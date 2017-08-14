@@ -1,3 +1,6 @@
+/** \mainpage notitle
+*/
+
 #ifndef MOLE_H
 #define MOLE_H
 
