@@ -1,4 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+examples_MATLAB/* linguist-documentation
 doc_MATLAB/* linguist-documentation
 doc_C++/* linguist-documentation
