@@ -2,3 +2,4 @@
 * text=auto
 doc_MATLAB/* linguist-documentation
 doc_C++/* linguist-documentation
+mole_C++/mole.h linguist-documentation
