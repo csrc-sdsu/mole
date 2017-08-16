@@ -1,4 +1,5 @@
 /** \mainpage notitle
+*   C++
 */
 
 #ifndef MOLE_H
