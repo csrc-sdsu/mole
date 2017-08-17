@@ -6,15 +6,15 @@ close all
 addpath('../mole_MATLAB')
 
 % Spatial discretization
-k = 2;
-m = 50;
-n = m;
-a = 0;
-b = 1;
-c = 0;
-d = 1;
-dx = (b-a)/m;
-dy = (d-c)/n;
+k = 2;  % Order of accuracy
+m = 50;  % Number of cells along the x-axis
+n = m;  % Number of cells along the y-axis
+a = 0;  % West
+b = 1;  % East
+c = 0;  % South
+d = 1;  % North
+dx = (b-a)/m;  % Step length along the x-axis
+dy = (d-c)/n;  % Step length along the y-axis
 
 % 2D Staggered grid
 xgrid = [a a+dx/2 : dx : b-dx/2 b];
@@ -65,7 +65,7 @@ for t = 0 : TIME/dt
     uold = unew;
     vold = vnew;
     
-    % Plot results
+    % Plot result
     mesh(X, Y, reshape(unew, m+2, n+2))
     title(['Elastic membrane with position Verlet \newlineTime = ' num2str(dt*t)])
     xlabel('x')
