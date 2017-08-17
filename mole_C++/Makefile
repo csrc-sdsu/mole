@@ -26,8 +26,7 @@ divergence.o: divergence.cpp divergence.h utils.h
 gradient.o: gradient.cpp gradient.h utils.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gradient.o gradient.cpp
 
-laplacian.o: laplacian.cpp laplacian.h divergence.h gradient.h \
-		utils.h
+laplacian.o: laplacian.cpp laplacian.h divergence.h gradient.h utils.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o laplacian.o laplacian.cpp
 
 interpol.o: interpol.cpp interpol.h utils.h
@@ -38,4 +37,3 @@ utils.o: utils.cpp utils.h
 
 clean:
 	rm -f *.o libmole.a
-
