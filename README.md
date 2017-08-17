@@ -1,6 +1,4 @@
-============================================
-| MOLE: Mimetic Operators Library Enhanced |
-============================================
+MOLE: Mimetic Operators Library Enhanced
 
 
 1: Description
