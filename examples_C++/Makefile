@@ -26,4 +26,3 @@ transport1D: transport1D.cpp
 
 clean:
 	rm -f transport1D
-
