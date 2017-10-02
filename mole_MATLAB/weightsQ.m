@@ -1,5 +1,5 @@
 function Q = weightsQ(k, m, dx)
-% Returns the m weights of Q
+% Returns the m+2 weights of Q
 %
 % Parameters:
 %                k : Order of accuracy
