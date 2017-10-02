@@ -5,7 +5,7 @@ function B = mimeticB(k, m)
 %                k : Order of accuracy
 %                m : Number of cells
 
-    Q = sparse(diag([0; weightsQ(k, m, 1); 0]));
+    Q = sparse(diag(weightsQ(k, m, 1)));
     D = div(k, m, 1);
     G = grad(k, m, 1);
     P = sparse(diag(weightsP(k, m, 1)));
