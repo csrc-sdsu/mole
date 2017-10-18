@@ -6,7 +6,7 @@ MOLE: Mimetic Operators Library Enhanced
 --------------
 
 MOLE is a high quality (C++ & MATLAB) library that implements 
-higher-order mimetic methods to solve partial differential equations. 
+high-order mimetic operators to solve partial differential equations. 
 It provides discrete analogs of the most common vector calculus operators: 
 Gradient, Divergence, Laplacian and Curl. These operators (matrices) act 
 on staggered grids (uniform and nonuniform) and they satisfy local and 
