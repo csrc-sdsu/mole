@@ -9,11 +9,13 @@ function D = divNonUniform(k, ticks)
     % Get uniform operator without scaling
     D = div(k, length(ticks)-1, 1);
     
+    [m, ~] = size(D);
+    
     % Compute the Jacobian using the uniform operator and the ticks
     if size(ticks, 1) == 1
-        J = diag((D*ticks').^-1);
+        J = spdiags((D*ticks').^-1, 0, m, m);
     else
-        J = diag((D*ticks).^-1);
+        J = spdiags((D*ticks).^-1, 0, m, m);
     end
     
     % This is the non-uniform operator
