@@ -10,11 +10,13 @@ function G = gradNonUniform(k, ticks)
     % Get uniform operator without scaling
     G = grad(k, length(ticks)-2, 1);
     
+    [m, ~] = size(G);
+    
     % Compute the Jacobian using the uniform operator and the ticks
     if size(ticks, 1) == 1
-        J = diag((G*ticks').^-1);
+        J = spdiags((G*ticks').^-1, 0, m, m);
     else
-        J = diag((G*ticks).^-1);
+        J = spdiags((G*ticks).^-1, 0, m, m);
     end
     
     % This is the non-uniform operator
