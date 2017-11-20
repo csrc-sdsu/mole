@@ -33,14 +33,16 @@ Interpol::Interpol(u32 m, u32 n, double c1, double c2)
     sp_mat I2 = Utils::spkron(Iy, Im);
 
     // Dimensions = 2*m*n+m+n, (m+2)*(n+2)
-    //*this = join_cols(I1, I2);
+    *this = join_cols(I1, I2);
 
+    /* This trick only works when m = n
     sp_mat A1(2, 1);
     sp_mat A2(2, 1);
 
     A1(0, 0) = A2(1, 0) = 1.0;
 
     *this = Utils::spkron(A1, I1) + Utils::spkron(A2, I2);
+    */
 }
 
 // 3-D Constructor
@@ -66,8 +68,9 @@ Interpol::Interpol(u32 m, u32 n, u32 o, double c1, double c2, double c3)
     sp_mat I3 = Utils::spkron(Utils::spkron(Iz, In), Im);
 
     // Dimensions = HUGE
-    //*this = join_cols(join_cols(I1, I2), I3);
+    *this = join_cols(join_cols(I1, I2), I3);
 
+    /* This trick only works when m = n = o
     sp_mat A1(3, 1);
     sp_mat A2(3, 1);
     sp_mat A3(3, 1);
@@ -75,4 +78,5 @@ Interpol::Interpol(u32 m, u32 n, u32 o, double c1, double c2, double c3)
     A1(0, 0) = A2(1, 0) = A3(2, 0) = 1.0;
 
     *this = Utils::spkron(A1, I1) + Utils::spkron(A2, I2) + Utils::spkron(A3, I3);
+    */
 }
