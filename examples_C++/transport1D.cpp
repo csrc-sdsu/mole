@@ -41,7 +41,7 @@ int main() {
     dt /= R;
 
     // Time integration loop
-    for(int i = 0; i <= iter; i++) {
+    for(int i = 0; i < iter; i++) {
 
         // First-order forward-time scheme
         C += dt*(D*(dis*(G*C))-D*(V%(I*C)));
