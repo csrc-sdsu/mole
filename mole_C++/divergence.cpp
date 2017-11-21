@@ -145,7 +145,7 @@ Divergence::Divergence(u16 k, u32 m, u32 n, u32 o, double dx, double dy, double 
     sp_mat D3 = Utils::spkron(Utils::spkron(Dz, In), Im);
 
     // Dimensions = HUGE
-    if (m != n != o)
+    if ((m != n) || (n != o))
         *this = join_rows(join_rows(D1, D2), D3);
     else {
         sp_mat A1(1, 3);
