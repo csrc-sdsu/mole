@@ -272,7 +272,7 @@ Gradient::Gradient(u16 k, u32 m, u32 n, u32 o, double dx, double dy, double dz)
     sp_mat G3 = Utils::spkron(Utils::spkron(Gz, In), Im);
 
     // Dimensions = HUGE
-    if (m != n != o)
+    if ((m != n) || (n != o))
         *this = join_cols(join_cols(G1, G2), G3);
     else {
         sp_mat A1(3, 1);
