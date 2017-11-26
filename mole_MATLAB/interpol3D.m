@@ -1,5 +1,8 @@
 function I = interpol3D(m, n, o, c1, c2, c3)
 % Returns a three-dimensional interpolator of 2nd-order
+%                m : Number of cells along x-axis
+%                n : Number of cells along y-axis
+%                o : Number of cells along z-axis
 %               c1 : Left interpolation coeff.
 %               c2 : Bottom interpolation coeff.
 %               c3 : Front interpolation coeff.
