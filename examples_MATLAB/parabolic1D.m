@@ -14,7 +14,7 @@ m = 2*k+1; % Minimum number of cells to attain the desired accuracy
 dx = (east-west)/m;
 
 t = 1; % Simulation time
-dt = (dx^2/(2*alpha))/2; % von Neumann stability criteria for explicit scheme
+dt = dx^2/(3*alpha); % von Neumann stability criterion for explicit scheme, if k > 2 then /(4*alpha)
 
 L = lap(k, m, dx); % 1D Mimetic laplacian operator
 
