@@ -4,6 +4,7 @@
 
 clc
 close all
+addpath('../mole_MATLAB')
 
 order =   2;
 west  = -10;
@@ -43,7 +44,6 @@ for j = 1 : 2 : 2*n+1
     end
 end
 
-addpath('../mole/mole_MATLAB')
 curlMOLE = div2D(order, m, dx, n, dy)*A2;
 curlMOLE = reshape(curlMOLE, m+2, n+2);
 curlMOLE = curlMOLE(2:end-1, 2:end-1);
