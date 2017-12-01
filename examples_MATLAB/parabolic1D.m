@@ -30,7 +30,7 @@ grid = [west west+dx/2: dx :east-dx/2 east];
 explicit = 1; % 0 = Implicit scheme
 
 if explicit
-    
+    tic
     % Explicit
     L = alpha*dt*L + speye(size(L));
     
@@ -45,8 +45,9 @@ if explicit
         pause(0.01)
         U = L*U; % Apply the operator
     end
+    toc
 else
-    
+    tic
     % Implicit
     L = -alpha*dt*L + speye(size(L));
     
@@ -61,4 +62,5 @@ else
         pause(0.01)
         U = L\U; % Solve a linear system of equations (unconditionally stable)
     end
+    toc
 end
