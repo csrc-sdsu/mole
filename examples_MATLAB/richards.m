@@ -50,7 +50,7 @@ function richards
     ff = figure(1);
 
     % Time integration loop
-    for i = 1:n
+    for i = 1 : n
         
         init_guess = ones(m,1)*ic;
         func = @F;
@@ -72,25 +72,25 @@ function richards
         set(gcf, 'color', 'w')
         legend('U')
         drawnow
-
+        
         %M(k) = getframe(gcf);
     end
-
+    
     %writeVideo(v, M)
     %close(v)
-
+    
     function fval = F(psi)
         psi_new = [bot_bc;psi;top_bc];
         K = I * K_psi(psi_new);
-
+        
         theta_t = (theta_psi(psi_new) - theta_psi(psi_old)) / dt;
-
+        
         d1 = - D * diag(K) * G * psi_new;
         d1 = [bot_bc ; d1(2:end-1) ; top_bc];
-
+        
         Dz = + D * K;
         Dz = [bot_bc ; Dz(2:end-1) ; top_bc];
-
+        
         fval = theta_t  + d1 + Dz;
         fval = fval(2:end-1);
     end
