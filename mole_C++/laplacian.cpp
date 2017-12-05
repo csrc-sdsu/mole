@@ -26,6 +26,6 @@ Laplacian::Laplacian(u16 k, u32 m, u32 n, u32 o, double dx, double dy, double dz
     Divergence div(k, m, n, o, dx, dy, dz);
     Gradient grad(k, m, n, o, dx, dy, dz);
 
-    // Dimensions = HUGE
+    // Dimensions = (m+2)*(n+2)*(o+2), (m+2)*(n+2)*(o+2)
     *this = (sp_mat)div*(sp_mat)grad;
 }
