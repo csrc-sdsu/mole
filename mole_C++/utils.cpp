@@ -34,7 +34,6 @@ sp_mat Utils::spkron(sp_mat A, sp_mat B)
 
     while(itA != endA) {
         while(itB != endB) {
-
             locations(0, j) = itA.row()*B.n_rows + itB.row();
             locations(1, j) = itA.col()*B.n_cols + itB.col();
             values(j) = (*itA)*(*itB);
@@ -71,15 +70,15 @@ sp_mat Utils::spjoin_rows(sp_mat A, sp_mat B)
         values(j) = (*itA);
         ++itA;
         ++j;
-	}
+    }
 
-	while(itB != endB) { 
+    while(itB != endB) { 
         locations(0, j) = itB.row();
         locations(1, j) = itB.col() + A.n_cols;
         values(j) = (*itB);
         ++itB;
         ++j;
-	}
+    }
 
     sp_mat result(locations, values, A.n_rows, A.n_cols+B.n_cols, true);
 
@@ -106,15 +105,15 @@ sp_mat Utils::spjoin_cols(sp_mat A, sp_mat B)
         values(j) = (*itA);
         ++itA;
         ++j;
-	}
+    }
 
-	while(itB != endB) { 
+    while(itB != endB) { 
         locations(0, j) = itB.row() + A.n_rows;
         locations(1, j) = itB.col();
         values(j) = (*itB);
         ++itB;
         ++j;
-	}
+    }
 
     sp_mat result(locations, values, A.n_rows+B.n_rows, A.n_cols, true);
 
