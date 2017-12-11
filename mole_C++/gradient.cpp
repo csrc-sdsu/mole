@@ -238,16 +238,15 @@ Gradient::Gradient(u16 k, u32 m, u32 n, double dx, double dy)
     sp_mat G1 = Utils::spkron(In, Gx);
     sp_mat G2 = Utils::spkron(Gy, Im);
 
-    *this = Utils::spjoin_cols(G1, G2);
     // Dimensions = 2*m*n+m+n, (m+2)*(n+2)
-    /*if (m != n)
-        *this = join_cols(G1, G2);
+    if (m != n)
+        *this = Utils::spjoin_cols(G1, G2);
     else {
         sp_mat A1(2, 1);
         sp_mat A2(2, 1);
         A1(0, 0) = A2(1, 0) = 1.0;
         *this = Utils::spkron(A1, G1) + Utils::spkron(A2, G2);
-    }*/
+    }
 }
 
 // 3-D Constructor
@@ -272,17 +271,16 @@ Gradient::Gradient(u16 k, u32 m, u32 n, u32 o, double dx, double dy, double dz)
     sp_mat G2 = Utils::spkron(Utils::spkron(Io, Gy), Im);
     sp_mat G3 = Utils::spkron(Utils::spkron(Gz, In), Im);
 
-    *this = Utils::spjoin_cols(Utils::spjoin_cols(G1, G2), G3);
     // Dimensions = HUGE
-    /*if ((m != n) || (n != o))
-        *this = join_cols(join_cols(G1, G2), G3);
+    if ((m != n) || (n != o))
+        *this = Utils::spjoin_cols(Utils::spjoin_cols(G1, G2), G3);
     else {
         sp_mat A1(3, 1);
         sp_mat A2(3, 1);
         sp_mat A3(3, 1);
         A1(0, 0) = A2(1, 0) = A3(2, 0) = 1.0;
         *this = Utils::spkron(A1, G1) + Utils::spkron(A2, G2) + Utils::spkron(A3, G3);
-    }*/
+    }
 }
 
 // Returns weights
