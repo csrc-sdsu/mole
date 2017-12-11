@@ -111,16 +111,15 @@ Divergence::Divergence(u16 k, u32 m, u32 n, double dx, double dy)
     sp_mat D1 = Utils::spkron(In, Dx);
     sp_mat D2 = Utils::spkron(Dy, Im);
 
-    *this = Utils::spjoin_rows(D1, D2);
     // Dimensions = (m+2)*(n+2), 2*m*n+m+n
-    /*if (m != n)
-        *this = join_rows(D1, D2);
+    if (m != n)
+        *this = Utils::spjoin_rows(D1, D2);
     else {
         sp_mat A1(1, 2);
         sp_mat A2(1, 2);
         A1(0, 0) = A2(0, 1) = 1.0;
         *this = Utils::spkron(A1, D1) + Utils::spkron(A2, D2);
-    }*/
+    }
 }
 
 // 3-D Constructor
@@ -145,17 +144,16 @@ Divergence::Divergence(u16 k, u32 m, u32 n, u32 o, double dx, double dy, double 
     sp_mat D2 = Utils::spkron(Utils::spkron(Io, Dy), Im);
     sp_mat D3 = Utils::spkron(Utils::spkron(Dz, In), Im);
 
-    *this = Utils::spjoin_rows(Utils::spjoin_rows(D1, D2), D3);
     // Dimensions = HUGE
-    /*if ((m != n) || (n != o))
-        *this = join_rows(join_rows(D1, D2), D3);
+    if ((m != n) || (n != o))
+        *this = Utils::spjoin_rows(Utils::spjoin_rows(D1, D2), D3);
     else {
         sp_mat A1(1, 3);
         sp_mat A2(1, 3);
         sp_mat A3(1, 3);
         A1(0, 0) = A2(0, 1) = A3(0, 2) = 1.0;
         *this = Utils::spkron(A1, D1) + Utils::spkron(A2, D2) + Utils::spkron(A3, D3);
-    }*/
+    }
 }
 
 // Returns weights
