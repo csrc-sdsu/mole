@@ -1,4 +1,4 @@
-function C = curl2D(k, m, dx, n, dy, west, east, north, south, U, V)
+function C = curl2D(k, m, dx, n, dy, west, east, south, north, U, V)
 % Returns a two-dimensional mimetic curl operator
 %
 % Parameters:
@@ -8,7 +8,7 @@ function C = curl2D(k, m, dx, n, dy, west, east, north, south, U, V)
 %                n : Number of cells along y-axis
 %               dy : Step size along y-axis
 %      west, east,
-%     north, south : west, east, north, south limits
+%     south, north : west, east, south, north limits
 %                U : Vector space function acting on x-direction
 %                    U(X,Y) must be defined as function handle
 %                V : Vector space function acting on y-direction
@@ -23,7 +23,7 @@ function C = curl2D(k, m, dx, n, dy, west, east, north, south, U, V)
     assert(west < east && south < north , 'west < east, south < north');
 
 % Variables initialization
-    F = zeros(2*m*n+m+n, 1);
+    F = sparse(2*m*n+m+n, 1);
     xaxis = west : (dx/2) : east;
     yaxis = south : (dy/2) : north;
 
