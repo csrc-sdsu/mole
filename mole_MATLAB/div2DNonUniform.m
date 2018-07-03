@@ -9,6 +9,9 @@ function D = div2DNonUniform(k, xticks, yticks)
     Dx = divNonUniform(k, xticks);
     Dy = divNonUniform(k, yticks);
     
+    m = size(Dx, 1) - 2;
+    n = size(Dy, 1) - 2;
+    
     Im = sparse(m + 2, m);
     In = sparse(n + 2, n);
     
