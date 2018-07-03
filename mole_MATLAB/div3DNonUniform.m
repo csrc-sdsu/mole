@@ -7,20 +7,22 @@ function D = div3DNonUniform(k, xticks, yticks, zticks)
 %                yticks : Edges' ticks (y-axis)
 %                zticks : Edges' ticks (z-axis)
 
+    Dx = divNonUniform(k, xticks);
+    Dy = divNonUniform(k, yticks);
+    Dz = divNonUniform(k, zticks);
+    
+    m = size(Dx, 1) - 2;
+    n = size(Dy, 1) - 2;
+    o = size(Dz, 1) - 2;
+    
     Im = sparse(m + 2, m);
     Im(2:(m + 2) - 1, :) = speye(m, m);
-    
-    Dx = divNonUniform(k, xticks);
     
     In = sparse(n + 2, n);
     In(2:(n + 2) - 1, :) = speye(n, n);
     
-    Dy = divNonUniform(k, yticks);
-    
     Io = sparse(o + 2, o);
     Io(2:(o + 2) - 1, :) = speye(o, o);
-    
-    Dz = divNonUniform(k, zticks);
     
     Sx = kron(kron(Io, In), Dx);
     Sy = kron(kron(Io, Dy), Im);
