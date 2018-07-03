@@ -10,6 +10,9 @@ function G = grad2DNonUniform(k, xticks, yticks)
     Gx = gradNonUniform(k, xticks);
     Gy = gradNonUniform(k, yticks);
     
+    m = size(Gx, 1) - 1;
+    n = size(Gy, 1) - 1;
+    
     Im = sparse(m + 2, m);
     In = sparse(n + 2, n);
     
