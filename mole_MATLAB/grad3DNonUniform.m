@@ -8,20 +8,22 @@ function G = grad3DNonUniform(k, xticks, yticks, zticks)
 %                zticks : Centers' ticks (z-axis)
 %                         (including the boundaries!)
 
+    Gx = gradNonUniform(k, xticks);
+    Gy = gradNonUniform(k, yticks);
+    Gz = gradNonUniform(k, zticks);
+    
+    m = size(Gx, 1) - 1;
+    n = size(Gy, 1) - 1;
+    o = size(Gz, 1) - 1;
+    
     Im = sparse(m + 2, m);
     Im(2:(m + 2) - 1, :) = speye(m, m);
-    
-    Gx = gradNonUniform(k, xticks);
     
     In = sparse(n + 2, n);
     In(2:(n + 2) - 1, :) = speye(n, n);
     
-    Gy = gradNonUniform(k, yticks);
-    
     Io = sparse(o + 2, o);
     Io(2:(o + 2) - 1, :) = speye(o, o);
-    
-    Gz = gradNonUniform(k, zticks);
     
     Sx = kron(kron(Io', In'), Gx);
     Sy = kron(kron(Io', Gy), Im');
