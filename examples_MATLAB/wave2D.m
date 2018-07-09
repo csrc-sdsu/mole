@@ -59,7 +59,7 @@ I2 = 0.5*dt*I2;
 %open(v);
 
 % Time loop
-for t = 0 : TIME/dt
+for t = 1 : TIME/dt
     % Apply "position Verlet" algorithm -----------------------------------
     uold = uold + I2*vold;
     vnew = vold + I*F(uold, c);
