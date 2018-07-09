@@ -24,7 +24,7 @@ ygrid = [c c+dy/2 : dy : d-dy/2 d];
 
 % Mimetic operator (Laplacian)
 L = lap2D(k, m, dx, n, dy);
-L = L + robinBC2D(k, m, dx, n, dy, 1, 0);
+L = L + robinBC2D(k, m, dx, n, dy, 1, 0); % Dirichlet BC
 I = interpol2D(m, n, 0.5, 0.5);
 I2 = interpolD2D(m, n, 0.5, 0.5);
 
@@ -50,16 +50,20 @@ uold = reshape(uold, (m+2)*(n+2), 1);
 
 theta = 1/(2-2^(1/3)); % From Peter Young's paper
 
+% Premultiply I and I2
+I = dt*I;
+I2 = 0.5*dt*I2;
+
 %v = VideoWriter('membrane2D_Corbino.avi', 'Uncompressed AVI');
 %v.FrameRate = 20;
 %open(v);
 
-% Time integration loop
+% Time loop
 for t = 0 : TIME/dt
     % Apply "position Verlet" algorithm -----------------------------------
-    uold = uold + 0.5*dt*I2*vold;
-    vnew = vold + dt*I*F(uold, c);
-    unew = uold + 0.5*dt*I2*vnew;
+    uold = uold + I2*vold;
+    vnew = vold + I*F(uold, c);
+    unew = uold + I2*vnew;
     
     % Update
     uold = unew;
@@ -67,7 +71,7 @@ for t = 0 : TIME/dt
     
     % Plot result
     mesh(X, Y, reshape(unew, m+2, n+2))
-    title(['Elastic membrane with position Verlet \newlineTime = ' num2str(dt*t)])
+    title(['Elastic membrane with position Verlet \newlineTime = ' num2str(dt*t, '%1.2f')])
     xlabel('x')
     ylabel('y')
     colorbar
