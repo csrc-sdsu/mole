@@ -1,8 +1,10 @@
-% medium.m | Solves convection-diffusion equation using MOLE
+% convection_diffusion.m | Solves convection-diffusion equation using MOLE
 
 clc
 close all
 format short
+
+addpath('../mole_MATLAB')
 
 % Mimetic operator's parameters
 k = 2;
