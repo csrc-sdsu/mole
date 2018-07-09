@@ -24,21 +24,21 @@ ygrid = [c c+dy/2 : dy : d-dy/2 d];
 
 % Mimetic Operator (Laplacian)
 L = lap2D(k, m, dx, n, dy);
-L = L + robinBC2D(k, m, dx, n, dy, 0, 0);
+L = L + robinBC2D(k, m, dx, n, dy, 1, 0); % Dirichlet BC
 I = interpol2D(m, n, 0.5, 0.5);
 I2 = interpolD2D(m, n, 0.5, 0.5);
 
 % Wave propagation speed
-cc = 100;  % Depends on the problem
+c = 100;
 
 % "Force" function
-F = @(x, cc) (cc^2)*L*x;
+F = @(x, c) (c^2)*L*x;
 
 % Simulation time
 TIME = 0.3;
 
 % Temporal discretization based on CFL condition
-dt = dx/(2*cc); % dt = h on Young's paper
+dt = dx/(2*c); % dt = h on Young's paper
 
 % Initial condition
 ICU = @(x, y) sin(pi*x).*sin(pi*y).*(x>2).*(x<3).*(y>2).*(y<3);
@@ -50,7 +50,7 @@ uold = reshape(uold, (m+2)*(n+2), 1);
 
 theta = 1/(2-2^(1/3)); % From Peter Young's paper
 
-% Premultiply out of the time loop (since it doesn't change)
+% Premultiply I and I2
 I = dt*I;
 I2 = 0.5*dt*I2;
 
@@ -62,7 +62,7 @@ I2 = 0.5*dt*I2;
 for t = 1 : TIME/dt
     % Apply "position Verlet" algorithm -----------------------------------
     uold = uold + I2*vold;
-    vnew = vold + I*F(uold, cc);
+    vnew = vold + I*F(uold, c);
     unew = uold + I2*vnew;
     
     % Update
