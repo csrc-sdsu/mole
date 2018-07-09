@@ -58,8 +58,8 @@ I2 = 0.5*dt*I2;
 %v.FrameRate = 10;
 %open(v);
 
-% Time integration loop
-for t = 0 : TIME/dt
+% Time loop
+for t = 1 : TIME/dt
     % Apply "position Verlet" algorithm -----------------------------------
     uold = uold + I2*vold;
     vnew = vold + I*F(uold, cc);
@@ -71,7 +71,7 @@ for t = 0 : TIME/dt
     
     % Plot results
     surf(X, Y, reshape(unew, m+2, n+2), 'EdgeColor', 'none')
-    title(['2D Wave equation solved with MOLE' '\newlineTime = ' num2str(dt*t, '%1.3f')])
+    title(['2D Wave equation solved with MOLE' '\newlineTime = ' num2str(dt*t, '%1.2f')])
     
     colormap winter
     colorbar
