@@ -93,10 +93,8 @@ for i = 1 : iters*3
     pause(0.01)
     
     % Plot density profile
-    C = reshape(C, m+2, n+2, o+2);
-    slice(C, seal, ceil((m+2)/2), ceil((o+2)/2));
+    slice(reshape(C, m+2, n+2, o+2), seal, ceil((m+2)/2), ceil((o+2)/2));
     shading interp
-    
     set(gca, 'XDir', 'reverse')
     set(gca, 'ZDir', 'reverse')
     set(gcf, 'color', 'w')
@@ -107,8 +105,6 @@ for i = 1 : iters*3
     title(['CO_2 concentration profile, t = ' num2str(i*dt, '%2.2f')])
     colorbar
     view(90, 90)
-    
-    C = C(:);
 end
 
 min(C)
