@@ -65,7 +65,7 @@ Interpol::Interpol(u32 m, u32 n, u32 o, double c1, double c2, double c3)
     sp_mat I2 = Utils::spkron(Utils::spkron(Io, Iy), Im);
     sp_mat I3 = Utils::spkron(Utils::spkron(Iz, In), Im);
 
-    // Dimensions = HUGE
+    // Dimensions = 3*m*n*o+m*n+m*o+n*o, (m+2)*(n+2)*(o+2)
     if ((m != n) || (n != o))
         *this = Utils::spjoin_cols(Utils::spjoin_cols(I1, I2), I3);
     else {
