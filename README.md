@@ -52,8 +52,4 @@ in your projects and specify the location of "libmole.a" to the linker.
 
 Please cite our work if you use MOLE in your research and/or software. 
 Citations are useful for the continued development and maintenance of 
-the library.
-
-  Johnny Corbino and Jose Castillo.
-  MOLE: Mimetic Operators Library Enhanced.
-  Computational Science Research Center at San Diego State University.
+the library https://authors.elsevier.com/a/1ZMsl1LkiPMMO-
