@@ -7,6 +7,7 @@ using namespace arma;
 
 class Utils
 {
+
 public:
     static sp_mat spkron(sp_mat A, sp_mat B);
     static sp_mat spjoin_rows(sp_mat A, sp_mat B);
