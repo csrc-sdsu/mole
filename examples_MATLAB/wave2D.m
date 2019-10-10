@@ -6,13 +6,13 @@ close all
 addpath('../mole_MATLAB')
 
 % Spatial discretization
-k = 2;  % Order of accuracy
+k = 2;   % Order of accuracy
 m = 50;  % Number of cells along the x-axis
-n = m;  % Number of cells along the y-axis
-a = 0;  % West
-b = 1;  % East
-c = 0;  % South
-d = 1;  % North
+n = m;   % Number of cells along the y-axis
+a = 0;   % West
+b = 1;   % East
+c = 0;   % South
+d = 1;   % North
 dx = (b-a)/m;  % Step length along the x-axis
 dy = (d-c)/n;  % Step length along the y-axis
 
