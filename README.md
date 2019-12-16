@@ -52,4 +52,7 @@ in your projects and specify the location of "libmole.a" to the linker.
 
 Please cite our work if you use MOLE in your research and/or software. 
 Citations are useful for the continued development and maintenance of 
-the library https://authors.elsevier.com/a/1ZMsl1LkiPMMO-
+the library https://www.sciencedirect.com/science/article/abs/pii/S0377042719303231
+
+
+[![View mole on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/64095-mole)
