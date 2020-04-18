@@ -56,3 +56,10 @@ the library https://www.sciencedirect.com/science/article/abs/pii/S0377042719303
 
 
 [![View mole on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/64095-mole)
+
+![Obtained with curvilinear operators](images/4thOrder.png)
+![Obtained with curvilinear operators](images/4thOrder2.png)
+![Obtained with curvilinear operators](images/4thOrder3.png)
+![Obtained with curvilinear operators](images/grid2.png)
+![Obtained with curvilinear operators](images/grid.png)
+![Obtained with curvilinear operators](images/WavyGrid.png)
