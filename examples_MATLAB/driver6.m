@@ -2,6 +2,8 @@
 clc
 close all
 
+addpath('../mole_MATLAB')
+
 % Parameters
 e = 0.2; % Controls "rectangularity" of the grid, e = 0 -> completely rectangular
 k = 2;
