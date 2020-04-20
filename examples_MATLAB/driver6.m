@@ -143,5 +143,6 @@ set(gcf, 'Color', 'w')
 colorbar
 axis equal
 
-fprintf('\nMaximum error: %.2f\n', max(max(abs(F(Cx, Cy)-Comp))))
+fprintf('\nEuclidean norm: %.2f\n', norm(F(Cx, Cy)-Comp))
+fprintf('Maximum error:  %.2f\n', max(max(abs(F(Cx, Cy)-Comp))))
 fprintf('Relative error: %.2f%%\n', 100*max(max(abs(F(Cx, Cy)-Comp)))/(max(max(F(Cx, Cy))) - min(min(F(Cx, Cy)))))
