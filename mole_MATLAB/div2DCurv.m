@@ -20,12 +20,10 @@ function D = div2DCurv(k, X, Y)
     De = D_(:, 1:n*(m+1));
     Dn = D_(:, n*(m+1)+1:end);
     
-    Dex = spdiags((De*Ux_).^-1, 0, (m+2)*(n+2),...
-                                   (m+2)*(n+2));
+    Dex = spdiags((De*Ux_).^-1, 0, size(De, 1), size(De, 1));
     Sx = Dex*De;
     
-    Dny = spdiags((Dn*Vy_).^-1, 0, (m+2)*(n+2),...
-                                   (m+2)*(n+2));
+    Dny = spdiags((Dn*Vy_).^-1, 0, size(Dn, 1), size(Dn, 1));
     Sy = Dny*Dn;
     
     D = [Sx Sy];
