@@ -26,9 +26,9 @@ f = matlabFunction(diff(fx, X)+diff(fy, Y));
 % Grid
 dm = (b-a)/m;
 dn = (d-c)/n;
-[X, Y] = meshgrid(a:dm:b, c:dn:d);
-X = X+e*cos(Y);
-Y = Y+e*cos(X);
+[X_, Y] = meshgrid(a:dm:b, c:dn:d);
+X = X_+e*cos(Y);
+Y = Y+e*cos(X_);
 
 mesh(X, Y, zeros(n+1, m+1), 'Marker', '.', 'MarkerSize', 10)
 view([0 90])
