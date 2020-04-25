@@ -9,6 +9,7 @@ k = 2;
 m = 100;
 n = 100;
 
+% Grid
 r1 = 1; % Inner radius 
 r2 = 2; % Outer radius
 nR = linspace(r1, r2, m) ;
