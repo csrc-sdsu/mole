@@ -22,19 +22,10 @@ function G = grad2DCurv(k, X, Y)
     Cx = [Cx Ux(:, end)];
     Cy = [Cy Uy(:, end)];
     
-    Cx = [[0 Vx(1, :) 0]; Cx];
-    Cy = [[0 Vy(1, :) 0]; Cy];
-    Cx = [Cx; [0 Vx(end, :) 0]];
-    Cy = [Cy; [0 Vy(end, :) 0]];
-    
-    Cx(1, 1) = X(1, 1);
-    Cy(1, 1) = Y(1, 1);
-    Cx(1, end) = X(1, end);
-    Cy(1, end) = Y(1, end);
-    Cx(end, 1) = X(end, 1);
-    Cy(end, 1) = Y(end, 1);
-    Cx(end, end) = X(end, end);
-    Cy(end, end) = Y(end, end);
+    Cx = [[X(1, 1) Vx(1, :) X(1, end)]; Cx];
+    Cy = [[Y(1, 1) Vy(1, :) Y(1, end)]; Cy];
+    Cx = [Cx; [X(end, 1) Vx(end, :) X(end, end)]];
+    Cy = [Cy; [Y(end, 1) Vy(end, :) Y(end, end)]];
     
     Cx_ = reshape(Cx.', [], 1);
     Cy_ = reshape(Cy.', [], 1);
