@@ -99,4 +99,4 @@ Gold = grad2D(k, m, 1, n, 1);
 spy(G-Gold)
 max(max(abs(G-Gold)))
 max(max(abs(2*Ux-U)))
-max(max(abs(zeros(size(Vx))-V)))
+max(max(abs(V)))
