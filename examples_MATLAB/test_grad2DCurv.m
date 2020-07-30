@@ -95,8 +95,8 @@ ylabel('y')
 set(gcf, 'Color', 'w')
 
 figure
-Gold = grad2D(k, m, 1, n, 1);
-spy(G-Gold)
-max(max(abs(G-Gold)))
+G2 = grad2D(k, m, 1, n, 1);
+spy(G-G2)
+max(max(abs(G-G2)))
 max(max(abs(2*Ux-U)))
 max(max(abs(V)))
