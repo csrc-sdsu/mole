@@ -115,7 +115,3 @@ surf(Cx(2:end-1, 2:end-1), Cy(2:end-1, 2:end-1), Ccomp(2:end-1, 2:end-1)'-C(2:en
 view([0 90])
 colorbar
 max(max(abs(Ccomp(2:end-1, 2:end-1)'-C(2:end-1, 2:end-1))))
-
-G = grad2DCurv(k, X, Y);
-Dold = div2D(k, m, 1, n, 1);
-Gold = grad2D(k, m, 1, n, 1);
