@@ -1,4 +1,4 @@
-% Testing the curvilinear laplacian
+% Tests the 2D curvilinear laplacian
 clc
 close all
 
