@@ -1,4 +1,4 @@
-% Testing the curvilinear gradient
+% Tests the 2D curvilinear gradient
 clc
 close all
 
@@ -6,15 +6,15 @@ addpath('../mole_MATLAB')
 
 % Parameters
 k = 2;
-m = 50;
-n = 50;
+m = 10;
+n = 10;
 
-%[X, Y] = meshgrid(1:m, 1:n);
 [X, Y] = genCurvGrid(n, m);
+%[X, Y] = meshgrid(1:m, 1:n);
 
 mesh(X, Y, zeros(n, m), 'Marker', '.', 'MarkerSize', 10)
 view([0 90])
-axis tight
+axis equal
 set(gcf, 'Color', 'w')
 hold on
 
@@ -64,7 +64,7 @@ tic
 G = grad2DCurv(k, X, Y);
 toc
 
-Cgiven = Cx.^2;
+Cgiven = Cx.^2 + Cy.^2;
 
 UV = G*reshape(Cgiven.', [], 1);
 
@@ -74,29 +74,49 @@ V = UV(n*(m+1)+1:end);
 V = reshape(V, m, n+1)';
 
 figure
-subplot(3, 1, 1)
+subplot(5, 1, 4)
+surf(Vx, Vy, V, 'EdgeColor', 'none');
+colorbar
+view([0 90])
+xlabel('x')
+ylabel('y')
+title('Numerical V')
+axis equal
+subplot(5, 1, 2)
 surf(Ux, Uy, U, 'EdgeColor', 'none');
 colorbar
 view([0 90])
 xlabel('x')
 ylabel('y')
-subplot(3, 1, 2)
-surf(Vx, Vy, V, 'EdgeColor', 'none');
+title('Numerical U')
+axis equal
+subplot(5, 1, 3)
+surf(Vx, Vy, 2*Vy, 'EdgeColor', 'none');
 colorbar
-view([0 0])
+view([0 90])
 xlabel('x')
 ylabel('y')
-subplot(3, 1, 3)
+title('Analytical V')
+axis equal
+set(gcf, 'Color', 'w')
+subplot(5, 1, 1)
 surf(Ux, Uy, 2*Ux, 'EdgeColor', 'none');
 colorbar
 view([0 90])
 xlabel('x')
 ylabel('y')
+title('Analytical U')
+axis equal
+set(gcf, 'Color', 'w')
+subplot(5, 1, 5)
+surf(Cx, Cy, Cgiven, 'EdgeColor', 'none');
+colorbar
+view([0 90])
+xlabel('x')
+ylabel('y')
+title('Scalar field')
+axis equal
 set(gcf, 'Color', 'w')
 
-figure
-G2 = grad2D(k, m, 1, n, 1);
-spy(G-G2)
-max(max(abs(G-G2)))
-max(max(abs(2*Ux-U)))
-max(max(abs(V)))
+max(max(abs(2*Ux - U)))
+max(max(abs(2*Vy - V)))
