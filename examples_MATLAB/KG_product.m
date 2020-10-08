@@ -1,4 +1,4 @@
-% Testing flux operator 'KG' aka tensor times the gradient
+% Tests flux operator 'KG' aka tensor times the gradient
 clc
 close all
 
