@@ -1,4 +1,4 @@
-% Testing the curvilinear divergence
+% Tests the 2D curvilinear divergence
 clc
 close all
 
