@@ -13,8 +13,8 @@ function D = div2DCurv(k, X, Y)
     Ux = (X(1:end-1, :) + X(2:end, :))/2;
     Vy = (Y(:, 1:end-1) + Y(:, 2:end))/2;
     
-    Ux_ = reshape(Ux.', [], 1);
-    Vy_ = reshape(Vy.', [], 1);
+    Ux_ = reshape(Ux', [], 1);
+    Vy_ = reshape(Vy', [], 1);
     
     D_ = div2D(k, m, 1, n, 1);
     De = D_(:, 1:n*(m+1));

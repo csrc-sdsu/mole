@@ -2,7 +2,7 @@
 
 # Put here the path to Armadillo and MOLE
 ARMA = /home/johnny/armadillo-7.950.1
-MOLE = /home/johnny/mole/mole_C++
+MOLE = /home/johnny/Desktop/mole/mole_C++
 
 #----------------------------------------------------------------------
 

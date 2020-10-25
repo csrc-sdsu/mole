@@ -1,44 +1,52 @@
 function G = grad2DCurv(k, X, Y)
-% Returns a two-dimensional curvilinear mimetic gradient operator
-%
-% Parameters:
-%                k : Order of accuracy
-%                X : x-coordinates of meshgrid
-%                Y : y-coordinates of meshgrid
-
+    % Get the determinant of the jacobian and the metrics
+    [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y);
+    
+    % Dimensions of nodal grid
     [n, m] = size(X);
-    n = n-1;
-    m = m-1;
     
-    Ux = [(X(1:end-1, 1) + X(2:end, 1))/2 (X(1:end-1, end) + X(2:end, end))/2];
-    Vy = [(Y(1, 1:end-1) + Y(1, 2:end))/2; (Y(end, 1:end-1) + Y(end, 2:end))/2];
-    Vx = (X(:, 1:end-1) + X(:, 2:end))/2;
-    Uy = (Y(1:end-1, :) + Y(2:end, :))/2;
-    Cx = (Vx(1:end-1, :) + Vx(2:end, :))/2;
-    Cy = (Uy(:, 1:end-1) + Uy(:, 2:end))/2;
+    % Make them surfaces so they can be interpolated
+    J = reshape(J, m, n)';
+    Xe = reshape(Xe, m, n)';
+    Xn = reshape(Xn, m, n)';
+    Ye = reshape(Ye, m, n)';
+    Yn = reshape(Yn, m, n)';
     
-    Cx = [Ux(:, 1) Cx];
-    Cy = [Uy(:, 1) Cy];
-    Cx = [Cx Ux(:, end)];
-    Cy = [Cy Uy(:, end)];
+    % Logical grids
+    [Xl, Yl] = meshgrid(1:m, 1:n);
     
-    Cx = [[X(1, 1) Vx(1, :) X(1, end)]; Cx];
-    Cy = [[Y(1, 1) Vy(1, :) Y(1, end)]; Cy];
-    Cx = [Cx; [X(end, 1) Vx(end, :) X(end, end)]];
-    Cy = [Cy; [Y(end, 1) Vy(end, :) Y(end, end)]];
+    % Interpolate the metrics on the logical grid for positions u and v
+    Ju = interp2(Xl, Yl, J, (Xl(1:end-1, :)+Xl(2:end, :))/2,...
+                                            (Yl(1:end-1, :)+Yl(2:end, :))/2);
+    Jv = interp2(Xl, Yl, J, (Xl(:, 1:end-1)+Xl(:, 2:end))/2,...
+                                            (Yl(:, 1:end-1)+Yl(:, 2:end))/2);
+    Xev = interp2(Xl, Yl, Xe, (Xl(:, 1:end-1)+Xl(:, 2:end))/2,...
+                                            (Yl(:, 1:end-1)+Yl(:, 2:end))/2);
+    Xnv = interp2(Xl, Yl, Xn, (Xl(:, 1:end-1)+Xl(:, 2:end))/2,...
+                                            (Yl(:, 1:end-1)+Yl(:, 2:end))/2);
+    Yeu = interp2(Xl, Yl, Ye, (Xl(1:end-1, :)+Xl(2:end, :))/2,...
+                                            (Yl(1:end-1, :)+Yl(2:end, :))/2);
+    Ynu = interp2(Xl, Yl, Yn, (Xl(1:end-1, :)+Xl(2:end, :))/2,...
+                                            (Yl(1:end-1, :)+Yl(2:end, :))/2);
     
-    Cx_ = reshape(Cx.', [], 1);
-    Cy_ = reshape(Cy.', [], 1);
+    % Convert metrics to diagonal matrices so they can be multiplied by the 
+    % logical operators
+    Ju = spdiags(1./reshape(Ju', [], 1), 0, numel(Ju), numel(Ju));
+    Jv = spdiags(1./reshape(Jv', [], 1), 0, numel(Jv), numel(Jv));
+    Xev = spdiags(reshape(Xev', [], 1), 0, numel(Xev), numel(Xev));
+    Xnv = spdiags(reshape(Xnv', [], 1), 0, numel(Xnv), numel(Xnv));
+    Yeu = spdiags(reshape(Yeu', [], 1), 0, numel(Yeu), numel(Yeu));
+    Ynu = spdiags(reshape(Ynu', [], 1), 0, numel(Ynu), numel(Ynu));
     
-    G_ = grad2D(k, m, 1, n, 1);
-    Ge = G_(1:n*m+n, :);
-    Gn = G_(n*m+n+1:end, :);
+    % Construct 2D uniform mimetic gradient operator (d/de, d/dn)
+    G = grad2D(k, m-1, 1, n-1, 1);
+    Ge = G(1:m*(n-1), :);
+    Gn = G(m*(n-1)+1:end, :);
     
-    Gex = spdiags((Ge*Cx_).^-1, 0, size(Ge, 1), size(Ge, 1));
-    Sx = Gex*Ge;
+    % Apply transformation
+    Gx = Ju*(Ynu*Ge-Yeu*I(Gn, m-1, n-1, 'Gn'));
+    Gy = Jv*(-Xnv*I(Ge, m-1, n-1, 'Ge')+Xev*Gn);
     
-    Gny = spdiags((Gn*Cy_).^-1, 0, size(Gn, 1), size(Gn, 1));
-    Sy = Gny*Gn;
-    
-    G = [Sx; Sy];
+    % Final 2D curvilinear mimetic gradient operator (d/dx, d/dy)
+    G = [Gx; Gy];
 end

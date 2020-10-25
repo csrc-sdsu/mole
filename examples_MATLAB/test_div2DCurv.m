@@ -109,9 +109,3 @@ colorbar
 title('Approx')
 xlabel('x')
 ylabel('y')
-
-figure
-surf(Cx(2:end-1, 2:end-1), Cy(2:end-1, 2:end-1), Ccomp(2:end-1, 2:end-1)'-C(2:end-1, 2:end-1), 'EdgeColor', 'none')
-view([0 90])
-colorbar
-max(max(abs(Ccomp(2:end-1, 2:end-1)'-C(2:end-1, 2:end-1))))
