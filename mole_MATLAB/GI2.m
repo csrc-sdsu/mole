@@ -1,4 +1,4 @@
-function I = I_(M, m, n, type)
+function I = GI2(M, m, n, type)
     if strcmp(type, 'Gn')
         I = zeros(4*n*(m-1)+12*n, 1);
         J = I;

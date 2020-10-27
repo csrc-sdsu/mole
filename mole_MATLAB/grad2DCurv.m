@@ -44,8 +44,8 @@ function G = grad2DCurv(k, X, Y)
     Gn = G(m*(n-1)+1:end, :);
     
     % Apply transformation
-    Gx = Ju*(Ynu*Ge-Yeu*I(Gn, m-1, n-1, 'Gn'));
-    Gy = Jv*(-Xnv*I(Ge, m-1, n-1, 'Ge')+Xev*Gn);
+    Gx = Ju*(Ynu*Ge-Yeu*GI2(Gn, m-1, n-1, 'Gn'));
+    Gy = Jv*(-Xnv*GI2(Ge, m-1, n-1, 'Ge')+Xev*Gn);
     
     % Final 2D curvilinear mimetic gradient operator (d/dx, d/dy)
     G = [Gx; Gy];
