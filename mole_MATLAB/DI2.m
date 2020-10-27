@@ -4,7 +4,7 @@ function I = DI2(m, n, type)
         pad1 = spalloc(1, (m+1)*n, 0);
         e = ones(m, 1);
         
-        bdry = spdiags([-0.5*e -0.5*e 0.5*e 0.5*e], [0 1 m+1 m+2], m, (m+1)*n);
+        bdry = spdiags([-0.25*e -0.25*e 0.25*e 0.25*e], [0 1 m+1 m+2], m, (m+1)*n);
         
         I = [padm3; bdry; pad1];
         
@@ -22,7 +22,7 @@ function I = DI2(m, n, type)
     else
         padm2 = spalloc(m+2, (n+1)*m, 0);
         pad1 = spalloc(1, (n+1)*m, 0);
-        bdry = spdiags([-0.5 0.5 -0.5 0.5], [0 1 m m+1], 1, (n+1)*m);
+        bdry = spdiags([-0.25 0.25 -0.25 0.25], [0 1 m m+1], 1, (n+1)*m);
         
         e = ones(m-2, 1);
         middle = spdiags([-0.25*e 0.25*e -0.25*e 0.25*e], [0 2 m m+2], m-2, (n+1)*m);
