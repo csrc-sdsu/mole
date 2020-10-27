@@ -6,8 +6,8 @@ addpath('../mole_MATLAB')
 
 % Parameters
 k = 2;
-m = 100;
-n = 100;
+m = 50;
+n = 50;
 
 % Grid
 r1 = 1; % Inner radius 
@@ -19,13 +19,13 @@ nT = linspace(0, 2*pi, n) ;
 X = R.*cos(T); 
 Y = R.*sin(T);
 
-%[X, Y] = meshgrid(1:m, 1:n);
-%[X, Y] = genCurvGrid(n, m);
+% [X, Y] = meshgrid(1:m, 1:n);
+% [X, Y] = genCurvGrid(n, m);
 
 mesh(X, Y, zeros(n, m), 'Marker', '.', 'MarkerSize', 10)
 %    Az  El
 view([0 90])
-axis tight
+axis equal
 set(gcf, 'Color', 'w')
 hold on
 
@@ -85,27 +85,29 @@ scatter3(Cx(:), Cy(:), zeros((m+2)*(n+2), 1), 'o', 'MarkerEdgeColor', 'r')
 legend('Nodal points', 'u', 'v', 'Centers', 'All centers')
 hold off
 
-figure
-subplot(2, 1, 1)
-surf(Cx(2:end-1, 2:end-1), Cy(2:end-1, 2:end-1), C(2:end-1, 2:end-1), 'EdgeColor', 'none');
-view([-16 21])
-axis equal
-colorbar
-title('Exact')
-xlabel('x')
-ylabel('y')
-
 tic
 D = div2DCurv(k, X, Y);
 toc
 
 Ccomp = D*[reshape(U.', [], 1); reshape(V.', [], 1)];
 Ccomp = reshape(Ccomp, m+2, n+2);
-subplot(2, 1, 2)
-surf(Cx(2:end-1, 2:end-1), Cy(2:end-1, 2:end-1), Ccomp(2:end-1, 2:end-1)', 'EdgeColor', 'none')
-view([-16 21])
+
+figure
+subplot(2, 1, 1)
+surf(Cx(2:end-1, 2:end-1), Cy(2:end-1, 2:end-1), C(2:end-1, 2:end-1),...
+    'EdgeColor', 'none');
+view([0 90])
+colorbar
+title('Exact')
+xlabel('x')
+ylabel('y')
 axis equal
+subplot(2, 1, 2)
+surf(Cx(2:end-1, 2:end-1), Cy(2:end-1, 2:end-1), Ccomp(2:end-1, 2:end-1)',...
+    'EdgeColor', 'none')
+view([0 90])
 colorbar
 title('Approx')
 xlabel('x')
 ylabel('y')
+axis equal
