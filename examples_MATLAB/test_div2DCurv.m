@@ -46,15 +46,15 @@ Cy = (Uy(:, 1:end-1) + Uy(:, 2:end))/2;
 scatter3(Cx(:), Cy(:), zeros(n*m, 1), '.', 'MarkerEdgeColor', 'r')
 
 % Interpolate U values
-Ugiven = sin(X);%X.^2;%-X.^3/3;
+Ugiven = sin(X);
 interpolant = scatteredInterpolant([X(:) Y(:)], Ugiven(:));
 U = interpolant(Ux, Uy);
 % Interpolate V values
-Vgiven = cos(Y);%Y.^2;%-Y.^3/3;
+Vgiven = cos(Y);
 interpolant = scatteredInterpolant([X(:) Y(:)], Vgiven(:));
 V = interpolant(Vx, Vy);
 % Interpolate C values
-Cgiven = cos(X)-sin(Y);%2*X+2*Y;%-X.^2-Y.^2;
+Cgiven = cos(X)-sin(Y);
 interpolant = scatteredInterpolant([X(:) Y(:)], Cgiven(:));
 
 % West-East sides
