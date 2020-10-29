@@ -113,7 +113,10 @@ B2 = reshape(B2.', [], 1);
 B(bdry) = B2(bdry);
 
 % Solve the system
+disp('Solving system...')
+tic
 Comp = L\B;
+toc
 Comp = reshape(Comp, m+2, n+2)';
 
 % Plot results
