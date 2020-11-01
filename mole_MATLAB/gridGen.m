@@ -14,17 +14,17 @@ function [X, Y] = gridGen(grid_name, m, n, plot_grid)
     addpath(['grids/' grid_name])
     
     % Logical grid
-    Xl = linspace(0, 1, m);
-    Yl = linspace(0, 1, n);
+    xi = linspace(0, 1, m);
+    eta = linspace(0, 1, n);
     
     % Allocate space for physical grid
     X = zeros(m, n);
     Y = zeros(m, n);
     
     for i = 1 : m
-        u = Xl(i);
+        u = xi(i);
         for j = 1 : n
-            v = Yl(j);
+            v = eta(j);
             % Transfinite interpolation
             XY = (1-v)*bottom(u)+v*top(u)+(1-u)*left(v)+u*right(v)-...
                 (u*v*top(1)+u*(1-v)*bottom(1)+v*(1-u)*top(0)+(1-u)*(1-v)*bottom(0));
