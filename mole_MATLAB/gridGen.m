@@ -9,7 +9,6 @@ function [X, Y] = gridGen(grid_name, m, n, plot_grid)
 %                n : Number of nodes along the vertical axis
 %        plot_grid : If defined -> grid will be plotted
     
-    assert(nargin == 4, 'Must specify all input arguments')
     assert(m > 4 && n > 4, 'm and n must be greater than 4')
     
     addpath(['grids/' grid_name])
