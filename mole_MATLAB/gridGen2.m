@@ -43,8 +43,8 @@ function [X, Y] = gridGen2(grid_name, m, n, iters, plot_grid)
     newX = X;
     newY = Y;
     
-    err1 = zeros(1, iters);
-    err2 = zeros(1, iters);
+    errX = zeros(1, iters);
+    errY = zeros(1, iters);
     
     for t = 1 : iters
         i = 2 : m-1;
@@ -62,13 +62,13 @@ function [X, Y] = gridGen2(grid_name, m, n, iters, plot_grid)
             .*(Y(i+1, j+1)-Y(i-1, j+1)-Y(i+1, j-1) + Y(i-1, j-1))-alpha(i, j)...
             .*(Y(i+1, j)+Y(i-1, j))-gamma(i, j).*(Y(i, j+1)+Y(i, j-1)));
         
-        err1(1, t) = max(max(abs(newX-X)));
-        err2(1, t) = max(max(abs(newY-Y)));
+        errX(1, t) = max(max(abs(newX-X)));
+        errY(1, t) = max(max(abs(newY-Y)));
         
         X = newX;
         Y = newY;
         
-        if err1(t) < tol && err2(t) < tol
+        if errX(t) < tol && errY(t) < tol
             break
         end
     end
