@@ -71,18 +71,15 @@ function [X, Y] = gridGen2(grid_name, m, n, iters, plot_grid)
         if err1(t) < tol && err2(t) < tol
             break
         end
-        
-        if plot_grid
-          if ceil(t/10)*10 == t
-            clf
-            hold on
-            axis equal
-            axis off
-            mesh(X, Y, zeros(m, n), 'Marker', '.', 'MarkerSize', 10, 'EdgeColor', 'b')
-            title(['Physical grid. m = ' num2str(m) ', n = ' num2str(n)])
-            set(gcf, 'color', 'w')
-            pause(0.01)
-          end
-        end
+    end
+    
+    if plot_grid
+        figure
+        mesh(X, Y, zeros(m, n), 'Marker', '.', 'MarkerSize', 10, 'EdgeColor', 'b')
+        title(['Physical grid. m = ' num2str(m) ', n = ' num2str(n)])
+        set(gcf, 'color', 'w')
+        axis equal
+        axis off
+        view([0 90])
     end
 end
