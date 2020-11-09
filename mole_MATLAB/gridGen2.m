@@ -13,14 +13,17 @@ function [X, Y] = gridGen2(grid_name, m, n, iters, plot_grid)
     
     addpath(['grids/' grid_name])
     
+    % Error tolerance for iterative method
     tol = 10^-6;
     
+    % Preallocation
     X = zeros(m, n);
     Y = zeros(m, n);
     alpha = zeros(m, n);
     beta = zeros(m, n);
     gamma = zeros(m, n);
     
+    % BCs
     for i = 1 : m
         xi = (i-1)/(m-1);
         XY = top(xi);
@@ -46,25 +49,27 @@ function [X, Y] = gridGen2(grid_name, m, n, iters, plot_grid)
     errX = zeros(1, iters);
     errY = zeros(1, iters);
     
+    % SOR
     for t = 1 : iters
         i = 2 : m-1;
         j = 2 : n-1;
         
-        alpha(i, j) = (1/4)*((X(i, j+1)-X(i, j-1)).^2 + (Y(i, j+1) - Y(i, j-1)).^2);
+        alpha(i, j) = (1/4)*((X(i, j+1)-X(i, j-1)).^2+(Y(i, j+1)-Y(i, j-1)).^2);
         beta(i, j) = (1/16)*((X(i+1, j)-X(i-1, j)).*(X(i, j+1)-X(i, j-1))+(Y(i+1, j)...
-            - Y(i-1, j)).*(Y(i, j+1) - Y(i, j-1)));
-        gamma(i, j) = (1/4)*((X(i+1, j)-X(i-1, j)).^2 + (Y(i+1, j) - Y(i-1, j)).^2);
+           -Y(i-1, j)).*(Y(i, j+1)-Y(i, j-1)));
+        gamma(i, j) = (1/4)*((X(i+1, j)-X(i-1, j)).^2+(Y(i+1, j)-Y(i-1, j)).^2);
         
-        newX(i, j) = ((-0.5)./(alpha(i, j)+gamma(i, j)+10^-9)).*(2*beta(i, j)...
-            .*(X(i+1, j+1)-X(i-1, j+1)-X(i+1, j-1) + X(i-1, j-1))-alpha(i, j)...
+        newX(i, j) = ((-0.5)./(alpha(i, j)+gamma(i, j)+1e-10)).*(2*beta(i, j)...
+            .*(X(i+1, j+1)-X(i-1, j+1)-X(i+1, j-1)+X(i-1, j-1))-alpha(i, j)...
             .*(X(i+1, j)+X(i-1, j))-gamma(i, j).*(X(i, j+1)+X(i, j-1)));
-        newY(i, j) = ((-0.5)./(alpha(i, j)+gamma(i, j)+10^-9)).*(2*beta(i, j)...
-            .*(Y(i+1, j+1)-Y(i-1, j+1)-Y(i+1, j-1) + Y(i-1, j-1))-alpha(i, j)...
+        newY(i, j) = ((-0.5)./(alpha(i, j)+gamma(i, j)+1e-10)).*(2*beta(i, j)...
+            .*(Y(i+1, j+1)-Y(i-1, j+1)-Y(i+1, j-1)+Y(i-1, j-1))-alpha(i, j)...
             .*(Y(i+1, j)+Y(i-1, j))-gamma(i, j).*(Y(i, j+1)+Y(i, j-1)));
         
         errX(1, t) = max(max(abs(newX-X)));
         errY(1, t) = max(max(abs(newY-Y)));
         
+        % Update
         X = newX;
         Y = newY;
         
