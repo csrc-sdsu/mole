@@ -17,5 +17,7 @@ function [X, Y] = gridGen(method, grid_name, m, n, plot_grid, varargin)
         else
             disp('Must specify maximum number of iterations for SOR algorithm.')
         end
+    else
+        disp('Method must be TFI or TTM.')
     end
 end
