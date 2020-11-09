@@ -54,10 +54,10 @@ function [X, Y] = gridGen2(grid_name, m, n, iters, plot_grid)
         i = 2 : m-1;
         j = 2 : n-1;
         
-        alpha(i, j) = (1/4)*((X(i, j+1)-X(i, j-1)).^2+(Y(i, j+1)-Y(i, j-1)).^2);
-        beta(i, j) = (1/16)*((X(i+1, j)-X(i-1, j)).*(X(i, j+1)-X(i, j-1))+(Y(i+1, j)...
+        alpha(i, j) = 0.25*((X(i, j+1)-X(i, j-1)).^2+(Y(i, j+1)-Y(i, j-1)).^2);
+        beta(i, j) = 0.0625*((X(i+1, j)-X(i-1, j)).*(X(i, j+1)-X(i, j-1))+(Y(i+1, j)...
            -Y(i-1, j)).*(Y(i, j+1)-Y(i, j-1)));
-        gamma(i, j) = (1/4)*((X(i+1, j)-X(i-1, j)).^2+(Y(i+1, j)-Y(i-1, j)).^2);
+        gamma(i, j) = 0.25*((X(i+1, j)-X(i-1, j)).^2+(Y(i+1, j)-Y(i-1, j)).^2);
         
         newX(i, j) = ((-0.5)./(alpha(i, j)+gamma(i, j)+1e-10)).*(2*beta(i, j)...
             .*(X(i+1, j+1)-X(i-1, j+1)-X(i+1, j-1)+X(i-1, j-1))-alpha(i, j)...
