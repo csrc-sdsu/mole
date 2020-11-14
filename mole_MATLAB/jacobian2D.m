@@ -13,8 +13,8 @@ function [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y)
     
     [n, m] = size(X);
     
-    X = reshape(X.', [], 1);
-    Y = reshape(Y.', [], 1);
+    X = reshape(X', [], 1);
+    Y = reshape(Y', [], 1);
     
     N = nodal2D(k, m, 1, n, 1);
     
