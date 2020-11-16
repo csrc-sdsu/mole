@@ -48,7 +48,7 @@ Gy = permute(reshape(Gy, m-1, n, o-1), [2, 1, 3]);
 Gz = permute(reshape(Gz, m-1, n-1, o), [2, 1, 3]);
 
 figure
-surf(Gx(:, :, 10))
+surf(Gx(:, :, 10), 'EdgeColor', 'none')
 title('Gx')
 xlabel('x')
 ylabel('y')
@@ -56,7 +56,7 @@ zlabel('z')
 set(gcf, 'Color', 'w')
 
 figure
-surf(Gy(:, :, 10))
+surf(Gy(:, :, 10), 'EdgeColor', 'none')
 title('Gy')
 xlabel('x')
 ylabel('y')
@@ -64,7 +64,7 @@ zlabel('z')
 set(gcf, 'Color', 'w')
 
 figure
-surf(squeeze(Gz(10, :, :)))
+surf(squeeze(Gz(10, :, :)), 'EdgeColor', 'none')
 title('Gz')
 xlabel('z')
 ylabel('x')
