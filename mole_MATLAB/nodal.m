@@ -4,7 +4,7 @@ function N = nodal(k, m, dx)
 %
 % Parameters:
 %                k : Order of accuracy
-%                m : Number of cells
+%                m : Number of nodes
 %               dx : Step size
     
     N = grad(k, m-1, dx, 'nodal');

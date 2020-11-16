@@ -4,9 +4,9 @@ function N = nodal2D(k, m, dx, n, dy)
 %
 % Parameters:
 %                k : Order of accuracy
-%                m : Number of cells along x-axis
+%                m : Number of nodes along x-axis
 %               dx : Step size along x-axis
-%                n : Number of cells along y-axis
+%                n : Number of nodes along y-axis
 %               dy : Step size along y-axis
     
     Nx = nodal(k, m, dx);
