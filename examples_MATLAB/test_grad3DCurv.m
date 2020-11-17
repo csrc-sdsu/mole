@@ -9,10 +9,10 @@ m = 20; % Number of nodes along x-axis
 n = 20; % Number of nodes along y-axis
 o = 20; % Number of nodes along z-axis
 
-[X, Y, Z] = meshgrid(1:m, 1:n, 1:o);
-X = X.*X;
-Y = Y.*Y;
-Z = Z.*Z;
+[X, Y] = genCurvGrid(n, m);
+X = repmat(X, [1 1 o]);
+Y = repmat(Y, [1 1 o]);
+[~, ~, Z] = meshgrid(1:m, 1:n, 1:o);
 
 C = X.^2+Y.^2+Z.^2; % Given scalar field (on a nodal grid)
 
@@ -22,6 +22,7 @@ title('Given scalar field')
 xlabel('x')
 ylabel('y')
 zlabel('z')
+axis equal
 
 % Staggered logical grid
 [Xs, Ys, Zs] = meshgrid([1 1.5 : 1 : m-0.5 m], [1 1.5 : 1 : n-0.5 n], [1 1.5 : 1 : o-0.5 o]);
@@ -40,31 +41,42 @@ Gy = TMP(m*(n-1)*(o-1)+1:m*(n-1)*(o-1)+(m-1)*n*(o-1));
 Gz = TMP(m*(n-1)*(o-1)+(m-1)*n*(o-1)+1:end);
 
 % Reshape for visualization
-Gx = permute(reshape(Gx, m, n-1, o-1), [2, 1, 3]);
-Gy = permute(reshape(Gy, m-1, n, o-1), [2, 1, 3]);
-Gz = permute(reshape(Gz, m-1, n-1, o), [2, 1, 3]);
-
-xslice = 10;
-yslice = 10;
-zslice = 10;
+Gx = Gx(1:m*(n-1));
+Gx = reshape(Gx, m, n-1)';
+Gy = Gy(1:(m-1)*n);
+Gy = reshape(Gy, m-1, n)';
+Gz = reshape(Gz, m-1, n-1, o);
+Gz = squeeze(Gz(:, n/2, :))';
 
 figure
-slice(Gx, xslice, yslice, zslice)
+Xu = (X(1:end-1, :, o/2)+X(2:end, :, o/2))/2;
+Yu = (Y(1:end-1, :, o/2)+Y(2:end, :, o/2))/2;
+surf(Xu, Yu, Gx, 'EdgeColor', 'none')
 title('Gx')
 xlabel('x')
 ylabel('y')
 zlabel('z')
+axis equal
+view([0 90])
 
 figure
-slice(Gy, xslice, yslice, zslice)
+Xv = (X(:, 1:end-1, o/2)+X(:, 2:end, o/2))/2;
+Yv = (Y(:, 1:end-1, o/2)+Y(:, 2:end, o/2))/2;
+surf(Xv, Yv, Gy, 'EdgeColor', 'none')
 title('Gy')
 xlabel('x')
 ylabel('y')
 zlabel('z')
+axis equal
+view([0 90])
 
 figure
-slice(Gz, xslice, yslice, zslice)
+Xw = squeeze((X(m/2, 1:end-1, :)+X(m/2, 2:end, :))/2);
+Zw = squeeze((Z(m/2, 1:end-1, :)+Z(m/2, 2:end, :))/2);
+surf(Xw', Zw', Gz, 'EdgeColor', 'none')
 title('Gz')
 xlabel('x')
-ylabel('y')
-zlabel('z')
+ylabel('z')
+zlabel('y')
+axis equal
+view([0 90])
