@@ -46,11 +46,11 @@ Gx = reshape(Gx, m, n-1)';
 Gy = Gy(1:(m-1)*n);
 Gy = reshape(Gy, m-1, n)';
 Gz = reshape(Gz, m-1, n-1, o);
-Gz = squeeze(Gz(:, n/2, :))';
+Gz = squeeze(Gz(:, 1, :))';
 
 figure
-Xu = (X(1:end-1, :, o/2)+X(2:end, :, o/2))/2;
-Yu = (Y(1:end-1, :, o/2)+Y(2:end, :, o/2))/2;
+Xu = (X(1:end-1, :, 1)+X(2:end, :, 1))/2;
+Yu = (Y(1:end-1, :, 1)+Y(2:end, :, 1))/2;
 surf(Xu, Yu, Gx, 'EdgeColor', 'none')
 title('Gx')
 xlabel('x')
@@ -61,8 +61,8 @@ view([0 90])
 shading interp
 
 figure
-Xv = (X(:, 1:end-1, o/2)+X(:, 2:end, o/2))/2;
-Yv = (Y(:, 1:end-1, o/2)+Y(:, 2:end, o/2))/2;
+Xv = (X(:, 1:end-1, 1)+X(:, 2:end, 1))/2;
+Yv = (Y(:, 1:end-1, 1)+Y(:, 2:end, 1))/2;
 surf(Xv, Yv, Gy, 'EdgeColor', 'none')
 title('Gy')
 xlabel('x')
@@ -73,9 +73,9 @@ view([0 90])
 shading interp
 
 figure
-Xw = squeeze((X(m/2, 1:end-1, :)+X(m/2, 2:end, :))/2);
-Zw = squeeze((Z(m/2, 1:end-1, :)+Z(m/2, 2:end, :))/2);
-surf(Xw', Zw', Gz, 'EdgeColor', 'none')
+Xw = squeeze((X(1, 1:end-1, :)+X(1, 2:end, :))/2);
+Zw = squeeze((Z(1, 1:end-1, :)+Z(1, 2:end, :))/2);
+surf(Xw, Zw, Gz', 'EdgeColor', 'none')
 title('Gz')
 xlabel('x')
 ylabel('z')
