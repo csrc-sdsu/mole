@@ -48,6 +48,7 @@ ylabel('y')
 title('C')
 axis equal
 view([0 90])
+shading interp
 subplot(3, 1, 2)
 surf((X(1:end-1, :)+X(2:end, :))/2, (Y(1:end-1, :)+Y(2:end, :))/2, Gx, 'EdgeColor', 'none');
 colorbar
@@ -56,6 +57,7 @@ ylabel('y')
 title('U')
 axis equal
 view([0 90])
+shading interp
 subplot(3, 1, 3)
 surf((X(:, 1:end-1)+X(:, 2:end))/2, (Y(:, 1:end-1)+Y(:, 2:end))/2, Gy, 'EdgeColor', 'none');
 colorbar
@@ -64,3 +66,4 @@ ylabel('y')
 title('V')
 axis equal
 view([0 90])
+shading interp

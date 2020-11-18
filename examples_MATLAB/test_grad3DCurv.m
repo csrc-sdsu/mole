@@ -58,6 +58,7 @@ ylabel('y')
 zlabel('z')
 axis equal
 view([0 90])
+shading interp
 
 figure
 Xv = (X(:, 1:end-1, o/2)+X(:, 2:end, o/2))/2;
@@ -69,6 +70,7 @@ ylabel('y')
 zlabel('z')
 axis equal
 view([0 90])
+shading interp
 
 figure
 Xw = squeeze((X(m/2, 1:end-1, :)+X(m/2, 2:end, :))/2);
@@ -80,3 +82,4 @@ ylabel('z')
 zlabel('y')
 axis equal
 view([0 90])
+shading interp
