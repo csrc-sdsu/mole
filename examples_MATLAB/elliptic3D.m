@@ -5,17 +5,13 @@ close all
 
 addpath('../mole_MATLAB')
 
+k = 2; % Order of accuracy
 m = 5; % -> 7
 n = 6; % -> 8
 o = 7; % -> 9
 
-L = lap3D(2, m, 1, n, 1, o, 1); % 3D Mimetic laplacian operator
-
-for i = 1 : (m+2)*(n+2)*(o+2)
-    if L(i,i) == 0
-        L(i,i) = 1; % Impose Dirichlet BC
-    end
-end
+L = lap3D(k, m, 1, n, 1, o, 1); % 3D Mimetic laplacian operator
+L = L + robinBC3D(k, m, 1, n, 1, o, 1, 1, 0);
 
 RHS = zeros((m+2), (n+2), (o+2));
 

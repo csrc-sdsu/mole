@@ -1,4 +1,4 @@
-% Tests the 2D curvilinear laplacian
+% Tests the 2D curvilinear laplacian on a sinusoidal grid
 clc
 close all
 
@@ -7,8 +7,8 @@ addpath('../mole_MATLAB')
 % Parameters
 e = 1; % Controls "rectangularity" of the grid, e = 0 -> completely rectangular
 k = 2;
-m = 50;
-n = 50;
+m = 20;
+n = 20;
 a = -pi;
 b = 2*pi;
 c = -pi;
@@ -129,6 +129,7 @@ title('Exact')
 xlabel('x')
 ylabel('y')
 axis equal
+shading interp
 colorbar
 subplot(2, 1, 2)
 surf(Cx, Cy, Comp, 'EdgeColor', 'none')
@@ -138,6 +139,7 @@ xlabel('x')
 ylabel('y')
 axis equal
 colorbar
+shading interp
 
 % Plot error
 figure
@@ -149,8 +151,8 @@ ylabel('y')
 set(gcf, 'Color', 'w')
 colorbar
 axis equal
+shading interp
 
 fprintf('\nEuclidean norm: %.2f\n', norm(F(Cx, Cy)-Comp))
 fprintf('Maximum error:  %.2f\n', max(max(abs(F(Cx, Cy)-Comp))))
-fprintf('Relative error: %.2f%%\n', 100*max(max(abs(F(Cx, Cy)-Comp)))/...
-    (max(max(F(Cx, Cy)))-min(min(F(Cx, Cy)))))
+fprintf('Relative error: %.2f%%\n', 100*max(max(abs(F(Cx, Cy)-Comp)))/(max(max(F(Cx, Cy)))-min(min(F(Cx, Cy)))))

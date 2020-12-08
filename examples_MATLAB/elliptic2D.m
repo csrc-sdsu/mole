@@ -1,4 +1,4 @@
-% Tests the 2D curvilinear laplacian
+% Tests the 2D curvilinear laplacian on a noisy grid
 clc
 close all
 

@@ -75,7 +75,7 @@ function G = grad3DCurv(k, X, Y, Z)
     Gn = Grad(m*(n-1)*(o-1)+1:m*(n-1)*(o-1)+(m-1)*n*(o-1), :);
     Gc = Grad(m*(n-1)*(o-1)+(m-1)*n*(o-1)+1:end, :);
     
-    % Apply transformation    
+    % Apply transformation
     Gx = Ju*(A*Ge+D*GI13(Gn, m-1, n-1, o-1, 'Gn')+G*GI13(Gc, m-1, n-1, o-1, 'Gc'));
     Gy = Jv*(B*GI13(Ge, m-1, n-1, o-1, 'Ge')+E*Gn+H*GI13(Gc, m-1, n-1, o-1, 'Gcy'));
     Gz = Jw*(C*GI13(Ge, m-1, n-1, o-1, 'Gee')+F*GI13(Gn, m-1, n-1, o-1, 'Gnn')+I*Gc);

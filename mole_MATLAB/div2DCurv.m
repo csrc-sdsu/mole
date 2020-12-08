@@ -17,7 +17,7 @@ function D = div2DCurv(k, X, Y)
     % Staggered logical grid
     [Xs, Ys] = meshgrid([1 1.5 : 1 : m-0.5 m], [1 1.5 : 1 : n-0.5 n]);
     
-    % Interpolate the metrics on the logical grid for positions u and v
+    % Interpolate the metrics on the logical grid for positions (Xs, Ys)
     J = interp2(Xl, Yl, J, Xs, Ys);
     Xe = interp2(Xl, Yl, Xe, Xs, Ys);
     Xn = interp2(Xl, Yl, Xn, Xs, Ys);
