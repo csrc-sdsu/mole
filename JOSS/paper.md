@@ -25,4 +25,14 @@ MOLE is a high quality (C++ & MATLAB) library that implements high-order mimetic
 
 The mathematics is based on the work of [@Corbino]. However the user may find useful previous publications such as [@Castillo], in which similar operators are derived using a matrix analysis approach.
 
+# Mimetic operators
+
+All linear transformations can be represented by a matrix multiplication, integration and differentiation are linear transformations. Mimetic operators are essentially matrices that when applied to discrete scalar or vector fields produce high-order approximations that are faithful to the physics.
+
+The basis of higher-dimensional operators, as well of more sophisticated operators such as the Laplacian or the Biharmonic operator are the one-dimensional mimetic gradient and divergence operators.
+
+# The library
+
+MOLE was designed to...
+
 # References
