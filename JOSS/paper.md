@@ -29,11 +29,17 @@ The mathematics is based on the work of [@Corbino]. However the user may find us
 
 All linear transformations can be represented by a matrix multiplication, integration and differentiation are linear transformations. Mimetic operators are essentially matrices that when applied to discrete scalar or vector fields produce high-order approximations that are faithful to the physics.
 
-The basis of higher-dimensional operators, as well of more sophisticated operators such as the Laplacian or the Biharmonic operator are the one-dimensional mimetic gradient and divergence operators.
+The basis of higher-dimensional operators, as well of more sophisticated operators such as the Laplacian or the Biharmonic operator are the one-dimensional mimetic Gradient and Divergence operators.
 
 # The library
 
 MOLE was designed to be an intuitive software package to numerically solve partial differential equations using mimetic methods. MOLE is implemented in C++ and in MATLAB scripting language (these are two independent flavors) and every single function in MOLE returns a sparse matrix of the requested mimetic operator. For information on the installation or usage of the library, please read the [User's Manual](https://github.com/jcorbino/mole/blob/master/MOLE%20User's%20Manual%20(MATLAB%20version).pdf) which is included in the repository.
+
+For example, if the user wants to get a 1D <em>k</em>-order mimetic Laplacian, just need to invoke:
+```matlab
+lap(k, m, dx);
+```
+where **k** is the desired order of accuracy, **m** is the number of cell centers (spatial resolution), and **dx** is the step length.
 
 The following code snippet shows how easy is to solve a boundary value problem through MOLE:
 ```matlab
