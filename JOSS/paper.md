@@ -39,7 +39,9 @@ For example, if the user wants to get a 1D *k*-order mimetic Laplacian, just nee
 ```matlab
 lap(k, m, dx);
 ```
-where **k** is the desired order of accuracy, **m** is the number of cell centers (spatial resolution), and **dx** is the step length. All functions in MOLE follow are quite consistent with such syntax.
+where **k** is the desired order of accuracy, **m** is the number of cell centers (spatial resolution), and **dx** is the step length. All functions in MOLE are quite consistent with this syntax.
+
+\pagebreak
 
 The following code snippet shows how easy is to solve a boundary value problem (with Robin's boundary conditions) through MOLE:
 ```matlab
