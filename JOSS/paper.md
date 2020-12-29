@@ -13,7 +13,7 @@ authors:
   - name: Jose E. Castillo
     affiliation: 1
 affiliations:
- - name: Computational Science Research Center, San Diego State University, San Diego State University, 5500 Campanile Dr, San Diego, California, 92182
+ - name: Computational Science Research Center, San Diego State University, 5500 Campanile Dr, San Diego, California, 92182.
    index: 1
 date: 29 December 2020
 bibliography: paper.bib
