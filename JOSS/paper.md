@@ -33,6 +33,6 @@ The basis of higher-dimensional operators, as well of more sophisticated operato
 
 # The library
 
-MOLE was designed to...
+MOLE was designed to be an intuitive software package to numerically solve partial differential equations using mimetic methods. MOLE is implemented in C++ and in MATLAB scripting language (these are two independent flavors) and every single function in MOLE returns a sparse matrix of the requested mimetic operator. For information on the installation or usage of the library, please read the [User's Manual](https://github.com/jcorbino/mole/blob/master/MOLE%20User's%20Manual%20(MATLAB%20version).pdf) which is included in the repository.
 
 # References
