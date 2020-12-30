@@ -78,6 +78,6 @@ xlabel('x')
 ylabel('u(x)')
 ```
 
-![Solution to BVP using *m=9* and *k=4*.](fig1.png){width=70%}
+![Solution to BVP using *m=9* and *k=4*.](fig1.png){width=75%}
 
 # References
