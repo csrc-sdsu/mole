@@ -29,7 +29,7 @@ The mathematics is based on the work of [@Corbino]. However the user may find us
 
 All linear transformations can be represented by a matrix multiplication, integration and differentiation are linear transformations. Mimetic operators are essentially matrices that when applied to discrete scalar or vector fields produce high-order approximations that are faithful to the physics.
 
-The basis of higher-dimensional operators, as well of more sophisticated operators such as the Laplacian or the Biharmonic operator are the one-dimensional mimetic Gradient and Divergence operators.
+The basis of higher-dimensional operators, as well of more sophisticated operators such as the Laplacian or the Biharmonic operator are the one-dimensional mimetic Gradient (**G**) and Divergence (**D**) operators.
 
 # The library
 
@@ -69,7 +69,7 @@ U = exp(grid)';
 U(1) = 0;  % West BC
 U(end) = 2*exp(1);  % East BC
 
-U = L\U;  % Solve a linear system of equations
+U = L\U;  % Solve a system of linear equations
 
 % Plot result
 plot(grid, U, 'o-')
