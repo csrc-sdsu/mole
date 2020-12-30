@@ -29,16 +29,7 @@ The mathematics is based on the work of [@Corbino]. However the user may find us
 
 All linear transformations can be represented by a matrix multiplication, integration and differentiation are linear transformations. Mimetic operators are essentially matrices that when applied to discrete scalar or vector fields produce high-order approximations that are faithful to the physics.
 
-The basis of higher-dimensional operators, as well of more sophisticated operators such as the Laplacian or the Biharmonic operator are the one-dimensional mimetic Gradient (**G**) and Divergence (**D**) operators. Where these two operators satisfy the following:
-
-\begin{equation}\label{identities}
-Gf_const=0  Gradient of a constant field \
-Dv_const=0  Free stream preservation \
-CGf=0  Curl of the gradient of any field \
-DCv=0  Divergence of the curl of any field \
-DGf=Lf  Definition of Laplacian \
-<Dv,f>_Q+<Gf,v>_P=<Bv,f>  Discrete extended divergence theorem
-\end{equation}
+The basis of higher-dimensional operators, as well of more sophisticated operators such as the Laplacian or the Biharmonic operator are the one-dimensional mimetic Gradient (**G**) and Divergence (**D**) operators. These operators can be reused throughout the model and they provide a higher level of abstraction at the time of solving differential equations.
 
 # The library
 
