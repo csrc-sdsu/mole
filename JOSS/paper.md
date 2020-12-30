@@ -32,11 +32,11 @@ All linear transformations can be represented by a matrix multiplication, integr
 The basis of higher-dimensional operators, as well of more sophisticated operators such as the Laplacian or the Biharmonic operator are the one-dimensional mimetic Gradient (**G**) and Divergence (**D**) operators. Where these two operators satisfy the following:
 
 \begin{equation}\label{identities}
-**G**f_const=0  Gradient of a constant field
-**D**v_const=0  Free stream preservation
-**CG**f=0  Curl of the gradient of any field
-**DC**V=0  Divergence of the curl of any field
-**DG**f=**L**f  Definition of Laplacian
+Gf_const=0  Gradient of a constant field \
+Dv_const=0  Free stream preservation \
+CGf=0  Curl of the gradient of any field \
+DCv=0  Divergence of the curl of any field \
+DGf=Lf  Definition of Laplacian \
 <Dv,f>_Q+<Gf,v>_P=<Bv,f>  Discrete extended divergence theorem
 \end{equation}
 
