@@ -78,6 +78,6 @@ xlabel('x')
 ylabel('u(x)')
 ```
 
-![Solution to BVP using *m=9* and *k=4*. \label{fig1}](fig1.png)
+![Solution to BVP using *m=9* and *k=4*. \label{fig1}](fig1.png=450x)
 
 # References
