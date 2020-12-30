@@ -39,7 +39,7 @@ For example, if the user wants to get a one-dimensional *k*-order mimetic Laplac
 ```matlab
 lap(k, m, dx);
 ```
-where **k** is the desired order of accuracy, **m** is the number of cell centers (spatial resolution), and **dx** is the step length. All functions in MOLE are quite consistent with this syntax, and more information regarding the signature of the function can be accessed via the ```help``` command. The C++ version of the library only depends on *Armadillo*, which is an open-source package for dense and sparse linear algebra [@Arma].
+where **k** is the desired order of accuracy, **m** is the number of cell centers (spatial resolution), and **dx** is the step length. All functions in MOLE are quite consistent with this syntax, and more information regarding the signature of the function can be accessed via the ```help``` command. The C++ version of the library only depends on [*Armadillo*](http://http://arma.sourceforge.net/), which is an open-source package for dense and sparse linear algebra [@Arma].
 
 \pagebreak
 
