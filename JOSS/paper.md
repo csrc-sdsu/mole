@@ -43,7 +43,7 @@ where **k** is the desired order of accuracy, **m** is the number of cell center
 
 The following code snippet shows how easy is to solve a boundary value problem (with Robin's boundary conditions) through MOLE:
 ```matlab
-addpath('../mole_MATLAB')
+addpath('../mole_MATLAB')  % Add path to library
 
 west = 0;  % Domain's limits
 east = 1;
@@ -55,9 +55,9 @@ dx = (east-west)/m;  % Step length
 L = lap(k, m, dx);  % 1D Mimetic laplacian operator
 
 % Impose Robin BC on laplacian operator
-a = 1;
-b = 1;
-L = L + robinBC(k, m, dx, a, b);
+a = 1;  % Dirichlet coefficient
+b = 1;  % Neumann coefficient
+L = L + robinBC(k, m, dx, a, b);  % Add BCs to laplacian operator
 
 % 1D Staggered grid
 grid = [west west+dx/2 : dx : east-dx/2 east];
