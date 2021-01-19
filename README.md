@@ -38,8 +38,8 @@ Armadillo in your computer. e.g. ARMA = /home/johnny/armadillo-7.950.1
 
 Then open a terminal and execute the following commands,
 
-qmake
-make
+`qmake
+make`
 
 a static library named "libmole.a" will be created.
 If you do not have qmake installed, you can simply modify the original 
