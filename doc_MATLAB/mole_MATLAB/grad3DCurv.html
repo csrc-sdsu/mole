@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of grad3DCurv</title>
+  <meta name="keywords" content="grad3DCurv">
+  <meta name="description" content="Get the determinant of the jacobian and the metrics">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html mole_MATLAB -->
+<h1>grad3DCurv
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Get the determinant of the jacobian and the metrics</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function G = grad3DCurv(k, X, Y, Z) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Get the determinant of the jacobian and the metrics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="GI13.html" class="code" title="function I = GI13(M, m, n, o, type)">GI13</a>	</li><li><a href="grad3D.html" class="code" title="function G = grad3D(k, m, dx, n, dy, o, dz)">grad3D</a>	Returns a three-dimensional mimetic gradient operator</li><li><a href="jacobian3D.html" class="code" title="function [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3D(k, X, Y, Z)">jacobian3D</a>	Returns:</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function G = grad3DCurv(k, X, Y, Z)</a>
+0002     <span class="comment">% Get the determinant of the jacobian and the metrics</span>
+0003     [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = <a href="jacobian3D.html" class="code" title="function [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3D(k, X, Y, Z)">jacobian3D</a>(k, X, Y, Z);
+0004     
+0005     <span class="comment">% Dimensions of nodal grid</span>
+0006     [n, m, o] = size(X);
+0007     
+0008     <span class="comment">% Make them volumes so they can be interpolated</span>
+0009     J = permute(reshape(J, m, n, o), [2, 1, 3]);
+0010     A = permute(reshape(Yn.*Zc-Zn.*Yc, m, n, o), [2, 1, 3]);
+0011     B = permute(reshape(Zn.*Xc-Xn.*Zc, m, n, o), [2, 1, 3]);
+0012     C = permute(reshape(Xn.*Yc-Yn.*Xc, m, n, o), [2, 1, 3]);
+0013     D = permute(reshape(Ze.*Yc-Ye.*Zc, m, n, o), [2, 1, 3]);
+0014     E = permute(reshape(Xe.*Zc-Ze.*Xc, m, n, o), [2, 1, 3]);
+0015     F = permute(reshape(Ye.*Xc-Xe.*Yc, m, n, o), [2, 1, 3]);
+0016     G = permute(reshape(Ye.*Zn-Ze.*Yn, m, n, o), [2, 1, 3]);
+0017     H = permute(reshape(Ze.*Xn-Xe.*Zn, m, n, o), [2, 1, 3]);
+0018     I = permute(reshape(Xe.*Yn-Ye.*Xn, m, n, o), [2, 1, 3]);
+0019     
+0020     <span class="comment">% Logical grids</span>
+0021     [Xl, Yl, Zl] = meshgrid(1:m, 1:n, 1:o);
+0022     
+0023     <span class="comment">% Interpolate the metrics on the logical grid for positions u, v and w</span>
+0024     Xl_ = (Xl(1:end-1, :, :)+Xl(2:<span class="keyword">end</span>, :, :))/2;
+0025     Xl_ = (Xl_(:, :, 1:end-1)+Xl_(:, :, 2:end))/2;
+0026     Yl_ = (Yl(1:end-1, :, :)+Yl(2:<span class="keyword">end</span>, :, :))/2;
+0027     Yl_ = (Yl_(:, :, 1:end-1)+Yl_(:, :, 2:end))/2;
+0028     Zl_ = (Zl(1:end-1, :, :)+Zl(2:<span class="keyword">end</span>, :, :))/2;
+0029     Zl_ = (Zl_(:, :, 1:end-1)+Zl_(:, :, 2:end))/2;
+0030     Ju = interp3(Xl, Yl, Zl, J, Xl_, Yl_, Zl_);
+0031     A = interp3(Xl, Yl, Zl, A, Xl_, Yl_, Zl_);
+0032     D = interp3(Xl, Yl, Zl, D, Xl_, Yl_, Zl_);
+0033     G = interp3(Xl, Yl, Zl, G, Xl_, Yl_, Zl_);
+0034     
+0035     Xl_ = (Xl(:, 1:end-1, :)+Xl(:, 2:<span class="keyword">end</span>, :))/2;
+0036     Xl_ = (Xl_(:, :, 1:end-1)+Xl_(:, :, 2:end))/2;
+0037     Yl_ = (Yl(:, 1:end-1, :)+Yl(:, 2:<span class="keyword">end</span>, :))/2;
+0038     Yl_ = (Yl_(:, :, 1:end-1)+Yl_(:, :, 2:end))/2;
+0039     Zl_ = (Zl(:, 1:end-1, :)+Zl(:, 2:<span class="keyword">end</span>, :))/2;
+0040     Zl_ = (Zl_(:, :, 1:end-1)+Zl_(:, :, 2:end))/2;
+0041     Jv = interp3(Xl, Yl, Zl, J, Xl_, Yl_, Zl_);
+0042     B = interp3(Xl, Yl, Zl, B, Xl_, Yl_, Zl_);
+0043     E = interp3(Xl, Yl, Zl, E, Xl_, Yl_, Zl_);
+0044     H = interp3(Xl, Yl, Zl, H, Xl_, Yl_, Zl_);
+0045     
+0046     Xl_ = (Xl(1:end-1, :, :)+Xl(2:<span class="keyword">end</span>, :, :))/2;
+0047     Xl_ = (Xl_(:, 1:end-1, :)+Xl_(:, 2:<span class="keyword">end</span>, :))/2;
+0048     Yl_ = (Yl(1:end-1, :, :)+Yl(2:<span class="keyword">end</span>, :, :))/2;
+0049     Yl_ = (Yl_(:, 1:end-1, :)+Yl_(:, 2:<span class="keyword">end</span>, :))/2;
+0050     Zl_ = (Zl(1:end-1, :, :)+Zl(2:<span class="keyword">end</span>, :, :))/2;
+0051     Zl_ = (Zl_(:, 1:end-1, :)+Zl_(:, 2:<span class="keyword">end</span>, :))/2;
+0052     Jw = interp3(Xl, Yl, Zl, J, Xl_, Yl_, Zl_);
+0053     C = interp3(Xl, Yl, Zl, C, Xl_, Yl_, Zl_);
+0054     F = interp3(Xl, Yl, Zl, F, Xl_, Yl_, Zl_);
+0055     I = interp3(Xl, Yl, Zl, I, Xl_, Yl_, Zl_);
+0056     
+0057     <span class="comment">% Convert metrics to diagonal matrices so they can be multiplied by the</span>
+0058     <span class="comment">% logical operators</span>
+0059     Ju = spdiags(1./reshape(permute(Ju, [2, 1, 3]), [], 1), 0, numel(Ju), numel(Ju));
+0060     Jv = spdiags(1./reshape(permute(Jv, [2, 1, 3]), [], 1), 0, numel(Jv), numel(Jv));
+0061     Jw = spdiags(1./reshape(permute(Jw, [2, 1, 3]), [], 1), 0, numel(Jw), numel(Jw));
+0062     A = spdiags(reshape(permute(A, [2, 1, 3]), [], 1), 0, numel(A), numel(A));
+0063     B = spdiags(reshape(permute(B, [2, 1, 3]), [], 1), 0, numel(B), numel(B));
+0064     C = spdiags(reshape(permute(C, [2, 1, 3]), [], 1), 0, numel(C), numel(C));
+0065     D = spdiags(reshape(permute(D, [2, 1, 3]), [], 1), 0, numel(D), numel(D));
+0066     E = spdiags(reshape(permute(E, [2, 1, 3]), [], 1), 0, numel(E), numel(E));
+0067     F = spdiags(reshape(permute(F, [2, 1, 3]), [], 1), 0, numel(F), numel(F));
+0068     G = spdiags(reshape(permute(G, [2, 1, 3]), [], 1), 0, numel(G), numel(G));
+0069     H = spdiags(reshape(permute(H, [2, 1, 3]), [], 1), 0, numel(H), numel(H));
+0070     I = spdiags(reshape(permute(I, [2, 1, 3]), [], 1), 0, numel(I), numel(I));
+0071     
+0072     <span class="comment">% Construct 3D uniform mimetic gradient operator (d/de, d/dn, d/dc)</span>
+0073     Grad = <a href="grad3D.html" class="code" title="function G = grad3D(k, m, dx, n, dy, o, dz)">grad3D</a>(k, m-1, 1, n-1, 1, o-1, 1);
+0074     Ge = Grad(1:m*(n-1)*(o-1), :);
+0075     Gn = Grad(m*(n-1)*(o-1)+1:m*(n-1)*(o-1)+(m-1)*n*(o-1), :);
+0076     Gc = Grad(m*(n-1)*(o-1)+(m-1)*n*(o-1)+1:<span class="keyword">end</span>, :);
+0077     
+0078     <span class="comment">% Apply transformation</span>
+0079     Gx = Ju*(A*Ge+D*<a href="GI13.html" class="code" title="function I = GI13(M, m, n, o, type)">GI13</a>(Gn, m-1, n-1, o-1, <span class="string">'Gn'</span>)+G*<a href="GI13.html" class="code" title="function I = GI13(M, m, n, o, type)">GI13</a>(Gc, m-1, n-1, o-1, <span class="string">'Gc'</span>));
+0080     Gy = Jv*(B*<a href="GI13.html" class="code" title="function I = GI13(M, m, n, o, type)">GI13</a>(Ge, m-1, n-1, o-1, <span class="string">'Ge'</span>)+E*Gn+H*<a href="GI13.html" class="code" title="function I = GI13(M, m, n, o, type)">GI13</a>(Gc, m-1, n-1, o-1, <span class="string">'Gcy'</span>));
+0081     Gz = Jw*(C*<a href="GI13.html" class="code" title="function I = GI13(M, m, n, o, type)">GI13</a>(Ge, m-1, n-1, o-1, <span class="string">'Gee'</span>)+F*<a href="GI13.html" class="code" title="function I = GI13(M, m, n, o, type)">GI13</a>(Gn, m-1, n-1, o-1, <span class="string">'Gnn'</span>)+I*Gc);
+0082     
+0083     <span class="comment">% Final 3D curvilinear mimetic gradient operator (d/dx, d/dy, d/dz)</span>
+0084     G = [Gx; Gy; Gz];
+0085 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 27-Jan-2021 14:29:32 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

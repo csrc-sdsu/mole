@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of nodal2D</title>
+  <meta name="keywords" content="nodal2D">
+  <meta name="description" content="Returns a two-dimensional operator that approximates the first-order">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html mole_MATLAB -->
+<h1>nodal2D
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Returns a two-dimensional operator that approximates the first-order</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function N = nodal2D(k, m, dx, n, dy) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Returns a two-dimensional operator that approximates the first-order 
+ derivatives on a uniform nodal grid
+
+ Parameters:
+                k : Order of accuracy
+                m : Number of nodes along x-axis
+               dx : Step size along x-axis
+                n : Number of nodes along y-axis
+               dy : Step size along y-axis</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="nodal.html" class="code" title="function N = nodal(k, m, dx)">nodal</a>	Returns a m+1 by m+1 one-dimensional operator that approximates the</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="jacobian2D.html" class="code" title="function [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y)">jacobian2D</a>	Returns:</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function N = nodal2D(k, m, dx, n, dy)</a>
+0002 <span class="comment">% Returns a two-dimensional operator that approximates the first-order</span>
+0003 <span class="comment">% derivatives on a uniform nodal grid</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Parameters:</span>
+0006 <span class="comment">%                k : Order of accuracy</span>
+0007 <span class="comment">%                m : Number of nodes along x-axis</span>
+0008 <span class="comment">%               dx : Step size along x-axis</span>
+0009 <span class="comment">%                n : Number of nodes along y-axis</span>
+0010 <span class="comment">%               dy : Step size along y-axis</span>
+0011     
+0012     Nx = <a href="nodal.html" class="code" title="function N = nodal(k, m, dx)">nodal</a>(k, m, dx);
+0013     Ny = <a href="nodal.html" class="code" title="function N = nodal(k, m, dx)">nodal</a>(k, n, dy);
+0014     
+0015     Im = speye(m, m);
+0016     In = speye(n, n);
+0017     
+0018     N = [kron(In, Nx); kron(Ny, Im)];
+0019 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 27-Jan-2021 14:29:32 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

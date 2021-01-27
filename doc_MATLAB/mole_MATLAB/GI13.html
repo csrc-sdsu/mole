@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of GI13</title>
+  <meta name="keywords" content="GI13">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html mole_MATLAB -->
+<h1>GI13
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function I = GI13(M, m, n, o, type) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="grad3DCurv.html" class="code" title="function G = grad3DCurv(k, X, Y, Z)">grad3DCurv</a>	Get the determinant of the jacobian and the metrics</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function I = GI13(M, m, n, o, type)</a>
+0002     <span class="keyword">if</span> strcmp(type, <span class="string">'Gn'</span>)
+0003         I = speye(n*o);
+0004         I1 = speye(m+1, m);
+0005         I1(<span class="keyword">end</span>, end) = 1;
+0006         I = kron(I, I1);
+0007         I = [I sparse(size(I, 1), m*o)];
+0008         I = I*M;
+0009     <span class="keyword">elseif</span> strcmp(type, <span class="string">'Ge'</span>)
+0010         I = speye(n+1, n);
+0011         I(<span class="keyword">end</span>, end) = 1;
+0012         I1 = speye(m, m+1);
+0013         I = kron(I, I1);
+0014         I = kron(speye(o), I);
+0015         I = I*M;
+0016     <span class="keyword">elseif</span> strcmp(type, <span class="string">'Gc'</span>)
+0017         I = speye(n*o);
+0018         I1 = speye(m+1, m);
+0019         I1(<span class="keyword">end</span>, end) = 1;
+0020         I = kron(I, I1);
+0021         I = [I sparse(size(I, 1), m*n)];
+0022         I = I*M;
+0023     <span class="keyword">elseif</span> strcmp(type, <span class="string">'Gcy'</span>)
+0024         I = speye(m*o);
+0025         I1 = speye(n+1, n);
+0026         I1(<span class="keyword">end</span>, end) = 1;
+0027         I = kron(I, I1);
+0028         I = [I sparse(size(I, 1), m*n)];
+0029         I = I*M;
+0030     <span class="keyword">elseif</span> strcmp(type, <span class="string">'Gee'</span>)
+0031         I = speye(o+1, o);
+0032         I(<span class="keyword">end</span>, end) = 1;
+0033         I1 = speye(m, m+1);
+0034         I = kron(I, I1);
+0035         I = kron(speye(n), I);
+0036         I = I*M;
+0037     <span class="keyword">elseif</span> strcmp(type, <span class="string">'Gnn'</span>)
+0038         I = speye(m*n);
+0039         I1 = speye(o+1, o);
+0040         I1(<span class="keyword">end</span>, end) = 1;
+0041         I = kron(I, I1);
+0042         I = [I sparse(size(I, 1), m*o)];
+0043         I = I*M;
+0044     <span class="keyword">end</span>
+0045 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 27-Jan-2021 14:29:32 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

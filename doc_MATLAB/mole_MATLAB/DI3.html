@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of DI3</title>
+  <meta name="keywords" content="DI3">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html mole_MATLAB -->
+<h1>DI3
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function I = DI3(m, n, o, type) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="div3DCurv.html" class="code" title="function D = div3DCurv(k, X, Y, Z)">div3DCurv</a>	Get the determinant of the jacobian and the metrics</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function I = DI3(m, n, o, type)</a>
+0002     <span class="keyword">if</span> strcmp(type, <span class="string">'Dn'</span>)
+0003         e = ones(m, 1);
+0004         bdry = spdiags([-0.5*e -0.5*e 0.5*e 0.5*e], [0 1 m+1 m+2], m, (m+1)*n);
+0005         block = spdiags([[0.25*e; 0; 0] [0.25*e; 0.25; 0]], [0 1], m+2, m+1);
+0006         pattern = spdiags([-ones(n-2, 1) ones(n-2, 1)], [0 2], n-2, n);
+0007         middle = kron(pattern, block);
+0008         I = [spalloc(m+3, (m+1)*n, 0); bdry; spalloc(2, (m+1)*n, 0); middle; circshift(bdry, (m+1)*(n-2), 2); spalloc(m+3, (m+1)*n, 0)];
+0009         I = kron(speye(o), I);
+0010         I = [spalloc((m+2)*(n+2), size(I, 2), 0); I; spalloc((m+2)*(n+2), size(I, 2), 0)];
+0011     <span class="keyword">elseif</span> strcmp(type, <span class="string">'De'</span>)
+0012         e = ones(m-2, 1);
+0013         block = spdiags([[-0.25*e; -0.25; 0] [0; 0.25*e; 0.25]], [-1 1], m+2, m);
+0014         block(1, 1) = -0.5;
+0015         block(1, 2) = 0.5;
+0016         block(m, m-1) = -0.5;
+0017         block(m, m) = 0.5;
+0018         pattern = spdiags([ones(n, 1) ones(n, 1)], [0 1], n, n+1);
+0019         middle = kron(pattern, block);
+0020         I = [spalloc(m+3, (n+1)*m, 0); middle; spalloc(m+1, (n+1)*m, 0)];
+0021         I = kron(speye(o), I);
+0022         I = [spalloc((m+2)*(n+2), size(I, 2), 0); I; spalloc((m+2)*(n+2), size(I, 2), 0)];
+0023     <span class="keyword">elseif</span> strcmp(type, <span class="string">'Dc'</span>)
+0024         e = ones(m, 1);
+0025         bdry = spdiags([0.5*e 0.5*e], [0 1], m, m+1);
+0026         bdry = [bdry; spalloc(2, m+1, 0)];
+0027         bdry = kron(speye(n), bdry);
+0028         middle = kron(0.25*speye(o-2), [bdry; spalloc(2*(m+2), size(bdry, 2), 0)]);
+0029         middle = [spalloc(2*(m+2), size(middle, 2), 0); middle];
+0030         middle = [middle spalloc(size(middle, 1), (m+1)*n*o-size(middle, 2), 0)];
+0031         middle = -middle + circshift(middle, 2*(m+1)*n, 2);
+0032         bdry = [-bdry bdry spalloc(size(bdry, 1), (m+1)*n*o-2*size(bdry, 2), 0)];
+0033         I = [spalloc((m+2)*(n+2)+m+3, size(bdry, 2), 0); bdry];
+0034         I = [I; middle; circshift(bdry, (m+1)*n*(o-2), 2); spalloc((m+2)*(n+2)+m+1, size(bdry, 2), 0)];
+0035     <span class="keyword">elseif</span> strcmp(type, <span class="string">'Dcc'</span>)
+0036         e = ones(m, 1);
+0037         bdry = spdiags(0.5*e, 0, m, m);
+0038         bdry = [bdry; spalloc(2, m, 0)];
+0039         I = spdiags([ones(n, 1) ones(n, 1)], [0 1], n, n+1);
+0040         middle = kron(0.25*I, bdry);
+0041         middle = [middle; spalloc(2*(m+2), size(middle, 2), 0)];
+0042         middle = kron(spdiags([-ones(o-2, 1) ones(o-2, 1)], [0 2], o-2, o), middle);
+0043         bdry = kron(I, bdry);
+0044         bdry = [-bdry bdry spalloc(size(bdry, 1), m*(n+1)*o-2*size(bdry, 2), 0)];
+0045         I = [spalloc((m+2)*(n+2)+m+3, size(bdry, 2), 0); bdry; spalloc(2*(m+2), size(bdry, 2), 0); middle; circshift(bdry, m*(n+1)*(o-2), 2); spalloc((m+2)*(n+2)+m+1, size(bdry, 2), 0)];
+0046     <span class="keyword">elseif</span> strcmp(type, <span class="string">'Dee'</span>)
+0047         e = ones(m-2, 1);
+0048         block = spdiags([[-0.25*e; -0.25; 0] [0; 0.25*e; 0.25]], [-1 1], m+2, m);
+0049         block(1, 1) = -0.5;
+0050         block(1, 2) = 0.5;
+0051         block(m, m-1) = -0.5;
+0052         block(m, m) = 0.5;
+0053         middle = kron(speye(n), block);
+0054         middle = [middle; spalloc(2*(m+2), size(middle, 2), 0)];
+0055         I = kron(spdiags([ones(o, 1) ones(o, 1)], [0 1], o, o+1), middle);
+0056         I = [spalloc((m+2)*(n+2)+m+3, size(I, 2), 0); I; spalloc((m+2)*n+m+1, size(I, 2), 0)];
+0057     <span class="keyword">elseif</span> strcmp(type, <span class="string">'Dnn'</span>)
+0058         e = ones(m, 1);
+0059         bdry = spdiags([-0.5*e 0.5*e -0.5*e 0.5*e], [0 m m*n m*n+m], m, 2*m*n);
+0060         middle = 0.25*speye(m);
+0061         middle = [middle; spalloc(2, m, 0)];
+0062         middle = kron(spdiags([-ones(n-2, 1) ones(n-2, 1)], [0 2], n-2, n), middle);
+0063         middle = [middle middle];
+0064         I = [bdry; spalloc(2, size(bdry, 2), 0); middle; circshift(bdry, m*(n-2), 2)];
+0065         I = I(:, 1:m*n);
+0066         I = [I; spalloc(2*(m+2)+2, size(I, 2), 0)];
+0067         I = kron(spdiags([ones(o, 1) ones(o, 1)], [0 1], o, o+1), I);
+0068         I = [spalloc((m+2)*(n+2)+m+3, size(I, 2), 0); I; spalloc((m+2)*n+m+1, size(I, 2), 0)];
+0069     <span class="keyword">end</span>
+0070 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 27-Jan-2021 14:29:32 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

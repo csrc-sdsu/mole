@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of div</title>
+  <meta name="keywords" content="div">
+  <meta name="description" content="Returns a m+2 by m+1 one-dimensional mimetic divergence operator">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html mole_MATLAB -->
+<h1>div
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Returns a m+2 by m+1 one-dimensional mimetic divergence operator</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function D = div(k, m, dx) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Returns a m+2 by m+1 one-dimensional mimetic divergence operator
+
+ Parameters:
+                k : Order of accuracy
+                m : Number of cells
+               dx : Step size</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="div2D.html" class="code" title="function D = div2D(k, m, dx, n, dy)">div2D</a>	Returns a two-dimensional mimetic divergence operator</li><li><a href="div3D.html" class="code" title="function D = div3D(k, m, dx, n, dy, o, dz)">div3D</a>	Returns a three-dimensional mimetic divergence operator</li><li><a href="divNonUniform.html" class="code" title="function D = divNonUniform(k, ticks)">divNonUniform</a>	Returns a m+2 by m+1 one-dimensional non-uniform mimetic divergence</li><li><a href="lap.html" class="code" title="function L = lap(k, m, dx)">lap</a>	Returns a m+2 by m+2 one-dimensional mimetic laplacian operator</li><li><a href="mimeticB.html" class="code" title="function B = mimeticB(k, m)">mimeticB</a>	Returns a m+2 by m+1 one-dimensional mimetic boundary operator</li><li><a href="weightsQ.html" class="code" title="function Q = weightsQ(k, m, dx)">weightsQ</a>	Returns the m+2 weights of Q</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function D = div(k, m, dx)</a>
+0002 <span class="comment">% Returns a m+2 by m+1 one-dimensional mimetic divergence operator</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Parameters:</span>
+0005 <span class="comment">%                k : Order of accuracy</span>
+0006 <span class="comment">%                m : Number of cells</span>
+0007 <span class="comment">%               dx : Step size</span>
+0008     
+0009     <span class="comment">% Assertions:</span>
+0010     assert(k &gt;= 2, <span class="string">'k &gt;= 2'</span>);
+0011     assert(mod(k, 2) == 0, <span class="string">'k % 2 = 0'</span>);
+0012     assert(m &gt;= 2*k+1, [<span class="string">'m &gt;= '</span> num2str(2*k+1) <span class="string">' for k = '</span> num2str(k)]);
+0013     
+0014     <span class="comment">% Dimensions of D:</span>
+0015     n_rows = m+2;
+0016     n_cols = m+1;
+0017     
+0018     D = sparse(n_rows, n_cols);
+0019     
+0020     <span class="comment">% Fill the middle of D ------------------------------------------------</span>
+0021     neighbors = zeros(1, k); <span class="comment">% Bandwidth = k</span>
+0022     neighbors(1) = 1/2 - k/2;
+0023     <span class="keyword">for</span> i = 2 : k
+0024         neighbors(i) = neighbors(i-1)+1;
+0025     <span class="keyword">end</span>
+0026     
+0027     <span class="comment">% Create a k by k Vandermonde matrix based on the neighbors:</span>
+0028     A = vander(neighbors)';
+0029     
+0030     <span class="comment">% First-order derivative</span>
+0031     b = zeros(k, 1);
+0032     b(k-1) = 1;
+0033     
+0034     <span class="comment">% Solve the linear system to get the coefficients</span>
+0035     coeffs = A\b;
+0036     
+0037     j = 1;
+0038     <span class="keyword">for</span> i = k/2+1 : n_rows - k/2
+0039         D(i, j:j+k-1) = coeffs;
+0040         j = j + 1;
+0041     <span class="keyword">end</span>
+0042     <span class="comment">% ---------------------------------------------------------------------</span>
+0043     
+0044     <span class="comment">% Create A ------------------------------------------------------------</span>
+0045     p = k/2-1;
+0046     q = k+1;
+0047     A = sparse(p, q);
+0048     <span class="keyword">for</span> i = 1 : p <span class="comment">% For each row of A</span>
+0049         neighbors = zeros(1, q); <span class="comment">% k+1 points are used for the boundaries</span>
+0050         neighbors(1) = 1/2 - i; <span class="comment">% Shifting the stencil to the right</span>
+0051         <span class="keyword">for</span> j = 2 : q
+0052             neighbors(j) = neighbors(j-1)+1;
+0053         <span class="keyword">end</span>
+0054         V = vander(neighbors)';
+0055         b = zeros(q, 1);
+0056         b(q-1) = 1;
+0057         coeffs = V\b;
+0058         A(i, 1:q) = coeffs;
+0059     <span class="keyword">end</span>
+0060     <span class="comment">% ---------------------------------------------------------------------</span>
+0061     
+0062     <span class="comment">% Insert A into D (upper-left corner of D)</span>
+0063     D(2:p+1, 1:q) = A;
+0064     
+0065     <span class="comment">% Permutation matrices</span>
+0066     Pp = fliplr(speye(p));
+0067     Pq = fliplr(speye(q));
+0068     <span class="comment">% Construct A' (lower-right corner of D)</span>
+0069     A = -Pp*A*Pq;
+0070     
+0071     <span class="comment">% Insert A' into D</span>
+0072     D(n_rows-p:n_rows-1, n_cols-q+1:n_cols) = A;
+0073     
+0074     <span class="comment">% Scale D</span>
+0075     D = 1/dx*D;
+0076 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 27-Jan-2021 14:29:32 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
