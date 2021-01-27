@@ -29,12 +29,16 @@ LICENSE.txt and GPLv3.txt files for more information on this.
 
 In order to install MOLE (C++ version), you need to have Armadillo C++ 
 Linear Algebra Library. You can easily download Armadillo from: 
-<http://arma.sourceforge.net/download.html>, we suggest to use the 
-latest stable version that is available. Also, we recommend to use 
-the qmake tool to generate the Makefile of the project.
+<http://arma.sourceforge.net/download.html>, or simply install it via:
 
-You need to set the ARMA variable on "mole.pro" with the location of 
-Armadillo in your computer. e.g. ARMA = /home/johnny/armadillo-7.950.1
+`sudo apt install libarmadillo-dev`
+
+We suggest to use the latest stable version that is available. Also, 
+we recommend to use the `qmake` tool to generate the `Makefile` of the project.
+
+**NOTE**: If you installed Armadillo via its sourcefiles (`.tar.xz`), then you 
+must set the `ARMA` variable in `mole.pro` with the location of Armadillo in 
+your computer. e.g. `ARMA = /home/johnny/armadillo-7.950.1`
 
 Then open a terminal and execute the following commands,
 
@@ -42,11 +46,14 @@ Then open a terminal and execute the following commands,
 
 `make`
 
-a static library named "libmole.a" will be created.
-If you do not have qmake installed, you can simply modify the original 
-Makefile provided. From this point you just need to include "mole.h" 
-in your projects and specify the location of "libmole.a" to the linker.
+a static library named `libmole.a` will be created.
+If you do not have `qmake` installed, you can simply modify the original 
+`Makefile` provided. From this point you just need to include `mole.h` 
+in your projects and specify the location of `libmole.a` to the linker.
 
+For the MATLAB version of our library, the only dependency is to have MATLAB installed.
+The two implementations of MOLE (C++ & MATLAB) are independent, that is, you don't need
+to build the C++ version if you are just interested in using MOLE from MATLAB.
 
 4: Citations
 ------------
