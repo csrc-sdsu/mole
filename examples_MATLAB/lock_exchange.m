@@ -80,9 +80,12 @@ L = L+robinBC2D(k, m, dx, n, dy, 0, 1);
 I0 = interpol2D(m, n, 0, 0);  % For downwind
 I1 = interpol2D(m, n, 1, 1);  % For upwind
 
-%% Iterate over time
+%% Convenient definitions
 SOL = zeros(size(D, 2), 1);   % To be used later for heat advection
+rho_dt = rho_middle/dt;
 u_length = (m+1)*n;
+
+%% Iterate over time
 for t = 1 : iterations
     
     %% Velocity BCs (no-slip)
@@ -160,7 +163,7 @@ for t = 1 : iterations
     u_s = reshape(u_s', [], 1);
     v_s = reshape(v_s', [], 1);
     
-    R = rho_middle/dt*[u_s; v_s];
+    R = rho_dt*[u_s; v_s];
     
     % Poisson's equation (most time-consuming part)
     p = L\(D*R);
