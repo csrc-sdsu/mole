@@ -81,7 +81,7 @@ I0 = interpol2D(m, n, 0, 0);  % For downwind
 I1 = interpol2D(m, n, 1, 1);  % For upwind
 
 %% Convenient definitions
-SOL = zeros(size(D, 2), 1);   % To be used later for heat advection
+SOL = zeros(size(D, 2), 1);
 rho_dt = rho_middle/dt;
 u_length = (m+1)*n;
 
