@@ -82,6 +82,7 @@ I1 = interpol2D(m, n, 1, 1);  % For upwind
 
 %% Iterate over time
 SOL = zeros(size(D, 2), 1);   % To be used later for heat advection
+u_length = (m+1)*n;
 for t = 1 : iterations
     
     %% Velocity BCs (no-slip)
@@ -98,7 +99,7 @@ for t = 1 : iterations
     % Mimetic operators could be used here, but for a second-order
     % approximation it will be pointless.
     % u*
-    u_s = u;
+    u_s = u;  % We just need the boundaries but this is simpler
     for j = 2 : m
         for i = 2 : n-1
             
@@ -127,7 +128,7 @@ for t = 1 : iterations
     end
     
     % v*
-    v_s = v;
+    v_s = v;  % We just need the boundaries but this is simpler
     for j = 2 : m-1
         for i = 2 : n
             
@@ -159,14 +160,14 @@ for t = 1 : iterations
     u_s = reshape(u_s', [], 1);
     v_s = reshape(v_s', [], 1);
     
-    R = [u_s; v_s];
+    R = rho_middle/dt*[u_s; v_s];
     
     % Poisson's equation (most time-consuming part)
-    p = L\(rho_middle/dt*D*R);
+    p = L\(D*R);
     
     %% Corrector step
-    u = u_s+G(1:(m+1)*n, :)*p;
-    v = v_s+G((m+1)*n+1:end, :)*p;
+    u = u_s+G(1:u_length, :)*p;
+    v = v_s+G(u_length+1:end, :)*p;
     
     %% Advection of heat
     T = reshape(T', [], 1);
