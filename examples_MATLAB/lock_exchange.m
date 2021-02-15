@@ -48,7 +48,7 @@ delta_rho = reduced_gravity*rho_0/g;  % Density difference between the two fluid
 
 % Time parameters
 time = 200;              % s Simulation time
-dt = 1;                  % s Time step
+dt = 1;                  % s Time step, based on CFL condition: max(|u|)dt/dx + max(|v|)dt/dy <= 1
 iterations = time/dt;    % Number of iterations
 
 %% Initialize densities and temperatures
