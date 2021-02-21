@@ -27,29 +27,40 @@ LICENSE.txt and GPLv3.txt files for more information on this.
 3: Installation
 ---------------
 
-In order to install MOLE (C++ version), you need to have Armadillo C++ 
-Linear Algebra Library. You can easily download Armadillo from: 
-<http://arma.sourceforge.net/download.html>, or simply install it via:
+In order to install MOLE (C++ version), you need to have _Armadillo C++ 
+Linear Algebra Library_. You can easily download Armadillo from: 
+<http://arma.sourceforge.net/download.html>. Armadillo requires _SuperLU_ 
+for certain operations on sparse matrices. Assuming that SuperLU is 
+properly installed on your computer, you just need to follow these steps:
 
-`sudo apt install libarmadillo-dev`
+`wget http://sourceforge.net/projects/arma/files/armadillo-10.2.1.tar.xz`
+`tar xvf armadillo-10.2.1.tar.xz`
+`cd armadillo-10.2.1`
 
-We suggest to use the latest stable version that is available.
+**NOTE:** We suggest to use the latest stable version that is available.
 
-**NOTE**: If you installed Armadillo via its sourcefiles (`.tar.xz`), then you 
-must set the `ARMA` variable in `mole_C++/Makefile` and `examples_C++/Makefile` 
-with the location of Armadillo in your computer. e.g. `ARMA = /home/johnny/armadillo-10.2.1`. 
-Also, for problems that involve a system of equations, you must enable Armadillo's capability to 
-use the SuperLU library <https://portal.nersc.gov/project/sparse/superlu>.
+Undefine `ARMA_USE_LAPACK` and define `ARMA_USE_SUPERLU` in `include/armadillo_bits/config.hpp` 
+before building Armadillo. After that just execute:
 
-After installing SuperLU and Armadillo, open a terminal and execute the following command,
+`./configure`
+`make`
+
+this will create `libarmadillo.so`.
+
+Now go to `mole/mole_C++` and modify the `Makefile` by setting the correct path to Armadillo:
+
+`ARMA = /home/johnny/Desktop/armadillo-10.2.1`
+
+**NOTE:** Do the same with the `Makefile` located in `mole/examples_C++` if you want to build the examples.
+
+Lastly, build MOLE by executing:
 
 `make`
 
-a static library named `libmole.a` will be created.
-From this point you just need to include `mole.h` 
+a static library named `libmole.a` will be created. From this point you just need to include `mole.h` 
 in your projects and specify the location of `libmole.a` to the linker.
 
-For the MATLAB version of our library, the only dependency is to have MATLAB installed.
+**For the MATLAB version of our library, the only dependency is to have MATLAB installed**.
 The two implementations of MOLE (C++ & MATLAB) are independent, that is, you don't need
 to build the C++ version if you are just interested in using MOLE from MATLAB.
 
