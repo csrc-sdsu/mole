@@ -34,7 +34,9 @@ for certain operations on sparse matrices. Assuming that SuperLU is
 properly installed on your computer, you just need to follow these steps:
 
 `wget http://sourceforge.net/projects/arma/files/armadillo-10.2.1.tar.xz`
+
 `tar xvf armadillo-10.2.1.tar.xz`
+
 `cd armadillo-10.2.1`
 
 **NOTE:** We suggest to use the latest stable version that is available.
@@ -43,6 +45,7 @@ Undefine `ARMA_USE_LAPACK` and define `ARMA_USE_SUPERLU` in `include/armadillo_b
 before building Armadillo. After that just execute:
 
 `./configure`
+
 `make`
 
 this will create `libarmadillo.so`.
