@@ -1,10 +1,7 @@
-# Basic Makefile template
-
 # Put here the path to Armadillo
-ARMA = /home/johnny/armadillo-7.950.1
+ARMA = /home/johnny/Desktop/armadillo-10.2.1
 
 #----------------------------------------------------------------------
-
 # Compiler for C++
 CXX = g++
 

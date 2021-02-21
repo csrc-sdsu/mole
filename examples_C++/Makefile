@@ -1,10 +1,8 @@
-# Basic Makefile template
-
-# Put here the path to Armadillo and MOLE
-ARMA = /home/johnny/armadillo-7.950.1
-MOLE = /home/johnny/Desktop/mole/mole_C++
+# Put here the path to Armadillo
+ARMA = /home/johnny/Desktop/armadillo-10.2.1
 
 #----------------------------------------------------------------------
+MOLE = ../mole_C++
 
 # Compiler for C++
 CXX = g++
@@ -16,13 +14,16 @@ CXXFLAGS = -O3
 INCPATH = -I. -I$(ARMA)/include -I$(MOLE)
 
 # Path to libmole.a
-LIBS = -L$(MOLE) -lmole
+LIBS = -L$(MOLE) -lmole -lsuperlu
 
 # Rules:
-all: transport1D
+all: transport1D elliptic1D
 
 transport1D: transport1D.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o transport1D transport1D.cpp $(LIBS)
 
+elliptic1D: elliptic1D.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o elliptic1D elliptic1D.cpp $(LIBS)
+
 clean:
-	rm -f transport1D
+	rm -f transport1D elliptic1D

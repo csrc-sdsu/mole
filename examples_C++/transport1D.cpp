@@ -51,7 +51,7 @@ int main() {
     }
 
     // Spit out the new concentrations!
-    cout << C << endl;
+    cout << C;
 
     return 0;
 }

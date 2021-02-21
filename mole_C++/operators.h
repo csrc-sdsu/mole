@@ -3,10 +3,16 @@
 
 #include "laplacian.h"
 #include "interpol.h"
+#include "robinbc.h"
 
 inline sp_mat operator*(const Divergence &div, const Gradient &grad)
 {
     return (sp_mat)div*(sp_mat)grad;
+}
+
+inline sp_mat operator+(const Laplacian &lap, const RobinBC &bc)
+{
+    return (sp_mat)lap+(sp_mat)bc;
 }
 
 inline vec operator*(const Divergence &div, const vec &v)
