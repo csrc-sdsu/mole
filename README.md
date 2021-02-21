@@ -27,8 +27,7 @@ LICENSE.txt and GPLv3.txt files for more information on this.
 3: Installation
 ---------------
 
-To use MOLE (C++ version), you need to have _Armadillo C++ 
-Linear Algebra Library_ <http://arma.sourceforge.net> and _SuperLU_ 
+To use MOLE (C++ version), you need to have _Armadillo C++_ <http://arma.sourceforge.net> and _SuperLU_ 
 <https://portal.nersc.gov/project/sparse/superlu> installed on your computer.
 
 Assuming a working installation of _SuperLU_, follow these steps:
@@ -41,8 +40,7 @@ Assuming a working installation of _SuperLU_, follow these steps:
 
 **NOTE:** We suggest to use the latest stable version that is available.
 
-Undefine `ARMA_USE_LAPACK` and define `ARMA_USE_SUPERLU` in `include/armadillo_bits/config.hpp` 
-before building _Armadillo_! After that just execute:
+Undefine `ARMA_USE_LAPACK` and define `ARMA_USE_SUPERLU` in `include/armadillo_bits/config.hpp`. Then execute:
 
 `./configure`
 
@@ -50,10 +48,10 @@ before building _Armadillo_! After that just execute:
 
 this will create `libarmadillo.so`.
 
-Now go to `mole/mole_C++` and modify the `Makefile` by setting the correct path to _Armadillo_ 
+Now go to `mole/mole_C++` and modify the path to _Armadillo_ in the `Makefile` 
 e.g. `ARMA = /home/johnny/Desktop/armadillo-10.2.1`.
 
-**NOTE:** Do the same with the `Makefile` located in `mole/examples_C++` if you want to build the examples.
+**NOTE:** Do the same with the `Makefile` located in `mole/examples_C++`.
 
 Lastly, build MOLE by executing:
 
