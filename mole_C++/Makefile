@@ -17,7 +17,7 @@ INCPATH = -I. -I$(ARMA)/include
 # Rules:
 all: libmole.a
 
-libmole.a: divergence.o gradient.o laplacian.o interpol.o utils.o
+libmole.a: divergence.o gradient.o laplacian.o interpol.o robinbc.o utils.o
 	ar cqs libmole.a *.o
 
 divergence.o: divergence.cpp divergence.h utils.h
@@ -31,6 +31,9 @@ laplacian.o: laplacian.cpp laplacian.h divergence.h gradient.h utils.h
 
 interpol.o: interpol.cpp interpol.h utils.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o interpol.o interpol.cpp
+
+robinbc.o: robinbc.cpp robinbc.h utils.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o robinbc.o robinbc.cpp
 
 utils.o: utils.cpp utils.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o utils.o utils.cpp

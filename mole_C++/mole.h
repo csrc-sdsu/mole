@@ -10,6 +10,7 @@
 #include "gradient.h"
 #include "laplacian.h"
 #include "interpol.h"
+#include "robinbc.h"
 #include "utils.h"
 
 #endif // MOLE_H
