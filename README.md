@@ -59,7 +59,7 @@ to build the C++ version if you are just interested in using MOLE from MATLAB.
 4: Documentation
 ------------
 The folder `doc_MATLAB` contains generated documentation about the MATLAB version.
-It was generated using a tool called _m2html_ which can be found here: <https://www.artefact.tk/software/matlab/m2html>.
+It was generated with a tool called _m2html_ which can be found here: <https://www.artefact.tk/software/matlab/m2html>.
 
 To generate the C++ documentation, just execute:
 
