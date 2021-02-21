@@ -27,11 +27,11 @@ LICENSE.txt and GPLv3.txt files for more information on this.
 3: Installation
 ---------------
 
-In order to install MOLE (C++ version), you need to have _Armadillo C++ 
-Linear Algebra Library_. You can easily download Armadillo from: 
-<http://arma.sourceforge.net/download.html>. Armadillo requires _SuperLU_ 
-for certain operations on sparse matrices. Assuming that SuperLU is 
-properly installed on your computer, you just need to follow these steps:
+To use MOLE (C++ version), you need to have _Armadillo C++ 
+Linear Algebra Library_ <http://arma.sourceforge.net> and _SuperLU_ 
+<https://portal.nersc.gov/project/sparse/superlu> installed on your computer.
+
+Assuming a working installation of _SuperLU_, follow these steps:
 
 `wget http://sourceforge.net/projects/arma/files/armadillo-10.2.1.tar.xz`
 
@@ -42,7 +42,7 @@ properly installed on your computer, you just need to follow these steps:
 **NOTE:** We suggest to use the latest stable version that is available.
 
 Undefine `ARMA_USE_LAPACK` and define `ARMA_USE_SUPERLU` in `include/armadillo_bits/config.hpp` 
-before building Armadillo. After that just execute:
+before building _Armadillo_! After that just execute:
 
 `./configure`
 
@@ -50,9 +50,8 @@ before building Armadillo. After that just execute:
 
 this will create `libarmadillo.so`.
 
-Now go to `mole/mole_C++` and modify the `Makefile` by setting the correct path to Armadillo:
-
-`ARMA = /home/johnny/Desktop/armadillo-10.2.1`
+Now go to `mole/mole_C++` and modify the `Makefile` by setting the correct path to _Armadillo_ 
+e.g. `ARMA = /home/johnny/Desktop/armadillo-10.2.1`.
 
 **NOTE:** Do the same with the `Makefile` located in `mole/examples_C++` if you want to build the examples.
 
@@ -60,7 +59,7 @@ Lastly, build MOLE by executing:
 
 `make`
 
-a static library named `libmole.a` will be created. From this point you just need to include `mole.h` 
+a static library named `libmole.a` will get created. From this point you just need to include `mole.h` 
 in your projects and specify the location of `libmole.a` to the linker.
 
 **For the MATLAB version of our library, the only dependency is to have MATLAB installed**.
