@@ -26,8 +26,8 @@ RobinBC::RobinBC(u16 k, u32 m, double dx, u32 n, double dy, double a, double b)
     sp_mat Im = speye(m+2, m+2);
     sp_mat In = speye(n+2, n+2);
 
-    In(0, 0) = 0;
-    In(n+1, n+1) = 0;
+    In.at(0, 0) = 0;
+    In.at(n+1, n+1) = 0;
 
     sp_mat BC1 = Utils::spkron(In, Bm);
     sp_mat BC2 = Utils::spkron(Bn, Im);
@@ -46,12 +46,12 @@ RobinBC::RobinBC(u16 k, u32 m, double dx, u32 n, double dy, u32 o, double dz, do
     sp_mat In = speye(n+2, n+2);
     sp_mat Io = speye(o+2, o+2);
 
-    Io(0, 0) = 0;
-    Io(o+1, o+1) = 0;
+    Io.at(0, 0) = 0;
+    Io.at(o+1, o+1) = 0;
 
     sp_mat In2 = In;
-    In2(0, 0) = 0;
-    In2(n+1, n+1) = 0;
+    In2.at(0, 0) = 0;
+    In2.at(n+1, n+1) = 0;
 
     sp_mat BC1 = Utils::spkron(Utils::spkron(Io, In2), Bm);
     sp_mat BC2 = Utils::spkron(Utils::spkron(Io, Bn), Im);
