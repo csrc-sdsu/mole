@@ -55,7 +55,21 @@ For the MATLAB version of our library, the only dependency is to have MATLAB ins
 The two implementations of MOLE (C++ & MATLAB) are independent, that is, you don't need
 to build the C++ version if you are just interested in using MOLE from MATLAB.
 
-4: Citations
+
+4: Documentation
+------------
+The folder `doc_MATLAB` contains generated documentation about the MATLAB version.
+It was generated using a tool called _m2html_ which can be found here: <https://www.artefact.tk/software/matlab/m2html>.
+
+To generate the C++ documentation, just execute:
+
+`doxygen Doxyfile`
+
+this will create a folder called `doc_C++` containing a set of _html_ files. Please refer to the _index.html_ file 
+to start browsing the documentation.
+
+
+5: Citations
 ------------
 
 Please cite our work if you use MOLE in your research and/or software. 
