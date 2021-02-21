@@ -1,2 +1,5 @@
+  GNU nano 4.8                                                                          .gitignore                                                                                    
+*.o
+*.a
+*.asv
 *~
-*asv
