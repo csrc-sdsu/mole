@@ -1,6 +1,14 @@
 on: [push]
 
 jobs:
+  doxygen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build documentation
+        uses: mattnotmitt/doxygen-action@v1
+        with:
+          doxyfile-path: ./Doxyfile
   paper:
     runs-on: ubuntu-latest
     name: Paper Draft
