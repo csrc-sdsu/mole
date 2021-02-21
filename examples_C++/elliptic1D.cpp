@@ -11,7 +11,7 @@ int main() {
     float   a = 0;        // Left boundary
     float   b = 1;        // Right boundary
     int     m = 2*k+1;    // Number of cells
-    float  dx = (b-a)/m;  // Cell's width [m]
+    float  dx = (b-a)/m;  // Step size
 
     // Get mimetic operators
     Laplacian L(k, m, dx);
