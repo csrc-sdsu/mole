@@ -33,22 +33,20 @@ Linear Algebra Library. You can easily download Armadillo from:
 
 `sudo apt install libarmadillo-dev`
 
-We suggest to use the latest stable version that is available. Also, 
-we recommend to use the `qmake` tool to generate the `Makefile` of the project.
+We suggest to use the latest stable version that is available.
 
 **NOTE**: If you installed Armadillo via its sourcefiles (`.tar.xz`), then you 
-must set the `ARMA` variable in `mole.pro` with the location of Armadillo in 
-your computer. e.g. `ARMA = /home/johnny/armadillo-7.950.1`
+must set the `ARMA` variable in `mole_C++/Makefile` and `examples_C++/Makefile` 
+with the location of Armadillo in your computer. e.g. `ARMA = /home/johnny/armadillo-10.2.1`. 
+Also, for problems that involve a system of equations, you must enable Armadillo's capability to 
+use the SuperLU library <https://portal.nersc.gov/project/sparse/superlu>.
 
-Then open a terminal and execute the following commands,
-
-`qmake`
+After installing SuperLU and Armadillo, open a terminal and execute the following command,
 
 `make`
 
 a static library named `libmole.a` will be created.
-If you do not have `qmake` installed, you can simply modify the original 
-`Makefile` provided. From this point you just need to include `mole.h` 
+From this point you just need to include `mole.h` 
 in your projects and specify the location of `libmole.a` to the linker.
 
 For the MATLAB version of our library, the only dependency is to have MATLAB installed.
