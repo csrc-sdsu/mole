@@ -30,7 +30,10 @@ U(end) = 2*exp(1);  % East BC
 U = L\U;  % Solve a linear system of equations
 
 % Plot result
-plot(grid, U, 'o-')
+plot(grid, U, 'o')
+hold on
+plot(grid, exp(grid))
+legend('Approximated', 'Analytical', 'Location', 'NorthWest')
 title('Poisson''s equation with Robin BC')
 xlabel('x')
 ylabel('u(x)')
