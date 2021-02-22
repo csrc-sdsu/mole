@@ -38,7 +38,7 @@ for i = 0 : t/dt
     str = sprintf('t = %.2f', i*dt);
     title(str)
     xlabel('x')
-    ylabel('u(x)')
+    ylabel('u(x,t)')
     grid on
     drawnow
     
