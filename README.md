@@ -30,7 +30,7 @@ LICENSE.txt and GPLv3.txt files for more information on this.
 To use MOLE (C++ version), you need to have _Armadillo C++_ <http://arma.sourceforge.net> and _SuperLU_ 
 <https://portal.nersc.gov/project/sparse/superlu> installed on your computer.
 
-Assuming a working installation of _SuperLU_, follow these steps:
+Assuming a working installation of _SuperLU_ (`sudo apt install libsuperlu-dev` or `sudo yum install SuperLU-devel`), follow these steps:
 
 `wget http://sourceforge.net/projects/arma/files/armadillo-10.2.1.tar.xz`
 
