@@ -72,7 +72,7 @@ It was generated with a tool called _m2html_ which can be found here: <https://w
 
 To generate the C++ documentation, just execute:
 
-`doxygen Doxyfile`
+`doxygen Doxyfile` (requires _Doxygen_ and _Graphviz_)
 
 this will create a folder called `doc_C++` containing a set of _html_ files. Please refer to the _index.html_ file 
 to start browsing the documentation.
