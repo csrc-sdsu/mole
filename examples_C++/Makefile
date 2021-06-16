@@ -8,7 +8,7 @@ MOLE = ../mole_C++
 CXX = g++
 
 # Flags for C++ compiler
-CXXFLAGS = -O3
+CXXFLAGS = -O3 -fopenmp
 
 # Path to header files
 INCPATH = -I. -I$(ARMA)/include -I$(MOLE)
