@@ -26,7 +26,7 @@ axis equal
 
 % Staggered logical grid
 [Xs, Ys, Zs] = meshgrid([1 1.5 : 1 : m-0.5 m], [1 1.5 : 1 : n-0.5 n], [1 1.5 : 1 : o-0.5 o]);
-% Interpolate scalar field
+% Interpolate scalar field from nodal logical to staggered logical
 Cs = interp3(C, Xs, Ys, Zs);
 % Reshape the field so it can be multiplied by the operator later on
 C_ = reshape(permute(Cs, [2, 1, 3]), [], 1);
