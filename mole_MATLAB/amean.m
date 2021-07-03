@@ -1,5 +1,5 @@
 function Y = amean(X)
-% Returns the arithmetic mean for every two pairs of a column vector
+% Returns the arithmetic mean for every two pairs in a column vector
 % And, Y(1) = X(1), Y(end) = X(end)
 %
 % Parameters:
