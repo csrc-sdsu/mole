@@ -1,4 +1,3 @@
-
 % Solves ODE using explicit RK4 method
 
 h = .1;                                       % Step-size
