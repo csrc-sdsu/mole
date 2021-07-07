@@ -12,7 +12,7 @@ for i = 1 : length(t) - 1                   % Stages
     k3 = f(t(i) + h/2, y(i) + h*k2/2);
     k4 = f(t(i) + h,   y(i) + h*k3);
     
-    y(i + 1) = y(i) + (1/6)*(k1 + 2*k2 + 2*k3 + k4)*h;  % y(i + 1)
+    y(i + 1) = y(i) + h/6*(k1 + 2*k2 + 2*k3 + k4);  % y(i + 1)
 end
 
 plot(t, y)
