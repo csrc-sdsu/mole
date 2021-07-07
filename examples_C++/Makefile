@@ -14,7 +14,7 @@ CXXFLAGS = -O3 -fopenmp
 INCPATH = -I. -I$(ARMA)/include -I$(MOLE)
 
 # Path to libmole.a
-LIBS = -L$(MOLE) -lmole -lsuperlu -larmadillo
+LIBS = -L$(MOLE) -L$(ARMA) -lmole -larmadillo -lsuperlu
 
 # Rules:
 all: transport1D elliptic1D
