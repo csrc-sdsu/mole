@@ -18,7 +18,7 @@ sp_mat Utils::spkron(sp_mat A, sp_mat B)
 }
 */
 
-sp_mat Utils::spkron(sp_mat A, sp_mat B)
+sp_mat Utils::spkron(const sp_mat &A, const sp_mat &B)
 {
     sp_mat::const_iterator itA  = A.begin();
     sp_mat::const_iterator endA = A.end();
@@ -50,7 +50,7 @@ sp_mat Utils::spkron(sp_mat A, sp_mat B)
     return result;
 }
 
-sp_mat Utils::spjoin_rows(sp_mat A, sp_mat B)
+sp_mat Utils::spjoin_rows(const sp_mat &A, const sp_mat &B)
 {
     sp_mat::const_iterator itA  = A.begin();
     sp_mat::const_iterator endA = A.end();
@@ -72,7 +72,7 @@ sp_mat Utils::spjoin_rows(sp_mat A, sp_mat B)
         ++j;
     }
 
-    while(itB != endB) { 
+    while(itB != endB) {
         locations(0, j) = itB.row();
         locations(1, j) = itB.col() + A.n_cols;
         values(j) = (*itB);
@@ -85,7 +85,7 @@ sp_mat Utils::spjoin_rows(sp_mat A, sp_mat B)
     return result;
 }
 
-sp_mat Utils::spjoin_cols(sp_mat A, sp_mat B)
+sp_mat Utils::spjoin_cols(const sp_mat &A, const sp_mat &B)
 {
     sp_mat::const_iterator itA  = A.begin();
     sp_mat::const_iterator endA = A.end();
@@ -107,7 +107,7 @@ sp_mat Utils::spjoin_cols(sp_mat A, sp_mat B)
         ++j;
     }
 
-    while(itB != endB) { 
+    while(itB != endB) {
         locations(0, j) = itB.row() + A.n_rows;
         locations(1, j) = itB.col();
         values(j) = (*itB);
