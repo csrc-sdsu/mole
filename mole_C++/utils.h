@@ -9,9 +9,9 @@ class Utils
 {
 
 public:
-    static sp_mat spkron(sp_mat A, sp_mat B);
-    static sp_mat spjoin_rows(sp_mat A, sp_mat B);
-    static sp_mat spjoin_cols(sp_mat A, sp_mat B);
+    static sp_mat spkron(const sp_mat &A, const sp_mat &B);
+    static sp_mat spjoin_rows(const sp_mat &A, const sp_mat &B);
+    static sp_mat spjoin_cols(const sp_mat &A, const sp_mat &B);
 };
 
 #endif // UTILS_H
