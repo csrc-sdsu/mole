@@ -6,7 +6,7 @@ ARMA = /home/johnny/Desktop/armadillo-10.2.1
 CXX = g++
 
 # Flags for C++ compiler
-CXXFLAGS = -O3
+CXXFLAGS = -O3 -fopenmp
 
 # Path to header files
 INCPATH = -I. -I$(ARMA)/include
