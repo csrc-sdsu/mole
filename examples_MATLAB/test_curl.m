@@ -1,9 +1,7 @@
-%
 % This file does not uses the curl2D(...) function provided by the library.
 % It just tests the 2D mimetic divergence applied to an auxiliary vector 
 % field to obtain the equivalent curl. The proper way to solve problems 
 % that involve the curl operator is by calling the function curl2D(...)
-%
 
 clc
 close all
