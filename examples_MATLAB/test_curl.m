@@ -52,13 +52,14 @@ curlMOLE = curlMOLE(2:end-1, 2:end-1);
 
 quiver3(X(2:end, 2:end), Y(2:end, 2:end), zeros(m, n),...
         U(2:end, 2:end), V(2:end, 2:end), curlMOLE,... 
-        'AutoScale', 'off');
+        'AutoScale', 'on');
 title('Quiver plot');
 xlabel('x')
 ylabel('y')
 zlabel('z')
 set(gcf, 'color', 'w')
 view(0, 90)
+axis equal
 
 % Modified vector field (F*)
 function U = P(~, Y)
