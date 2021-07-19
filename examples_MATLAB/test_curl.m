@@ -59,7 +59,7 @@ ylabel('y')
 zlabel('z')
 set(gcf, 'color', 'w')
 view(0, 90)
-axis equal
+axis tight
 
 % Modified vector field (F*)
 function U = P(~, Y)
