@@ -46,14 +46,14 @@ for j = 1 : 2 : 2*n+1
     end
 end
 
-curlMOLE = div2D(order, m, dx, n, dy)*A2;
-curlMOLE = reshape(curlMOLE, m+2, n+2);
-curlMOLE = curlMOLE(2:end-1, 2:end-1);
+curl = div2D(order, m, dx, n, dy)*A2;
+curl = reshape(curl, m+2, n+2);
+curl = curl(2:end-1, 2:end-1);
 
 quiver3(X(2:end, 2:end), Y(2:end, 2:end), zeros(m, n),...
-        U(2:end, 2:end), V(2:end, 2:end), curlMOLE,... 
+        U(2:end, 2:end), V(2:end, 2:end), curl,...
         'AutoScale', 'on');
-title('Quiver plot');
+title('Mimetic-curl');
 xlabel('x')
 ylabel('y')
 zlabel('z')
