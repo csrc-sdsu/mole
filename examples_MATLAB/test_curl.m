@@ -58,7 +58,7 @@ xlabel('x')
 ylabel('y')
 zlabel('z')
 set(gcf, 'color', 'w')
-view([130 45])
+view(0, 90)
 
 % Modified vector field (F*)
 function U = P(~, Y)
