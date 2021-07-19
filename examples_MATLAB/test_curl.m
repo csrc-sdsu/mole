@@ -56,12 +56,11 @@ quiver3(X(2:end, 2:end), Y(2:end, 2:end), zeros(m, n),...
         U(2:end, 2:end), V(2:end, 2:end), curlMOLE,... 
         'AutoScale', 'off');
 title('Quiver plot');
-set(gca, 'XDir', 'reverse')
-set(gca, 'YDir', 'reverse')
 xlabel('x')
 ylabel('y')
 zlabel('z')
 set(gcf, 'color', 'w')
+view([130 45])
 
 % Modified vector field (F*)
 function U = P(~, Y)
