@@ -51,7 +51,6 @@ ylabel('y')
 zlabel('z')
 axis equal
 colorbar
-view([130 50])
 
 % Plot the approximation
 subplot(2, 1, 2)
@@ -63,4 +62,3 @@ ylabel('y')
 zlabel('z')
 axis equal
 colorbar
-view([130 50])
