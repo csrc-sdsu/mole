@@ -4,17 +4,17 @@
 RobinBC::RobinBC(u16 k, u32 m, double dx, double a, double b)
 {
     sp_mat A(m+2, m+2);
-    sp_mat B(m+2, m+1);
+    sp_mat BG(m+2, m+2);
 
     A.at(0, 0) = a;
     A.at(m+1, m+1) = a;
 
-    B.at(0, 0) = -b;
-    B.at(m+1, m) = b;
-
     Gradient grad(k, m, dx);
 
-    *this = A + B*(sp_mat)grad;
+    BG.row(0) = -b*grad.row(0);
+    BG.row(m+1) = b*grad.row(m);
+
+    *this = A + BG;
 }
 
 // 2-D Constructor
