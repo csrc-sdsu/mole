@@ -40,7 +40,7 @@ Assuming a working installation of _SuperLU_ (`sudo apt install libsuperlu-dev` 
 
 **NOTE:** We suggest to use the latest stable version that is available.
 
-Undefine `ARMA_USE_LAPACK` and `ARMA_USE_BLAS` (in case you don't have them installed), then define `ARMA_USE_SUPERLU` and `ARMA_USE_OPENMP` in `include/armadillo_bits/config.hpp`. Then execute:
+Undefine `ARMA_USE_LAPACK` and `ARMA_USE_BLAS` (in case you don't have them installed), then define `ARMA_USE_SUPERLU` and `ARMA_USE_OPENMP` in `include/armadillo_bits/config.hpp`. Make sure that you have `cmake` and `g++` before executing:
 
 `./configure`
 
