@@ -37,7 +37,11 @@ int main() {
     rhs(m+1) = 2*exp(1);  // rhs(1) = 2e
 
     // Solve the system of linear equations
-    vec sol = spsolve(L, rhs);
+#ifdef EIGEN
+    vec sol = Utils::spsolve_eigen(L, rhs);
+#else
+    vec sol = spsolve(L, rhs); // Will use SuperLU
+#endif
 
     // Print out the solution
     cout << sol;

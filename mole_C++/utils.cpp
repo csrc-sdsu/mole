@@ -1,8 +1,39 @@
 #include "utils.h"
 
-// Basic implementation
+#ifdef EIGEN
+#include <eigen3/Eigen/SparseLU>
+vec Utils::spsolve_eigen(const sp_mat &A, const vec &b)
+{
+	Eigen::SparseMatrix<double> eigen_A(A.n_rows, A.n_cols);
+	std::vector<Eigen::Triplet<double>> triplets;
+	Eigen::SparseLU<Eigen::SparseMatrix<double>, Eigen::COLAMDOrdering<int>> solver;
+
+	Eigen::VectorXd eigen_x(A.n_rows);
+	triplets.reserve(5*A.n_rows);
+
+	auto it = A.begin();
+	while(it != A.end()) {
+		triplets.push_back(Eigen::Triplet<double>(it.row(), it.col(), *it));
+		++it;
+	}
+
+	eigen_A.setFromTriplets(triplets.begin(), triplets.end());
+	triplets.clear();
+
+	auto b_ = conv_to<std::vector<double> >::from(b);
+	Eigen::Map<Eigen::VectorXd> eigen_b(b_.data(), b_.size());
+
+	solver.analyzePattern(eigen_A);
+	solver.factorize(eigen_A);
+	eigen_x = solver.solve(eigen_b);
+
+	return vec(eigen_x.data(), eigen_x.size());
+}
+#endif
+
+// Basic implementation of Kronecker product
 /*
-sp_mat Utils::spkron(sp_mat A, sp_mat B)
+sp_mat Utils::spkron(const sp_mat &A, const sp_mat &B)
 {
     sp_mat result;
 

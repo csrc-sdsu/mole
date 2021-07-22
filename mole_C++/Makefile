@@ -1,6 +1,9 @@
 # Put here the path to Armadillo
 ARMA = /home/johnny/Desktop/armadillo-10.2.1
 
+# Put here the path to Eigen (optional)
+#EIGEN = /usr/include/eigen3
+
 #----------------------------------------------------------------------
 # Compiler for C++
 CXX = g++
@@ -10,6 +13,11 @@ CXXFLAGS = -O3 -fopenmp
 
 # Path to header files
 INCPATH = -I. -I$(ARMA)/include
+
+ifdef EIGEN
+CXXFLAGS += -DEIGEN
+INCPATH += -I$(EIGEN)
+endif
 
 # Rules:
 all: libmole.a

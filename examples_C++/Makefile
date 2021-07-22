@@ -1,6 +1,9 @@
 # Put here the path to Armadillo
 ARMA = /home/johnny/Desktop/armadillo-10.2.1
 
+# Put here the path to Eigen (optional)
+#EIGEN = /usr/include/eigen3
+
 #----------------------------------------------------------------------
 MOLE = ../mole_C++
 
@@ -14,7 +17,14 @@ CXXFLAGS = -O3 -fopenmp
 INCPATH = -I. -I$(ARMA)/include -I$(MOLE)
 
 # Path to libmole.a
-LIBS = -L$(MOLE) -L$(ARMA) -lmole -larmadillo -lsuperlu
+LIBS = -L$(MOLE) -L$(ARMA) -lmole -larmadillo
+
+ifdef EIGEN
+CXXFLAGS += -DEIGEN
+INCPATH += -I$(EIGEN)
+else
+LIBS += -lsuperlu
+endif
 
 # Rules:
 all: transport1D elliptic1D
