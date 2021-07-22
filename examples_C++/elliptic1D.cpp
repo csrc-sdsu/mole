@@ -38,6 +38,7 @@ int main() {
 
     // Solve the system of linear equations
 #ifdef EIGEN
+    // Use Eigen only if SuperLU (faster) is not available
     vec sol = Utils::spsolve_eigen(L, rhs);
 #else
     vec sol = spsolve(L, rhs); // Will use SuperLU
