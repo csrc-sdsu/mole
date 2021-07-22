@@ -1,5 +1,5 @@
 # Put here the path to Armadillo
-ARMA = /home/johnny/Desktop/armadillo-10.2.1
+ARMA = /home/johnny/armadillo-10.2.1
 
 # Put here the path to Eigen (optional)
 #EIGEN = /usr/include/eigen3
