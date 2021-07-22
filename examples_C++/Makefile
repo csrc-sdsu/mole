@@ -2,6 +2,7 @@
 ARMA = /home/johnny/armadillo-10.2.1
 
 # Put here the path to Eigen (optional)
+# We recommend SuperLU over Eigen for the sparse LU factorization
 #EIGEN = /usr/include/eigen3
 
 #----------------------------------------------------------------------
