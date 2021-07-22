@@ -27,7 +27,7 @@ p = 2; % Page to be displayed
 
 page = SOL(:, :, p);
 
-imagesc(reshape(page, m+2, n+2)')
+imagesc(page)
 title([num2str(p) ' page'])
 xlabel('m')
 ylabel('n')
