@@ -37,6 +37,7 @@ int main() {
     rhs(m+1) = 2*exp(1);  // rhs(1) = 2e
 
     // Solve the system of linear equations
+    // Use Eigen only if SuperLU (faster) is not available
 #ifdef EIGEN
     vec sol = Utils::spsolve_eigen(L, rhs);
 #else
