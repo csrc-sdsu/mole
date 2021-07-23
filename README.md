@@ -94,3 +94,4 @@ the library https://www.sciencedirect.com/science/article/abs/pii/S0377042719303
 ![Obtained with curvilinear operators](images/grid2.png)
 ![Obtained with curvilinear operators](images/grid.png)
 ![Obtained with curvilinear operators](images/WavyGrid.png)
+![Obtained with curvilinear operators](images/wave2D.png)
