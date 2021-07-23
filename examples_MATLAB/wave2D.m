@@ -74,6 +74,7 @@ for t = 1 : TIME/dt
     title(['Elastic membrane with position Verlet \newlineTime = ' num2str(dt*t, '%1.2f')])
     xlabel('x')
     ylabel('y')
+    zlabel('z')
     colorbar
     caxis([-1, 1])
     axis([0 1 0 1 -1 1])
