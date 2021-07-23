@@ -6,8 +6,8 @@ close all
 addpath('../mole_MATLAB')
 
 k = 2; % Order of accuracy
-m = 5; % -> 7
-n = 6; % -> 8
+m = 5; % Vertical resolution
+n = 6; % Horizontal resolution
 
 L = lap2D(k, m, 1, n, 1); % 2D Mimetic laplacian operator
 L = L + robinBC2D(k, m, 1, n, 1, 1, 0); % Dirichlet BC
