@@ -10,8 +10,8 @@
 
 int main() {
     int     k = 2;  // Operators' order of accuracy
-    int     m = 5;  // Horizontal resolution
-    int     n = 6;  // Vertical resolution
+    int     m = 5;  // Vertical resolution
+    int     n = 6;  // Horizontal resolution
 
     // Get mimetic operators
     Laplacian L(k, m, n, 1, 1);
