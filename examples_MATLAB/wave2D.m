@@ -29,16 +29,16 @@ I = interpol2D(m, n, 0.5, 0.5);
 I2 = interpolD2D(m, n, 0.5, 0.5);
 
 % Wave propagation speed
-c = 1;  % (T/p) Tension over density
+speed = 1;  % (T/p) Tension over density
 
 % "Force" function
-F = @(x, c) (c^2)*L*x;
+F = @(x, speed) (speed^2)*L*x;
 
 % Simulation time
 TIME = 1;
 
 % Temporal discretization based on CFL condition
-dt = dx/(2*c); % dt = h on Young's paper
+dt = dx/(2*speed); % dt = h on Young's paper
 
 % Initial condition
 ICU = @(x, y) sin(pi.*x).*sin(pi.*y);
@@ -62,7 +62,7 @@ I2 = 0.5*dt*I2;
 for t = 1 : TIME/dt
     % Apply "position Verlet" algorithm -----------------------------------
     uold = uold + I2*vold;
-    vnew = vold + I*F(uold, c);
+    vnew = vold + I*F(uold, speed);
     unew = uold + I2*vnew;
     
     % Update
