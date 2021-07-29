@@ -1,6 +1,6 @@
 function S = sidedNodal2D(k, m, n, dx, type)
-% Returns a (m+1)(n+1) by (m+1)(n+1) matrix to perform individual (Ux or Uy
-% or Uz) sided approximations on a nodal grid of m+1 nodes by n+1 nodes. So
+% Returns a (m+1)(n+1) by (m+1)(n+1) matrix to perform individual (Ux or Uy) 
+% sided approximations on a nodal grid of m+1 nodes by n+1 nodes. So
 % in case that your staggered grid looks like the following:
 %
 %   *--|--*--|--*--|--*--|--*
