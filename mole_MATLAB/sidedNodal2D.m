@@ -25,7 +25,7 @@ function S = sidedNodal2D(k, m, n, dx, type)
 % Parameters:
 %                k : Order of accuracy (either 1 or 2)
 %                m : Number of cells along x-axis
-%                n : Number of cells along y-axis (length(ynodes-1))
+%                n : Number of cells along y-axis
 %               dx : Step size along x-axis
 %             type : 'backward' or 'forward'
 
