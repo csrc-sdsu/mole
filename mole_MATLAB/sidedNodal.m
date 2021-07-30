@@ -8,12 +8,11 @@ function S = sidedNodal(k, m, dx, type)
 %               dx : Step size
 %             type : 'backward' or 'forward'
 
-    if k == 1 % first-order
+    if k
         if strcmp(type, 'backward')
             S = spdiags([-ones(m+1, 1) ones(m+1, 1)], [-1 0], m+1, m+1);
             S(1, end-1) = -1;
         else % forward
-            % S = circshift(backward, -1) or:
             S = spdiags([-ones(m+1, 1) ones(m+1, 1)], [0 1], m+1, m+1);
             S(end, 2) = 1;
         end
