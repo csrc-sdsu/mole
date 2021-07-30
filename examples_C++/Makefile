@@ -1,9 +1,13 @@
+ifndef ARMA
 # Put here the path to Armadillo
 ARMA = /home/johnny/armadillo-10.2.1
+endif
 
+ifndef EIGEN
 # Put here the path to Eigen (optional)
 # We recommend SuperLU over Eigen for the sparse LU factorization
 #EIGEN = /usr/include/eigen3
+endif
 
 #----------------------------------------------------------------------
 MOLE = ../mole_C++
