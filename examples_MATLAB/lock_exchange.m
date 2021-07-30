@@ -54,7 +54,7 @@ iterations = time/dt;    % Number of iterations
 %% Initialize densities and temperatures
 for j = 1 : m+2
     x = a + (j-1)*dx;
-    rho(:, j) = rho_0+delta_rho/2*(1-erf((x-(b-a)/2)/interface_width));
+    rho(:, j) = rho_0+delta_rho/2*(1-erf((x-(a+b)/2)/interface_width));
     T(:, j) = (1-rho(1, j)/rho_0)/alpha+T_0;
 end
 

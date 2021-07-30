@@ -1,15 +1,25 @@
 # Put here the path to Armadillo
-ARMA = /home/johnny/Desktop/armadillo-10.2.1
+ARMA = /home/johnny/armadillo-10.2.1
+
+# Put here the path to Eigen (optional)
+# You won't need it unless you have to solve a linear system in which
+# case we recommend to use SuperLU over Eigen for the sparse LU factorization
+#EIGEN = /usr/include/eigen3
 
 #----------------------------------------------------------------------
 # Compiler for C++
 CXX = g++
 
 # Flags for C++ compiler
-CXXFLAGS = -O3
+CXXFLAGS = -O3 -fopenmp
 
 # Path to header files
 INCPATH = -I. -I$(ARMA)/include
+
+ifdef EIGEN
+CXXFLAGS += -DEIGEN
+INCPATH += -I$(EIGEN)
+endif
 
 # Rules:
 all: libmole.a
