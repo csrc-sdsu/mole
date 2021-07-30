@@ -3,7 +3,7 @@ function S = sidedNodal(k, m, dx, type)
 % spaced data points.
 %
 % Parameters:
-%                k : Order of accuracy (either 1 or 2)
+%                k : Order of accuracy (only first order for now!)
 %                m : Number of cells
 %               dx : Step size
 %             type : 'backward' or 'forward'
