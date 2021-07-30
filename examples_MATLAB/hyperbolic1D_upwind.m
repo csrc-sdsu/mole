@@ -1,5 +1,5 @@
 % Solves the scalar advection equation with periodic boundary conditions
-% using upwind scheme. First-order in space and time.
+% and upwind scheme. First-order in space and time.
 
 clc
 close all
@@ -30,10 +30,9 @@ S = speye(size(S))-a*dt*S;
 % Time integration loop
 for i = 1 : t/dt
     
-    U2 = S*U; % Compute using Euler's method
-    U = U2;
+    U = S*U; % Compute using Euler's method
     
-    plot(grid, U2, 'o-')
+    plot(grid, U, 'o-')
     hold on
     plot(grid, sin(2*pi*(grid - a*i*dt))) % Plot exact solution
     hold off
