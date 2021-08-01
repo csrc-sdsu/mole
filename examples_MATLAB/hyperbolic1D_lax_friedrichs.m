@@ -42,5 +42,6 @@ for i = 1 : t/dt
     title(str)
     xlabel('x')
     ylabel('u(x)')
+    ylim([-1 1])
     pause(0.04)
 end
