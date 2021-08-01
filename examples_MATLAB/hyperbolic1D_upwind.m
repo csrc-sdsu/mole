@@ -34,7 +34,7 @@ for i = 1 : t/dt
     
     U = S*U; % Compute U^(n+1)
     
-    plot(grid, U, 'o-')
+    plot(grid, U, 'o-') % Plot approximation
     hold on
     plot(grid, sin(2*pi*(grid - a*i*dt))) % Plot exact solution
     hold off
@@ -42,6 +42,6 @@ for i = 1 : t/dt
     title(str)
     xlabel('x')
     ylabel('u(x)')
-    ylim([-1 1])
+    axis([west east -1.5 1.5])
     pause(0.04)
 end
