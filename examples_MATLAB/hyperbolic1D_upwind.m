@@ -32,7 +32,7 @@ S = speye(size(S))-a*dt*S;
 % Time integration loop
 for i = 1 : t/dt
     
-    U = S*U; % Compute using Euler's method
+    U = S*U; % Compute U^(n+1)
     
     plot(grid, U, 'o-')
     hold on
