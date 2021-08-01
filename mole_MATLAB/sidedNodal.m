@@ -1,21 +1,25 @@
-function S = sidedNodal(k, m, dx, type)
+function S = sidedNodal(m, dx, type)
 % Returns a m+1 by m+1 one-dimensional sided approximation for uniformly
-% spaced data points.
+% spaced data points. This function is handy for advective terms.
 %
 % Parameters:
-%                k : Order of accuracy (only first order for now!)
 %                m : Number of cells
 %               dx : Step size
-%             type : 'backward' or 'forward'
+%             type : 'backward', 'forward' or 'centered'
 
-    if k
-        if strcmp(type, 'backward')
+    switch type
+        case 'backward'
             S = spdiags([-ones(m+1, 1) ones(m+1, 1)], [-1 0], m+1, m+1);
             S(1, end-1) = -1;
-        else % forward
+            S = S/dx;
+        case 'forward'
             S = spdiags([-ones(m+1, 1) ones(m+1, 1)], [0 1], m+1, m+1);
             S(end, 2) = 1;
-        end
-        S = S/dx;
+            S = S/dx;
+        otherwise % 'centered'
+            S = spdiags([-ones(m+1, 1) zeros(m+1, 1) ones(m+1, 1)], [-1 0 1], m+1, m+1);
+            S(1, end-1) = -1;
+            S(end, 2) = 1;
+            S = S/(2*dx);
     end
 end
