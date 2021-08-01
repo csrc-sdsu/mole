@@ -38,7 +38,7 @@ U2 = U + D/2*U; % Compute one step using Euler's method
 
 % Time integration loop
 for i = 1 : t/dt
-    plot(grid, U2, 'o-')
+    plot(grid, U2, 'o-') % Plot approximation
     hold on
     plot(grid, sin(2*pi*(grid - a*i*dt))) % Plot exact solution
     hold off
