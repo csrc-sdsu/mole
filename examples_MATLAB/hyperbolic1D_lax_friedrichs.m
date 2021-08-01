@@ -34,7 +34,7 @@ for i = 1 : t/dt
     avg = (avg(1:end-2)+avg(3:end))/2;
     U = avg + S*U;
     
-    plot(grid, U, 'o-')
+    plot(grid, U, 'o-') % Plot approximation
     hold on
     plot(grid, sin(2*pi*(grid - a*i*dt))) % Plot exact solution
     hold off
