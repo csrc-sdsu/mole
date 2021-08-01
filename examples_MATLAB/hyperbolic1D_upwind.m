@@ -16,7 +16,7 @@ dx = (east-west)/m;
 t = 1; % Simulation time
 dt = dx/abs(a); % CFL condition for explicit schemes
 
-S = sidedNodal(1, m, dx, 'backward'); % Use 'forward' if a < 0
+S = sidedNodal(m, dx, 'backward'); % Use 'forward' if a < 0
 % Line 19 can be rewritten in compact form, where based on the sign
 % of (a) either forward or backward differencing is used.
 
