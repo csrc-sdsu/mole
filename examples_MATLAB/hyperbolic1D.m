@@ -14,7 +14,7 @@ m = 50; % Number of cells
 dx = (east-west)/m;
 
 t = 1; % Simulation time
-dt = dx/abs((k/2)*a); % CFL condition for explicit schemes
+dt = dx/abs(a); % CFL condition for explicit schemes
 
 D = div(k, m, dx); % 1D Mimetic divergence operator
 I = interpol(m, 0.5); % 1D 2nd order interpolator
