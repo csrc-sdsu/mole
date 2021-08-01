@@ -43,11 +43,11 @@ for i = 1 : t/dt
     hold on
     plot(grid, sin(2*pi*(grid - a*i*dt))) % Plot exact solution
     hold off
-    axis([0 1 -1.5 1.5])
     str = sprintf('t = %.2f', i*dt);
     title(str)
     xlabel('x')
     ylabel('u(x)')
+    ylim([-1 1])
     pause(0.04)
     U3 = U + D*U2; % Compute next step using Leapfrog scheme
     U = U2;
