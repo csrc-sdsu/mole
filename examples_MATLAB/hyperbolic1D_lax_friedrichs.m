@@ -42,6 +42,6 @@ for i = 1 : t/dt
     title(str)
     xlabel('x')
     ylabel('u(x)')
-    ylim([-1 1])
+    axis([west east -1.5 1.5])
     pause(0.04)
 end
