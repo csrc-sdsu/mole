@@ -38,7 +38,6 @@ for i = 1 : t/dt
     hold on
     plot(grid, sin(2*pi*(grid - a*i*dt))) % Plot exact solution
     hold off
-    axis([0 1 -1.5 1.5])
     str = sprintf('t = %.2f', i*dt);
     title(str)
     xlabel('x')
