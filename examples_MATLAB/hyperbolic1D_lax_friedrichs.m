@@ -30,6 +30,7 @@ S = -a*dt*S;
 % Time integration loop
 for i = 1 : t/dt
     
+    % Lax-Friedrichs scheme
     avg = [U(end-1); U; U(2)];
     avg = (avg(1:end-2)+avg(3:end))/2;
     U = avg + S*U;
