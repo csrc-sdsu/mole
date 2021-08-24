@@ -1,4 +1,5 @@
-% Solves the 1D Inviscid Burgers' equation
+% Solves the 1D Inviscid Burgers' equation.
+% Upwind scheme is used and the equation is written in conservative form.
 % Initial Condition: exp(-x^2/50)
 
 clc
@@ -13,11 +14,11 @@ k = 2; % Operator's order of accuracy
 m = 300; % Number of cells
 dx = (east-west)/m;
 
-t = 5; % Simulation time
+t = 10; % Simulation time
 dt = dx; % CFL condition for explicit schemes
 
 D = div(k, m, dx); % 1D Mimetic divergence operator
-I = interpol(m, 0.5); % 1D 2nd order interpolator
+I = interpol(m, 1); % 1D interpolator
 
 % 1D Staggered grid
 xgrid = [west west+dx/2: dx :east-dx/2 east];
@@ -26,7 +27,7 @@ xgrid = [west west+dx/2: dx :east-dx/2 east];
 U = exp(-(xgrid.^2)/50)';
 
 % Premultiply out of the time loop (since it doesn't change)
-D = -dt*D*I;
+D = -dt/2*D*I;
 
 % Time integration loop
 for i = 0 : t/dt
@@ -42,6 +43,6 @@ for i = 0 : t/dt
     grid on
     drawnow
     
-    U2 = U + U.*D*U; % Euler's scheme
+    U2 = U + D*U.^2;
     U = U2;
 end
