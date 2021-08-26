@@ -35,7 +35,6 @@ for i = 0 : t/dt
     trapz(U) % Check for area conservation
     
     plot(xgrid, U, 'LineWidth', 2)
-    axis([west east 0.1 1.1])
     str = sprintf('t = %.2f', i*dt);
     title(str)
     xlabel('x')
