@@ -45,7 +45,7 @@ for i = 1 : t/dt
     str = sprintf('t = %.2f', i*dt);
     title(str)
     xlabel('x')
-    ylabel('u(x)')
+    ylabel('u(x, t)')
     axis([west east -1.5 1.5])
     pause(0.04)
     U3 = U + D*U2; % Compute next step using Leapfrog scheme
