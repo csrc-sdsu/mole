@@ -33,6 +33,8 @@ D(end,end-1) = -1/(2*dx);
 
 % Premultiply out of the time loop (since it doesn't change)
 D = -a*dt*2*D*I;
+% One could also have said: D = -a*dt*2*I*D if the grid 
+% was defined as: grid = west : dx : east (nodal)
 
 U2 = U + D/2*U; % Compute one step using Euler's method
 
