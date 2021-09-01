@@ -2,6 +2,7 @@
 
 addpath('../mole_MATLAB')
 
+%             func   tspan  dt    y0
 [t, y] = rk4(@vdp1, [0 20], .1, [2 0]);
 
 plot(t, y(1, :), '-o', t, y(2, :), '-*')
