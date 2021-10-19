@@ -29,4 +29,8 @@ function [Nx, Ny, Nz] = nodal3DCurv(k, X, Y, Z)
     Nx = J*(A*Ne+D*Nn+G*Nc);
     Ny = J*(B*Ne+E*Nn+H*Nc);
     Nz = J*(C*Ne+F*Nn+I*Nc);
+    
+    %  [J*A J*D J*G;
+    %   J*B J*E J*H;
+    %   J*C J*F J*I]*[Ne; Nn; Nc]
 end
