@@ -24,7 +24,6 @@ tic
 [Nx, Ny] = nodal2DCurv(k, X, Y);
 L = [Nx Ny]*[Nx; Ny];
 toc
-spy(L)
 
 % Get indices of nodes at the boundaries
 bdry_idx = boundaryIdx2D(m, n);
@@ -34,7 +33,6 @@ L(bdry_idx, :) = 0;
 for i = 1:numel(bdry_idx)
     L(bdry_idx(i), bdry_idx(i)) = 1;
 end
-figure
 spy(L)
 
 RHS = f(X, Y);
