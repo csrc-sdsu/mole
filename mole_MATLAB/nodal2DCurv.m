@@ -22,4 +22,6 @@ function [Nx, Ny] = nodal2DCurv(k, X, Y)
     % Apply transformation
     Nx = J*(Yn*Ne-Ye*Nn);
     Ny = J*(-Xn*Ne+Xe*Nn);
+    
+    % [J*Yn -J*Ye; J*-Xn J*Xe]*[Ne; Nn]
 end
