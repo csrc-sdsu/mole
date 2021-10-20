@@ -53,6 +53,7 @@ surf(X, Y, Comp)
 xlabel('x')
 ylabel('y')
 colorbar
+
 figure
 surf(X, Y, F(X, Y))
 xlabel('x')
