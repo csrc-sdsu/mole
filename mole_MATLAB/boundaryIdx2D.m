@@ -8,11 +8,13 @@ function idx = boundaryIdx2D(m, n)
 
     idx = zeros(2*m+2*(n-2), 1);
     
+    mn = m*n;
+    
     idx(1:m) = 1:m;
-    idx(end-m+1:end) = m*n-m+1:m*n;
+    idx(end-m+1:end) = mn-m+1:mn;
     
     k = m+1;
-    for i = m+1:m:m*n-m
+    for i = m+1:m:mn-m
         idx(k) = i;
         idx(k+1) = i+m-1;
         k = k+2;
