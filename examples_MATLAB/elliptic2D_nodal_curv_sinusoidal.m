@@ -7,8 +7,8 @@ addpath('../mole_MATLAB')
 % Parameters
 e = 1; % Controls "rectangularity" of the grid, e = 0 -> completely rectangular
 k = 4;
-m = 200;
-n = 200;
+m = 100;
+n = 100;
 a = -pi;
 b = 2*pi;
 c = -pi;
