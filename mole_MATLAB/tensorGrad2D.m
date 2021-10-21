@@ -23,6 +23,9 @@ function KG = tensorGrad2D(K, G)
         %Kyx = K(2, 1);
     end
     
+    % The following line and lines [17, 18, 22, 23] are commented 
+    % because Gx and Gy will have incompatible sizes unless m == n 
+    % OR if G is a nodal operator.
     %KG = [Kxx*Gx + Kxy*Gy; Kyx*Gx + Kyy*Gy];
     KG = [Kxx*Gx; Kyy*Gy];
 end
