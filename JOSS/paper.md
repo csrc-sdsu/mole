@@ -37,7 +37,7 @@ Implementing mimetic operators is not a trivial matter, particularly in three di
 
 # State of the field
 
-A previous library [@mtk] was developed to implement the mimetic operators presented in the Castillo and Grone paper [@Castillo].  This library was only capable of handling dense matrices so it was limited to solve small problems hence its development was stopped. MOLE implements the operators presented in the Corbino and Castillo paper [@Corbino]. These  operators are optimal from the number of points in each stencil and produce more accurate results. MOLE deals with sparse matrices efficiently and is capable of solving problems with millions of cells.
+A previous library [@Mtk] was developed to implement the mimetic operators presented in the Castillo and Grone paper [@Castillo].  This library was only capable of handling dense matrices so it was limited to solve small problems hence its development was stopped. MOLE implements the operators presented in the Corbino and Castillo paper [@Corbino]. These  operators are optimal from the number of points in each stencil and produce more accurate results. MOLE deals with sparse matrices efficiently and is capable of solving problems with millions of cells.
 
 # The library
 
