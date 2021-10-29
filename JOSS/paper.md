@@ -33,11 +33,11 @@ The basis of higher-dimensional operators, as well of more sophisticated operato
 
 # Statement of need
 
-Implementing mimetic operators is not a trivial matter, particularly in three dimensions,  this is substantially facilitated by MOLE relieving the user to devote their time to focus on the problem of interest. The user interested in solving, for example, a Poisson equation  $-\nabla^2 u = f$, will be solving a discrete analog of this equation, $-DG\hat{u} = \hat{f}$, by using MOLE and a few lines of code.
+Implementing mimetic operators is not a trivial matter, particularly in three dimensions,  this is substantially facilitated by MOLE relieving the user to devote their time to focus on the problem of interest. The user interested in solving, for example, a Poisson equation  $-\nabla^2 u = f$, will be solving a discrete analog of this equation, $-DG\bar{u} = \bar{f}$, by using MOLE and a few lines of code.
 
 # State of the field
 
-A previous library [@Mtk] was developed to implement the mimetic operators presented in the Castillo and Grone paper [@Castillo].  This library was only capable of handling dense matrices so it was limited to solve small problems hence its development was stopped. MOLE implements the operators presented in the Corbino and Castillo paper [@Corbino]. These  operators are optimal from the number of points in each stencil and produce more accurate results. MOLE deals with sparse matrices efficiently and is capable of solving problems with millions of cells.
+A previous library [@Mtk] was developed to implement the mimetic operators presented in [@Castillo]. This library was only capable of handling dense matrices so it was limited to solve small problems hence its development was stopped. MOLE implements the operators presented in the Corbino and Castillo paper [@Corbino]. These  operators are optimal from the number of points in each stencil and produce more accurate results. MOLE deals with sparse matrices efficiently and is capable of solving problems with millions of cells.
 
 # The library
 
