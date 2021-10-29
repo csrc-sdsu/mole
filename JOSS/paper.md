@@ -33,7 +33,7 @@ The basis of higher-dimensional operators, as well of more sophisticated operato
 
 # Statement of need
 
-Implementing mimetic operators is not a trivial matter, particularly in three dimensions,  this is substantially facilitated by MOLE relieving the user to devote their time to focus on the problem of interest. The user interested in solving, for example, a Poisson equation  -Laplacian u = f, will be solving a discrete analog of this equation, -DGu = f, by using MOLE and a few lines of code.
+Implementing mimetic operators is not a trivial matter, particularly in three dimensions,  this is substantially facilitated by MOLE relieving the user to devote their time to focus on the problem of interest. The user interested in solving, for example, a Poisson equation  $-\nabla^2 u = f$, will be solving a discrete analog of this equation, $-DGu = f$, by using MOLE and a few lines of code.
 
 # State of the field
 
