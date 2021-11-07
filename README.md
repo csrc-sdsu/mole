@@ -24,8 +24,8 @@ MOLE is distributed under a dual-licensing model, please refer to the
 LICENSE.txt and GPLv3.txt files for more information on this.
 
 
-3: Installation
----------------
+3.1: Installation (Linux)
+-------------------------
 
 To use MOLE (C++ version), you need to have _Armadillo C++_ <http://arma.sourceforge.net> and _SuperLU_ 
 <https://portal.nersc.gov/project/sparse/superlu> installed on your computer.
@@ -65,8 +65,40 @@ The two implementations of MOLE (C++ & MATLAB) are independent, that is, you don
 to build the C++ version if you are just interested in using MOLE from MATLAB.
 
 
+3.2: Installation (MacOS)
+-------------------------
+
+First, download _Eigen_ from <https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz>, and _Armadillo C++_ from <http://arma.sourceforge.net>.
+
+Extract _Eigen_ and _Armadillo_, you can use the following command for each compressed file:
+
+`tar xvf name_of_the_file_including_extension --directory target_directory`
+
+Now, proceed to download MOLE <https://github.com/jcorbino/mole/archive/refs/heads/master.zip> and extract the file:
+
+`unzip master.zip –d mole`
+
+after that, enter MOLE's directory `cd mole` and edit the following files:
+
+`mole_C++/utils.cpp` (line 4) to be simply `#include <Eigen/SparseLU>`
+
+`mole_C++/Makefile` (line 18) should be `CXXFLAGS = -O3 -std=c++11`
+
+same for (line 19) of `examples_C++/Makefile`.
+
+Lastly, (line 25) of `examples_C++/Makefile` should not include `-larmadillo`.
+
+At this point, you just need to edit the `Makefile` located in MOLE's root directory by setting the correct path to each dependency (_Eigen_ and _Armadillo_), that is:
+
+(Line 2) of that `Makefile` should look like: `ARMA = ../../armadillo-10.7.0` and (line 7) should be `EIGEN = ../../eigen-3.4.0`.
+
+Now, just build the library and its examples by simply executing `make` from MOLE's root folder.
+
+**IMPORTANT**: In order to build ANY of the aforementioned packages, the operating system needs to have `g++` (_GNU Compiler_) and `make` (utility) installed. Those two packages will get installed when you set up _Xcode_ on your Mac: `xcode-select --install`.
+
+
 4: Documentation
-------------
+----------------
 The folder `doc_MATLAB` contains generated documentation about the MATLAB version.
 It was generated with a tool called _m2html_ which can be found here: <https://www.artefact.tk/software/matlab/m2html>.
 
