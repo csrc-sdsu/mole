@@ -94,7 +94,7 @@ At this point, you just need to edit the `Makefile` located in MOLE's root direc
 
 Now, just build the library and its examples by simply executing `make` from MOLE's root folder.
 
-**IMPORTANT**: In order to build ANY of the aforementioned packages, the operating system needs to have `g++` (_GNU Compiler_) and `make` (utility) installed. Those two packages will get installed when you set up _Xcode_ on your Mac: `xcode-select --install`.
+**IMPORTANT**: In order to build any of the aforementioned packages, the operating system needs to have `g++` (_GNU Compiler_) and `make` (utility) installed. Those two packages will get installed when you set up _Xcode_ on your Mac: `xcode-select --install`.
 
 
 4: Documentation
