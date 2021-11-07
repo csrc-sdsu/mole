@@ -37,7 +37,7 @@ Implementing mimetic operators is not a trivial matter, particularly in three di
 
 # State of the field
 
-A previous library [@MTK] was developed to implement the mimetic operators presented in [@Castillo]. This library was only capable of handling dense matrices so it was limited to solve small problems hence its development was stopped. MOLE implements the operators presented in the Corbino and Castillo paper [@Corbino]. These  operators are optimal from the number of points in each stencil and produce more accurate results. MOLE deals with sparse matrices efficiently and is capable of solving problems with millions of cells.
+A previous library [@MTK] was developed to implement the mimetic operators presented in [@Castillo]. This library was only capable of handling dense matrices so it was limited to solve small problems hence its development was stopped. MOLE implements the operators presented in the Corbino and Castillo paper [@Corbino]. These  operators are optimal from the number of points in each stencil and produce more accurate results. MOLE deals with sparse matrices efficiently and is capable of solving problems with millions of cells. To the best of the authors' knowledge, there are no other libraries that implement mimetic methods.
 
 # The library
 
@@ -48,6 +48,8 @@ For example, if the user wants to get a one-dimensional *k*-order mimetic Laplac
 lap(k, m, dx);
 ```
 where **k** is the desired order of accuracy, **m** is the number of cell centers (spatial resolution), and **dx** is the step length. All functions in MOLE are quite consistent with this syntax, and more information regarding the signature of the function can be accessed via the ```help``` command. The C++ version of the library only depends on [*Armadillo*](http://arma.sourceforge.net/), which is an open-source package for dense and sparse linear algebra [@Arma].
+
+It is important to mention that MOLE's main role is the construction of matrices that represent spatial derivative operators and boundary conditions; other components such as solvers and time steppers are only provided via self-contained examples.
 
 The following code snippet shows how easy is to solve a boundary value problem (with Robin's boundary conditions) through MOLE:
 ```matlab
@@ -86,6 +88,6 @@ ylabel('u(x)')
 
 ![Solution to BVP using *k=4* and *m=9*.](fig1.png){width=80%}
 
-In this short article we only show a 1D relatively simple problem, but the point is that even such an underwhelming problem will require many more lines of code if one opted for a different technique. The user can find more elaborated and computationally demanding problems in [Examples](https://github.com/jcorbino/mole/blob/master/examples_MATLAB).
+In this short article we only show a 1D problem, but the point is that even such an underwhelming problem will require many more lines of code if one opted for a different technique. The user can find more elaborated and computationally demanding problems in the [Examples](https://github.com/jcorbino/mole/blob/master/examples_MATLAB) folder.
 
 # References
