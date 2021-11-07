@@ -86,6 +86,6 @@ ylabel('u(x)')
 
 ![Solution to BVP using *k=4* and *m=9*.](fig1.png){width=80%}
 
-In this short article we only show a 1D relatively simple problem, but the point is that even such an underwhelming problem will require many more lines of code if one opted for a different technique. The user can find more elaborated and computationally demanding problems in the examples folders.
+In this short article we only show a 1D relatively simple problem, but the point is that even such an underwhelming problem will require many more lines of code if one opted for a different technique. The user can find more elaborated and computationally demanding problems in [Examples](https://github.com/jcorbino/mole/blob/master/examples_MATLAB).
 
 # References
