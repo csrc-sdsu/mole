@@ -1,9 +1,5 @@
 MOLE: Mimetic Operators Library Enhanced
 
-Copyright (C) 2015-2017, San Diego State University Research Foundation. 
-Created by Dr. Jose Castillo and Johnny Corbino, San Diego State 
-University.
-
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -19,10 +15,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 The GNU General Public License is a copyleft license, meaning any
 modified version must be licensed under the GNU GPL as well, including
-any new code written. 
-
-If you would like to alternatively obtain a proprietary license that 
-is not subject to the requirement to release modifications under the 
-GNU GPL license, please contact the San Diego State University 
-Technology Transfer Office at tto@sdsu.edu, cc: tmartindale@sdsu.edu; 
-kwelch@foundation.sdsu.edu; johnnycorbino@gmail.com; jcastillo@mail.sdsu.edu
+any new code written.
