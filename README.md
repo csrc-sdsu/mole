@@ -21,7 +21,7 @@ in which similar operators are derived using a matrix analysis approach.
 ------------
 
 MOLE is distributed under a GNU General Public License, please refer to the _LICENSE_ 
-file for more information on this.
+file for more details.
 
 
 3.1: Installation (Linux)
