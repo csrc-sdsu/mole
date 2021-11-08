@@ -20,8 +20,8 @@ in which similar operators are derived using a matrix analysis approach.
 2: Licensing
 ------------
 
-MOLE is distributed under a dual-licensing model, please refer to the 
-LICENSE.txt and GPLv3.txt files for more information on this.
+MOLE is distributed under a GNU General Public License, please refer to the GPLv3.txt 
+file for more information on this.
 
 
 3.1: Installation (Linux)
