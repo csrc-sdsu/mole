@@ -20,7 +20,7 @@ in which similar operators are derived using a matrix analysis approach.
 2: Licensing
 ------------
 
-MOLE is distributed under a GNU General Public License, please refer to the GPLv3.txt 
+MOLE is distributed under a GNU General Public License, please refer to the _LICENSE_ 
 file for more information on this.
 
 
