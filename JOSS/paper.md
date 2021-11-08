@@ -88,6 +88,8 @@ ylabel('u(x)')
 
 ![Solution to BVP using *k=4* and *m=9*.](fig1.png){width=80%}
 
-In this short article we only show a 1D problem, but the point is that even such an underwhelming problem will require many more lines of code if one opted for a different technique. The user can find more elaborated and computationally demanding problems in the [Examples](https://github.com/jcorbino/mole/blob/master/examples_MATLAB) folder.
+# Concluding remarks
+
+In this short article we introduced MOLE, an open-source library that implements the mimetic operators from [@Corbino]. For conciseness purposes, we showed a one-dimensional Poisson problem as example, however, MOLE comes with over 30 examples that range from the one-way wave equation to highly nonlinear and computationally demanding problems such as Richard's equation for unsaturated flow in porous media. The user can find such examples in the [Examples](https://github.com/jcorbino/mole/blob/master/examples_MATLAB) folder.
 
 # References
