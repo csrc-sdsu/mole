@@ -48,7 +48,7 @@ Undefine `ARMA_USE_LAPACK` and `ARMA_USE_BLAS` (in case you don't have them inst
 
 this will create `libarmadillo.so`.
 
-Now set the path to _Armadillo_ in `mole/Makefile`, e.g. `ARMA = /home/johnny/armadillo-10.2.1`.
+Now go to `mole/` and set the path to _Armadillo_ in the `Makefile`, e.g. `ARMA = /home/johnny/armadillo-10.2.1`.
 
 Lastly, build MOLE by executing:
 
