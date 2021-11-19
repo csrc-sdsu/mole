@@ -48,10 +48,7 @@ Undefine `ARMA_USE_LAPACK` and `ARMA_USE_BLAS` (in case you don't have them inst
 
 this will create `libarmadillo.so`.
 
-Now go to `mole/mole_C++` and modify the path to _Armadillo_ in the `Makefile` 
-e.g. `ARMA = /home/johnny/Desktop/armadillo-10.2.1`.
-
-**NOTE:** Do the same with the `Makefile` located in `mole/examples_C++`.
+Now set the path to _Armadillo_ in `mole/Makefile`, e.g. `ARMA = /home/johnny/armadillo-10.2.1`.
 
 Lastly, build MOLE by executing:
 
