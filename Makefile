@@ -8,7 +8,7 @@ ARMA = /home/johnny/armadillo-10.2.1
 
 export
 
-SUBDIRS = mole_C++ examples_C++
+SUBDIRS = mole_C++ examples_C++ tests_C++
 
 all clean: $(SUBDIRS)
 $(SUBDIRS):
