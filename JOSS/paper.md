@@ -39,11 +39,11 @@ Implementing mimetic operators is not a trivial matter, particularly in three di
 
 # State of the field
 
-A previous library [@MTK] was developed to implement the mimetic operators presented in [@Castillo]. This library was only capable of handling dense matrices so it was limited to solve small problems hence its development was stopped. MOLE implements the operators presented in the Corbino and Castillo paper [@Corbino]. These  operators are optimal from the number of points in each stencil and produce more accurate results. MOLE deals with sparse matrices efficiently and is capable of solving problems with millions of cells. To the best of the authors' knowledge, there are no other libraries that implement mimetic methods.
+A previous library [@MTK] was developed to implement the mimetic operators presented in [@Castillo]. This library was only capable of handling dense matrices so it was limited to solve small problems hence its development was stopped. MOLE implements the operators presented in the Corbino and Castillo paper [@Corbino]. These  operators are optimal from the number of points in each stencil and produce more accurate results. MOLE deals with sparse matrices efficiently and is capable of solving problems with millions of cells. To the best of the authors' knowledge, there are no other libraries that implement mimetic methods as the ones presented in this paper.
 
 # The library
 
-MOLE was designed to be an intuitive software package to numerically solve partial differential equations using mimetic methods. MOLE is implemented in C++ and in MATLAB scripting language (these are two independent flavors) and every single function in MOLE returns a sparse matrix of the requested mimetic operator. For information on the installation or usage of the library, please read the [User's Manual](https://github.com/jcorbino/mole/blob/master/MOLE%20User's%20Manual%20(MATLAB%20version).pdf) which is included in the repository.
+MOLE was designed to be an intuitive software package to construct mimetic operators based on [@Corbino] method. MOLE is implemented in C++ and in MATLAB scripting language (these are two independent flavors) and every single function in MOLE returns a sparse matrix of the requested mimetic operator. For information on the installation or usage of the library, please read the [User's Manual](https://github.com/jcorbino/mole/blob/master/MOLE%20User's%20Manual%20(MATLAB%20version).pdf) which is included in the repository.
 
 Mimetic operators can be easily used to build codes to solve PDEs with a few lines of code. For example, if the user wants to get a one-dimensional *k*-order mimetic Laplacian, just need to invoke:
 ```matlab
