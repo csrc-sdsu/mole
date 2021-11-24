@@ -31,7 +31,7 @@ Mimetic finite-difference operators, divergence (**D**), gradient (**G**), curl 
 
 The basis of higher-dimensional operators, as well of more sophisticated operators such as the laplacian or the biharmonic operator are the one-dimensional mimetic **G** and **D** operators. These finite-dimensional operators can be reused throughout the model and they provide a higher level of abstraction at the time of solving differential equations.
 
-These operators, have been used to write codes to solve PDEs of different types [@Bazan, @Boada, Boada2]. For an overview of mimetic methods of different types see the book by Castillo and Miranda and the references there in [@Miranda].
+These operators, have been used to write codes to solve PDEs of different types [@Bazan, @Boada, @Boada2]. For an overview of mimetic methods of different types see the book by Castillo and Miranda and the references there in [@Miranda].
 
 # Statement of need
 
