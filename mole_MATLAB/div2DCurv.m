@@ -1,4 +1,6 @@
 function D = div2DCurv(k, X, Y)
+% Returns a 2D curvilinear mimetic gradient
+
     % Get the determinant of the jacobian and the metrics
     [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y);
     
