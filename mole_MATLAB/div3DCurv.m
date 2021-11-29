@@ -1,4 +1,6 @@
 function D = div3DCurv(k, X, Y, Z)
+% Returns a 3D curvilinear mimetic divergence
+
     % Get the determinant of the jacobian and the metrics
     [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3D(k, X, Y, Z);
     
