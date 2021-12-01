@@ -1,4 +1,6 @@
 function N = neumann2DCurv(G, m, n, b)
+% Returns a 2D curvilinear Neumann BC operator
+
     % G is the curvilinear gradient and b is the Neumann coeff.
 
     Bm = sparse(m+2, m+1);
