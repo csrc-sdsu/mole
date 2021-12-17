@@ -165,7 +165,8 @@ for t = 1 : iterations
     
     R = rho_dt*[u_s; v_s];
     
-    % Poisson's equation (most time-consuming part)
+    % Poisson's equation (most time-consuming part). Next time better do: dL = decomposition(L) 
+    % outside the loop, and use dL instead of L to solve the linear system more efficiently.
     p = L\(D*R);
     
     %% Corrector step
