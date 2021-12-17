@@ -61,6 +61,8 @@ else
         ylabel('T')
         pause(0.01)
         U = L\U; % Solve a linear system of equations (unconditionally stable)
+        % Next time better do: dL = decomposition(L) 
+        % outside the loop, and use dL instead of L to solve the linear system more efficiently.
     end
     toc
 end
