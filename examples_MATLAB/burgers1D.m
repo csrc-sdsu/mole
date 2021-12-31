@@ -19,6 +19,7 @@ dt = dx; % CFL condition for explicit schemes
 
 D = div(k, m, dx); % 1D Mimetic divergence operator
 I = interpol(m, 1); % 1D interpolator
+% Use I = interpol(m, 0) (downwind) if the fluid propagates to the left
 
 % 1D Staggered grid
 xgrid = [west west+dx/2: dx :east-dx/2 east];
