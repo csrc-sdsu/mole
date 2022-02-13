@@ -128,6 +128,9 @@ double* cuda_qr(const double* values,
                       d_x,
                       &singularity);
 
+  if (0 <= singularity)
+        cout << "Matrix is singular\n";
+
   x = (double*)malloc(sizeof(double) * cols);
 
   cudaMemcpy(x, d_x, sizeof(double) * cols, cudaMemcpyDeviceToHost);
