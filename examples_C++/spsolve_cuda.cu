@@ -1,5 +1,14 @@
-// Compile:
-// nvcc spsolve_cuda.cu -o spsolve_cuda -O3 -I./armadillo-10.2.1/include -lcusparse -lcusolver
+/* This isolated example illustrates how to solve a linear system where 'A' 
+is of type sp_mat and 'b' is of type vec (Armadillo's types) using sparse QR 
+factorization provided by cuSOLVER.
+
+cuSOLVER doesn't provide a routine for sparse LU factorization on the GPU! Ergo, the 
+best alternative is QR factorization (based on the qualities of the mimetic Laplacian) even
+though it is twice as expensive.
+
+Compile:
+nvcc spsolve_cuda.cu -o spsolve_cuda -O3 -I./armadillo-10.2.1/include -lcusparse -lcusolver
+*/
 
 #include <cusolverSp.h>
 #define ARMA_ALLOW_FAKE_GCC
