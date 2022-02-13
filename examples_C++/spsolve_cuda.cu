@@ -165,7 +165,7 @@ vec spsolve_cuda(sp_mat A, vec b) {
   double* b_ = b.memptr();
   double* x = nullptr;
 
-  return vec(cuda_qr(values, nnz, rows, cols, row_indices, col_ptrs, b_, x), A.n_rows);
+  return vec(cuda_qr(values, nnz, rows, cols, row_indices, col_ptrs, b_, x), A.n_cols);
 }
 
 int main() {
