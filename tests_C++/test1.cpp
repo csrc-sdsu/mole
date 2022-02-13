@@ -12,7 +12,7 @@ int main() {
     float tol = 1e-16;
     
     Divergence D(k, m, dx);
-    vec field(m+1);
+    vec field(m+1, fill::ones);
     
     vec sol = D*field;
     
