@@ -12,7 +12,7 @@ CXX = g++
 CXXFLAGS = -O3 -fopenmp
 
 # Path to header files
-INCPATH = -I. -I$(MOLE)
+INCPATH = -I. -I$(ARMA)/include -I$(MOLE)
 
 # Path to libmole.a
 LIBS = -L$(MOLE) -L$(ARMA) -lmole -larmadillo
