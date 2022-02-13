@@ -111,9 +111,9 @@ double* cuda_qr(const double* values,
   int singularity = 0;
 
   double* d_x = nullptr;
-  cudaMalloc((void**)&d_x, sizeof(double) * rows);
+  cudaMalloc((void**)&d_x, sizeof(double) * cols);
 
-  cudaMemcpy(d_b, b, sizeof(double) * cols, cudaMemcpyHostToDevice);
+  cudaMemcpy(d_b, b, sizeof(double) * rows, cudaMemcpyHostToDevice);
 
   cusolverSpDcsrlsvqr(solhandle,
                       cols,
