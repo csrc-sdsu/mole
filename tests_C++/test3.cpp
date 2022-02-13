@@ -12,7 +12,7 @@ int main() {
     float tol = 1e-16;
     
     Laplacian L(k, m, dx);
-    vec field(m+2);
+    vec field(m+2, fill::ones);
     
     vec sol = L*field;
     
