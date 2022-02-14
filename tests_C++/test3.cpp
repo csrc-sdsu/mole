@@ -9,7 +9,7 @@ int main() {
     int k = 2;
     int m = 2*k+1;
     float dx = 1;
-    float tol = 1e-16;
+    float tol = 1e-12;
     
     Laplacian L(k, m, dx);
     vec field(m+2, fill::ones);
