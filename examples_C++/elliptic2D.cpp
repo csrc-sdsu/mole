@@ -9,9 +9,9 @@
 #include "mole.h"
 
 int main() {
-    int     k = 2;  // Operators' order of accuracy
-    int     m = 9;  // Vertical resolution
-    int     n = 9;  // Horizontal resolution
+    int k = 2;  // Operators' order of accuracy
+    int m = 9;  // Vertical resolution
+    int n = 9;  // Horizontal resolution
 
     // Get mimetic operators
     Laplacian L(k, m, n, 1, 1);
