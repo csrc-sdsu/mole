@@ -11,11 +11,11 @@ public:
     using sp_mat::operator=;
 
     // 1-D Constructor
-    Interpol(u32 m, double c);
+    Interpol(u32 m, real c);
     // 2-D Constructor
-    Interpol(u32 m, u32 n, double c1, double c2);
+    Interpol(u32 m, u32 n, real c1, real c2);
     // 3-D Constructor
-    Interpol(u32 m, u32 n, u32 o, double c1, double c2, double c3);
+    Interpol(u32 m, u32 n, u32 o, real c1, real c2, real c3);
 };
 
 #endif // INTERPOL_H

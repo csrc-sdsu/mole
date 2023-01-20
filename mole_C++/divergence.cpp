@@ -1,7 +1,7 @@
 #include "divergence.h"
 
 // 1-D Constructor
-Divergence::Divergence(u16 k, u32 m, double dx) : sp_mat(m+2, m+1)
+Divergence::Divergence(u16 k, u32 m, real dx) : sp_mat(m+2, m+1)
 {
     assert(!(k%2));
     assert(k > 1 && k < 7);
@@ -95,7 +95,7 @@ Divergence::Divergence(u16 k, u32 m, double dx) : sp_mat(m+2, m+1)
 }
 
 // 2-D Constructor
-Divergence::Divergence(u16 k, u32 m, u32 n, double dx, double dy)
+Divergence::Divergence(u16 k, u32 m, u32 n, real dx, real dy)
 {
     Divergence Dx(k, m, dx);
     Divergence Dy(k, n, dy);
@@ -123,7 +123,7 @@ Divergence::Divergence(u16 k, u32 m, u32 n, double dx, double dy)
 }
 
 // 3-D Constructor
-Divergence::Divergence(u16 k, u32 m, u32 n, u32 o, double dx, double dy, double dz)
+Divergence::Divergence(u16 k, u32 m, u32 n, u32 o, real dx, real dy, real dz)
 {
     Divergence Dx(k, m, dx);
     Divergence Dy(k, n, dy);

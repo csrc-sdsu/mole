@@ -10,11 +10,11 @@ public:
     using sp_mat::operator=;
 
     // 1-D Constructor
-    RobinBC(u16 k, u32 m, double dx, double a, double b);
+    RobinBC(u16 k, u32 m, real dx, real a, real b);
     // 2-D Constructor
-    RobinBC(u16 k, u32 m, double dx, u32 n, double dy, double a, double b);
+    RobinBC(u16 k, u32 m, real dx, u32 n, real dy, real a, real b);
     // 3-D Constructor
-    RobinBC(u16 k, u32 m, double dx, u32 n, double dy, u32 o, double dz, double a, double b);
+    RobinBC(u16 k, u32 m, real dx, u32 n, real dy, u32 o, real dz, real a, real b);
 };
 
 #endif // ROBINBC_H

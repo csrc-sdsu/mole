@@ -1,7 +1,10 @@
+#pragma once
+
 #ifndef UTILS_H
 #define UTILS_H
 
 #include <armadillo>
+#define real double
 
 using namespace arma;
 

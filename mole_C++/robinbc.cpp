@@ -1,7 +1,7 @@
 #include "robinbc.h"
 
 // 1-D Constructor
-RobinBC::RobinBC(u16 k, u32 m, double dx, double a, double b)
+RobinBC::RobinBC(u16 k, u32 m, real dx, real a, real b)
 {
     sp_mat A(m+2, m+2);
     sp_mat BG(m+2, m+2);
@@ -18,7 +18,7 @@ RobinBC::RobinBC(u16 k, u32 m, double dx, double a, double b)
 }
 
 // 2-D Constructor
-RobinBC::RobinBC(u16 k, u32 m, double dx, u32 n, double dy, double a, double b)
+RobinBC::RobinBC(u16 k, u32 m, real dx, u32 n, real dy, real a, real b)
 {
     RobinBC Bm(k, m, dx, a, b);
     RobinBC Bn(k, n, dy, a, b);
@@ -36,7 +36,7 @@ RobinBC::RobinBC(u16 k, u32 m, double dx, u32 n, double dy, double a, double b)
 }
 
 // 3-D Constructor
-RobinBC::RobinBC(u16 k, u32 m, double dx, u32 n, double dy, u32 o, double dz, double a, double b)
+RobinBC::RobinBC(u16 k, u32 m, real dx, u32 n, real dy, u32 o, real dz, real a, real b)
 {
     RobinBC Bm(k, m, dx, a, b);
     RobinBC Bn(k, n, dy, a, b);

@@ -22,7 +22,7 @@ CXXFLAGS = -O3 -fopenmp
 INCPATH = -I. -I$(ARMA)/include -I$(MOLE)
 
 # Path to libmole.a
-LIBS = -L$(MOLE) -L$(ARMA) -lmole -larmadillo
+LIBS = -L$(MOLE) -L$(ARMA) -lmole -larmadillo -lopenblas
 
 ifdef EIGEN
 CXXFLAGS += -DEIGEN

@@ -4,23 +4,23 @@
 #include <eigen3/Eigen/SparseLU>
 vec Utils::spsolve_eigen(const sp_mat &A, const vec &b)
 {
-	Eigen::SparseMatrix<double> eigen_A(A.n_rows, A.n_cols);
-	std::vector<Eigen::Triplet<double>> triplets;
-	Eigen::SparseLU<Eigen::SparseMatrix<double>, Eigen::COLAMDOrdering<int>> solver;
+	Eigen::SparseMatrix<real> eigen_A(A.n_rows, A.n_cols);
+	std::vector<Eigen::Triplet<real>> triplets;
+	Eigen::SparseLU<Eigen::SparseMatrix<real>, Eigen::COLAMDOrdering<int>> solver;
 
 	Eigen::VectorXd eigen_x(A.n_rows);
 	triplets.reserve(5*A.n_rows);
 
 	auto it = A.begin();
 	while(it != A.end()) {
-		triplets.push_back(Eigen::Triplet<double>(it.row(), it.col(), *it));
+		triplets.push_back(Eigen::Triplet<real>(it.row(), it.col(), *it));
 		++it;
 	}
 
 	eigen_A.setFromTriplets(triplets.begin(), triplets.end());
 	triplets.clear();
 
-	auto b_ = conv_to<std::vector<double> >::from(b);
+	auto b_ = conv_to<std::vector<real> >::from(b);
 	Eigen::Map<Eigen::VectorXd> eigen_b(b_.data(), b_.size());
 
 	solver.analyzePattern(eigen_A);

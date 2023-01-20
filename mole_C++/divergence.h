@@ -11,11 +11,11 @@ public:
     using sp_mat::operator=;
 
     // 1-D Constructor
-    Divergence(u16 k, u32 m, double dx);
+    Divergence(u16 k, u32 m, real dx);
     // 2-D Constructor
-    Divergence(u16 k, u32 m, u32 n, double dx, double dy);
+    Divergence(u16 k, u32 m, u32 n, real dx, real dy);
     // 3-D Constructor
-    Divergence(u16 k, u32 m, u32 n, u32 o, double dx, double dy, double dz);
+    Divergence(u16 k, u32 m, u32 n, u32 o, real dx, real dy, real dz);
     // Returns weights
     vec getQ();
 

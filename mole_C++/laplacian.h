@@ -11,11 +11,11 @@ public:
     using sp_mat::operator=;
 
     // 1-D Constructor
-    Laplacian(u16 k, u32 m, double dx);
+    Laplacian(u16 k, u32 m, real dx);
     // 2-D Constructor
-    Laplacian(u16 k, u32 m, u32 n, double dx, double dy);
+    Laplacian(u16 k, u32 m, u32 n, real dx, real dy);
     // 3-D Constructor
-    Laplacian(u16 k, u32 m, u32 n, u32 o, double dx, double dy, double dz);
+    Laplacian(u16 k, u32 m, u32 n, u32 o, real dx, real dy, real dz);
 };
 
 #endif // LAPLACIAN_H
