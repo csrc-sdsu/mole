@@ -8,13 +8,13 @@
 
 int main() {
 
-    int     k = 2;        // Operators' order of accuracy
+    int    k = 2;        // Operators' order of accuracy
     real   a = 0;        // Left boundary
     real   b = 130;      // Right boundary
-    int     m = 26;       // Number of cells
+    int    m = 26;       // Number of cells
     real  dx = (b-a)/m;  // Cell's width [m]
     real   t = 4;        // Simulation time [years]
-    int  iter = 208;      // Number of iterations
+    int iter = 208;      // Number of iterations
     real  dt = t/iter;   // Time step
     real dis = 5;        // Dispersivity [m]
     real vel = 15;       // Pore-water flow velocity [m/year]
