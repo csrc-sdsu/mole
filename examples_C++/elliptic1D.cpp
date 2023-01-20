@@ -7,11 +7,11 @@
 
 int main() {
 
-    int     k = 6;        // Operators' order of accuracy
-    real   a = 0;        // Left boundary
-    real   b = 1;        // Right boundary
-    int     m = 2*k+1;    // Number of cells
-    real  dx = (b-a)/m;  // Step size
+    int   k = 6;        // Operators' order of accuracy
+    real  a = 0;        // Left boundary
+    real  b = 1;        // Right boundary
+    int   m = 2*k+1;    // Number of cells
+    real dx = (b-a)/m;  // Step size
 
     // Get mimetic operators
     Laplacian L(k, m, dx);
