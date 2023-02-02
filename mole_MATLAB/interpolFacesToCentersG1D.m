@@ -1,5 +1,6 @@
-function I = interpolFacesToStaggeredG1D(k, m)
+function I = interpolFacesToCentersG1D(k, m)
 % 1D interpolation from faces to centers
+% centers logical coordinates [1,1.5:m-0.5,m]
 % m is the number of cells in the logical x-axis
 
     I = sparse(m+2, m+1);
