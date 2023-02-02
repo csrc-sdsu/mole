@@ -1,5 +1,6 @@
-function I = interpolFacesToStaggeredG2D(k, m, n)
+function I = interpolFacesToCentersG2D(k, m, n)
 % 2D interpolation from faces to centers
+% centers logical coordinates [1,1.5:m-0.5,m]x[1,1.5:n-0.5,n]
 % m, n, are the number of cells in the logical x- and y- axes
 
     Ix = interpolFacesToStaggeredG1D(k, m);
