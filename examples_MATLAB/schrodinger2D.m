@@ -9,7 +9,7 @@ Lxy = 1;              % Length of box in x and y
 k = 2;                % Order of accuracy        
 m = 50;               % Grid points in x     
 n = 50;               % Grid points in y 
-t = 1;                % Time elapsed
+t = 1;                % Time
 nx = 2;               % Energy level in x 
 ny = 2;               % Energy level in y  
 c = 1;                % Wave propagation speed
@@ -19,8 +19,7 @@ dx = Lxy / m;         % Step in x
 dy = Lxy / n;         % Step in y
 dt = dx/(2*c);        % Time step
 
-% Discretizing
-tGrid = 0:dt:t;                   % Grid spacing in time 
+% Spatial discretization
 xGrid = [0 dx/2:dx:Lxy-dx/2 Lxy]; % Staggered grid x
 yGrid = [0 dy/2:dy:Lxy-dy/2 Lxy]; % Staggered grid y 
 [Y, X] = meshgrid(yGrid, xGrid);  % Grid
@@ -37,7 +36,7 @@ L = L + robinBC2D(k, m, dx, n, dy, 1, 0);
 I = interpol2D(m, n, 0.5, 0.5);
 I2 = interpolD2D(m, n, 0.5, 0.5);
 
-% Pre-multiplying for convenience 
+% Premultiplying for convenience 
 I = dt*I; 
 I2 = 0.5*dt*I2; 
 
