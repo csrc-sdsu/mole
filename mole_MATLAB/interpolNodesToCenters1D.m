@@ -4,5 +4,5 @@ function I = interpolNodesToCenters1D(k, m)
 % nodal logical coordinates are [1:1:m]
 % centers logical coordinates [1,1.5:m-0.5,m]
 
-    I = interpolFacesToStaggeredG1D(k, m);
+    I = interpolFacesToCentersG1D(k, m);
 end
