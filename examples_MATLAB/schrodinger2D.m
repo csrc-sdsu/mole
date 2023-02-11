@@ -13,8 +13,8 @@ nx = 2;               % Energy level in x
 ny = 2;               % Energy level in y
 kx = @(nx) nx*pi/Lxy; % Wave vector in x
 ky = @(ny) ny*pi/Lxy; % Wave vector in y
-dx = Lxy / m;         % Step in x
-dy = Lxy / n;         % Step in y
+dx = Lxy/m;           % Step in x
+dy = Lxy/n;           % Step in y
 dt = dx;              % Time step
 
 % Spatial discretization
@@ -32,7 +32,7 @@ I2 = interpolD2D(m, n, 0.5, 0.5);
 I = dt*I;
 I2 = 0.5*dt*I2;
 
-% Hamiltonian function
+% Hamiltonian
 H = @(x) 0.5*L*x;
 
 % Initialization
@@ -54,7 +54,7 @@ for i = 0:105
     ylabel('y')
     zlabel('\psi')
     zlim([-A A]);
-    title(['nx = ',num2str(nx),', ny = ',num2str(ny),', t = ',num2str(i)]);
+    title(['n_x = ',num2str(nx),', n_y = ',num2str(ny),', t = ',num2str(i)]);
     drawnow
     
     % Updating
