@@ -17,10 +17,11 @@ dx = Lxy/m;           % Step in x
 dy = Lxy/n;           % Step in y
 dt = dx;              % Time step
 
-% Spatial discretization
-xGrid = [0 dx/2:dx:Lxy-dx/2 Lxy]; % Staggered grid x
-yGrid = [0 dy/2:dy:Lxy-dy/2 Lxy]; % Staggered grid y
-[Y, X] = meshgrid(yGrid, xGrid);  % Grid
+% 2D Staggered grid
+xgrid = [0 dx/2:dx:Lxy-dx/2 Lxy]; % Staggered grid x
+ygrid = [0 dy/2:dy:Lxy-dy/2 Lxy]; % Staggered grid y
+
+[X, Y] = meshgrid(xgrid, ygrid);  % Grid
 
 % Mimetic Laplacian operator and interpolator
 L = lap2D(k, m, dx, n, dy);
@@ -37,19 +38,19 @@ H = @(x) 0.5*L*x;
 
 % Initialization
 A = 2/Lxy;
-Psi_old = A*sin(kx(nx)*X).*sin(ky(ny)*Y);
-Psi_old = Psi_old(:);
+psi_old = A*sin(kx(nx)*X).*sin(ky(ny)*Y);
+psi_old = psi_old(:);
 v_old = zeros(2*m*n+m+n, 1);
 
 for i = 0:105
     % Position Verlet algorithm
-    Psi_old = Psi_old + I2*v_old;
-    v_new = v_old + I*H(Psi_old);
-    Psi_new = Psi_old + I2*v_new;
-    Psi_re = reshape(Psi_new, m+2, n+2);
+    psi_old = psi_old + I2*v_old;
+    v_new = v_old + I*H(psi_old);
+    psi_new = psi_old + I2*v_new;
+    Psi_re = reshape(psi_new, m+2, n+2);
     
     % Plotting
-    surf(X, Y, reshape(Psi_new, m+2, n+2))
+    surf(X, Y, reshape(psi_new, m+2, n+2))
     xlabel('x')
     ylabel('y')
     zlabel('\psi')
@@ -58,6 +59,6 @@ for i = 0:105
     drawnow
     
     % Updating
-    Psi_old = Psi_new;
+    psi_old = psi_new;
     v_old = v_new;
 end
