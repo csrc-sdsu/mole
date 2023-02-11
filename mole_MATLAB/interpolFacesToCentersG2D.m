@@ -3,8 +3,8 @@ function I = interpolFacesToCentersG2D(k, m, n)
 % centers logical coordinates [1,1.5:m-0.5,m]x[1,1.5:n-0.5,n]
 % m, n, are the number of cells in the logical x- and y- axes
 
-    Ix = interpolFacesToStaggeredG1D(k, m);
-    Iy = interpolFacesToStaggeredG1D(k, n);
+    Ix = interpolFacesToCentersG1D(k, m);
+    Iy = interpolFacesToCentersG1D(k, n);
 
     Im = sparse(m + 2, m);
     In = sparse(n + 2, n);

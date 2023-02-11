@@ -5,9 +5,9 @@ function I = interpolCentersToFacesD3D(k, m, n, o)
 
     cells = (o+2)*(n+2)*(m+2);
 
-    Ix = interpolStaggeredToFacesD1D(k, m);
-    Iy = interpolStaggeredToFacesD1D(k, n);
-    Iz = interpolStaggeredToFacesD1D(k, o);
+    Ix = interpolCentersToFacesD1D(k, m);
+    Iy = interpolCentersToFacesD1D(k, n);
+    Iz = interpolCentersToFacesD1D(k, o);
 
     Im = sparse(m + 2, m);
     In = sparse(n + 2, n);

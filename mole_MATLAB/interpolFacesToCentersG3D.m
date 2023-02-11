@@ -5,9 +5,9 @@ function I = interpolFacesToCentersG3D(k, m, n, o)
 
     cells = (o+2)*(n+2)*(m+2);
 
-    Ix = interpolFacesToStaggeredG1D(k, m);
-    Iy = interpolFacesToStaggeredG1D(k, n);
-    Iz = interpolFacesToStaggeredG1D(k, o);
+    Ix = interpolFacesToCentersG1D(k, m);
+    Iy = interpolFacesToCentersG1D(k, n);
+    Iz = interpolFacesToCentersG1D(k, o);
 
     Im = sparse(m + 2, m);
     In = sparse(n + 2, n);
