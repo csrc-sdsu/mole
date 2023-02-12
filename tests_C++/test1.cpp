@@ -8,8 +8,8 @@
 int main() {
     int k = 2;
     int m = 2*k+1;
-    real dx = 1;
-    real tol = 1e-12;
+    Real dx = 1;
+    Real tol = 1e-12;
     
     Divergence D(k, m, dx);
     vec field(m+1, fill::ones);

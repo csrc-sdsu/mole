@@ -8,15 +8,15 @@
 int main() {
 
     int   k = 6;        // Operators' order of accuracy
-    real  a = 0;        // Left boundary
-    real  b = 1;        // Right boundary
+    Real  a = 0;        // Left boundary
+    Real  b = 1;        // Right boundary
     int   m = 2*k+1;    // Number of cells
-    real dx = (b-a)/m;  // Step size
+    Real dx = (b-a)/m;  // Step size
 
     // Get mimetic operators
     Laplacian L(k, m, dx);
-    real d = 1;  // Dirichlet coefficient
-    real n = 1;  // Neumann coefficient
+    Real d = 1;  // Dirichlet coefficient
+    Real n = 1;  // Neumann coefficient
     RobinBC BC(k, m, dx, d, n);
     L = L + BC;
 

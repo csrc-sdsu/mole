@@ -1,7 +1,7 @@
 #include "interpol.h"
 
 // 1-D Constructor
-Interpol::Interpol(u32 m, real c) : sp_mat(m+1, m+2)
+Interpol::Interpol(u32 m, Real c) : sp_mat(m+1, m+2)
 {
     assert(m >= 4);
     assert(c >= 0 && c <= 1);
@@ -16,7 +16,7 @@ Interpol::Interpol(u32 m, real c) : sp_mat(m+1, m+2)
 }
 
 // 2-D Constructor
-Interpol::Interpol(u32 m, u32 n, real c1, real c2)
+Interpol::Interpol(u32 m, u32 n, Real c1, Real c2)
 {
     Interpol Ix(m, c1);
     Interpol Iy(n, c2);
@@ -44,7 +44,7 @@ Interpol::Interpol(u32 m, u32 n, real c1, real c2)
 }
 
 // 3-D Constructor
-Interpol::Interpol(u32 m, u32 n, u32 o, real c1, real c2, real c3)
+Interpol::Interpol(u32 m, u32 n, u32 o, Real c1, Real c2, Real c3)
 {
     Interpol Ix(m, c1);
     Interpol Iy(n, c2);
