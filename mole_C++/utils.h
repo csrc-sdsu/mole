@@ -4,7 +4,7 @@
 #define UTILS_H
 
 #include <armadillo>
-#define real double
+#define Real double
 
 using namespace arma;
 

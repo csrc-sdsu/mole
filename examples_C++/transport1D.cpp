@@ -9,17 +9,17 @@
 int main() {
 
     int    k = 2;        // Operators' order of accuracy
-    real   a = 0;        // Left boundary
-    real   b = 130;      // Right boundary
+    Real   a = 0;        // Left boundary
+    Real   b = 130;      // Right boundary
     int    m = 26;       // Number of cells
-    real  dx = (b-a)/m;  // Cell's width [m]
-    real   t = 4;        // Simulation time [years]
+    Real  dx = (b-a)/m;  // Cell's width [m]
+    Real   t = 4;        // Simulation time [years]
     int iter = 208;      // Number of iterations
-    real  dt = t/iter;   // Time step
-    real dis = 5;        // Dispersivity [m]
-    real vel = 15;       // Pore-water flow velocity [m/year]
-    real   R = 2.5;      // Retardation (Cl^- = 1, Na^+ = 2.5)
-    real  C0 = 1;        // Displacing solution concentration [mmol/kgw]
+    Real  dt = t/iter;   // Time step
+    Real dis = 5;        // Dispersivity [m]
+    Real vel = 15;       // Pore-water flow velocity [m/year]
+    Real   R = 2.5;      // Retardation (Cl^- = 1, Na^+ = 2.5)
+    Real  C0 = 1;        // Displacing solution concentration [mmol/kgw]
 
     // Get 1D mimetic operators
     Gradient G(k, m, dx);

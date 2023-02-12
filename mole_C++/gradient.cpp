@@ -1,7 +1,7 @@
 #include "gradient.h"
 
 // 1-D Constructor
-Gradient::Gradient(u16 k, u32 m, real dx) : sp_mat(m+1, m+2)
+Gradient::Gradient(u16 k, u32 m, Real dx) : sp_mat(m+1, m+2)
 {
     assert(!(k%2));
     assert(k > 1 && k < 9);
@@ -222,7 +222,7 @@ Gradient::Gradient(u16 k, u32 m, real dx) : sp_mat(m+1, m+2)
 }
 
 // 2-D Constructor
-Gradient::Gradient(u16 k, u32 m, u32 n, real dx, real dy)
+Gradient::Gradient(u16 k, u32 m, u32 n, Real dx, Real dy)
 {
     Gradient Gx(k, m, dx);
     Gradient Gy(k, n, dy);
@@ -250,7 +250,7 @@ Gradient::Gradient(u16 k, u32 m, u32 n, real dx, real dy)
 }
 
 // 3-D Constructor
-Gradient::Gradient(u16 k, u32 m, u32 n, u32 o, real dx, real dy, real dz)
+Gradient::Gradient(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz)
 {
     Gradient Gx(k, m, dx);
     Gradient Gy(k, n, dy);
