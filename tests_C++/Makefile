@@ -18,7 +18,7 @@ INCPATH = -I. -I$(ARMA)/include -I$(MOLE)
 LIBS = -L$(MOLE) -L$(ARMA) -lmole -larmadillo -lopenblas
 
 # Rules:
-all: test1 test2 test3 run
+all: test1 test2 test3 test4 run
 
 test1: test1.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o test1 test1.cpp $(LIBS)
@@ -29,10 +29,14 @@ test2: test2.cpp
 test3: test3.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o test3 test3.cpp $(LIBS)
 
+test4: test4.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o test4 test4.cpp $(LIBS)
+
 run: test1 test2 test3
 	./test1
 	./test2
 	./test3
+	./test4
 
 clean:
-	rm -f test1 test2 test3
+	rm -f test1 test2 test3 test4
