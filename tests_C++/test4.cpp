@@ -33,7 +33,7 @@ int main() {
     vec expected {1, 3, 5, 7};
 
     bool failed = false;
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < expected.size(); ++i)
         if (std::norm(real(eigval(i)/eigval(0)) - expected(i)) > tol) {
             cout << "\033[1;31mTest FAILED!\033[0m\n";
             failed = true;
