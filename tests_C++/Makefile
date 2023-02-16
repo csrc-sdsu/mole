@@ -32,7 +32,7 @@ test3: test3.cpp
 test4: test4.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o test4 test4.cpp $(LIBS)
 
-run: test1 test2 test3
+run: test1 test2 test3 test4
 	./test1
 	./test2
 	./test3
