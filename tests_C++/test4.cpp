@@ -30,7 +30,7 @@ int main() {
 
     eigval = sort(eigval);
 
-    vec expected {1, 3, 5, 7};
+    vec expected {1, 3, 5, 7, 9};
 
     bool failed = false;
     for (int i = 0; i < expected.size(); ++i)
