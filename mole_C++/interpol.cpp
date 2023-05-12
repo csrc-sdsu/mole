@@ -76,3 +76,63 @@ Interpol::Interpol(u32 m, u32 n, u32 o, Real c1, Real c2, Real c3)
         *this = Utils::spkron(A1, I1) + Utils::spkron(A2, I2) + Utils::spkron(A3, I3);
     }
 }
+
+// 1-D Constructor for second type
+Interpol::Interpol(bool type, u32 m, Real c) : sp_mat(m+2, m+1)
+{
+    assert(m >= 4 && "m >= 4");
+    assert(c >= 0 && c <= 1 && "0 <= c <= 1");
+
+    at(0, 0) = 1;
+    at(m+2 - 1, m+1 - 1) = 1;
+
+    vec avg = {c, 1 - c};
+
+    int j = 0;
+    for (int i = 1; i < m+1; ++i) {
+        at(i, j) = avg(0);
+        at(i, j + 1) = avg(1);
+        j++;
+    }
+}
+
+// 2-D Constructor for second type
+Interpol::Interpol(bool type, u32 m, u32 n, Real c1, Real c2)
+{
+    Interpol Ix(true, m, c1);
+    Interpol Iy(true, n, c2);
+
+    sp_mat Im(m + 2, m);
+    Im.submat(1, 0, m, m-1) = speye(m, m);
+
+    sp_mat In(n + 2, n);
+    In.submat(1, 0, n, n-1) = speye(n, n);
+
+    sp_mat Sx = Utils::spkron(In, Ix);
+    sp_mat Sy = Utils::spkron(Iy, Im);
+
+    *this = Utils::spjoin_rows(Sx, Sy);
+}
+
+// 3-D Constructor for second type
+Interpol::Interpol(bool type, u32 m, u32 n, u32 o, Real c1, Real c2, Real c3)
+{
+    Interpol Ix(true, m, c1);
+    Interpol Iy(true, n, c2);
+    Interpol Iz(true, o, c3);
+
+    sp_mat Im(m + 2, m);
+    Im.submat(1, 0, m, m-1) = speye(m, m);
+
+    sp_mat In(n + 2, n);
+    In.submat(1, 0, n, n-1) = speye(n, n);
+
+    sp_mat Io(o + 2, o);
+    Io.submat(1, 0, o, o-1) = speye(o, o);
+
+    sp_mat Sx = Utils::spkron(Utils::spkron(Io, In), Ix);
+    sp_mat Sy = Utils::spkron(Utils::spkron(Io, Iy), Im);
+    sp_mat Sz = Utils::spkron(Utils::spkron(Iz, In), Im);
+
+    *this = Utils::spjoin_rows(Utils::spjoin_rows(Sx, Sy), Sz);
+}
