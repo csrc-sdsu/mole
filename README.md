@@ -12,7 +12,7 @@ Gradient, Divergence, Laplacian, Bilaplacian and Curl. These operators (matrices
 on staggered grids (uniform and nonuniform) and they satisfy local and 
 global conservation laws.
 
-The mathematics is based on the work of [Corbino and Castillo, 2020]. 
+The mathematics is based on the work of [Corbino and Castillo, 2020] https://www.sciencedirect.com/science/article/abs/pii/S0377042719303231. 
 However, the user may find useful previous publications such as [Castillo and Grone, 2003],
 in which similar operators are derived using a matrix analysis approach.
 
@@ -112,8 +112,7 @@ to start browsing the documentation.
 
 Please cite our work if you use MOLE in your research and/or software. 
 Citations are useful for the continued development and maintenance of 
-the library https://www.sciencedirect.com/science/article/abs/pii/S0377042719303231
-
+the library [![DOI](https://zenodo.org/badge/100132401.svg)](https://zenodo.org/badge/latestdoi/100132401)
 
 [![View mole on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/124870-mole)
 
