@@ -26,7 +26,15 @@ INCPATH += -I$(EIGEN)
 endif
 
 # Rules:
+ifndef SHARED_LIB
 all: libmole.a
+else
+CXXFLAGS += -fPIC
+all: libmole.so
+endif
+
+libmole.so: divergence.o gradient.o laplacian.o interpol.o robinbc.o utils.o
+	$(CXX) -shared -o libmole.so *.o
 
 libmole.a: divergence.o gradient.o laplacian.o interpol.o robinbc.o utils.o
 	ar cqs libmole.a *.o
@@ -50,4 +58,4 @@ utils.o: utils.cpp utils.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o utils.o utils.cpp
 
 clean:
-	rm -f *.o libmole.a
+	rm -f *.o libmole.a libmole.so
