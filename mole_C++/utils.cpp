@@ -155,8 +155,8 @@ void Utils::meshgrid( const vec &x, const vec &y, mat &X, mat &Y)
 {
     int m = x.n_elem;
     int n = y.n_elem;
-    assert (m > 0 );
-    assert (n > 0 );
+    assert ( m > 0 );
+    assert ( n > 0 );
 
     //Build X
     vec t(n, fill::ones);
@@ -164,13 +164,13 @@ void Utils::meshgrid( const vec &x, const vec &y, mat &X, mat &Y)
     X.zeros(n,m);
     Y.zeros(n,m);
 
-    for(int ii=0; ii<m; ++ii)
+    for( int ii=0; ii<m; ++ii )
     {
         X.col(ii) = x(ii) * t;
         t.ones();
     }
 
-    for(int ii=0; ii<m; ++ii)
+    for( int ii=0; ii<m; ++ii )
     {
         Y.col(ii) = y;
     }
@@ -196,28 +196,28 @@ void Utils::meshgrid( const vec &x, const vec &y, const vec &z, cube &X, cube &Y
     Y.zeros(m,n,o);
     Z.zeros(m,n,o);
     // Sheet that repeats each slice
-    for(int ii=0; ii<m; ++ii)
+    for( int ii=0; ii<m; ++ii )
     {
         sheet.row(ii) = x(ii) * t.t();
         t.ones();
     }   
 
-    for( int kk=0; kk<o; ++kk){
+    for( int kk=0; kk<o; ++kk ){
         X.slice(kk) = sheet;
     }
 
     // Y Cube, repeats same sheet as well
-    for(int ii=0; ii<m; ++ii)
+    for( int ii=0; ii<m; ++ii )
     {
         sheet.row(ii) = y.t();
     }
 
-    for( int kk=0; kk<o; ++kk){
+    for( int kk=0; kk<o; ++kk ){
         Y.slice(kk) = sheet;
     }
 
     // Z cube goes by slices each with same value
-    for( int kk=0; kk<o; ++kk){
+    for( int kk=0; kk<o; ++kk ){
         Z.slice(kk).fill( z(kk) );
     }
 }
