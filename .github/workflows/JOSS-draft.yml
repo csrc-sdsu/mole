@@ -1,3 +1,5 @@
+name: Produce draft for JOSS
+
 on: [push]
 
 jobs:
