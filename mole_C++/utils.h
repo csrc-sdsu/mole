@@ -4,8 +4,8 @@
 #define UTILS_H
 
 #include <armadillo>
-#define Real double
 
+using Real = double;
 using namespace arma;
 
 class Utils
