@@ -11,31 +11,33 @@ authors:
     orcid: 0000-0002-2638-9216
     affiliation: 1
   - name: Jose E. Castillo
-    affiliation: 1
+    affiliation: 2
 affiliations:
- - name: Computational Science Research Center, San Diego State University, 5500 Campanile Dr, San Diego, California, 92182.
+ - name: Computational Research Division, Lawrence Berkeley National Laboratory, Berkeley, California, 94720.
    index: 1
+ - name: Computational Science Research Center, San Diego State University, 5500 Campanile Dr, San Diego, California, 92182.
+   index: 2
 date: 29 December 2020
 bibliography: paper.bib
 ---
 
 # Summary
 
-MOLE is a high quality (C++ & MATLAB) library that implements high-order mimetic operators. It provides discrete analogs of the most common vector calculus operators: Gradient, Divergence, Laplacian and Curl. These operators (matrices) act on staggered grids (uniform and nonuniform) and they satisfy local and global conservation laws. These operators can be used to build codes to solve partial differential equations (PDEs).
+MOLE is a high-quality (C++ & MATLAB) library that implements high-order mimetic operators. It provides discrete analogs of the most common vector calculus operators: Divergence, Gradient, Curl, and Laplacian. These operators (matrices) act on staggered grids (uniform, nonuniform, and curvilinear) and they satisfy local and global conservation laws. MOLE's operators can be utilized to develop code for solving partial differential equations (PDEs).
 
-The mathematics is based on the work of [@Corbino]. In addition, the user may find useful previous publications such as [@Castillo], in which similar operators are derived using a matrix analysis approach.
+The mathematics are based on the work of [@Corbino]. In addition, the user may find useful previous publications such as [@Castillo], in which similar operators are derived using a matrix analysis approach.
 
 # Mimetic operators
 
-Mimetic finite-difference operators, divergence (**D**), gradient (**G**), curl (**C**), and laplacian (**L**) are discrete analogs of their corresponding continuum operators. These mimetic finite-difference operators satisfy in the discrete sense the vector identities that the continuum ones do, making them more faithful to the physics [@Corbino].
+Mimetic finite-difference operators, Divergence (**D**), Gradient (**G**), Curl (**C**), and Laplacian (**L**) are discrete analogs of their corresponding continuum operators. These mimetic finite-difference operators satisfy in the discrete sense the vector identities that the continuum ones do, making them more faithful to the physics [@Corbino].
 
-The basis of higher-dimensional operators, as well of more sophisticated operators such as the laplacian or the biharmonic operator are the one-dimensional mimetic **G** and **D** operators. These finite-dimensional operators can be reused throughout the model and they provide a higher level of abstraction at the time of solving differential equations.
+The basis of higher-dimensional operators, as well of more sophisticated operators such as the Laplacian or the Biharmonic operator are the one-dimensional mimetic **G** and **D** operators. These finite-dimensional operators can be reused throughout the model and they provide a higher level of abstraction at the time of solving differential equations.
 
-These operators, have been used to write codes to solve PDEs of different types [@Bazan], [@Boada], [@Boada2], [@Rojas], [@Jorge], [@Josep], [@Abouali]. For an overview of mimetic methods of different types see the book by Castillo and Miranda and the references there in [@Miranda].
+These operators, have been used to write codes to solve PDEs of different types [@Jared], [@Bazan], [@Boada], [@Boada2], [@Rojas], [@Jorge], [@Josep], [@Abouali]. For an overview of mimetic methods of different types see the book by Castillo and Miranda and the references there in [@Miranda].
 
 # Statement of need
 
-Implementing mimetic operators is not a trivial matter, particularly in three dimensions,  this is substantially facilitated by MOLE relieving the user to devote their time to focus on the problem of interest. The user interested in solving, for example, a Poisson equation  $-\nabla^2 u = f$, will be solving a discrete analog of this equation, $-DG\bar{u} = \bar{f}$, by using MOLE with a few lines of code.
+Implementing mimetic operators is not a trivial matter, particularly in three dimensions, this is substantially facilitated by MOLE relieving the user to devote their time to focus on the problem of interest. The user interested in solving, for example, a _Poisson equation_  $-\nabla^2 u = f$, will be solving a discrete analog of this equation, $-DG\bar{u} = \bar{f}$, by using MOLE with a few lines of code.
 
 # State of the field
 
@@ -43,7 +45,7 @@ A previous library [@MTK] was developed to implement the mimetic operators prese
 
 # The library
 
-MOLE was designed to be an intuitive software package to construct mimetic operators based on [@Corbino] method. MOLE is implemented in C++ and in MATLAB scripting language (these are two independent flavors) and every single function in MOLE returns a sparse matrix of the requested mimetic operator. For information on the installation or usage of the library, please read the [User's Manual](https://github.com/jcorbino/mole/blob/master/MOLE%20User's%20Manual%20(MATLAB%20version).pdf) which is included in the repository.
+MOLE was designed to be an intuitive software package to construct mimetic operators based on [@Corbino] method. MOLE is implemented in C++ and in MATLAB scripting language (these are two independent flavors) and every single function in MOLE returns a sparse matrix of the requested mimetic operator. For information on the installation or usage of the library, please read the documentation included in the repository.
 
 Mimetic operators can be easily used to build codes to solve PDEs with a few lines of code. For example, if the user wants to get a one-dimensional *k*-order mimetic Laplacian, just need to invoke:
 ```matlab
@@ -92,6 +94,10 @@ ylabel('u(x)')
 
 # Concluding remarks
 
-In this short article we introduced MOLE, an open-source library that implements the mimetic operators from [@Corbino]. For conciseness purposes, we showed a one-dimensional Poisson problem as example, however, MOLE comes with over 30 examples that range from the one-way wave equation to highly nonlinear and computationally demanding problems such as Richard's equation for unsaturated flow in porous media. The user can find such examples in the [Examples](https://github.com/jcorbino/mole/blob/master/examples_MATLAB) folder.
+In this short article we introduced MOLE, an open-source library that implements the mimetic operators from [@Corbino]. For conciseness purposes, we showed a one-dimensional Poisson problem as example, however, MOLE includes over 30 examples that span a wide range of applications, from the one-way wave equation to highly nonlinear and computationally demanding problems, including the Navier-Stokes equation for fluid dynamics and Richard's equation for unsaturated flow in porous media. The user can find such examples in the [Examples](https://github.com/jcorbino/mole/blob/master/examples_MATLAB) folder.
+
+# Acknowledgements
+
+We acknowledge contributions from Dr. Miguel Dumett, Dr. Angel Boada, and Jared Brzenski, whose dedicated efforts and insightful discussions significantly enhanced the development of the software tool.
 
 # References
