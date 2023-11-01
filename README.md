@@ -71,7 +71,7 @@ Extract _Eigen_ and _Armadillo_, you can use the following command for each comp
 
 `tar xvf name_of_the_file_including_extension --directory target_directory`
 
-Now, proceed to download MOLE <https://github.com/jcorbino/mole/archive/refs/heads/master.zip> and extract the file:
+Now, proceed to download MOLE <https://github.com/csrc-sdsu/mole/archive/refs/heads/master.zip> and extract the file:
 
 `unzip master.zip –d mole`
 
@@ -96,8 +96,8 @@ Now, just build the library and its examples by simply executing `make` from MOL
 
 4: Documentation
 ----------------
-The folder `doc_MATLAB` contains generated documentation about the MATLAB version.
-It was generated with a tool called _m2html_ which can be found here: <https://www.artefact.tk/software/matlab/m2html>.
+The folder `doc_MATLAB` contains generated documentation about the MATLAB/Octave API.
+It was generated with a tool called [_m2html_](https://www.gllmflndn.com/software/matlab/m2html). However, for a quick start on MOLE's MATLAB/Octave version, we recommend to start with this short [guide](https://github.com/csrc-sdsu/mole/blob/master/CSRC%20Report%20on%20MOLE.pdf).
 
 To generate the C++ documentation, just execute:
 
@@ -105,7 +105,6 @@ To generate the C++ documentation, just execute:
 
 this will create a folder called `doc_C++` containing a set of _html_ files. Please refer to the _index.html_ file 
 to start browsing the documentation.
-
 
 5: Citations
 ------------
