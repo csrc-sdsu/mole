@@ -47,7 +47,7 @@ A previous library [@MTK] was developed to implement the mimetic operators prese
 
 # The library
 
-MOLE was designed to be an intuitive software package to construct mimetic operators based on [@Corbino] method. MOLE is implemented in C++ and in MATLAB scripting language (these are two independent flavors) and every single function in MOLE returns a sparse matrix of the requested mimetic operator. For information on the installation or usage of the library, please read the [documentation](https://github.com/jcorbino/mole/blob/master/README.md) included in the repository.
+MOLE was designed to be an intuitive software package to construct mimetic operators based on [@Corbino] method. MOLE is implemented in C++ and in MATLAB scripting language (these are two independent flavors) and every single function in MOLE returns a sparse matrix of the requested mimetic operator. For information on the installation or usage of the library, please read the [documentation](https://github.com/csrc-sdsu/mole/blob/master/README.md) included in the repository.
 
 Mimetic operators can be easily used to build codes to solve PDEs with a few lines of code. For example, if the user wants to get a one-dimensional *k*-order mimetic Laplacian, just need to invoke:
 ```matlab
