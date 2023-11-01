@@ -10,6 +10,8 @@ authors:
   - name: Johnny Corbino^[Corresponding author.]
     orcid: 0000-0002-2638-9216
     affiliation: 1
+  - name: Miguel A. Dumett
+    affiliation: 2
   - name: Jose E. Castillo
     affiliation: 2
 affiliations:
@@ -23,15 +25,15 @@ bibliography: paper.bib
 
 # Summary
 
-MOLE is a high-quality (C++ & MATLAB) library that implements high-order mimetic operators. It provides discrete analogs of the most common vector calculus operators: Divergence, Gradient, Curl, and Laplacian. These operators (matrices) act on staggered grids (uniform, nonuniform, and curvilinear) and they satisfy local and global conservation laws. MOLE's operators can be utilized to develop code for solving partial differential equations (PDEs).
+MOLE is a high-quality (C++ & MATLAB) library that implements high-order mimetic operators. It provides discrete analogs of the most common vector calculus operators: Divergence, Gradient, Curl, and Laplacian. These operators (matrices) act on staggered grids (uniform, nonuniform, and curvilinear) and they satisfy local and global conservation laws [@R202203] [@R202305]. MOLE's operators can be utilized to develop code for solving partial differential equations (PDEs).
 
 The mathematics are based on the work of [@Corbino]. In addition, the user may find useful previous publications such as [@Castillo], in which similar operators are derived using a matrix analysis approach.
 
 # Mimetic operators
 
-Mimetic finite-difference operators, Divergence (**D**), Gradient (**G**), Curl (**C**), and Laplacian (**L**) are discrete analogs of their corresponding continuum operators. These mimetic finite-difference operators satisfy in the discrete sense the vector identities that the continuum ones do, making them more faithful to the physics [@Corbino].
+Mimetic finite-difference operators, Divergence (**D**), Gradient (**G**), Curl (**C**), and Laplacian (**L**) are discrete analogs of their corresponding continuum operators. These mimetic finite-difference operators satisfy in the discrete sense the vector identities that the continuum ones do [@R202301], making them more faithful to the physics [@Corbino].
 
-The basis of higher-dimensional operators, as well of more sophisticated operators such as the Laplacian or the Biharmonic operator are the one-dimensional mimetic **G** and **D** operators. These finite-dimensional operators can be reused throughout the model and they provide a higher level of abstraction at the time of solving differential equations.
+The basis of higher-dimensional operators, as well of more sophisticated operators such as the Laplacian or the Biharmonic operator are the one-dimensional mimetic **G** and **D** operators, together with high-order mimetic interpolation operators [@R202202], also contained in the library. These finite-dimensional operators can be reused throughout the model and they provide a higher level of abstraction at the time of solving differential equations.
 
 These operators, have been used to write codes to solve PDEs of different types [@Jared], [@Bazan], [@Boada], [@Boada2], [@Rojas], [@Jorge], [@Josep], [@Abouali]. For an overview of mimetic methods of different types see the book by Castillo and Miranda and the references there in [@Miranda].
 
@@ -51,7 +53,7 @@ Mimetic operators can be easily used to build codes to solve PDEs with a few lin
 ```matlab
 lap(k, m, dx);
 ```
-where **k** is the desired order of accuracy, **m** is the number of cell centers (spatial resolution), and **dx** is the step length. All functions in MOLE are quite consistent with this syntax, and more information regarding the signature of the function can be accessed via the ```help``` command. The C++ version of the library only depends on [*Armadillo*](http://arma.sourceforge.net/), which is an open-source package for dense and sparse linear algebra [@Arma].
+where **k** is the desired order of accuracy, **m** is the number of cell centers (spatial resolution), and **dx** is the distance between consecutive cell centers. All functions in MOLE are quite consistent with this syntax, and more information regarding the signature of the function can be accessed via the ```help``` command. The C++ version of the library only depends on [*Armadillo*](http://arma.sourceforge.net/), which is an open-source package for dense and sparse linear algebra [@Arma].
 
 It is important to mention that MOLE's main role is the construction of matrices that represent spatial derivative operators and boundary conditions; other components such as solvers and time steppers are only provided via self-contained examples.
 
@@ -98,6 +100,6 @@ In this short article we introduced MOLE, an open-source library that implements
 
 # Acknowledgements
 
-We acknowledge contributions from Dr. Miguel Dumett, Dr. Angel Boada, and Jared Brzenski, whose dedicated efforts and insightful discussions significantly enhanced the development of the software tool.
+We acknowledge contributions from Dr. Angel Boada, and Jared Brzenski, whose dedicated efforts and insightful discussions significantly enhanced the development of the software tool.
 
 # References
