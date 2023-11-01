@@ -25,7 +25,7 @@ bibliography: paper.bib
 
 # Summary
 
-MOLE is a high-quality (C++ & MATLAB) library that implements high-order mimetic operators. It provides discrete analogs of the most common vector calculus operators: Divergence, Gradient, Curl, and Laplacian. These operators (matrices) act on staggered grids (uniform, nonuniform, and curvilinear) and they satisfy local and global conservation laws [@R202203] [@R202305]. MOLE's operators can be utilized to develop code for solving partial differential equations (PDEs).
+MOLE is a high-quality (C++ & MATLAB) library that implements high-order mimetic operators. It provides discrete analogs of the most common vector calculus operators: Divergence, Gradient, Curl, and Laplacian. These operators (matrices) act on staggered grids (uniform, nonuniform, and curvilinear) and they satisfy local and global conservation laws [@R202203; @R202305]. MOLE's operators can be utilized to develop code for solving partial differential equations (PDEs).
 
 The mathematics are based on the work of [@Corbino]. In addition, the user may find useful previous publications such as [@Castillo], in which similar operators are derived using a matrix analysis approach.
 
@@ -35,7 +35,7 @@ Mimetic finite-difference operators, Divergence (**D**), Gradient (**G**), Curl 
 
 The basis of higher-dimensional operators, as well of more sophisticated operators such as the Laplacian or the Biharmonic operator are the one-dimensional mimetic **G** and **D** operators, together with high-order mimetic interpolation operators [@R202202], also contained in the library. These finite-dimensional operators can be reused throughout the model and they provide a higher level of abstraction at the time of solving differential equations.
 
-These operators, have been used to write codes to solve PDEs of different types [@Jared], [@Bazan], [@Boada], [@Boada2], [@Rojas], [@Jorge], [@Josep], [@Abouali]. For an overview of mimetic methods of different types see the book by Castillo and Miranda and the references there in [@Miranda].
+These operators, have been used to write codes to solve PDEs of different types [@Jared; @Bazan; @Boada; @Boada2; @Rojas; @Jorge; @Josep; @Abouali]. For an overview of mimetic methods of different types see the book by Castillo and Miranda and the references there in [@Miranda].
 
 # Statement of need
 
@@ -47,7 +47,7 @@ A previous library [@MTK] was developed to implement the mimetic operators prese
 
 # The library
 
-MOLE was designed to be an intuitive software package to construct mimetic operators based on [@Corbino] method. MOLE is implemented in C++ and in MATLAB scripting language (these are two independent flavors) and every single function in MOLE returns a sparse matrix of the requested mimetic operator. For information on the installation or usage of the library, please read the [documentation](https://github.com/csrc-sdsu/mole/blob/master/README.md) included in the repository.
+MOLE was designed to be an intuitive software package to construct mimetic operators based on [@Corbino] method. MOLE is implemented in C++ and in MATLAB scripting language (these are two independent flavors) and every single function in MOLE returns a sparse matrix of the requested mimetic operator. For information on the installation or usage of the library, please read the [documentation](https://github.com/jcorbino/mole/blob/master/README.md) included in the repository.
 
 Mimetic operators can be easily used to build codes to solve PDEs with a few lines of code. For example, if the user wants to get a one-dimensional *k*-order mimetic Laplacian, just need to invoke:
 ```matlab
