@@ -31,7 +31,7 @@ The mathematics are based on the work of [@Corbino]. In addition, the user may f
 
 # Mimetic operators
 
-Mimetic finite-difference operators, Divergence (**D**), Gradient (**G**), Curl (**C**), and Laplacian (**L**) are discrete analogs of their corresponding continuum operators. These mimetic finite-difference operators satisfy in the discrete sense the vector identities that the continuum ones do [@R202301], making them more faithful to the physics [@Corbino].
+Mimetic operators, Divergence (**D**), Gradient (**G**), Curl (**C**), and Laplacian (**L**) are discrete analogs of their corresponding continuum operators. These operators satisfy in the discrete sense the vector identities that the continuum ones do [@R202301], making them more faithful to the physics [@Corbino].
 
 The basis of higher-dimensional operators, as well of more sophisticated operators such as the Laplacian or the Biharmonic operator are the one-dimensional mimetic **G** and **D** operators, together with high-order mimetic interpolation operators [@R202202], also contained in the library. These finite-dimensional operators can be reused throughout the model and they provide a higher level of abstraction at the time of solving differential equations.
 
