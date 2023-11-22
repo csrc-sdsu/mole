@@ -4,7 +4,7 @@
 % n = refractive index
 % This equation models the wifi signal propagation in a room
 
-% clc
+clc
 close all
 
 addpath('../mole_MATLAB')
