@@ -122,4 +122,4 @@ the library [![DOI](https://zenodo.org/badge/100132401.svg)](https://zenodo.org/
 ![Obtained with curvilinear operators](images/grid.png)
 ![Obtained with curvilinear operators](images/WavyGrid.png)
 ![Obtained with curvilinear operators](images/wave2D.png)
-
+![Obtained with curvilinear operators](images/burgers.png)
