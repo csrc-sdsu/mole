@@ -12,5 +12,6 @@
 #include "interpol.h"
 #include "robinbc.h"
 #include "utils.h"
+#include "debug.h"
 
 #endif // MOLE_H
