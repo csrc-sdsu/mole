@@ -1,11 +1,38 @@
-cff-version: 1.2.0
-message: "If you use this software, please cite it as below."
+cff-version: "1.2.0"
 authors:
-  - family-names: "Johnny"
-    given-names: "Corbino"
+- family-names: Corbino
+  given-names: Johnny
+  orcid: "https://orcid.org/0000-0002-2638-9216"
+- family-names: Dumett
+  given-names: Miguel A.
+- family-names: Castillo
+  given-names: Jose E.
+contact:
+- family-names: Corbino
+  given-names: Johnny
+  orcid: "https://orcid.org/0000-0002-2638-9216"
+doi: 10.5281/zenodo.12752946
+message: If you use this software, please cite our article in the
+  Journal of Open Source Software.
+preferred-citation:
+  authors:
+  - family-names: Corbino
+    given-names: Johnny
     orcid: "https://orcid.org/0000-0002-2638-9216"
+  - family-names: Dumett
+    given-names: Miguel A.
+  - family-names: Castillo
+    given-names: Jose E.
+  date-published: 2024-07-17
+  doi: 10.21105/joss.06288
+  issn: 2475-9066
+  issue: 99
+  journal: Journal of Open Source Software
+  publisher:
+    name: Open Journals
+  start: 6288
+  title: "MOLE: Mimetic Operators Library Enhanced"
+  type: article
+  url: "https://joss.theoj.org/papers/10.21105/joss.06288"
+  volume: 9
 title: "MOLE: Mimetic Operators Library Enhanced"
-version: v2.0
-doi: 10.5281/zenodo.7996615
-date-released: 2023-06-01
-url: "https://github.com/jcorbino/mole"
