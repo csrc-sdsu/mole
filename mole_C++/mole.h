@@ -5,7 +5,6 @@
 #ifndef MOLE_H
 #define MOLE_H
 
-#include "debug.h"
 #include "divergence.h"
 #include "gradient.h"
 #include "interpol.h"
