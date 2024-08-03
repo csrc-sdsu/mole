@@ -1,37 +1,37 @@
-ifndef ARMA
-# Put here the path to Armadillo
-ARMA = /home/johnny/armadillo-10.2.1
-endif
-
-ifndef EIGEN
-# Put here the path to Eigen (optional)
-# We recommend SuperLU over Eigen for the sparse LU factorization
-#EIGEN = /usr/include/eigen3
-endif
-
-#----------------------------------------------------------------------
 MOLE = ../mole_C++
 
-# Compiler for C++
-CXX = g++
+CXX ?= g++
 
-# Flags for C++ compiler
-CXXFLAGS = -O3 -fopenmp
+ifeq ($(DEBUG),1)
+CXXFLAGS = -O0 -g
+else
+CXXFLAGS = -O3
+endif
+CXXFLAGS += -fopenmp -DARMA_DONT_USE_WRAPPER
 
-# Path to header files
-INCPATH = -I. -I$(ARMA)/include -I$(MOLE)
+INCPATH = -I. $(if $(ARMA), -I$(ARMA)/include) -I$(MOLE)
 
-# Path to libmole.a
-LIBS = -L$(MOLE) -L$(ARMA) -lmole -larmadillo -lopenblas
+LIBS = -L$(MOLE) -lmole -lopenblas
+
+ifdef ARMA
+LIBS += -L$(ARMA) -Wl,-rpath,$(ARMA) -larmadillo
+else
+ifeq (,$(filter clean,$(MAKECMDGOALS)))
+$(warning The path to Armadillo's library was not provided. I will look for it in the standard system directories.)
+endif
+endif
 
 ifdef EIGEN
 CXXFLAGS += -DEIGEN
 INCPATH += -I$(EIGEN)
 else
+ifdef SUPERLU
+LIBS += -L$(SUPERLU)/lib -Wl,-rpath,$(SUPERLU)/lib -lsuperlu
+else
 LIBS += -lsuperlu
 endif
+endif
 
-# Rules:
 all: transport1D schrodinger1D elliptic1D elliptic2D
 
 transport1D: transport1D.cpp
