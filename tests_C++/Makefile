@@ -1,24 +1,31 @@
-ifndef ARMA
-# Put here the path to Armadillo
-ARMA = /home/johnny/armadillo-10.2.1
-endif
-#----------------------------------------------------------------------
 MOLE = ../mole_C++
 
-# Compiler for C++
-CXX = g++
+CXX ?= g++
 
-# Flags for C++ compiler
-CXXFLAGS = -O3 -fopenmp
+INCPATH = -I$(MOLE)
+CXXFLAGS = -O3 -fopenmp -DARMA_DONT_USE_WRAPPER
+LIBS = -L$(MOLE) -lmole -lopenblas
 
-# Path to header files
-INCPATH = -I. -I$(ARMA)/include -I$(MOLE)
+ifdef ARMA
+INCPATH += -I. -I$(ARMA)/include
+else
+ifeq (,$(filter clean,$(MAKECMDGOALS)))
+$(warning The path to Armadillo's library was not provided. I will look for it in the standard system directories.)
+endif
+endif
 
-# Path to libmole.a
-LIBS = -L$(MOLE) -L$(ARMA) -lmole -larmadillo -lopenblas
+ifdef EIGEN
+CXXFLAGS += -DEIGEN
+INCPATH += -I$(EIGEN)
+else
+ifdef SUPERLU
+LIBS += -L$(SUPERLU)/lib -Wl,-rpath,$(SUPERLU)/lib -lsuperlu
+else
+LIBS += -lsuperlu
+endif
+endif
 
-# Rules:
-all: test1 test2 test3 test4 run
+all: test1 test2 test3 test4 test5 run
 
 test1: test1.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o test1 test1.cpp $(LIBS)
@@ -32,11 +39,15 @@ test3: test3.cpp
 test4: test4.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o test4 test4.cpp $(LIBS)
 
-run: test1 test2 test3 test4
+test5: test5.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o test5 test5.cpp $(LIBS)
+
+run: test1 test2 test3 test4 test5
 	LD_LIBRARY_PATH=../mole_C++ ./test1
 	LD_LIBRARY_PATH=../mole_C++ ./test2
 	LD_LIBRARY_PATH=../mole_C++ ./test3
 	LD_LIBRARY_PATH=../mole_C++ ./test4
+	LD_LIBRARY_PATH=../mole_C++ ./test5
 
 clean:
-	rm -f test1 test2 test3 test4
+	rm -f test1 test2 test3 test4 test5
