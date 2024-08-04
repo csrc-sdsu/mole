@@ -94,7 +94,7 @@ public:
    * @param coeffs_front Coefficients for the front boundary condition
    * @param back Type of boundary condition at the back boundary ('Dirichlet',
    * 'Neumann', 'Robin')
-   * @param coeffs_back Coefficients for the top boundary condition
+   * @param coeffs_back Coefficients for the back boundary condition
    */
   MixedBC(u16 k, u32 m, Real dx, u32 n, Real dy, u32 o, Real dz,
           const std::string &left, const std::vector<Real> &coeffs_left,
