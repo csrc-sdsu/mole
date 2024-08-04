@@ -5,16 +5,20 @@ MixedBC::MixedBC(u16 k, u32 m, Real dx, const std::string &left,
                  const std::vector<Real> &coeffs_left, const std::string &right,
                  const std::vector<Real> &coeffs_right) {
   sp_mat A(m + 2, m + 2);
-  sp_mat B(m + 2, m + 1);
+  sp_mat BG(m + 2, m + 2);
+
+  Gradient *grad = nullptr;
 
   // Handle the left boundary condition
   if (left == "Dirichlet") {
     A.at(0, 0) = coeffs_left[0];
   } else if (left == "Neumann") {
-    B.at(0, 0) = -coeffs_left[0];
+    grad = new Gradient(k, m, dx);
+    BG.row(0) = -coeffs_left[0] * grad->row(0);
   } else if (left == "Robin") {
     A.at(0, 0) = coeffs_left[0];
-    B.at(0, 0) = -coeffs_left[1];
+    grad = new Gradient(k, m, dx);
+    BG.row(0) = -coeffs_left[1] * grad->row(0);
   } else {
     throw std::invalid_argument("Unknown boundary condition type");
   }
@@ -23,19 +27,21 @@ MixedBC::MixedBC(u16 k, u32 m, Real dx, const std::string &left,
   if (right == "Dirichlet") {
     A.at(m + 1, m + 1) = coeffs_right[0];
   } else if (right == "Neumann") {
-    B.at(m + 1, m + 1) = coeffs_right[0];
+    if (!grad)
+      grad = new Gradient(k, m, dx);
+    BG.row(m + 1) = coeffs_right[0] * grad->row(m);
   } else if (right == "Robin") {
     A.at(m + 1, m + 1) = coeffs_right[0];
-    B.at(m + 1, m + 1) = coeffs_right[1];
+    if (!grad)
+      grad = new Gradient(k, m, dx);
+    BG.row(m + 1) = coeffs_right[1] * grad->row(m);
   } else {
     throw std::invalid_argument("Unknown boundary condition type");
   }
 
-  // Create the gradient operator
-  Gradient G(k, m, dx);
+  *this = A + BG;
 
-  // Combine A, B, and G to form the boundary condition operator
-  *this = A + B * (sp_mat)G;
+  delete grad;
 }
 
 // 2-D Constructor
