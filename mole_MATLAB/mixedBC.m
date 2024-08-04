@@ -22,7 +22,7 @@ function BC = mixedBC(k, m, dx, left, coeffs_left, right, coeffs_right)
             A(1, 1) = coeffs_left(1);
             B(1, 1) = -coeffs_left(2);
         otherwise
-            error('Unknown boundary condition type for left boundary');
+            error('Unknown boundary condition type');
     end
     
     switch right
@@ -34,7 +34,7 @@ function BC = mixedBC(k, m, dx, left, coeffs_left, right, coeffs_right)
             A(end, end) = coeffs_right(1);
             B(end, end) = coeffs_right(2);
         otherwise
-            error('Unknown boundary condition type for right boundary');
+            error('Unknown boundary condition type');
     end
     
     G = grad(k, m, dx);

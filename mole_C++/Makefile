@@ -33,10 +33,10 @@ CXXFLAGS += -fPIC
 all: libmole.so
 endif
 
-libmole.so: divergence.o gradient.o laplacian.o interpol.o robinbc.o utils.o
+libmole.so: divergence.o gradient.o laplacian.o interpol.o mixedbc.o robinbc.o utils.o
 	$(CXX) -shared -o libmole.so *.o
 
-libmole.a: divergence.o gradient.o laplacian.o interpol.o robinbc.o utils.o
+libmole.a: divergence.o gradient.o laplacian.o interpol.o mixedbc.o robinbc.o utils.o
 	ar cqs libmole.a *.o
 
 divergence.o: divergence.cpp divergence.h utils.h
@@ -50,6 +50,9 @@ laplacian.o: laplacian.cpp laplacian.h divergence.h gradient.h utils.h
 
 interpol.o: interpol.cpp interpol.h utils.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o interpol.o interpol.cpp
+
+mixedbc.o: mixedbc.cpp mixedbc.h utils.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mixedbc.o mixedbc.cpp
 
 robinbc.o: robinbc.cpp robinbc.h utils.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o robinbc.o robinbc.cpp

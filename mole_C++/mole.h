@@ -9,6 +9,7 @@
 #include "gradient.h"
 #include "interpol.h"
 #include "laplacian.h"
+#include "mixedbc.h"
 #include "operators.h"
 #include "robinbc.h"
 #include "utils.h"
