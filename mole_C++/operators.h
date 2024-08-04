@@ -3,6 +3,7 @@
 
 #include "interpol.h"
 #include "laplacian.h"
+#include "mixedbc.h"
 #include "robinbc.h"
 
 inline sp_mat operator*(const Divergence &div, const Gradient &grad) {
@@ -10,6 +11,10 @@ inline sp_mat operator*(const Divergence &div, const Gradient &grad) {
 }
 
 inline sp_mat operator+(const Laplacian &lap, const RobinBC &bc) {
+  return (sp_mat)lap + (sp_mat)bc;
+}
+
+inline sp_mat operator+(const Laplacian &lap, const MixedBC &bc) {
   return (sp_mat)lap + (sp_mat)bc;
 }
 
