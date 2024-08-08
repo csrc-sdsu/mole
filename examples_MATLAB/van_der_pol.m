@@ -2,8 +2,11 @@
 
 addpath('../mole_MATLAB')
 
+% OCTAVE does not have VanDerPol equation, so here it is with Mu=1
+vdpl = @(t,y) [y(2); (1 - y(1)^2) * y(2) - y(1)];
+
 %             func   tspan  dt    y0
-[t, y] = rk4(@vdp1, [0 20], .1, [2 0]);
+[t, y] = rk4(vdpl, [0 20], .1, [2 0]);
 
 plot(t, y(1, :), '-o', t, y(2, :), '-*')
 title('Solution of van der Pol''s Equation');
