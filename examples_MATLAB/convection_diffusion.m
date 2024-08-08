@@ -93,7 +93,8 @@ for i = 1 : iters*3
     pause(0.01)
     
     % Plot density profile
-    slice(reshape(C, m+2, n+2, o+2), seal, ceil((m+2)/2), ceil((o+2)/2));
+    temp = reshape(C, m+2, n+2, o+2);
+    pcolor(squeeze(temp(seal,:,:))); %
     shading interp
     set(gca, 'XDir', 'reverse')
     set(gca, 'ZDir', 'reverse')
