@@ -71,7 +71,7 @@ for t = 1 : TIME/dt
     
     % Plot results
     surf(X, Y, reshape(unew, m+2, n+2), 'EdgeColor', 'none')
-    title(['2D Wave equation solved with MOLE' '\newlineTime = ' num2str(dt*t, '%1.2f')])
+    title(['2D Wave equation solved with MOLE, Time = ' num2str(dt*t, '%1.2f')])
     
     colormap winter
     colorbar
