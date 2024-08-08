@@ -56,16 +56,14 @@ function richards
         func = @F;
         
         % Find the roots using Newton's method
-        sol = fsolve(@(psi) func(psi), init_guess, optimoptions('fsolve',...
-                     'Display', 'off'));
+        sol = fsolve( @(psi) func(psi), init_guess );
         
         psi_old = [bot_bc; sol; top_bc];
         
         % Plot results
         plot([0 dx/2:dx:b-dx/2 b], psi_old, 'b');
-        ff.GraphicsSmoothing = 'on';
         title(['Richards Eqn. (Mixed form) solved with MOLE,' ' Time = '...
-              num2str(dt*i) '\newline'])
+              num2str(dt*i)])
         axis([0 40 -70 -10])
         xlabel('Depth')
         ylabel('Pressure head')
