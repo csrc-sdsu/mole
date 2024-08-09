@@ -7,16 +7,16 @@ addpath('../mole_MATLAB')
 % Parameters
 k = 2;
 m = 20;
-n = 20;
+n = 30;
 
 % Grid
-r1 = 1; % Inner radius 
+r1 = 1; % Inner radius
 r2 = 2; % Outer radius
 nR = linspace(r1, r2, m) ;
 nT = linspace(0, 2*pi, n) ;
 [R, T] = meshgrid(nR, nT) ;
 % Convert grid to cartesian coordinates
-X = R.*cos(T); 
+X = R.*cos(T);
 Y = R.*sin(T);
 
 % Test on another grid
@@ -44,41 +44,45 @@ Cx = (Vx(1:end-1, :) + Vx(2:end, :))/2;
 Cy = (Uy(:, 1:end-1) + Uy(:, 2:end))/2;
 scatter3(Cx(:), Cy(:), zeros(n*m, 1), '.', 'MarkerEdgeColor', 'r')
 
+%% Interpolators
+% Some useful numbers
+num_nodes = (m+1)*(n+1);
+num_centers = (m+2)*(n+2);
+num_u = (m+1)*n;
+num_v = m*(n+1);
+
+% MOLE Interpolator Matrices of 'k' order
+NtoC = interpolNodesToCenters2D(k, n, m);
+CtoF = interpolCentersToFacesD2D(k, n, m); % V is the top part!!
+
+% Center to specific face, u or v
+CtoV = CtoF(1:(n+1)*m, 1:num_centers);
+CtoU = CtoF((n+1)*m+1:end, num_centers+1:end);
+
+% Node to X interpolator is pre-multiplied
+NtoU = CtoU * NtoC;
+NtoV = CtoV * NtoC;
+
 % Interpolate U values
 Ugiven = sin(X);
-interpolant = scatteredInterpolant([X(:) Y(:)], Ugiven(:));
-U = interpolant(Ux, Uy);
+U = NtoU * Ugiven(:);
+U = reshape(U,n,m+1);
+
 % Interpolate V values
 Vgiven = cos(Y);
-interpolant = scatteredInterpolant([X(:) Y(:)], Vgiven(:));
-V = interpolant(Vx, Vy);
-% Interpolate C values
+V = NtoV * Vgiven(:);
+V = reshape(V,n+1,m);
+
 Cgiven = cos(X)-sin(Y);
-interpolant = scatteredInterpolant([X(:) Y(:)], Cgiven(:));
+C = NtoC * Cgiven(:);
+C = reshape(C,n+2,m+2);
 
-% West-East sides
-Cx = [Ux(:, 1) Cx];
-Cy = [Uy(:, 1) Cy];
-Cx = [Cx Ux(:, end)];
-Cy = [Cy Uy(:, end)];
+% Interpolate Nodal grid to centered grid.
+Cx = NtoC * X(:);
+Cx = reshape(Cx,n+2,m+2);
 
-% South-North sides
-Cx = [[0 Vx(1, :) 0]; Cx];
-Cy = [[0 Vy(1, :) 0]; Cy];
-Cx = [Cx; [0 Vx(end, :) 0]];
-Cy = [Cy; [0 Vy(end, :) 0]];
-
-% Corners
-Cx(1, 1) = X(1, 1);
-Cy(1, 1) = Y(1, 1);
-Cx(1, end) = X(1, end);
-Cy(1, end) = Y(1, end);
-Cx(end, 1) = X(end, 1);
-Cy(end, 1) = Y(end, 1);
-Cx(end, end) = X(end, end);
-Cy(end, end) = Y(end, end);
-
-C = interpolant(Cx, Cy);
+Cy = NtoC * Y(:);
+Cy = reshape(Cy, n+2,m+2);
 
 scatter3(Cx(:), Cy(:), zeros((m+2)*(n+2), 1), 'o', 'MarkerEdgeColor', 'r')
 legend('Nodal points', 'u', 'v', 'Centers', 'All centers')
