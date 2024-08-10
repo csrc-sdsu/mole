@@ -1,68 +1,115 @@
 % Tests the 3D curvilinear divergence
 clc
 close all
+clear all
 
 addpath('../mole_MATLAB')
 
 % Parameters
 k = 2;  % Order of accuracy
 m = 20; % Number of nodes along x-axis
-n = 20; % Number of nodes along y-axis
-o = 20; % Number of nodes along z-axis
+n = 30; % Number of nodes along y-axis
+o = 40; % Number of nodes along z-axis
+
+xlength = linspace(1,m,m);
+ylength = linspace(1,n,n);
+zlength = linspace(1,o,o);
+
+% [X, Y, Z] = meshgrid(xlength,ylength,zlength);
 
 [X, Y] = genCurvGrid(n, m);
 X = repmat(X, [1 1 o]);
 Y = repmat(Y, [1 1 o]);
 [~, ~, Z] = meshgrid(1:m, 1:n, 1:o);
-% [X, Y, Z] = meshgrid(1:m, 1:n, 1:o);
 
-Ux = (X(1:end-1, :, :) + X(2:end, :, :))/2;
-Ux = (Ux(:, :, 1:end-1) + Ux(:, :, 2:end))/2;
-Uy = (Y(1:end-1, :, :) + Y(2:end, :, :))/2;
-Uy = (Uy(:, :, 1:end-1) + Uy(:, :, 2:end))/2;
-Uz = (Z(1:end-1, :, :) + Z(2:end, :, :))/2;
-Uz = (Uz(:, :, 1:end-1) + Uz(:, :, 2:end))/2;
-Vx = (X(:, 1:end-1, :) + X(:, 2:end, :))/2;
-Vx = (Vx(:, :, 1:end-1) + Vx(:, :, 2:end))/2;
-Vy = (Y(:, 1:end-1, :) + Y(:, 2:end, :))/2;
-Vy = (Vy(:, :, 1:end-1) + Vy(:, :, 2:end))/2;
-Vz = (Z(:, 1:end-1, :) + Z(:, 2:end, :))/2;
-Vz = (Vz(:, :, 1:end-1) + Vz(:, :, 2:end))/2;
-Wx = (X(1:end-1, :, :) + X(2:end, :, :))/2;
-Wx = (Wx(:, 1:end-1, :) + Wx(:, 2:end, :))/2;
-Wy = (Y(1:end-1, :, :) + Y(2:end, :, :))/2;
-Wy = (Wy(:, 1:end-1, :) + Wy(:, 2:end, :))/2;
-Wz = (Z(1:end-1, :, :) + Z(2:end, :, :))/2;
-Wz = (Wz(:, 1:end-1, :) + Wz(:, 2:end, :))/2;
+Ux = (X(1:end-1, : ,1:end-1)+X(2:end, : ,2:end))*0.50;
+Uy = (Y(1:end-1, : ,1:end-1)+Y(2:end, : ,2:end))*0.50;
+Uz = (Z(1:end-1, : ,1:end-1)+Z(2:end, : ,2:end))*0.50;
+%
+Vx = (X( : ,1:end-1,1:end-1)+X( : ,2:end,2:end))*0.50;
+Vy = (Y( : ,1:end-1,1:end-1)+Y( : ,2:end,2:end))*0.50;
+Vz = (Z( : ,1:end-1,1:end-1)+Z( : ,2:end,2:end))*0.50;
+%
+Wx = (X(1:end-1,1:end-1,:)+X(2:end,2:end,:))*0.50;
+Wy = (Y(1:end-1,1:end-1,:)+Y(2:end,2:end,:))*0.50;
+Wz = (Z(1:end-1,1:end-1,:)+Z(2:end,2:end,:))*0.50;
 
+% MOLE Operators want matrices to be in X,Y,Z
+% for row, col, slice. Meshgrid creates a matrix
+% col, row, slice. So, the permutation is needed.
+X = permute( X, [2 1 3] );
+Y = permute( Y, [2 1 3] );
+Z = permute( Z, [2 1 3] );
+
+Ux = permute( Ux, [2 1 3] );
+Uy = permute( Uy, [2 1 3] );
+Uz = permute( Uz, [2 1 3] );
+
+Vx = permute( Vx, [2 1 3] );
+Vy = permute( Vy, [2 1 3] );
+Vz = permute( Vz, [2 1 3] );
+
+Wx = permute( Wx, [2 1 3] );
+Wy = permute( Wy, [2 1 3] );
+Wz = permute( Wz, [2 1 3] );
+
+%% Interpolators
+% Some useful numbers
+NtoC = interpolNodesToCenters3D(k+2, m-1, n-1, o-1);
+CtoF3D = interpolCentersToFacesD3D(k+2,m-1,n-1,o-1);% v,u,w
+
+size_u = (m)*(n-1)*(o-1);
+size_v = (m-1)*(n)*(o-1);
+size_w = (m-1)*(n-1)*(o);
+size_c = (m+1)*(n+1)*(o+1);
+size_n = (m)*(n)*(o);
+
+CtoU = CtoF3D(1:size_u, 1:size_c);
+CtoV = CtoF3D(size_u+1:size_u+size_v, size_c+1:2*size_c);
+CtoW = CtoF3D(size_u+size_v+1:end, 2*size_c+1:end);
+
+NtoU = CtoU * NtoC;
+NtoV = CtoV * NtoC;
+NtoW = CtoW * NtoC;
+% 
 % Interpolate U values
 Ugiven = sin(X); %X.^2;
-interpolant = scatteredInterpolant([X(:) Y(:) Z(:)], Ugiven(:));
-U = interpolant(Ux, Uy, Uz);
+U = NtoU * Ugiven(:);
+U = reshape(U, m, n-1 , o-1);
+
 % Interpolate V values
 Vgiven = zeros(size(Y)); %Y.^2;
-interpolant = scatteredInterpolant([X(:) Y(:) Z(:)], Vgiven(:));
-V = interpolant(Vx, Vy, Vz);
+V = NtoV * Vgiven(:);
+V = reshape(V, m-1, n, o-1);
+
 % Interpolate W values
 Wgiven = zeros(size(Z)); %Z.^2;
-interpolant = scatteredInterpolant([X(:) Y(:) Z(:)], Wgiven(:));
-W = interpolant(Wx, Wy, Wz);
+W = NtoW * Wgiven(:);
+W = reshape(W, m-1, n-1, o);
 
-U = reshape(permute(U, [2, 1, 3]), [], 1);
-V = reshape(permute(V, [2, 1, 3]), [], 1);
-W = reshape(permute(W, [2, 1, 3]), [], 1);
+
+U = reshape(U, [], 1);
+V = reshape(V, [], 1);
+W = reshape(W, [], 1);
 
 % Get 3D curvilinear mimetic divergence
-D = div3DCurv(k, X, Y, Z);
+% The operator want everything in X,Y,Z, BUT!!!!
+% uses the original meshgrid X,Y,Z in (y,x,z) coordinates!!
+% This needs to be changed!!! This is insane !!!
+Xog = permute(X, [2 1 3]);
+Yog = permute(Y, [2 1 3]);
+Zog = permute(Z, [2 1 3]);
+
+D = div3DCurv(k, Xog, Yog, Zog);
 
 % Apply the operator to the field
 Ccomp = D*[U; V; W];
 
 % Remove outer layers for visualization
-Ccomp = permute(reshape(Ccomp, m+1, n+1, o+1), [2, 1, 3]);
+Ccomp = reshape(Ccomp, m+1, n+1, o+1);
 Ccomp = Ccomp(2:end-1, 2:end-1, 2:end-1);
 
-% Compute centroids
+% Compute centroids?
 X = (X(1:end-1, :, :)+X(2:end, :, :))/2;
 X = (X(:, 1:end-1, :)+X(:, 2:end, :))/2;
 X = (X(:, :, 1:end-1)+X(:, :, 2:end))/2;
