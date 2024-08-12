@@ -71,7 +71,7 @@ for t = 1 : TIME/dt
     
     % Plot result
     mesh(X, Y, reshape(unew, m+2, n+2))
-    title(['Elastic membrane with position Verlet \newlineTime = ' num2str(dt*t, '%1.2f')])
+    title(['Elastic membrane with position Verlet Time = ' num2str(dt*t, '%1.2f')])
     xlabel('x')
     ylabel('y')
     zlabel('z')

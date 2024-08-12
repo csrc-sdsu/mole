@@ -204,11 +204,10 @@ end
 p = reshape(p, m+2, n+2)';
 subplot(2, 2, 1)
 surf(X(3:end-2, 3:end-2), Y(3:end-2, 3:end-2), p(3:end-2, 3:end-2))
-title('p')
+title('p (N/m^2)')
 shading interp
 axis equal
 h = colorbar;
-h.Label.String = 'Pa';  % N/m2 = kg/(m⋅s2)
 view([0 90])
 xlabel('x (m)')
 ylabel('y (m)')
@@ -216,11 +215,10 @@ ylabel('y (m)')
 % Temperature
 subplot(2, 2, 2)
 surf(X(3:end-2, 3:end-2), Y(3:end-2, 3:end-2), T(3:end-2, 3:end-2))
-title('T')
+title('T in celsius')
 shading interp
 axis equal
 h = colorbar;
-h.Label.String = '°C';
 view([0 90])
 xlabel('x (m)')
 ylabel('y (m)')
@@ -228,11 +226,10 @@ ylabel('y (m)')
 % u-velocity
 subplot(2, 2, 3)
 surf(u)
-title('u')
+title('u in m/s')
 shading interp
 axis equal
 h = colorbar;
-h.Label.String = 'm/s';
 view([0 90])
 xlabel('x (m)')
 ylabel('y (m)')
@@ -240,16 +237,16 @@ ylabel('y (m)')
 % v-velocity
 subplot(2, 2, 4)
 surf(v)
-title('v')
+title('v in m/s')
 shading interp
 axis equal
 h = colorbar;
-h.Label.String = 'm/s';
 view([0 90])
 xlabel('x (m)')
 ylabel('y (m)')
 
-sgtitle(['t = ' num2str(time) 's'])  % MATLAB >= R2018b
+% For compatibility with Octave and MATLAB
+S  = axes( 'visible', 'off', 'title', ['t = ' num2str(time) 's'] );
 set(gcf, 'color', 'w')
 colormap jet
 
@@ -259,11 +256,10 @@ rho = rho_middle*(1-alpha*(T-T_middle));  % Can also use rho_0 and T_0
 % Plot the density
 figure
 surf(X(3:end-2, 3:end-2), Y(3:end-2, 3:end-2), rho(3:end-2, 3:end-2))
-title(['\rho @ t = ' num2str(time) 's'])
+title(['\rho (kg/m^3) @ t = ' num2str(time) 's'])
 shading interp
 axis equal
 h = colorbar;
-h.Label.String = 'kg/m^3';
 view([0 90])
 xlabel('x (m)')
 ylabel('y (m)')

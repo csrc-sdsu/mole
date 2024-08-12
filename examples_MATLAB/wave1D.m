@@ -67,7 +67,7 @@ for t = 0 : TIME/dt
     
     % Plot results
     plot(xgrid, unew, '-o')
-    title(['1D Wave equation \newlinet = ' num2str(dt*t)])
+    title(['1D Wave equation t = ' num2str(dt*t)])
     xlabel('x')
     ylabel('u(x)')
     axis([0 1 -1.5 1.5])  % If initial condition changes, then change this line too
