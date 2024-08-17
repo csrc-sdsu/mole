@@ -23,22 +23,25 @@ function BC = mixedBC3D(k, m, dx, n, dy, o, dz, left, coeffs_left, right, coeffs
 %    coeffs_back     : Coefficients for the back boundary condition (a, b for Robin, otherwise coeff. for Dirichlet or Neumann)
 
     % 1-D boundary operators
-    Bx = mixedBC(k, m, dx, left, coeffs_left, right, coeffs_right);
-    By = mixedBC(k, n, dy, bottom, coeffs_bottom, top, coeffs_top);
-    Bz = mixedBC(k, o, dz, front, coeffs_front, back, coeffs_back);
-    
+    Bm = mixedBC(k, m, dx, left, coeffs_left, right, coeffs_right);
+    Bn = mixedBC(k, n, dy, bottom, coeffs_bottom, top, coeffs_top);
+    Bo = mixedBC(k, o, dz, front, coeffs_front, back, coeffs_back);
+
     Im = speye(m+2);
+
     In = speye(n+2);
+
     Io = speye(o+2);
-    
-    In(1, 1) = 0;
-    In(end, end) = 0;
     Io(1, 1) = 0;
     Io(end, end) = 0;
 
-    BC1 = kron(kron(Io, In), Bx);
-    BC2 = kron(kron(Io, By), Im);
-    BC3 = kron(kron(Bz, In), Im);
-    
+    In2 = In;
+    In2(1, 1) = 0;
+    In2(end, end) = 0;
+
+    BC1 = kron(kron(Io, In2), Bm);
+    BC2 = kron(kron(Io, Bn), Im);
+    BC3 = kron(kron(Bo, In), Im);
+
     BC = BC1 + BC2 + BC3;
 end
