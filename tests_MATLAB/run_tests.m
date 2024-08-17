@@ -18,3 +18,6 @@ run('test4.m');
 
 disp('Running: Accuracy test (Poisson equation)...');
 run('test5.m');
+
+disp('Running: BC Ops consistency test...');
+run('test6.m');

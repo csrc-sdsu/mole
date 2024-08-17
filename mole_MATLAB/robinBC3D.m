@@ -13,7 +13,7 @@ function BC = robinBC3D(k, m, dx, n, dy, o, dz, a, b)
 %                a : Dirichlet Coefficient
 %                b : Neumann Coefficient
 
-    % 1-D boundary operator
+    % 1-D boundary operators
     Bm = robinBC(k, m, dx, a, b);
     Bn = robinBC(k, n, dy, a, b);
     Bo = robinBC(k, o, dz, a, b);
