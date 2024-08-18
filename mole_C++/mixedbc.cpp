@@ -52,7 +52,7 @@ MixedBC::MixedBC(u16 k, u32 m, Real dx, u32 n, Real dy, const std::string &left,
                  const std::vector<Real> &coeffs_bottom, const std::string &top,
                  const std::vector<Real> &coeffs_top) {
   MixedBC Bm(k, m, dx, left, coeffs_left, right, coeffs_right);
-  MixedBC Bn(k, n, dy, top, coeffs_top, bottom, coeffs_bottom);
+  MixedBC Bn(k, n, dy, bottom, coeffs_bottom, top, coeffs_top);
 
   sp_mat Im = speye(m + 2, m + 2);
   sp_mat In = speye(n + 2, n + 2);
@@ -77,7 +77,7 @@ MixedBC::MixedBC(u16 k, u32 m, Real dx, u32 n, Real dy, u32 o, Real dz,
                  const std::vector<Real> &coeffs_front, const std::string &back,
                  const std::vector<Real> &coeffs_back) {
   MixedBC Bm(k, m, dx, left, coeffs_left, right, coeffs_right);
-  MixedBC Bn(k, n, dy, top, coeffs_top, bottom, coeffs_bottom);
+  MixedBC Bn(k, n, dy, bottom, coeffs_bottom, top, coeffs_top);
   MixedBC Bo(k, o, dz, front, coeffs_front, back, coeffs_back);
 
   sp_mat Im = speye(m + 2, m + 2);
