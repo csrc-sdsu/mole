@@ -18,7 +18,7 @@ function BC = mixedBC2D(k, m, dx, n, dy, left, coeffs_left, right, coeffs_right,
 
     % 1-D boundary operators
     Bm = mixedBC(k, m, dx, left, coeffs_left, right, coeffs_right);
-    Bn = mixedBC(k, n, dy, top, coeffs_top, bottom, coeffs_bottom);
+    Bn = mixedBC(k, n, dy, bottom, coeffs_bottom, top, coeffs_top);
     
     Im = speye(m+2);
     
