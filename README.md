@@ -8,19 +8,19 @@ MOLE: Mimetic Operators Library Enhanced
 MOLE is a high-quality (C++ & MATLAB/Octave) library that implements 
 high-order mimetic operators to solve partial differential equations. 
 It provides discrete analogs of the most common vector calculus operators: 
-Gradient, Divergence, Laplacian, Bilaplacian and Curl. These operators (matrices) act 
+Gradient, Divergence, Laplacian, Bilaplacian, and Curl. These operators (highly sparse matrices) act 
 on staggered grids (uniform, non-uniform, curvilinear) and satisfy local and 
 global conservation laws.
 
-Mathematics are based on the work of [Corbino and Castillo, 2020](https://doi.org/10.1016/j.cam.2019.06.042). 
-However, the user may find useful previous publications, such as [Castillo and Grone, 2003](https://doi.org/10.1137/S0895479801398025),
+Mathematics is based on the work of [Corbino and Castillo, 2020](https://doi.org/10.1016/j.cam.2019.06.042). 
+However, the user may find helpful previous publications, such as [Castillo and Grone, 2003](https://doi.org/10.1137/S0895479801398025),
 in which similar operators were derived using a matrix analysis approach.
 
 
 2: Licensing
 ------------
 
-MOLE is distributed under a GNU General Public License, please refer to the _LICENSE_ 
+MOLE is distributed under a GNU General Public License; please refer to the _LICENSE_ 
 file for more details.
 
 
@@ -46,74 +46,74 @@ Define `ARMA_USE_SUPERLU` and `ARMA_USE_OPENMP` in `include/armadillo_bits/confi
 
 `make`
 
-this will create `libarmadillo.so`.
+This will create `libarmadillo.so`.
 
 Now go to `mole/` and build MOLE via:
 
 `ARMA=PATH_TO_ARMADILLO_FOLDER make`
 
-or simply:
+Or simply:
 
 `make`
 
 if _Armadillo_ was installed via `sudo apt install libarmadillo-dev` or `sudo yum install armadillo-devel`.
 
-A static library named `libmole.a` will get created after the previous step. From this point you just need to include `mole.h` 
-in your projects and specify the location of `libmole.a` to the linker. For the users that are interested in building MOLE as a _shared library_, you just need to specify `make SHARED_LIB=1`. Make sure to include `mole_C++` directory in `LD_LIBRARY_PATH` (`export LD_LIBRARY_PATH=/full/path/to/mole_C++`) so the loader can find the library at runtime.
+A static library named `libmole.a` will be created after the previous step. From this point, you need to include `mole.h` 
+in your projects, specify the location of `libmole.a` to the linker. For the users interested in building MOLE as a _shared library_, specify `make SHARED_LIB=1`. Make sure to include `mole_C++` directory in `LD_LIBRARY_PATH` (`export LD_LIBRARY_PATH=/full/path/to/mole_C++`) so the loader can find the library at runtime.
 
-**For the MATLAB/Octave version of our library, the only dependency is to have MATLAB/Octave installed**.
-The two implementations of MOLE (C++ & MATLAB/Octave) are independent, that is, you don't need
+**For our library's MATLAB/Octave version, the only dependency is to have MATLAB/Octave installed**.
+The two implementations of MOLE (C++ & MATLAB/Octave) are independent; you don't need
 to build the C++ version if you are just interested in using MOLE from MATLAB/Octave.
 
 
 4: Running Examples & Tests
 ---------------------------
 
-To help you quickly get started with MOLE, here are instructions on how to run the provided examples and tests for both the C++ and MATLAB versions of the library.
+Here are instructions on how to run the provided examples and tests for both the C++ and MATLAB versions of the library to help you quickly get started with MOLE.
 
 * **tests_C++:**
-These tests, automatically executed upon construction of the library's C++ version, play a crucial role in verifying the correct installation of MOLE and its dependencies. There are four tests in total.
+These tests, which are automatically executed upon constructing the library's C++ version, play a crucial role in verifying the correct installation of MOLE and its dependencies. There are four tests in total.
 
 * **tests_MATLAB:**
-We encourage MATLAB users to execute these tests before using MOLE by entering the `tests_MATLAB` directory and executing `run_tests.m` from MATLAB. These are analogs to the tests contained in `tests_C++`.
+We encourage MATLAB users to execute these tests before using MOLE by entering the `tests_MATLAB` directory and executing `run_tests.m` from MATLAB. These tests are analogous to those contained in `tests_C++`.
 
 * **examples_C++:**
-These will be automatically built after calling `make`. We encourage C++ users to make this their entry point to familiarize themselves with this library version. The four examples are self-contained, properly documented, and they solve typical PDEs.
+These will be automatically built after calling `make`. We encourage C++ users to make this their entry point to familiarize themselves with this library version. The four examples are self-contained and adequately documented, and they solve typical PDEs.
 
 * **examples_MATLAB:**
-Most of our examples are provided in the MATLAB scripting language. There are over 30 examples, ranging from linear one-dimensional PDEs to highly nonlinear multidimensional PDEs.
+Most of our examples are provided in the MATLAB scripting language. Over 30 examples range from linear one-dimensional PDEs to highly nonlinear multidimensional PDEs.
 
 
 5: Documentation
 ----------------
 
 The folder `doc_MATLAB` contains generated documentation about the MATLAB/Octave API.
-It was generated with a tool called [_m2html_](https://www.gllmflndn.com/software/matlab/m2html). However, for a quick start on MOLE's MATLAB/Octave version, we recommend to start with this short [guide](https://github.com/jcorbino/mole/blob/master/CSRC%20Report%20on%20MOLE.pdf).
+It was generated with a tool called [_m2html_](https://www.gllmflndn.com/software/matlab/m2html). However, for a quick start on MOLE's MATLAB/Octave version, we recommend starting with this short [guide](https://github.com/jcorbino/mole/blob/master/CSRC%20Report%20on%20MOLE.pdf).
 
 For C++ users, we provide a short [guide](https://github.com/jcorbino/mole/blob/master/MOLE_C%2B%2B_Quick_Guide.pdf) to MOLE's C++ flavor. However, for those in need of more details to interact with the library, we suggest to follow these instructions:
 
-To generate the C++ documentation, just execute:
+To generate the C++ documentation, execute:
 
 `doxygen Doxyfile` (requires _Doxygen_ and _Graphviz_)
 
-this will create a folder called `doc_C++` containing a set of _html_ files. Please refer to the _index.html_ file 
+this will create a folder called `doc_C++` containing a set of _html_ files. Please take a look at the _index.html_ file 
 to start browsing the documentation.
 
 **NOTE:**
-Performing non-unary operations involving operands constructed over different grids may lead to unexpected results. While MOLE currently allows such operations without throwing errors, users must exercise caution when manipulating operators across different grids.
+Performing non-unary operations involving operands constructed over different grids may lead to unexpected results. While MOLE allows such operations without throwing errors, users must exercise caution when manipulating operators across different grids.
 
 
 6: Community Guidelines
 -----------------------
 
-We warmly welcome contributions to MOLE, whether they involve adding new functionalities, providing examples, addressing existing issues, reporting bugs, or requesting new features. Please refer to our [Contribution Guidelines](https://github.com/jcorbino/mole/blob/master/CONTRIBUTING.md) for more details.
+We welcome contributions to MOLE, whether they involve adding new functionalities, providing examples, addressing existing issues, reporting bugs, or requesting new features. Please refer to our [Contribution Guidelines](https://github.com/jcorbino/mole/blob/master/CONTRIBUTING.md) for more details.
 
 
 7: Citations
 ------------
 
-Please cite our work if you use MOLE in your research and/or software. 
-Citations are useful for the continued development and maintenance of 
+Please cite our work if you use MOLE in your research or software. 
+Citations are helpful for the continued development and maintenance of 
 the library [![DOI](https://joss.theoj.org/papers/10.21105/joss.06288/status.svg)](https://doi.org/10.21105/joss.06288)
 
 [![View mole on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/124870-mole)
