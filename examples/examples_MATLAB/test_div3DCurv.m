@@ -3,7 +3,7 @@ clc
 close all
 clear all
 
-addpath('../mole_MATLAB')
+addpath('../../src/mole_MATLAB')
 
 % Parameters
 k = 2;  % Order of accuracy

@@ -2,7 +2,7 @@
 clc
 close all
 
-addpath('../mole_MATLAB')
+addpath('../../src/mole_MATLAB')
 
 % Parameters
 Lxy = 1;              % Length of box in x and y
