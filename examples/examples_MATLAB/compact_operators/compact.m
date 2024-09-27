@@ -9,7 +9,7 @@
 close all
 format rat
 
-addpath('../mole_MATLAB')
+addpath('../../src/mole_MATLAB')
 
 k = 4;
 m = 2*k+1;

@@ -2,7 +2,7 @@
 clc
 close all
 
-addpath('../mole_MATLAB')
+addpath('../../src/mole_MATLAB')
 
 % Parameters
 k = 2;

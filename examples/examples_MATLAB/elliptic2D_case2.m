@@ -2,7 +2,7 @@
 clc
 close all
 
-addpath('../mole_MATLAB')
+addpath('../../src/mole_MATLAB')
 
 % Parameters
 e = 1; % Controls "rectangularity" of the grid, e = 0 -> completely rectangular
