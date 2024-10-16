@@ -1,8 +1,28 @@
+/**
+ * @file utils.cpp
+ * @date 2024/10/15
+ * @brief Helpers for sparse operations and MATLAB analogs
+ * 
+ * Sparse operations that repeatedly are needed, but not 
+ * necessarily part of the Armadillo library. Some other MATLAB
+ * type functions are also here, like meshgrid.
+ */
+
+
 #include "utils.h"
 #include <cassert>
 
 #ifdef EIGEN
 #include <eigen3/Eigen/SparseLU>
+
+/**
+ * @brief A wrappper for implementing a sparse solve using Eigen from SuperLU.
+ *
+ * @param A a sparse matrix LHS of Ax=b
+ * @param b a vector for the RHS of Ax=b
+ *
+ * @note This function requires the EIGEN to be used when Armadillo is built
+ */
 vec Utils::spsolve_eigen(const sp_mat &A, const vec &b) {
   Eigen::SparseMatrix<Real> eigen_A(A.n_rows, A.n_cols);
   std::vector<Eigen::Triplet<Real>> triplets;
@@ -48,7 +68,14 @@ sp_mat Utils::spkron(const sp_mat &A, const sp_mat &B)
     return result;
 }
 */
-
+/**
+ * @brief A wrappper for implementing a sparse Kroenecker product.
+ *
+ * @param A a sparse matrix
+ * @param B a sparse matrix
+ *
+ * @note This is available in Armadillo >8.0
+ */
 sp_mat Utils::spkron(const sp_mat &A, const sp_mat &B) {
   sp_mat::const_iterator itA = A.begin();
   sp_mat::const_iterator endA = A.end();
@@ -81,6 +108,14 @@ sp_mat Utils::spkron(const sp_mat &A, const sp_mat &B) {
   return result;
 }
 
+/**
+ * @brief An in place oepration for two matrices by rows
+ *
+ * @param A a sparse matrix
+ * @param B a sparse matrix
+ *
+ * @note This is available in Armadillo >8.0
+ */
 sp_mat Utils::spjoin_rows(const sp_mat &A, const sp_mat &B) {
   sp_mat::const_iterator itA = A.begin();
   sp_mat::const_iterator endA = A.end();
@@ -115,6 +150,14 @@ sp_mat Utils::spjoin_rows(const sp_mat &A, const sp_mat &B) {
   return result;
 }
 
+/**
+ * @brief An in place operation for two matrices by columns
+ *
+ * @param A a sparse matrix
+ * @param B a sparse matrix
+ *
+ * @note This is available in Armadillo >8.0
+ */
 sp_mat Utils::spjoin_cols(const sp_mat &A, const sp_mat &B) {
   sp_mat::const_iterator itA = A.begin();
   sp_mat::const_iterator endA = A.end();
@@ -149,6 +192,15 @@ sp_mat Utils::spjoin_cols(const sp_mat &A, const sp_mat &B) {
   return result;
 }
 
+/**
+ * @brief An analog to the MATLAB 2D meshgrid operation
+ *
+ * @param x a vector of x-indices
+ * @param y a vector of y-indices
+ * @param X a sparse matrix, will be filled by the function
+ * @param Y a sparse matrix, will be filled by the function
+ *
+ */
 void Utils::meshgrid(const vec &x, const vec &y, mat &X, mat &Y) {
   int m = x.n_elem;
   int n = y.n_elem;
@@ -171,6 +223,17 @@ void Utils::meshgrid(const vec &x, const vec &y, mat &X, mat &Y) {
     Y.col(ii) = y;
 }
 
+/**
+ * @brief An analog to the MATLAB 3D meshgrid operation
+ *
+ * @param x a vector of x-indices
+ * @param y a vector of y-indices
+ * @param z a vector of z-indices
+ * @param X a sparse matrix, will be filled by the function
+ * @param Y a sparse matrix, will be filled by the function
+ * @param Z a sparse matrix, will be filled by the function
+ *
+ */
 void Utils::meshgrid(const vec &x, const vec &y, const vec &z, cube &X, cube &Y,
                      cube &Z) {
   int m = x.n_elem;
