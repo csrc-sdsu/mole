@@ -1,4 +1,12 @@
-#include "gradient.h"
+/**
+ * @file gradient.cpp
+ * 
+ * @brief Mimetic Gradient Operators
+ * 
+ * @date 2024/10/15
+ * 
+ */
+ #include "gradient.h"
 
 // 1-D Constructor
 Gradient::Gradient(u16 k, u32 m, Real dx) : sp_mat(m + 1, m + 2) {

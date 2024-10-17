@@ -1,19 +1,59 @@
+/**
+ * @file laplacian.h
+ * 
+ * @brief Mimetic Laplacian Constructors
+ * 
+ * @date 2024/10/15
+ * 
+ */
+
 #ifndef LAPLACIAN_H
 #define LAPLACIAN_H
 
 #include "divergence.h"
 #include "gradient.h"
 
+/**
+ * @brief Mimetic Laplacian operator
+ *
+ */
 class Laplacian : public sp_mat {
 
 public:
   using sp_mat::operator=;
 
-  // 1-D Constructor
+  /**
+   * @brief 1-D Mimetic Laplacian Constructor
+   *
+   * @param k Order of accuracy
+   * @param m Number of cells
+   * @param dx Spacing between cells
+   */  
   Laplacian(u16 k, u32 m, Real dx);
-  // 2-D Constructor
+  
+  /**
+   * @brief 2-D Mimetic Laplacian Constructor
+   *
+   * @param k Order of accuracy
+   * @param m Number of cells in x-direction
+   * @param n Number of cells in y-direction
+   * @param dx Spacing between cells in x-direction
+   * @param dy Spacing between cells in y-direction
+   */  
   Laplacian(u16 k, u32 m, u32 n, Real dx, Real dy);
-  // 3-D Constructor
+  
+
+  /**
+   * @brief 3-D Mimetic Laplacian Constructor
+   *
+   * @param k Order of accuracy
+   * @param m Number of cells in x-direction
+   * @param n Number of cells in y-direction
+   * @param o Number of cells in z-direction
+   * @param dx Spacing between cells in x-direction
+   * @param dy Spacing between cells in y-direction
+   * @param dz Spacing between cells in z-direction
+   */  
   Laplacian(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz);
 };
 
