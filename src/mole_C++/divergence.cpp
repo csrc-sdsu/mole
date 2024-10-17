@@ -1,3 +1,12 @@
+/**
+ * @file divergence.cpp
+ * 
+ * @brief Mimetic Divergence Operators
+ * 
+ * @date 2024/10/15
+ * 
+ */
+
 #include "divergence.h"
 
 // 1-D Constructor

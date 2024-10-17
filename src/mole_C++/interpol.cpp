@@ -1,3 +1,12 @@
+/**
+ * @file interpol.cpp
+ * 
+ * @brief Mimetic Interpolators
+ * 
+ * @date 2024/10/15
+ * 
+ */
+
 #include "interpol.h"
 
 // 1-D Constructor

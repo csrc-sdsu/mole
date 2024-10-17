@@ -15,7 +15,7 @@
 #include "gradient.h"
 
 /**
- * @brief Mimetic Mixed BC operator
+ * @brief Mimetic Mixed Boundary Condition operator
  *
  */
 class MixedBC : public sp_mat {
