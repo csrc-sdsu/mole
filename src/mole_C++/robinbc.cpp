@@ -1,6 +1,15 @@
+/**
+ * @file robinbc.cpp
+ * @date 2024/10/15
+ * @brief Robin Boundary Condition Class functions
+ * 
+ * Based on parameters, can implement Dirichlet, Neumann, or Robin 
+ * boundary conditions.
+ * 
+ */
+
 #include "robinbc.h"
 
-// 1-D Constructor
 RobinBC::RobinBC(u16 k, u32 m, Real dx, Real a, Real b) {
   sp_mat A(m + 2, m + 2);
   sp_mat BG(m + 2, m + 2);
@@ -16,7 +25,7 @@ RobinBC::RobinBC(u16 k, u32 m, Real dx, Real a, Real b) {
   *this = A + BG;
 }
 
-// 2-D Constructor
+
 RobinBC::RobinBC(u16 k, u32 m, Real dx, u32 n, Real dy, Real a, Real b) {
   RobinBC Bm(k, m, dx, a, b);
   RobinBC Bn(k, n, dy, a, b);
@@ -33,7 +42,7 @@ RobinBC::RobinBC(u16 k, u32 m, Real dx, u32 n, Real dy, Real a, Real b) {
   *this = BC1 + BC2;
 }
 
-// 3-D Constructor
+
 RobinBC::RobinBC(u16 k, u32 m, Real dx, u32 n, Real dy, u32 o, Real dz, Real a,
                  Real b) {
   RobinBC Bm(k, m, dx, a, b);
