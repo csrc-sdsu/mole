@@ -9,13 +9,11 @@
  * 
  */
 
-
 #include "utils.h"
 #include <cassert>
 
 #ifdef EIGEN
 #include <eigen3/Eigen/SparseLU>
-
 
 vec Utils::spsolve_eigen(const sp_mat &A, const vec &b) {
   Eigen::SparseMatrix<Real> eigen_A(A.n_rows, A.n_cols);

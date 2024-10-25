@@ -1,7 +1,7 @@
 /**
  * @file laplacian.h
  * 
- * @brief Mimetic Laplacian Constructors
+ * @brief Mimetic Laplacian Class and Constructors
  * 
  * @date 2024/10/15
  * 
