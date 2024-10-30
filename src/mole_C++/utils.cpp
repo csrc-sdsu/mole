@@ -1,8 +1,20 @@
+/**
+ * @file utils.cpp
+ * @brief Helpers for sparse operations and MATLAB analogs
+ * @date 2024/10/15
+ * 
+ * Sparse operations that repeatedly are needed, but not 
+ * necessarily part of the Armadillo library. Some other MATLAB
+ * type functions are also here, like meshgrid.
+ * 
+ */
+
 #include "utils.h"
 #include <cassert>
 
 #ifdef EIGEN
 #include <eigen3/Eigen/SparseLU>
+
 vec Utils::spsolve_eigen(const sp_mat &A, const vec &b) {
   Eigen::SparseMatrix<Real> eigen_A(A.n_rows, A.n_cols);
   std::vector<Eigen::Triplet<Real>> triplets;
@@ -81,6 +93,7 @@ sp_mat Utils::spkron(const sp_mat &A, const sp_mat &B) {
   return result;
 }
 
+
 sp_mat Utils::spjoin_rows(const sp_mat &A, const sp_mat &B) {
   sp_mat::const_iterator itA = A.begin();
   sp_mat::const_iterator endA = A.end();
@@ -114,6 +127,7 @@ sp_mat Utils::spjoin_rows(const sp_mat &A, const sp_mat &B) {
 
   return result;
 }
+
 
 sp_mat Utils::spjoin_cols(const sp_mat &A, const sp_mat &B) {
   sp_mat::const_iterator itA = A.begin();
@@ -149,6 +163,7 @@ sp_mat Utils::spjoin_cols(const sp_mat &A, const sp_mat &B) {
   return result;
 }
 
+
 void Utils::meshgrid(const vec &x, const vec &y, mat &X, mat &Y) {
   int m = x.n_elem;
   int n = y.n_elem;
@@ -170,6 +185,7 @@ void Utils::meshgrid(const vec &x, const vec &y, mat &X, mat &Y) {
   for (int ii = 0; ii < m; ++ii)
     Y.col(ii) = y;
 }
+
 
 void Utils::meshgrid(const vec &x, const vec &y, const vec &z, cube &X, cube &Y,
                      cube &Z) {
