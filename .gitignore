@@ -1,9 +1,20 @@
+# General ignore patterns
 *
 !*.*
 !*/
+
+# Ignore build artifacts and temporary files
 *.o
 *.so
 *.a
 *.asv
 *~
-doc*/
+
+# Ignore Sphinx build output but include source files
+doc/build/
+doc/source/.*
+!doc/source/*.rst
+!doc/source/conf.py
+
+# Include all non-build documentation files
+!doc/

@@ -1,0 +1,45 @@
+digraph "examples/examples_C++/transport1D.cpp"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  Node1 [id="Node000001",label="examples/examples_C\l++/transport1D.cpp",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="mole.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$mole_8h.html",tooltip="Mimetic Operator Header File."];
+  Node2 -> Node3 [id="edge2_Node000002_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="divergence.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$divergence_8h.html",tooltip="Mimetic Divergence Operators."];
+  Node3 -> Node4 [id="edge3_Node000003_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="utils.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$utils_8h.html",tooltip="Helpers for sparse operations and MATLAB analogs."];
+  Node4 -> Node5 [id="edge4_Node000004_Node000005",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="armadillo",height=0.2,width=0.4,color="grey60", fillcolor="#E0E0E0", style="filled",tooltip=" "];
+  Node3 -> Node6 [id="edge5_Node000003_Node000006",color="steelblue1",style="solid",tooltip=" "];
+  Node6 [id="Node000006",label="cassert",height=0.2,width=0.4,color="grey60", fillcolor="#E0E0E0", style="filled",tooltip=" "];
+  Node2 -> Node7 [id="edge6_Node000002_Node000007",color="steelblue1",style="solid",tooltip=" "];
+  Node7 [id="Node000007",label="gradient.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$gradient_8h.html",tooltip="Mimetic Gradient Operators."];
+  Node7 -> Node4 [id="edge7_Node000007_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node7 -> Node6 [id="edge8_Node000007_Node000006",color="steelblue1",style="solid",tooltip=" "];
+  Node2 -> Node8 [id="edge9_Node000002_Node000008",color="steelblue1",style="solid",tooltip=" "];
+  Node8 [id="Node000008",label="interpol.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$interpol_8h.html",tooltip="Mimetic Interpolators."];
+  Node8 -> Node4 [id="edge10_Node000008_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node8 -> Node6 [id="edge11_Node000008_Node000006",color="steelblue1",style="solid",tooltip=" "];
+  Node2 -> Node9 [id="edge12_Node000002_Node000009",color="steelblue1",style="solid",tooltip=" "];
+  Node9 [id="Node000009",label="laplacian.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$laplacian_8h.html",tooltip="Mimetic Laplacian Class and Constructors."];
+  Node9 -> Node3 [id="edge13_Node000009_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node9 -> Node7 [id="edge14_Node000009_Node000007",color="steelblue1",style="solid",tooltip=" "];
+  Node2 -> Node10 [id="edge15_Node000002_Node000010",color="steelblue1",style="solid",tooltip=" "];
+  Node10 [id="Node000010",label="mixedbc.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$mixedbc_8h.html",tooltip="Header file for the Mixed Boundary Condition operator."];
+  Node10 -> Node7 [id="edge16_Node000010_Node000007",color="steelblue1",style="solid",tooltip=" "];
+  Node2 -> Node11 [id="edge17_Node000002_Node000011",color="steelblue1",style="solid",tooltip=" "];
+  Node11 [id="Node000011",label="operators.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$operators_8h.html",tooltip="Sparse operation inline definitions for mimetic class constructions."];
+  Node11 -> Node8 [id="edge18_Node000011_Node000008",color="steelblue1",style="solid",tooltip=" "];
+  Node11 -> Node9 [id="edge19_Node000011_Node000009",color="steelblue1",style="solid",tooltip=" "];
+  Node11 -> Node10 [id="edge20_Node000011_Node000010",color="steelblue1",style="solid",tooltip=" "];
+  Node11 -> Node12 [id="edge21_Node000011_Node000012",color="steelblue1",style="solid",tooltip=" "];
+  Node12 [id="Node000012",label="robinbc.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$robinbc_8h.html",tooltip=" "];
+  Node12 -> Node7 [id="edge22_Node000012_Node000007",color="steelblue1",style="solid",tooltip=" "];
+  Node2 -> Node12 [id="edge23_Node000002_Node000012",color="steelblue1",style="solid",tooltip=" "];
+  Node2 -> Node4 [id="edge24_Node000002_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node13 [id="edge25_Node000001_Node000013",color="steelblue1",style="solid",tooltip=" "];
+  Node13 [id="Node000013",label="iostream",height=0.2,width=0.4,color="grey60", fillcolor="#E0E0E0", style="filled",tooltip=" "];
+}
