@@ -8,7 +8,7 @@ ARMA = /home/johnny/armadillo-10.2.1
 
 export
 
-SUBDIRS = src/mole_C++ examples/examples_C++ tests/tests_C++
+SUBDIRS = src/cpp examples/cpp tests/cpp
 
 all clean: $(SUBDIRS)
 $(SUBDIRS):
