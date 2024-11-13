@@ -127,31 +127,25 @@ $(function(){initNavTree('index.html',''); initResizable(true); });
 <h1>4: Running Examples &amp; Tests </h1>
 <p>Here are instructions on how to run the provided examples and tests for both the C++ and MATLAB versions of the library to help you quickly get started with MOLE.</p>
 <ul>
-<li><b>tests_C++:</b> These tests, which are automatically executed upon constructing the library's C++ version, play a crucial role in verifying the correct installation of MOLE and its dependencies. There are four tests in total.</li>
-<li><b>tests_MATLAB:</b> We encourage MATLAB users to execute these tests before using MOLE by entering the <code>tests_MATLAB</code> directory and executing <code>run_tests.m</code> from MATLAB. These tests are analogous to those contained in <code>tests_C++</code>.</li>
-<li><b>examples_C++:</b> These will be automatically built after calling <code>make</code>. We encourage C++ users to make this their entry point to familiarize themselves with this library version. The four examples are self-contained and adequately documented, and they solve typical PDEs.</li>
-<li><b>examples_MATLAB:</b> Most of our examples are provided in the MATLAB scripting language. Over 30 examples range from linear one-dimensional PDEs to highly nonlinear multidimensional PDEs.</li>
+<li><b>tests/cpp:</b> These tests, which are automatically executed upon constructing the library's C++ version, play a crucial role in verifying the correct installation of MOLE and its dependencies. There are four tests in total.</li>
+<li><b>tests/matlab:</b> We encourage MATLAB users to execute these tests before using MOLE by entering the <code>tests/matlab</code> directory and executing <code>run_tests.m</code> from MATLAB. These tests are analogous to those contained in <code>tests/cpp</code>.</li>
+<li><b>examples/cpp:</b> These will be automatically built after calling <code>make</code>. We encourage C++ users to make this their entry point to familiarize themselves with this library version. The four examples are self-contained and adequately documented, and they solve typical PDEs.</li>
+<li><b>examples/matlab:</b> Most of our examples are provided in the MATLAB scripting language. Over 30 examples range from linear one-dimensional PDEs to highly nonlinear multidimensional PDEs.</li>
 </ul>
 <h1>5: Documentation </h1>
-<p>The folder <code>doc_MATLAB</code> contains generated documentation about the MATLAB/Octave API. It was generated with a tool called <a href="https://www.gllmflndn.com/software/matlab/m2html"><em>m2html</em></a>. However, for a quick start on MOLE's MATLAB/Octave version, we recommend starting with this short <a href="https://github.com/jcorbino/mole/blob/master/CSRC%20Report%20on%20MOLE.pdf">guide</a>.</p>
-<p>For C++ users, we provide a short <a href="https://github.com/jcorbino/mole/blob/master/MOLE_C%2B%2B_Quick_Guide.pdf">guide</a> to MOLE's C++ flavor. However, for those in need of more details to interact with the library, we suggest to follow these instructions:</p>
+<p>The folder <code>doc/api_docs/matlab</code> contains generated documentation about the MATLAB/Octave API. It was generated with a tool called <a href="https://www.gllmflndn.com/software/matlab/m2html"><em>m2html</em></a>. However, for a quick start on MOLE's MATLAB/Octave version, we recommend starting with this short <a href="https://github.com/csrc-sdsu/mole/blob/master/doc/assets/manuals/CSRC%20Report%20on%20MOLE.pdf">guide</a>.</p>
+<p>For C++ users, we provide a short <a href="https://github.com/csrc-sdsu/mole/blob/master/doc/assets/manuals/MOLE_C%2B%2B_Quick_Guide.pdf">guide</a> to MOLE's C++ flavor. However, for those in need of more details to interact with the library, we suggest to follow these instructions:</p>
 <p>To generate the C++ documentation, execute:</p>
 <p><code>doxygen Doxyfile</code> (requires <em>Doxygen</em> and <em>Graphviz</em>)</p>
 <p>this will create a folder called <code>doc_C++</code> containing a set of <em>html</em> files. Please take a look at the <em>index.html</em> file to start browsing the documentation.</p>
 <p><b>NOTE:</b> Performing non-unary operations involving operands constructed over different grids may lead to unexpected results. While MOLE allows such operations without throwing errors, users must exercise caution when manipulating operators across different grids.</p>
 <h1>6: Community Guidelines </h1>
-<p>We welcome contributions to MOLE, whether they involve adding new functionalities, providing examples, addressing existing issues, reporting bugs, or requesting new features. Please refer to our <a href="https://github.com/jcorbino/mole/blob/master/CONTRIBUTING.md">Contribution Guidelines</a> for more details.</p>
+<p>We welcome contributions to MOLE, whether they involve adding new functionalities, providing examples, addressing existing issues, reporting bugs, or requesting new features. Please refer to our <a href="https://github.com/csrc-sdsu/mole/blob/master/CONTRIBUTING.md">Contribution Guidelines</a> for more details.</p>
 <h1>7: Citations </h1>
 <p>Please cite our work if you use MOLE in your research or software. Citations are helpful for the continued development and maintenance of the library <a href="https://doi.org/10.21105/joss.06288"><img src="https://joss.theoj.org/papers/10.21105/joss.06288/status.svg" alt="DOI" style="pointer-events: none;" class="inline"/></a></p>
 <p><a href="https://www.mathworks.com/matlabcentral/fileexchange/124870-mole"><img src="https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg" alt="View mole on File Exchange" style="pointer-events: none;" class="inline"/></a></p>
 <p>Now, some cool pictures obtained with MOLE:</p>
-<p><img src="4thOrder.png" alt="" class="inline" title="Obtained with curvilinear operators"/>    </p>
-<p><img src="4thOrder2.png" alt="" class="inline" title="Obtained with curvilinear operators"/>    </p>
-<p><img src="4thOrder3.png" alt="" class="inline" title="Obtained with curvilinear operators"/>    </p>
-<p><img src="grid2.png" alt="" class="inline" title="Obtained with curvilinear operators"/>    </p>
-<p><img src="grid.png" alt="" class="inline" title="Obtained with curvilinear operators"/>    </p>
-<p><img src="wave2D.png" alt="" class="inline" title="Obtained with curvilinear operators"/>    </p>
-<p><img src="burgers.png" alt="" class="inline" title="Obtained with curvilinear operators"/>     </p>
+<p><img src="doc/assets/img/4thOrder.png" alt="Obtained with curvilinear operators" class="inline"/> <img src="doc/assets/img/4thOrder2.png" alt="Obtained with curvilinear operators" class="inline"/> <img src="doc/assets/img/4thOrder3.png" alt="Obtained with curvilinear operators" class="inline"/> <img src="doc/assets/img/grid2.png" alt="Obtained with curvilinear operators" class="inline"/> <img src="doc/assets/img/grid.png" alt="Obtained with curvilinear operators" class="inline"/> <img src="doc/assets/img/WavyGrid.png" alt="Obtained with curvilinear operators" class="inline"/> <img src="doc/assets/img/wave2D.png" alt="Obtained with curvilinear operators" class="inline"/> <img src="doc/assets/img/burgers.png" alt="Obtained with curvilinear operators" class="inline"/> </p>
 </div></div><!-- PageDoc -->
 <a href="doxygen_crawl.html"></a>
 </div><!-- contents -->

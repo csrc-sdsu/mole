@@ -1,4 +1,4 @@
-digraph "src/mole_C++"
+digraph "src/cpp"
 {
  // LATEX_PDF_SIZE
   bgcolor="transparent";
