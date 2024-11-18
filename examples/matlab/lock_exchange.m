@@ -8,7 +8,7 @@ clc
 close all
 
 %% MOLE'S path so mimetic methods can be used
-addpath('../../src/mole_MATLAB')
+addpath('../../src/matlab')
 
 tic  % Start the timer
 %--------------------------------------------------------------------------

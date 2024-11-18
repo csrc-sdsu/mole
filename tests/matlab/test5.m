@@ -1,6 +1,6 @@
 % Poisson accuracy test
 
-addpath('../mole_MATLAB')
+addpath('../../src/matlab')
 
 west = 0;  % Domain's limits
 east = 1;

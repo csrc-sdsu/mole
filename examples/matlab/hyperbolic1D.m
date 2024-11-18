@@ -3,7 +3,7 @@
 clc
 close all
 
-addpath('../../src/mole_MATLAB')
+addpath('../../src/matlab')
 
 a = 1; % Velocity
 west = 0; % Domain's limits

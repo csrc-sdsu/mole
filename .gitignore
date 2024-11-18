@@ -12,12 +12,7 @@
 
 # Ignore Sphinx build output but include source files
 doc/build/
-doc/source/.*
-!doc/source/*.rst
-!doc/source/conf.py
-
-# Include all non-build documentation files
-!doc/
+doc/api_docs/cpp
 
 # Add makefile 
 !Makefile

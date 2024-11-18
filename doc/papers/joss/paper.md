@@ -60,7 +60,7 @@ It is important to mention that MOLE's main role is the construction of matrices
 The following code snippet shows how easy is to solve a 1D Poisson problem (with Robin's boundary conditions) through MOLE:
 ```matlab
 % File: elliptic1D.m
-addpath('../mole_MATLAB')  % Add path to library
+addpath('../srs/matlab')  % Add path to library
 
 west = 0;  % Domain's limits
 east = 1;

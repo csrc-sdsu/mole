@@ -4,7 +4,7 @@ clc
 close all
 format short
 
-addpath('../../src/mole_MATLAB')
+addpath('../../src/matlab')
 
 % Mimetic operator's parameters
 k = 2;

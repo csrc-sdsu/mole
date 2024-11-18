@@ -1,6 +1,6 @@
 % Consistency test for BCs operators (RobinBC and MixedBC)
 
-addpath('../mole_MATLAB')
+addpath('../../src/matlab')
 
 k = 4;
 m = 50;

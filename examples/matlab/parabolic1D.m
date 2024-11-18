@@ -3,7 +3,7 @@
 clc
 close all
 
-addpath('../../src/mole_MATLAB')
+addpath('../../src/matlab')
 
 alpha = 1; % Thermal diffusivity
 west = 0; % Domain's limits

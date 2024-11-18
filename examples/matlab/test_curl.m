@@ -6,7 +6,7 @@
 clc
 close all
 
-addpath('../../src/mole_MATLAB')
+addpath('../../src/matlab')
 
 order =   2;
 west  = -10;

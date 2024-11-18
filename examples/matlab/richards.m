@@ -6,7 +6,7 @@ function richards
     clc
     close all
 
-    addpath('../../src/mole_MATLAB');
+    addpath('../../src/matlab');
 
     % Spatial and temporal discretization
     k = 4;

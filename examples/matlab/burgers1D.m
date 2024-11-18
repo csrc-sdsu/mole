@@ -5,7 +5,7 @@
 clc
 close all
 
-addpath('../../src/mole_MATLAB')
+addpath('../../src/matlab')
 
 west = -15; % Domain's limits
 east = 15;

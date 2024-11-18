@@ -1,6 +1,6 @@
 % Nullity test of Gradient operator
 
-addpath('../mole_MATLAB')
+addpath('../../src/matlab')
 
 ks = [2, 4, 6, 8];  % Different orders of accuracy
 tol = 1e-10;

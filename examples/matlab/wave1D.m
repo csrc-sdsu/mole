@@ -3,7 +3,7 @@
 clc
 close all
 
-addpath('../../src/mole_MATLAB')
+addpath('../../src/matlab')
 
 % Spatial discretization
 k = 2;         % Order of accuracy (spatial)

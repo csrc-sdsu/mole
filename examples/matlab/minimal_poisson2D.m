@@ -3,7 +3,7 @@
 clc
 close all
 
-addpath('../../src/mole_MATLAB')
+addpath('../../src/matlab')
 
 k = 2; % Order of accuracy
 m = 5; % Vertical resolution

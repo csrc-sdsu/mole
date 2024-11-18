@@ -43,11 +43,11 @@ test5: test5.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o test5 test5.cpp $(LIBS)
 
 run: test1 test2 test3 test4 test5
-	LD_LIBRARY_PATH=../../src/mole_C++ ./test1
-	LD_LIBRARY_PATH=../../src/mole_C++ ./test2
-	LD_LIBRARY_PATH=../../src/mole_C++ ./test3
-	LD_LIBRARY_PATH=../../src/mole_C++ ./test4
-	LD_LIBRARY_PATH=../../src/mole_C++ ./test5
+	LD_LIBRARY_PATH=../../src/cpp ./test1
+	LD_LIBRARY_PATH=../../src/cpp ./test2
+	LD_LIBRARY_PATH=../../src/cpp ./test3
+	LD_LIBRARY_PATH=../../src/cpp ./test4
+	LD_LIBRARY_PATH=../../src/cpp ./test5
 
 clean:
 	rm -f test1 test2 test3 test4 test5

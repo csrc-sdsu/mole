@@ -1,6 +1,6 @@
 % Energy test
 
-addpath('../mole_MATLAB')
+addpath('../../src/matlab')
 
 % Parameters
 k = 4;
