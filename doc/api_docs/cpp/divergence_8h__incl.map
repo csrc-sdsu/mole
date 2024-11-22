@@ -1,0 +1,9 @@
+<map id="src/cpp/divergence.h" name="src/cpp/divergence.h">
+<area shape="rect" id="Node000001" title="Mimetic Divergence Operators." alt="" coords="12,5,154,31"/>
+<area shape="rect" id="Node000002" href="$utils_8h.html" title="Helpers for sparse operations and MATLAB analogs." alt="" coords="14,79,70,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="79,33,59,67,54,64,74,30"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="94,79,158,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="93,30,113,64,109,67,88,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,153,79,178"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="45,105,45,137,39,137,39,105"/>
+</map>
