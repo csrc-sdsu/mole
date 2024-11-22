@@ -1,0 +1,17 @@
+<map id="src/cpp/laplacian.cpp" name="src/cpp/laplacian.cpp">
+<area shape="rect" id="Node000001" title="Mimetic Laplacian Constructors." alt="" coords="36,5,180,31"/>
+<area shape="rect" id="Node000002" href="$laplacian_8h.html" title="Mimetic Laplacian Class and Constructors." alt="" coords="66,79,149,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,31,110,63,105,63,105,31"/>
+<area shape="rect" id="Node000003" href="$divergence_8h.html" title="Mimetic Divergence Operators." alt="" coords="5,153,101,178"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="101,107,73,142,69,139,97,103"/>
+<area shape="rect" id="Node000007" href="$gradient_8h.html" title="Mimetic Gradient Operators." alt="" coords="124,153,203,178"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="119,103,147,139,143,142,115,107"/>
+<area shape="rect" id="Node000004" href="$utils_8h.html" title="Helpers for sparse operations and MATLAB analogs." alt="" coords="32,226,88,252"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="57,178,60,211,54,211,51,179"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="125,226,189,252"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="72,177,128,215,125,220,69,181"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="23,300,96,326"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="62,252,62,284,57,284,57,252"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="148,181,91,220,88,215,145,177"/>
+<area shape="poly" id="edge8_Node000007_Node000006" title=" " alt="" coords="165,179,162,211,157,211,160,178"/>
+</map>
