@@ -2014,7 +2014,7 @@ MAN_EXTENSION          = .3
 
 # The MAN_SUBDIR tag determines the name of the directory created within
 # MAN_OUTPUT in which the man pages are placed. If defaults to man followed by
-# MAN_EXTENSION with the initi al . removed.
+# MAN_EXTENSION with the initial . removed.
 # This tag requires that the tag GENERATE_MAN is set to YES.
 
 MAN_SUBDIR             =
