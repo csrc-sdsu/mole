@@ -1,3 +1,5 @@
+% MOLE is distributed under a GNU General Public License; please refer to the LICENSE file for more details.
+
 function [Nx, Ny, Nz] = nodal3DCurv(k, X, Y, Z)
     % Get the determinant of the jacobian and the metrics
     [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3D(k, X, Y, Z);

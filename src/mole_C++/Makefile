@@ -1,6 +1,7 @@
 ifndef ARMA
 # Put here the path to Armadillo
-ARMA = /home/johnny/armadillo-10.2.1
+#ARMA = /home/johnny/armadillo-10.2.1
+ARMA = /Users/aneeshsrinivas/Documents/GitHub/armadillo-14.0.3
 endif
 
 ifndef EIGEN
@@ -12,10 +13,10 @@ endif
 
 #----------------------------------------------------------------------
 # Compiler for C++
-CXX = g++
+CXX = clang++
 
 # Flags for C++ compiler
-CXXFLAGS = -O3 -fopenmp
+CXXFLAGS = -O3 
 
 # Path to header files
 INCPATH = -I. -I$(ARMA)/include

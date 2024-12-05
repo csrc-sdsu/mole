@@ -1,3 +1,5 @@
+% MOLE is distributed under a GNU General Public License; please refer to the LICENSE file for more details.
+
 function S = sidedNodal(m, dx, type)
 % Returns a m+1 by m+1 one-dimensional sided approximation for uniformly
 % spaced data points. This function is handy for advective terms.

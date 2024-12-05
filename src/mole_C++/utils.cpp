@@ -6,6 +6,7 @@
  * Sparse operations that repeatedly are needed, but not 
  * necessarily part of the Armadillo library. Some other MATLAB
  * type functions are also here, like meshgrid.
+ * MOLE is distributed under a GNU General Public License; please refer to the LICENSE file for more details.
  * 
  */
 
@@ -227,3 +228,50 @@ void Utils::meshgrid(const vec &x, const vec &y, const vec &z, cube &X, cube &Y,
   for (int kk = 0; kk < o; ++kk)
     Z.slice(kk).fill(z(kk));
 }
+
+vec Utils::kthordercentraldiff(u16 k){
+  vec derivitive(k,fill::zeros);
+  if (k<4){
+    return derivitive;
+  }
+  vec nextTerm(k,fill::zeros);
+  vec nextTermCopy(k,fill::zeros); //helper list to help updating nextTerm. 
+  derivitive(k/2-1)=-1.0;
+  derivitive(k/2)=1.0;
+  double scalefactor=1.0;
+  nextTerm(k/2-2)=-1.0;
+  nextTerm(k/2-1)=3.0;
+  nextTerm(k/2)=-3.0;
+  nextTerm(k/2+1)=-3.0;
+  u16 i=1;  
+  u16 j;
+  while (true){
+    scalefactor*=(0.125/i-0.25);
+    derivitive+=(scalefactor/(2.0*i+1.0))*nextTerm;
+    
+    if (i==k/2-1){
+      break;
+    }
+    nextTermCopy(k/2-i-2)=-1.0;
+    nextTermCopy(k/2-i-1)=1.0*(2.0*i+3.0);
+    nextTermCopy(k/2+i)=-1.0*(2.0*i+3.0);
+    nextTermCopy(k/2+i+1)=1.0;
+    for (u16 j=k/2-i;j<=k/2+i-1;j++){
+      nextTermCopy(j)=nextTerm(j+1)-2*nextTerm(j)+nextTerm(j-1);
+    }
+
+    for (u16 j=k/2-i-1;j<=k/2+i+1;j++){
+      nextTerm(j)=nextTermCopy(j);
+
+    }
+    i=i+1;
+
+    }
+    return derivitive;
+
+    
+  }
+
+  
+
+

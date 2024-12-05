@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/aneeshsrinivas/Documents/GitHub/mole/src/mole_C++",
+      "program": "/Users/aneeshsrinivas/Documents/GitHub/mole/src/mole_C++/build/Debug/outDebug"
+    }
+  ]
+}

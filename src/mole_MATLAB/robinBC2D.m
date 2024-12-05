@@ -1,3 +1,5 @@
+% MOLE is distributed under a GNU General Public License; please refer to the LICENSE file for more details.
+
 function BC = robinBC2D(k, m, dx, n, dy, a, b)
 % Returns a two-dimensional mimetic boundary operator that 
 % imposes a boundary condition of Robin's type

@@ -1,3 +1,5 @@
+% MOLE is distributed under a GNU General Public License; please refer to the LICENSE file for more details.
+
 % https://www.sciencedirect.com/science/article/pii/0022247X78902172?via%3Dihub
 function [X, Y] = ttm(grid_name, m, n, iters, plot_grid)
 % Returns X and Y which are both m by n matrices that contains the physical

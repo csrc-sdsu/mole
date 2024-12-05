@@ -1,3 +1,5 @@
+% MOLE is distributed under a GNU General Public License; please refer to the LICENSE file for more details.
+
 function P = weightsP(k, m, dx)
 % Returns the m+1 weights of P
 %

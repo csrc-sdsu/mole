@@ -4,7 +4,7 @@ CXX ?= g++
 
 INCPATH = -I$(MOLE)
 CXXFLAGS = -O3 -fopenmp -DARMA_DONT_USE_WRAPPER
-LIBS = -L$(MOLE) -lmole -lopenblas
+LIBS = -L$(MOLE) -lmole -lopenblas -L/opt/homebrew/opt/openblas/lib
 
 ifdef ARMA
 INCPATH += -I. -I$(ARMA)/include
@@ -19,9 +19,9 @@ CXXFLAGS += -DEIGEN
 INCPATH += -I$(EIGEN)
 else
 ifdef SUPERLU
-LIBS += -L$(SUPERLU)/lib -Wl,-rpath,$(SUPERLU)/lib -lsuperlu
+LIBS += -L$(SUPERLU)/lib -Wl,-rpath,$(SUPERLU)/lib -lsuperlu -L/opt/homebrew/Cellar/superlu/7.0.0/lib
 else
-LIBS += -lsuperlu
+LIBS += -lsuperlu -L/opt/homebrew/Cellar/superlu/7.0.0/lib
 endif
 endif
 

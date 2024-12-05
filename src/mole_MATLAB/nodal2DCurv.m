@@ -1,3 +1,5 @@
+% MOLE is distributed under a GNU General Public License; please refer to the LICENSE file for more details.
+
 function [Nx, Ny] = nodal2DCurv(k, X, Y)
     % Get the determinant of the jacobian and the metrics
     [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y);

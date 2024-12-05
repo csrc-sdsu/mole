@@ -1,3 +1,5 @@
+% MOLE is distributed under a GNU General Public License; please refer to the LICENSE file for more details.
+
 % https://en.wikipedia.org/wiki/Transfinite_interpolation
 function [X, Y] = tfi(grid_name, m, n, plot_grid)
 % Returns X and Y which are both m by n matrices that contains the physical

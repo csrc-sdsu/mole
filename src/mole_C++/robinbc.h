@@ -2,6 +2,7 @@
  * @file robinbc.cpp
  * @date 2024/10/15
  * @brief Robin Boundary Condition Class
+ * MOLE is distributed under a GNU General Public License; please refer to the LICENSE file for more details.
  * 
  */
 

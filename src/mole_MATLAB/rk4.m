@@ -1,3 +1,5 @@
+% MOLE is distributed under a GNU General Public License; please refer to the LICENSE file for more details.
+
 function [t, y] = rk4(func, tspan, dt, y0)
 % Explicit Runge-Kutta 4th-order method
 %

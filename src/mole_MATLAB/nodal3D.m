@@ -1,3 +1,5 @@
+% MOLE is distributed under a GNU General Public License; please refer to the LICENSE file for more details.
+
 function N = nodal3D(k, m, dx, n, dy, o, dz)
 % Returns a three-dimensional operator that approximates the first-order 
 % derivatives on a uniform nodal grid

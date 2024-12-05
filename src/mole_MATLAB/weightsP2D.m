@@ -1,3 +1,5 @@
+% MOLE is distributed under a GNU General Public License; please refer to the LICENSE file for more details.
+
 function P = weightsP2D(k, m, dx, n, dy)
 % Returns the 2mn+m+n weights of P in 2-D
 %

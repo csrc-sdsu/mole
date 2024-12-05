@@ -1,3 +1,12 @@
+/**
+ * @file mixeddbc.cpp
+ * 
+ * @brief Implements boundary operators for mixed boundary conditions. 
+ * 
+ * @date 2024/12/05
+ * MOLE is distributed under a GNU General Public License; please refer to the LICENSE file for more details.
+ * 
+ */
 #include "mixedbc.h"
 
 // 1-D Constructor
