@@ -39,47 +39,6 @@ Interpol::Interpol(u32 m, Real c) : sp_mat(m + 1, m + 2) {
   }
 }
 
-// alternate 1-D Constructor for higher order interpolation operators
-Interpol::Interpol(u32 m, u16 k) : sp_mat(m + 1, m + 2) {
-  assert(m >= 4);
-  assert (k%2==0); 
-  assert (k>=2); //TODO: add support for higher order interpolation operators
-
-  at(0, 0) = 1;
-  at(m, m + 1) = 1; 
-  if (k==2){
-     for (u32 i = 1; i < m; i++) {
-      at(i, i) = 0.5;
-      at(i, i + 1) = 0.5;
-    }
-
-
-  }
-  else {
-    at(1,0)=(-16.0)/(112.0);
-    at(1,1)=(70.0)/(112.0);
-    at(1,2)=(70.0)/(112.0);
-    at(1,3)=(-14.0)/(112.0);
-    at(1,4)=(2.0)/(112.0);
-    at(m-1,m+1)=(-16.0)/(112.0);
-    at(m-1,m)=(70.0)/(112.0);
-    at(m-1,m-1)=(70.0)/(112.0);
-    at(m-1,m-2)=(-14.0)/(112.0);
-    at(m-1,m-3)=(2.0)/(112.0);
-    for (u32 i = 2; i < m-1; i++) {
-      at(i, i-1) = -(7.0)/(112.0);
-      at(i, i) = (63.0)/(112.0);
-      at(i, i+1) = (63.0)/(112.0);
-      at(i, i+2) = (-7.0)/(112.0);
-    }
-
-
-  }
-
-
-
-}
-
 // 2-D Constructor
 Interpol::Interpol(u32 m, u32 n, Real c1, Real c2) {
   Interpol Ix(m, c1);

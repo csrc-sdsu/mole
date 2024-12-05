@@ -6,9 +6,24 @@
  * Sparse operations that repeatedly are needed, but not 
  * necessarily part of the Armadillo library. Some other MATLAB
  * type functions are also here, like meshgrid.
- * MOLE is distributed under a GNU General Public License; please refer to the LICENSE file for more details.
  * 
  */
+
+ // SPDX-License-Identifier: GPL-3.0-only
+// 
+// Copyright 2008-2024 San Diego State University (SDSU) and Contributors 
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, version 3.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// LICENSE file or on the web GNU General Public License 
+// <https://www.gnu.org/licenses/> for more details.
+//
+// ------------------------------------------------------------------------
 
 #include "utils.h"
 #include <cassert>
@@ -229,11 +244,12 @@ void Utils::meshgrid(const vec &x, const vec &y, const vec &z, cube &X, cube &Y,
     Z.slice(kk).fill(z(kk));
 }
 
-vec Utils::kthordercentraldiff(u16 k){
+vec Utils::kthordercentraldiff(u16 k){ //gives the interior row for the kth order central differece for gradient and the divergence
+//this is based off of the fact that the interior row for the kth order mimetic gradient and divergence
   vec derivitive(k,fill::zeros);
-  if (k<4){
+  if (k<4){ 
     return derivitive;
-  }
+  }  
   vec nextTerm(k,fill::zeros);
   vec nextTermCopy(k,fill::zeros); //helper list to help updating nextTerm. 
   derivitive(k/2-1)=-1.0;

@@ -46,12 +46,6 @@ public:
    */  
   Interpol(u32 m, Real c);
 
-  /**
-   * @brief 1-D Mimetic Interpolator Constructor
-   * @param m Number of cells
-   * @param k order of operator
-   */  
-   Interpol(u32 m,u16 k);
   
   /**
    * @brief 2-D Mimetic Interpolator Constructor
