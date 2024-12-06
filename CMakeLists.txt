@@ -6,12 +6,23 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Display the detected C++ compiler ID
 message(STATUS "Detected CXX Compiler ID: ${CMAKE_CXX_COMPILER_ID}")
 
-# Set CXX_FLAGS
-set(CMAKE_CXX_FLAGS "-O3 -Xclang -fopenmp -DARMA_DONT_USE_WRAPPER -DARMA_USE_SUPERLU")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/usr/local/Cellar/libomp/19.1.4/lib -lomp")
+# Compiler-specific CXX_FLAGS and linker flags
+if (CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+    # Set flags for AppleClang
+    set(CMAKE_CXX_FLAGS "-O3 -Xclang -fopenmp -DARMA_DONT_USE_WRAPPER -DARMA_USE_SUPERLU")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/usr/local/Cellar/libomp/19.1.4/lib -lomp")
+    message(STATUS "Using AppleClang-specific flags.")
+    # Include Directories
+    include_directories("/usr/local/Cellar/libomp/19.1.4/include")
 
-# Include Directories
-include_directories("/usr/local/Cellar/libomp/19.1.4/include")
+else()
+    # Set flags for other compilers
+    set(CMAKE_CXX_FLAGS "-O3 -fopenmp -DARMA_DONT_USE_WRAPPER -DARMA_USE_SUPERLU")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
+    message(STATUS "Using non-Clang compiler flags.")
+endif()
+
+
 
 # Required Libraries
 find_package(Armadillo 9.800.4 REQUIRED)
@@ -28,7 +39,11 @@ endif()
 
 # Include and link directories for all subprojects
 include_directories(${ARMADILLO_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${SUPERLU_INCLUDE_DIR} ${LAPACK_INCLUDE_DIR})
-set(LINK_LIBS ${ARMADILLO_LIBRARIES} ${OpenBLAS_LIBRARIES} ${SUPERLU_LIBRARY} ${LAPACK_LIBRARY} -lomp)
+if (CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+    set(LINK_LIBS ${ARMADILLO_LIBRARIES} ${OpenBLAS_LIBRARIES} ${SUPERLU_LIBRARY} ${LAPACK_LIBRARY} -lomp)
+else()
+    set(LINK_LIBS ${ARMADILLO_LIBRARIES} ${OpenBLAS_LIBRARIES} ${SUPERLU_LIBRARY} ${LAPACK_LIBRARY})
+endif()
 
 # Add subdirectories
 add_subdirectory(src/cpp)
