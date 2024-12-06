@@ -5,6 +5,7 @@
  * 
  */
 
+
 #pragma once
 
 #ifndef UTILS_H
@@ -78,6 +79,9 @@ public:
   * @param Y a sparse matrix, will be filled by the function
   *
   */  
+
+ 
+
   void meshgrid(const vec &x, const vec &y, mat &X, mat &Y);
 
   /**
@@ -97,6 +101,18 @@ public:
   */
   void meshgrid(const vec &x, const vec &y, const vec &z, cube &X, cube &Y,
                 cube &Z);
+
+ /**
+  * @brief Calculates the interior row for the kth order central finite difference scheme. This is in utils because 
+  *Both the gradient and interior operators need to use this for large k
+  * @param k an even integer
+  * 
+  */         
+  static vec kthordercentraldiff(u16 k);
+
+  
+
+
 };
 
 #endif // UTILS_H
