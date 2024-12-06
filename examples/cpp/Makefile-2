@@ -1,0 +1,66 @@
+MOLE = ../../src/cpp
+
+CXX ?= g++
+
+ifeq ($(DEBUG),1)
+CXXFLAGS = -O0 -g
+else
+CXXFLAGS = -O3
+endif
+CXXFLAGS += -fopenmp -DARMA_DONT_USE_WRAPPER
+
+INCPATH = -I. $(if $(ARMA), -I$(ARMA)/include) -I$(MOLE)
+
+LIBS = -L$(MOLE) -lmole -lopenblas
+
+ifdef ARMA
+LIBS += -L$(ARMA) -Wl,-rpath,$(ARMA) -larmadillo
+else
+ifeq (,$(filter clean,$(MAKECMDGOALS)))
+$(warning The path to Armadillo's library was not provided. I will look for it in the standard system directories.)
+endif
+endif
+
+ifdef EIGEN
+CXXFLAGS += -DEIGEN
+INCPATH += -I$(EIGEN)
+else
+ifdef SUPERLU
+LIBS += -L$(SUPERLU)/lib -Wl,-rpath,$(SUPERLU)/lib -lsuperlu
+else
+LIBS += -lsuperlu
+endif
+endif
+
+# Define the sources for your project
+SRC = transport1D.cpp schrodinger1D.cpp elliptic1D.cpp elliptic2D.cpp Schrodinger2D.cpp /mnt/c/Users/surin/OneDrive/Desktop/mole-master/src/cpp/Laplacian.cpp /mnt/c/Users/surin/OneDrive/Desktop/mole-master/src/cpp/RobinBC.cpp
+
+# Define the target executables
+TARGETS = transport1D schrodinger1D elliptic1D elliptic2D Schrodinger2D
+
+# Default target
+all: $(TARGETS)
+
+# Rule to compile each target
+transport1D: transport1D.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o transport1D transport1D.cpp $(LIBS)
+
+schrodinger1D: schrodinger1D.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o schrodinger1D schrodinger1D.cpp $(LIBS)
+
+elliptic1D: elliptic1D.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o elliptic1D elliptic1D.cpp $(LIBS)
+
+elliptic2D: elliptic2D.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o elliptic2D elliptic2D.cpp $(LIBS)
+
+# Rule for Schrodinger2D
+Schrodinger2D: Schrodinger2D.cpp /mnt/c/Users/surin/OneDrive/Desktop/mole-master/src/cpp/Laplacian.cpp /mnt/c/Users/surin/OneDrive/Desktop/mole-master/src/cpp/RobinBC.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o Schrodinger2D Schrodinger2D.cpp /mnt/c/Users/surin/OneDrive/Desktop/mole-master/src/cpp/Laplacian.cpp /mnt/c/Users/surin/OneDrive/Desktop/mole-master/src/cpp/RobinBC.cpp $(LIBS)
+
+# Clean rule to remove executables
+clean:
+	rm -f $(TARGETS)
+
+.PHONY: all clean
+
