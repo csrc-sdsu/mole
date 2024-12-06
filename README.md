@@ -65,6 +65,46 @@ in your projects, specify the location of `libmole.a` to the linker. For the use
 The two implementations of MOLE (C++ & MATLAB/Octave) are independent; you don't need
 to build the C++ version if you are just interested in using MOLE from MATLAB/Octave.
 
+3.1: Installation (Mac)
+-----------------------
+
+To use MOLE (C++ version), you need to have _Armadillo C++_ <http://arma.sourceforge.net>, _SuperLU_ 
+<https://portal.nersc.gov/project/sparse/superlu>, and _OpenBLAS_ <https://www.openblas.net> installed on your computer.
+
+On Macs, you can install superlu using the following steps:
+a. Open a terminal
+b. (type) brew install superlu 
+Note (assuming that it is installing ver 7.0.0): This will install superlu in a directory called /opt/homebrew/Cellar/superlu/7.0.0/lib
+
+On Macs, you can install openblas using the following steps:
+a. Open a terminal
+b. (type) brew install openblas 
+Note: This will install openblas in the directory called /opt/homebrew/opt/openblas/lib
+
+
+On Mac, we will need to change the makefiles to now point to the right paths. We need to make the following changes:
+
+1. open the Makefile in mole/src/tests directory
+2. Add the following extra path namely -L/opt/homebrew/Cellar/superlu/7.0.0/lib (as shown below)
+ifdef SUPERLU
+LIBS += -L$(SUPERLU)/lib -Wl,-rpath,$(SUPERLU)/lib -lsuperlu -L/opt/homebrew/Cellar/superlu/7.0.0/lib
+else
+LIBS += -lsuperlu -L/opt/homebrew/Cellar/superlu/7.0.0/lib
+endif
+3. Add the path to openblas namely -L/opt/homebrew/opt/openblas/lib  as shown below
+LIBS = -L$(MOLE) -lmole -lopenblas -L/opt/homebrew/opt/openblas/lib
+
+As mentioned in the Linux instllation above, do the following steps as usual - 
+Define `ARMA_USE_SUPERLU` and `ARMA_USE_OPENMP` in `include/armadillo_bits/config.hpp`. 
+
+Another quriky change is the usage of makefiles on mac. Depending on the version of the software packages installed on your mac,
+you may encounter difficulties in compiling. Follow the instructions given in section 3.0 above. If you are unable to compile, use the following command 
+
+To compile the source code in mole/src/mole_C++/
+- make CXX=g++-14 CC=gcc-14
+To compile the source code in mole/src/examples/examples_C++/
+- make CXX=g++-14 CC=gcc-14
+
 
 4: Running Examples & Tests
 ---------------------------
