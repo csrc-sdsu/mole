@@ -32,7 +32,7 @@ LIBS += -lsuperlu
 endif
 endif
 
-all: transport1D schrodinger1D elliptic1D elliptic2D convection_diffusion
+all: transport1D schrodinger1D elliptic1D elliptic2D convection_diffusion RK2
 
 transport1D: transport1D.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o transport1D transport1D.cpp $(LIBS)
@@ -49,5 +49,8 @@ elliptic2D: elliptic2D.cpp
 convection_diffusion: convection_diffusion.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o convection_diffusion convection_diffusion.cpp $(LIBS)
 
+RK2: RK2.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o RK2 RK2.cpp $(LIBS)
+
 clean:
-	rm -f transport1D schrodinger1D elliptic1D elliptic2D convection_diffusion
+	rm -f transport1D schrodinger1D elliptic1D elliptic2D convection_diffusion RK2
