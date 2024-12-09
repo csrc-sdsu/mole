@@ -3,7 +3,7 @@
 clc
 close all
 
-addpath('../../src/matlab')
+addpath('../../src/mole_MATLAB')
 
 alpha = 1; % Thermal diffusivity
 west = 0; % Domain's limits
@@ -50,7 +50,8 @@ else
     tic
     % Implicit
     L = -alpha*dt*L + speye(size(L));
-    
+    dL=decomposition(L); 
+    %doing decomposition to speed up the solving the systems
     % Time integration loop
     for i = 0 : t/dt+1
         plot(grid, U, 'o-')
@@ -60,9 +61,7 @@ else
         xlabel('x')
         ylabel('T')
         pause(0.01)
-        U = L\U; % Solve a linear system of equations (unconditionally stable)
-        % Next time better do: dL = decomposition(L) 
-        % outside the loop, and use dL instead of L to solve the linear system more efficiently.
+        U = dL\U; 
     end
     toc
 end
