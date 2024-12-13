@@ -104,7 +104,9 @@ public:
 
  /**
   * @brief Calculates the interior row for the kth order central finite difference scheme. This is in utils because 
-  *Both the gradient and interior operators need to use this for large k
+  * Both the gradient and interior operators need to use this for large k.
+  * This function is based off of the fact that d/dx=1/h*sum_{k=0}^∞ (prod_{i=1}^{k}(1/(8i)-0.25))/(2k+1)(delta_h)^(2k+1), 
+  * where delta_hf(x)=(f(x+h/2)-f(x-h/2))
   * @param k an even integer
   * 
   */         
