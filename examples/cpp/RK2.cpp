@@ -1,4 +1,4 @@
-#include "mole.h"  // Include the MOLE library
+#include "mole.h"
 #include <iostream>
 #include <sstream>  // For string streams
 #include <fstream>  // For file output
