@@ -1,6 +1,6 @@
-#include "mole.h"  
+#include "mole.h"  // Include the MOLE library
 #include <iostream>
-#include <sstream> 
+#include <sstream>  // For string streams
 #include <fstream>  // For file output
 #include <cmath>    // For sin()
 #include <iomanip>  // For setprecision
@@ -35,19 +35,11 @@ int main() {
         y(i + 1) = y(i) + h * k2;                                    // Update solution
     }
 
-    // Write data to a file
-    std::ofstream data_file("data.txt");
-    if (!data_file) {
-        std::cerr << "Error: Failed to open data file.\n";
-        return 1;
-    }
-
-    // Write the time and solution values to the file
-    data_file << std::fixed << std::setprecision(6);
+    // Print the time and solution values to the standard output
+    std::cout << std::fixed << std::setprecision(6);
     for (int i = 0; i < n_steps; ++i) {
-        data_file << t(i) << " " << y(i) << "\n";
+        std::cout << t(i) << " " << y(i) << "\n";
     }
-    data_file.close();
 
     // Generate GNUplot script
     std::ofstream plot_script("plot.gnu");
