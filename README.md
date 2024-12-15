@@ -71,26 +71,26 @@ to build the C++ version if you are just interested in using MOLE from MATLAB/Oc
 
 Here are instructions on how to run the provided examples and tests for both the C++ and MATLAB versions of the library to help you quickly get started with MOLE.
 
-* **tests_C++:**
+* **tests/cpp:**
 These tests, which are automatically executed upon constructing the library's C++ version, play a crucial role in verifying the correct installation of MOLE and its dependencies. There are four tests in total.
 
-* **tests_MATLAB:**
-We encourage MATLAB users to execute these tests before using MOLE by entering the `tests_MATLAB` directory and executing `run_tests.m` from MATLAB. These tests are analogous to those contained in `tests_C++`.
+* **tests/matlab:**
+We encourage MATLAB users to execute these tests before using MOLE by entering the `tests/matlab` directory and executing `run_tests.m` from MATLAB. These tests are analogous to those contained in `tests/cpp`.
 
-* **examples_C++:**
+* **examples/cpp:**
 These will be automatically built after calling `make`. We encourage C++ users to make this their entry point to familiarize themselves with this library version. The four examples are self-contained and adequately documented, and they solve typical PDEs.
 
-* **examples_MATLAB:**
+* **examples/matlab:**
 Most of our examples are provided in the MATLAB scripting language. Over 30 examples range from linear one-dimensional PDEs to highly nonlinear multidimensional PDEs.
 
 
 5: Documentation
 ----------------
 
-The folder `doc_MATLAB` contains generated documentation about the MATLAB/Octave API.
-It was generated with a tool called [_m2html_](https://www.gllmflndn.com/software/matlab/m2html). However, for a quick start on MOLE's MATLAB/Octave version, we recommend starting with this short [guide](https://github.com/jcorbino/mole/blob/master/CSRC%20Report%20on%20MOLE.pdf).
+The folder `doc/api_docs/matlab` contains generated documentation about the MATLAB/Octave API.
+It was generated with a tool called [_m2html_](https://www.gllmflndn.com/software/matlab/m2html). However, for a quick start on MOLE's MATLAB/Octave version, we recommend starting with this short [guide](https://github.com/csrc-sdsu/mole/blob/master/doc/assets/manuals/CSRC%20Report%20on%20MOLE.pdf).
 
-For C++ users, we provide a short [guide](https://github.com/jcorbino/mole/blob/master/MOLE_C%2B%2B_Quick_Guide.pdf) to MOLE's C++ flavor. However, for those in need of more details to interact with the library, we suggest to follow these instructions:
+For C++ users, we provide a short [guide](https://github.com/csrc-sdsu/mole/blob/master/doc/assets/manuals/MOLE_C%2B%2B_Quick_Guide.pdf) to MOLE's C++ flavor. However, for those in need of more details to interact with the library, we suggest to follow these instructions:
 
 To generate the C++ documentation, execute:
 
@@ -106,7 +106,7 @@ Performing non-unary operations involving operands constructed over different gr
 6: Community Guidelines
 -----------------------
 
-We welcome contributions to MOLE, whether they involve adding new functionalities, providing examples, addressing existing issues, reporting bugs, or requesting new features. Please refer to our [Contribution Guidelines](https://github.com/jcorbino/mole/blob/master/CONTRIBUTING.md) for more details.
+We welcome contributions to MOLE, whether they involve adding new functionalities, providing examples, addressing existing issues, reporting bugs, or requesting new features. Please refer to our [Contribution Guidelines](https://github.com/csrc-sdsu/mole/blob/master/CONTRIBUTING.md) for more details.
 
 
 7: Citations
@@ -120,11 +120,11 @@ the library [![DOI](https://joss.theoj.org/papers/10.21105/joss.06288/status.svg
 
 Now, some cool pictures obtained with MOLE:
 
-![Obtained with curvilinear operators](images/4thOrder.png)
-![Obtained with curvilinear operators](images/4thOrder2.png)
-![Obtained with curvilinear operators](images/4thOrder3.png)
-![Obtained with curvilinear operators](images/grid2.png)
-![Obtained with curvilinear operators](images/grid.png)
-![Obtained with curvilinear operators](images/WavyGrid.png)
-![Obtained with curvilinear operators](images/wave2D.png)
-![Obtained with curvilinear operators](images/burgers.png)
+![Obtained with curvilinear operators](doc/assets/img/4thOrder.png)
+![Obtained with curvilinear operators](doc/assets/img/4thOrder2.png)
+![Obtained with curvilinear operators](doc/assets/img/4thOrder3.png)
+![Obtained with curvilinear operators](doc/assets/img/grid2.png)
+![Obtained with curvilinear operators](doc/assets/img/grid.png)
+![Obtained with curvilinear operators](doc/assets/img/WavyGrid.png)
+![Obtained with curvilinear operators](doc/assets/img/wave2D.png)
+![Obtained with curvilinear operators](doc/assets/img/burgers.png)

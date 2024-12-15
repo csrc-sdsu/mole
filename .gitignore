@@ -1,9 +1,38 @@
-*
+# General ignore patterns
+
 !*.*
 !*/
+
+# Ignore build artifacts and temporary files
 *.o
 *.so
 *.a
 *.asv
 *~
-doc*/
+
+# Ignore Doxygen generated HTML and XML output
+doc/api_docs/cpp  
+# Ignore Sphinx build output
+doc/sphinx/build/
+
+# Mac specific
+.DS_Store
+*.dSYM
+*~
+*.dylib
+
+# Python
+dist
+*egg*
+.pytest_cache
+*cffi.so
+*cffi.dylib
+__pycache__/
+.ipynb_checkpoints/
+
+# Editor Misc
+.cache/
+.history
+.vscode
+.ccls-cache
+.vim
