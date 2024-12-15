@@ -7,10 +7,10 @@
 
  */
 int main() { 
-int k=4;// Operators' order of accuracy
+int k=2;// Operators' order of accuracy
 double t0=0; //initial time
 double tf=1; //final time
-double a=-1; //left boundary
+double a=0; //left boundary
 double b=1; //right boundary
 int m=2*k+1; //num of cells
 double dx=(b-a)/m;
@@ -20,25 +20,13 @@ Laplacian L(k,m,dx); //mimetic operator is m+2 by m+2. it gives the laplacian at
 vec solution(m + 2); //solution at a,a+dx,...,a+(m-1)dx,b
 solution(0)=100;
 solution(m+1)=100;
-int i; 
-for (i=1;i<=m;i++){  
-    solution(i)=100*(a+dx*(i-0.5))*(a+dx*(i-0.5));
-}
+
 
 vec k1(m+2); 
-vec k2(m+2);
-vec k3(m+2);
-vec k4(m+2);
 double t=t0;
 while (t<=tf){
 k1=L*(solution);
-k2=L*(solution+dt/2*k1);
-k3=L*(solution+dt/2*k2);
-k4=L*(solution+dt*k3);
-solution=solution+dt/6*k1;
-solution=solution+dt/3*k2;
-solution=solution+dt/3*k3;
-solution=solution+dt/6*k4;
+solution=solution+dt*k1;
 t=t+dt;
 }
 

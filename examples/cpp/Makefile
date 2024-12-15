@@ -9,7 +9,7 @@ CXXFLAGS = -O3
 endif
 CXXFLAGS +=  -DARMA_DONT_USE_WRAPPER
 
-INCPATH = -I. $(if $(ARMA), -I$(ARMA)/include) -I$(MOLE)
+INCPATH = -I. $(if $(ARMA), -I$(ARMA)/include) -I$(MOLE) -I$(MOLE)/../../src/cpp/
 
 LIBS = -L$(MOLE) -lmole -lopenblas -L/opt/homebrew/opt/openblas/lib
 
@@ -50,4 +50,4 @@ parabolic1D: parabolic1D.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o parabolic1D parabolic1D.cpp $(LIBS)
 
 clean:
-	rm -f transport1D schrodinger1D elliptic1D elliptic2D
+	rm -f transport1D schrodinger1D parabolic1D elliptic1D elliptic2D
