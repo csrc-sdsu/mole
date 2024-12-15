@@ -1,17 +1,20 @@
 MOLE = ../../src/mole_C++
 #ARMA = /Users/aneeshsrinivas/Documents/GitHub/armadillo-14.0.3
-CXX ?= clang++
+#CXX ?= clang++
 
 ifeq ($(DEBUG),1)
 CXXFLAGS = -O0 -g
 else
 CXXFLAGS = -O3
 endif
-CXXFLAGS +=  -DARMA_DONT_USE_WRAPPER
+CXXFLAGS += -fopenmp -DARMA_DONT_USE_WRAPPER
+#CXXFLAGS +=  -DARMA_DONT_USE_WRAPPER #for mac os
 
-INCPATH = -I. $(if $(ARMA), -I$(ARMA)/include) -I$(MOLE) -I$(MOLE)/../../src/cpp/
+INCPATH = -I. $(if $(ARMA), -I$(ARMA)/include) -I$(MOLE) 
+#INCPATH = -I. $(if $(ARMA), -I$(ARMA)/include) -I$(MOLE) -I$(MOLE)/../../src/cpp/ for mac os
 
-LIBS = -L$(MOLE) -lmole -lopenblas -L/opt/homebrew/opt/openblas/lib
+LIBS = -L$(MOLE) -lmole -lopenblas
+#LIBS = -L$(MOLE) -lmole -lopenblas -L/opt/homebrew/opt/openblas/lib for mac os
 
 ifdef ARMA
 LIBS += -L$(ARMA) -Wl,-rpath,$(ARMA) -larmadillo
