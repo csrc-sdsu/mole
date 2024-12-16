@@ -3,7 +3,7 @@
 clc
 close all
 
-addpath('../../src/mole_MATLAB')
+addpath('../../src/matlab')
 
 alpha = 1; % Thermal diffusivity
 west = 0; % Domain's limits
@@ -17,7 +17,6 @@ t = 1; % Simulation time
 dt = dx^2/(3*alpha); % von Neumann stability criterion for explicit scheme, if k > 2 then /(4*alpha)
 
 L = lap(k, m, dx); % 1D Mimetic laplacian operator
-dx^2*L
 % IC
 U = zeros(m+2, 1);
 % BC
