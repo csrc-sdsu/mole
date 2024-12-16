@@ -59,7 +59,6 @@ int main() {
         std::cerr << "Error: Failed to execute GNUplot.\n";
         return 1;
     }
-
     return 0;
 }
 
