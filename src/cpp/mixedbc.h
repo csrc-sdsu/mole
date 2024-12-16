@@ -1,4 +1,4 @@
-/**
+/*
  * SPDX-License-Identifier: GPL-3.0-only
  * 
  * Copyright 2008-2024 San Diego State University Research Foundation (SDSURF).
@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (c) 2024
  *
- */
+ **/
 
 #ifndef MIXEDBC_H
 #define MIXEDBC_H

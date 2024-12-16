@@ -1,4 +1,4 @@
-/** 
+/*
  * SPDX-License-Identifier: GPL-3.0-only
  * 
  * Copyright 2008-2024 San Diego State University Research Foundation (SDSURF).
@@ -12,14 +12,14 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * LICENSE file or on the web GNU General Public License 
  * <https:*www.gnu.org/licenses/> for more details.
- **/
+ */
 
 /**
  * @file operators.h
  * 
  * @brief Sparse operation inline definitions for mimetic class constructions
  * @date 2024/10/15
- */
+ **/
 
 #ifndef OPERATORS_H
 #define OPERATORS_H
