@@ -1,4 +1,4 @@
-MOLE = ../../src/mole_C++
+MOLE = ../../src/cpp
 
 CXX ?= g++
 
