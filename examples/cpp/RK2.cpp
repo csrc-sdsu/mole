@@ -1,3 +1,11 @@
+//  RK2.cpp
+ 
+// Description:
+// This program solves a first-order ordinary differential equation (ODE) of the form:
+//     dy/dt = sin^2(t) * y
+// using the second-order Runge-Kutta (RK2) method. The solution is computed over the 
+// time interval [0, 5] with an initial condition y(0) = 2.0.
+
 #include "mole.h"
 #include <iostream>
 #include <sstream>  // For string streams
