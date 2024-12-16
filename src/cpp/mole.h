@@ -15,14 +15,14 @@
  *
  */
 
-/**
+/*
  * @file mole.h
  * 
  * @brief Mimetic Operator Header File
  * 
  * @date 2024/10/15
  * 
- **/
+ */
 
 #ifndef MOLE_H
 #define MOLE_H

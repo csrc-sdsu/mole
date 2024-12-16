@@ -15,6 +15,15 @@
  * <https:*www.gnu.org/licenses/> for more details.
  *
  */
+
+ /*
+ * @file mixedbc.cpp
+ * 
+ * @brief Mixed Boundary Condition Class functions
+ * 
+ * @date 2024/10/15
+ */
+
 #include "mixedbc.h"
 
 // 1-D Constructor

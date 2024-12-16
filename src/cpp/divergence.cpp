@@ -1,4 +1,4 @@
-/**
+/*
  * 
  * SPDX-License-Identifier: GPL-3.0-only
  * 
@@ -14,7 +14,7 @@
  * LICENSE file or on the web GNU General Public License 
  * <https:*www.gnu.org/licenses/> for more details.
  *
- **/
+ */
 
 /*
  * @file divergence.cpp

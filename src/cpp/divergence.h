@@ -15,7 +15,7 @@
  *
  */
  
- /** 
+ /* 
  * @file divergence.h
  * 
  * @brief Mimetic Divergence Operators
@@ -23,7 +23,7 @@
  * @date 2024/10/15
  * 
  *
- **/
+ */
 
 #ifndef DIVERGENCE_H
 #define DIVERGENCE_H

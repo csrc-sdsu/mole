@@ -15,7 +15,7 @@
  *
  */
  
-/**
+/*
  * @file mixedbc.h
  * @author Johnny Corbino (johnnycorbino@gmail.com)
  * @brief Header file for the Mixed Boundary Condition operator
@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (c) 2024
  *
- **/
+ */
 
 #ifndef MIXEDBC_H
 #define MIXEDBC_H

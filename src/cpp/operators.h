@@ -14,12 +14,12 @@
  * <https:*www.gnu.org/licenses/> for more details.
  */
 
-/**
+/*
  * @file operators.h
  * 
  * @brief Sparse operation inline definitions for mimetic class constructions
  * @date 2024/10/15
- **/
+ */
 
 #ifndef OPERATORS_H
 #define OPERATORS_H

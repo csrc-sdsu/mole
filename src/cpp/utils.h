@@ -15,12 +15,12 @@
  *  
  */
 
-/** 
+/*
  * @file utils.h
  * @brief Helpers for sparse operations and MATLAB analogs
  * @date 2024/10/15
  *
- **/
+ */
 
 #pragma once
 

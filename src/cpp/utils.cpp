@@ -17,7 +17,7 @@
  * 
  */
 
-/** 
+/* 
  * @file utils.cpp
  * @brief Helpers for sparse operations and MATLAB analogs
  * @date 2024/10/15
@@ -25,7 +25,7 @@
  * Sparse operations that repeatedly are needed, but not 
  * necessarily part of the Armadillo library. Some other MATLAB
  * type functions are also here, like meshgrid.
- **/
+ */
 
 #include "utils.h"
 #include <cassert>

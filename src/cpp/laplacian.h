@@ -15,7 +15,7 @@
  *
  */
 
-/**
+/*
  * @file laplacian.h
  * 
  * @brief Mimetic Laplacian Class and Constructors

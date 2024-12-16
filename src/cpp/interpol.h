@@ -15,13 +15,13 @@
  *
  */
  
-/**
+/*
  * @file interpol.h
  * 
  * @brief Mimetic Interpolators
  * 
  * @date 2024/10/15
- **/
+ */
 
  #ifndef INTERPOL_H
 #define INTERPOL_H

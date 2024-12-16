@@ -15,7 +15,7 @@
  *
  */
 
-/**
+/*
  * @file laplacian.cpp
  * 
  * @brief Mimetic Laplacian Constructors

@@ -14,12 +14,12 @@
  * <https:*www.gnu.org/licenses/> for more details.
  */
  
-/**
+/*
  * @file robinbc.cpp
  * @date 2024/10/15
  * @brief Robin Boundary Condition Class
  * 
- **/
+ */
 
 #ifndef ROBINBC_H
 #define ROBINBC_H
