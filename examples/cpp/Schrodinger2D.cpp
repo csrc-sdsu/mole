@@ -1,3 +1,7 @@
+/**
+ * This example uses MOLE to solve the 2D Schrodinger equation
+ * This aligns with matlab example.
+ */
 #include "mole.h"
 #include <iostream>
 #include <cmath>
