@@ -1,16 +1,9 @@
-/**
- * @file utils.cpp
- * @brief Helpers for sparse operations and MATLAB analogs
- * @date 2024/10/15
- * 
- * Sparse operations that repeatedly are needed, but not 
- * necessarily part of the Armadillo library. Some other MATLAB
- * type functions are also here, like meshgrid.
+/*
  * 
  * 
  * SPDX-License-Identifier: GPL-3.0-only
  * 
- * Copyright 2008-2024 San Diego State University (SDSU) and Contributors 
+ * Copyright 2008-2024 San Diego State University Research Foundation (SDSURF).
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +16,16 @@
  * <https:*www.gnu.org/licenses/> for more details.
  * 
  */
+
+/** 
+ * @file utils.cpp
+ * @brief Helpers for sparse operations and MATLAB analogs
+ * @date 2024/10/15
+ * 
+ * Sparse operations that repeatedly are needed, but not 
+ * necessarily part of the Armadillo library. Some other MATLAB
+ * type functions are also here, like meshgrid.
+ **/
 
 #include "utils.h"
 #include <cassert>

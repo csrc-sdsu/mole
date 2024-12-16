@@ -1,14 +1,7 @@
 /**
- * @file laplacian.h
- * 
- * @brief Mimetic Laplacian Class and Constructors
- * 
- * @date 2024/10/15
- * 
- * 
  * SPDX-License-Identifier: GPL-3.0-only
  * 
- * Copyright 2008-2024 San Diego State University (SDSU) and Contributors 
+ * Copyright 2008-2024 San Diego State University Research Foundation (SDSURF).
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +12,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * LICENSE file or on the web GNU General Public License 
  * <https:*www.gnu.org/licenses/> for more details.
+ *
+ */
+
+/**
+ * @file laplacian.h
  * 
+ * @brief Mimetic Laplacian Class and Constructors
+ * 
+ * @date 2024/10/15
  */
 
 #ifndef LAPLACIAN_H

@@ -1,16 +1,7 @@
 /**
- * @file mixedbc.h
- * @author Johnny Corbino (johnnycorbino@gmail.com)
- * @brief Header file for the Mixed Boundary Condition operator
- * @version 0.1
- * @date 2024-08-03
- *
- * @copyright Copyright (c) 2024
- *
- * 
  * SPDX-License-Identifier: GPL-3.0-only
  * 
- * Copyright 2008-2024 San Diego State University (SDSU) and Contributors 
+ * Copyright 2008-2024 San Diego State University Research Foundation (SDSURF).
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +12,18 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * LICENSE file or on the web GNU General Public License 
  * <https:*www.gnu.org/licenses/> for more details.
- * 
+ *
+ */
+ 
+/**
+ * @file mixedbc.h
+ * @author Johnny Corbino (johnnycorbino@gmail.com)
+ * @brief Header file for the Mixed Boundary Condition operator
+ * @version 0.1
+ * @date 2024-08-03
+ *
+ * @copyright Copyright (c) 2024
+ *
  */
 
 #ifndef MIXEDBC_H
