@@ -1,6 +1,7 @@
 MOLE = ../../src/mole_C++
+CXX ?= g++
 #ARMA = /Users/aneeshsrinivas/Documents/GitHub/armadillo-14.0.3
-#CXX ?= clang++
+#CXX ?= clang++ #for mac os
 
 ifeq ($(DEBUG),1)
 CXXFLAGS = -O0 -g
@@ -29,9 +30,11 @@ CXXFLAGS += -DEIGEN
 INCPATH += -I$(EIGEN)
 else
 ifdef SUPERLU
-LIBS += -L$(SUPERLU)/lib -Wl,-rpath,$(SUPERLU)/lib -lsuperlu -L/opt/homebrew/Cellar/superlu/7.0.0/lib
+LIBS += -L$(SUPERLU)/lib -Wl,-rpath,$(SUPERLU)/lib -lsuperlu
+#LIBS += -L$(SUPERLU)/lib -Wl,-rpath,$(SUPERLU)/lib -lsuperlu -L/opt/homebrew/Cellar/superlu/7.0.0/lib #for mac os
 else
-LIBS += -lsuperlu -L/opt/homebrew/Cellar/superlu/7.0.0/lib
+LIBS += -lsuperlu
+#LIBS += -lsuperlu -L/opt/homebrew/Cellar/superlu/7.0.0/lib #for mac os
 endif
 endif
 
