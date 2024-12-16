@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of GI2</title>
+  <meta name="keywords" content="GI2">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html mole_MATLAB -->
+<h1>GI2
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function I = GI2(M, m, n, type) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="grad2DCurv.html" class="code" title="function G = grad2DCurv(k, X, Y)">grad2DCurv</a>	Get the determinant of the jacobian and the metrics</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function I = GI2(M, m, n, type)</a>
+0002     <span class="keyword">if</span> strcmp(type, <span class="string">'Gn'</span>)
+0003         I = zeros(4*n*(m-1)+12*n, 1);
+0004         J = I;
+0005         V = J;
+0006         k = 1;
+0007         kt = 4*(m-1)-1;
+0008         
+0009         <span class="keyword">for</span> idx = 0 : n-1
+0010             i = idx*(m+1);
+0011             j = idx*m;
+0012             
+0013             I(k:k+kt, 1) = [i+2:i+m   i+2:i+m i+2:i+m i+2:i+m];
+0014             J(k:k+kt, 1) = [j+1:j+m-1 j+2:j+m j+m+1:j+2*m-1 j+m+2:j+2*m];
+0015             V(k:k+kt, 1) = .25;
+0016             
+0017             k = k+kt+1;
+0018         <span class="keyword">end</span>
+0019         
+0020         <span class="keyword">for</span> idx = 0 : n-1
+0021             i = idx*(m+1);
+0022             j = idx*m;
+0023             
+0024             I(k:k+5, 1) = [i+1 i+1 i+1 i+1 i+1 i+1];
+0025             J(k:k+5, 1) = [j+1 j+2 j+3 j+m+1 j+m+2 j+m+3];
+0026             V(k:k+5, 1) = [.5 .25 -.25 .5 .25 -.25];
+0027             k = k+6;
+0028             
+0029             I(k:k+5, 1) = [i+m+1 i+m+1 i+m+1 i+m+1 i+m+1 i+m+1];
+0030             J(k:k+5, 1) = [j+m-2 j+m-1 j+m j+2*m-2 j+2*m-1 j+2*m];
+0031             V(k:k+5, 1) = [-.25 .25 .5 -.25 .25 .5];
+0032             k = k+6;
+0033         <span class="keyword">end</span>
+0034         
+0035         I = sparse(I, J, V)*M;
+0036     <span class="keyword">else</span>
+0037         I = zeros(4*m*(n-1)+12*m, 1);
+0038         J = I;
+0039         V = J;
+0040         k = 1;
+0041         kt = 4*m;
+0042         
+0043         jt = 1;
+0044         it = m;
+0045         
+0046         <span class="keyword">for</span> idx = 0 : n-2
+0047             ib = it+1;
+0048             it = ib+m-1;
+0049             jb = jt;
+0050             jt = jb+m+1;
+0051             
+0052             I(k:kt) = [ib:it ib:it ib:it ib:it];
+0053             J(k:kt) = [jb:jt-2 jb+1:jt-1 jt:jt+m-1 jt+1:jt+m];
+0054             V(k:kt) = .25;
+0055             
+0056             k = kt+1;
+0057             kt = kt+4*m;
+0058         <span class="keyword">end</span>
+0059         
+0060         ib = 1;
+0061         it = m;
+0062         kt = k+6*m-1;
+0063         jb = 1;
+0064         jm = m+2;
+0065         jt = 2*m+3;
+0066         
+0067         E = ones(m, 1);
+0068         
+0069         I(k:kt) = [ib:it ib:it ib:it ib:it ib:it ib:it];
+0070         J(k:kt) = [jb:jm-2 jb+1:jm-1 jm:jt-2 jm+1:jt-1 jt:jt+m-1 jt+1:jt+m];
+0071         V(k:kt) = [.5*E .5*E .25*E .25*E -.25*E -.25*E];
+0072         
+0073         ib = n*m+1;
+0074         it = ib+m-1;
+0075         jb = (n-3) * (m+1)+1;
+0076         jm = jb+m+1;
+0077         jt = jm+m+1;
+0078         k = kt+1;
+0079         kt = k+6*m-1;
+0080         
+0081         I(k:kt) = [ib:it ib:it ib:it ib:it ib:it ib:it];
+0082         J(k:kt) = [jb:jm-2 jb+1:jm-1 jm:jt-2 jm+1:jt-1 jt:jt+m-1 jt+1:jt+m];
+0083         V(k:kt) = [-.25*E -.25*E .25*E .25*E .5*E .5*E];
+0084         
+0085         I = sparse(I, J, V)*M;
+0086     <span class="keyword">end</span>
+0087 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 27-Jan-2021 14:29:32 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

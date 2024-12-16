@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of interpolD3D</title>
+  <meta name="keywords" content="interpolD3D">
+  <meta name="description" content="Returns a three-dimensional interpolator of 2nd-order">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html mole_MATLAB -->
+<h1>interpolD3D
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Returns a three-dimensional interpolator of 2nd-order</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function I = interpolD3D(m, n, o, c1, c2, c3) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Returns a three-dimensional interpolator of 2nd-order
+                m : Number of cells along x-axis
+                n : Number of cells along y-axis
+                o : Number of cells along z-axis
+               c1 : Left interpolation coeff.
+               c2 : Bottom interpolation coeff.
+               c3 : Front interpolation coeff.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="interpolD.html" class="code" title="function I = interpolD(m, c)">interpolD</a>	Returns a m+2 by m+1 one-dimensional interpolator of 2nd-order</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function I = interpolD3D(m, n, o, c1, c2, c3)</a>
+0002 <span class="comment">% Returns a three-dimensional interpolator of 2nd-order</span>
+0003 <span class="comment">%                m : Number of cells along x-axis</span>
+0004 <span class="comment">%                n : Number of cells along y-axis</span>
+0005 <span class="comment">%                o : Number of cells along z-axis</span>
+0006 <span class="comment">%               c1 : Left interpolation coeff.</span>
+0007 <span class="comment">%               c2 : Bottom interpolation coeff.</span>
+0008 <span class="comment">%               c3 : Front interpolation coeff.</span>
+0009 
+0010     Im = sparse(m + 2, m);
+0011     Im(2:(m + 2) - 1, :) = speye(m, m);
+0012     
+0013     Ix = <a href="interpolD.html" class="code" title="function I = interpolD(m, c)">interpolD</a>(m, c1);
+0014     
+0015     In = sparse(n + 2, n);
+0016     In(2:(n + 2) - 1, :) = speye(n, n);
+0017     
+0018     Iy = <a href="interpolD.html" class="code" title="function I = interpolD(m, c)">interpolD</a>(n, c2);
+0019     
+0020     Io = sparse(o + 2, o);
+0021     Io(2:(o + 2) - 1, :) = speye(o, o);
+0022     
+0023     Iz = <a href="interpolD.html" class="code" title="function I = interpolD(m, c)">interpolD</a>(o, c3);
+0024     
+0025     Sx = kron(kron(Io, In), Ix);
+0026     Sy = kron(kron(Io, Iy), Im);
+0027     Sz = kron(kron(Iz, In), Im);
+0028     
+0029     I = [Sx Sy Sz];
+0030 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 27-Jan-2021 14:29:32 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of nodal3D</title>
+  <meta name="keywords" content="nodal3D">
+  <meta name="description" content="Returns a three-dimensional operator that approximates the first-order">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html mole_MATLAB -->
+<h1>nodal3D
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Returns a three-dimensional operator that approximates the first-order</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function N = nodal3D(k, m, dx, n, dy, o, dz) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Returns a three-dimensional operator that approximates the first-order 
+ derivatives on a uniform nodal grid
+
+ Parameters:
+                k : Order of accuracy
+                m : Number of nodes along x-axis
+               dx : Step size along x-axis
+                n : Number of nodes along y-axis
+               dy : Step size along y-axis
+                o : Number of nodes along z-axis
+               dz : Step size along z-axis</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="nodal.html" class="code" title="function N = nodal(k, m, dx)">nodal</a>	Returns a m+1 by m+1 one-dimensional operator that approximates the</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="jacobian3D.html" class="code" title="function [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3D(k, X, Y, Z)">jacobian3D</a>	Returns:</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function N = nodal3D(k, m, dx, n, dy, o, dz)</a>
+0002 <span class="comment">% Returns a three-dimensional operator that approximates the first-order</span>
+0003 <span class="comment">% derivatives on a uniform nodal grid</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Parameters:</span>
+0006 <span class="comment">%                k : Order of accuracy</span>
+0007 <span class="comment">%                m : Number of nodes along x-axis</span>
+0008 <span class="comment">%               dx : Step size along x-axis</span>
+0009 <span class="comment">%                n : Number of nodes along y-axis</span>
+0010 <span class="comment">%               dy : Step size along y-axis</span>
+0011 <span class="comment">%                o : Number of nodes along z-axis</span>
+0012 <span class="comment">%               dz : Step size along z-axis</span>
+0013     
+0014     Nx = <a href="nodal.html" class="code" title="function N = nodal(k, m, dx)">nodal</a>(k, m, dx);
+0015     Ny = <a href="nodal.html" class="code" title="function N = nodal(k, m, dx)">nodal</a>(k, n, dy);
+0016     Nz = <a href="nodal.html" class="code" title="function N = nodal(k, m, dx)">nodal</a>(k, o, dz);
+0017     
+0018     Im = speye(m, m);
+0019     In = speye(n, n);
+0020     Io = speye(o, o);
+0021     
+0022     Sx = kron(kron(Io, In), Nx);
+0023     Sy = kron(kron(Io, Ny), Im);
+0024     Sz = kron(kron(Nz, In), Im);
+0025     
+0026     N = [Sx; Sy; Sz];
+0027 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 27-Jan-2021 14:29:32 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

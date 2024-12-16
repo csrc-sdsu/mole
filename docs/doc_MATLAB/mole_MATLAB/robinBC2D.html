@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of robinBC2D</title>
+  <meta name="keywords" content="robinBC2D">
+  <meta name="description" content="Returns a two-dimensional mimetic boundary operator that">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html mole_MATLAB -->
+<h1>robinBC2D
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Returns a two-dimensional mimetic boundary operator that</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function BC = robinBC2D(k, m, dx, n, dy, a, b) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Returns a two-dimensional mimetic boundary operator that 
+ imposes a boundary condition of Robin's type
+
+ Parameters:
+                k : Order of accuracy
+                m : Number of cells along x-axis
+               dx : Step size along x-axis
+                n : Number of cells along y-axis
+               dy : Step size along y-axis
+                a : Dirichlet Coefficient
+                b : Neumann Coefficient</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="robinBC.html" class="code" title="function BC = robinBC(k, m, dx, a, b)">robinBC</a>	Returns a m+2 by m+2 one-dimensional mimetic boundary operator that</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function BC = robinBC2D(k, m, dx, n, dy, a, b)</a>
+0002 <span class="comment">% Returns a two-dimensional mimetic boundary operator that</span>
+0003 <span class="comment">% imposes a boundary condition of Robin's type</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Parameters:</span>
+0006 <span class="comment">%                k : Order of accuracy</span>
+0007 <span class="comment">%                m : Number of cells along x-axis</span>
+0008 <span class="comment">%               dx : Step size along x-axis</span>
+0009 <span class="comment">%                n : Number of cells along y-axis</span>
+0010 <span class="comment">%               dy : Step size along y-axis</span>
+0011 <span class="comment">%                a : Dirichlet Coefficient</span>
+0012 <span class="comment">%                b : Neumann Coefficient</span>
+0013 
+0014     <span class="comment">% 1-D boundary operator</span>
+0015     Bm = <a href="robinBC.html" class="code" title="function BC = robinBC(k, m, dx, a, b)">robinBC</a>(k, m, dx, a, b);
+0016     Bn = <a href="robinBC.html" class="code" title="function BC = robinBC(k, m, dx, a, b)">robinBC</a>(k, n, dy, a, b);
+0017     
+0018     Im = speye(m+2);
+0019     
+0020     In = speye(n+2);
+0021     In(1, 1) = 0;
+0022     In(<span class="keyword">end</span>, end) = 0;
+0023     
+0024     BC1 = kron(In, Bm);
+0025     BC2 = kron(Bn, Im);
+0026     
+0027     BC = BC1 + BC2;
+0028 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 27-Jan-2021 14:29:32 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

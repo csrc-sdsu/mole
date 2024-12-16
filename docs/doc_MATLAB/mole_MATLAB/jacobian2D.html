@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of jacobian2D</title>
+  <meta name="keywords" content="jacobian2D">
+  <meta name="description" content="Returns:">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html mole_MATLAB -->
+<h1>jacobian2D
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Returns:</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Returns:
+                J : Determinant of the Jacobian (XeYn - XnYe)
+               Xe : dx/de metric
+               Xn : dx/dn metric
+               Ye : dy/de metric
+               Yn : dy/dn metric
+
+ Parameters:
+                k : Order of accuracy
+                X : x-coordinates (physical) of meshgrid
+                Y : y-coordinates (physical) of meshgrid</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="nodal2D.html" class="code" title="function N = nodal2D(k, m, dx, n, dy)">nodal2D</a>	Returns a two-dimensional operator that approximates the first-order</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="div2DCurv.html" class="code" title="function D = div2DCurv(k, X, Y)">div2DCurv</a>	Get the determinant of the jacobian and the metrics</li><li><a href="grad2DCurv.html" class="code" title="function G = grad2DCurv(k, X, Y)">grad2DCurv</a>	Get the determinant of the jacobian and the metrics</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y)</a>
+0002 <span class="comment">% Returns:</span>
+0003 <span class="comment">%                J : Determinant of the Jacobian (XeYn - XnYe)</span>
+0004 <span class="comment">%               Xe : dx/de metric</span>
+0005 <span class="comment">%               Xn : dx/dn metric</span>
+0006 <span class="comment">%               Ye : dy/de metric</span>
+0007 <span class="comment">%               Yn : dy/dn metric</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Parameters:</span>
+0010 <span class="comment">%                k : Order of accuracy</span>
+0011 <span class="comment">%                X : x-coordinates (physical) of meshgrid</span>
+0012 <span class="comment">%                Y : y-coordinates (physical) of meshgrid</span>
+0013     
+0014     [n, m] = size(X);
+0015     
+0016     X = reshape(X', [], 1);
+0017     Y = reshape(Y', [], 1);
+0018     
+0019     N = <a href="nodal2D.html" class="code" title="function N = nodal2D(k, m, dx, n, dy)">nodal2D</a>(k, m, 1, n, 1);
+0020     
+0021     X = N*X;
+0022     Y = N*Y;
+0023     
+0024     mn = m*n;
+0025     
+0026     Xe = X(1:mn);
+0027     Xn = X(mn+1:end);
+0028     Ye = Y(1:mn);
+0029     Yn = Y(mn+1:end);
+0030     
+0031     J = Xe.*Yn-Xn.*Ye;
+0032 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 27-Jan-2021 14:29:32 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
