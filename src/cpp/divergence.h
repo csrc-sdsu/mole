@@ -15,7 +15,7 @@
  *
  */
  
- /* 
+ /*
  * @file divergence.h
  * 
  * @brief Mimetic Divergence Operators
