@@ -1,6 +1,6 @@
 MOLE = ../../src/cpp
 
-#ARMA = /Users/aneeshsrinivas/Documents/GitHub/armadillo-14.0.3
+ARMA = /home/johnny/armadillo-10.2.1
 CXX ?= g++ 
 
 ifeq ($(DEBUG),1)
