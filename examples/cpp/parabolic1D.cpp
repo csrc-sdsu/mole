@@ -26,11 +26,10 @@ int main() {
     vec k1(m+2); 
     double t=t0;
     while (t <= tf) { //time integration with euler method. 
-      k1=L*(solution);
-      solution=solution+dt*k1;
-      t=t+dt;
+        k1=L*(solution);
+        solution=solution+dt*k1;
+        t=t+dt;
     }
-
     std::cout << solution;
 
 
