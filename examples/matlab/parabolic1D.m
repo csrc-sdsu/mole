@@ -3,7 +3,7 @@
 clc
 close all
 
-addpath('../../src/matlab')
+addpath('../../src/mole_MATLAB')
 
 alpha = 1; % Thermal diffusivity
 west = 0; % Domain's limits
@@ -49,9 +49,13 @@ if explicit
 else
     tic
     % Implicit
-    L = -alpha*dt*L + speye(size(L));
-    
-    % Time integration loop
+    L = -alpha*dt*L + speye(size(L)); 
+    dL=decomposition(L)
+    %This line precomputes the LU decomposition of L and stores it as a
+    %decomposition object. Because it's being stored as a decomposition
+    %object. Matlab knows not to bother with LU factorizing L every time we
+    %run \, which means that solving the system is sped up. 
+    %
     for i = 0 : t/dt+1
         plot(grid, U, 'o-')
         axis([0 1 0 105])
@@ -60,9 +64,7 @@ else
         xlabel('x')
         ylabel('T')
         pause(0.01)
-        U = L\U; % Solve a linear system of equations (unconditionally stable)
-        % Next time better do: dL = decomposition(L) 
-        % outside the loop, and use dL instead of L to solve the linear system more efficiently.
+        U = dL\U; 
     end
     toc
 end
