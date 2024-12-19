@@ -1,4 +1,4 @@
-MOLE = ../../src/mole_C++
+MOLE = ../../src/cpp
 
 #ARMA = /Users/aneeshsrinivas/Documents/GitHub/armadillo-14.0.3
 #if you are running on MACOS, uncomment all of the lines which have a # for mac os. 
