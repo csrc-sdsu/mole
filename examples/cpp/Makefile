@@ -1,23 +1,18 @@
 MOLE = ../../src/cpp
 
 #ARMA = /Users/aneeshsrinivas/Documents/GitHub/armadillo-14.0.3
-#if you are running on MACOS, uncomment all of the lines which have a # for mac os. 
-#CXX ?= clang++ #for mac os
-CXX ?= g++ #for non mac users.
+CXX ?= g++ 
 
 ifeq ($(DEBUG),1)
 CXXFLAGS = -O0 -g
 else
 CXXFLAGS = -O3
 endif
-CXXFLAGS += -fopenmp -DARMA_DONT_USE_WRAPPER #for non mac users.
-#CXXFLAGS +=  -DARMA_DONT_USE_WRAPPER #for mac os
+CXXFLAGS += -fopenmp -DARMA_DONT_USE_WRAPPER 
 
-INCPATH = -I. $(if $(ARMA), -I$(ARMA)/include) -I$(MOLE) #for non mac users.
-#INCPATH = -I. $(if $(ARMA), -I$(ARMA)/include) -I$(MOLE) -I$(MOLE)/../../src/cpp/ #for mac os
+INCPATH = -I. $(if $(ARMA), -I$(ARMA)/include) -I$(MOLE) 
 
-LIBS = -L$(MOLE) -lmole -lopenblas #for non mac users.
-#LIBS = -L$(MOLE) -lmole -lopenblas -L/opt/homebrew/opt/openblas/lib #for mac os
+LIBS = -L$(MOLE) -lmole -lopenblas 
 
 ifdef ARMA
 LIBS += -L$(ARMA) -Wl,-rpath,$(ARMA) -larmadillo
@@ -32,11 +27,9 @@ CXXFLAGS += -DEIGEN
 INCPATH += -I$(EIGEN)
 else
 ifdef SUPERLU
-LIBS += -L$(SUPERLU)/lib -Wl,-rpath,$(SUPERLU)/lib -lsuperlu #for non mac users.
-#LIBS += -L$(SUPERLU)/lib -Wl,-rpath,$(SUPERLU)/lib -lsuperlu -L/opt/homebrew/Cellar/superlu/7.0.0/lib #for mac os
+LIBS += -L$(SUPERLU)/lib -Wl,-rpath,$(SUPERLU)/lib -lsuperlu 
 else
-LIBS += -lsuperlu #for non mac users.
-#LIBS += -lsuperlu -L/opt/homebrew/Cellar/superlu/7.0.0/lib #for mac os
+LIBS += -lsuperlu 
 endif
 endif
 
