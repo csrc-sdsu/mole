@@ -1,10 +1,9 @@
 MOLE = ../../src/cpp
 
-<<<<<<< HEAD
-ARMA = /home/johnny/armadillo-10.2.1
-=======
-#ARMA = /Users/aneeshsrinivas/Documents/GitHub/armadillo-14.0.3
->>>>>>> b6a9a21 (removed all the macos comments)
+ifndef ARMA
+	ARMA = /home/johnny/armadillo-10.2.1
+endif
+
 CXX ?= g++ 
 
 ifeq ($(DEBUG),1)
