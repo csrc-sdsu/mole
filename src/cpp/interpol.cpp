@@ -24,8 +24,6 @@
  * 
  */
 
- 
-
 #include "interpol.h"
 
 // 1-D Constructor
