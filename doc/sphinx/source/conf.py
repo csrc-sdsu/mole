@@ -13,16 +13,34 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
     'sphinx.ext.todo',
-    'sphinx.ext.viewcode'
+    'sphinx.ext.viewcode',
+    'sphinx.ext.doctest',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.coverage',
+    'sphinx.ext.mathjax',
+    'sphinx.ext.ifconfig',
+    'sphinx.ext.githubpages',
+    'breathe',
 ]
 
 templates_path = ['_templates']
 exclude_patterns = []
 
+# -- Options for HTML output -------------------------------------------------
 
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'sphinx_book_theme'
+
+html_theme_options = {
+    "repository_url": "https://github.com/csrc-sdsu/mole",
+    "use_repository_button": True,
+    "use_issues_button": True,
+    "use_edit_page_button": True,
+    "path_to_docs": "doc/sphinx/source",
+}
+
 html_static_path = ['_static']
 
+html_logo = "../../../logo.png"
 
 # Breathe configuration
 breathe_projects = {
@@ -31,5 +49,4 @@ breathe_projects = {
 }
 breathe_default_project = "MoleCpp"
 
-html_static_path = ['_static']
 html_output_dir = '../sphinx/build'
