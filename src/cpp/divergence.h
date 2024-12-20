@@ -22,7 +22,6 @@
  * 
  * @date 2024/10/15
  * 
- *
  */
 
 #ifndef DIVERGENCE_H
