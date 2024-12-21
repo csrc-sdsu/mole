@@ -1,0 +1,215 @@
+﻿3. Packages Required        2
+3.1 General Packages        2
+3.2 Linux        2
+3.2.1 Armadillo C++        2
+3.2.2  SuperLU        3
+3.2.3 OpenBLAS        3
+3.2.4 Eigen3        3
+3.3 MacOS        4
+3.3.1 Armadillo C++        4
+3.3.2 SuperLU        4
+3.3.3 libomp        5
+3.3.4 lapack        5
+4. Mole Library Installation        5
+4.1 Installation on Linux        5
+________________
+3. Packages Required 
+
+
+To have a MOLE library installed in the system there are some packages which are to be installed and set before setting up MOLE. The packages may vary based on the OS. 
+3.1 General Packages
+        3.1.1 cmake
+        3.2.2 gcc g++
+3.2 Linux
+3.2.1 Armadillo C++ 
+
+
+3.2.2 SuperLU 
+
+
+3.2.3 OpenBLAS 
+
+
+3.2.4 Eigen3 
+
+
+
+
+3.2.1 Armadillo C++
+
+
+The minimum version required for armadillo is armadillo-9.800.4
+
+
+Armadillo can be installed in the terminal either by using
+
+
+In built library
+sudo apt install libarmadillo-dev
+
+
+(Or)
+
+
+Manual installation
+                wget https://sourceforge.net/projects/arma/files/armadillo-12.6.6.tar.xz
+tar xvf armadillo-12.6.6.tar.xz
+cd armadillo-12.6.6
+./configure
+make
+
+
+
+
+3.2.2  SuperLU
+
+
+The minimum version required for superLU is SuperLU 5.2.1
+
+
+SuperLU can be installed in the terminal either by using
+In built library
+sudo apt install libsuperlu-dev
+(or)
+sudo yum install SuperLu-devel
+
+
+(or)
+
+
+Manual installation
+                wget https://github.com/xiaoyeli/superlu.git
+cd superlu
+mkdir build ; cd build
+cmake
+make 
+make install (To install the Library)
+make test(optional to run the regression tests)
+
+
+3.2.3 OpenBLAS
+The minimum version required for OpenBlas is armadillo-9.800.4
+
+
+OpenBlas can be installed in the terminal by using
+
+
+In built library
+sudo apt install libopenblas-dev
+(or)
+sudo yum install openblas-devel
+
+
+
+
+
+
+3.2.4 Eigen3
+The minimum version required for eigen is eigen-3
+
+
+Eigen can be installed in the terminal by using
+
+
+In built library
+sudo apt install eigen3-dev
+(or)
+sudo yum install eigen3-devel
+3.3 MacOS
+3.3.1 Armadillo C++ 
+
+
+3.3.2 SuperLU 
+
+
+3.3.3 libomp 
+
+
+3.3.4 lapack 
+
+
+3.3.1 Armadillo C++
+
+
+The minimum version required for armadillo is armadillo-9.800.4
+
+
+Armadillo can be installed in the terminal either by using
+
+
+In built library
+brew install armadillo
+
+
+(or)
+
+
+Manual installation
+                wget https://sourceforge.net/projects/arma/files/armadillo-12.6.6.tar.xz
+tar xvf armadillo-12.6.6.tar.xz
+cd armadillo-12.6.6
+./configure
+make
+3.3.2 SuperLU
+
+
+The minimum version required for superLU is SuperLU 5.2.1
+
+
+SuperLU can be installed in the terminal either by using
+In built library
+brew install superlu
+
+
+
+
+(or)
+
+
+Manual installation
+                wget https://github.com/xiaoyeli/superlu.git
+cd superlu
+mkdir build ; cd build
+cmake
+make 
+make install (To install the Library)
+make test(optional to run the regression tests)
+3.3.3 libomp
+
+
+The minimum version required for libomp is 
+
+
+libomp can be installed in the terminal by using
+
+
+In built library
+brew install libomp
+
+
+        
+3.3.4 lapack
+
+
+The minimum version required for lapack is 
+
+
+lapack can be installed in the terminal by using
+
+
+In built library
+brew install lapack
+
+
+
+
+
+
+4. Mole Library Installation
+4.1 Installation on Linux
+                wget https://github.com/csrc-sdsu/mole.git
+cd mole/src/cpp
+mkdir build ; cd build
+cmake ..
+make 
+make install (To install the Library)
