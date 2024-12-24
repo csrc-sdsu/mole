@@ -36,7 +36,10 @@ endif
 
 all: transport1D schrodinger1D elliptic1D elliptic2D parabolic1D convection_diffusion RK2
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 
 transport1D: transport1D.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o transport1D transport1D.cpp $(LIBS)
@@ -60,7 +63,10 @@ RK2: RK2.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o RK2 RK2.cpp $(LIBS)
 
 clean:
+<<<<<<< HEAD
 	rm -f transport1D schrodinger1D parabolic1D elliptic1D elliptic2D convection_diffusion RK2 
 
 clean:
+=======
+>>>>>>> upstream/master
 	rm -f transport1D schrodinger1D parabolic1D elliptic1D elliptic2D convection_diffusion RK2
