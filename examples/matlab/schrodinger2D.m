@@ -4,6 +4,10 @@ close all
 
 addpath('../../src/matlab')
 
+files = dir('C:\Users\surin\Downloads\mole\examples\cpp\output_*.txt'); % List all CSV files matching pattern
+
+gifFile = 'C:\Users\surin\Downloads\mole\examples\cpp\Schrodinger_Compare.gif';
+
 % Parameters
 Lxy = 1;              % Length of box in x and y
 k = 2;                % Order of accuracy
@@ -42,6 +46,9 @@ psi_old = A*sin(kx(nx)*X).*sin(ky(ny)*Y);
 psi_old = psi_old(:);
 v_old = zeros(2*m*n+m+n, 1);
 
+fig = figure();
+exportgraphics(fig, gifFile);
+
 for i = 0:105
     % Position Verlet algorithm
     psi_old = psi_old + I2*v_old;
@@ -50,14 +57,30 @@ for i = 0:105
     Psi_re = reshape(psi_new, m+2, n+2);
     
     % Plotting
+    tiledlayout (1,2);
+    nexttile
     surf(X, Y, reshape(psi_new, m+2, n+2))
     xlabel('x')
     ylabel('y')
     zlabel('\psi')
     zlim([-A A]);
     title(['n_x = ',num2str(nx),', n_y = ',num2str(ny),', t = ',num2str(i)]);
-    drawnow
     
+    % Plot the cpp example
+    nexttile
+    fileName = files(i+1).name;
+    dataTable = readmatrix(strcat('C:\Users\surin\Downloads\mole\examples\cpp\', fileName) ); % Read each file
+    surf(dataTable);
+    xlabel('x')
+    ylabel('y')
+    zlabel('\psi')
+    zlim([-A A]);
+    title(['Data from file: ', fileName, ', iteration ', num2str(i) ], Interpreter="none");
+    drawnow
+    exportgraphics(fig, gifFile, Append=true);
+
+
+   
     % Updating
     psi_old = psi_new;
     v_old = v_new;
