@@ -1,6 +1,9 @@
 MOLE = ../../src/cpp
 
-ARMA = /home/johnny/armadillo-10.2.1
+ifndef ARMA
+	ARMA = /home/johnny/armadillo-10.2.1
+endif
+
 CXX ?= g++ 
 
 ifeq ($(DEBUG),1)

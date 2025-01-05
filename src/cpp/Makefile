@@ -16,7 +16,7 @@
  
 ifndef ARMA
 # Put here the path to Armadillo
-ARMA = /home/johnny/armadillo-10.2.1
+	ARMA = /home/johnny/armadillo-10.2.1
 endif
 
 ifndef EIGEN
