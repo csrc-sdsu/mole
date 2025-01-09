@@ -1,0 +1,12 @@
+prefix=/Users/janani/mole/build/third_party_install/superlu-5.3.0
+libdir=/Users/janani/mole/build/third_party_install/superlu-5.3.0/lib
+includedir=/Users/janani/mole/build/third_party_install/superlu-5.3.0/include
+
+Name: SuperLU
+Description: Direct solution of large, sparse systems of linear equations
+Version: 5.3.0
+URL: http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
+
+Libs: -L${libdir} -lsuperlu
+Libs.private: blas -lm
+Cflags: -I${includedir}
