@@ -1,0 +1,2 @@
+/Library/Developer/CommandLineTools/usr/bin/ar qc libmole_C++.a CMakeFiles/mole_C++.dir/utils.cpp.o CMakeFiles/mole_C++.dir/divergence.cpp.o CMakeFiles/mole_C++.dir/gradient.cpp.o CMakeFiles/mole_C++.dir/laplacian.cpp.o CMakeFiles/mole_C++.dir/interpol.cpp.o CMakeFiles/mole_C++.dir/mixedbc.cpp.o CMakeFiles/mole_C++.dir/robinbc.cpp.o
+/Library/Developer/CommandLineTools/usr/bin/ranlib libmole_C++.a
