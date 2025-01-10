@@ -32,15 +32,16 @@ set(SUPERLU_BUILD_DIR "${SUPERLU_SRC_DIR}/build")
 set(SUPERLU_INSTALL_DIR "${INSTALL_DIR}/superlu-${SUPERLU_VERSION}")
 
 file(DOWNLOAD ${SUPERLU_TARBALL_URL} ${BUILD_DIR}/superlu-${SUPERLU_VERSION}.tar.gz)
-execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf superlu-${SUPERLU_VERSION}.tar.gz
-    WORKING_DIRECTORY ${BUILD_DIR})
+execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf superlu-${SUPERLU_VERSION}.tar.gz WORKING_DIRECTORY ${BUILD_DIR})
 execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${SUPERLU_BUILD_DIR})
-execute_process(COMMAND cmake .. -DCMAKE_INSTALL_PREFIX=${SUPERLU_INSTALL_DIR}
+execute_process(COMMAND ${CMAKE_COMMAND} ..
+    -DCMAKE_INSTALL_PREFIX=${SUPERLU_INSTALL_DIR}
+    -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    -DCMAKE_C_FLAGS="-fPIC"
+    -DCMAKE_CXX_FLAGS="-fPIC"
     WORKING_DIRECTORY ${SUPERLU_BUILD_DIR})
 execute_process(COMMAND make -j4 WORKING_DIRECTORY ${SUPERLU_BUILD_DIR})
 execute_process(COMMAND make install WORKING_DIRECTORY ${SUPERLU_BUILD_DIR})
-
-execute_process(COMMAND sudo ${CMAKE_COMMAND} -E copy ${SUPERLU_INSTALL_DIR}/lib/libsuperlu.a /usr/local/lib)
 
 # Armadillo configuration
 set(ARMADILLO_TARBALL_URL "https://sourceforge.net/projects/arma/files/armadillo-${ARMADILLO_VERSION}.tar.xz")
@@ -48,12 +49,12 @@ set(ARMADILLO_BUILD_DIR "${BUILD_DIR}/armadillo-${ARMADILLO_VERSION}")
 set(ARMADILLO_INSTALL_DIR "${INSTALL_DIR}/armadillo-${ARMADILLO_VERSION}")
 
 file(DOWNLOAD ${ARMADILLO_TARBALL_URL} ${BUILD_DIR}/armadillo-${ARMADILLO_VERSION}.tar.xz)
-execute_process(COMMAND ${CMAKE_COMMAND} -E tar xJf armadillo-${ARMADILLO_VERSION}.tar.xz
-    WORKING_DIRECTORY ${BUILD_DIR})
-
-execute_process(COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${ARMADILLO_INSTALL_DIR} .
+execute_process(COMMAND ${CMAKE_COMMAND} -E tar xJf armadillo-${ARMADILLO_VERSION}.tar.xz WORKING_DIRECTORY ${BUILD_DIR})
+execute_process(COMMAND ${CMAKE_COMMAND}
+    -DSuperLU_INCLUDE_DIR=${SUPERLU_INSTALL_DIR}/include
+    -DSuperLU_LIBRARY=${SUPERLU_INSTALL_DIR}/lib/libsuperlu.a
+    -DCMAKE_INSTALL_PREFIX=${ARMADILLO_INSTALL_DIR} .
     WORKING_DIRECTORY ${ARMADILLO_BUILD_DIR})
-
 execute_process(COMMAND make -j4 WORKING_DIRECTORY ${ARMADILLO_BUILD_DIR})
 execute_process(COMMAND make install WORKING_DIRECTORY ${ARMADILLO_BUILD_DIR})
 
@@ -73,7 +74,7 @@ else()
 endif()
 
 find_package(Eigen3 3.3.7 REQUIRED)
-find_library(OpenBLAS_LIBRARIES NAMES openblas blas "/usr/lib/x86_64-linux-gnu" REQUIRED)
+find_library(OpenBLAS_LIBRARIES NAMES openblas blas PATHS "/usr/lib/x86_64-linux-gnu" REQUIRED)
 find_library(LAPACK_LIBRARY lapack REQUIRED PATHS "/usr/lib" "/usr/lib/x86_64-linux-gnu" "/usr/local/lib" "/usr/local/Cellar/")
 
 # Required libraries and link settings
