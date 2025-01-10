@@ -40,6 +40,8 @@ execute_process(COMMAND cmake .. -DCMAKE_INSTALL_PREFIX=${SUPERLU_INSTALL_DIR}
 execute_process(COMMAND make -j4 WORKING_DIRECTORY ${SUPERLU_BUILD_DIR})
 execute_process(COMMAND make install WORKING_DIRECTORY ${SUPERLU_BUILD_DIR})
 
+execute_process(COMMAND sudo ${CMAKE_COMMAND} -E copy ${SUPERLU_INSTALL_DIR}/lib/libsuperlu.a /usr/local/lib)
+
 # Armadillo configuration
 set(ARMADILLO_TARBALL_URL "https://sourceforge.net/projects/arma/files/armadillo-${ARMADILLO_VERSION}.tar.xz")
 set(ARMADILLO_BUILD_DIR "${BUILD_DIR}/armadillo-${ARMADILLO_VERSION}")
