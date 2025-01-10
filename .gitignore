@@ -36,3 +36,19 @@ __pycache__/
 .vscode
 .ccls-cache
 .vim
+
+# Don't try to track executables
+examples/cpp/RK2
+examples/cpp/convection_diffusion
+examples/cpp/elliptic1D
+examples/cpp/elliptic2D
+examples/cpp/parabolic1D
+examples/cpp/plot.gnu
+examples/cpp/schrodinger1D
+examples/cpp/transport1D
+tests/cpp/test1
+tests/cpp/test2
+tests/cpp/test3
+tests/cpp/test4
+tests/cpp/test5
+
