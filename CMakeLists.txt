@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
 project(TopLevelProject VERSION 1.0 LANGUAGES CXX)
-
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -9,76 +8,42 @@ message(STATUS "Detected CXX Compiler ID: ${CMAKE_CXX_COMPILER_ID}")
 
 # Compiler-specific CXX_FLAGS and linker flags
 if (CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+    # Set flags for AppleClang
     set(CMAKE_CXX_FLAGS "-O3 -Xclang -fopenmp -DARMA_DONT_USE_WRAPPER -DARMA_USE_SUPERLU")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/usr/local/Cellar/libomp/19.1.6/lib -lomp")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/usr/local/Cellar/libomp/19.1.4/lib -lomp")
     message(STATUS "Using AppleClang-specific flags.")
-    include_directories("/usr/local/Cellar/libomp/19.1.6/include")
+    # Include Directories
+    include_directories("/usr/local/Cellar/libomp/19.1.4/include")
+
 else()
+    # Set flags for other compilers
     set(CMAKE_CXX_FLAGS "-O3 -fopenmp -DARMA_DONT_USE_WRAPPER -DARMA_USE_SUPERLU")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
     message(STATUS "Using non-Clang compiler flags.")
 endif()
 
-# Paths for downloading and building libraries
-set(ARMADILLO_VERSION "14.2.2")
-set(SUPERLU_VERSION "5.3.0")
-set(BUILD_DIR "${CMAKE_BINARY_DIR}/third_party_build")
-set(INSTALL_DIR "${CMAKE_BINARY_DIR}/third_party_install")
 
-# SuperLU configuration
-set(SUPERLU_TARBALL_URL "https://github.com/xiaoyeli/superlu/archive/refs/tags/v${SUPERLU_VERSION}.tar.gz")
-set(SUPERLU_SRC_DIR "${BUILD_DIR}/superlu-${SUPERLU_VERSION}")
-set(SUPERLU_BUILD_DIR "${SUPERLU_SRC_DIR}/build")
-set(SUPERLU_INSTALL_DIR "${INSTALL_DIR}/superlu-${SUPERLU_VERSION}")
 
-file(DOWNLOAD ${SUPERLU_TARBALL_URL} ${BUILD_DIR}/superlu-${SUPERLU_VERSION}.tar.gz)
-execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf superlu-${SUPERLU_VERSION}.tar.gz
-    WORKING_DIRECTORY ${BUILD_DIR})
-execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${SUPERLU_BUILD_DIR})
-execute_process(COMMAND cmake .. -DCMAKE_INSTALL_PREFIX=${SUPERLU_INSTALL_DIR}
-    WORKING_DIRECTORY ${SUPERLU_BUILD_DIR})
-execute_process(COMMAND make -j4 WORKING_DIRECTORY ${SUPERLU_BUILD_DIR})
-execute_process(COMMAND make install WORKING_DIRECTORY ${SUPERLU_BUILD_DIR})
-
-# Armadillo configuration
-set(ARMADILLO_TARBALL_URL "https://sourceforge.net/projects/arma/files/armadillo-${ARMADILLO_VERSION}.tar.xz")
-set(ARMADILLO_BUILD_DIR "${BUILD_DIR}/armadillo-${ARMADILLO_VERSION}")
-set(ARMADILLO_INSTALL_DIR "${INSTALL_DIR}/armadillo-${ARMADILLO_VERSION}")
-
-file(DOWNLOAD ${ARMADILLO_TARBALL_URL} ${BUILD_DIR}/armadillo-${ARMADILLO_VERSION}.tar.xz)
-execute_process(COMMAND ${CMAKE_COMMAND} -E tar xJf armadillo-${ARMADILLO_VERSION}.tar.xz
-    WORKING_DIRECTORY ${BUILD_DIR})
-
-execute_process(COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${ARMADILLO_INSTALL_DIR} .
-    WORKING_DIRECTORY ${ARMADILLO_BUILD_DIR})
-
-execute_process(COMMAND make -j4 WORKING_DIRECTORY ${ARMADILLO_BUILD_DIR})
-execute_process(COMMAND make install WORKING_DIRECTORY ${ARMADILLO_BUILD_DIR})
-
-# Update paths for Armadillo and SuperLU
-include_directories(${SUPERLU_INSTALL_DIR}/include ${ARMADILLO_INSTALL_DIR}/include)
-link_directories(${SUPERLU_INSTALL_DIR}/lib ${ARMADILLO_INSTALL_DIR}/lib)
-
-# Find required libraries
-set(CMAKE_PREFIX_PATH ${ARMADILLO_INSTALL_DIR} ${CMAKE_PREFIX_PATH})
-set(Armadillo_DIR ${ARMADILLO_INSTALL_DIR}/share/Armadillo)
-
-find_package(Armadillo REQUIRED)
-if(NOT Armadillo_FOUND)
-    message(FATAL_ERROR "Custom Armadillo not found in ${ARMADILLO_INSTALL_DIR}")
-else()
-    message(STATUS "Using Armadillo from ${ARMADILLO_INSTALL_DIR}")
-endif()
-
+# Required Libraries
+find_package(Armadillo 9.800.4 REQUIRED)
 find_package(Eigen3 3.3.7 REQUIRED)
 find_library(OpenBLAS_LIBRARIES NAMES openblas blas "/usr/lib/x86_64-linux-gnu" REQUIRED)
 find_library(LAPACK_LIBRARY lapack REQUIRED PATHS "/usr/lib" "/usr/lib/x86_64-linux-gnu" "/usr/local/lib" "/usr/local/Cellar/")
+find_path(SUPERLU_INCLUDE_DIR slu_ddefs.h PATHS "/usr/local/include" "/usr/include" "/usr/include/superlu" NO_DEFAULT_PATH)
+find_library(SUPERLU_LIBRARY superlu PATHS "/usr/local/lib" "/usr/lib" "/usr/lib/x86_64-linux-gnu" NO_DEFAULT_PATH)
+if(NOT SUPERLU_INCLUDE_DIR OR NOT SUPERLU_LIBRARY)
+    message(FATAL_ERROR "SuperLU not found. Please make sure SuperLU is installed.")
+else()
+    message(STATUS "SuperLU found at ${SUPERLU_INCLUDE_DIR} and ${SUPERLU_LIBRARY}")
+endif()
 
-# Required libraries and link settings
-set(LINK_LIBS ${ARMADILLO_LIBRARIES}
-              ${OpenBLAS_LIBRARIES}
-              ${SUPERLU_INSTALL_DIR}/lib/libsuperlu.a
-              ${LAPACK_LIBRARY})
+# Include and link directories for all subprojects
+include_directories(${ARMADILLO_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${SUPERLU_INCLUDE_DIR} ${LAPACK_INCLUDE_DIR})
+if (CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+    set(LINK_LIBS ${ARMADILLO_LIBRARIES} ${OpenBLAS_LIBRARIES} ${SUPERLU_LIBRARY} ${LAPACK_LIBRARY} -lomp)
+else()
+    set(LINK_LIBS ${ARMADILLO_LIBRARIES} ${OpenBLAS_LIBRARIES} ${SUPERLU_LIBRARY} ${LAPACK_LIBRARY})
+endif()
 
 # Add subdirectories
 add_subdirectory(src/cpp)
@@ -87,4 +52,3 @@ add_subdirectory(examples/cpp)
 
 # Custom target to build everything
 add_custom_target(all_build DEPENDS mole_C++ tests_C++ examples_C++)
-
