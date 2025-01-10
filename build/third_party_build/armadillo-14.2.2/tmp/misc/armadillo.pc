@@ -1,9 +1,0 @@
-libdir=/Users/janani/mole/build/third_party_install/armadillo-14.2.2/lib
-includedir=/Users/janani/mole/build/third_party_install/armadillo-14.2.2/include
-
-Name: armadillo
-Description: C++ library for linear algebra and scientific computing with MATLAB-like syntax
-URL: http://arma.sourceforge.net
-Version: 14.2.2
-Cflags: -I${includedir}
-Libs: -L${libdir} -larmadillo
