@@ -31,17 +31,13 @@ file for more details.
 
 To install the MOLE library on your system, certain packages must be installed and configured beforehand. The required packages vary by operating system.
 
-For a MacOS, Homebrew needs to be installed to download the required packages. 
+For the macOS, Homebrew needs to be installed to download the required packages. 
 	
- 	# Homebrew for MacOS
+ 	# Invoke the following command in the terminal app
 	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-#### 3.1.1 General Packages  
-- **cmake**
-- **fortran**  
-- **gcc** and **g++**
 
-#### 3.1.2 OpenBLAS
+#### 3.1.1 OpenBLAS
 **Minimum Version Required**: OpenBLAS 0.3.10
 
 	# For Ubuntu systems:
@@ -51,7 +47,7 @@ For a MacOS, Homebrew needs to be installed to download the required packages.
 	# For Yum-based systems:  
 	sudo yum install openblas-devel
 
-#### 3.1.3 Eigen3
+#### 3.1.2 Eigen3
 **Minimum Version Required**: eigen-3
 
 	# For Ubuntu systems
@@ -61,13 +57,13 @@ For a MacOS, Homebrew needs to be installed to download the required packages.
 	# For Yum-based systems:  
 	sudo yum install eigen3-devel
 
-#### 3.1.4 libomp
+#### 3.1.3 libomp
 
 	# For Mac Systems
 	brew install libomp
 
 
-#### 3.1.5 LAPACK
+#### 3.1.4 LAPACK
 
 	# For Mac Systems
 	brew install lapack
