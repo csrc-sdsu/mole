@@ -4,6 +4,9 @@
 
 To install the MOLE library on your system, certain packages must be installed and configured beforehand. The required packages vary by operating system.
 
+For a MacOS, Homebrew needs to be installed to download the required packages. Homebrew can be downloaded from
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
 ### 3.1 General Packages  
 - **cmake**
 - **fortran**  
@@ -13,7 +16,9 @@ To install the MOLE library on your system, certain packages must be installed a
 **Minimum Version Required**: OpenBLAS 0.3.10
 
 	# For Ubuntu systems:
-	sudo apt install libopenblas-dev  
+	sudo apt install libopenblas-dev 
+	# For Mac Systems
+	brew install openblas
 	# For Yum-based systems:  
 	sudo yum install openblas-devel
 
