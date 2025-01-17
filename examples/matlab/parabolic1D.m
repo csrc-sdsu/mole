@@ -5,6 +5,8 @@ close all
 
 addpath('../../src/matlab')
 
+is_Octave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+
 alpha = 1; % Thermal diffusivity
 west = 0; % Domain's limits
 east = 1;
@@ -27,7 +29,7 @@ U(end) = 100;
 % 1D Staggered grid
 grid = [west west+dx/2: dx :east-dx/2 east];
 
-explicit = 1; % 0 = Implicit scheme
+explicit = 0; % 0 = Implicit scheme
 
 if explicit
     tic
@@ -49,12 +51,18 @@ if explicit
 else
     tic
     % Implicit
-    L = -alpha*dt*L + speye(size(L)); 
-    dL=decomposition(L)
-    %This line precomputes the LU decomposition of L and stores it as a
-    %decomposition object. Because it's being stored as a decomposition
-    %object. Matlab knows not to bother with LU factorizing L every time we
-    %run \, which means that solving the system is sped up. 
+    L = -alpha*dt*L + speye(size(L));
+    %
+    if ( is_Octave )
+        dL = L; % no pre-decomposition in Octave.
+    else
+        % This precomputes the LU decomposition of L and stores it as a
+        % decomposition object. Because it's being stored as a decomposition
+        % object. Matlab knows not to bother with LU factorizing L every time we
+        % run \, which means that solving the system is sped up. This is 
+        % only available in MATLAB.
+        dL=decomposition(L);
+    end
     %
     for i = 0 : t/dt+1
         plot(grid, U, 'o-')
