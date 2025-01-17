@@ -29,7 +29,7 @@ U(end) = 100;
 % 1D Staggered grid
 grid = [west west+dx/2: dx :east-dx/2 east];
 
-explicit = 0; % 0 = Implicit scheme
+explicit = 1; % 0 = Implicit scheme
 
 if explicit
     tic
@@ -58,7 +58,7 @@ else
     else
         % This precomputes the LU decomposition of L and stores it as a
         % decomposition object. Because it's being stored as a decomposition
-        % object. Matlab knows not to bother with LU factorizing L every time we
+        % object, Matlab knows not to bother with LU factorizing L every time we
         % run \, which means that solving the system is sped up. This is 
         % only available in MATLAB.
         dL=decomposition(L);
