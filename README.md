@@ -50,7 +50,7 @@ For the macOS, Homebrew needs to be installed to download the required packages.
 **Minimum Version Required**: eigen-3
 
 ##### For Ubuntu systems
-	sudo apt install eigen3-dev
+	sudo apt install libeigen3-dev
 ##### For Mac Systems
 	brew install eigen  
 ##### For Yum-based systems:  
