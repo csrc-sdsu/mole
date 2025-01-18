@@ -1,13 +1,12 @@
 # examples_C++ Configuration
 include_directories("${CMAKE_SOURCE_DIR}/src/cpp")
 
-# Executable definitions
-add_executable(transport1D transport1D.cpp)
-add_executable(schrodinger1D schrodinger1D.cpp)
-add_executable(elliptic1D elliptic1D.cpp)
-add_executable(elliptic2D elliptic2D.cpp)
+# Find all .cpp files in the examples directory
+file(GLOB EXAMPLE_SOURCES *.cpp)
 
-# Link libraries
-foreach(EXE transport1D schrodinger1D elliptic1D elliptic2D)
-    target_link_libraries(${EXE} PUBLIC mole_C++ ${LINK_LIBS})
+# Create executables for each source file
+foreach(EXAMPLE_SOURCE ${EXAMPLE_SOURCES})
+    get_filename_component(EXAMPLE_NAME ${EXAMPLE_SOURCE} NAME_WE)
+    add_executable(${EXAMPLE_NAME} ${EXAMPLE_SOURCE})
+    target_link_libraries(${EXAMPLE_NAME} PUBLIC mole_C++ ${LINK_LIBS})
 endforeach()
