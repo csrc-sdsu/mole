@@ -78,11 +78,20 @@ For the macOS, Homebrew needs to be installed to download the required packages.
 	mkdir build && cd build  
 	cmake ..
 	make  
-	make install  # To install the library
+ To install the library in a custom location (Eg. home/mole) 
 
+ 	cmake --install . --prefix /path/to/location
+ 
+ To install the library in a previledged location (Eg. /opt/mole)
+
+ 	sudo cmake --install .
+ Or
+
+ 	sudo cmake --install . --prefix /path/to/privileged/location	
  
  Armadillo and SuperLu will be locally installed in the build directory once the cmake .. command is passed.
  By following the steps outlined above, you will successfully install the necessary packages and the MOLE library on your system. 
+ The library will be installed in the location provided.
  The tests and examples to be executed will also be built locally inside the build directory. 
 	
 
