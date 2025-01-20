@@ -6,6 +6,9 @@ target_include_directories(mole_C++ PUBLIC ${ARMADILLO_INCLUDE_DIRS} ${EIGEN3_IN
 target_link_libraries(mole_C++ PUBLIC ${LINK_LIBS})
 
 # Installation for mole library
-install(TARGETS mole_C++ DESTINATION "${CMAKE_BINARY_DIR}/install")
+install(TARGETS mole_C++ DESTINATION lib)
+
+
 
 # ${CMAKE_INSTALL_PREFIX}/lib for custom installation path. 
+# ${CMAKE_BINARY_DIR}/install for cmake build directory installation
