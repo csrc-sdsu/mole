@@ -13,17 +13,17 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
     list(APPEND TEST_EXECUTABLES ${TEST_NAME})
 endforeach()
 
+# Enable testing
+enable_testing()
+
+# Add each test executable to the test suite
+foreach(TEST_EXECUTABLE ${TEST_EXECUTABLES})
+    add_test(NAME ${TEST_EXECUTABLE} COMMAND ${TEST_EXECUTABLE})
+endforeach()
+
 # Custom target to run all tests
 add_custom_target(run_tests
-    COMMAND ${CMAKE_COMMAND} -E env LD_LIBRARY_PATH=${CMAKE_BINARY_DIR}/src/cpp
-    ${CMAKE_COMMAND} -P - <<EOF
-    file(GLOB TEST_EXECUTABLES "${CMAKE_BINARY_DIR}/src/cpp/test*")
-    foreach(TEST_EXECUTABLE ${TEST_EXECUTABLES})
-        execute_process(COMMAND ${TEST_EXECUTABLE} RESULT_VARIABLE result)
-        if(result)
-            message(FATAL_ERROR "Test failed: ${TEST_EXECUTABLE}")
-        endif()
-    endforeach()
-EOF
+    COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
     DEPENDS ${TEST_EXECUTABLES}
 )
+
