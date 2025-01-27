@@ -24,46 +24,76 @@ MOLE is distributed under a GNU General Public License; please refer to the _LIC
 file for more details.
 
 
-3: Installation (Linux)
------------------------
+3: Installation
+------------
 
-To use MOLE (C++ version), you need to have _Armadillo C++_ <http://arma.sourceforge.net>, _SuperLU_ 
-<https://portal.nersc.gov/project/sparse/superlu>, and _OpenBLAS_ <https://www.openblas.net> installed on your computer.
+### 3.1 Packages Required
 
-Assuming a working installation of _SuperLU_ (`sudo apt install libsuperlu-dev` or `sudo yum install SuperLU-devel`), and _OpenBLAS_ (`sudo apt install libopenblas-dev` or `sudo yum install openblas-devel`), follow these steps:
+To install the MOLE library on your system, certain packages must be installed and configured beforehand. The required packages vary by operating system.
 
-`wget https://sourceforge.net/projects/arma/files/armadillo-12.6.6.tar.xz`
+For the macOS, Homebrew needs to be installed to download the required packages. Invoke the following command in the terminal app
+	
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-`tar xvf armadillo-12.6.6.tar.xz`
 
-`cd armadillo-12.6.6`
+#### 3.1.1 OpenBLAS
+**Minimum Version Required**: OpenBLAS 0.3.10
 
-**NOTE:** We suggest to use the latest stable version.
+##### For Ubuntu systems:
+	sudo apt install libopenblas-dev 
+##### For Mac Systems
+	brew install openblas
+##### For Yum-based systems:  
+	sudo yum install openblas-devel
 
-Define `ARMA_USE_SUPERLU` and `ARMA_USE_OPENMP` in `include/armadillo_bits/config.hpp`. Make sure that you have `cmake` and `g++` installed before executing:
+#### 3.1.2 Eigen3
+**Minimum Version Required**: eigen-3
 
-`./configure`
+##### For Ubuntu systems
+	sudo apt install libeigen3-dev
+##### For Mac Systems
+	brew install eigen  
+##### For Yum-based systems:  
+	sudo yum install eigen3-devel
 
-`make`
+#### 3.1.3 libomp
 
-This will create `libarmadillo.so`.
+##### For Mac Systems
+	brew install libomp
 
-Now go to `mole/` and build MOLE via:
 
-`ARMA=PATH_TO_ARMADILLO_FOLDER make`
+#### 3.1.4 LAPACK
 
-Or simply:
+##### For Mac Systems
+	brew install lapack
+ 
 
-`make`
+### 3.2 MOLE Library Installation
 
-if _Armadillo_ was installed via `sudo apt install libarmadillo-dev` or `sudo yum install armadillo-devel`.
 
-A static library named `libmole.a` will be created after the previous step. From this point, you need to include `mole.h` 
-in your projects, specify the location of `libmole.a` to the linker. For the users interested in building MOLE as a _shared library_, specify `make SHARED_LIB=1`. Make sure to include `mole_C++` directory in `LD_LIBRARY_PATH` (`export LD_LIBRARY_PATH=/full/path/to/mole_C++`) so the loader can find the library at runtime.
+**Clone the MOLE repository and build the library**
 
-**For our library's MATLAB/Octave version, the only dependency is to have MATLAB/Octave installed**.
-The two implementations of MOLE (C++ & MATLAB/Octave) are independent; you don't need
-to build the C++ version if you are just interested in using MOLE from MATLAB/Octave.
+	git clone https://github.com/csrc-sdsu/mole.git  
+	cd mole  
+	mkdir build && cd build  
+	cmake ..
+	make  
+ To install the library in a custom location (Eg. home/mole) 
+
+ 	cmake --install . --prefix /path/to/location
+ 
+ To install the library in a previledged location (Eg. /opt/mole)
+
+ 	sudo cmake --install .
+ Or
+
+ 	sudo cmake --install . --prefix /path/to/privileged/location	
+ 
+ Armadillo and SuperLu will be locally installed in the build directory once the cmake .. command is passed.
+ By following the steps outlined above, you will successfully install the necessary packages and the MOLE library on your system. 
+ The library will be installed in the location provided.
+ The tests and examples to be executed will also be built locally inside the build directory. 
+	
 
 
 4: Running Examples & Tests
