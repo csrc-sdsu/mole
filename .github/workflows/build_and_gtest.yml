@@ -39,4 +39,4 @@ jobs:
     - name: Run tests
       run: |
         cd build
-        make run_tests --output-on-failure
+        make run_tests
