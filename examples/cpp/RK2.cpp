@@ -45,9 +45,11 @@ int main() {
 
     // Print the time and solution values to the standard output
     std::cout << std::fixed << std::setprecision(6);
+    std::ofstream data("data.txt");
     for (int i = 0; i < n_steps; ++i) {
-        std::cout << t(i) << " " << y(i) << "\n";
+        data << t(i) << " " << y(i) << "\n";
     }
+    data.close();
 
     // Generate GNUplot script
     std::ofstream plot_script("plot.gnu");
