@@ -2,13 +2,14 @@
 
 This page provides a brief description of the documentation for the Mimetic Operators Library Enhanced (MOLE).
 
-## Quick Build
+### Dependencies
 
-If you have Python and Doxygen installed, these two commands should build the documentation in `doc/api_docs/cpp`:
+The documentation system requires several Python packages. You can install them using:
 
 ```sh
-pip install --user -r doc/sphinx/requirements.txt  # only needed once
-make doc                                          # builds documentation
+virtualenv VENV                              # create a virtual environment (Recommended)
+source VENV/bin/activate                     # activate the environment (Recommended)
+pip install -r doc/sphinx/requirements.txt   # install dependencies
 ```
 
 ## Documentation Structure
@@ -18,51 +19,41 @@ The MOLE documentation consists of two main components:
 1. **API Documentation**: Generated using Doxygen, providing detailed C++ API reference
 2. **User Manual**: Written in Sphinx, offering tutorials, examples, and usage guides
 
-## Doxygen
+## 1. Doxygen
 
 Doxygen is used to generate the C++ API documentation. The configuration can be found in the `Doxyfile` in the root directory. To build the API documentation:
 
 ```sh
-make doxygen
+doxygen Doxyfile
 ```
 
 This will generate documentation in the `doc/api_docs/cpp` directory.
 
-## Sphinx
+## 2. Sphinx
 
-Sphinx is used for the User Manual, which can produce documentation in multiple formats including HTML, PDF, and ePub. 
+Sphinx is the tool used for libCEED's User Manual. Sphinx can produce documentation in different output formats: HTML, LaTeX (for printable PDF versions), ePub, Texinfo, manual pages, and plain text. Sphinx comes with a broad set of extensions for different features, for instance the automatic inclusion of documentation from docstrings and snippets of codes, support of todo items, highlighting of code, and math rendering.
 
-### Dependencies
+To be able to contribute to libCEED's User Manual, Sphinx needs to be [installed](http://www.sphinx-doc.org/en/master/usage/installation.html) together with its desired extensions.
 
-The documentation system requires several Python packages. You can install them using:
-
-```sh
-pip install --user -r doc/sphinx/requirements.txt
-```
-
-For isolated development, you can use a virtual environment:
+The Sphinx API documentation depends on Doxygen's XML output (via the `breathe` plugin).  Build these files in the `xml/` directory via:
 
 ```sh
-virtualenv VENV                              # create a virtual environment
-source VENV/bin/activate                     # activate the environment
-pip install -r doc/sphinx/requirements.txt   # install dependencies
-make doc                                     # build documentation
+doxygen Doxyfile
 ```
 
-### Building Documentation
-
-To build specific documentation formats:
+If you are editing documentation, such as the reStructuredText files in `doc/sphinx/source`, you can rebuild incrementally via
 
 ```sh
-make -C doc/sphinx html      # Build HTML documentation
-make -C doc/sphinx latexpdf  # Build PDF documentation (requires LaTeX)
+sphinx-build -b html doc/sphinx/source  doc/sphinx/build 
 ```
-
-For a list of all available documentation targets:
+which will HTML docs in the [doc/sphinx/build](./sphinx/build) directory.
 
 ```sh
-make -C doc/sphinx help
+sphinx-build -b latexpdf doc/sphinx/source doc/sphinx/build 
 ```
+
+to build PDF using the LaTeX toolchain (which must be installed).
+This requires the `rsvg-convert` utility, which is likely available from your package manager under `librsvg` or `librsvg2-bin`.
 
 ## Contributing to Documentation
 
