@@ -31,9 +31,9 @@ This will generate documentation in the `doc/api_docs/cpp` directory.
 
 ## 2. Sphinx
 
-Sphinx is the tool used for libCEED's User Manual. Sphinx can produce documentation in different output formats: HTML, LaTeX (for printable PDF versions), ePub, Texinfo, manual pages, and plain text. Sphinx comes with a broad set of extensions for different features, for instance the automatic inclusion of documentation from docstrings and snippets of codes, support of todo items, highlighting of code, and math rendering.
+Sphinx is the tool used for MOLE's User Manual. Sphinx can produce documentation in different output formats: HTML, LaTeX (for printable PDF versions), ePub, Texinfo, manual pages, and plain text. Sphinx comes with a broad set of extensions for different features, for instance the automatic inclusion of documentation from docstrings and snippets of codes, support of todo items, highlighting of code, and math rendering.
 
-To be able to contribute to libCEED's User Manual, Sphinx needs to be [installed](http://www.sphinx-doc.org/en/master/usage/installation.html) together with its desired extensions.
+To be able to contribute to MOLE's User Manual, Sphinx needs to be [installed](http://www.sphinx-doc.org/en/master/usage/installation.html) together with its desired extensions.
 
 The Sphinx API documentation depends on Doxygen's XML output (via the `breathe` plugin).  Build these files in the `xml/` directory via:
 
