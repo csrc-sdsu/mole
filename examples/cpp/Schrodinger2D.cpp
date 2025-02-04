@@ -1,10 +1,4 @@
-#include "mole.h"  
-#include <iostream>  
-#include <cmath>  
-#include <iomanip>  
-#include <vector>  
-#include <fstream>  
-  
+#include "mole.h"   
 using namespace arma;  
   
 int main() {  
@@ -60,9 +54,6 @@ int main() {
   
   // Convert to column vector for compatibility  
   vec psi_old = vectorise(Psi_grid);  // Convert to column vector  
-  
-  
-  
   // Create interpolators  
   Interpol I(m, n, 0.5, 0.5);  
   Interpol I2(true, m, n, 0.5, 0.5);  
