@@ -20,22 +20,33 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.githubpages',
-    'sphinx_book_theme',
+    'sphinx_rtd_theme',
+    'myst_parser',
 ]
+
+# Configure myst-parser
+myst_enable_extensions = [
+    "colon_fence",
+    "deflist",
+]
+
+# Add support for Markdown files
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.md': 'markdown',
+}
 
 templates_path = ['_templates']
 exclude_patterns = []
 
 # -- Options for HTML output -------------------------------------------------
 
-html_theme = 'sphinx_book_theme'
+html_theme = 'sphinx_rtd_theme'
 
 html_theme_options = {
-    "repository_url": "https://github.com/csrc-sdsu/mole",
-    "use_repository_button": True,
-    "use_issues_button": True,
-    "use_edit_page_button": True,
-    "path_to_docs": "doc/sphinx/source",
+    "style_external_links": True,
+    "logo_only": True,
+    "navigation_depth": 4,
 }
 
 html_static_path = []
