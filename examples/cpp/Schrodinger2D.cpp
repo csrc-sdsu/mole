@@ -1,4 +1,6 @@
-#include "mole.h"   
+#include "mole.h" 
+#include <iostream>
+#include <cmath>
 using namespace arma;  
   
 int main() {  
