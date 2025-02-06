@@ -36,7 +36,7 @@ LIBS += -lsuperlu
 endif
 endif
 
-all: transport1D schrodinger1D elliptic1D elliptic2D parabolic1D convection_diffusion RK2 wave1d wave2d
+all: transport1D schrodinger1D elliptic1D elliptic2D parabolic1D convection_diffusion RK2 wave1d wave1D_case2 wave2d wave2D_case2
 
 transport1D: transport1D.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o transport1D transport1D.cpp $(LIBS)
@@ -62,8 +62,14 @@ RK2: RK2.cpp
 wave1d: wave1d.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o wave1d wave1d.cpp $(LIBS)
 
+wave1D_case2: wave1D_case2.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o wave1D_case2 wave1D_case2.cpp $(LIBS)
+
 wave2d: wave2d.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o wave2d wave2d.cpp $(LIBS)
 
+wave2D_case2: wave2D_case2.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o wave2D_case2 wave2D_case2.cpp $(LIBS)
+
 clean:
-	rm -f transport1D schrodinger1D parabolic1D elliptic1D elliptic2D convection_diffusion RK2 wave1d wave2d
+	rm -f transport1D schrodinger1D parabolic1D elliptic1D elliptic2D convection_diffusion RK2 wave1d wave1D_case2 wave2d wave2D_case2
