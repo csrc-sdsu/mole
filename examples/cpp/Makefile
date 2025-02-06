@@ -1,7 +1,7 @@
 MOLE = ../../src/cpp
 
 ifndef ARMA
-	ARMA = /home/johnny/armadillo-10.2.1
+    ARMA = /home/johnny/armadillo-10.2.1
 endif
 
 CXX ?= g++ 
@@ -11,11 +11,11 @@ CXXFLAGS = -O0 -g
 else
 CXXFLAGS = -O3
 endif
-CXXFLAGS += -fopenmp -DARMA_DONT_USE_WRAPPER 
+CXXFLAGS += -fopenmp -DARMA_DONT_USE_WRAPPER -std=c++17
 
 INCPATH = -I. $(if $(ARMA), -I$(ARMA)/include) -I$(MOLE) 
 
-LIBS = -L$(MOLE) -lmole -lopenblas 
+LIBS = -L$(MOLE) -lmole -lopenblas -lboost_iostreams -lboost_system -lboost_filesystem
 
 ifdef ARMA
 LIBS += -L$(ARMA) -Wl,-rpath,$(ARMA) -larmadillo
@@ -36,9 +36,7 @@ LIBS += -lsuperlu
 endif
 endif
 
-
-all: transport1D schrodinger1D elliptic1D elliptic2D parabolic1D convection_diffusion RK2
-
+all: transport1D schrodinger1D elliptic1D elliptic2D parabolic1D convection_diffusion RK2 wave1d wave1D_case2 wave2d wave2D_case2
 
 transport1D: transport1D.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o transport1D transport1D.cpp $(LIBS)
@@ -61,5 +59,17 @@ convection_diffusion: convection_diffusion.cpp
 RK2: RK2.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o RK2 RK2.cpp $(LIBS)
 
+wave1d: wave1d.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o wave1d wave1d.cpp $(LIBS)
+
+wave1D_case2: wave1D_case2.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o wave1D_case2 wave1D_case2.cpp $(LIBS)
+
+wave2d: wave2d.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o wave2d wave2d.cpp $(LIBS)
+
+wave2D_case2: wave2D_case2.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o wave2D_case2 wave2D_case2.cpp $(LIBS)
+
 clean:
-	rm -f transport1D schrodinger1D parabolic1D elliptic1D elliptic2D convection_diffusion RK2
+	rm -f transport1D schrodinger1D parabolic1D elliptic1D elliptic2D convection_diffusion RK2 wave1d wave1D_case2 wave2d wave2D_case2
