@@ -3,13 +3,13 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-=================
+======================
 MOLE Documentation
-=================
+======================
 
---------------------------------------------------
+----------------------------------------------------------
 Welcome to MOLE (Mimetic Operators Library Enhanced)
---------------------------------------------------
+----------------------------------------------------------
 
 MOLE is a comprehensive library for numerical computations focusing on mimetic finite difference methods.
 
@@ -54,7 +54,7 @@ Indices and Tables
 .. **C++ API**
 .. ------------
 .. .. doxygenindex:: 
-..    :project: MoleCpp
+   :project: MoleCpp
 
 .. **MATLAB API**
 .. --------------

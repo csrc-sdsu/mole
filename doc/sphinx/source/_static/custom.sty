@@ -1,0 +1,23 @@
+\usepackage{fancyhdr}
+\usepackage{float}
+
+% Fix header height
+\setlength{\headheight}{14.0pt}
+\addtolength{\topmargin}{-2.0pt}
+
+% Better handling of long URLs and code blocks
+\sloppy
+\emergencystretch=3em
+
+% Better figure placement
+\let\origfigure\figure
+\let\endorigfigure\endfigure
+\renewenvironment{figure}[1][2] {
+    \expandafter\origfigure\expandafter[H]
+} {
+    \endorigfigure
+}
+
+% Better handling of code blocks
+\renewcommand{\ttdefault}{txtt}
+\renewcommand{\familydefault}{\rmdefault}
