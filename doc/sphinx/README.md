@@ -1,69 +1,89 @@
-# MOLE: Documentation
+# MOLE Documentation
 
-This page provides a brief description of the documentation for the Mimetic Operators Library Enhanced (MOLE).
+This guide explains how to build and maintain the documentation for the Mimetic Operators Library Enhanced (MOLE).
 
-### Dependencies
-
-The documentation system requires several Python packages. You can install them using:
-
-```sh
-virtualenv VENV                              # create a virtual environment (Recommended)
-source VENV/bin/activate                     # activate the environment (Recommended)
-pip install -r doc/sphinx/requirements.txt   # install dependencies
-```
-
-## Documentation Structure
+## 📚 Documentation Structure
 
 The MOLE documentation consists of two main components:
 
-1. **API Documentation**: Generated using Doxygen, providing detailed C++ API reference
-2. **User Manual**: Written in Sphinx, offering tutorials, examples, and usage guides
+1. **API Documentation** (Doxygen)
+   - C++ API reference
+   - MATLAB API reference
+   - Implementation details
+   - Code documentation
 
-## 1. Doxygen
+2. **User Manual** (Sphinx)
+   - Tutorials
+   - Examples
+   - Usage guides
+   - Theory background
 
-Doxygen is used to generate the C++ API documentation. The configuration can be found in the `Doxyfile` in the root directory. To build the API documentation:
+## 🛠️ Building Documentation
 
-```sh
-doxygen Doxyfile
+### Prerequisites
+
+```bash
+# Create and activate a virtual environment (Recommended)
+python -m venv .venv
+source .venv/bin/activate  # On Unix/MacOS
+# or
+.venv\Scripts\activate     # On Windows
+
+# Install dependencies
+pip install -r doc/sphinx/requirements.txt
 ```
 
-This will generate documentation in the `doc/api_docs/cpp` directory.
+### Building Steps
 
-## 2. Sphinx
-
-Sphinx is the tool used for MOLE's User Manual. Sphinx can produce documentation in different output formats: HTML, LaTeX (for printable PDF versions), ePub, Texinfo, manual pages, and plain text. Sphinx comes with a broad set of extensions for different features, for instance the automatic inclusion of documentation from docstrings and snippets of codes, support of todo items, highlighting of code, and math rendering.
-
-To be able to contribute to MOLE's User Manual, Sphinx needs to be [installed](http://www.sphinx-doc.org/en/master/usage/installation.html) together with its desired extensions.
-
-The Sphinx API documentation depends on Doxygen's XML output (via the `breathe` plugin).  Build these files in the `xml/` directory via:
-
-```sh
-doxygen Doxyfile
+1. **Generate API Documentation**
+```bash
+# From project root
+make doxygen
 ```
 
-If you are editing documentation, such as the reStructuredText files in `doc/sphinx/source`, you can rebuild incrementally via
+2. **Build User Manual**
+```bash
+# HTML output
+make html
 
-```sh
-sphinx-build -b html doc/sphinx/source  doc/sphinx/build 
+# PDF output (requires LaTeX)
+make latexpdf
+
+# Clean build (Removes all Sphinx build files)
+make clean
 ```
-which will HTML docs in the [doc/sphinx/build](./sphinx/build) directory.
 
-```sh
-sphinx-build -b latexpdf doc/sphinx/source doc/sphinx/build 
-```
+The documentation will be generated in:
+- C++ API Docs: `doc/api_docs/cpp/`
+- HTML: `doc/sphinx/build/html/`
+- PDF: `doc/sphinx/build/pdf/`
 
-to build PDF using the LaTeX toolchain (which must be installed).
-This requires the `rsvg-convert` utility, which is likely available from your package manager under `librsvg` or `librsvg2-bin`.
+## 🔄 Development Workflow
 
-## Contributing to Documentation
+When contributing to documentation:
 
-When contributing to the documentation:
+1. **API Documentation**
+   - Add C++ documentation in source code using Doxygen syntax
+   - Build with `make doxygen` to verify
 
-1. API documentation should be written as C++ comments in the source code
-2. User manual content should be added to the appropriate `.rst` files in `doc/sphinx/source`
-3. Examples and tutorials should include working code samples
-4. Build and test the documentation locally before submitting changes
+2. **User Manual**
+   - Edit `.rst` files in `doc/sphinx/source/`
+   - Build with `make html` to preview changes
+   - Use `make clean` to force full rebuild
 
-For more information about the documentation system, please refer to:
-- [Doxygen Manual](https://www.doxygen.nl/manual/)
+## 📖 Documentation Standards
+
+- Use clear, concise language
+- Include working code examples
+- Follow [Sphinx reST](https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html) syntax
+- Follow [Doxygen](https://www.doxygen.nl/manual/docblocks.html) conventions for API docs
+
+## 🔗 Useful Links
+
 - [Sphinx Documentation](https://www.sphinx-doc.org/)
+- [Doxygen Manual](https://www.doxygen.nl/manual/)
+- [reStructuredText Primer](https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html)
+
+## 🤝 Contributing
+
+Please read our [Contributing Guide](../../CONTRIBUTING.md) before submitting documentation changes.

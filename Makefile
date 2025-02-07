@@ -21,18 +21,19 @@ $(SUBDIRS):
 
 # documentation/ creation of Sphinx build ---------------------------
 
-.PHONY: html
+.PHONY: doxygen html clean latexpdf
+
+doxygen:
+	doxygen Doxyfile
 
 html:
 	sphinx-build -b html doc/sphinx/source doc/sphinx/build
 
-# documentation/ creation of latex+pdf ---------------------------
-
-.PHONY: latexpdf
+clean:
+	rm -rf doc/sphinx/build
 
 latexpdf:
 	sphinx-build -b latex doc/sphinx/source doc/sphinx/build/latex
 	make -C doc/sphinx/build/latex
 	mkdir -p doc/sphinx/build/pdf 
 	mv doc/sphinx/build/latex/*.pdf doc/sphinx/build/pdf/
-
