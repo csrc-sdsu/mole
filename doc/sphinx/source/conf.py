@@ -76,12 +76,25 @@ suppress_warnings = [
     'epub.unknown_project_files'
 ]
 
-# LaTeX output configuration
+# LaTeX configuration
+latex_engine = 'lualatex'
+
 latex_elements = {
     'papersize': 'letterpaper',
     'pointsize': '11pt',
+    'fontpkg': r'''
+        \usepackage[math-style=ISO,bold-style=ISO]{unicode-math}
+        \setmainfont{TeX Gyre Pagella}
+        \setmathfont{TeX Gyre Pagella Math}
+        \setsansfont{DejaVu Sans}
+        \setmonofont{DejaVu Sans Mono}
+    ''',
     'preamble': r'''
+        \usepackage{amscd}
+        \usepackage{cancel}
         \usepackage{fancyhdr}
+        
+        % Header and margin adjustments
         \setlength{\headheight}{14.0pt}
         \addtolength{\topmargin}{-2.0pt}
         
@@ -89,7 +102,7 @@ latex_elements = {
         \setlength{\emergencystretch}{3em}
         \providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
         
-        % Fix figure placement
+        % Improved figure placement
         \usepackage{float}
         \let\origfigure\figure
         \let\endorigfigure\endfigure
@@ -98,9 +111,21 @@ latex_elements = {
         } {
             \endorigfigure
         }
+        
+        % Math commands
+        \newcommand\bm[1]{\symbf{#1}}
+        \def\diff{\operatorname{d}\!}
+        \def\tcolon{\!:\!}
+        \def\trace{\operatorname{trace}}
+        
+        % Remove page numbers from references
+        \renewcommand{\sphinxcrossref}[1]{\texttt{#1}}
     ''',
     'figure_align': 'H',
     'extrapackages': r'\usepackage{float}',
+    'hyperref': r'''
+        \usepackage[hidelinks]{hyperref}
+    ''',
 }
 
 latex_documents = [
@@ -108,7 +133,8 @@ latex_documents = [
      'MOLE Development Team', 'manual'),
 ]
 
-latex_show_pagerefs = True
+# Additional LaTeX settings
+latex_show_pagerefs = False
 latex_show_urls = 'footnote'
 latex_logo = str(ROOT_DIR / "logo.png")
 latex_domain_indices = True
