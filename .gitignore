@@ -60,3 +60,5 @@ Thumbs.db
 /examples/cpp/plot.gnu
 /tests/cpp/test[1-5]
 
+# build
+build/
