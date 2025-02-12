@@ -18,3 +18,22 @@ $(SUBDIRS):
 
 .PHONY: all $(SUBDIRS)
 .NOTPARALLEL:
+
+# documentation/ creation of Sphinx build ---------------------------
+
+.PHONY: doxygen html clean latexpdf
+
+doc-doxygen:
+	doxygen Doxyfile
+
+doc-html:
+	sphinx-build -b html doc/sphinx/source doc/sphinx/build
+
+doc-clean:
+	rm -rf doc/sphinx/build
+
+doc-latexpdf:
+	sphinx-build -b latex doc/sphinx/source doc/sphinx/build/latex
+	make -C doc/sphinx/build/latex
+	mkdir -p doc/sphinx/build/pdf 
+	mv doc/sphinx/build/latex/*.pdf doc/sphinx/build/pdf/
