@@ -1,6 +1,17 @@
+/**
+ * @file Schrodinger2D.cpp
+ * @brief Solves a 2D Time Dependant Schrodinger's Equation using mimetic methods (MOLE).
+ *
+ * Can be visualized as a surface using gnuplot by running the command:
+ *     
+ *     ./Schrodinger2D | sed 1d | gnuplot -p -e "splot '<cat'"
+ */
+
 #include "mole.h" 
 #include <iostream>
 #include <cmath>
+#include <iomanip>
+
 using namespace arma;  
   
 int main() {  
