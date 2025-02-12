@@ -38,19 +38,19 @@ pip install -r doc/sphinx/requirements.txt
 1. **Generate API Documentation**
 ```bash
 # From project root
-make doxygen
+make doc-doxygen
 ```
 
 2. **Build User Manual**
 ```bash
 # HTML output
-make html
+make doc-html
 
 # PDF output (requires LaTeX)
-make latexpdf
+make doc-latexpdf
 
 # Clean build (Removes all Sphinx build files)
-make clean
+make doc-clean
 ```
 
 The documentation will be generated in:
@@ -64,12 +64,12 @@ When contributing to documentation:
 
 1. **API Documentation**
    - Add C++ documentation in source code using Doxygen syntax
-   - Build with `make doxygen` to verify
+   - Build with `make doc-doxygen` to verify
 
 2. **User Manual**
    - Edit `.rst` files in `doc/sphinx/source/`
-   - Build with `make html` to preview changes
-   - Use `make clean` to force full rebuild
+   - Build with `make doc-html` to preview changes
+   - Use `make doc-clean` to force full rebuild
 
 ## 📖 Documentation Standards
 

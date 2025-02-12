@@ -23,16 +23,16 @@ $(SUBDIRS):
 
 .PHONY: doxygen html clean latexpdf
 
-doxygen:
+doc-doxygen:
 	doxygen Doxyfile
 
-html:
+doc-html:
 	sphinx-build -b html doc/sphinx/source doc/sphinx/build
 
-clean:
+doc-clean:
 	rm -rf doc/sphinx/build
 
-latexpdf:
+doc-latexpdf:
 	sphinx-build -b latex doc/sphinx/source doc/sphinx/build/latex
 	make -C doc/sphinx/build/latex
 	mkdir -p doc/sphinx/build/pdf 
