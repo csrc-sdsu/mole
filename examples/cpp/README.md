@@ -28,6 +28,7 @@ This folder houses a collection of examples that serve as excellent starting poi
 - OpenBLAS (Optional, for better performance)
 - SuperLU (For sparse matrix operations)
 - Incorporate C++20 for better filesystem handling
+- CMake (helps you build, test, and package software)
 
 ### Installation on different platforms:
 
@@ -37,6 +38,7 @@ brew install armadillo
 brew install boost
 brew install gnuplot
 brew install openblas
+brew install cmake
 ```
 #### Ubuntu/Debian:
 ```
@@ -45,7 +47,24 @@ sudo apt-get install libboost-all-dev
 sudo apt-get install gnuplot
 sudo apt-get install libopenblas-dev
 sudo apt-get install libsuperlu-dev
+sudo apt-get install cmake
 ```
+#### Fedora:
+```
+sudo dnf install libarmadillo-dev
+sudo dnf install libboost-all-dev
+sudo dnf install gnuplot
+sudo dnf install libopenblas-dev
+sudo dnf install libsuperlu-dev
+sudo dnf install cmake
+```
+
+#### Note:
+You can find the exact path by running:
+
+- Windows: ```where cmake or gnuplot ...```
+- macOS/Linux: ```which cmake or gnuplot ...```
+
 
 ### Structure of the directory
 ```plaintext
