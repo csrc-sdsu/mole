@@ -1,75 +1,98 @@
 MOLE = ../../src/cpp
+BOOST_ROOT = /opt/homebrew/Cellar/boost/1.87.0
 
-ifndef ARMA
-    ARMA = /home/johnny/armadillo-10.2.1
-endif
+CXX = g++
+CXXFLAGS += \
+    -DARMA_DONT_USE_WRAPPER \
+    -std=c++20
 
-CXX ?= g++ 
 
-ifeq ($(DEBUG),1)
-CXXFLAGS = -O0 -g
-else
-CXXFLAGS = -O3
-endif
-CXXFLAGS += -fopenmp -DARMA_DONT_USE_WRAPPER -std=c++17
+# Include paths
+INCPATH = -I. \
+          -I/opt/homebrew/include \
+          -I$(MOLE) \
+          -I$(BOOST_ROOT)/include \
+          -I/opt/homebrew/opt/openblas/include
 
-INCPATH = -I. $(if $(ARMA), -I$(ARMA)/include) -I$(MOLE) 
+# Library paths
+LDFLAGS = -L$(MOLE) \
+          -L/opt/homebrew/lib \
+          -L$(BOOST_ROOT)/lib \
+          -L/opt/homebrew/opt/openblas/lib
 
-LIBS = -L$(MOLE) -lmole -lopenblas -lboost_iostreams -lboost_system -lboost_filesystem
+# Libraries
+LIBS = -larmadillo \
+       -lboost_iostreams \
+       -lboost_system \
+       -lboost_filesystem \
+       -lopenblas \
+       -lsuperlu
 
-ifdef ARMA
-LIBS += -L$(ARMA) -Wl,-rpath,$(ARMA) -larmadillo
-else
-ifeq (,$(filter clean,$(MAKECMDGOALS)))
-$(warning The path to Armadillo's library was not provided. I will look for it in the standard system directories.)
-endif
-endif
+SOURCES = $(MOLE)/utils.cpp \
+          $(MOLE)/gradient.cpp \
+          $(MOLE)/divergence.cpp \
+          $(MOLE)/laplacian.cpp \
+          $(MOLE)/robinbc.cpp \
+          $(MOLE)/interpol.cpp
 
-ifdef EIGEN
-CXXFLAGS += -DEIGEN
-INCPATH += -I$(EIGEN)
-else
-ifdef SUPERLU
-LIBS += -L$(SUPERLU)/lib -Wl,-rpath,$(SUPERLU)/lib -lsuperlu 
-else
-LIBS += -lsuperlu 
-endif
-endif
 
-all: transport1D schrodinger1D elliptic1D elliptic2D parabolic1D convection_diffusion RK2 wave1d wave1D_case2 wave2d wave2D_case2
+# All targets
+all: transport1D \
+     schrodinger1D \
+     elliptic1D \
+     elliptic2D \
+     parabolic1D \
+     convection_diffusion \
+     RK2 \
+     wave1d \
+     wave1d_case2 \
+     wave2d \
+     wave2d_case2
 
+# Individual targets
 transport1D: transport1D.cpp
-	$(CXX) $(CXXFLAGS) $(INCPATH) -o transport1D transport1D.cpp $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCPATH) $(LDFLAGS) -o $@ $< $(LIBS)
 
 schrodinger1D: schrodinger1D.cpp
-	$(CXX) $(CXXFLAGS) $(INCPATH) -o schrodinger1D schrodinger1D.cpp $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCPATH) $(LDFLAGS) -o $@ $< $(LIBS)
 
 elliptic1D: elliptic1D.cpp
-	$(CXX) $(CXXFLAGS) $(INCPATH) -o elliptic1D elliptic1D.cpp $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCPATH) $(LDFLAGS) -o $@ $< $(LIBS)
 
 elliptic2D: elliptic2D.cpp
-	$(CXX) $(CXXFLAGS) $(INCPATH) -o elliptic2D elliptic2D.cpp $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCPATH) $(LDFLAGS) -o $@ $< $(LIBS)
 	
 parabolic1D: parabolic1D.cpp
-	$(CXX) $(CXXFLAGS) $(INCPATH) -o parabolic1D parabolic1D.cpp $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCPATH) $(LDFLAGS) -o $@ $< $(LIBS)
 
 convection_diffusion: convection_diffusion.cpp
-	$(CXX) $(CXXFLAGS) $(INCPATH) -o convection_diffusion convection_diffusion.cpp $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCPATH) $(LDFLAGS) -o $@ $< $(LIBS)
 
 RK2: RK2.cpp
-	$(CXX) $(CXXFLAGS) $(INCPATH) -o RK2 RK2.cpp $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCPATH) $(LDFLAGS) -o $@ $< $(LIBS)
 
-wave1d: wave1d.cpp
-	$(CXX) $(CXXFLAGS) $(INCPATH) -o wave1d wave1d.cpp $(LIBS)
+# Wave equation targets
+wave1d: wave1d.cpp $(SOURCES)
+	$(CXX) $(CXXFLAGS) $(INCPATH) $(LDFLAGS) -o $@ $^ $(LIBS)
 
-wave1D_case2: wave1D_case2.cpp
-	$(CXX) $(CXXFLAGS) $(INCPATH) -o wave1D_case2 wave1D_case2.cpp $(LIBS)
+wave1d_case2: wave1d_case2.cpp $(SOURCES)
+	$(CXX) $(CXXFLAGS) $(INCPATH) $(LDFLAGS) -o $@ $^ $(LIBS)
 
-wave2d: wave2d.cpp
-	$(CXX) $(CXXFLAGS) $(INCPATH) -o wave2d wave2d.cpp $(LIBS)
+wave2d: wave2d.cpp $(SOURCES)
+	$(CXX) $(CXXFLAGS) $(INCPATH) $(LDFLAGS) -o $@ $^ $(LIBS)
 
-wave2D_case2: wave2D_case2.cpp
-	$(CXX) $(CXXFLAGS) $(INCPATH) -o wave2D_case2 wave2D_case2.cpp $(LIBS)
+wave2d_case2: wave2d_case2.cpp $(SOURCES)
+	$(CXX) $(CXXFLAGS) $(INCPATH) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 clean:
-	rm -f transport1D schrodinger1D parabolic1D elliptic1D elliptic2D convection_diffusion RK2 wave1d wave1D_case2 wave2d wave2D_case2
+	rm -f transport1D \
+        schrodinger1D \
+        parabolic1D \
+        elliptic1D \
+        elliptic2D \
+        convection_diffusion \
+        RK2 \
+        wave1d \
+        wave1d_case2 \
+        wave2d \
+        wave2d_case2
