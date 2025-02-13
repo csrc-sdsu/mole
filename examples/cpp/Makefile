@@ -65,5 +65,8 @@ convection_diffusion: convection_diffusion.cpp
 RK2: RK2.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o RK2 RK2.cpp $(LIBS)
 
+Schrodinger2D: Schrodinger2D.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o Schrodinger2D Schrodinger2D.cpp $(LIBS)
+
 clean:
-	rm -f transport1D schrodinger1D parabolic1D elliptic1D elliptic2D convection_diffusion RK2
+	rm -f transport1D schrodinger1D parabolic1D elliptic1D elliptic2D convection_diffusion RK2 Schrodinger2D
