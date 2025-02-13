@@ -37,8 +37,8 @@ endif
 endif
 
 
-all: transport1D schrodinger1D elliptic1D elliptic2D parabolic1D convection_diffusion RK2 Schrodinger2D
-
+all: transport1D schrodinger1D elliptic1D elliptic2D elliptic3D parabolic1D convection_diffusion RK2 Schrodinger2D
+ 
 
 
 transport1D: transport1D.cpp
@@ -52,6 +52,9 @@ elliptic1D: elliptic1D.cpp
 
 elliptic2D: elliptic2D.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o elliptic2D elliptic2D.cpp $(LIBS)
+
+elliptic3D: elliptic3D.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o elliptic3D elliptic3D.cpp $(LIBS)
 	
 parabolic1D: parabolic1D.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o parabolic1D parabolic1D.cpp $(LIBS)
@@ -62,10 +65,5 @@ convection_diffusion: convection_diffusion.cpp
 RK2: RK2.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o RK2 RK2.cpp $(LIBS)
 
-Schrodinger2D: Schrodinger2D.cpp
-	$(CXX) $(CXXFLAGS) $(INCPATH) -o Schrodinger2D Schrodinger2D.cpp $(LIBS)
-
 clean:
-	rm -f transport1D schrodinger1D parabolic1D elliptic1D elliptic2D convection_diffusion RK2 Schrodinger2D
-
-
+	rm -f transport1D schrodinger1D parabolic1D elliptic1D elliptic2D convection_diffusion RK2
