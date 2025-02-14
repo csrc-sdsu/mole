@@ -15,6 +15,7 @@
  * 
  */
 
+
 /* 
  * @file utils.cpp
  * @brief Helpers for sparse operations and MATLAB analogs
