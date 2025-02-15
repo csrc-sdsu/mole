@@ -8,18 +8,29 @@
 *.so
 *.a
 *.asv
-*~
+
+*.obj
+*.exe
+*.out
+*.app
+*.dll
+*.dylib
+
 
 # Ignore Doxygen generated HTML and XML output
 doc/api_docs/cpp  
 # Ignore Sphinx build output
 doc/sphinx/build/
+# Build directory
+build/
+**/build/
 
 # Mac specific
 .DS_Store
 *.dSYM
 *~
 *.dylib
+
 
 # Python
 dist
@@ -30,7 +41,7 @@ dist
 __pycache__/
 .ipynb_checkpoints/
 
-# Editor Misc
+# Editor Misc and IDE
 .cache/
 .history
 .vscode
@@ -52,3 +63,27 @@ tests/cpp/test3
 tests/cpp/test4
 tests/cpp/test5
 
+# Solution files
+solutions/
+*.dat
+
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+*.cmake
+compile_commands.json
+
+# Generated headers
+*.hpp.gch
+*.h.gch
+
+# Temporary files
+*.tmp
+
+# JSON files if not needed
+*.json
+
+# HTML documentation if not needed
+*.html
