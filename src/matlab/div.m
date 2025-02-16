@@ -61,6 +61,8 @@ function D = div(k, m, dx)
             for i = 5:m-2
                 D(i, i-4:i+3) = [5/7168 -49/5120 245/3072 -1225/1024 1225/1024 -245/3072 49/5120 -5/7168];
             end
+        otherwise 
+            D=divergencehelper(k,m);
     end
     D = (1/dx).*D;
 end
