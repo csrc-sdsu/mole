@@ -65,9 +65,6 @@ RK2: RK2.cpp
 Schrodinger2D: Schrodinger2D.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o Schrodinger2D Schrodinger2D.cpp $(LIBS)
 
-SchrodingeD: Schrodinger2D.cpp
-	$(CXX) $(CXXFLAGS) $(INCPATH) -o Schrodinger2D Schrodinger2D.cpp $(LIBS)
-
 Burgers1D: Burgers1D.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o Burgers1D Burgers1D.cpp $(LIBS)
 
