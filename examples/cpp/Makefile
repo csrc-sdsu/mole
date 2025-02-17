@@ -37,7 +37,7 @@ endif
 endif
 
 
-all: transport1D schrodinger1D elliptic1D elliptic2D parabolic1D convection_diffusion RK2 Schrodinger2D
+all: transport1D schrodinger1D elliptic1D elliptic2D parabolic1D convection_diffusion RK2 Schrodinger2D Burgers1D pois2D
 
 
 
@@ -65,7 +65,17 @@ RK2: RK2.cpp
 Schrodinger2D: Schrodinger2D.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o Schrodinger2D Schrodinger2D.cpp $(LIBS)
 
+SchrodingeD: Schrodinger2D.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o Schrodinger2D Schrodinger2D.cpp $(LIBS)
+
+Burgers1D: Burgers1D.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o Burgers1D Burgers1D.cpp $(LIBS)
+
+pois2D: pois2D.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o pois2D pois2D.cpp $(LIBS)
+
 clean:
-	rm -f transport1D schrodinger1D parabolic1D elliptic1D elliptic2D convection_diffusion RK2 Schrodinger2D
+	rm -f transport1D schrodinger1D parabolic1D elliptic1D elliptic2D convection_diffusion RK2 Schrodinger2D Burgers1D pois2D
+
 
 
