@@ -1,7 +1,6 @@
 #include "mole.h"
 #include <iostream>
 #include <cmath>
-#include <thread>
 
 using namespace std::chrono_literals;
 constexpr double pi = 3.14159;
@@ -53,42 +52,49 @@ int main()
 
     S = speye<sp_mat>(S.n_rows, S.n_cols) - a * dt * S;
     
-    // Open a pipe to GNUplot
-    FILE *gnuplotPipe = popen("gnuplot -persistent", "w");
-    if (!gnuplotPipe) {
-        std::cerr << "Error opening GNUplot.\n";
+    int steps = t / dt;
+    
+    std::ofstream dataFile("results.dat");
+    if (!dataFile) {
+        std::cerr << "Error opening data file.\n";
         return 1;
     }
-    
-    int steps = t / dt;
 
+    // Write all time steps to a single data file
     for (int i = 1; i <= steps; ++i) {
-        U = S * U;  // Compute U^(n+1)
+        // Compute U^(n+1)
+        U = S * U;
 
-        // Save data to file for plotting
-        std::ofstream dataFile("plot_data.dat");
-        for (size_t j = 0; j < grid.n_elem; ++j) {
-            dataFile << grid(j) << " " << U(j) << " "
-            << std::sin(2 * pi * (grid(j) - a * i * dt)) << "\n";
+        // Store the data with an empty line between time steps for indexing in GNUplot
+        for (size_t j = 0; j < grid.size(); ++j) {
+            dataFile << grid[j] << " " << U[j] << " "
+                     << std::sin(2 * pi * (grid[j] - a * i * dt)) << "\n";
         }
-        dataFile.close();
+        dataFile << "\n\n"; // Separate time steps
+    }
+    dataFile.close();
 
-        // Send plot commands to GNUplot
-        fprintf(gnuplotPipe, "set title 't = %.2f'\n", i * dt);
-        fprintf(gnuplotPipe, "set xlabel 'x'\n");
-        fprintf(gnuplotPipe, "set ylabel 'u(x, t)'\n");
-        fprintf(gnuplotPipe, "set xrange [%f:%f]\n", west, east);
-        fprintf(gnuplotPipe, "set yrange [-1.5:1.5]\n");
-        fprintf(gnuplotPipe, "plot 'plot_data.dat' using 1:2 with linespoints title 'Approximation', "
-                             "'plot_data.dat' using 1:3 with lines title 'Exact Solution'\n");
-        fflush(gnuplotPipe);
-
-        std::this_thread::sleep_for(400ms);
+    // Create the GNUplot script
+    std::ofstream scriptFile("gp_script");
+    if (!scriptFile) {
+        std::cerr << "Error creating GNUplot script.\n";
+        return 1;
     }
 
-    // Close GNUplot
-    pclose(gnuplotPipe);
-    
-   
-    
+    scriptFile << "set terminal qt\n";
+    scriptFile << "set xlabel 'x'\n";
+    scriptFile << "set ylabel 'u(x,t)'\n";
+    scriptFile << "set xrange [" << west << ":" << east << "]\n";
+    scriptFile << "set yrange [-1.5:1.5]\n";
+    scriptFile << "set grid\n";
+    scriptFile << "do for [i=0:" << steps-1 << "] {\n";
+    scriptFile << "    plot 'results.dat' index i using 1:2 with linespoints title sprintf('t = %.2f', i*" << dt << " + " << dt << "), "
+                  "'results.dat' index i using 1:3 with lines title 'Exact Solution'\n";
+    scriptFile << "    pause 0.1\n";
+    scriptFile << "}\n";
+
+    scriptFile.close();
+
+    // Run GNUplot with the script
+    system("gnuplot -persistent gp_script");
 }
