@@ -7,66 +7,39 @@
 MOLE Documentation
 ======================
 
-----------------------------------------------------------
-Welcome to MOLE (Mimetic Operators Library Enhanced)
-----------------------------------------------------------
-
-MOLE is a comprehensive library for numerical computations focusing on mimetic finite difference methods.
-
 .. image:: ../../../logo.png
    :align: center
    :width: 200px
 
---------------------------------------------------
-Key Features
---------------------------------------------------
-
-* Mimetic finite difference operators
-* Support for various boundary conditions
-* High-performance numerical computations
-* Cross-platform compatibility (C++ and MATLAB implementations)
-* Extensive example collection
-
---------------------------------------------------
-Contents
---------------------------------------------------
+.. toctree::
+   :maxdepth: 2
+   :caption: Core Documentation
+   
+   introduction
+   readme
+   installation
+   getting_started
+   
 
 .. toctree::
-   :maxdepth: 4
-   :caption: Documentation
+   :maxdepth: 2
+   :caption: C++ API
    
-   api/introduction
-   api/cpp_api
-   api/matlab_api
-   api/gettingstarted
-   Contributing Guide <api/CONTRIBUTING>
-   Code of Conduct <api/CODE_OF_CONDUCT>
+   api/cpp/operators/index
+   api/cpp/boundary/index
+   api/cpp/utils/index
+
+.. toctree::
+   :maxdepth: 2
+   :caption: MATLAB API
    
---------------------------------------------------
-Indices and Tables
---------------------------------------------------
+   api/matlab/operators/index
+   api/matlab/boundary/index
+   api/matlab/utils/index
 
-* :ref:`genindex`
-* :ref:`search`
-
-.. **Doxygen API Documentation**
-
-.. **C++ API**
-.. ------------
-.. .. doxygenindex:: 
-   :project: MoleCpp
-
-.. **MATLAB API**
-.. --------------
-.. .. toctree::
-..    :maxdepth: 1
-..    :caption: MATLAB API
-
-..    ../../doc/api_docs/matlab/mole_MATLAB/index.html
-
---------------------------------------------------
-**More Information**
---------------------------------------------------
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. toctree::
+   :maxdepth: 1
+   :caption: Project Info
+   
+   contributing
+   code_of_conduct
