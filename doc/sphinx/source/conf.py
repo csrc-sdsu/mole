@@ -51,7 +51,7 @@ source_suffix = {
     '.md': 'markdown',
 }
 
-templates_path = ['_templates']
+templates_path = [str(Path('_templates'))]
 exclude_patterns = []
 
 # HTML output configuration
@@ -61,7 +61,7 @@ html_theme_options = {
     "logo_only": True,
     "navigation_depth": 4,
 }
-html_static_path = []
+html_static_path = ['_static']
 html_logo = str(ROOT_DIR / "logo.png")
 
 # Breathe configuration
@@ -150,5 +150,16 @@ numfig_format = {
 
 # Fix image handling
 latex_additional_files = []
+
+# MATLAB documentation handling
+matlab_doc_root = str(ROOT_DIR / 'doc/api_docs/matlab')
+
+# Configure external links for MATLAB API
+extlinks = {
+    'matlab-api': ('_static/matlab/mole_MATLAB/%s.html', '%s'),
+}
+
+# Add MATLAB API configuration
+matlab_api_path = str(ROOT_DIR / 'doc/api_docs/matlab/mole_MATLAB')
 
 
