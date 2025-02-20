@@ -24,7 +24,7 @@ nc = [0;0];
 % v = [hermiteH(4,-1);hermiteH(4,1)];
 v = [-20; -20];
 G = grad(k,m,dx);
-I = interpolFacesToStaggered1D(k,m);
+I = interpolFacesToCentersG1D(k,m);
 A = lap(k,m,dx) - 2*sparse(diag(xc)*I*G) + 8*speye(m+2,m+2); % m = 4
 b = zeros(size(A,2),1);
 [A0,b0] = addBC1D(A,b,k,m,dx,dc,nc,v);

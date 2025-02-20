@@ -11,7 +11,6 @@ close all; clc;
 addpath('../../src/matlab');
 
 k = 2;
-
 bvp = 1;
 m = 29; % should be odd to be able to plot the middle slice
 n = m+2; % should be odd to be able to plot the middle slice
@@ -50,6 +49,7 @@ b = reshape(b,[],1);
 [A0,b0] = addBC3D(A,b,k,m,dx,n,dy,o,dz,dc,nc,v);
 ua = A0\b0; % approximate solution
 ua = reshape(ua,m+2,n+2,o+2);
+ua = ua - ua((m+1)/2,(n+3)/2,(o+3)/2);
 
 % plot slices as surfaces
 figure(bvp)

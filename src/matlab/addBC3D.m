@@ -87,16 +87,23 @@ function [A, b] = addBC3D(A, b, k, m, dx, n, dy, o, dz, dc, nc, v)
     [Abcl,Abcr,Abcb,Abct,Abcf,Abcz] = addBC3Dlhs(k, m, dx, n, dy, o, dz, dc, nc);
 
     % get rhs entries affected by bcs for left, right, bottom, top, front, back faces, resp.
-    [rl,~,~] = find(Abcl);
-    [rr,~,~] = find(Abcr);
-    [rb,~,~] = find(Abcb);
-    [rt,~,~] = find(Abct);
-    [rf,~,~] = find(Abcf);
-    [rz,~,~] = find(Abcz);
+    [rl,~,~] = find(Abcl); 
+    [rr,~,~] = find(Abcr); 
+    [rb,~,~] = find(Abcb); 
+    [rt,~,~] = find(Abct); 
+    [rf,~,~] = find(Abcf); 
+    [rz,~,~] = find(Abcz); 
+    rl = unique(rl);
+    rr = unique(rr);
+    rb = unique(rb);
+    rt = unique(rt);
+    rf = unique(rf);
+    rz = unique(rz);
 
     % remove rows from matrix A
     Abc = Abcl + Abcr + Abcb + Abct + Abcz + Abcf;
     [rowsbc,~,~] = find(Abc);
+    rowsbc = unique(rowsbc);
     [rows,cols,s] = find(A(rowsbc,:));
     A = A - sparse(rows, cols, s, size(A,1), size(A,2));
     % update matrix A with boundary information

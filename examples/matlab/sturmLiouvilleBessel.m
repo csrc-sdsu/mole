@@ -22,7 +22,7 @@ dc = [1;1];
 nc = [0;0];
 v = [0;besselj(3,1)];
 G = grad(k,m,dx);
-I = interpolFacesToStaggered1D(k,m);
+I = interpolFacesToCentersG1D(k,m);
 A = sparse(diag(xc.^2)*lap(k,m,dx) + diag(xc)*I*G + diag(xc.^2 - 9)*speye(m+2,m+2)); % nu = 3
 b = zeros(size(A,2),1);
 [A0,b0] = addBC1D(A,b,k,m,dx,dc,nc,v);

@@ -1,5 +1,5 @@
 % ====================== Test 2 =====================
-% 3D Poisson BVP: Dirichlet (on left and right faces), Periodic, Periodic BC
+% 3D Poisson BVP: Robin (on left and right faces), Periodic, Periodic BC
 % -(u_xx + u_yy + u_zz) = - f(x,y,z), -1 < x < 1, 0 < y,z < 2 pi
 % - f(x,y,z) = 16(1-x^2)cos(4x) - 16x sin(4x) + 2(cos(4x)+sin(2y)+sin(4z)) + (1-x^2)(4 sin(2y) + 16 sin(4z))
 % % f(x,y,z) = 16(1-x^2)cos(4x) - 16x sin(4x) + 2 cos(4x) + (1-x^2)(4 sin(2y) + 16 sin(4z))
@@ -14,7 +14,7 @@ addpath('../../src/matlab');
 
 k = 2;
 bvp = 2;
-m = 49; % should be odd to be able to plot the middle slice
+m = 39; % should be odd to be able to plot the middle slice
 n = m+2; % should be odd to be able to plot the middle slice
 o = m+4; % should be odd to be able to plot the middle slice
 dx = 2/m;
@@ -27,10 +27,14 @@ zc = [0 dz/2:dz:2*pi-dz/2 2*pi]';
 [Y,X,Z] = meshgrid(yc,xc,zc);
 t = 'u_xx + u_yy + u_zz = f(x,y,z), -1 < x < 1, 0 < y,z < 2 pi, u(-1,y,z) = 0, u(1,y,z) = 0, periodic BC on y,z, with exact solution u(x,y,z) = (cos(4x)+sin(2y)+sin(4z))*(1-x^2)';
 ue = (cos(4*X)+sin(2*Y)+sin(4*Z)).*(1-X.^2);
-dc = [1;1;0;0;0;0];
-nc = [0;0;0;0;0;0];
-bcl = zeros(n*o,1);
-bcr = zeros(n*o,1);
+dc = [0;0;0;0;0;0];
+nc = [1;1;0;0;0;0];
+bcl = -2*(cos(4)+sin(2*Y)+sin(4*Z));
+bcr = -2*(cos(4)+sin(2*Y)+sin(4*Z));
+bcl = squeeze(bcl(1,:,:)); % left bc (y increase along rows, z increase along cols)
+bcr = squeeze(bcr(end,:,:)); % right bc (y increase along rows, z increase along cols)
+bcl = reshape(bcl(2:end-1,2:end-1),[],1);
+bcr = reshape(bcr(2:end-1,2:end-1),[],1);
 bcb = zeros((m+2)*o,1);
 bct = zeros((m+2)*o,1);
 bcf = zeros((n+2)*(m+2),1);
@@ -42,6 +46,8 @@ b = reshape(b,[],1);
 [A0,b0] = addBC3D(A,b,k,m,dx,n,dy,o,dz,dc,nc,v);
 ua = A0\b0; % approximate solution
 ua = reshape(ua,m+2,n+2,o+2);
+ua = ua - ua(1) + ue(1);
+% ua = ua - ua((m+1)/2,(n+3)/2,(o+3)/2);
 
 
 % plot slices as surfaces

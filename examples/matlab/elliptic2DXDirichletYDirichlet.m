@@ -11,7 +11,6 @@ close all; clc;
 addpath('../../src/matlab');
 
 k = 2;
-
 bvp = 1;
 m = 99; % it should be odd
 n = m+2; % it should be odd

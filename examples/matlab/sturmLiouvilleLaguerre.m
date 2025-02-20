@@ -30,7 +30,7 @@ nc = [0;0];
 % v = [laguerreL(4,0);laguerreL(4,2)];
 v = [1; 0.333333333333333];
 G = grad(k,m,dx);
-I = interpolFacesToStaggered1D(k,m);
+I = interpolFacesToCentersG1D(k,m);
 A = sparse(diag(xc)*lap(k,m,dx) + diag(1-xc)*I*G) + 4*speye(m+2,m+2); % n = 4
 b = zeros(size(A,2),1);
 [A0,b0] = addBC1D(A,b,k,m,dx,dc,nc,v);

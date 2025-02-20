@@ -21,7 +21,7 @@ dc = [1;1];
 nc = [0;0];
 v = [1;1];
 G = grad(k,m,dx);
-I = interpolFacesToStaggered1D(k,m);
+I = interpolFacesToCentersG1D(k,m);
 A = sparse(diag(1-xc.^2)*lap(k,m,dx) - diag(xc)*I*G) + 4*speye(m+2,m+2); % n = 2
 b = zeros(size(A,2),1);
 [A0,b0] = addBC1D(A,b,k,m,dx,dc,nc,v);
