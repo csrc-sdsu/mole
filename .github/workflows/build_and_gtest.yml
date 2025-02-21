@@ -3,12 +3,10 @@ name: Build and Test
 on:
   push:
     branches:
-      - main
-      - gtest
+      - '**' 
   pull_request:
     branches:
-      - main
-      - gtest
+      - '**' 
 
 jobs:
   build-and-test:
