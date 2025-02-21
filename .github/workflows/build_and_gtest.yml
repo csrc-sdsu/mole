@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - master
-      - Workflow_Updates
+      - Makefile_Deletion
   pull_request:
     branches:
       - master
-      - Workflow_Updates
+      - Makefile_Deletion
 
 jobs:
   build-and-test:
