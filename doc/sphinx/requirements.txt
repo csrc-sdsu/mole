@@ -11,4 +11,3 @@ sphinxcontrib-mermaid
 sphinxcontrib-svg2pdfconverter
 sphinxext-altair
 docutils<0.21
-xindy
