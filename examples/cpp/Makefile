@@ -37,8 +37,15 @@ endif
 endif
 
 
-all: transport1D schrodinger1D elliptic1D elliptic2D elliptic3D parabolic1D convection_diffusion RK2 Schrodinger2D
- 
+all: transport1D \
+     schrodinger1D \
+     elliptic1D \
+     elliptic2D \
+     elliptic3D \
+     parabolic1D \
+     convection_diffusion \
+     RK2 \
+     Schrodinger2D 
 
 
 transport1D: transport1D.cpp

@@ -52,7 +52,9 @@ tests/cpp/test3
 tests/cpp/test4
 tests/cpp/test5
 
-venv/
-
 # build
 build/
+mole/
+
+#clang
+.clang-format
