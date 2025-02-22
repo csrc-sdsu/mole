@@ -60,7 +60,9 @@ Thumbs.db
 /examples/cpp/plot.gnu
 /tests/cpp/test[1-5]
 
-venv/
-
 # build
 build/
+mole/
+
+#clang
+.clang-format
