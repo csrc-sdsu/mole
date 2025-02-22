@@ -1,54 +1,62 @@
-# General ignore patterns
+# Build and binary directories
+/build/
+/bin/
+/lib/
+/dist/
+/src/mole_C++/*.o
+/src/mole_C++/*.a
+/src/cpp/*.o
+/src/cpp/*.a
 
-!*.*
-!*/
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+*.cmake
+!CMakeLists.txt
 
-# Ignore build artifacts and temporary files
-*.o
-*.so
-*.a
-*.asv
-*~
+# Documentation generated files
+/doc/api_docs/cpp
+# /doc/api_docs/matlab # TODO: add this back in once we work to update or integrate the MATLAB API.
+/doc/sphinx/build/
+/doc/sphinx/_build/
+# /doc/sphinx/source/api/ # TODO: add this back in once the API is updated and the final docs are built.
 
-# Ignore Doxygen generated HTML and XML output
-doc/api_docs/cpp  
-# Ignore Sphinx build output
-doc/sphinx/build/
-
-# Mac specific
-.DS_Store
-*.dSYM
-*~
-*.dylib
-
-# Python
-dist
-*egg*
-.pytest_cache
-*cffi.so
-*cffi.dylib
+# Python related
 __pycache__/
-.ipynb_checkpoints/
+*.py[cod]
+.env
+.venv
+env/
+venv/
+*.egg-info/
 
-# Editor Misc
+# MATLAB related
+*.asv
+
+# IDE and editor files
+.vscode/
+.idea/
+.vim/
 .cache/
-.history
-.vscode
-.ccls-cache
-.vim
+.ccls-cache/
+*.swp
+*~
 
-# Don't try to track executables
-examples/cpp/RK2
-examples/cpp/convection_diffusion3D
-examples/cpp/elliptic1D
-examples/cpp/elliptic2D
-examples/cpp/parabolic1D
-examples/cpp/plot.gnu
-examples/cpp/schrodinger1D
-examples/cpp/transport1D
-tests/cpp/test1
-tests/cpp/test2
-tests/cpp/test3
-tests/cpp/test4
-tests/cpp/test5
+
+# OS specific files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+
+# Project specific executables
+/examples/cpp/RK2
+/examples/cpp/convection_diffusion3D
+/examples/cpp/elliptic[12]D
+/examples/cpp/parabolic1D
+/examples/cpp/schrodinger1D
+/examples/cpp/transport1D
+/examples/cpp/plot.gnu
+/tests/cpp/test[1-5]
 
