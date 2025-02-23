@@ -1,4 +1,4 @@
-% convection_diffusion.m | Solves convection-diffusion equation using MOLE
+% convection_diffusion3D.m | Solves convection-diffusion equation using MOLE
 
 clc
 close all
