@@ -45,6 +45,11 @@ function [A, b] = addBC1D(A, b, k, m, dx, dc, nc, v)
 %        dc : a0 (2x1 vector for left and right vertices, resp.)
 %        nc : b0 (2x1 vector for left and right vertices, resp.)
 %         v : g (2x1 vector for left and right vertices, resp.)
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
 
     % verify bc sizes and square linear system
     assert(all(size(dc) == [2 1]), 'dc is a 2x1 vector');

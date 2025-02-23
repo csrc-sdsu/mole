@@ -18,6 +18,11 @@ function b = addBC3Drhs(b, dc, nc, v, rl, rr, rb, rt, rf, rz)
 %        rt : indices of rhs top indices    
 %        rf : indices of rhs front indices    
 %        rz : indices of rhs back indices  
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
 
     % rhs for non-periodic boundary conditions (assumes data given in cell array)
     qrl = find(dc(1:2).*dc(1:2) + nc(1:2).*nc(1:2),1);

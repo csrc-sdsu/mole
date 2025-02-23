@@ -1,25 +1,14 @@
-% SPDX-License-Identifier: GPL-3.0-only
-% 
-% Copyright 2008-2024 San Diego State University Research Foundation (SDSURF).
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, version 3.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% LICENSE file or on the web GNU General Public License 
-% <https://www.gnu.org/licenses/> for more details.
-%
-% ------------------------------------------------------------------------
-
 function I = interpol2D(m, n, c1, c2)
 % Returns a two-dimensional interpolator of 2nd-order
 %                m : Number of cells along x-axis
 %                n : Number of cells along y-axis
 %               c1 : Left interpolation coeff.
 %               c2 : Bottom interpolation coeff.
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
 
     Ix = interpol(m, c1);
     Iy = interpol(n, c2);

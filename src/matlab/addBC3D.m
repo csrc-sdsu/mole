@@ -68,6 +68,11 @@ function [A, b] = addBC3D(A, b, k, m, dx, n, dy, o, dz, dc, nc, v)
 %        dc : a0 (6x1 vector for left, right, bottom, top, front, back boundary types, resp.)
 %        nc : b0 (6x1 vector for left, right, bottom, top, front, back boundary types, resp.)
 %         v : g (6x1 vector of arrays for left, right, bottom, top, front, back boundaries, resp.)
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
 
     % verify bc sizes and square linear system
     assert(all(size(dc) == [6 1]), 'dc is a 6x1 vector');
