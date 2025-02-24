@@ -114,7 +114,7 @@ If you encounter errors during Homebrew installation, please run the following c
 
 To run the C++ tests manually,
 
-	cmake run_tests
+	make run_tests
  
  Armadillo and SuperLu will be locally installed in the build directory once the cmake .. command is passed.
  By following the steps outlined above, you will successfully install the necessary packages and the MOLE library on your system. 
