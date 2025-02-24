@@ -45,9 +45,9 @@ Update Homebrew again
 
 If you encounter errors during Homebrew installation, please run the following commands before the installation:
 
-```
-sudo chown -R $(whoami) /usr/local/Cellar
-git -C /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core fetch --unshallow
+
+	sudo chown -R $(whoami) /usr/local/Cellar
+	git -C /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core fetch --unshallow
 
 #### 3.1.1 CMake
 **Minimum Version Required**: 3.10
