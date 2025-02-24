@@ -35,8 +35,31 @@ For the macOS, Homebrew needs to be installed to download the required packages.
 	
 	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
+Remove Java dependencies
 
-#### 3.1.1 OpenBLAS
+	brew uninstall --ignore-dependencies java
+
+Update Homebrew again
+
+	brew update
+
+If you encounter errors during Homebrew installation, please run the following commands before the installation:
+
+```
+sudo chown -R $(whoami) /usr/local/Cellar
+git -C /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core fetch --unshallow
+
+#### 3.1.1 CMake
+**Minimum Version Required**: 3.10
+
+##### For Ubuntu systems:
+	sudo apt install cmake
+##### For Mac Systems
+	brew install cmake
+##### For Yum-based systems:  
+	sudo yum install cmake
+
+#### 3.1.2 OpenBLAS
 **Minimum Version Required**: OpenBLAS 0.3.10
 
 ##### For Ubuntu systems:
@@ -46,7 +69,7 @@ For the macOS, Homebrew needs to be installed to download the required packages.
 ##### For Yum-based systems:  
 	sudo yum install openblas-devel
 
-#### 3.1.2 Eigen3
+#### 3.1.3 Eigen3
 **Minimum Version Required**: eigen-3
 
 ##### For Ubuntu systems
@@ -56,13 +79,13 @@ For the macOS, Homebrew needs to be installed to download the required packages.
 ##### For Yum-based systems:  
 	sudo yum install eigen3-devel
 
-#### 3.1.3 libomp
+#### 3.1.4 libomp
 
 ##### For Mac Systems
 	brew install libomp
 
 
-#### 3.1.4 LAPACK
+#### 3.1.5 LAPACK
 
 ##### For Mac Systems
 	brew install lapack
@@ -88,6 +111,10 @@ For the macOS, Homebrew needs to be installed to download the required packages.
  Or
 
  	sudo cmake --install . --prefix /path/to/privileged/location	
+
+To run the C++ tests manually,
+
+	cmake run_tests
  
  Armadillo and SuperLu will be locally installed in the build directory once the cmake .. command is passed.
  By following the steps outlined above, you will successfully install the necessary packages and the MOLE library on your system. 
