@@ -19,6 +19,10 @@ else()
     message(STATUS "Using non-Clang compiler flags.")
 endif()
 
+find_package(Eigen3 3.3.7 REQUIRED)
+find_library(OpenBLAS_LIBRARIES NAMES openblas blas PATHS "/usr/lib/x86_64-linux-gnu" "/usr/local/opt/" REQUIRED)
+find_library(LAPACK_LIBRARY lapack REQUIRED PATHS "/usr/lib" "/usr/lib/x86_64-linux-gnu" "/usr/local/lib" "/usr/local/opt/")
+
 # Paths for downloading and building libraries
 set(ARMADILLO_VERSION "14.2.2")
 set(SUPERLU_VERSION "5.3.0")
@@ -36,6 +40,8 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf superlu-${SUPERLU_VERSION}.t
 execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${SUPERLU_BUILD_DIR})
 execute_process(COMMAND ${CMAKE_COMMAND} ..
     -DCMAKE_INSTALL_PREFIX=${SUPERLU_INSTALL_DIR}
+    -Denable_internal_blaslib=NO
+    -DTPL_BLAS_LIBRARIES= ${OpenBLAS_LIBRARIES}
     -DCMAKE_POSITION_INDEPENDENT_CODE=ON
     -DCMAKE_C_FLAGS="-fPIC"
     -DCMAKE_CXX_FLAGS="-fPIC"
