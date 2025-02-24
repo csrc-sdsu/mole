@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 project(TopLevelProject VERSION 1.0 LANGUAGES CXX)
-<<<<<<< HEAD
+
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -20,7 +20,6 @@ else()
     message(STATUS "Using non-Clang compiler flags.")
 endif()
 
-=======
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -48,8 +47,6 @@ if(POLICY CMP0135)
   cmake_policy(SET CMP0135 NEW)
 endif()
 
-
->>>>>>> 6b1ea3f (Paths updated in CMake to support Mac Apple Silicon)
 # Paths for downloading and building libraries
 set(ARMADILLO_VERSION "14.2.2")
 set(SUPERLU_VERSION "5.3.0")
@@ -106,12 +103,11 @@ else()
     message(STATUS "Using Armadillo from ${ARMADILLO_INSTALL_DIR}")
 endif()
 
-<<<<<<< HEAD
+
 find_package(Eigen3 3.3.7 REQUIRED)
 find_library(OpenBLAS_LIBRARIES NAMES openblas blas PATHS "/usr/lib/x86_64-linux-gnu" "/usr/local/opt/" REQUIRED)
 find_library(LAPACK_LIBRARY lapack REQUIRED PATHS "/usr/lib" "/usr/lib/x86_64-linux-gnu" "/usr/local/lib" "/usr/local/opt/")
-=======
->>>>>>> 6b1ea3f (Paths updated in CMake to support Mac Apple Silicon)
+
 
 # Required libraries and link settings
 set(LINK_LIBS ${ARMADILLO_LIBRARIES}
@@ -126,7 +122,7 @@ add_subdirectory(examples/cpp)
 
 # Custom target to build everything
 add_custom_target(all_build DEPENDS mole_C++ tests_C++ examples_C++)
-<<<<<<< HEAD
+
 
 =======
 >>>>>>> 6b1ea3f (Paths updated in CMake to support Mac Apple Silicon)
