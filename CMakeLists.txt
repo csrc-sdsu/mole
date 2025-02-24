@@ -124,5 +124,3 @@ add_subdirectory(examples/cpp)
 add_custom_target(all_build DEPENDS mole_C++ tests_C++ examples_C++)
 
 
-=======
->>>>>>> 6b1ea3f (Paths updated in CMake to support Mac Apple Silicon)
