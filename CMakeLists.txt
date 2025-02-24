@@ -41,7 +41,7 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${SUPERLU_BUILD_DIR})
 execute_process(COMMAND ${CMAKE_COMMAND} ..
     -DCMAKE_INSTALL_PREFIX=${SUPERLU_INSTALL_DIR}
     -Denable_internal_blaslib=NO
-    -DTPL_BLAS_LIBRARIES= ${OpenBLAS_LIBRARIES}
+    -DTPL_BLAS_LIBRARIES=${OpenBLAS_LIBRARIES}
     -DCMAKE_POSITION_INDEPENDENT_CODE=ON
     -DCMAKE_C_FLAGS="-fPIC"
     -DCMAKE_CXX_FLAGS="-fPIC"
@@ -79,9 +79,6 @@ else()
     message(STATUS "Using Armadillo from ${ARMADILLO_INSTALL_DIR}")
 endif()
 
-find_package(Eigen3 3.3.7 REQUIRED)
-find_library(OpenBLAS_LIBRARIES NAMES openblas blas PATHS "/usr/lib/x86_64-linux-gnu" "/usr/local/opt/" REQUIRED)
-find_library(LAPACK_LIBRARY lapack REQUIRED PATHS "/usr/lib" "/usr/lib/x86_64-linux-gnu" "/usr/local/lib" "/usr/local/opt/")
 
 # Required libraries and link settings
 set(LINK_LIBS ${ARMADILLO_LIBRARIES}
