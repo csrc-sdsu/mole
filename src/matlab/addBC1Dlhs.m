@@ -13,6 +13,11 @@ function [Al, Ar] = addBC1Dlhs(k, m, dx, dc, nc)
 %        dx : Step size
 %        dc : Dirichlet coefficient (2x1 vector for left and right vertices, resp.)
 %        nc : Neumann coefficient (2x1 vector for left and right vertices, resp.)
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
 
     % Dirichlet coefficient
     Al = sparse(m+2, m+2);

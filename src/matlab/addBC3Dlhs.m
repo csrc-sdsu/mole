@@ -21,6 +21,11 @@ function [Abcl,Abcr,Abcb,Abct,Abcf,Abcz] = addBC3Dlhs(k, m, dx, n, dy, o, dz, dc
 %        dz : Depth cell size
 %        dc : a0 (6x1 vector for left, right, bottom, top, front, back boundary types, resp.)
 %        nc : b0 (6x1 vector for left, right, bottom, top, front, back boundary types, resp.)
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
 
     % 3D boundary operator
     [Abcl0,Abcr0] = addBC1Dlhs(k, m, dx, dc(1:2,1), nc(1:2,1));

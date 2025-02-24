@@ -12,6 +12,11 @@ function b = addBC1Drhs(b, dc, nc, v, vec)
 %        nc : Neumann coefficient (2x1 vector for left and right vertices, resp.)
 %         v : value (2x1 vector for left and right vertices, resp.)
 %       vec : vector with indices of rhs associated to bc
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
 
     % periodic boundary condition case
     q = find(dc.*dc + nc.*nc,1);

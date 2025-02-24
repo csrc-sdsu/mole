@@ -61,6 +61,11 @@ function [A, b] = addBC2D(A, b, k, m, dx, n, dy, dc, nc, v)
 %        dc : a0 (4x1 vector for left, right, bottom, top boundaries, resp.)
 %        nc : b0 (4x1 vector for left, right, bottom, top boundaries, resp.)
 %         v : g (4x1 vector of arrays for left, right, bottom, top boundaries, resp.)
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
 
     % verify bc sizes and square linear system
     assert(all(size(dc) == [4 1]), 'dc is a 4x1 vector');
