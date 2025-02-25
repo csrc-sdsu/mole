@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(TopLevelProject VERSION 1.0 LANGUAGES CXX)
 
+
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -10,9 +11,9 @@ message(STATUS "Detected CXX Compiler ID: ${CMAKE_CXX_COMPILER_ID}")
 # Compiler-specific CXX_FLAGS and linker flags
 if (CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
     set(CMAKE_CXX_FLAGS "-O3 -Xclang -fopenmp -DARMA_DONT_USE_WRAPPER -DARMA_USE_SUPERLU")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/usr/local/opt/libomp/lib -lomp")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/usr/local/opt/libomp/lib -L/opt/homebrew/opt/libomp/lib -lomp")
     message(STATUS "Using AppleClang-specific flags.")
-    include_directories("/usr/local/opt/libomp/include")
+    include_directories("/usr/local/opt/libomp/include" "/opt/homebrew/opt/libomp/include")
 else()
     set(CMAKE_CXX_FLAGS "-O3 -fopenmp -DARMA_DONT_USE_WRAPPER -DARMA_USE_SUPERLU")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
@@ -26,7 +27,6 @@ find_library(LAPACK_LIBRARY lapack REQUIRED PATHS "/usr/lib" "/usr/lib/x86_64-li
 if(POLICY CMP0135)
   cmake_policy(SET CMP0135 NEW)
 endif()
-
 
 # Paths for downloading and building libraries
 set(ARMADILLO_VERSION "14.2.2")
@@ -84,6 +84,9 @@ else()
     message(STATUS "Using Armadillo from ${ARMADILLO_INSTALL_DIR}")
 endif()
 
+find_package(Eigen3 3.3.7 REQUIRED)
+find_library(OpenBLAS_LIBRARIES NAMES openblas blas PATHS "/usr/lib/x86_64-linux-gnu" "/usr/local/opt/" REQUIRED)
+find_library(LAPACK_LIBRARY lapack REQUIRED PATHS "/usr/lib" "/usr/lib/x86_64-linux-gnu" "/usr/local/lib" "/usr/local/opt/")
 
 # Required libraries and link settings
 set(LINK_LIBS ${ARMADILLO_LIBRARIES}
@@ -98,4 +101,5 @@ add_subdirectory(examples/cpp)
 
 # Custom target to build everything
 add_custom_target(all_build DEPENDS mole_C++ tests_C++ examples_C++)
+
 
