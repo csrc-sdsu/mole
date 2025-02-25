@@ -11,24 +11,6 @@ message(STATUS "Detected CXX Compiler ID: ${CMAKE_CXX_COMPILER_ID}")
 # Compiler-specific CXX_FLAGS and linker flags
 if (CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
     set(CMAKE_CXX_FLAGS "-O3 -Xclang -fopenmp -DARMA_DONT_USE_WRAPPER -DARMA_USE_SUPERLU")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/usr/local/opt/libomp/lib -lomp")
-    message(STATUS "Using AppleClang-specific flags.")
-    include_directories("/usr/local/opt/libomp/include")
-else()
-    set(CMAKE_CXX_FLAGS "-O3 -fopenmp -DARMA_DONT_USE_WRAPPER -DARMA_USE_SUPERLU")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
-    message(STATUS "Using non-Clang compiler flags.")
-endif()
-
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-
-# Display the detected C++ compiler ID
-message(STATUS "Detected CXX Compiler ID: ${CMAKE_CXX_COMPILER_ID}")
-
-# Compiler-specific CXX_FLAGS and linker flags
-if (CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
-    set(CMAKE_CXX_FLAGS "-O3 -Xclang -fopenmp -DARMA_DONT_USE_WRAPPER -DARMA_USE_SUPERLU")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/usr/local/opt/libomp/lib -L/opt/homebrew/opt/libomp/lib -lomp")
     message(STATUS "Using AppleClang-specific flags.")
     include_directories("/usr/local/opt/libomp/include" "/opt/homebrew/opt/libomp/include")
