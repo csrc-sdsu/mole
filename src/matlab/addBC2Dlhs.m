@@ -17,6 +17,11 @@ function [Abcl,Abcr,Abcb,Abct] = addBC2Dlhs(k, m, dx, n, dy, dc, nc)
 %        dy : Horizontal cell size
 %        dc : a0 (4x1 vector for left, right, bottom, top boundaries, resp.)
 %        nc : b0 (4x1 vector for left, right, bottom, top boundaries resp.)
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
 
     % 2D boundary operator
     [Abcl0,Abcr0] = addBC1Dlhs(k, m, dx, dc(1:2,1), nc(1:2,1));

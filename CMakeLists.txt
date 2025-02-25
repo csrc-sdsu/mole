@@ -20,7 +20,6 @@ else()
     message(STATUS "Using non-Clang compiler flags.")
 endif()
 
-
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -103,11 +102,9 @@ else()
     message(STATUS "Using Armadillo from ${ARMADILLO_INSTALL_DIR}")
 endif()
 
-
 find_package(Eigen3 3.3.7 REQUIRED)
 find_library(OpenBLAS_LIBRARIES NAMES openblas blas PATHS "/usr/lib/x86_64-linux-gnu" "/usr/local/opt/" REQUIRED)
 find_library(LAPACK_LIBRARY lapack REQUIRED PATHS "/usr/lib" "/usr/lib/x86_64-linux-gnu" "/usr/local/lib" "/usr/local/opt/")
-
 
 # Required libraries and link settings
 set(LINK_LIBS ${ARMADILLO_LIBRARIES}

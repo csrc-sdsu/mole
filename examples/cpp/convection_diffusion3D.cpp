@@ -1,5 +1,5 @@
 /**
- * @file convection_diffusion_3D.cpp
+ * @file convection_diffusion3D.cpp
  * @brief Solves a 3D Convection-Diffusion equation using Mimetic Operators for Linear Equations (MOLE).
  *
  * This program numerically solves the 3D convection-diffusion equation using MOLE techniques.

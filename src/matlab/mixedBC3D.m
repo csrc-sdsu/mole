@@ -1,19 +1,3 @@
-% SPDX-License-Identifier: GPL-3.0-only
-% 
-% Copyright 2008-2024 San Diego State University Research Foundation (SDSURF). 
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, version 3.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% LICENSE file or on the web GNU General Public License 
-% <https://www.gnu.org/licenses/> for more details.
-%
-% ------------------------------------------------------------------------
-
 function BC = mixedBC3D(k, m, dx, n, dy, o, dz, left, coeffs_left, right, coeffs_right, bottom, coeffs_bottom, top, coeffs_top, front, coeffs_front, back, coeffs_back)
 % Constructs a 3D mimetic mixed boundary conditions operator
 %
@@ -37,6 +21,11 @@ function BC = mixedBC3D(k, m, dx, n, dy, o, dz, left, coeffs_left, right, coeffs
 %    coeffs_front    : Coefficients for the front boundary condition (a, b for Robin, otherwise coeff. for Dirichlet or Neumann)
 %    back            : Type of boundary condition at the back boundary ('Dirichlet', 'Neumann', 'Robin')
 %    coeffs_back     : Coefficients for the back boundary condition (a, b for Robin, otherwise coeff. for Dirichlet or Neumann)
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
 
     % 1-D boundary operators
     Bm = mixedBC(k, m, dx, left, coeffs_left, right, coeffs_right);
