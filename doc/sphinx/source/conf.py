@@ -126,6 +126,8 @@ latex_elements = {
     'hyperref': r'''
         \usepackage[hidelinks]{hyperref}
     ''',
+    'makeindex': '\\makeindex',  # Use makeindex instead of xindy
+    'printindex': '\\printindex',
 }
 
 latex_documents = [
