@@ -86,11 +86,11 @@ doc-doxygen: doc-deps
 		exit 1; \
 	fi
 	@mkdir -p $(DOXYDIR)
-	@if [ -f Doxyfile ]; then \
-		doxygen Doxyfile || \
+	@if [ -f ../../Doxyfile ]; then \
+		cd ../.. && doxygen Doxyfile || \
 		{ echo "$(RED)Error: Doxygen generation failed. Check the error messages above.$(RESET)"; exit 1; }; \
 	else \
-		echo "$(RED)Error: Doxyfile not found. Please create a Doxyfile first.$(RESET)"; \
+		echo "$(RED)Error: Doxyfile not found in root directory. Please create a Doxyfile first.$(RESET)"; \
 		exit 1; \
 	fi
 	@echo "$(GREEN)Doxygen documentation built successfully in $(DOXYDIR)/$(RESET)"
