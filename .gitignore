@@ -39,7 +39,7 @@ __pycache__/
 
 # Don't try to track executables
 examples/cpp/RK2
-examples/cpp/convection_diffusion
+examples/cpp/convection_diffusion3D
 examples/cpp/elliptic1D
 examples/cpp/elliptic2D
 examples/cpp/parabolic1D

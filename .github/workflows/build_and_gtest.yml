@@ -1,0 +1,40 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - '**' 
+  pull_request:
+    branches:
+      - '**' 
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Update Libraries
+      run: sudo apt-get update
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get install -y cmake g++ libgtest-dev libarmadillo-dev libopenblas-dev libsuperlu-dev libeigen3-dev
+        # Build and install Google Test (if not pre-installed)
+        cd /usr/src/googletest && sudo cmake . && sudo make && sudo make install
+
+    - name: Create build directory
+      run: mkdir build
+
+    - name: Run CMake
+      run: cmake -S . -B build
+
+    - name: Build library
+      run: cmake --build build
+
+    - name: Run tests
+      run: |
+        cd build
+        make run_tests
