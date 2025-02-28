@@ -9,6 +9,7 @@ BUILDDIR      = build
 
 # Output directories
 PDFDIR        = $(BUILDDIR)/pdf
+DOXYDIR       = cd ../doxygen/cpp # TODO: replace with the doxygen output directory once we make the matlab docs builder
 
 .PHONY: help doc-deps doc-html doc-latexpdf doc-clean doc-doxygen doc-all
 
@@ -45,6 +46,7 @@ doc-latexpdf: doc-deps
 # Clean built documentation
 doc-clean:
 	@rm -rf $(BUILDDIR)
+	@rm -rf $(DOXYDIR)
 
 # Generate all documentation
 doc-all: doc-clean doc-doxygen doc-html doc-latexpdf
