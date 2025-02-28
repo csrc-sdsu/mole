@@ -3,7 +3,9 @@
 # Project settings
 PROJECT_NAME           = "MOLE MATLAB API"
 PROJECT_BRIEF         = "MATLAB API Documentation"
+PROJECT_LOGO          = doc/doxygen/matlab/matlabicon.gif
 OUTPUT_DIRECTORY      = doc/doxygen/matlab2
+CREATE_SUBDIRS        = NO
 
 # Input settings
 INPUT                 = src/matlab
@@ -20,30 +22,73 @@ HTML_OUTPUT          = html
 HTML_FILE_EXTENSION  = .html
 
 # HTML styling
-HTML_EXTRA_STYLESHEET = custom.css
-HTML_EXTRA_FILES     = doc/doxygen/matlab/matlabicon.gif doc/doxygen/templates/header.html doc/doxygen/templates/footer.html doc/doxygen/templates/menu.html
+HTML_EXTRA_FILES     = doc/doxygen/matlab/matlabicon.gif
+HTML_DYNAMIC_MENUS   = NO
+HTML_DYNAMIC_SECTIONS = NO
+HTML_TIMESTAMP       = YES
+HTML_COLORSTYLE      = LIGHT
+ENUM_VALUES_PER_LINE = 1
+MARKDOWN_SUPPORT     = YES
+TOC_INCLUDE_HEADINGS = 5
+USE_MATHJAX          = YES
+MATHJAX_VERSION      = MathJax_3
+MATHJAX_FORMAT       = HTML-CSS
 
 # Source browsing
 SOURCE_BROWSER       = YES
 INLINE_SOURCES      = YES
 STRIP_CODE_COMMENTS = NO
+STRIP_FROM_PATH     = src/matlab
+STRIP_FROM_INC_PATH = src/matlab
+REFERENCED_BY_RELATION = YES
+REFERENCES_RELATION  = YES
+REFERENCES_LINK_SOURCE = YES
 
 # MATLAB specific settings
 EXTENSION_MAPPING    = m=C++
 CASE_SENSE_NAMES    = NO
+OPTIMIZE_OUTPUT_FOR_MATLAB = YES
+FILE_NAMING         = NO_LONG_NAMES
 
-# Documentation extraction
+# Documentation structure
 HIDE_UNDOC_MEMBERS  = NO
 HIDE_UNDOC_CLASSES  = NO
 BRIEF_MEMBER_DESC   = YES
 REPEAT_BRIEF        = YES
-SHOW_INCLUDE_FILES  = YES
+SHOW_INCLUDE_FILES  = NO
 SORT_MEMBER_DOCS    = YES
+SHOW_DIRECTORIES    = NO
+SHOW_FILES          = YES
+SHOW_NAMESPACES     = NO
+FULL_PATH_NAMES     = NO
+SUBGROUPING         = NO
+ALWAYS_DETAILED_SEC = YES
+JAVADOC_AUTOBRIEF   = YES
+QT_AUTOBRIEF        = YES
+MULTILINE_CPP_IS_BRIEF = NO
+INHERIT_DOCS        = YES
+DISTRIBUTE_GROUP_DOC = YES
+GROUP_NESTED_COMPOUNDS = YES
+INLINE_GROUPED_CLASSES = YES
+INLINE_SIMPLE_STRUCTS = YES
 
 # Navigation
 GENERATE_TREEVIEW    = YES
-DISABLE_INDEX        = NO
-HTML_DYNAMIC_SECTIONS = NO
+DISABLE_INDEX        = YES
+GENERATE_TODOLIST   = NO
+GENERATE_TESTLIST   = NO
+GENERATE_BUGLIST    = NO
+GENERATE_DEPRECATEDLIST = NO
+LAYOUT_FILE         = 
+
+# Search engine
+SEARCHENGINE        = YES
+SERVER_BASED_SEARCH = NO
+EXTERNAL_SEARCH     = NO
+SEARCHDATA_FILE     = searchdata.xml
+GENERATE_SEARCH_BOX = YES
+SEARCH_INCLUDES     = YES
+SEARCH_MAPPINGS     = YES
 
 # Input parsing
 INPUT_ENCODING      = UTF-8
@@ -54,21 +99,32 @@ EXTRACT_LOCAL_METHODS = YES
 EXTRACT_ANON_NSPACES = YES
 
 # Comment parsing
-TCL_SUBST           = NO
-MULTILINE_CPP_IS_BRIEF = NO
-INHERIT_DOCS        = YES
-SEPARATE_MEMBER_PAGES = NO
 TAB_SIZE            = 4
 ALIASES            += "matlab=\par MATLAB Example:\n"
+ALIASES            += "note=\par Note:\n"
+ALIASES            += "warning=\par Warning:\n"
+ALIASES            += "see=\par See also:\n"
+ALIASES            += "param=\par Parameter:\n"
+ALIASES            += "return=\par Returns:\n"
 
-# Disable unnecessary features
-GENERATE_TODOLIST   = NO
-GENERATE_TESTLIST   = NO
-GENERATE_BUGLIST    = NO
-GENERATE_DEPRECATEDLIST = NO
-SHOW_USED_FILES     = NO
-SHOW_FILES          = YES
-SHOW_NAMESPACES     = NO
+# Graph support
+HAVE_DOT            = YES
+DOT_IMAGE_FORMAT    = SVG
+INTERACTIVE_SVG     = YES
+DOT_GRAPH_MAX_NODES = 100
+COLLABORATION_GRAPH = YES
+CLASS_GRAPH         = YES
+CALL_GRAPH          = YES
+CALLER_GRAPH        = YES
+
+# Output quality
+HTML_INDEX_NUM_ENTRIES = 100
+GENERATE_DOCSET    = NO
+DOCSET_FEEDNAME    = "MOLE MATLAB API Documentation"
+USE_MDFILE_AS_MAINPAGE = README.md
+TOC_EXPAND         = YES
+GENERATE_LEGEND    = YES
+LEGEND_PAGES       = YES
 
 # Other settings
 QUIET               = NO
@@ -76,14 +132,7 @@ WARNINGS            = YES
 WARN_IF_UNDOCUMENTED = YES
 WARN_IF_DOC_ERROR   = YES
 WARN_NO_PARAMDOC    = YES
-
-# Search engine
-SEARCHENGINE        = NO
-SERVER_BASED_SEARCH = NO
-
-# MATLAB specific settings
-OPTIMIZE_OUTPUT_FOR_MATLAB = YES
-FILE_NAMING         = NO_LONG_NAMES
+WARN_AS_ERROR       = NO
 
 # MATLAB specific settings
 EXTRACT_LOCAL_CLASSES = YES
@@ -126,10 +175,6 @@ WARNINGS            = YES
 WARN_IF_UNDOCUMENTED = YES
 WARN_IF_DOC_ERROR   = YES
 WARN_NO_PARAMDOC    = YES
-
-# Search engine
-SEARCHENGINE        = NO
-SERVER_BASED_SEARCH = NO
 
 # Navigation
 GENERATE_TREEVIEW    = YES
