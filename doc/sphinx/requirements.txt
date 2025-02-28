@@ -1,13 +1,14 @@
 # ======= Sphinx =======
 
 # Core Sphinx
-sphinx>=5.3,<6
+sphinx>=5.3,<6                   # Using older version to avoid epub3 issues
 docutils<0.21
+Pillow                          # Required for imghdr module
 
 # Theme
 sphinx_rtd_theme
 
-# Extensions used in conf.pys
+# Extensions used in conf.py
 breathe>=4.30                    # C++ documentation integration
 myst-parser[linkify]>=0.14.0    # Markdown support
 sphinx-design                    # UI components
@@ -15,6 +16,7 @@ sphinxcontrib-bibtex==2.5       # Bibliography support
 sphinxcontrib-mermaid           # Diagrams
 sphinxcontrib-katex             # Math rendering
 sphinxcontrib-svg2pdfconverter  # SVG conversion for PDF
+standard-imghdr
 
 # Visualization
 altair>=5.0                     # Data visualization

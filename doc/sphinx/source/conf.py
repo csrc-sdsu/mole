@@ -31,6 +31,10 @@ extensions = [
     'myst_parser',
 ]
 
+# Disable epub builder
+epub_show_urls = 'no'
+epub_use_index = False
+
 # Configure myst-parser
 myst_enable_extensions = [
     "colon_fence",
