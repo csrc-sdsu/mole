@@ -1,3 +1,16 @@
+/**
+ * Solving the 1D Advection Equation using a Mimetic Finite Difference Scheme
+ *
+ * Equation: ∂U/∂t + ∂(U²)/∂x = 0  (Nonlinear Burgers' Equation in conservative form)
+ * Domain:   x ∈ [-15, 15] with m = 300 grid cells
+ * Time:     Simulated until t = 10.0 with time step dt = dx (CFL condition)
+ * Initial Condition: U(x,0) = exp(-x² / 50)
+ * Boundary Conditions: Mimetic divergence and interpolation operators applied (implicit treatment)
+ *
+ * Solution is computed using a staggered grid approach, explicit time-stepping, 
+ * and mimetic finite difference operators for divergence and interpolation.
+ */
+
 #include <iostream>
 #include <armadillo>
 #include <cmath>
