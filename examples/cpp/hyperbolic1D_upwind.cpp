@@ -1,3 +1,30 @@
+/**
+ * @file hyperbolic1D_upwind.cpp
+ * @brief Solves the 1D linear advection equation using finite differencing.
+ *
+ * The equation being solved is:
+ *      ∂u/∂t + a ∂u/∂x = 0
+ * where `u(x,t)` is the scalar quantity being advected, and `a` is the constant velocity.
+ *
+ * ## Spatial and Temporal Domains:
+ * - The spatial domain is x ∈ [0,1].
+ * - The temporal domain is t ∈ [0,1].
+ * - The grid spacing is dx = (east - west) / m.
+ * - The time step is chosen based on the CFL condition: dt = dx / |a|.
+ *
+ * ## Initial Condition:
+ *      u(x,0) = sin(2πx),   for x ∈ [0,1]
+ *
+ * ## Boundary Conditions:
+ * - Periodic boundary conditions are applied, meaning u(0,t) = u(1,t).
+ * - The spatial derivative is discretized using backward, forward, or centered finite differences.
+ *
+ * The solution is computed iteratively, and the numerical result is compared with the exact solution:
+ *      u_exact(x,t) = sin(2π(x - at)).
+ *
+ * The results are saved to a file ("results.dat") and visualized using GNUplot.
+ */
+
 #include "mole.h"
 #include <iostream>
 #include <cmath>
