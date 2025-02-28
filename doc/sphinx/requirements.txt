@@ -1,14 +1,24 @@
-altair>=5.0
-breathe>=4.30
-myst-parser[linkify]>=0.14.0
-sphinx-hoverxref>=0.3b1
-sphinx-design
+# ======= Sphinx =======
+
+# Core Sphinx
 sphinx>=5.3,<6
-sphinx_rtd_theme
-sphinxcontrib-bibtex==2.5
-sphinxcontrib-katex
-sphinxcontrib-mermaid
-sphinxcontrib-svg2pdfconverter
-sphinxext-altair
 docutils<0.21
-xindy
+
+# Theme
+sphinx_rtd_theme
+
+# Extensions used in conf.pys
+breathe>=4.30                    # C++ documentation integration
+myst-parser[linkify]>=0.14.0    # Markdown support
+sphinx-design                    # UI components
+sphinxcontrib-bibtex==2.5       # Bibliography support
+sphinxcontrib-mermaid           # Diagrams
+sphinxcontrib-katex             # Math rendering
+sphinxcontrib-svg2pdfconverter  # SVG conversion for PDF
+
+# Visualization
+altair>=5.0                     # Data visualization
+sphinxext-altair                # Altair integration
+
+# Optional but useful
+sphinx-hoverxref>=0.3b1         # Hover tooltips for references
