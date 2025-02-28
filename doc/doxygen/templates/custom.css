@@ -1,0 +1,225 @@
+/* Reset and base styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+}
+
+/* Layout */
+.header {
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    padding: 1rem;
+}
+
+.contents {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Navigation */
+#nav-tree {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-right: 1px solid #e9ecef;
+}
+
+#nav-tree .item {
+    padding: 0.25rem 0;
+}
+
+#nav-tree .selected {
+    background-color: #e9ecef;
+    color: #000;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    color: #212529;
+}
+
+h1 { font-size: 2em; }
+h2 { font-size: 1.5em; }
+h3 { font-size: 1.17em; }
+
+p {
+    margin-bottom: 1em;
+}
+
+/* Code blocks */
+div.fragment {
+    padding: 1rem;
+    margin: 1rem 0;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+pre.fragment {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    line-height: 1.4;
+}
+
+/* Tables */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+}
+
+th, td {
+    padding: 0.75rem;
+    border: 1px solid #e9ecef;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+/* Links */
+a {
+    color: #0366d6;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Member documentation */
+.memitem {
+    padding: 1rem;
+    margin: 1rem 0;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+}
+
+.memname {
+    font-weight: 600;
+    color: #212529;
+}
+
+.memdoc {
+    margin-top: 0.5rem;
+}
+
+/* Search box */
+#MSearchBox {
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .contents {
+        padding: 1rem;
+    }
+    
+    #nav-tree {
+        border-right: none;
+        border-bottom: 1px solid #e9ecef;
+    }
+}
+
+/* Frame layout */
+frameset {
+    border: none;
+}
+
+frame {
+    border: none;
+}
+
+/* Menu styling */
+#menu {
+    background-color: #f8f9fa;
+    padding: 1rem;
+}
+
+.directory {
+    margin: 1rem 0;
+}
+
+.directory tr {
+    border-bottom: 1px solid #e9ecef;
+}
+
+.directory td {
+    padding: 0.5rem;
+}
+
+/* Icons */
+.icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 0.5rem;
+}
+
+/* Function documentation */
+.mlabels {
+    margin-left: 0.5rem;
+}
+
+.mlabel {
+    background-color: #e9ecef;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.875em;
+}
+
+/* Source code highlighting */
+.highlight {
+    background-color: #fff3cd;
+}
+
+.comment {
+    color: #6c757d;
+}
+
+.keyword {
+    color: #d73a49;
+}
+
+.keywordtype {
+    color: #d73a49;
+}
+
+.stringliteral {
+    color: #28a745;
+}
+
+/* Documentation sections */
+.docTable {
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.paramname {
+    font-weight: 600;
+    color: #495057;
+}
+
+.params {
+    margin: 1rem 0;
+}
+
+/* Footer */
+.footer {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    text-align: center;
+    font-size: 0.875em;
+    color: #6c757d;
+} 
