@@ -9,7 +9,6 @@ BUILDDIR      = build
 
 # Output directories
 PDFDIR        = $(BUILDDIR)/pdf
-DOXYDIR       = $(BUILDDIR)/doxygen
 
 .PHONY: help doc-deps doc-html doc-latexpdf doc-clean doc-doxygen doc-all
 
@@ -25,7 +24,6 @@ help:
 
 # Doxygen documentation
 doc-doxygen: doc-deps
-	@mkdir -p $(DOXYDIR)
 	@cd ../.. && doxygen Doxyfile
 
 # Install dependencies from requirements.txt
