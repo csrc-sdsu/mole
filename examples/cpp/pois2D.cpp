@@ -1,3 +1,15 @@
+/**
+ * Solving the 2D Poisson Equation with Robin Boundary Conditions
+ * 
+ * Equation: ∇²u = f(x, y)  (Poisson Equation)
+ * Domain:   Defined on a (m+2) x (n+2) grid with spacing dx, dy
+ * Boundary Conditions:
+ *   - Bottom boundary (y = 0) has a Dirichlet condition: u = 100
+ *   - Other boundaries are subject to Robin conditions as defined in RobinBC
+ *
+ * Solution is computed using a Mimetic Finite Difference Laplacian and solved via Armadillo's sparse solver.
+ */
+
 #include <armadillo>
 #include "mole.h"
 #include <iomanip>
@@ -26,10 +38,10 @@ int main() {
 
     // Solve the system
     vec SOL = spsolve(L, rhs);
-    
+
     // Reshape solution back to 2D form
     mat SOL2D = reshape(SOL, m + 2, n + 2);
-    
+
     // Display solution without negative zeros or excessive decimal places
     std::cout << "2D Poisson Solution:\n";
     for (uint32_t i = 0; i < SOL2D.n_rows; ++i) {
@@ -45,7 +57,7 @@ int main() {
             } else {
                 std::cout << std::fixed << std::setprecision(4) << value;  // Four decimal places
             }
-            
+
             std::cout << "\t";  // Tab separation
         }
         std::cout << "\n";
