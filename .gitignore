@@ -16,8 +16,8 @@ cmake_install.cmake
 !CMakeLists.txt
 
 # Documentation generated files
-/doc/api_docs/cpp
-# /doc/api_docs/matlab # TODO: add this back in once we work to update or integrate the MATLAB API.
+/doc/doxygen/cpp
+# /doc/doxygen/matlab # TODO: add this back in once we work to update or integrate the MATLAB API.
 /doc/sphinx/build/
 /doc/sphinx/_build/
 # /doc/sphinx/source/api/ # TODO: add this back in once the API is updated and the final docs are built.
