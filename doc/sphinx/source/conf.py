@@ -70,7 +70,7 @@ html_logo = str(ROOT_DIR / "logo.png")
 
 # Breathe configuration
 breathe_projects = {
-    "MoleCpp": str(ROOT_DIR / "doc/api_docs/cpp/xml")
+    "MoleCpp": str(ROOT_DIR / "doc/doxygen/cpp/xml")
 }
 breathe_default_project = "MoleCpp"
 

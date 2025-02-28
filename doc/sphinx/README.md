@@ -54,7 +54,7 @@ make doc-clean
 ```
 
 The documentation will be generated in:
-- C++ API Docs: `doc/api_docs/cpp/`
+- C++ API Docs: `doc/doxygen/cpp/`
 - HTML: `doc/sphinx/build/html/`
 - PDF: `doc/sphinx/build/pdf/`
 

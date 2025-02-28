@@ -144,7 +144,7 @@ Most of our examples are provided in the MATLAB scripting language. Over 30 exam
 5: Documentation
 ----------------
 
-The folder `doc/api_docs/matlab` contains generated documentation about the MATLAB/Octave API.
+The folder `doc/doxygen/matlab` contains generated documentation about the MATLAB/Octave API.
 It was generated with a tool called [_m2html_](https://www.gllmflndn.com/software/matlab/m2html). However, for a quick start on MOLE's MATLAB/Octave version, we recommend starting with this short [guide](https://github.com/csrc-sdsu/mole/blob/master/doc/assets/manuals/CSRC%20Report%20on%20MOLE.pdf).
 
 For C++ users, we provide a short [guide](https://github.com/csrc-sdsu/mole/blob/master/doc/assets/manuals/MOLE_C%2B%2B_Quick_Guide.pdf) to MOLE's C++ flavor. However, for those in need of more details to interact with the library, we suggest to follow these instructions:
