@@ -18,4 +18,4 @@ Reference Documentation
 ------------------------------------
 
 The MATLAB API documentation can be found at the link below:
-`MATLAB API Reference <../../../doxygen/matlab/index.html>`_
+`MATLAB API Reference <../../../../../doc/doxygen/matlab/index.html>`_
