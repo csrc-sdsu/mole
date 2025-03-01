@@ -9,9 +9,13 @@ BUILDDIR      = build
 
 # Output directories
 PDFDIR        = $(BUILDDIR)/pdf
-DOXYDIR       = cd ../doxygen/cpp # TODO: replace with the doxygen output directory once we make the matlab docs builder
+DOXYDIR       = ../doxygen/cpp
+DOXYXML       = $(DOXYDIR)/xml
 
-.PHONY: help doc-deps doc-html doc-latexpdf doc-clean doc-doxygen doc-all
+# List of Sphinx builders
+SPHINX_TARGETS := html dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub latex text man changes linkcheck doctest coverage gettext
+
+.PHONY: help clean doc-deps doc-html doc-latexpdf doc-clean doc-doxygen doc-all $(SPHINX_TARGETS)
 
 # Default target
 help:
@@ -24,20 +28,31 @@ help:
 	@echo "  doc-all      : Generate all documentation formats with a clean build"
 
 # Doxygen documentation
-doc-doxygen: doc-deps
+doc-doxygen:
+	@echo "Generating Doxygen documentation..."
 	@cd ../.. && doxygen Doxyfile
+	@if [ ! -d "$(DOXYXML)" ]; then \
+		echo "Error: Doxygen XML output directory not found at $(DOXYXML)"; \
+		echo "Please check your Doxyfile configuration"; \
+		exit 1; \
+	fi
 
 # Install dependencies from requirements.txt
 doc-deps:
 	@pip install -r requirements.txt
 
 # HTML documentation
-doc-html: doc-deps
+doc-html: doc-deps doc-doxygen
+	@echo "Generating HTML documentation..."
 	@mkdir -p $(BUILDDIR)
+	@if [ ! -f "$(DOXYXML)/index.xml" ]; then \
+		echo "Error: Doxygen XML index file not found. Running doc-doxygen first..."; \
+		$(MAKE) doc-doxygen; \
+	fi
 	PYTHONPATH=../.. $(SPHINXBUILD) -b html "$(SOURCEDIR)" "$(BUILDDIR)/html"
 
 # LaTeX + PDF documentation
-doc-latexpdf: doc-deps
+doc-latexpdf: doc-deps doc-doxygen
 	@mkdir -p $(BUILDDIR)/latex $(PDFDIR)
 	PYTHONPATH=../.. $(SPHINXBUILD) -b latex "$(SOURCEDIR)" "$(BUILDDIR)/latex"
 	@make -C $(BUILDDIR)/latex
@@ -45,16 +60,17 @@ doc-latexpdf: doc-deps
 
 # Clean built documentation
 doc-clean:
+	@echo "Cleaning documentation build directories..."
 	@rm -rf $(BUILDDIR)
 	@rm -rf $(DOXYDIR)
 
 # Generate all documentation
-doc-all: doc-clean doc-doxygen doc-html doc-latexpdf
+doc-all: doc-clean doc-doxygen doc-deps doc-html doc-latexpdf
 	@echo "Documentation generated in:"
 	@echo "  HTML: $(BUILDDIR)/html/"
 	@echo "  PDF:  $(PDFDIR)/"
 	@echo "  API:  $(DOXYDIR)/"
 
-# Catch-all target: route all unknown targets to Sphinx
-%: Makefile
+# Explicit Sphinx targets
+$(SPHINX_TARGETS):
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS)

@@ -73,6 +73,12 @@ breathe_projects = {
     "MoleCpp": str(ROOT_DIR / "doc/doxygen/cpp/xml")
 }
 breathe_default_project = "MoleCpp"
+breathe_domain_by_extension = {
+    ".h": "cpp",
+    ".hpp": "cpp",
+    ".cpp": "cpp",
+    ".c": "c",
+}
 
 # Warning suppression
 suppress_warnings = [
