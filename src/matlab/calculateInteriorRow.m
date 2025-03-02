@@ -9,7 +9,7 @@ function output=calculateInteriorRow(k)
     % Our answer. 
     r=idivide(k,int32(2));
     output(r)=-1.0;
-    output(r+1)=1.0;
+    output(r+1)=1.0; %our starting value for this series is (e^(h/2*d/dx)-e^(-h/2*d/dx))
     if (k>2)
         nextTerm=zeros([1,k]);% NextTerm in the series.
         %Initially set to (e^(h/2*d/dx)-e^(-h/2*d/dx))^(3)
