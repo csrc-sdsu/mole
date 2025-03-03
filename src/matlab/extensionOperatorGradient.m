@@ -14,7 +14,7 @@ function E=extensionOperatorGradient(k,m)
     valueList=zeros([1,numNonZeros]);
     elementsInserted=1;
     R=zeros([r,k+1]);
-    R(:,2)=ones(r);
+    R(:,2)=ones([1,r]);
     R(r,2:end)=2*rem(1:k,2) - 1;
     for i=(r-1):(-1):1
         for j=3:(k+1)
@@ -24,7 +24,7 @@ function E=extensionOperatorGradient(k,m)
 
     Scalefactor=diag(-(k-1):2:-1);
     R=Scalefactor*R;
-    R(:,1)=ones(r);
+    R(:,1)=ones([1,r]);
     R=R*basisMatrixForGradient(k);
     for i=1:r
         for j=1:(k+1)

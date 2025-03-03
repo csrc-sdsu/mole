@@ -21,3 +21,9 @@ run('test5.m');
 
 disp('Running: BC Ops consistency test...');
 run('test6.m');
+
+disp('Running: Correctness test of gradienthelper...');
+run('test7.m');
+
+disp('Running: Correctness test of divergencehelper');
+run('test8.m');
