@@ -144,17 +144,7 @@ Most of our examples are provided in the MATLAB scripting language. Over 30 exam
 5: Documentation
 ----------------
 
-The folder `doc/doxygen/matlab` contains generated documentation about the MATLAB/Octave API.
-It was generated with a tool called [_m2html_](https://www.gllmflndn.com/software/matlab/m2html). However, for a quick start on MOLE's MATLAB/Octave version, we recommend starting with this short [guide](https://github.com/csrc-sdsu/mole/blob/master/doc/assets/manuals/CSRC%20Report%20on%20MOLE.pdf).
-
-For C++ users, we provide a short [guide](https://github.com/csrc-sdsu/mole/blob/master/doc/assets/manuals/MOLE_C%2B%2B_Quick_Guide.pdf) to MOLE's C++ flavor. However, for those in need of more details to interact with the library, we suggest to follow these instructions:
-
-To generate the C++ documentation, execute:
-
-`doxygen Doxyfile` (requires _Doxygen_ and _Graphviz_)
-
-this will create a folder called `doc_C++` containing a set of _html_ files. Please take a look at the _index.html_ file 
-to start browsing the documentation.
+For detailed documentation, including API references, tutorials, and examples, please refer to our [Documentation Guide](doc/sphinx/README.md).
 
 **NOTE:**
 Performing non-unary operations involving operands constructed over different grids may lead to unexpected results. While MOLE allows such operations without throwing errors, users must exercise caution when manipulating operators across different grids.
