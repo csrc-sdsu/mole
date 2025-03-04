@@ -62,7 +62,7 @@ Indices and Tables
 ..    :maxdepth: 1
 ..    :caption: MATLAB API
 
-..    ../../doc/api_docs/matlab/mole_MATLAB/index.html
+..    ../../doc/doxygen/matlab/mole_MATLAB/index.html
 
 --------------------------------------------------
 **More Information**
