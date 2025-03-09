@@ -97,9 +97,10 @@ set(LINK_LIBS ${ARMADILLO_LIBRARIES}
 # Add subdirectories
 add_subdirectory(src/cpp)
 add_subdirectory(tests/cpp)
+add_subdirectory(tests/matlab)
 add_subdirectory(examples/cpp)
 
 # Custom target to build everything
-add_custom_target(all_build DEPENDS mole_C++ tests_C++ examples_C++)
+add_custom_target(all_build DEPENDS mole_C++ tests_C++ examples_C++ tests_matlab)
 
 
