@@ -1,16 +1,30 @@
 /**
- * This example uses MOLE to solve a 3D BVP
- * It visualizes the middle slice (z = p/2) using GNUplot
- * It is the equivalent to examples_MATLAB/elliptic3D.m
+ * This example uses MOLE to solve a 3D Boundary Value Problem (BVP)
+ * 
+ * Mathematical Problem:
+ * --------------------
+ * Equation:    ∇²u = 0  (3D Laplace equation)
+ *              where ∇² = ∂²/∂x² + ∂²/∂y² + ∂²/∂z²
+ * 
+ * Domain:      Ω = [0,m]×[0,n]×[0,p]  (3D rectangular domain)
+ *              where in this example m=5, n=6, p=7 are the number of cells in each direction
+ * 
+ * Boundary Conditions:
+ * ------------------
+ * Front face (z=0):    u = 100
+ * All other faces:     u = 0    (Dirichlet conditions)
+ * 
+ * Visualization:
+ * -------------
+ * The middle slice (z = p/2) is output for visualization using GNUplot
  */
 
-#include <fstream>  // For writing data
+#include <fstream>  
 #include <iostream>
 
 #include "mole.h"
 
 using namespace std;
-using namespace arma;
 
 int main() {
   constexpr int k = 2;  // Operators' order of accuracy
