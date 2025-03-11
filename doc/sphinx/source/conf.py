@@ -1,6 +1,8 @@
 import os
 import sys
 from pathlib import Path
+import shutil
+import subprocess
 
 # Define root directory using pathlib
 ROOT_DIR = Path(__file__).resolve().parents[3]
@@ -8,27 +10,27 @@ ROOT_DIR = Path(__file__).resolve().parents[3]
 # Update Python path - simplified version
 sys.path.insert(0, str(ROOT_DIR))
 
+# Add the _ext directory to the Python path
+sys.path.insert(0, os.path.abspath('_ext'))
+
 # Project information
-project = 'mole'
-copyright = '2024, CSRC'
-author = 'CSRC'
+project = 'MOLE'
+copyright = '2023, CSRC SDSU'
+author = 'CSRC SDSU'
 release = '1.0.0'
 
 # Extensions configuration
 extensions = [
-    'breathe',
     'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.todo',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.doctest',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
-    'sphinx.ext.ifconfig',
-    'sphinx.ext.githubpages',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.napoleon',
+    'sphinx.ext.intersphinx',
     'sphinx_rtd_theme',
+    'breathe',
     'myst_parser',
+    'copy_assets',  # Our custom extension to copy assets
+    'sphinxcontrib.mermaid',  # Add Mermaid support
 ]
 
 # Disable epub builder
@@ -49,11 +51,22 @@ myst_enable_extensions = [
     "tasklist"
 ]
 
+# Additional myst-parser settings
+myst_heading_anchors = 3
+myst_url_schemes = ("http", "https", "mailto", "ftp", "file")
+myst_all_links_external = False
+myst_ref_domains = None
+
 # Source configuration
 source_suffix = {
     '.rst': 'restructuredtext',
     '.md': 'markdown',
 }
+
+# Follow symlinks
+html_extra_path = [str(ROOT_DIR / 'doc' / 'doxygen')]
+html_use_symlinks = True
+follow_links = True
 
 templates_path = ['_templates']
 exclude_patterns = []
@@ -63,10 +76,18 @@ html_theme = 'sphinx_rtd_theme'
 html_theme_options = {
     "style_external_links": True,
     "logo_only": True,
-    "navigation_depth": 4,
+    "navigation_depth": 3,
+    "includehidden": True,
+    "titles_only": False,
+    "collapse_navigation": False
 }
-html_static_path = []
+html_static_path = ['_static']
 html_logo = str(ROOT_DIR / "logo.png")
+
+# Add custom CSS
+html_css_files = [
+    'css/custom.css',
+]
 
 # Breathe configuration
 breathe_projects = {
@@ -79,6 +100,12 @@ breathe_domain_by_extension = {
     ".cpp": "cpp",
     ".c": "c",
 }
+breathe_default_members = ('members', 'undoc-members')
+
+# Run Doxygen if needed during build
+if not os.path.exists(str(ROOT_DIR / "doc/doxygen/cpp/xml/index.xml")):
+    print("Doxygen XML not found. Running Doxygen...")
+    subprocess.call(["doxygen", "Doxyfile"], cwd=str(ROOT_DIR))
 
 # Warning suppression
 suppress_warnings = [
@@ -160,5 +187,17 @@ numfig_format = {
 
 # Fix image handling
 latex_additional_files = []
+
+# Fix for assets directory warning
+html_static_path = ['_static']
+# Add a custom path for assets
+assets_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../doc/assets'))
+if os.path.exists(assets_path):
+    # If the assets directory exists at the project level, use it
+    html_static_path.append(assets_path)
+else:
+    # Otherwise, create a symlink or copy the assets
+    local_assets = os.path.join(os.path.dirname(__file__), '_static/assets')
+    os.makedirs(local_assets, exist_ok=True)
 
 

@@ -62,6 +62,21 @@ The documentation will be generated in:
 - PDF: `doc/sphinx/build/pdf/`
 - API Docs: `doc/doxygen/`
 
+### Image Handling
+
+Images are automatically handled when building the documentation using the Makefile targets:
+
+The image handling process:
+- Copies images from `doc/assets/img/` to `doc/sphinx/build/html/_static/img/`
+- Fixes image paths in the HTML output
+
+If you're running Sphinx directly without the Makefile, you'll need to run the image copy script separately:
+
+```bash
+# Run after building documentation manually
+./copy_images.sh
+```
+
 ## 🔄 Development Workflow
 
 When contributing to documentation:
@@ -90,4 +105,4 @@ When contributing to documentation:
 
 ## 🤝 Contributing
 
-Please read our [Contributing Guide](../../CONTRIBUTING.md) before submitting documentation changes.
+Please read our [Contributing Guide](https://github.com/csrc-sdsu/mole/blob/master/CONTRIBUTING.md) before submitting documentation changes.
