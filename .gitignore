@@ -60,3 +60,7 @@ Thumbs.db
 /examples/cpp/plot.gnu
 /tests/cpp/test[1-5]
 
+# Project tree html file 
+tree.html
+
+
