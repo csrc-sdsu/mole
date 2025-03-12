@@ -11,6 +11,8 @@ MOLE's C++ API is organized into several key components:
 - **Utilities**: Helper functions and utilities
 - **Examples**: Usage examples and tutorials
 
+The library provides a set of mimetic operators that preserve important mathematical properties of the continuous operators they approximate. These operators can be used to solve various partial differential equations (PDEs) with high accuracy.
+
 ## API Components
 
 ```{toctree}
@@ -31,50 +33,3 @@ For a complete reference of all classes and functions in the MOLE C++ API, see t
 .. doxygenindex::
    :project: MoleCpp
 ```
-
-## Operator Classes
-
-```{eval-rst}
-.. list-table::
-   :header-rows: 1
-   :widths: 30 70
-
-   * - Class
-     - Description
-   * - :cpp:class:`Divergence`
-     - Computes the divergence of a vector field
-   * - :cpp:class:`Gradient`
-     - Computes the gradient of a scalar field
-   * - :cpp:class:`Laplacian`
-     - Computes the Laplacian of a field
-   * - :cpp:class:`Interpol`
-     - Performs interpolation operations
-```
-
-## Boundary Condition Classes
-
-```{eval-rst}
-.. list-table::
-   :header-rows: 1
-   :widths: 30 70
-
-   * - Class
-     - Description
-   * - :cpp:class:`RobinBC`
-     - Implements Robin boundary conditions
-   * - :cpp:class:`MixedBC`
-     - Implements mixed boundary conditions
-```
-
-## Utility Classes
-
-```{eval-rst}
-.. list-table::
-   :header-rows: 1
-   :widths: 30 70
-
-   * - Class
-     - Description
-   * - :cpp:class:`Utils`
-     - Provides utility functions for numerical operations
-``` 

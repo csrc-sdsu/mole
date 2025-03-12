@@ -2,6 +2,138 @@
 
 This section documents the core mimetic operators provided by the MOLE library. For complete API details, see the Complete Class Reference section in the C++ API documentation.
 
+## Available Operators
+
+MOLE provides several mimetic operators for numerical computations:
+
+```{eval-rst}
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Operator
+     - Description
+   * - :doc:`Divergence <operators/divergence>`
+     - Computes the divergence of a vector field
+   * - :doc:`Gradient <operators/gradient>`
+     - Computes the gradient of a scalar field
+   * - :doc:`Curl <operators/curl>`
+     - Computes the curl of a vector field
+   * - :doc:`Laplacian <operators/laplacian>`
+     - Computes the Laplacian of a field
+   * - :doc:`Interpolation <operators/interpolation>`
+     - Performs interpolation operations
+```
+
+## Detailed Documentation
+
+```{toctree}
+:maxdepth: 1
+
+operators/divergence.md
+operators/gradient.md
+operators/curl.md
+operators/laplacian.md
+operators/interpolation.md
+```
+
+For complete API details of all operator classes, see the Class Reference section in the C++ API documentation.
+
+```{eval-rst}
+.. raw:: html
+
+   <div class="on-this-page">
+     <div class="on-this-page-title">On This Page</div>
+     <ul>
+       <li><a href="#divergence-operator">Divergence Operator</a></li>
+       <li><a href="#gradient-operator">Gradient Operator</a></li>
+       <li><a href="#curl-operator">Curl Operator</a></li>
+       <li><a href="#laplacian-operator">Laplacian Operator</a></li>
+       <li><a href="#interpolation-operator">Interpolation Operator</a></li>
+     </ul>
+   </div>
+
+   <style>
+     .on-this-page {
+       position: sticky;
+       top: 20px;
+       float: right;
+       width: 200px;
+       padding: 10px;
+       margin-left: 20px;
+       background-color: #f8f9fa;
+       border: 1px solid #e1e4e5;
+       border-radius: 5px;
+     }
+     
+     .on-this-page-title {
+       font-weight: bold;
+       margin-bottom: 10px;
+     }
+     
+     .on-this-page ul {
+       list-style-type: none;
+       padding-left: 10px;
+       margin: 0;
+     }
+     
+     .on-this-page li {
+       margin-bottom: 5px;
+     }
+     
+     .on-this-page a {
+       text-decoration: none;
+     }
+     
+     .collapsible-section {
+       margin-bottom: 20px;
+     }
+     
+     .collapsible-header {
+       background-color: #f6f6f6;
+       padding: 10px;
+       cursor: pointer;
+       border: 1px solid #e1e4e5;
+       border-radius: 5px 5px 0 0;
+       font-weight: bold;
+     }
+     
+     .collapsible-content {
+       border: 1px solid #e1e4e5;
+       border-top: none;
+       padding: 10px;
+       border-radius: 0 0 5px 5px;
+       display: none;
+     }
+     
+     .collapsible-header.active {
+       background-color: #e1e4e5;
+     }
+     
+     .collapsible-header.active + .collapsible-content {
+       display: block;
+     }
+   </style>
+
+   <script>
+     document.addEventListener('DOMContentLoaded', function() {
+       const headers = document.querySelectorAll('.collapsible-header');
+       
+       headers.forEach(header => {
+         header.addEventListener('click', function() {
+           this.classList.toggle('active');
+           const content = this.nextElementSibling;
+           if (content.style.display === 'block') {
+             content.style.display = 'none';
+           } else {
+             content.style.display = 'block';
+           }
+         });
+       });
+     });
+   </script>
+```
+
 ## Divergence Operator
 
 The divergence operator computes the divergence of a vector field.
@@ -11,7 +143,13 @@ The divergence operator computes the divergence of a vector field.
    For complete API details of the ``Divergence`` class, see the :cpp:class:`Divergence` class in the Class Reference.
 ```
 
-### Usage Example
+```{eval-rst}
+.. raw:: html
+
+   <div class="collapsible-section">
+     <div class="collapsible-header">Usage Example</div>
+     <div class="collapsible-content">
+```
 
 ```cpp
 #include <mole/operators.h>
@@ -46,6 +184,30 @@ int main() {
     
     return 0;
 }
+```
+
+```{eval-rst}
+.. raw:: html
+
+     </div>
+   </div>
+
+   <div class="collapsible-section">
+     <div class="collapsible-header">API Details</div>
+     <div class="collapsible-content">
+```
+
+```{eval-rst}
+.. doxygenclass:: mole::Divergence
+   :members:
+   :project: MoleCpp
+```
+
+```{eval-rst}
+.. raw:: html
+
+     </div>
+   </div>
 ```
 
 ## Gradient Operator

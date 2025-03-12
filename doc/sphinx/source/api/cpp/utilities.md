@@ -2,120 +2,282 @@
 
 This section documents the utility classes and functions provided by the MOLE library. For complete API details, see the Complete Class Reference section in the C++ API documentation.
 
-## Grid and Math Utilities
+## Available Utilities
 
-The `Utils` class provides various utility functions for working with grids, sparse matrices, and vectors.
+MOLE provides various utility functions for numerical computations:
+
+```{eval-rst}
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Utility
+     - Description
+   * - :doc:`Grid Utilities <utilities/grid>`
+     - Functions for working with grids and meshes
+   * - :doc:`Math Utilities <utilities/math>`
+     - Mathematical functions for numerical operations
+   * - :doc:`I/O Utilities <utilities/io>`
+     - Functions for input and output operations
+   * - :doc:`Sparse Matrix Utilities <utilities/sparse>`
+     - Functions for working with sparse matrices
+```
+
+## Detailed Documentation
+
+```{toctree}
+:maxdepth: 1
+
+utilities/grid.md
+utilities/math.md
+utilities/io.md
+utilities/sparse.md
+```
+
+For complete API details of all utility classes and functions, see the Class Reference section in the C++ API documentation.
+
+```{eval-rst}
+.. raw:: html
+
+   <div class="on-this-page">
+     <div class="on-this-page-title">On This Page</div>
+     <ul>
+       <li><a href="#grid-utilities">Grid Utilities</a></li>
+       <li><a href="#math-utilities">Math Utilities</a></li>
+       <li><a href="#io-utilities">I/O Utilities</a></li>
+       <li><a href="#utility-functions">Utility Functions</a></li>
+     </ul>
+   </div>
+
+   <style>
+     .on-this-page {
+       position: sticky;
+       top: 20px;
+       float: right;
+       width: 200px;
+       padding: 10px;
+       margin-left: 20px;
+       background-color: #f8f9fa;
+       border: 1px solid #e1e4e5;
+       border-radius: 5px;
+     }
+     
+     .on-this-page-title {
+       font-weight: bold;
+       margin-bottom: 10px;
+     }
+     
+     .on-this-page ul {
+       list-style-type: none;
+       padding-left: 10px;
+       margin: 0;
+     }
+     
+     .on-this-page li {
+       margin-bottom: 5px;
+     }
+     
+     .on-this-page a {
+       text-decoration: none;
+     }
+     
+     .collapsible-section {
+       margin-bottom: 20px;
+     }
+     
+     .collapsible-header {
+       background-color: #f6f6f6;
+       padding: 10px;
+       cursor: pointer;
+       border: 1px solid #e1e4e5;
+       border-radius: 5px 5px 0 0;
+       font-weight: bold;
+     }
+     
+     .collapsible-content {
+       border: 1px solid #e1e4e5;
+       border-top: none;
+       padding: 10px;
+       border-radius: 0 0 5px 5px;
+       display: none;
+     }
+     
+     .collapsible-header.active {
+       background-color: #e1e4e5;
+     }
+     
+     .collapsible-header.active + .collapsible-content {
+       display: block;
+     }
+   </style>
+
+   <script>
+     document.addEventListener('DOMContentLoaded', function() {
+       const headers = document.querySelectorAll('.collapsible-header');
+       
+       headers.forEach(header => {
+         header.addEventListener('click', function() {
+           this.classList.toggle('active');
+           const content = this.nextElementSibling;
+           if (content.style.display === 'block') {
+             content.style.display = 'none';
+           } else {
+             content.style.display = 'block';
+           }
+         });
+       });
+     });
+   </script>
+```
+
+## Grid Utilities
+
+The MOLE library provides various utility functions for working with grids and meshes.
 
 ```{eval-rst}
 .. note::
    For complete API details of the ``Utils`` class, see the :cpp:class:`Utils` class in the Class Reference.
 ```
 
-### Grid Usage Example
+```{eval-rst}
+.. raw:: html
+
+   <div class="collapsible-section">
+     <div class="collapsible-header">Usage Example</div>
+     <div class="collapsible-content">
+```
 
 ```cpp
+#include <mole/utils.h>
 #include <mole/grid.h>
-#include <iostream>
+#include <vector>
 
 int main() {
-    // Create a 1D grid
-    mole::Grid1D grid1d(0.0, 1.0, 100);
-    
-    // Print grid information
-    std::cout << "1D Grid points: " << grid1d.size() << std::endl;
-    std::cout << "1D Grid spacing: " << grid1d.spacing() << std::endl;
-    
     // Create a 2D grid
-    mole::Grid2D grid2d(0.0, 1.0, 0.0, 1.0, 50, 50);
+    mole::Grid2D grid(0.0, 1.0, 0.0, 1.0, 50, 50);
     
-    // Print grid information
-    std::cout << "2D Grid points: " << grid2d.size() << std::endl;
-    std::cout << "2D Grid x-spacing: " << grid2d.dx() << std::endl;
-    std::cout << "2D Grid y-spacing: " << grid2d.dy() << std::endl;
+    // Create a meshgrid
+    std::vector<double> X, Y;
+    mole::Utils::meshgrid(grid.x(), grid.y(), X, Y);
     
-    // Create a 3D grid
-    mole::Grid3D grid3d(0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 20, 20, 20);
-    
-    // Print grid information
-    std::cout << "3D Grid points: " << grid3d.size() << std::endl;
+    // Use the meshgrid to initialize a field
+    std::vector<double> field(grid.size());
+    for (size_t i = 0; i < field.size(); ++i) {
+        field[i] = std::sin(2 * M_PI * X[i]) * std::cos(2 * M_PI * Y[i]);
+    }
     
     return 0;
 }
 ```
 
-### Math Utilities Example
+```{eval-rst}
+.. raw:: html
+
+     </div>
+   </div>
+
+   <div class="collapsible-section">
+     <div class="collapsible-header">API Details</div>
+     <div class="collapsible-content">
+```
+
+```{eval-rst}
+.. doxygenclass:: mole::Utils
+   :members:
+   :project: MoleCpp
+```
+
+```{eval-rst}
+.. raw:: html
+
+     </div>
+   </div>
+```
+
+## Math Utilities
+
+The MOLE library provides various mathematical utility functions for numerical operations.
+
+```{eval-rst}
+.. raw:: html
+
+   <div class="collapsible-section">
+     <div class="collapsible-header">Usage Example</div>
+     <div class="collapsible-content">
+```
 
 ```cpp
-#include <mole/math.h>
+#include <mole/utils.h>
+#include <Eigen/Sparse>
 #include <vector>
-#include <iostream>
 
 int main() {
-    // Create vectors
-    std::vector<double> a = {1.0, 2.0, 3.0};
-    std::vector<double> b = {4.0, 5.0, 6.0};
+    // Create sparse matrices
+    Eigen::SparseMatrix<double> A(10, 10);
+    Eigen::VectorXd b(10);
     
-    // Compute dot product
-    double dot = mole::math::dot(a, b);
-    std::cout << "Dot product: " << dot << std::endl;
+    // Fill matrices with values
+    // ...
     
-    // Compute norm
-    double norm = mole::math::norm(a);
-    std::cout << "Norm: " << norm << std::endl;
-    
-    // Create matrices
-    mole::Matrix A(3, 3);
-    mole::Matrix B(3, 3);
-    
-    // Fill matrices
-    for (int i = 0; i < 3; ++i) {
-        for (int j = 0; j < 3; ++j) {
-            A(i, j) = i + j;
-            B(i, j) = i * j;
-        }
-    }
-    
-    // Matrix operations
-    mole::Matrix C = A * B;
-    mole::Matrix D = A + B;
+    // Solve the system Ax = b
+    Eigen::VectorXd x = mole::Utils::spsolve_eigen(A, b);
     
     return 0;
 }
+```
+
+```{eval-rst}
+.. raw:: html
+
+     </div>
+   </div>
 ```
 
 ## I/O Utilities
 
-Input/output utility functions.
+The MOLE library provides utility functions for input and output operations.
 
 ```{eval-rst}
-.. note::
-   For complete API details of the I/O utilities, see the ``io`` namespace in the Class Reference.
+.. raw:: html
+
+   <div class="collapsible-section">
+     <div class="collapsible-header">Usage Example</div>
+     <div class="collapsible-content">
 ```
 
-### Usage Example
-
 ```cpp
-#include <mole/io.h>
+#include <mole/utils.h>
+#include <mole/grid.h>
 #include <vector>
 #include <string>
 
 int main() {
+    // Create a 2D grid
+    mole::Grid2D grid(0.0, 1.0, 0.0, 1.0, 50, 50);
+    
     // Create a field
-    std::vector<double> field = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
+    std::vector<double> field(grid.size());
+    for (size_t i = 0; i < field.size(); ++i) {
+        field[i] = /* some value */;
+    }
     
-    // Save field to file
-    mole::io::saveToFile(field, "field.dat");
+    // Save the field to a file
+    std::string filename = "field_data.txt";
+    mole::Utils::saveField(field, grid, filename);
     
-    // Load field from file
+    // Load the field from a file
     std::vector<double> loaded_field;
-    mole::io::loadFromFile("field.dat", loaded_field);
-    
-    // Save field in VTK format for visualization
-    mole::Grid2D grid(0.0, 1.0, 0.0, 1.0, 3, 3);
-    mole::io::saveVTK(grid, field, "field.vtk", "field");
+    mole::Utils::loadField(loaded_field, grid, filename);
     
     return 0;
 }
+```
+
+```{eval-rst}
+.. raw:: html
+
+     </div>
+   </div>
 ```
 
 ## Sparse Matrix Utilities Example
