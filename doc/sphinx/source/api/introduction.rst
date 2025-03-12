@@ -3,7 +3,7 @@ Introduction
 
 Welcome to the introduction to MOLE (Mimetic Operators Library Enhanced). 
 
-This section provides a high-level overview of the library's goals, purpose, and major features. The MOLE library aims to deliver robust, efficient, and maintainable numerical operators for mimetic finite difference methods.
+This section provides a high-level overview of the library's goals, purpose, and major features. The MOLE library aims to deliver robust, efficient, and maintainable numerical operators for mimetic difference methods.
 
 -------------
 Key Features
