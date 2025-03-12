@@ -31,8 +31,8 @@ api/gettingstarted.md
 :maxdepth: 1
 :caption: Community
 
-Contributing Guide <api/CONTRIBUTING.md>
-Code of Conduct <api/CODE_OF_CONDUCT.md>
+Contributing <api/contributing_wrapper.md>
+Code of Conduct <api/code_of_conduct_wrapper.md>
 ```
 
 ## Indices and Tables

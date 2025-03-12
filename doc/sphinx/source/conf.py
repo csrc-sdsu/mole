@@ -49,11 +49,22 @@ myst_enable_extensions = [
     "tasklist"
 ]
 
+# Additional myst-parser settings
+myst_heading_anchors = 3
+myst_url_schemes = ("http", "https", "mailto", "ftp", "file")
+myst_all_links_external = False
+myst_ref_domains = None
+
 # Source configuration
 source_suffix = {
     '.rst': 'restructuredtext',
     '.md': 'markdown',
 }
+
+# Follow symlinks
+html_extra_path = []
+html_use_symlinks = True
+follow_links = True
 
 templates_path = ['_templates']
 exclude_patterns = []
@@ -63,7 +74,10 @@ html_theme = 'sphinx_rtd_theme'
 html_theme_options = {
     "style_external_links": True,
     "logo_only": True,
-    "navigation_depth": 2,
+    "navigation_depth": 3,
+    "includehidden": True,
+    "titles_only": False,
+    "collapse_navigation": False
 }
 html_static_path = []
 html_logo = str(ROOT_DIR / "logo.png")
