@@ -15,23 +15,46 @@ The MATLAB API documentation is generated using Doxygen and provides detailed in
 
 ```{eval-rst}
 .. note::
-   The complete MATLAB API reference is available in the Doxygen-generated documentation.
+   For the complete MATLAB API reference, please visit the :doc:`MATLAB API Reference <matlab_api_full>` page.
 ```
-
-### Detailed MATLAB Documentation
-
-```{eval-rst}
-For comprehensive documentation of all MATLAB functions and classes, please visit the `MATLAB API Reference <../../../../../doc/doxygen/matlab/index.html>`_.
-```
-
-## Embedding MATLAB Documentation
-
-You can also view the MATLAB documentation directly within this interface using the embedded frame below:
 
 ```{eval-rst}
 .. raw:: html
 
-   <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
-     <iframe src="../../../../../doc/doxygen/matlab/index.html" frameborder="0" style="position: absolute; top: 0; left: 0; width: 100%; height: 500px;"></iframe>
-   </div>
-``` 
+   <a href="../../../../../doc/doxygen/matlab/index.html" class="btn btn-primary btn-lg" style="background-color: #2980b9; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block; margin: 20px 0;" target="_blank" rel="noopener noreferrer">Access MATLAB API Documentation</a>
+```
+
+## Usage Examples
+
+### Computing Divergence
+
+```matlab
+% Create a 2D grid
+nx = 10; ny = 10;
+x = linspace(0, 1, nx);
+y = linspace(0, 1, ny);
+
+% Create a vector field
+[X, Y] = meshgrid(x, y);
+u = sin(2*pi*X) .* cos(2*pi*Y);
+v = cos(2*pi*X) .* sin(2*pi*Y);
+
+% Compute the divergence
+div = divergence(u, v, x, y);
+```
+
+### Setting Boundary Conditions
+
+```matlab
+% Create a grid
+nx = 20; ny = 20;
+x = linspace(0, 1, nx);
+y = linspace(0, 1, ny);
+
+% Create a Laplacian operator with Dirichlet boundary conditions
+L = laplacian2d(nx, ny, 'dirichlet');
+
+% Solve a Poisson equation
+f = ones(nx*ny, 1);  % Right-hand side
+u = L \ f;           % Solution
+```
