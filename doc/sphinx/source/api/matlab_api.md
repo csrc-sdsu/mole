@@ -11,5 +11,9 @@ The **MATLAB API** for MOLE provides access to mimetic operators, solvers, and p
 
 ## Reference Documentation
 
-The MATLAB API documentation can be found at the link below:
-[MATLAB API Reference](../../../../../doc/doxygen/matlab/index.html) 
+The MATLAB API documentation is generated using Doxygen and provides detailed information about all functions, classes, and methods available in the MATLAB interface.
+
+```{eval-rst}
+.. note::
+   The complete MATLAB API reference is available in the Doxygen-generated documentation.
+``` 

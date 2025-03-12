@@ -17,13 +17,20 @@ MOLE is a comprehensive library for numerical computations focusing on mimetic f
 ## Contents
 
 ```{toctree}
-:maxdepth: 4
+:maxdepth: 2
 :caption: Documentation
 
 api/introduction.md
+README <api/README.md>
 api/cpp_api.md
 api/matlab_api.md
 api/gettingstarted.md
+```
+
+```{toctree}
+:maxdepth: 1
+:caption: Community
+
 Contributing Guide <api/CONTRIBUTING.md>
 Code of Conduct <api/CODE_OF_CONDUCT.md>
 ```
@@ -32,26 +39,3 @@ Code of Conduct <api/CODE_OF_CONDUCT.md>
 
 * [Index](genindex)
 * [Search](search)
-
-<!--
-**Doxygen API Documentation**
-
-**C++ API**
-------------
-.. doxygenindex:: 
-   :project: MoleCpp
-
-**MATLAB API**
---------------
-.. toctree::
-   :maxdepth: 1
-   :caption: MATLAB API
-
-   ../../doc/doxygen/matlab/mole_MATLAB/index.html
--->
-
-## **More Information**
-
-* [Index](genindex)
-* [Module Index](modindex)
-* [Search](search) 

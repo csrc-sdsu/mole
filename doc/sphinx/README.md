@@ -90,4 +90,4 @@ When contributing to documentation:
 
 ## 🤝 Contributing
 
-Please read our [Contributing Guide](../../CONTRIBUTING.md) before submitting documentation changes.
+Please read our [Contributing Guide](CONTRIBUTING.md) before submitting documentation changes.

@@ -63,7 +63,7 @@ html_theme = 'sphinx_rtd_theme'
 html_theme_options = {
     "style_external_links": True,
     "logo_only": True,
-    "navigation_depth": 4,
+    "navigation_depth": 2,
 }
 html_static_path = []
 html_logo = str(ROOT_DIR / "logo.png")
