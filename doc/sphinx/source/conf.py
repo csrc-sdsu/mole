@@ -1,6 +1,7 @@
 import os
 import sys
 from pathlib import Path
+import shutil
 
 # Define root directory using pathlib
 ROOT_DIR = Path(__file__).resolve().parents[3]
@@ -62,7 +63,7 @@ source_suffix = {
 }
 
 # Follow symlinks
-html_extra_path = []
+html_extra_path = [str(ROOT_DIR / 'doc' / 'doxygen')]
 html_use_symlinks = True
 follow_links = True
 

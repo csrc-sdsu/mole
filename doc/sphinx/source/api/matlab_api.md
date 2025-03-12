@@ -16,4 +16,22 @@ The MATLAB API documentation is generated using Doxygen and provides detailed in
 ```{eval-rst}
 .. note::
    The complete MATLAB API reference is available in the Doxygen-generated documentation.
+```
+
+### Detailed MATLAB Documentation
+
+```{eval-rst}
+For comprehensive documentation of all MATLAB functions and classes, please visit the `MATLAB API Reference <../../../../../doc/doxygen/matlab/index.html>`_.
+```
+
+## Embedding MATLAB Documentation
+
+You can also view the MATLAB documentation directly within this interface using the embedded frame below:
+
+```{eval-rst}
+.. raw:: html
+
+   <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+     <iframe src="../../../../../doc/doxygen/matlab/index.html" frameborder="0" style="position: absolute; top: 0; left: 0; width: 100%; height: 500px;"></iframe>
+   </div>
 ``` 
