@@ -1,6 +1,21 @@
-add_custom_target(tests_matlab
-    COMMAND matlab -batch "runtests testDivergence"
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMENT "Running MATLAB unit tests..."
+# Find all MATLAB test files (test*.m)
+file(GLOB TEST_SOURCES test*.m)
+
+# Enable testing
+enable_testing()
+
+# Loop through all MATLAB test files and register them as tests
+foreach(TEST_SOURCE ${TEST_SOURCES})
+    get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
+
+    add_test(NAME ${TEST_NAME}
+        COMMAND matlab -batch "addpath('${CMAKE_CURRENT_SOURCE_DIR}'); runtests('${TEST_NAME}')"
+    )
+endforeach()
+
+# Custom target to run all MATLAB tests using CTest
+add_custom_target(run_matlab_tests
+    COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
+    COMMENT "Running all MATLAB unit tests..."
 )
 
