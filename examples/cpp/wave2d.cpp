@@ -13,7 +13,6 @@
 #include "interpol.h"
 #include <armadillo>
 
-// Add these new functions at the start, after the includes
 std::string rgbToHex(double r, double g, double b) {
     int ri = static_cast<int>(r * 255);
     int gi = static_cast<int>(g * 255);
