@@ -1,13 +1,10 @@
-Introduction
-============
+# Introduction
 
 Welcome to the introduction to MOLE (Mimetic Operators Library Enhanced). 
 
 This section provides a high-level overview of the library's goals, purpose, and major features. The MOLE library aims to deliver robust, efficient, and maintainable numerical operators for mimetic difference methods.
 
--------------
-Key Features
--------------
+## Key Features
 
 - **Mimetic Operators**: Support for divergence, gradient, curl, and other core operators.
 
@@ -19,4 +16,4 @@ Key Features
 
 - **Documentation & Examples**: Includes tutorials, usage examples, and implementation guides.
 
-Continue reading the **C++ API** and **MATLAB API** documentation for in-depth technical usage and examples.
+Continue reading the **C++ API** and **MATLAB API** documentation for in-depth technical usage and examples. 
