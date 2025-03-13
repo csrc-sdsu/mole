@@ -31,6 +31,10 @@ extensions = [
     'myst_parser',
 ]
 
+# Disable epub builder
+epub_show_urls = 'no'
+epub_use_index = False
+
 # Configure myst-parser
 myst_enable_extensions = [
     "colon_fence",
@@ -66,9 +70,15 @@ html_logo = str(ROOT_DIR / "logo.png")
 
 # Breathe configuration
 breathe_projects = {
-    "MoleCpp": str(ROOT_DIR / "doc/api_docs/cpp/xml")
+    "MoleCpp": str(ROOT_DIR / "doc/doxygen/cpp/xml")
 }
 breathe_default_project = "MoleCpp"
+breathe_domain_by_extension = {
+    ".h": "cpp",
+    ".hpp": "cpp",
+    ".cpp": "cpp",
+    ".c": "c",
+}
 
 # Warning suppression
 suppress_warnings = [

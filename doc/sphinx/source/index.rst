@@ -11,7 +11,7 @@ MOLE Documentation
 Welcome to MOLE (Mimetic Operators Library Enhanced)
 ----------------------------------------------------------
 
-MOLE is a comprehensive library for numerical computations focusing on mimetic finite difference methods.
+MOLE is a comprehensive library for numerical computations focusing on mimetic difference methods.
 
 .. image:: ../../../logo.png
    :align: center
@@ -21,7 +21,7 @@ MOLE is a comprehensive library for numerical computations focusing on mimetic f
 Key Features
 --------------------------------------------------
 
-* Mimetic finite difference operators
+* Mimetic difference operators
 * Support for various boundary conditions
 * High-performance numerical computations
 * Cross-platform compatibility (C++ and MATLAB implementations)
@@ -62,7 +62,7 @@ Indices and Tables
 ..    :maxdepth: 1
 ..    :caption: MATLAB API
 
-..    ../../doc/api_docs/matlab/mole_MATLAB/index.html
+..    ../../doc/doxygen/matlab/mole_MATLAB/index.html
 
 --------------------------------------------------
 **More Information**

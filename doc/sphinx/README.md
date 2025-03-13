@@ -23,6 +23,9 @@ The MOLE documentation consists of two main components:
 ### Prerequisites
 
 ```bash
+# Navigate to the documentation directory
+cd doc/sphinx
+
 # Create and activate a virtual environment (Recommended)
 python -m venv .venv
 source .venv/bin/activate  # On Unix/MacOS
@@ -30,33 +33,34 @@ source .venv/bin/activate  # On Unix/MacOS
 .venv\Scripts\activate     # On Windows
 
 # Install dependencies
-pip install -r doc/sphinx/requirements.txt
+make doc-deps
 ```
 
 ### Building Steps
 
-1. **Generate API Documentation**
-```bash
-# From project root
-make doc-doxygen
-```
+All commands should be run from the `doc/sphinx` directory:
 
-2. **Build User Manual**
 ```bash
-# HTML output
+# Generate API Documentation
+make doc-doxygen
+
+# Build HTML documentation
 make doc-html
 
 # PDF output (requires LaTeX)
 make doc-latexpdf
 
-# Clean build (Removes all Sphinx build files)
+# Clean build files (Doxygen + Sphinx)
 make doc-clean
+
+# Build all documentation
+make doc-all
 ```
 
 The documentation will be generated in:
-- C++ API Docs: `doc/api_docs/cpp/`
 - HTML: `doc/sphinx/build/html/`
 - PDF: `doc/sphinx/build/pdf/`
+- API Docs: `doc/doxygen/`
 
 ## 🔄 Development Workflow
 
@@ -67,7 +71,7 @@ When contributing to documentation:
    - Build with `make doc-doxygen` to verify
 
 2. **User Manual**
-   - Edit `.rst` files in `doc/sphinx/source/`
+   - Edit `.rst` or `.md` files in `doc/sphinx/source/`
    - Build with `make doc-html` to preview changes
    - Use `make doc-clean` to force full rebuild
 
