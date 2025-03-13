@@ -35,55 +35,6 @@ def setup(app):
     # Connect to the build-finished event
     app.connect('build-finished', copy_assets)
     
-    # Add CSS to fix image paths in the README
-    app.add_css_file('css/custom.css')
-    
-    # Create the CSS directory and file if they don't exist
-    css_dir = Path(app.srcdir) / '_static' / 'css'
-    css_dir.mkdir(parents=True, exist_ok=True)
-    
-    css_file = css_dir / 'custom.css'
-    with open(css_file, 'w') as f:
-        f.write("""
-/* Fix image paths in the included README.md */
-img[src^="doc/assets/img/"] {
-    display: none;
-}
-img[src="doc/assets/img/4thOrder.png"] {
-    content: url("/_static/img/4thOrder.png");
-    display: inline;
-}
-img[src="doc/assets/img/4thOrder2.png"] {
-    content: url("/_static/img/4thOrder2.png");
-    display: inline;
-}
-img[src="doc/assets/img/4thOrder3.png"] {
-    content: url("/_static/img/4thOrder3.png");
-    display: inline;
-}
-img[src="doc/assets/img/grid2.png"] {
-    content: url("/_static/img/grid2.png");
-    display: inline;
-}
-img[src="doc/assets/img/grid.png"] {
-    content: url("/_static/img/grid.png");
-    display: inline;
-}
-img[src="doc/assets/img/WavyGrid.png"] {
-    content: url("/_static/img/WavyGrid.png");
-    display: inline;
-}
-img[src="doc/assets/img/wave2D.png"] {
-    content: url("/_static/img/wave2D.png");
-    display: inline;
-}
-img[src="doc/assets/img/burgers.png"] {
-    content: url("/_static/img/burgers.png");
-    display: inline;
-}
-""")
-    logger.info(f'Created custom CSS file at {css_file}')
-    
     return {
         'version': '0.1',
         'parallel_read_safe': True,

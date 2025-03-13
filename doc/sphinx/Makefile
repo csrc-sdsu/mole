@@ -50,11 +50,15 @@ doc-html: doc-deps doc-doxygen
 		$(MAKE) doc-doxygen; \
 	fi
 	PYTHONPATH=../.. $(SPHINXBUILD) -b html "$(SOURCEDIR)" "$(BUILDDIR)/html"
+	@echo "Fixing image paths..."
+	@cd ../.. && ./copy_images.sh
 
 # LaTeX + PDF documentation
 doc-latexpdf: doc-deps doc-doxygen
 	@mkdir -p $(BUILDDIR)/latex $(PDFDIR)
 	PYTHONPATH=../.. $(SPHINXBUILD) -b latex "$(SOURCEDIR)" "$(BUILDDIR)/latex"
+	@echo "Fixing image paths..."
+	@cd ../.. && ./copy_images.sh
 	@make -C $(BUILDDIR)/latex
 	@mv $(BUILDDIR)/latex/*.pdf $(PDFDIR)/
 
@@ -65,7 +69,17 @@ doc-clean:
 	@rm -rf $(DOXYDIR)
 
 # Generate all documentation
-doc-all: doc-clean doc-doxygen doc-deps doc-html doc-latexpdf
+doc-all: doc-clean doc-doxygen doc-deps
+	@echo "Building HTML documentation..."
+	PYTHONPATH=../.. $(SPHINXBUILD) -b html "$(SOURCEDIR)" "$(BUILDDIR)/html"
+	@echo "Building LaTeX documentation..."
+	PYTHONPATH=../.. $(SPHINXBUILD) -b latex "$(SOURCEDIR)" "$(BUILDDIR)/latex"
+	@echo "Fixing image paths..."
+	@cd ../.. && ./copy_images.sh
+	@echo "Generating PDF..."
+	@mkdir -p $(PDFDIR)
+	@make -C $(BUILDDIR)/latex
+	@mv $(BUILDDIR)/latex/*.pdf $(PDFDIR)/
 	@echo "Documentation generated in:"
 	@echo "  HTML: $(BUILDDIR)/html/"
 	@echo "  PDF:  $(PDFDIR)/"
