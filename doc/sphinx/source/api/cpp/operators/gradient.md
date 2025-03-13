@@ -2,38 +2,36 @@
 
 The gradient operator computes the gradient of a scalar field.
 
-```{eval-rst}
-.. note::
-   For complete API details of the ``Gradient`` class, see the :cpp:class:`Gradient` class in the Class Reference.
-```
-
 ## Usage Example
 
 ```cpp
-#include <mole/operators.h>
-#include <mole/grid.h>
 #include <vector>
+#include <cmath>
 
 int main() {
     // Create a 2D grid
-    mole::Grid2D grid(0.0, 1.0, 0.0, 1.0, 50, 50);
-    
-    // Create scalar field
-    std::vector<double> f(grid.size());
-    
-    // Initialize scalar field
-    for (int i = 0; i < grid.nx(); ++i) {
-        for (int j = 0; j < grid.ny(); ++j) {
-            int idx = i + j * grid.nx();
-            double x = grid.x(i);
-            double y = grid.y(j);
-            
-            f[idx] = x*x + y*y;
-        }
-    }
+    u32 m = 50; // cells in x-direction
+    u32 n = 50; // cells in y-direction
+    Real dx = 0.02;
+    Real dy = 0.02;
     
     // Create gradient operator
-    mole::Gradient grad(grid);
+    u16 k = 4; // Order of accuracy
+    Gradient grad(k, m, dx, n, dy);
+    
+    // Create scalar field
+    std::vector<double> f(m*n);
+    
+    // Initialize scalar field
+    for (u32 i = 0; i < m; ++i) {
+        for (u32 j = 0; j < n; ++j) {
+            u32 idx = i + j*m;
+            double x = i * dx;
+            double y = j * dy;
+            
+            f[idx] = std::sin(x) * std::cos(y);
+        }
+    }
     
     // Compute gradient
     std::vector<double> grad_x, grad_y;
@@ -45,8 +43,4 @@ int main() {
 
 ## API Details
 
-```{eval-rst}
-.. doxygenclass:: mole::Gradient
-   :members:
-   :project: MoleCpp
-``` 
+For complete API details, please refer to the Gradient class in the source code. 

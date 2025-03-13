@@ -1,39 +1,37 @@
 # Laplacian Operator
 
-The Laplacian operator computes the Laplacian of a field.
-
-```{eval-rst}
-.. note::
-   For complete API details of the ``Laplacian`` class, see the :cpp:class:`Laplacian` class in the Class Reference.
-```
+The Laplacian operator computes the Laplacian of a scalar field.
 
 ## Usage Example
 
 ```cpp
-#include <mole/operators.h>
-#include <mole/grid.h>
 #include <vector>
+#include <cmath>
 
 int main() {
     // Create a 2D grid
-    mole::Grid2D grid(0.0, 1.0, 0.0, 1.0, 50, 50);
-    
-    // Create scalar field
-    std::vector<double> f(grid.size());
-    
-    // Initialize scalar field
-    for (int i = 0; i < grid.nx(); ++i) {
-        for (int j = 0; j < grid.ny(); ++j) {
-            int idx = i + j * grid.nx();
-            double x = grid.x(i);
-            double y = grid.y(j);
-            
-            f[idx] = x*x + y*y;
-        }
-    }
+    u32 m = 50; // cells in x-direction
+    u32 n = 50; // cells in y-direction
+    Real dx = 0.02;
+    Real dy = 0.02;
     
     // Create Laplacian operator
-    mole::Laplacian lap(grid);
+    u16 k = 4; // Order of accuracy
+    Laplacian lap(k, m, dx, n, dy);
+    
+    // Create scalar field
+    std::vector<double> f(m*n);
+    
+    // Initialize scalar field
+    for (u32 i = 0; i < m; ++i) {
+        for (u32 j = 0; j < n; ++j) {
+            u32 idx = i + j*m;
+            double x = i * dx;
+            double y = j * dy;
+            
+            f[idx] = std::sin(M_PI * x) * std::sin(M_PI * y);
+        }
+    }
     
     // Compute Laplacian
     std::vector<double> result = lap.apply(f);
@@ -44,8 +42,4 @@ int main() {
 
 ## API Details
 
-```{eval-rst}
-.. doxygenclass:: mole::Laplacian
-   :members:
-   :project: MoleCpp
-``` 
+For complete API details, please refer to the Laplacian class in the source code. 

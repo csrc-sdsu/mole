@@ -2,45 +2,45 @@
 
 The curl operator computes the curl of a vector field.
 
-```{eval-rst}
-.. note::
-   For complete API details of the ``Curl`` class, see the :cpp:class:`Curl` class in the Class Reference.
-```
-
 ## Usage Example
 
 ```cpp
-#include <mole/operators.h>
-#include <mole/grid.h>
 #include <vector>
+#include <cmath>
 
 int main() {
     // Create a 3D grid
-    mole::Grid3D grid(0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 20, 20, 20);
+    u32 m = 20; // cells in x-direction
+    u32 n = 20; // cells in y-direction
+    u32 o = 20; // cells in z-direction
+    Real dx = 0.05;
+    Real dy = 0.05;
+    Real dz = 0.05;
     
-    // Create vector field (u, v, w)
-    std::vector<double> u(grid.size());
-    std::vector<double> v(grid.size());
-    std::vector<double> w(grid.size());
+    // Create curl operator
+    u16 k = 4; // Order of accuracy
+    Curl curl(k, m, dx, n, dy, o, dz);
+    
+    // Create vector field components
+    std::vector<double> u(m*n*o);
+    std::vector<double> v(m*n*o);
+    std::vector<double> w(m*n*o);
     
     // Initialize vector field
-    for (int i = 0; i < grid.nx(); ++i) {
-        for (int j = 0; j < grid.ny(); ++j) {
-            for (int k = 0; k < grid.nz(); ++k) {
-                int idx = i + j * grid.nx() + k * grid.nx() * grid.ny();
-                double x = grid.x(i);
-                double y = grid.y(j);
-                double z = grid.z(k);
+    for (u32 i = 0; i < m; ++i) {
+        for (u32 j = 0; j < n; ++j) {
+            for (u32 k = 0; k < o; ++k) {
+                u32 idx = i + j*m + k*m*n;
+                double x = i * dx;
+                double y = j * dy;
+                double z = k * dz;
                 
-                u[idx] = y * z;
-                v[idx] = x * z;
-                w[idx] = x * y;
+                u[idx] = std::sin(x) * std::cos(y) * std::cos(z);
+                v[idx] = std::cos(x) * std::sin(y) * std::cos(z);
+                w[idx] = std::cos(x) * std::cos(y) * std::sin(z);
             }
         }
     }
-    
-    // Create curl operator
-    mole::Curl curl(grid);
     
     // Compute curl
     std::vector<double> curl_x, curl_y, curl_z;
@@ -52,8 +52,4 @@ int main() {
 
 ## API Details
 
-```{eval-rst}
-.. doxygenclass:: mole::Curl
-   :members:
-   :project: MoleCpp
-``` 
+For complete API details, please refer to the Curl class in the source code. 

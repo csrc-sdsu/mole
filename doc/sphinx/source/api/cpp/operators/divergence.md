@@ -2,40 +2,38 @@
 
 The divergence operator computes the divergence of a vector field.
 
-```{eval-rst}
-.. note::
-   For complete API details of the ``Divergence`` class, see the :cpp:class:`Divergence` class in the Class Reference.
-```
-
 ## Usage Example
 
 ```cpp
-#include <mole/operators.h>
-#include <mole/grid.h>
 #include <vector>
+#include <cmath>
 
 int main() {
     // Create a 2D grid
-    mole::Grid2D grid(0.0, 1.0, 0.0, 1.0, 50, 50);
-    
-    // Create vector field (u, v)
-    std::vector<double> u(grid.size());
-    std::vector<double> v(grid.size());
-    
-    // Initialize vector field
-    for (int i = 0; i < grid.nx(); ++i) {
-        for (int j = 0; j < grid.ny(); ++j) {
-            int idx = i + j * grid.nx();
-            double x = grid.x(i);
-            double y = grid.y(j);
-            
-            u[idx] = x * y;
-            v[idx] = x * x + y * y;
-        }
-    }
+    u32 m = 50; // cells in x-direction
+    u32 n = 50; // cells in y-direction
+    Real dx = 0.02;
+    Real dy = 0.02;
     
     // Create divergence operator
-    mole::Divergence div(grid);
+    u16 k = 4; // Order of accuracy
+    Divergence div(k, m, dx, n, dy);
+    
+    // Create vector field components
+    std::vector<double> u(m*n);
+    std::vector<double> v(m*n);
+    
+    // Initialize vector field
+    for (u32 i = 0; i < m; ++i) {
+        for (u32 j = 0; j < n; ++j) {
+            u32 idx = i + j*m;
+            double x = i * dx;
+            double y = j * dy;
+            
+            u[idx] = std::sin(x) * std::cos(y);
+            v[idx] = std::cos(x) * std::sin(y);
+        }
+    }
     
     // Compute divergence
     std::vector<double> result = div.apply(u, v);
@@ -46,8 +44,4 @@ int main() {
 
 ## API Details
 
-```{eval-rst}
-.. doxygenclass:: mole::Divergence
-   :members:
-   :project: MoleCpp
-``` 
+For complete API details, please refer to the Divergence class in the source code. 

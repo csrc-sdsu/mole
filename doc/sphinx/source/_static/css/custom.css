@@ -1,0 +1,37 @@
+
+/* Fix image paths in the included README.md */
+img[src^="doc/assets/img/"] {
+    display: none;
+}
+img[src="doc/assets/img/4thOrder.png"] {
+    content: url("/_static/img/4thOrder.png");
+    display: inline;
+}
+img[src="doc/assets/img/4thOrder2.png"] {
+    content: url("/_static/img/4thOrder2.png");
+    display: inline;
+}
+img[src="doc/assets/img/4thOrder3.png"] {
+    content: url("/_static/img/4thOrder3.png");
+    display: inline;
+}
+img[src="doc/assets/img/grid2.png"] {
+    content: url("/_static/img/grid2.png");
+    display: inline;
+}
+img[src="doc/assets/img/grid.png"] {
+    content: url("/_static/img/grid.png");
+    display: inline;
+}
+img[src="doc/assets/img/WavyGrid.png"] {
+    content: url("/_static/img/WavyGrid.png");
+    display: inline;
+}
+img[src="doc/assets/img/wave2D.png"] {
+    content: url("/_static/img/wave2D.png");
+    display: inline;
+}
+img[src="doc/assets/img/burgers.png"] {
+    content: url("/_static/img/burgers.png");
+    display: inline;
+}

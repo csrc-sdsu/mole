@@ -1,43 +1,40 @@
 # Interpolation Operator
 
-The interpolation operator performs interpolation operations on fields.
-
-```{eval-rst}
-.. note::
-   For complete API details of the ``Interpol`` class, see the :cpp:class:`Interpol` class in the Class Reference.
-```
+The interpolation operator interpolates values from one grid to another.
 
 ## Usage Example
 
 ```cpp
-#include <mole/operators.h>
-#include <mole/grid.h>
 #include <vector>
+#include <cmath>
 
 int main() {
     // Create a 2D grid
-    mole::Grid2D grid(0.0, 1.0, 0.0, 1.0, 50, 50);
+    u32 m = 50; // cells in x-direction
+    u32 n = 50; // cells in y-direction
+    Real dx = 0.02;
+    Real dy = 0.02;
     
-    // Create a field
-    std::vector<double> field(grid.size());
+    // Create interpolation operator
+    u16 k = 4; // Order of accuracy
+    Interpol interp(k, m, dx, n, dy);
     
-    // Initialize field
-    for (int i = 0; i < grid.nx(); ++i) {
-        for (int j = 0; j < grid.ny(); ++j) {
-            int idx = i + j * grid.nx();
-            double x = grid.x(i);
-            double y = grid.y(j);
+    // Create scalar field
+    std::vector<double> f(m*n);
+    
+    // Initialize scalar field
+    for (u32 i = 0; i < m; ++i) {
+        for (u32 j = 0; j < n; ++j) {
+            u32 idx = i + j*m;
+            double x = i * dx;
+            double y = j * dy;
             
-            field[idx] = x*x + y*y;
+            f[idx] = std::sin(x) * std::cos(y);
         }
     }
     
-    // Create interpolation operator with coefficient c = 0.5
-    double c = 0.5;
-    mole::Interpol interp(grid.nx(), grid.ny(), c, c);
-    
-    // Apply interpolation
-    std::vector<double> result = interp.apply(field);
+    // Interpolate to cell centers
+    std::vector<double> result = interp.apply(f);
     
     return 0;
 }
@@ -45,8 +42,4 @@ int main() {
 
 ## API Details
 
-```{eval-rst}
-.. doxygenclass:: mole::Interpol
-   :members:
-   :project: MoleCpp
-``` 
+For complete API details, please refer to the Interpol class in the source code. 

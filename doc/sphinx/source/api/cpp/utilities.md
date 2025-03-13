@@ -1,10 +1,10 @@
 # Utilities
 
-This section documents the utility classes and functions provided by the MOLE library. For complete API details, see the Complete Class Reference section in the C++ API documentation.
+This section documents the utility functions provided by the MOLE library. For complete API details, see the Complete Class Reference section in the C++ API documentation.
 
 ## Available Utilities
 
-MOLE provides various utility functions for numerical computations:
+MOLE provides several utility functions for numerical simulations:
 
 ```{eval-rst}
 .. list-table::
@@ -13,14 +13,14 @@ MOLE provides various utility functions for numerical computations:
 
    * - Utility
      - Description
-   * - :doc:`Grid Utilities <utilities/grid>`
-     - Functions for working with grids and meshes
-   * - :doc:`Math Utilities <utilities/math>`
-     - Mathematical functions for numerical operations
-   * - :doc:`I/O Utilities <utilities/io>`
-     - Functions for input and output operations
-   * - :doc:`Sparse Matrix Utilities <utilities/sparse>`
-     - Functions for working with sparse matrices
+   * - :doc:`Grid <utilities/grid>`
+     - Utilities for creating and manipulating grids
+   * - :doc:`Sparse Matrix <utilities/sparse>`
+     - Utilities for working with sparse matrices
+   * - :doc:`Math <utilities/math>`
+     - Mathematical utility functions
+   * - :doc:`I/O <utilities/io>`
+     - Input/output utility functions
 ```
 
 ## Detailed Documentation
@@ -29,12 +29,12 @@ MOLE provides various utility functions for numerical computations:
 :maxdepth: 1
 
 utilities/grid.md
+utilities/sparse.md
 utilities/math.md
 utilities/io.md
-utilities/sparse.md
 ```
 
-For complete API details of all utility classes and functions, see the Class Reference section in the C++ API documentation.
+For complete API details of all utility functions, see the Class Reference section in the C++ API documentation.
 
 ```{eval-rst}
 .. raw:: html

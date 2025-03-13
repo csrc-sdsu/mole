@@ -9,6 +9,9 @@ ROOT_DIR = Path(__file__).resolve().parents[3]
 # Update Python path - simplified version
 sys.path.insert(0, str(ROOT_DIR))
 
+# Add the _ext directory to the Python path
+sys.path.insert(0, os.path.abspath('_ext'))
+
 # Project information
 project = 'mole'
 copyright = '2024, CSRC'
@@ -30,6 +33,7 @@ extensions = [
     'sphinx.ext.githubpages',
     'sphinx_rtd_theme',
     'myst_parser',
+    'copy_assets',  # Our custom extension to copy assets
 ]
 
 # Disable epub builder
@@ -80,7 +84,7 @@ html_theme_options = {
     "titles_only": False,
     "collapse_navigation": False
 }
-html_static_path = []
+html_static_path = ['_static']
 html_logo = str(ROOT_DIR / "logo.png")
 
 # Breathe configuration

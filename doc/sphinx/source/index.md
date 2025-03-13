@@ -19,9 +19,9 @@ MOLE is a comprehensive library for numerical computations focusing on mimetic f
 ```{toctree}
 :maxdepth: 2
 :caption: Documentation
-
 api/introduction.md
-Read Me <api/README.md>
+Offline Documentation <api/README.md>
+Read Me <api/readme_wrapper.md>
 api/gettingstarted.md
 api/cpp_api.md
 api/matlab_api.md

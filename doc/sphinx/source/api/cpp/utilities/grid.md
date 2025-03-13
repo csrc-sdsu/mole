@@ -1,64 +1,54 @@
 # Grid Utilities
 
-The MOLE library provides various utility functions for working with grids and meshes.
-
-```{eval-rst}
-.. note::
-   For complete API details of the grid utilities, see the :cpp:class:`Utils` class in the Class Reference.
-```
+The MOLE library provides utilities for creating and manipulating grids in 1D, 2D, and 3D.
 
 ## Usage Example
 
 ```cpp
-#include <mole/utils.h>
-#include <mole/grid.h>
 #include <vector>
 
 int main() {
-    // Create a 2D grid
-    mole::Grid2D grid(0.0, 1.0, 0.0, 1.0, 50, 50);
-    
-    // Create a meshgrid
-    std::vector<double> X, Y;
-    mole::Utils::meshgrid(grid.x(), grid.y(), X, Y);
-    
-    // Use the meshgrid to initialize a field
-    std::vector<double> field(grid.size());
-    for (size_t i = 0; i < field.size(); ++i) {
-        field[i] = std::sin(2 * M_PI * X[i]) * std::cos(2 * M_PI * Y[i]);
-    }
-    
-    return 0;
-}
-```
-
-## Grid Creation Examples
-
-```cpp
-#include <mole/grid.h>
-#include <iostream>
-
-int main() {
     // Create a 1D grid
-    mole::Grid1D grid1d(0.0, 1.0, 100);
-    
-    // Print grid information
-    std::cout << "1D Grid points: " << grid1d.size() << std::endl;
-    std::cout << "1D Grid spacing: " << grid1d.spacing() << std::endl;
+    u32 m = 100; // Number of cells
+    Real dx = 0.01; // Cell width
     
     // Create a 2D grid
-    mole::Grid2D grid2d(0.0, 1.0, 0.0, 1.0, 50, 50);
-    
-    // Print grid information
-    std::cout << "2D Grid points: " << grid2d.size() << std::endl;
-    std::cout << "2D Grid x-spacing: " << grid2d.dx() << std::endl;
-    std::cout << "2D Grid y-spacing: " << grid2d.dy() << std::endl;
+    u32 n = 50; // Number of cells in y-direction
+    Real dy = 0.02; // Cell width in y-direction
     
     // Create a 3D grid
-    mole::Grid3D grid3d(0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 20, 20, 20);
+    u32 o = 25; // Number of cells in z-direction
+    Real dz = 0.04; // Cell width in z-direction
     
-    // Print grid information
-    std::cout << "3D Grid points: " << grid3d.size() << std::endl;
+    // Access grid points
+    for (u32 i = 0; i < m; ++i) {
+        double x = i * dx; // x-coordinate
+        
+        // Do something with x
+    }
+    
+    // Access 2D grid points
+    for (u32 i = 0; i < m; ++i) {
+        for (u32 j = 0; j < n; ++j) {
+            double x = i * dx; // x-coordinate
+            double y = j * dy; // y-coordinate
+            
+            // Do something with x, y
+        }
+    }
+    
+    // Access 3D grid points
+    for (u32 i = 0; i < m; ++i) {
+        for (u32 j = 0; j < n; ++j) {
+            for (u32 k = 0; k < o; ++k) {
+                double x = i * dx; // x-coordinate
+                double y = j * dy; // y-coordinate
+                double z = k * dz; // z-coordinate
+                
+                // Do something with x, y, z
+            }
+        }
+    }
     
     return 0;
 }
@@ -66,16 +56,4 @@ int main() {
 
 ## API Details
 
-```{eval-rst}
-.. doxygenclass:: mole::Grid1D
-   :members:
-   :project: MoleCpp
-
-.. doxygenclass:: mole::Grid2D
-   :members:
-   :project: MoleCpp
-
-.. doxygenclass:: mole::Grid3D
-   :members:
-   :project: MoleCpp
-``` 
+For complete API details, please refer to the grid utility classes in the source code. 

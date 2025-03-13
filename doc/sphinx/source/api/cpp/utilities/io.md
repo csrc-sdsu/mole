@@ -1,67 +1,41 @@
 # I/O Utilities
 
-The MOLE library provides utility functions for input and output operations.
-
-```{eval-rst}
-.. note::
-   For complete API details of the I/O utilities, see the ``io`` namespace in the Class Reference.
-```
+The MOLE library provides utilities for input and output operations, such as saving and loading fields.
 
 ## Usage Example
 
 ```cpp
-#include <mole/utils.h>
-#include <mole/grid.h>
 #include <vector>
 #include <string>
 
 int main() {
     // Create a 2D grid
-    mole::Grid2D grid(0.0, 1.0, 0.0, 1.0, 50, 50);
+    u32 m = 50; // cells in x-direction
+    u32 n = 50; // cells in y-direction
+    Real dx = 0.02;
+    Real dy = 0.02;
     
     // Create a field
-    std::vector<double> field(grid.size());
-    for (size_t i = 0; i < field.size(); ++i) {
-        field[i] = /* some value */;
-    }
+    std::vector<double> field(m*n);
     
-    // Save the field to a file
-    std::string filename = "field_data.txt";
-    mole::Utils::saveField(field, grid, filename);
-    
-    // Load the field from a file
-    std::vector<double> loaded_field;
-    mole::Utils::loadField(loaded_field, grid, filename);
-    
-    return 0;
-}
-```
-
-## VTK Output Example
-
-```cpp
-#include <mole/io.h>
-#include <mole/grid.h>
-#include <vector>
-
-int main() {
-    // Create a 2D grid
-    mole::Grid2D grid(0.0, 1.0, 0.0, 1.0, 50, 50);
-    
-    // Create a field
-    std::vector<double> field(grid.size());
-    for (int i = 0; i < grid.nx(); ++i) {
-        for (int j = 0; j < grid.ny(); ++j) {
-            int idx = i + j * grid.nx();
-            double x = grid.x(i);
-            double y = grid.y(j);
+    // Initialize field
+    for (u32 i = 0; i < m; ++i) {
+        for (u32 j = 0; j < n; ++j) {
+            u32 idx = i + j*m;
+            double x = i * dx;
+            double y = j * dy;
             
             field[idx] = x*x + y*y;
         }
     }
     
-    // Save field in VTK format for visualization
-    mole::io::saveVTK(grid, field, "field.vtk", "field");
+    // Save field to file
+    std::string filename = "field.dat";
+    // io::save_field(field, filename);
+    
+    // Load field from file
+    std::vector<double> loaded_field;
+    // io::load_field(loaded_field, filename);
     
     return 0;
 }
@@ -69,8 +43,4 @@ int main() {
 
 ## API Details
 
-```{eval-rst}
-.. doxygennamespace:: mole::io
-   :members:
-   :project: MoleCpp
-``` 
+For complete API details, please refer to the I/O utility functions in the source code. 
