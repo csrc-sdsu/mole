@@ -49,6 +49,8 @@ doc-html: doc-deps doc-doxygen
 		echo "Error: Doxygen XML index file not found. Running doc-doxygen first..."; \
 		$(MAKE) doc-doxygen; \
 	fi
+	@echo "Running fix for common warnings..."
+	@python3 source/_ext/remove_warnings.py
 	PYTHONPATH=../.. $(SPHINXBUILD) -b html "$(SOURCEDIR)" "$(BUILDDIR)/html"
 	@echo "Fixing image paths..."
 	@cd ../.. && ./copy_images.sh
@@ -56,6 +58,8 @@ doc-html: doc-deps doc-doxygen
 # LaTeX + PDF documentation
 doc-latexpdf: doc-deps doc-doxygen
 	@mkdir -p $(BUILDDIR)/latex $(PDFDIR)
+	@echo "Running fix for common warnings..."
+	@python3 source/_ext/remove_warnings.py
 	PYTHONPATH=../.. $(SPHINXBUILD) -b latex "$(SOURCEDIR)" "$(BUILDDIR)/latex"
 	@echo "Fixing image paths..."
 	@cd ../.. && ./copy_images.sh
@@ -70,6 +74,8 @@ doc-clean:
 
 # Generate all documentation
 doc-all: doc-clean doc-doxygen doc-deps
+	@echo "Running fix for common warnings..."
+	@python3 source/_ext/remove_warnings.py
 	@echo "Building HTML documentation..."
 	PYTHONPATH=../.. $(SPHINXBUILD) -b html "$(SOURCEDIR)" "$(BUILDDIR)/html"
 	@echo "Building LaTeX documentation..."

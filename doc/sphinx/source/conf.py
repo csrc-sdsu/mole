@@ -13,25 +13,20 @@ sys.path.insert(0, str(ROOT_DIR))
 sys.path.insert(0, os.path.abspath('_ext'))
 
 # Project information
-project = 'mole'
-copyright = '2024, CSRC'
-author = 'CSRC'
+project = 'MOLE'
+copyright = '2023, CSRC SDSU'
+author = 'CSRC SDSU'
 release = '1.0.0'
 
 # Extensions configuration
 extensions = [
-    'breathe',
     'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.todo',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.doctest',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
-    'sphinx.ext.ifconfig',
-    'sphinx.ext.githubpages',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.napoleon',
+    'sphinx.ext.intersphinx',
     'sphinx_rtd_theme',
+    'breathe',
     'myst_parser',
     'copy_assets',  # Our custom extension to copy assets
 ]
@@ -179,5 +174,17 @@ numfig_format = {
 
 # Fix image handling
 latex_additional_files = []
+
+# Fix for assets directory warning
+html_static_path = ['_static']
+# Add a custom path for assets
+assets_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../doc/assets'))
+if os.path.exists(assets_path):
+    # If the assets directory exists at the project level, use it
+    html_static_path.append(assets_path)
+else:
+    # Otherwise, create a symlink or copy the assets
+    local_assets = os.path.join(os.path.dirname(__file__), '_static/assets')
+    os.makedirs(local_assets, exist_ok=True)
 
 

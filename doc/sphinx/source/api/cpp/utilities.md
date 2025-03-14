@@ -181,10 +181,8 @@ int main() {
      <div class="collapsible-content">
 ```
 
-```{eval-rst}
-.. doxygenclass:: mole::Utils
-   :members:
-   :project: MoleCpp
+```{note}
+The Utils class is planned for future implementation but is not yet available in the codebase.
 ```
 
 ```{eval-rst}

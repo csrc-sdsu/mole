@@ -392,10 +392,112 @@ int main() {
 ```
 
 ```{note}
-Robin boundary conditions (RobinBC) are planned for future implementation but are not yet available in the MOLE library.
+The Robin boundary condition (RobinBC) class is planned for future implementation but is not yet available in the MOLE library.
 ```
 
 ```{eval-rst}
 ```
 
+```{note}
+The RobinBC class is planned for future implementation but is not yet available in the codebase.
 ```
+
+```{eval-rst}
+.. raw:: html
+
+     </div>
+   </div>
+```
+
+## Mixed Boundary Conditions
+
+Mixed boundary conditions allow different types of boundary conditions on different parts of the boundary.
+
+```{eval-rst}
+.. note::
+   For complete API details of the ``MixedBC`` class, see the :cpp:class:`MixedBC` class in the Class Reference.
+```
+
+### Usage Example
+
+```cpp
+#include <mole/boundary_conditions.h>
+#include <mole/grid.h>
+#include <vector>
+
+int main() {
+    // Create a 2D grid
+    mole::Grid2D grid(0.0, 1.0, 0.0, 1.0, 50, 50);
+    
+    // Define boundary condition types
+    std::string left = "dirichlet";
+    std::string right = "neumann";
+    std::string bottom = "dirichlet";
+    std::string top = "robin";
+    
+    // Define boundary condition coefficients
+    std::vector<double> coeffs_left = {1.0};
+    std::vector<double> coeffs_right = {0.0};
+    std::vector<double> coeffs_bottom = {0.0};
+    std::vector<double> coeffs_top = {1.0, 0.5};
+    
+    // Create mixed boundary conditions
+    mole::MixedBC bc(2, grid.nx(), grid.dx(), grid.ny(), grid.dy(),
+                    left, coeffs_left, right, coeffs_right,
+                    bottom, coeffs_bottom, top, coeffs_top);
+    
+    // Apply boundary conditions to a field
+    std::vector<double> field(grid.size());
+    bc.apply(field);
+    
+    return 0;
+}
+```
+
+## Boundary Condition Utilities
+
+Utility functions for working with boundary conditions.
+
+```{eval-rst}
+.. note::
+   For complete API details of the boundary condition utilities, see the ``bc`` namespace in the Class Reference.
+```
+
+### Usage Example
+
+```cpp
+#include <mole/boundary_conditions.h>
+#include <mole/grid.h>
+#include <vector>
+
+int main() {
+    // Create a 2D grid
+    mole::Grid2D grid(0.0, 1.0, 0.0, 1.0, 50, 50);
+    
+    // Create a field
+    std::vector<double> field(grid.size());
+    
+    // Initialize field
+    for (int i = 0; i < grid.nx(); ++i) {
+        for (int j = 0; j < grid.ny(); ++j) {
+            int idx = i + j * grid.nx();
+            double x = grid.x(i);
+            double y = grid.y(j);
+            
+            field[idx] = x*x + y*y;
+        }
+    }
+    
+    // Apply boundary extraction
+    std::vector<double> boundary_values;
+    mole::bc::extractBoundary(grid, field, boundary_values);
+    
+    // Apply boundary injection
+    std::vector<double> new_boundary_values(boundary_values.size());
+    for (size_t i = 0; i < new_boundary_values.size(); ++i) {
+        new_boundary_values[i] = 2.0 * boundary_values[i];
+    }
+    mole::bc::injectBoundary(grid, new_boundary_values, field);
+    
+    return 0;
+} 
