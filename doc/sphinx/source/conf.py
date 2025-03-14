@@ -2,6 +2,7 @@ import os
 import sys
 from pathlib import Path
 import shutil
+import subprocess
 
 # Define root directory using pathlib
 ROOT_DIR = Path(__file__).resolve().parents[3]
@@ -93,6 +94,12 @@ breathe_domain_by_extension = {
     ".cpp": "cpp",
     ".c": "c",
 }
+breathe_default_members = ('members', 'undoc-members')
+
+# Run Doxygen if needed during build
+if not os.path.exists(str(ROOT_DIR / "doc/doxygen/cpp/xml/index.xml")):
+    print("Doxygen XML not found. Running Doxygen...")
+    subprocess.call(["doxygen", "Doxyfile"], cwd=str(ROOT_DIR))
 
 # Warning suppression
 suppress_warnings = [

@@ -41,3 +41,24 @@ Code of Conduct <api/code_of_conduct_wrapper.md>
 
 * [Index](genindex)
 * [Search](search)
+
+```{include} ../../README.md
+```
+
+```{toctree}
+:caption: Contents
+:maxdepth: 2
+:hidden:
+
+api/introduction
+api/gettingstarted
+api/index
+```
+
+# Indices and tables
+
+* {ref}`genindex`
+* {ref}`search`
+
+```{bibliography}
+```
