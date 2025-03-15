@@ -7,24 +7,24 @@
     </p>
 </div>
 
-<!-- <div class="grid-container" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2em; margin: 2em 0;">
-    <div class="feature-box" style="padding: 1.5em; background: #f8f9fa; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+<div class="grid-container" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2em; margin: 2em 0;">
+    <div class="component-box">
         <h3>🚀 High Performance</h3>
         <p>Optimized implementation of mimetic operators for maximum computational efficiency</p>
     </div>
-    <div class="feature-box" style="padding: 1.5em; background: #f8f9fa; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <div class="component-box">
         <h3>🔧 Easy to Use</h3>
         <p>Simple and intuitive interfaces for both C++ and MATLAB</p>
     </div>
-    <div class="feature-box" style="padding: 1.5em; background: #f8f9fa; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <div class="component-box">
         <h3>📚 Well Documented</h3>
         <p>Comprehensive documentation with examples and API references</p>
     </div>
-    <div class="feature-box" style="padding: 1.5em; background: #f8f9fa; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <div class="component-box">
         <h3>🔬 Research Ready</h3>
         <p>Designed for scientific computing and numerical analysis</p>
     </div>
-</div> -->
+</div>
 
 ```{toctree}
 :maxdepth: 2
@@ -40,12 +40,8 @@ Building Documentation <api/README.md>
 :caption: API Reference
 
 api/cpp/index
-api/matlab/matlab_api
+api/matlab/index
 ```
-<!-- api/operators/index -->
-<!-- api/boundary/index -->
-<!-- api/utils/index -->
-
 
 <!-- ```{toctree}
 :maxdepth: 2

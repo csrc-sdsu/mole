@@ -73,6 +73,19 @@ h3 {
     text-decoration: none;
 }
 
+.btn-secondary {
+    color: #fff;
+    background-color: #95a5a6;
+    border-color: #7f8c8d;
+}
+
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+    border-color: #5d6566;
+    color: #fff;
+    text-decoration: none;
+}
+
 /* Operator section icon color */
 .operator-icon {
     color: #e74c3c;
@@ -86,6 +99,11 @@ h3 {
 /* Utils section icon color */
 .utils-icon {
     color: #f39c12;
+}
+
+/* MATLAB section icon color */
+.matlab-icon {
+    color: #0076a8;
 }
 
 /* Links styling */
@@ -136,4 +154,10 @@ div[class^='highlight'] {
 .mermaid {
     margin: 30px 0;
     text-align: center;
+}
+
+/* MATLAB specific styling */
+.matlab-code {
+    background-color: #f5f5f5;
+    border-left: 3px solid #0076a8;
 } 
