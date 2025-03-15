@@ -25,5 +25,5 @@ function D = div2DPer(k, m, dx, n, dy)
 %                n : Number of cells along y-axis
 %               dy : Step size along y-axis
     
-    D = - grad2DPer(k, m, dx, n, dy);
+    D = - grad2DPer(k, m, dx, n, dy)';
 end
