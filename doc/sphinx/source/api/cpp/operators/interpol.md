@@ -1,6 +1,6 @@
-# Gradient Operator
+# Interpolation Operator
 
-The Gradient operator computes the gradient of a scalar field in the MOLE library.
+The Interpolation operator performs interpolation operations in the MOLE library.
 
 ## Mathematical Background
 
@@ -12,7 +12,7 @@ The Gradient operator computes the gradient of a scalar field in the MOLE librar
 
 ## API Reference
 
-```{doxygenclass} Gradient
+```{doxygenclass} Interpol
 :project: MoleCpp
 :members:
 :undoc-members:

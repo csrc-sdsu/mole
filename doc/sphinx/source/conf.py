@@ -30,6 +30,7 @@ extensions = [
     'breathe',
     'myst_parser',
     'copy_assets',  # Our custom extension to copy assets
+    'sphinxcontrib.mermaid',  # Add Mermaid support
 ]
 
 # Disable epub builder
@@ -82,6 +83,11 @@ html_theme_options = {
 }
 html_static_path = ['_static']
 html_logo = str(ROOT_DIR / "logo.png")
+
+# Add custom CSS
+html_css_files = [
+    'css/custom.css',
+]
 
 # Breathe configuration
 breathe_projects = {

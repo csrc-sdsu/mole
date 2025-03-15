@@ -1,6 +1,6 @@
-# Gradient Operator
+# Mixed Boundary Conditions
 
-The Gradient operator computes the gradient of a scalar field in the MOLE library.
+The MixedBC class implements mixed boundary conditions in the MOLE library.
 
 ## Mathematical Background
 
@@ -12,7 +12,7 @@ The Gradient operator computes the gradient of a scalar field in the MOLE librar
 
 ## API Reference
 
-```{doxygenclass} Gradient
+```{doxygenclass} MixedBC
 :project: MoleCpp
 :members:
 :undoc-members:
@@ -24,4 +24,4 @@ The Gradient operator computes the gradient of a scalar field in the MOLE librar
 
 ## Notes and Considerations
 
-<!-- TODO: Add important notes and considerations for using this operator --> 
+<!-- TODO: Add important notes and considerations for using this boundary condition --> 

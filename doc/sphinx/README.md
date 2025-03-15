@@ -97,31 +97,6 @@ When contributing to documentation:
 - Follow [Sphinx reST](https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html) syntax
 - Follow [Doxygen](https://www.doxygen.nl/manual/docblocks.html) conventions for API docs
 
-## 🔧 Troubleshooting
-
-### Dealing with Common Warnings
-
-The documentation build process includes an automatic fix for common warnings:
-
-1. **Missing Classes in Doxygen Output**
-   - If a class is referenced with `doxygenclass` but not found in Doxygen output, the script will handle it
-   - Note: This is particularly useful for classes planned for future implementation
-
-2. **Missing Image Files**
-   - Placeholder images are automatically created if they don't exist
-   - Proper paths are set up in the HTML output
-
-3. **Broken Reference Links**
-   - Links to external files are automatically fixed
-   - Broken internal links are adjusted to valid targets
-
-This process runs automatically when you use the provided Makefile targets (`make doc-html`, `make doc-latexpdf`, etc.).
-If you're still seeing warnings, you can run the fix script manually:
-
-```bash
-python3 source/_ext/remove_warnings.py
-```
-
 ## 🔗 Useful Links
 
 - [Sphinx Documentation](https://www.sphinx-doc.org/)

@@ -7,7 +7,7 @@
     </p>
 </div>
 
-<div class="grid-container" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2em; margin: 2em 0;">
+<!-- <div class="grid-container" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2em; margin: 2em 0;">
     <div class="feature-box" style="padding: 1.5em; background: #f8f9fa; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
         <h3>🚀 High Performance</h3>
         <p>Optimized implementation of mimetic operators for maximum computational efficiency</p>
@@ -24,7 +24,7 @@
         <h3>🔬 Research Ready</h3>
         <p>Designed for scientific computing and numerical analysis</p>
     </div>
-</div>
+</div> -->
 
 ```{toctree}
 :maxdepth: 2
@@ -39,11 +39,13 @@ Building Documentation <api/README.md>
 :maxdepth: 2
 :caption: API Reference
 
-api/operators/index
-api/boundary/index
-api/utils/index
-api/matlab_api
+api/cpp/index
+api/matlab/matlab_api
 ```
+<!-- api/operators/index -->
+<!-- api/boundary/index -->
+<!-- api/utils/index -->
+
 
 <!-- ```{toctree}
 :maxdepth: 2
@@ -58,11 +60,11 @@ examples/poisson_equation
 :maxdepth: 1
 :caption: Project
 
-README <api/readme_wrapper.md>
+Read Me <../../../README.md>
 Contributing <api/contributing_wrapper.md>
 Code of Conduct <api/code_of_conduct_wrapper.md>
 ```
-
+≠
 <div class="quick-links" style="margin: 2em 0; padding: 1em; background: #f8f9fa; border-radius: 8px;">
     <h2>Quick Links</h2>
     <ul style="list-style: none; padding: 0;">
