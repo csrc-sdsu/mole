@@ -1,4 +1,4 @@
-# Getting Started with MOLE
+# Getting Started
 
 Welcome to the getting started guide for MOLE (Mimetic Operators Library Enhanced). This guide will help you set up and run your first MOLE project.
 
