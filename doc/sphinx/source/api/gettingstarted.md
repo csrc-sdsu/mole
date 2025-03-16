@@ -5,6 +5,7 @@ Welcome to the getting started guide for MOLE (Mimetic Operators Library Enhance
 ```{include} ../../../../README.md
 :start-after: "3: Installation"
 :end-before: "4: Running Examples & Tests"
+:name: installation-section-include
 ```
 
 ## Quick Start Examples
@@ -73,16 +74,16 @@ lap_f = L * f';       % Laplacian
 ```{include} ../../../../README.md
 :start-after: "4: Running Examples & Tests"
 :end-before: "5: Documentation"
+:name: examples-tests-section-include
 ```
 
 ## Next Steps
 
-- Explore the [API Reference](../api/operators/index) for detailed documentation
 - Check out more complex examples in the examples directory
-- Read about [boundary conditions](../api/boundary/index) and [utilities](../api/utils/index)
 - Join our community and [contribute](../api/contributing_wrapper.md)
 
 ```{include} ../../../../README.md
 :start-after: "**NOTE:**"
 :end-before: "6: Community Guidelines"
+:name: note-section-include
 ``` 

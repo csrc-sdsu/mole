@@ -1,3 +1,5 @@
+:orphan:
+
 # Robin Boundary Conditions
 
 The RobinBC class implements Robin boundary conditions in the MOLE library.
