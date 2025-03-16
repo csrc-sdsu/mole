@@ -177,6 +177,11 @@ surf(U);
 <p>Access the complete MATLAB API documentation with detailed function references</p>
 <a href="matlab_api_full.html" class="btn btn-primary">View Full Documentation</a></div>
 
+```{toctree}
+:maxdepth: 1
+
+matlab_api_full
+```
 
 ```{admonition} Advanced Usage
 :class: tip

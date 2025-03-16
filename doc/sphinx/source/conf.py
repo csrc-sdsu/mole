@@ -29,7 +29,6 @@ extensions = [
     'sphinx_rtd_theme',
     'breathe',
     'myst_parser',
-    'copy_assets',  # Our custom extension to copy assets
     'sphinxcontrib.mermaid',  # Add Mermaid support
 ]
 
@@ -110,6 +109,8 @@ if not os.path.exists(str(ROOT_DIR / "doc/doxygen/cpp/xml/index.xml")):
 # Warning suppression
 suppress_warnings = [
     'myst.domains',
+    'myst.anchor',
+    'myst.header',
     'epub.unknown_project_files'
 ]
 
@@ -190,14 +191,9 @@ latex_additional_files = []
 
 # Fix for assets directory warning
 html_static_path = ['_static']
-# Add a custom path for assets
-assets_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../doc/assets'))
-if os.path.exists(assets_path):
-    # If the assets directory exists at the project level, use it
-    html_static_path.append(assets_path)
-else:
-    # Otherwise, create a symlink or copy the assets
-    local_assets = os.path.join(os.path.dirname(__file__), '_static/assets')
-    os.makedirs(local_assets, exist_ok=True)
 
+# Removed assets directory check code completely
+# No longer needed as we're not copying assets
 
+myst_heading_anchors = 3  # Limit heading anchor depth
+myst_ref_domains = []     # Disable automatic reference domain 

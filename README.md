@@ -1,9 +1,6 @@
-MOLE: Mimetic Operators Library Enhanced
-========================================
+# MOLE: Mimetic Operators Library Enhanced
 
-
-1: Description
---------------
+## 1: Description
 
 MOLE is a high-quality (C++ & MATLAB/Octave) library that implements 
 high-order mimetic operators to solve partial differential equations. 
@@ -17,15 +14,13 @@ However, the user may find helpful previous publications, such as [Castillo and 
 in which similar operators were derived using a matrix analysis approach.
 
 
-2: Licensing
-------------
+## 2: Licensing
 
 MOLE is distributed under a GNU General Public License; please refer to the _LICENSE_ 
 file for more details.
 
 
-3: Installation
-------------
+## 3: Installation
 
 ### 3.1 Packages Required
 
@@ -127,8 +122,9 @@ To run the matlab tests manually,
 	
 
 
-4: Running Examples & Tests
----------------------------
+## 4: Running Examples & Tests
+
+### 4.1 Test and Example Directories
 
 Here are instructions on how to run the provided examples and tests for both the C++ and MATLAB versions of the library to help you quickly get started with MOLE.
 
@@ -145,29 +141,28 @@ These will be automatically built after calling `make`. We encourage C++ users t
 Most of our examples are provided in the MATLAB scripting language. Over 30 examples range from linear one-dimensional PDEs to highly nonlinear multidimensional PDEs.
 
 
-5: Documentation
-----------------
+## 5: Documentation
 
-For detailed documentation, including API references, tutorials, and examples, please refer to our [Documentation Guide](doc/sphinx/README.md).
+For detailed documentation, including API references, tutorials, and examples, please refer to our [Documentation Guide](https://csrc-sdsu.github.io/mole/build/html/).
 
 **NOTE:**
 Performing non-unary operations involving operands constructed over different grids may lead to unexpected results. While MOLE allows such operations without throwing errors, users must exercise caution when manipulating operators across different grids.
 
 
-6: Community Guidelines
------------------------
+## 6: Community Guidelines
 
 We welcome contributions to MOLE, whether they involve adding new functionalities, providing examples, addressing existing issues, reporting bugs, or requesting new features. Please refer to our [Contribution Guidelines](https://github.com/csrc-sdsu/mole/blob/master/CONTRIBUTING.md) for more details.
 
 
-7: Citations
-------------
+## 7: Citations
 
 Please cite our work if you use MOLE in your research or software. 
 Citations are helpful for the continued development and maintenance of 
 the library [![DOI](https://joss.theoj.org/papers/10.21105/joss.06288/status.svg)](https://doi.org/10.21105/joss.06288)
 
 [![View mole on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/124870-mole)
+
+## Gallery
 
 Now, some cool pictures obtained with MOLE:
 

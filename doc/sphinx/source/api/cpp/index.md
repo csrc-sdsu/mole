@@ -23,6 +23,15 @@ graph TD
     User -->|utilizes| U[Utils Class]
 ```
 
+```{toctree}
+:maxdepth: 2
+:caption: API Components
+
+operators/index
+boundary/index
+utils/index
+```
+
 ## Components
 
 <div class="component-box">
@@ -50,10 +59,6 @@ graph TD
 <li><a href="utils/utils.html">Utils</a>: Utility class with static helper functions</li>
 </ul>
 </div>
-
-## Quick Start
-
-For examples and usage instructions, please refer to our [Getting Started Guide](../gettingstarted.md).
 
 ```{admonition} Advanced Usage
 :class: tip

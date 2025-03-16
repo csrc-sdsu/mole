@@ -56,13 +56,13 @@
 :maxdepth: 2
 :caption: Getting Started
 
-api/introduction.rst
+Introduction <api/introduction.rst>
 api/gettingstarted.rst
-Building Documentation <api/README.md>
+Building Documentation <api/doc_readme_wrapper.md>
 ```
 
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 3
 :caption: API Reference
 
 api/cpp/index
@@ -82,7 +82,6 @@ examples/poisson_equation
 :maxdepth: 1
 :caption: Project
 
-Read Me <../../../README.md>
 Contributing <api/contributing_wrapper.md>
 Code of Conduct <api/code_of_conduct_wrapper.md>
 ```
