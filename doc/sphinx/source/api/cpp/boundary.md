@@ -2,24 +2,37 @@
 
 MOLE supports a variety of boundary conditions for solving PDEs with different physical constraints.
 
-## Available Boundary Conditions
+## Mixed Boundary Conditions
 
-```{toctree}
-:maxdepth: 1
+The MixedBC class implements mixed boundary conditions in the MOLE library.
 
-mixedbc
-robinbc
+<!-- ### Mathematical Background -->
+
+<!-- TODO: Add mathematical background, principles, and mimetic properties -->
+
+### API Reference
+
+```{doxygenclass} MixedBC
+:project: MoleCpp
+:members:
+:undoc-members:
 ```
 
-## Overview
+## Robin Boundary Conditions
 
-Boundary conditions are essential for properly defining and solving partial differential equations. MOLE provides several types of boundary conditions that can be easily applied to differential operators.
+The RobinBC class implements Robin boundary conditions in the MOLE library.
 
-### Key Features
+<!-- ### Mathematical Background -->
 
-- **Flexible boundary specification**: Apply different boundary types at each boundary
-- **High-order accuracy**: Boundary conditions maintain the order of accuracy of the operators
-- **Easy integration with operators**: Simple interface for applying boundary conditions
+<!-- TODO: Add mathematical background, principles, and mimetic properties -->
+
+### API Reference
+
+```{doxygenclass} RobinBC
+:project: MoleCpp
+:members:
+:undoc-members:
+```
 
 ## Usage Examples
 
@@ -48,18 +61,11 @@ bc.setTopNeumann();
 L.setBC(bc);
 ```
 
-For more detailed examples, see the individual boundary condition documentation pages.
-
 ```{admonition} Importance of Boundary Conditions
 :class: important
 Boundary conditions are critical for ensuring that differential equation solutions are unique and physically meaningful. They specify constraints at the boundaries of the computational domain.
 ```
 
-## Common Features
+<!-- ## Notes and Considerations -->
 
-All boundary condition implementations in MOLE:
-
-* **High-order accuracy**: Maintain the same order of accuracy as the operators
-* **Mimetic properties preservation**: Respect conservation laws at boundaries
-* **Flexible specification**: Support for different conditions at different boundaries
-* **Seamless integration**: Work directly with the mimetic operators 
+<!-- TODO: Add important notes and considerations for using these boundary conditions --> 
