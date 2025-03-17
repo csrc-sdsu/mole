@@ -69,7 +69,7 @@ public:
   static vec spsolve_eigen(const sp_mat &A, const vec &b);
 
   /**
-  * @brief An analog to the MATLAB 2D meshgrid operation
+  * @brief An analog to the MATLAB/Octave 2D meshgrid operation
   *
   * returns 2-D grid coordinates based on the coordinates contained 
   * in vectors x and y. X is a matrix where each row is a copy of x, 
@@ -87,7 +87,7 @@ public:
   void meshgrid(const vec &x, const vec &y, mat &X, mat &Y);
 
   /**
-  * @brief An analog to the MATLAB 3D meshgrid operation
+  * @brief An analog to the MATLAB/Octave 3D meshgrid operation
   *
   * meshgrid(x,y,z,X,Y,Z) returns 3-D grid coordinates defined by the 
   * vectors x, y, and z. The grid represented by X, Y, and Z has size
