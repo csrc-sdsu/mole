@@ -1,15 +1,15 @@
-# MATLAB API Documentation
+# MATLAB/Octave API Documentation
 
-Welcome to the MATLAB API documentation for the Mimetic Operators Library Enhanced (MOLE). This section provides detailed information about using MOLE from MATLAB.
+Welcome to the MATLAB/Octave API documentation for the Mimetic Operators Library Enhanced (MOLE). This section provides detailed information about using MOLE from MATLAB.
 
-```{admonition} MATLAB Integration
+```{admonition} MATLAB/Octave Integration
 :class: note
 MOLE provides a complete MATLAB interface that allows you to use all the mimetic operators directly from your MATLAB scripts and functions.
 ```
 
 ## Overview
 
-The MOLE MATLAB API provides the following main components:
+The MOLE MATLAB/Octave API provides the following main components:
 
 - **Operators**:
   - **Gradient**: `grad`, `grad2D`, `grad3D`, etc.
@@ -174,8 +174,8 @@ surf(U);
 ## Complete API Reference
 
 <div class="component-box" style="text-align: center;">
-<h3>Full MATLAB API Documentation</h3>
-<p>Access the complete MATLAB API documentation with detailed function references</p>
+<h3>Full MATLAB/Octave API Documentation</h3>
+<p>Access the complete MATLAB/Octave API documentation with detailed function references</p>
 <a href="matlab_api_full.html" class="btn btn-primary">View Full Documentation</a></div>
 
 ```{toctree}
@@ -186,5 +186,5 @@ matlab_api_full
 
 ```{admonition} Advanced Usage
 :class: tip
-For optimal performance, vectorize your operations and use the sparse matrices directly in your MATLAB code.
+For optimal performance, vectorize your operations and use the sparse matrices directly in your MATLAB/Octave code.
 ``` 
