@@ -29,8 +29,27 @@ extensions = [
     'sphinx_rtd_theme',
     'breathe',
     'myst_parser',
-    'sphinxcontrib.mermaid',  # Add Mermaid support
+    'sphinxcontrib.mermaid',
 ]
+
+# Mermaid configuration
+# Check if mermaid-cli is available
+has_mmdc = shutil.which('mmdc') is not None
+has_npx = shutil.which('npx') is not None
+
+if has_mmdc:
+    mermaid_cmd = 'mmdc'
+    mermaid_output_format = 'svg'
+elif has_npx:
+    mermaid_cmd = 'npx mmdc'
+    mermaid_output_format = 'svg'
+else:
+    # If Mermaid CLI is not available, disable the extension
+    extensions.remove('sphinxcontrib.mermaid')
+    print("\n" + "="*80)
+    print("WARNING: Mermaid CLI not found. Mermaid diagrams will not be rendered.")
+    print("To install Mermaid CLI, run: npm install -g @mermaid-js/mermaid-cli")
+    print("="*80 + "\n")
 
 # Disable epub builder
 epub_show_urls = 'no'
@@ -118,66 +137,99 @@ suppress_warnings = [
 latex_engine = 'lualatex'
 
 latex_elements = {
+    # Basic document settings
     'papersize': 'letterpaper',
     'pointsize': '11pt',
+    'babel': r'\usepackage[english]{babel}',  # Better language support
+    'inputenc': '',  # Not needed with LuaLaTeX
+    'fontenc': '',   # Not needed with LuaLaTeX
+    
+    # Font configuration - using standard LaTeX fonts
     'fontpkg': r'''
-        \usepackage[math-style=ISO,bold-style=ISO]{unicode-math}
-        \setmainfont{TeX Gyre Pagella}
-        \setmathfont{TeX Gyre Pagella Math}
-        \setsansfont{DejaVu Sans}
-        \setmonofont{DejaVu Sans Mono}
+        \usepackage{fontspec}
+        \setmainfont{Latin Modern Roman}
+        \setsansfont{Latin Modern Sans}
+        \setmonofont{Latin Modern Mono}
+        \usepackage[math-style=ISO]{unicode-math}
+        \setmathfont{Latin Modern Math}
     ''',
+    
+    'passoptionstopackages': r'''
+        \PassOptionsToPackage{svgnames}{xcolor}
+    ''',
+    
     'preamble': r'''
+        % Core packages
         \usepackage{amscd}
         \usepackage{cancel}
         \usepackage{fancyhdr}
+        \usepackage{float}
+        \usepackage{microtype}  % Better typography
+        \usepackage[chapter]{algorithm}
+        \usepackage{algpseudocode}
         
         % Header and margin adjustments
         \setlength{\headheight}{14.0pt}
         \addtolength{\topmargin}{-2.0pt}
+        \setlength{\parskip}{0.5em}  % Better paragraph spacing
         
         % Fix overfull hbox warnings
         \setlength{\emergencystretch}{3em}
         \providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
         
-        % Improved figure placement
-        \usepackage{float}
-        \let\origfigure\figure
-        \let\endorigfigure\endfigure
-        \renewenvironment{figure}[1][2] {
-            \expandafter\origfigure\expandafter[H]
-        } {
-            \endorigfigure
-        }
-        
-        % Math commands
+        % Math commands and environments
         \newcommand\bm[1]{\symbf{#1}}
         \def\diff{\operatorname{d}\!}
         \def\tcolon{\!:\!}
         \def\trace{\operatorname{trace}}
         
-        % Remove page numbers from references
+        % Cross-referencing improvements
         \renewcommand{\sphinxcrossref}[1]{\texttt{#1}}
+        
+        % Better code listings
+        \definecolor{codecolor}{RGB}{240,240,240}
+        \definecolor{codetext}{RGB}{36,36,36}
+        \fancypagestyle{normal}{
+            \fancyhf{}
+            \fancyfoot[R]{\thepage}
+            \fancyhead[L]{\leftmark}
+            \fancyhead[R]{MOLE Documentation}
+            \renewcommand{\headrulewidth}{0.4pt}
+            \renewcommand{\footrulewidth}{0.4pt}
+            }
+            
+        % Table spacing improvements
+        \renewcommand{\tabcolsep}{0.5em}
+    
     ''',
+    
+    # Figure settings
     'figure_align': 'H',
     'extrapackages': r'\usepackage{float}',
+    
+    # Hyperref settings (should be loaded last)
     'hyperref': r'''
-        \usepackage[hidelinks]{hyperref}
-    ''',
+        \usepackage[hidelinks,
+                   colorlinks=true,
+                   linkcolor=NavyBlue,
+                   urlcolor=NavyBlue,
+                   citecolor=NavyBlue]{hyperref}
+    '''
 }
 
+# LaTeX document configuration
 latex_documents = [
     ('index', 'MOLE.tex', 'MOLE Documentation',
      'MOLE Development Team', 'manual'),
 ]
 
 # Additional LaTeX settings
-latex_show_pagerefs = False
+latex_show_pagerefs = True  # Changed to True for better cross-referencing
 latex_show_urls = 'footnote'
 latex_logo = str(ROOT_DIR / "logo.png")
 latex_domain_indices = True
 
-# Image settings
+# Image and numbering settings
 numfig = True
 numfig_format = {
     'figure': 'Figure %s',
@@ -185,8 +237,9 @@ numfig_format = {
     'code-block': 'Listing %s',
     'section': 'Section %s'
 }
+numfig_secnum_depth = 2
 
-# Fix image handling
+# Additional files needed for the build
 latex_additional_files = []
 
 # Fix for assets directory warning
