@@ -48,7 +48,7 @@ int main() {
 }
 ```
 
-### MATLAB Example
+### MATLAB/Octave Example
 
 ```matlab
 % Create a 1D grid

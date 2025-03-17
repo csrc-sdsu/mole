@@ -8,7 +8,7 @@ The MOLE documentation consists of two main components:
 
 1. **API Documentation** (Doxygen)
    - C++ API reference
-   - MATLAB API reference
+   - MATLAB/Octave API reference
    - Implementation details
    - Code documentation
 

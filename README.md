@@ -126,19 +126,19 @@ To run the matlab tests manually,
 
 ### 4.1 Test and Example Directories
 
-Here are instructions on how to run the provided examples and tests for both the C++ and MATLAB versions of the library to help you quickly get started with MOLE.
+Here are instructions on how to run the provided examples and tests for both the C++ and MATLAB/Octave versions of the library to help you quickly get started with MOLE.
 
 * **tests/cpp:**
 These tests, which are automatically executed upon constructing the library's C++ version, play a crucial role in verifying the correct installation of MOLE and its dependencies. There are four tests in total.
 
 * **tests/matlab:**
-We encourage MATLAB users to execute these tests before using MOLE by entering the `tests/matlab` directory and executing `run_tests.m` from MATLAB. These tests are analogous to those contained in `tests/cpp`.
+We encourage MATLAB/Octave users to execute these tests before using MOLE by entering the `tests/matlab` directory and executing `run_tests.m` from MATLAB/Octave. These tests are analogous to those contained in `tests/cpp`.
 
 * **examples/cpp:**
 These will be automatically built after calling `make`. We encourage C++ users to make this their entry point to familiarize themselves with this library version. The four examples are self-contained and adequately documented, and they solve typical PDEs.
 
 * **examples/matlab:**
-Most of our examples are provided in the MATLAB scripting language. Over 30 examples range from linear one-dimensional PDEs to highly nonlinear multidimensional PDEs.
+Most of our examples are provided in the MATLAB/Octave scripting language. Over 30 examples range from linear one-dimensional PDEs to highly nonlinear multidimensional PDEs.
 
 
 ## 5: Documentation

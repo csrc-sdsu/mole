@@ -1,10 +1,10 @@
 ---
-title: MATLAB API Reference
+title: MATLAB/Octave API Reference
 ---
 
-# MATLAB API Reference
+# MATLAB/Octave API Reference
 
-This page provides complete reference documentation for all MATLAB functions in the MOLE library.
+This page provides complete reference documentation for all MATLAB/Octave functions in the MOLE library.
 
 ```{admonition} Navigation Tip
 :class: tip
@@ -25,7 +25,7 @@ The documentation below uses frames for navigation. Use the left panel to browse
    </div>
    
    <div style="position: relative; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; max-width: 100%; margin-top: 10px; background-color: white;">
-     <div style="background-color: #f8f9fa; padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold;">MOLE MATLAB API Reference</div>
+     <div style="background-color: #f8f9fa; padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold;">MOLE MATLAB/Octave API Reference</div>
      <iframe id="matlab-api-frame" src="../../../../../doxygen/matlab/index.html" frameborder="0" style="width: 100%; height: 600px; border: none;"></iframe>
    </div>
    
