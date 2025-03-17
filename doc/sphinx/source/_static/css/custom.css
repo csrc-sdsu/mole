@@ -160,4 +160,50 @@ div[class^='highlight'] {
 .matlab-code {
     background-color: #f5f5f5;
     border-left: 3px solid #0076a8;
+}
+
+/* Add styles to fix Doxygen integration issues */
+.breathe-sectiondef {
+    padding-bottom: 10px;
+}
+
+.breathe-sectiondef-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Fix image paths in Doxygen-generated content */
+.doxygen-content img {
+    max-width: 100%;
+}
+
+/* Improve code block styling */
+div.highlight {
+    background-color: #f8f8f8;
+    border-radius: 3px;
+}
+
+/* Fix table styling */
+.rst-content table.docutils {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* Fix warning messages */
+.admonition.warning {
+    background-color: #fff3cd;
+    border-color: #ffecb5;
+}
+
+/* Fix note messages */
+.admonition.note {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+/* Fix mermaid diagram styling */
+.mermaid {
+    text-align: center;
+    margin: 20px 0;
 } 
