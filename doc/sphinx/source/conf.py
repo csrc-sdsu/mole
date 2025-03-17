@@ -3,6 +3,34 @@ import sys
 from pathlib import Path
 import shutil
 import subprocess
+import importlib.util
+import pkg_resources
+
+# Debug logging
+print("Python version:", sys.version)
+print("Python path:", sys.path)
+print("Installed packages:")
+for pkg in pkg_resources.working_set:
+    print(f"  {pkg.project_name} {pkg.version}")
+
+# Try to import the problematic module
+try:
+    import sphinxcontrib.svg2pdfconverter
+    print("Successfully imported sphinxcontrib.svg2pdfconverter")
+except ImportError as e:
+    print(f"Error importing sphinxcontrib.svg2pdfconverter: {e}")
+    # Check if the module exists
+    spec = importlib.util.find_spec("sphinxcontrib")
+    if spec:
+        print("sphinxcontrib package exists")
+        # Check submodules
+        if hasattr(spec, "submodule_search_locations"):
+            for path in spec.submodule_search_locations:
+                print(f"Checking {path} for svg2pdfconverter:")
+                if os.path.exists(path):
+                    print(f"  Contents: {os.listdir(path)}")
+    else:
+        print("sphinxcontrib package does not exist")
 
 # Define root directory using pathlib
 ROOT_DIR = Path(__file__).resolve().parents[3]
@@ -30,6 +58,7 @@ extensions = [
     'breathe',
     'myst_parser',
     'sphinxcontrib.mermaid',
+    'sphinxcontrib.rsvgconverter',
 ]
 
 # Mermaid configuration
@@ -130,7 +159,14 @@ suppress_warnings = [
     'myst.domains',
     'myst.anchor',
     'myst.header',
-    'epub.unknown_project_files'
+    'epub.unknown_project_files',
+    'image.nonlocal_uri',
+    'app.add_source_parser',
+    'autosectionlabel.*',
+    'ref.python',
+    'ref.cpp',
+    'ref.c',
+    'toc.excluded'
 ]
 
 # LaTeX configuration
@@ -242,11 +278,18 @@ numfig_secnum_depth = 2
 # Additional files needed for the build
 latex_additional_files = []
 
+# SVG to PDF converter configuration
+svg2pdfconverter = {
+    'command': 'rsvg-convert',
+    'convert_from_svg': {
+        'pdf': 'rsvg-convert -f pdf -o {dst} {src}',
+    }
+}
+
 # Fix for assets directory warning
 html_static_path = ['_static']
 
 # Removed assets directory check code completely
-# No longer needed as we're not copying assets
 
 myst_heading_anchors = 3  # Limit heading anchor depth
-myst_ref_domains = []     # Disable automatic reference domain 
+myst_ref_domains = None     # Disable automatic reference domain 

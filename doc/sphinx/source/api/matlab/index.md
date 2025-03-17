@@ -9,23 +9,24 @@ MOLE provides a complete MATLAB interface that allows you to use all the mimetic
 
 ## Overview
 
-```{mermaid}
-graph TD
-    User[MATLAB User Code] -->|calls| OP[MOLE Operators]
-    OP --> G["Gradient (grad, grad2D, grad3D)"]
-    OP --> D["Divergence (div, div2D, div3D)"]
-    OP --> L["Laplacian (lap, lap2D, lap3D)"]
-    OP --> I["Interpolation (interpol, interpol2D, interpol3D)"]
-    OP --> C["Curvilinear (grad2DCurv, div2DCurv)"]
-    User -->|applies| BC[Boundary Conditions]
-    BC --> M["Mixed BC (mixedbc)"]
-    BC --> R["Robin BC (robinBC, robinBC2D, robinBC3D)"]
-    User -->|utilizes| U[Utility Functions]
-    U --> W["Weights (weightsP, weightsQ)"]
-    U --> N["Nodal (nodal, nodal2D, nodal3D)"]
-    U --> J["Jacobian (jacobian2D, jacobian3D)"]
-    U --> G2["Grid Generation (gridGen, tfi)"]
-```
+The MOLE MATLAB API provides the following main components:
+
+- **Operators**:
+  - **Gradient**: `grad`, `grad2D`, `grad3D`, etc.
+  - **Divergence**: `div`, `div2D`, `div3D`, etc.
+  - **Laplacian**: `lap`, `lap2D`, `lap3D`
+  - **Interpolation**: `interpol`, `interpol2D`, `interpol3D`
+  - **Curvilinear**: `grad2DCurv`, `div2DCurv`
+
+- **Boundary Conditions**:
+  - **Mixed BC**: `mixedbc`
+  - **Robin BC**: `robinBC`, `robinBC2D`, `robinBC3D`
+
+- **Utility Functions**:
+  - **Weights**: `weightsP`, `weightsQ`
+  - **Nodal**: `nodal`, `nodal2D`, `nodal3D`
+  - **Jacobian**: `jacobian2D`, `jacobian3D`
+  - **Grid Generation**: `gridGen`, `tfi`
 
 ## Components
 

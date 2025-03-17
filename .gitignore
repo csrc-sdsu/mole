@@ -63,4 +63,6 @@ Thumbs.db
 # Project tree html file 
 tree.html
 
+# TEMPORARY
+/doc/sphinx/libCEED-sphinx-reference/source  
 
