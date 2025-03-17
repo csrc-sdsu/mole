@@ -9,19 +9,19 @@
 
 <div class="grid-container" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2em; margin: 2em 0;">
     <div class="component-box">
-        <h3>🔍 Mathematically Precise</h3>
+        <h3>Mathematically Precise</h3>
         <p>Discrete analogs of vector calculus operators that satisfy local and global conservation laws</p>
     </div>
     <div class="component-box">
-        <h3>📊 Multi-Grid Support</h3>
+        <h3>Multi-Grid Support</h3>
         <p>Works with uniform, non-uniform, and curvilinear staggered grids</p>
     </div>
     <div class="component-box">
-        <h3>🧮 Complete Operator Set</h3>
+        <h3>Complete Operator Set</h3>
         <p>Includes Gradient, Divergence, Laplacian, Bilaplacian, and Curl with various boundary conditions</p>
     </div>
     <div class="component-box">
-        <h3>💻 Dual Implementation</h3>
+        <h3>Dual Implementation</h3>
         <p>Available in both C++ and MATLAB/Octave with consistent interfaces</p>
     </div>
 </div>
@@ -30,7 +30,7 @@
     <h2>Key Capabilities</h2>
     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5em; margin-top: 1.5em;">
         <div>
-            <h3>📝 PDE Types</h3>
+            <h3>PDE Types</h3>
             <ul>
                 <li>Elliptic (Poisson, Helmholtz)</li>
                 <li>Parabolic (Heat, Diffusion)</li>
@@ -40,7 +40,7 @@
             </ul>
         </div>
         <div>
-            <h3>🛠️ Boundary Conditions</h3>
+            <h3>Boundary Conditions</h3>
             <ul>
                 <li>Dirichlet</li>
                 <li>Neumann</li>
@@ -89,11 +89,11 @@ Code of Conduct <api/code_of_conduct_wrapper.md>
 <div class="quick-links" style="margin: 2em 0; padding: 1em; background: #f8f9fa; border-radius: 8px;">
     <h2>Quick Links</h2>
     <ul style="list-style: none; padding: 0;">
-        <li>📖 <a href="genindex">Index</a></li>
-        <li>🔍 <a href="search">Search</a></li>
-        <li>⭐ <a href="https://github.com/csrc-sdsu/mole">GitHub Repository</a></li>
-        <li>📚 <a href="https://doi.org/10.21105/joss.06288">Citation (JOSS)</a></li>
-        <li>🔧 <a href="https://www.mathworks.com/matlabcentral/fileexchange/124870-mole">MATLAB File Exchange</a></li>
+        <li><a href="genindex">Index</a></li>
+        <li><a href="search">Search</a></li>
+        <li><a href="https://github.com/csrc-sdsu/mole">GitHub Repository</a></li>
+        <li><a href="https://doi.org/10.21105/joss.06288">Citation (JOSS)</a></li>
+        <li><a href="https://www.mathworks.com/matlabcentral/fileexchange/124870-mole">MATLAB File Exchange</a></li>
     </ul>
 </div>
 

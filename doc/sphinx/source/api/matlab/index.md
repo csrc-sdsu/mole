@@ -30,7 +30,7 @@ graph TD
 ## Components
 
 <div class="component-box">
-<h3><span class="operator-icon">🧮</span> Operators</h3>
+<h3>Operators</h3>
 <ul>
 <li><strong>Gradient</strong>: 
   <ul>
@@ -80,7 +80,7 @@ graph TD
 </div>
 
 <div class="component-box">
-<h3><span class="boundary-icon">🔄</span> Boundary Conditions</h3>
+<h3>Boundary Conditions</h3>
 <ul>
 <li><strong>Mixed Boundary Conditions</strong>: 
   <ul>
@@ -103,7 +103,7 @@ graph TD
 </div>
 
 <div class="component-box">
-<h3><span class="utils-icon">🛠️</span> Utility Functions</h3>
+<h3>Utility Functions</h3>
 <ul>
 <li><strong>Grid Management</strong>: 
   <ul>

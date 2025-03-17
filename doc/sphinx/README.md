@@ -2,7 +2,7 @@
 
 This guide explains how to build and maintain the documentation for the Mimetic Operators Library Enhanced (MOLE).
 
-## 📚 Documentation Structure
+## Documentation Structure
 
 The MOLE documentation consists of two main components:
 
@@ -18,7 +18,7 @@ The MOLE documentation consists of two main components:
    - Usage guides
    - Theory background
 
-## 🛠️ Building Documentation
+## ️Building Documentation
 
 ### Prerequisites
 
@@ -77,7 +77,7 @@ If you're running Sphinx directly without the Makefile, you'll need to run the i
 ./copy_images.sh
 ```
 
-## 🔄 Development Workflow
+## Development Workflow
 
 When contributing to documentation:
 
@@ -90,19 +90,19 @@ When contributing to documentation:
    - Build with `make doc-html` to preview changes
    - Use `make doc-clean` to force full rebuild
 
-## 📖 Documentation Standards
+## Documentation Standards
 
 - Use clear, concise language
 - Include working code examples
 - Follow [Sphinx reST](https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html) syntax
 - Follow [Doxygen](https://www.doxygen.nl/manual/docblocks.html) conventions for API docs
 
-## 🔗 Useful Links
+## Useful Links
 
 - [Sphinx Documentation](https://www.sphinx-doc.org/)
 - [Doxygen Manual](https://www.doxygen.nl/manual/)
 - [reStructuredText Primer](https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html)
 
-## 🤝 Contributing
+## Contributing
 
 Please read our [Contributing Guide](https://github.com/csrc-sdsu/mole/blob/master/CONTRIBUTING.md) before submitting documentation changes.
