@@ -9,19 +9,21 @@ Make sure you have installed the MOLE library properly to use these classes. See
 
 ## Class Hierarchy
 
-```{mermaid}
-graph TD
-    User[User Code] -->|uses| OP[Operators]
-    OP --> G[Gradient]
-    OP --> D[Divergence]
-    OP --> L[Laplacian]
-    OP --> I[Interpolation]
-    OP --> OO[Operator Overloads]
-    User -->|applies| BC[Boundary Conditions]
-    BC --> M[MixedBC]
-    BC --> R[RobinBC]
-    User -->|utilizes| U[Utils Class]
-```
+The MOLE C++ API consists of the following main components:
+
+- **Operators**: Core mathematical operators
+  - Gradient: Computes the gradient of a scalar field
+  - Divergence: Computes the divergence of a vector field
+  - Laplacian: Computes the Laplacian of a scalar field
+  - Interpolation: Performs interpolation operations
+  - Operator Overloads: For easy operator composition
+
+- **Boundary Conditions**: For specifying domain boundaries
+  - MixedBC: Implements mixed boundary conditions
+  - RobinBC: Implements Robin boundary conditions
+
+- **Utilities**: Helper functions and tools
+  - Utils: Static helper functions
 
 ```{toctree}
 :maxdepth: 2
