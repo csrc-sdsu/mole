@@ -130,7 +130,14 @@ suppress_warnings = [
     'myst.domains',
     'myst.anchor',
     'myst.header',
-    'epub.unknown_project_files'
+    'epub.unknown_project_files',
+    'image.nonlocal_uri',
+    'app.add_source_parser',
+    'autosectionlabel.*',
+    'ref.python',
+    'ref.cpp',
+    'ref.c',
+    'toc.excluded'
 ]
 
 # LaTeX configuration
