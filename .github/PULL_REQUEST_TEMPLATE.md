@@ -9,6 +9,11 @@
      - ✅ Provide tests for your changes.
      - 📝 Use descriptive commit messages.
      - 📗 Update any related documentation and include any relevant screenshots.
+     - 📝 Add license information in the appropriate place. See MATLAB or C++ code for reference.
+      
+          SPDX-License-Identifier: GPL-3.0-or-later
+          © 2008-2024 San Diego State University Research Foundation (SDSURF).
+          See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details. 
 
      NOTE: Pull Requests from forked repositories may need to be reviewed by
      a MOLE Team member before any CI builds will run.
@@ -53,8 +58,12 @@ _We encourage you to test all code included with MOLE, including examples.
       have not been included_
 - [ ] I need help with writing tests
 
+## Read Contributing Guide and Code of Conduct
+
+- [ ] I have read and followed the [Contributing Guide](https://github.com/csrc-sdsu/mole/blob/master/CONTRIBUTING.md) and the [Code of Conduct](https://github.com/csrc-sdsu/mole/blob/master/CODE_OF_CONDUCT.md)
+
 ## [optional] Are there any post deployment tasks we need to perform?
 
 ## [optional] What gif best describes this PR or how it makes you feel?
 
-![alt_text](gif_link)
+<img src="https://miro.medium.com/v2/1*VpQb2kbPdj6vXH2pJqi7Qg.gif" width="100" height="100" />
