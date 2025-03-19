@@ -45,7 +45,8 @@ all: transport1D \
      parabolic1D \
      convection_diffusion \
      RK2 \
-     Schrodinger2D 
+     Schrodinger2D \
+	 lock_exchange
 
 
 transport1D: transport1D.cpp
@@ -75,5 +76,8 @@ RK2: RK2.cpp
 Schrodinger2D: Schrodinger2D.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o Schrodinger2D Schrodinger2D.cpp $(LIBS)
 
+lock_exchange: lock_exchange.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o lock_exchange lock_exchange.cpp $(LIBS)
+
 clean:
-	rm -f transport1D schrodinger1D parabolic1D elliptic1D elliptic2D convection_diffusion RK2 Schrodinger2D
+	rm -f transport1D schrodinger1D parabolic1D elliptic1D elliptic2D elliptic3D convection_diffusion RK2 Schrodinger2D lock_exchange
