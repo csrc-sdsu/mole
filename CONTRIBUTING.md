@@ -12,7 +12,7 @@ Thank you for considering contributing to MOLE! We appreciate your interest and 
 
 If you encounter any issues or bugs, please report them by following these steps:
 
-- **Check for Existing Issues**: Before creating a new issue, please check the [issue tracker](https://github.com/csrc-sdsu/mole/issues)] to see if the problem has already been reported.
+- **Check for Existing Issues**: Before creating a new issue, please check the [issue tracker](https://github.com/csrc-sdsu/mole/issues) to see if the problem has already been reported.
 - **Create a New Issue**: If the issue has not been reported, create a new issue with a clear and descriptive title.
 
 ## 3. Seeking Support
