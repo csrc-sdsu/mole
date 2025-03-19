@@ -17,6 +17,7 @@ sphinxcontrib-mermaid           # Diagrams
 sphinxcontrib-katex             # Math rendering
 sphinxcontrib-svg2pdfconverter  # SVG conversion for PDF
 standard-imghdr
+setuptools                      # Required for Sphinx LaTeX PDF packaging
 
 # Visualization
 altair>=5.0                     # Data visualization
@@ -24,3 +25,4 @@ sphinxext-altair                # Altair integration
 
 # Optional but useful
 sphinx-hoverxref>=0.3b1         # Hover tooltips for references
+
