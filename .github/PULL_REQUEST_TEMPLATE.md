@@ -1,7 +1,4 @@
 <!--
-     For a timely review/response, please avoid force-pushing additional
-     commits if your PR already received reviews or comments.
-
      Before submitting a Pull Request, please ensure you've done the following:
      - 📖 Read the MOLE Contributing Guide: https://github.com/csrc-sdsu/mole/blob/master/CONTRIBUTING.md
      - 📖 Read the MOLE Code of Conduct: https://github.com/csrc-sdsu/mole/blob/master/CODE_OF_CONDUCT.md
@@ -15,8 +12,11 @@
           © 2008-2024 San Diego State University Research Foundation (SDSURF).
           See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details. 
 
-     NOTE: Pull Requests from forked repositories may need to be reviewed by
+     NOTE: Pull Requests from forked repositories need to be reviewed by
      a MOLE Team member before any CI builds will run.
+
+     For a timely review/response, please avoid force-pushing additional
+     commits if your PR already received reviews or comments.
 -->
 
 ## What type of PR is this? (check all applicable)
@@ -26,22 +26,20 @@
 - [ ] Bug Fix
 - [ ] Optimization
 - [ ] Example
-- [ ] Documentation Update
+- [ ] Documentation
 
 ## Description
 
-## Related Tickets & Documents
+## Related Issues & Documents
 
 <!--
-For pull requests that relate or close an issue, please include them
+For Pull Requests that relate or close an Issue, please include them
 below.  We like to follow [Github's guidance on linking issues to pull requests](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue).
 
 For example having the text: "closes #1234" would connect the current pull
 request to issue 1234.  And when we merge the pull request, Github will
 automatically close the issue.
 -->
-
-- Related Issue #
 - Closes #
 
 ## QA Instructions, Screenshots, Recordings
