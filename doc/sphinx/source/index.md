@@ -18,11 +18,11 @@
     </div>
     <div class="component-box">
         <h3>Complete Operator Set</h3>
-        <p>Includes Gradient, Divergence, Laplacian, Bilaplacian, and Curl with various boundary conditions</p>
+        <p>Includes Gradient, Divergence, and Laplacian operators with various boundary conditions</p>
     </div>
     <div class="component-box">
         <h3>Dual Implementation</h3>
-        <p>Available in both C++ and MATLAB/Octave with consistent interfaces</p>
+        <p>Available in both C++ and MATLAB with consistent interfaces</p>
     </div>
 </div>
 
@@ -30,13 +30,11 @@
     <h2>Key Capabilities</h2>
     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5em; margin-top: 1.5em;">
         <div>
-            <h3>PDE Types</h3>
+            <h3>Suitable for PDEs</h3>
             <ul>
-                <li>Elliptic (Poisson, Helmholtz)</li>
+                <li>Elliptic (Poisson)</li>
                 <li>Parabolic (Heat, Diffusion)</li>
-                <li>Hyperbolic (Wave, Transport)</li>
-                <li>Nonlinear (Burgers, Richards)</li>
-                <li>Quantum (Schrödinger)</li>
+                <li>Hyperbolic (Wave)</li>
             </ul>
         </div>
         <div>
@@ -45,13 +43,13 @@
                 <li>Dirichlet</li>
                 <li>Neumann</li>
                 <li>Robin</li>
-                <li>Periodic</li>
                 <li>Mixed</li>
             </ul>
         </div>
     </div>
 </div>
 
+<!--------------------------------------------------  toctree starts here  ----------------------------------------------------------------------->
 ```{toctree}
 :maxdepth: 2
 :caption: Getting Started
@@ -86,6 +84,8 @@ Contributing <api/contributing_wrapper.md>
 Code of Conduct <api/code_of_conduct_wrapper.md>
 ```
 
+<!--------------------------------------------------  toctree ends here  ----------------------------------------------------------------------->
+
 <div class="quick-links" style="margin: 2em 0; padding: 1em; background: #f8f9fa; border-radius: 8px;">
     <h2>Quick Links</h2>
     <ul style="list-style: none; padding: 0;">
@@ -97,41 +97,4 @@ Code of Conduct <api/code_of_conduct_wrapper.md>
     </ul>
 </div>
 
-<style>
-.component-box {
-    padding: 1.5em;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.component-box:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-.component-box h3 {
-    margin-top: 0;
-    color: #2980b9;
-}
-.more-features h3 {
-    color: #2980b9;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 0.5em;
-    margin-bottom: 0.8em;
-}
-.more-features ul {
-    padding-left: 1.5em;
-}
-.more-features ul li {
-    margin-bottom: 0.5em;
-}
-.quick-links ul li {
-    margin: 0.5em 0;
-}
-.quick-links ul li a {
-    text-decoration: none;
-}
-.quick-links ul li a:hover {
-    text-decoration: underline;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="_static/css/styles.css">
