@@ -102,16 +102,25 @@ sudo yum install cmake openblas-devel eigen3-devel
 
 ## Examples and Tests
 
-MOLE includes comprehensive examples and tests for both C++ and MATLAB/Octave implementations.
+MOLE provides comprehensive examples and tests for both C++ and MATLAB/Octave implementations to help you get started quickly.
 
 ### Available Resources
 
-| Directory | Description | How to Run |
-|-----------|-------------|------------|
-| **tests/cpp** | Four tests that verify the correct installation of MOLE and its dependencies | Run `make run_tests` in the build directory |
-| **tests/matlab** | MATLAB/Octave equivalents of the C++ tests | Navigate to `tests/matlab` and execute `run_tests.m` |
-| **examples/cpp** | Self-contained examples solving typical PDEs | Find compiled examples in `build/examples/cpp` after running `make` |
-| **examples/matlab** | Over 30 examples from linear one-dimensional PDEs to nonlinear multidimensional PDEs | Open desired script in `examples/matlab` and run it in MATLAB/Octave |
+#### Tests
+- **tests/cpp**:
+  A suite of four automatic tests that verify MOLE's installation and dependencies. These tests run automatically during the C++ library construction.
+  - Run: `make run_tests` in the build directory
+
+- **tests/matlab**:
+  MATLAB/Octave equivalent of the C++ test suite. We recommend running these tests before using MOLE to ensure proper setup.
+  - Run: Navigate to `tests/matlab` and execute `run_tests.m`
+
+#### Examples
+- **examples/cpp**:
+  Four self-contained, well-documented examples demonstrating typical PDE solutions. These are automatically built with `make` and serve as an excellent starting point for C++ users.
+
+- **examples/matlab**:
+  A collection of over 30 examples showcasing various PDE solutions, from simple linear one-dimensional problems to complex nonlinear multidimensional scenarios.
 
 We recommend running the tests before starting to use the library to ensure everything is working correctly.
 
