@@ -32,7 +32,7 @@ source .venv/bin/activate  # On Unix/MacOS
 # or
 .venv\Scripts\activate     # On Windows
 
-# Install dependencies
+# Install required dependencies from requirements.txt
 make doc-deps
 ```
 
