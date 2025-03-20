@@ -1,6 +1,6 @@
 # MOLE: Mimetic Operators Library Enhanced
 
-## 1: Description
+## Description
 
 MOLE is a high-quality (C++ & MATLAB/Octave) library that implements 
 high-order mimetic operators to solve partial differential equations. 
@@ -14,147 +14,135 @@ However, the user may find helpful previous publications, such as [Castillo and 
 in which similar operators were derived using a matrix analysis approach.
 
 
-## 2: Licensing
+## Licensing
 
 MOLE is distributed under a GNU General Public License; please refer to the _LICENSE_ 
 file for more details.
 
 
-## 3: Installation
+## Installation
 
-### 3.1 Packages Required
+### Prerequisites
 
-To install the MOLE library on your system, certain packages must be installed and configured beforehand. The required packages vary by operating system.
+To install the MOLE library, you'll need the following packages:
 
-For the macOS, Homebrew needs to be installed to download the required packages. Invoke the following command in the terminal app
-	
-	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+- CMake (Minimum version 3.10)
+- OpenBLAS (Minimum version 0.3.10)
+- Eigen3
+- LAPACK (Mac only)
+- libomp (Mac only)
 
-Remove Java dependencies
+### Package Installation by OS
 
-	brew uninstall --ignore-dependencies java
+#### Ubuntu/Debian Systems
 
-Update Homebrew again
+```bash
+# Install all required packages
+sudo apt install cmake libopenblas-dev libeigen3-dev
+```
 
-	brew update
+#### macOS Systems
 
-If you encounter errors during Homebrew installation, please run the following commands before the installation:
+Install [Homebrew](https://brew.sh/) if you don't have it already, then run:
 
+```bash
+# Install all required packages
+brew install cmake openblas eigen libomp lapack
+```
 
-	sudo chown -R $(whoami) /usr/local/Cellar
-	git -C /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core fetch --unshallow
+> **Troubleshooting Homebrew:** If you encounter installation errors, try these steps:
+> ```bash
+> # Fix permissions issues
+> sudo chown -R $(whoami) /usr/local/Cellar
+> # Fix shallow clone issues
+> git -C /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core fetch --unshallow
+> # Remove Java dependencies if they cause conflicts
+> brew uninstall --ignore-dependencies java
+> brew update
+> ```
 
-#### 3.1.1 CMake
-**Minimum Version Required**: 3.10
+#### RHEL/CentOS/Fedora Systems
 
-##### For Ubuntu systems:
-	sudo apt install cmake
-##### For Mac Systems
-	brew install cmake
-##### For Yum-based systems:  
-	sudo yum install cmake
+```bash
+# Install all required packages
+sudo yum install cmake openblas-devel eigen3-devel
+```
 
-#### 3.1.2 OpenBLAS
-**Minimum Version Required**: OpenBLAS 0.3.10
+### Building and Installing MOLE
 
-##### For Ubuntu systems:
-	sudo apt install libopenblas-dev 
-##### For Mac Systems
-	brew install openblas
-##### For Yum-based systems:  
-	sudo yum install openblas-devel
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/csrc-sdsu/mole.git  
+   cd mole  
+   ```
 
-#### 3.1.3 Eigen3
-**Minimum Version Required**: eigen-3
+2. Build the library:
+   ```bash
+   mkdir build && cd build  
+   cmake ..
+   make
+   ```
 
-##### For Ubuntu systems
-	sudo apt install libeigen3-dev
-##### For Mac Systems
-	brew install eigen  
-##### For Yum-based systems:  
-	sudo yum install eigen3-devel
+3. Install the library:
+   - For a custom location:
+     ```bash
+     cmake --install . --prefix /path/to/location
+     ```
+   - For a system location (requires privileges):
+     ```bash
+     sudo cmake --install .
+     ```
+     Or
+     ```bash
+     sudo cmake --install . --prefix /path/to/privileged/location
+     ```
 
-#### 3.1.4 libomp
-
-##### For Mac Systems
-	brew install libomp
-
-
-#### 3.1.5 LAPACK
-
-##### For Mac Systems
-	brew install lapack
- 
-
-### 3.2 MOLE Library Installation
-
-
-**Clone the MOLE repository and build the library**
-
-	git clone https://github.com/csrc-sdsu/mole.git  
-	cd mole  
-	mkdir build && cd build  
-	cmake ..
-	make  
- To install the library in a custom location (Eg. home/mole) 
-
- 	cmake --install . --prefix /path/to/location
- 
- To install the library in a previledged location (Eg. /opt/mole)
-
- 	sudo cmake --install .
- Or
-
- 	sudo cmake --install . --prefix /path/to/privileged/location	
-
-To run the C++ tests manually,
-
-	make run_tests
-
-To run the matlab tests manually,
-
-	make run_matlab_tests
- 
- Armadillo and SuperLu will be locally installed in the build directory once the cmake .. command is passed.
- By following the steps outlined above, you will successfully install the necessary packages and the MOLE library on your system. 
- The library will be installed in the location provided.
- The tests and examples to be executed will also be built locally inside the build directory. 
-	
+**Note:** Armadillo and SuperLU will be automatically installed in the build directory during the build process.
 
 
-## 4: Running Examples & Tests
+## Examples and Tests
 
-### 4.1 Test and Example Directories
+MOLE provides comprehensive examples and tests for both C++ and MATLAB/Octave implementations to help you get started quickly.
 
-Here are instructions on how to run the provided examples and tests for both the C++ and MATLAB/Octave versions of the library to help you quickly get started with MOLE.
+### Available Resources
 
-* **tests/cpp:**
-These tests, which are automatically executed upon constructing the library's C++ version, play a crucial role in verifying the correct installation of MOLE and its dependencies. There are four tests in total.
+#### Tests
+- **tests/cpp**:
+  A suite of four automatic tests that verify MOLE's installation and dependencies. These tests run automatically during the C++ library construction.
+  - Run: `make run_tests` in the build directory
 
-* **tests/matlab:**
-We encourage MATLAB/Octave users to execute these tests before using MOLE by entering the `tests/matlab` directory and executing `run_tests.m` from MATLAB/Octave. These tests are analogous to those contained in `tests/cpp`.
+- **tests/matlab**:
+  MATLAB/Octave equivalent of the C++ test suite. We recommend running these tests before using MOLE to ensure proper setup.
+  - Run: Navigate to `tests/matlab` and execute `run_tests.m`
 
-* **examples/cpp:**
-These will be automatically built after calling `make`. We encourage C++ users to make this their entry point to familiarize themselves with this library version. The four examples are self-contained and adequately documented, and they solve typical PDEs.
+#### Examples
+- **examples/cpp**:
+  Four self-contained, well-documented examples demonstrating typical PDE solutions. These are automatically built with `make` and serve as an excellent starting point for C++ users.
 
-* **examples/matlab:**
-Most of our examples are provided in the MATLAB/Octave scripting language. Over 30 examples range from linear one-dimensional PDEs to highly nonlinear multidimensional PDEs.
+- **examples/matlab**:
+  A collection of over 30 examples showcasing various PDE solutions, from simple linear one-dimensional problems to complex nonlinear multidimensional scenarios.
 
+We recommend running the tests before starting to use the library to ensure everything is working correctly.
 
-## 5: Documentation
+## Documentation
 
 For detailed documentation, including API references, tutorials, and examples, please refer to our [Documentation Guide](https://csrc-sdsu.github.io/mole/build/html/).
 
-**NOTE:**
-Performing non-unary operations involving operands constructed over different grids may lead to unexpected results. While MOLE allows such operations without throwing errors, users must exercise caution when manipulating operators across different grids.
+> **Important Note:** Performing non-unary operations involving operands constructed over different grids may lead to unexpected results. While MOLE allows such operations without throwing errors, users must exercise caution when manipulating operators across different grids.
+
+## Community Guidelines
+
+We welcome contributions to MOLE, including:
+- Adding new functionalities
+- Providing examples
+- Addressing existing issues
+- Reporting bugs
+- Requesting new features
+
+Please refer to our [Contribution Guidelines](https://github.com/csrc-sdsu/mole/blob/master/CONTRIBUTING.md) for more details.
 
 
-## 6: Community Guidelines
-
-We welcome contributions to MOLE, whether they involve adding new functionalities, providing examples, addressing existing issues, reporting bugs, or requesting new features. Please refer to our [Contribution Guidelines](https://github.com/csrc-sdsu/mole/blob/master/CONTRIBUTING.md) for more details.
-
-
-## 7: Citations
+## Citations
 
 Please cite our work if you use MOLE in your research or software. 
 Citations are helpful for the continued development and maintenance of 
