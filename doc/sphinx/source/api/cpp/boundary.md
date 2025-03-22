@@ -36,29 +36,18 @@ The RobinBC class implements Robin boundary conditions in the MOLE library.
 
 ## Usage Examples
 
-Here's a simple example of applying mixed boundary conditions to a Laplacian operator:
+### Elliptic Problem with Mixed Boundary Conditions
+```{literalinclude} ../../../../../examples/cpp/elliptic1D.cpp
+:language: cpp
+:linenos:
+:caption: Elliptic 1D Example with Mixed Boundary Conditions (examples/cpp/elliptic1D.cpp)
+```
 
-```cpp
-// Create a 4th order accurate 2D Laplacian operator
-Laplacian L(4, 50, 0.1, 50, 0.1);
-
-// Create mixed boundary conditions
-MixedBC bc;
-
-// Set Dirichlet boundary condition at the left boundary (x=0)
-bc.setLeftDirichlet();
-
-// Set Neumann boundary condition at the right boundary (x=1)
-bc.setRightNeumann();
-
-// Set Dirichlet boundary condition at the bottom boundary (y=0)
-bc.setBottomDirichlet();
-
-// Set Neumann boundary condition at the top boundary (y=1)
-bc.setTopNeumann();
-
-// Apply boundary conditions to the Laplacian operator
-L.setBC(bc);
+### Complex Problem with Advanced Boundary Handling
+```{literalinclude} ../../../../../examples/cpp/convection_diffusion3D.cpp
+:language: cpp
+:linenos:
+:caption: 3D Convection-Diffusion Example with Complex Boundary Conditions (examples/cpp/convection_diffusion3D.cpp)
 ```
 
 ```{admonition} Importance of Boundary Conditions
