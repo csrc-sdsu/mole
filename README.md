@@ -146,9 +146,9 @@ Please refer to our [Contribution Guidelines](https://github.com/csrc-sdsu/mole/
 
 Please cite our work if you use MOLE in your research or software. 
 Citations are helpful for the continued development and maintenance of 
-the library [![DOI](https://joss.theoj.org/papers/10.21105/joss.06288/status.svg)](https://doi.org/10.21105/joss.06288)
+the library [![DOI](doc/assets/img/joss-status.svg)](https://doi.org/10.21105/joss.06288)
 
-[![View mole on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/124870-mole)
+[![View mole on File Exchange](doc/assets/img/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/124870-mole)
 
 ## Gallery
 

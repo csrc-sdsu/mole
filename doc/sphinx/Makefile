@@ -8,14 +8,13 @@ SOURCEDIR     = source
 BUILDDIR      = build
 
 # Output directories
-PDFDIR        = $(BUILDDIR)/pdf
 DOXYDIR       = ../doxygen/cpp
 DOXYXML       = $(DOXYDIR)/xml
 
 # List of Sphinx builders
-SPHINX_TARGETS := html dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub latex text man changes linkcheck doctest coverage gettext
+SPHINX_TARGETS := html dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub text man changes linkcheck doctest coverage gettext
 
-.PHONY: help clean doc-deps doc-html doc-latexpdf doc-clean doc-doxygen doc-all $(SPHINX_TARGETS)
+.PHONY: help clean doc-deps doc-html doc-clean doc-doxygen doc-all $(SPHINX_TARGETS) doc-latexpdf doc-latexpdf
 
 # Default target
 help:
@@ -23,7 +22,7 @@ help:
 	@echo "  doc-doxygen  : Generate Doxygen documentation"
 	@echo "  doc-deps     : Install documentation dependencies"
 	@echo "  doc-html     : Build HTML documentation"
-	@echo "  doc-latexpdf : Build LaTeX documentation and generate PDF"
+	@echo "  doc-latexpdf      : Build PDF documentation using XeLaTeX"
 	@echo "  doc-clean    : Remove all built documentation"
 	@echo "  doc-all      : Generate all documentation formats with a clean build"
 
@@ -51,32 +50,41 @@ doc-html: doc-deps doc-doxygen
 	fi
 	PYTHONPATH=../.. $(SPHINXBUILD) -b html "$(SOURCEDIR)" "$(BUILDDIR)/html"
 
-# LaTeX + PDF documentation
-doc-latexpdf: doc-deps doc-doxygen
-	@mkdir -p $(BUILDDIR)/latex $(PDFDIR)
-	PYTHONPATH=../.. $(SPHINXBUILD) -b latex "$(SOURCEDIR)" "$(BUILDDIR)/latex"
-	@make -C $(BUILDDIR)/latex
-	@mv $(BUILDDIR)/latex/*.pdf $(PDFDIR)/
-
 # Clean built documentation
 doc-clean:
 	@echo "Cleaning documentation build directories..."
 	@rm -rf $(BUILDDIR)
 	@rm -rf $(DOXYDIR)
 
-# Generate all documentation
-doc-all: doc-clean doc-doxygen doc-deps
-	@echo "Building HTML documentation..."
-	PYTHONPATH=../.. $(SPHINXBUILD) -b html "$(SOURCEDIR)" "$(BUILDDIR)/html"
-	@echo "Building LaTeX documentation..."
+# PDF documentation
+doc-latexpdf: doc-deps doc-doxygen
+	@echo "Generating PDF documentation..."
+	@mkdir -p $(BUILDDIR)
+	@if [ ! -f "$(DOXYXML)/index.xml" ]; then \
+		echo "Error: Doxygen XML index file not found. Running doc-doxygen first..."; \
+		$(MAKE) doc-doxygen; \
+	fi
+	@echo "Building PDF using Sphinx..."
 	PYTHONPATH=../.. $(SPHINXBUILD) -b latex "$(SOURCEDIR)" "$(BUILDDIR)/latex"
-	@echo "Generating PDF..."
-	@mkdir -p $(PDFDIR)
-	@make -C $(BUILDDIR)/latex
-	@mv $(BUILDDIR)/latex/*.pdf $(PDFDIR)/
+	@echo "Running pdflatex passes (2 passes for references)..."
+	@(cd $(BUILDDIR)/latex && \
+		pdflatex -interaction=nonstopmode MOLE-docs.tex; \
+		pdflatex -interaction=nonstopmode MOLE-docs.tex || true)
+	@if [ -f "$(BUILDDIR)/latex/MOLE-docs.pdf" ]; then \
+		echo "PDF documentation generated successfully at: $(BUILDDIR)/latex/MOLE-docs.pdf"; \
+	else \
+		echo "ERROR: PDF generation failed"; \
+		exit 1; \
+	fi
+	@echo "Checking our debug logs..."
+	@(cd $(BUILDDIR)/latex && \
+		grep "DEBUG:" MOLE-docs.log || echo "No debug logs found!")
+
+# Generate all documentation
+doc-all: doc-clean doc-doxygen doc-deps doc-html doc-latexpdf
 	@echo "Documentation generated in:"
 	@echo "  HTML: $(BUILDDIR)/html/"
-	@echo "  PDF:  $(PDFDIR)/"
+	@echo "  PDF:  $(BUILDDIR)/latex/MOLE-docs.pdf"
 	@echo "  API:  $(DOXYDIR)/"
 
 # Explicit Sphinx targets
