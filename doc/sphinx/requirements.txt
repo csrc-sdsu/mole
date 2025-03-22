@@ -15,7 +15,6 @@ sphinx-design                    # UI components
 sphinxcontrib-bibtex==2.5       # Bibliography support
 sphinxcontrib-mermaid           # Diagrams
 sphinxcontrib-katex             # Math rendering
-sphinxcontrib-svg2pdfconverter  # SVG conversion for PDF
 standard-imghdr
 
 # Visualization
@@ -24,3 +23,4 @@ sphinxext-altair                # Altair integration
 
 # Optional but useful
 sphinx-hoverxref>=0.3b1         # Hover tooltips for references
+

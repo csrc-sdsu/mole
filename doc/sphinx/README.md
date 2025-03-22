@@ -2,13 +2,13 @@
 
 This guide explains how to build and maintain the documentation for the Mimetic Operators Library Enhanced (MOLE).
 
-## 📚 Documentation Structure
+## Documentation Structure
 
 The MOLE documentation consists of two main components:
 
 1. **API Documentation** (Doxygen)
    - C++ API reference
-   - MATLAB API reference
+   - MATLAB/Octave API reference
    - Implementation details
    - Code documentation
 
@@ -18,7 +18,7 @@ The MOLE documentation consists of two main components:
    - Usage guides
    - Theory background
 
-## 🛠️ Building Documentation
+## ️Building Documentation
 
 ### Prerequisites
 
@@ -32,7 +32,7 @@ source .venv/bin/activate  # On Unix/MacOS
 # or
 .venv\Scripts\activate     # On Windows
 
-# Install dependencies
+# Install required dependencies from requirements.txt
 make doc-deps
 ```
 
@@ -62,7 +62,22 @@ The documentation will be generated in:
 - PDF: `doc/sphinx/build/pdf/`
 - API Docs: `doc/doxygen/`
 
-## 🔄 Development Workflow
+### Image Handling
+
+Images are automatically handled when building the documentation using the Makefile targets:
+
+The image handling process:
+- Copies images from `doc/assets/img/` to `doc/sphinx/build/html/_static/img/`
+- Fixes image paths in the HTML output
+
+If you're running Sphinx directly without the Makefile, you'll need to run the image copy script separately:
+
+```bash
+# Run after building documentation manually
+./copy_images.sh
+```
+
+## Development Workflow
 
 When contributing to documentation:
 
@@ -75,19 +90,19 @@ When contributing to documentation:
    - Build with `make doc-html` to preview changes
    - Use `make doc-clean` to force full rebuild
 
-## 📖 Documentation Standards
+## Documentation Standards
 
 - Use clear, concise language
 - Include working code examples
 - Follow [Sphinx reST](https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html) syntax
 - Follow [Doxygen](https://www.doxygen.nl/manual/docblocks.html) conventions for API docs
 
-## 🔗 Useful Links
+## Useful Links
 
 - [Sphinx Documentation](https://www.sphinx-doc.org/)
 - [Doxygen Manual](https://www.doxygen.nl/manual/)
 - [reStructuredText Primer](https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html)
 
-## 🤝 Contributing
+## Contributing
 
-Please read our [Contributing Guide](../../CONTRIBUTING.md) before submitting documentation changes.
+Please read our [Contributing Guide](https://github.com/csrc-sdsu/mole/blob/master/CONTRIBUTING.md) before submitting documentation changes.
