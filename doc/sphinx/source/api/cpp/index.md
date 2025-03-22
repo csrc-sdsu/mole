@@ -4,7 +4,7 @@ Welcome to the C++ API documentation for the Mimetic Operators Library Enhanced 
 
 ```{admonition} Installation Note
 :class: note
-Make sure you have installed the MOLE library properly to use these classes. See the [Getting Started Guide](../gettingstarted.md) for installation instructions.
+Make sure you have installed the MOLE library properly to use these classes. See the [Getting Started Guide](../intros/gettingstarted.md) for installation instructions.
 ```
 
 ```{toctree}

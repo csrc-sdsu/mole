@@ -54,9 +54,9 @@
 :maxdepth: 2
 :caption: Getting Started
 
-Introduction <api/introduction.rst>
-api/gettingstarted.rst
-Building Documentation <api/doc_readme_wrapper.md>
+Introduction <api/intros/introduction.rst>
+api/intros/gettingstarted.rst
+Building Documentation <api/intros/doc_readme_wrapper.md>
 ```
 
 ```{toctree}
@@ -67,21 +67,26 @@ api/cpp/index
 api/matlab/index
 ```
 
-<!-- ```{toctree}
+```{toctree}
+:maxdepth: 2
+:caption: Mathematical Framework
+
+api/math_functions/index
+```
+
+```{toctree}
 :maxdepth: 2
 :caption: Examples
 
-examples/wave_equation
-examples/burgers_equation
-examples/poisson_equation
-``` -->
+api/examples/index
+```
 
 ```{toctree}
 :maxdepth: 1
 :caption: Project
 
-Contributing <api/contributing_wrapper.md>
-Code of Conduct <api/code_of_conduct_wrapper.md>
+Contributing <api/intros/contributing_wrapper.md>
+Code of Conduct <api/intros/code_of_conduct_wrapper.md>
 ```
 
 <!--------------------------------------------------  toctree ends here  ----------------------------------------------------------------------->
