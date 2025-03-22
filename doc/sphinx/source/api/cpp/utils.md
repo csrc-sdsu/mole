@@ -16,19 +16,12 @@ MOLE provides a set of utility functions and classes to simplify common tasks wh
 
 ## Usage Examples
 
-Here's a simple example of using utility functions:
+Here's an example using utility functions in a parabolic equation:
 
-```cpp
-// Create a uniform grid with 100 points from 0 to 1
-auto grid = Utils::createUniformGrid(0.0, 1.0, 100);
-
-// Create a non-uniform grid with clustering near boundaries
-auto clusteredGrid = Utils::createClusteredGrid(0.0, 1.0, 100, 2.0);
-
-// Compute the integral of a function over a grid
-vec values(100);
-// ... fill values with function evaluations ...
-double integral = Utils::integrate(values, grid);
+```{literalinclude} ../../../../../examples/cpp/parabolic1D.cpp
+:language: cpp
+:linenos:
+:caption: Parabolic 1D Example (examples/cpp/parabolic1D.cpp)
 ```
 
 <!-- ## Notes and Considerations -->

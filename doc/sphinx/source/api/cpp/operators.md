@@ -68,24 +68,25 @@ The Interpol class performs interpolation operations in the MOLE library.
 
 ## Usage Examples
 
-The operators can be used in various ways:
+### Transport Example (Gradient & Divergence)
+```{literalinclude} ../../../../../examples/cpp/transport1D.cpp
+:language: cpp
+:linenos:
+:caption: Transport 1D Example using Gradient and Divergence (examples/cpp/transport1D.cpp)
+```
 
-```cpp
-// Create a 4th order accurate 1D gradient operator with 50 grid points and step size 0.1
-Gradient G(4, 50, 0.1);
+### Elliptic Example (Laplacian)
+```{literalinclude} ../../../../../examples/cpp/elliptic2D.cpp
+:language: cpp
+:linenos:
+:caption: Elliptic 2D Example using Laplacian (examples/cpp/elliptic2D.cpp)
+```
 
-// Create a vector to operate on
-vec u(50);
-// ... fill u with values ...
-
-// Apply the gradient operator
-vec grad_u = G * u;
-
-// Create a 4th order accurate 2D Laplacian operator
-Laplacian L(4, 50, 0.1, 50, 0.1);
-
-// Apply the Laplacian operator
-vec lap_u = L * u;
+### Schrödinger Example (Complex Operators)
+```{literalinclude} ../../../../../examples/cpp/schrodinger1D.cpp
+:language: cpp
+:linenos:
+:caption: Schrödinger 1D Example (examples/cpp/schrodinger1D.cpp)
 ```
 
 ## Notes and Considerations
