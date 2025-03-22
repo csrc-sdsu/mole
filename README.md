@@ -32,6 +32,8 @@ To install the MOLE library, you'll need the following packages:
 - LAPACK (Mac only)
 - libomp (Mac only)
 
+For documentation build requirements, please refer to the [Documentation Guide](doc/sphinx/README.md).
+
 ### Package Installation by OS
 
 #### Ubuntu/Debian Systems
@@ -126,7 +128,10 @@ We recommend running the tests before starting to use the library to ensure ever
 
 ## Documentation
 
-For detailed documentation, including API references, tutorials, and examples, please refer to our [Documentation Guide](https://csrc-sdsu.github.io/mole/build/html/).
+MOLE comes with comprehensive documentation:
+
+- **API Reference & User Guide**: Access our online [Documentation](https://csrc-sdsu.github.io/mole/build/html/)
+- **Building Documentation**: To build documentation locally, follow our [Documentation Build Guide](doc/sphinx/README.md)
 
 > **Important Note:** Performing non-unary operations involving operands constructed over different grids may lead to unexpected results. While MOLE allows such operations without throwing errors, users must exercise caution when manipulating operators across different grids.
 

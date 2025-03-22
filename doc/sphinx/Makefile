@@ -38,7 +38,7 @@ doc-doxygen:
 
 # Install dependencies from requirements.txt
 doc-deps:
-	@pip install -r requirements.txt
+	@python3 -m pip install -r requirements.txt
 
 # HTML documentation
 doc-html: doc-deps doc-doxygen
@@ -57,12 +57,19 @@ doc-clean:
 	@rm -rf $(DOXYDIR)
 
 # PDF documentation
-doc-latexpdf: doc-deps doc-doxygen
+doc-latexpdf:
 	@echo "Generating PDF documentation..."
 	@mkdir -p $(BUILDDIR)
 	@if [ ! -f "$(DOXYXML)/index.xml" ]; then \
 		echo "Error: Doxygen XML index file not found. Running doc-doxygen first..."; \
 		$(MAKE) doc-doxygen; \
+	fi
+	@if ! command -v pdflatex >/dev/null 2>&1; then \
+		echo "Error: pdflatex not found. Please install texlive packages:"; \
+		echo "  Ubuntu/Debian: sudo apt install texlive-latex-base texlive-fonts-recommended texlive-latex-extra"; \
+		echo "  RHEL/Fedora: sudo dnf install texlive-latex"; \
+		echo "  macOS: brew install --cask mactex"; \
+		exit 1; \
 	fi
 	@echo "Building PDF using Sphinx..."
 	PYTHONPATH=../.. $(SPHINXBUILD) -b latex "$(SOURCEDIR)" "$(BUILDDIR)/latex"

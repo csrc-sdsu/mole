@@ -1,6 +1,6 @@
-# MOLE Documentation
+# MOLE Documentation Guide
 
-This guide explains how to build and maintain the documentation for the Mimetic Operators Library Enhanced (MOLE).
+This is the definitive guide for building and maintaining the documentation for the MOLE.
 
 ## Documentation Structure
 
@@ -22,19 +22,71 @@ The MOLE documentation consists of two main components:
 
 ### Prerequisites
 
-```bash
-# Navigate to the documentation directory
-cd doc/sphinx
+Before building the documentation, ensure you have:
 
-# Create and activate a virtual environment (Recommended)
-python -m venv .venv
-source .venv/bin/activate  # On Unix/MacOS
-# or
-.venv\Scripts\activate     # On Windows
+1. **Doxygen** installed on your system (for API documentation)
+   ```bash
+   # Ubuntu/Debian
+   sudo apt install doxygen
+   
+   # macOS with Homebrew
+   brew install doxygen
+   
+   # RHEL/CentOS/Fedora
+   sudo dnf install doxygen
+   ```
 
-# Install required dependencies from requirements.txt
-make doc-deps
-```
+2. **Graphviz** installed for generating diagrams
+   ```bash
+   # Ubuntu/Debian
+   sudo apt install graphviz
+   
+   # macOS with Homebrew
+   brew install graphviz
+   
+   # RHEL/CentOS/Fedora
+   sudo dnf install graphviz
+   ```
+
+3. **Python dependencies**:
+   First, ensure Python 3 and pip are installed:
+   ```bash
+   # Ubuntu/Debian
+   sudo apt install python3 python3-pip python3-venv
+   
+   # RHEL/CentOS/Fedora
+   sudo dnf install python3 python3-pip python3-virtualenv
+   ```
+
+   Then set up the Python environment:
+   ```bash
+   # Navigate to the documentation directory
+   cd doc/sphinx
+
+   # Create and activate a virtual environment (Required)
+   python3 -m venv .venv
+   source .venv/bin/activate  # On Unix/MacOS
+   # or
+   .venv\Scripts\activate     # On Windows
+
+   # Install required dependencies 
+   # Either use:
+   make doc-deps
+   # Or install directly:
+   python3 -m pip install -r requirements.txt
+   ```
+
+4. **LaTeX** (only needed for PDF generation):
+   ```bash
+   # Ubuntu/Debian
+   sudo apt install texlive-latex-base texlive-fonts-recommended texlive-latex-extra
+   
+   # RHEL/CentOS/Fedora
+   sudo dnf install texlive-latex
+   
+   # macOS
+   brew install --cask mactex
+   ```
 
 ### Building Steps
 
