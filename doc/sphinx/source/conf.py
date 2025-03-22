@@ -1,3 +1,10 @@
+################################################################################
+# MOLE Documentation Sphinx Configuration
+################################################################################
+
+#------------------------------------------------------------------------------
+# Basic imports
+#------------------------------------------------------------------------------
 import os
 import sys
 from pathlib import Path
@@ -6,62 +13,95 @@ import subprocess
 import importlib.util
 import pkg_resources
 
-# Debug logging
-print("Python version:", sys.version)
-print("Python path:", sys.path)
-print("Installed packages:")
-for pkg in pkg_resources.working_set:
-    print(f"  {pkg.project_name} {pkg.version}")
-
-# Try to import the problematic module
-try:
-    import sphinxcontrib.svg2pdfconverter
-    print("Successfully imported sphinxcontrib.svg2pdfconverter")
-except ImportError as e:
-    print(f"Error importing sphinxcontrib.svg2pdfconverter: {e}")
-    # Check if the module exists
-    spec = importlib.util.find_spec("sphinxcontrib")
-    if spec:
-        print("sphinxcontrib package exists")
-        # Check submodules
-        if hasattr(spec, "submodule_search_locations"):
-            for path in spec.submodule_search_locations:
-                print(f"Checking {path} for svg2pdfconverter:")
-                if os.path.exists(path):
-                    print(f"  Contents: {os.listdir(path)}")
-    else:
-        print("sphinxcontrib package does not exist")
-
+#------------------------------------------------------------------------------
+# Path configuration
+#------------------------------------------------------------------------------
 # Define root directory using pathlib
 ROOT_DIR = Path(__file__).resolve().parents[3]
 
-# Update Python path - simplified version
+# Update Python path to include project root
 sys.path.insert(0, str(ROOT_DIR))
 
-# Add the _ext directory to the Python path
+# Add the _ext directory to the Python path for custom extensions
 sys.path.insert(0, os.path.abspath('_ext'))
 
+#------------------------------------------------------------------------------
 # Project information
+#------------------------------------------------------------------------------
 project = 'MOLE'
 copyright = '2023, CSRC SDSU'
 author = 'CSRC SDSU'
 release = '1.0.0'
 
+#------------------------------------------------------------------------------
 # Extensions configuration
+#------------------------------------------------------------------------------
+# Core and required extensions
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.intersphinx',
-    'sphinx_rtd_theme',
-    'breathe',
-    'myst_parser',
-    'sphinxcontrib.mermaid',
-    'sphinxcontrib.rsvgconverter',
+    # Sphinx core extensions
+    'sphinx.ext.autodoc',     # Generate documentation from docstrings
+    'sphinx.ext.mathjax',     # Math rendering
+    'sphinx.ext.viewcode',    # Link to source code
+    'sphinx.ext.napoleon',    # Support for NumPy and Google style docstrings
+    'sphinx.ext.intersphinx', # Link to other project's documentation
+    
+    # Theme
+    'sphinx_rtd_theme',       # Read the Docs theme
+    
+    # External documentation extensions
+    'breathe',                # Doxygen integration
+    'myst_parser',            # Markdown support
+    
+    # Diagram support
+    'sphinxcontrib.mermaid',  # Mermaid diagram support
 ]
 
-# Mermaid configuration
+#------------------------------------------------------------------------------
+# MyST Parser configuration (Markdown support)
+#------------------------------------------------------------------------------
+# Enable specific MyST extensions
+myst_enable_extensions = [
+    "colon_fence",     # Alternative code fence syntax 
+    "deflist",         # Definition lists
+    "dollarmath",      # Math in $...$ syntax
+    "fieldlist",       # Field lists
+    "html_admonition", # HTML admonition directives
+    "html_image",      # HTML image directives
+    "replacements",    # Text replacements
+    "smartquotes",     # Smart quotes
+    "substitution",    # Substitution references
+    "tasklist"         # Task lists
+]
+
+# Additional MyST settings
+myst_heading_anchors = 3                     # Generate anchors for headings
+myst_url_schemes = ("http", "https", "mailto", "ftp", "file")
+myst_all_links_external = False
+myst_ref_domains = None                      # Disable automatic reference domain
+
+#------------------------------------------------------------------------------
+# Breathe configuration (Doxygen integration)
+#------------------------------------------------------------------------------
+breathe_projects = {
+    "MoleCpp": str(ROOT_DIR / "doc/doxygen/cpp/xml")
+}
+breathe_default_project = "MoleCpp"
+breathe_domain_by_extension = {
+    ".h": "cpp",
+    ".hpp": "cpp",
+    ".cpp": "cpp",
+    ".c": "c",
+}
+breathe_default_members = ('members', 'undoc-members')
+
+# Run Doxygen if needed during build
+if not os.path.exists(str(ROOT_DIR / "doc/doxygen/cpp/xml/index.xml")):
+    print("Doxygen XML not found. Running Doxygen...")
+    subprocess.call(["doxygen", "Doxyfile"], cwd=str(ROOT_DIR))
+
+#------------------------------------------------------------------------------
+# Mermaid diagram configuration
+#------------------------------------------------------------------------------
 # Check if mermaid-cli is available
 has_mmdc = shutil.which('mmdc') is not None
 has_npx = shutil.which('npx') is not None
@@ -80,45 +120,26 @@ else:
     print("To install Mermaid CLI, run: npm install -g @mermaid-js/mermaid-cli")
     print("="*80 + "\n")
 
-# Disable epub builder
-epub_show_urls = 'no'
-epub_use_index = False
-
-# Configure myst-parser
-myst_enable_extensions = [
-    "colon_fence",
-    "deflist",
-    "dollarmath",
-    "fieldlist",
-    "html_admonition",
-    "html_image",
-    "replacements",
-    "smartquotes",
-    "substitution",
-    "tasklist"
-]
-
-# Additional myst-parser settings
-myst_heading_anchors = 3
-myst_url_schemes = ("http", "https", "mailto", "ftp", "file")
-myst_all_links_external = False
-myst_ref_domains = None
-
+#------------------------------------------------------------------------------
 # Source configuration
+#------------------------------------------------------------------------------
+# File types to process
 source_suffix = {
     '.rst': 'restructuredtext',
     '.md': 'markdown',
 }
 
-# Follow symlinks
-html_extra_path = [str(ROOT_DIR / 'doc' / 'doxygen')]
-html_use_symlinks = True
-follow_links = True
-
+# Directories and files to exclude
 templates_path = ['_templates']
 exclude_patterns = []
 
+# Link handling
+follow_links = True
+
+#------------------------------------------------------------------------------
 # HTML output configuration
+#------------------------------------------------------------------------------
+# Theme settings
 html_theme = 'sphinx_rtd_theme'
 html_theme_options = {
     "style_external_links": True,
@@ -128,33 +149,21 @@ html_theme_options = {
     "titles_only": False,
     "collapse_navigation": False
 }
-html_static_path = ['_static']
-html_logo = str(ROOT_DIR / "logo.png")
 
-# Add custom CSS
+# Path settings
+html_static_path = ['_static']
+html_extra_path = [str(ROOT_DIR / 'doc' / 'doxygen')]
+html_use_symlinks = True
+
+# Appearance
+html_logo = str(ROOT_DIR / "logo.png")
 html_css_files = [
     'css/custom.css',
 ]
 
-# Breathe configuration
-breathe_projects = {
-    "MoleCpp": str(ROOT_DIR / "doc/doxygen/cpp/xml")
-}
-breathe_default_project = "MoleCpp"
-breathe_domain_by_extension = {
-    ".h": "cpp",
-    ".hpp": "cpp",
-    ".cpp": "cpp",
-    ".c": "c",
-}
-breathe_default_members = ('members', 'undoc-members')
-
-# Run Doxygen if needed during build
-if not os.path.exists(str(ROOT_DIR / "doc/doxygen/cpp/xml/index.xml")):
-    print("Doxygen XML not found. Running Doxygen...")
-    subprocess.call(["doxygen", "Doxyfile"], cwd=str(ROOT_DIR))
-
+#------------------------------------------------------------------------------
 # Warning suppression
+#------------------------------------------------------------------------------
 suppress_warnings = [
     'myst.domains',
     'myst.anchor',
@@ -169,127 +178,82 @@ suppress_warnings = [
     'toc.excluded'
 ]
 
-# LaTeX configuration
-latex_engine = 'lualatex'
+def setup(app):
+    """Setup function for Sphinx extension."""
+    app.connect('build-finished', on_build_finished)
+    
+def on_build_finished(app, exc):
+    """Handle build finished event."""
+    # This function is now minimal, we removed all custom LaTeX handling
+    pass
 
+#------------------------------------------------------------------------------
+# Optional debugging section - uncomment when needed
+#------------------------------------------------------------------------------
+
+#------------------------------------------------------------------------------
+# LaTeX and PDF output configuration
+#------------------------------------------------------------------------------
+# Use pdflatex for standard PDF generation
+latex_engine = 'pdflatex'
+
+# Minimal LaTeX configuration options
 latex_elements = {
-    # Basic document settings
+    # Paper size
     'papersize': 'letterpaper',
+    
+    # Document class (report provides chapters)
     'pointsize': '11pt',
-    'babel': r'\usepackage[english]{babel}',  # Better language support
-    'inputenc': '',  # Not needed with LuaLaTeX
-    'fontenc': '',   # Not needed with LuaLaTeX
     
-    # Font configuration - using standard LaTeX fonts
-    'fontpkg': r'''
-        \usepackage{fontspec}
-        \setmainfont{Latin Modern Roman}
-        \setsansfont{Latin Modern Sans}
-        \setmonofont{Latin Modern Mono}
-        \usepackage[math-style=ISO]{unicode-math}
-        \setmathfont{Latin Modern Math}
-    ''',
-    
-    'passoptionstopackages': r'''
-        \PassOptionsToPackage{svgnames}{xcolor}
-    ''',
-    
+    # Simplified preamble
     'preamble': r'''
-        % Core packages
-        \usepackage{amscd}
-        \usepackage{cancel}
-        \usepackage{fancyhdr}
-        \usepackage{float}
-        \usepackage{microtype}  % Better typography
-        \usepackage[chapter]{algorithm}
-        \usepackage{algpseudocode}
-        
-        % Header and margin adjustments
-        \setlength{\headheight}{14.0pt}
-        \addtolength{\topmargin}{-2.0pt}
-        \setlength{\parskip}{0.5em}  % Better paragraph spacing
-        
-        % Fix overfull hbox warnings
-        \setlength{\emergencystretch}{3em}
-        \providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-        
-        % Math commands and environments
-        \newcommand\bm[1]{\symbf{#1}}
-        \def\diff{\operatorname{d}\!}
-        \def\tcolon{\!:\!}
-        \def\trace{\operatorname{trace}}
-        
-        % Cross-referencing improvements
-        \renewcommand{\sphinxcrossref}[1]{\texttt{#1}}
-        
-        % Better code listings
-        \definecolor{codecolor}{RGB}{240,240,240}
-        \definecolor{codetext}{RGB}{36,36,36}
-        \fancypagestyle{normal}{
-            \fancyhf{}
-            \fancyfoot[R]{\thepage}
-            \fancyhead[L]{\leftmark}
-            \fancyhead[R]{MOLE Documentation}
-            \renewcommand{\headrulewidth}{0.4pt}
-            \renewcommand{\footrulewidth}{0.4pt}
-            }
-            
-        % Table spacing improvements
-        \renewcommand{\tabcolsep}{0.5em}
+\usepackage{booktabs}  % Better tables
+\usepackage{xcolor}    % Colors
+
+% Fix the headheight warning from fancyhdr
+\setlength{\headheight}{14pt}
+
+% Define missing commands from sphinxVerbatim
+\newcommand{\capstart}{}
+
+% Debug log for LaTeX variables
+\typeout{DEBUG: headheight=\the\headheight}
+\typeout{DEBUG: topmargin=\the\topmargin}
+
+% Fix for Unicode character handling
+\DeclareUnicodeCharacter{FE0F}{}
+
+% Turn off SVG handling since we removed SVG images
+\usepackage{silence}
+\WarningFilter{latex}{Unknown graphics extension}
+''',
     
-    ''',
+    # No empty pages
+    'classoptions': ',oneside',
     
-    # Figure settings
-    'figure_align': 'H',
-    'extrapackages': r'\usepackage{float}',
-    
-    # Hyperref settings (should be loaded last)
+    # Hyperref setup
     'hyperref': r'''
-        \usepackage[hidelinks,
-                   colorlinks=true,
-                   linkcolor=NavyBlue,
-                   urlcolor=NavyBlue,
-                   citecolor=NavyBlue]{hyperref}
-    '''
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=blue,
+    urlcolor=blue,
+}
+''',
 }
 
-# LaTeX document configuration
+# Main LaTeX/PDF document configuration
 latex_documents = [
-    ('index', 'MOLE.tex', 'MOLE Documentation',
-     'MOLE Development Team', 'manual'),
+    (
+        'index',           # Source start file
+        'MOLE-docs.tex',   # Target filename
+        'MOLE Documentation',      # Title
+        'CSRC SDSU',       # Author
+        'manual',          # Document class
+        False              # toctree_only
+    ),
 ]
 
-# Additional LaTeX settings
-latex_show_pagerefs = True  # Changed to True for better cross-referencing
-latex_show_urls = 'footnote'
-latex_logo = str(ROOT_DIR / "logo.png")
+# If false, no module index is generated
 latex_domain_indices = True
-
-# Image and numbering settings
-numfig = True
-numfig_format = {
-    'figure': 'Figure %s',
-    'table': 'Table %s',
-    'code-block': 'Listing %s',
-    'section': 'Section %s'
-}
-numfig_secnum_depth = 2
-
-# Additional files needed for the build
-latex_additional_files = []
-
-# SVG to PDF converter configuration
-svg2pdfconverter = {
-    'command': 'rsvg-convert',
-    'convert_from_svg': {
-        'pdf': 'rsvg-convert -f pdf -o {dst} {src}',
-    }
-}
-
-# Fix for assets directory warning
-html_static_path = ['_static']
-
-# Removed assets directory check code completely
-
-myst_heading_anchors = 3  # Limit heading anchor depth
-myst_ref_domains = None     # Disable automatic reference domain 

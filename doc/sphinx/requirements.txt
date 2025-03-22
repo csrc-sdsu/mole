@@ -15,9 +15,7 @@ sphinx-design                    # UI components
 sphinxcontrib-bibtex==2.5       # Bibliography support
 sphinxcontrib-mermaid           # Diagrams
 sphinxcontrib-katex             # Math rendering
-sphinxcontrib-svg2pdfconverter  # SVG conversion for PDF
 standard-imghdr
-setuptools                      # Required for Sphinx LaTeX PDF packaging
 
 # Visualization
 altair>=5.0                     # Data visualization
