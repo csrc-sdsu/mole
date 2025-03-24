@@ -1,3 +1,5 @@
+# Curvilinear Coordinate Mimetic Operators
+
 ---
 abstract: |
   This document presents mimetic differences gradient and divergence
@@ -9,7 +11,7 @@ author:
 title: Curvilinear Coordinate Mimetic Operators
 ---
 
-# Introduction
+## Introduction
 
 Suppose a PDE is given on a physical spatial domain $\mathcal P$ in
 three-dimensions (3D), with coordinates $x,y,z$. Suppose $\mathcal P$ is

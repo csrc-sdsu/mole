@@ -1,4 +1,4 @@
-################################################################################
+ ################################################################################
 # MOLE Documentation Sphinx Configuration
 ################################################################################
 
@@ -75,8 +75,8 @@ myst_enable_extensions = [
 
 # Additional MyST settings
 myst_heading_anchors = 3                     # Generate anchors for headings
-myst_url_schemes = ("http", "https", "mailto", "ftp", "file")
-myst_all_links_external = False
+myst_url_schemes = ("http", "https", "mailto", "ftp", "file", "doc")
+myst_all_links_external = True
 myst_ref_domains = None                      # Disable automatic reference domain
 
 #------------------------------------------------------------------------------
@@ -152,7 +152,12 @@ html_theme_options = {
 
 # Path settings
 html_static_path = ['_static']
-html_extra_path = [str(ROOT_DIR / 'doc' / 'doxygen')]
+html_extra_path = [
+    str(ROOT_DIR / 'README.md'),
+    str(ROOT_DIR / 'doc' / 'doxygen'), 
+    str(ROOT_DIR / 'doc' / 'assets'),
+    str(ROOT_DIR / 'doc' / 'sphinx' / 'README.md')
+    ]
 html_use_symlinks = True
 
 # Appearance
