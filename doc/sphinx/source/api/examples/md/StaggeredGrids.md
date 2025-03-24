@@ -20,7 +20,7 @@ argument in favor of using staggered grids is given.
 # Justification
 
 Mimetic difference operators are constructed for staggered grids
-[@corbino].
+[[1](#ref1)].
 
 This allows:
 
@@ -96,4 +96,5 @@ transport-convection-diffusion computations.
 
 ## References
 
+<a name="ref1"></a>
 1. J. Corbino, and J.E. Castillo, "High-order mimetic finite-difference operators satisfying the extended Gauss divergence theorem," J. Comput. Appl. Math., vol. 364, 2020, 112326.
