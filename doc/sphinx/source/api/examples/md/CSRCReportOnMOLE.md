@@ -64,7 +64,7 @@ theorem is also satisfied with high-order accuracy:
 
 $$  \langle D \, v, f \rangle_Q + \langle v, G \, f \rangle_P = \langle B \, v, f \rangle \tag{1}$$
 
-The deduction of equation (1) can be found in ][4](#ref4)].
+The deduction of equation (1) can be found in [[4]](#ref4).
 
 When using MDM we are not discretizing the equations (as it is done with
 standard finite-difference methods (FDM)), but instead we construct a
