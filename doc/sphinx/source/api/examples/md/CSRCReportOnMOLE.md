@@ -1,6 +1,6 @@
 # CSRC Report on MOLE Library
 
-# Introduction
+## Introduction
 
 Physical phenomena are typically modeled as a set of differential
 equations subject to conservation laws. Numerical methods used to solve
@@ -40,7 +40,7 @@ in the geosciences (porous media) [[1](#ref1), [11](#ref11)]; fluid dynamics
 (Navier-Stokes) [[2](#ref2), [3](#ref3)]; image processing [[9](#ref9)]; general relativity
 [[8](#ref8)]; and electromagnetism [[10](#ref10)].
 
-# On the Mathematics
+## On the Mathematics
 
 MDM not only provide uniform order of accuracy (all the way to the
 boundary), but they also satisfy fundamental identities from vector
@@ -153,7 +153,7 @@ $$
 \text{vectorField} = \text{zeros(numel(xgridVec)}, 1);
 $$
 
-# Using the Operators
+## Using the Operators
 
 Inside the \"**examples/matlab**\" folder you will find several
 MATLAB/Octave scripts that use MOLE to solve well known partial

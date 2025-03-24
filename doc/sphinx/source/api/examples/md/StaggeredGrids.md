@@ -10,7 +10,7 @@ author:
 title: Why Staggered Grids?
 ---
 
-# Introduction
+## Introduction
 
 The general purpose for using staggered grids is to differentiate
 between (physical) quantities that utilize exterior and interior
@@ -19,7 +19,7 @@ primal and a dual grids. Nevertheless, the current implementation of
 MOLE does not considers orientations, therefore in what follows an
 argument in favor of using staggered grids is given.
 
-# Justification
+## Justification
 
 Mimetic difference operators are constructed for staggered grids
 [[1](#ref1)].
@@ -30,7 +30,7 @@ This allows:
 
 -   Expected physical behavior (overcomes checkerboard pressure fields).
 
-# Checkerboard pressure fields
+## Checkerboard pressure fields
 
 Suppose a two-dimensional incompressible flow without a body force. The
 governing equations are: 
@@ -74,7 +74,7 @@ $$
 
 From equations (4)-(5), we can see that **the pressure gradient at point $P$ is related to the pressures of the neighbor grid points and not to its own pressure**. Therefore, if we have a pressure distribution as shown in the figure above, the discretization scheme represented by equations (4)-(5) will obtain $\frac{\partial p}{\partial x} = 0$ and $\frac{\partial p}{\partial y} = 0$ throughout the computational domain. This means that **it will not recognize the difference between a checkerboard pressure field and a uniform pressure field**. This behavior is obviously non-physical.
 
-# Staggered grids
+## Staggered grids
 
 A remedy for the aforementioned problem is to use staggered grids. The
 idea is to store scalar variables at the ordinary nodal points, and

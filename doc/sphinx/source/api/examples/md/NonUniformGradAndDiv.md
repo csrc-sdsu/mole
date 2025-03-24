@@ -10,7 +10,7 @@ date: 2025-03-23
 title: Non-Uniform Gradient and Divergence Operators [^2]
 ---
 
-# Introduction
+## Introduction
 
 On an interval $[a,b]$, consider $n$ equal size subintervals, each of
 length $h = \frac{b-a}{n}$. Then
