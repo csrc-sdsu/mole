@@ -1,3 +1,5 @@
+# Why Staggered Grids?
+
 ---
 abstract: |
   This document justifies the usage of staggered grids in mimetic

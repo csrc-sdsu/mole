@@ -1,3 +1,5 @@
+# 1D Poisson Equation
+
 This example solves the 1D Poisson equation:
 $$- \frac{d^2 C}{d x^2} = f(x)$$
 

@@ -1,3 +1,5 @@
+# Non-Uniform Gradient and Divergence Operators
+
 ---
 abstract: |
   This document provides formulas for the mimetic difference gradient

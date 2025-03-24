@@ -1,3 +1,5 @@
+# 1D Schrödinger Equation
+
 This example solves the 1D time-independent Schrodinger equation:
 $$H \, \psi = E \, \psi$$
 
