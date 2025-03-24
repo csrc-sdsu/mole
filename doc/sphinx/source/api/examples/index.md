@@ -6,8 +6,15 @@ This section contains a collection of examples demonstrating the usage of MOLE f
 :maxdepth: 2
 :caption: Examples
 
-example1
-example2
+tex/list
+tex/CSRCReportOnMOLE
+tex/Jacobian
+tex/NonUniformGradAndDiv 
+tex/Poisson1D
+tex/Schrodinger1D
+tex/StaggeredGrids
+tex/transport1D
+
 ```
 
 More examples will be added in the future. 
