@@ -1,14 +1,11 @@
 # Curvilinear Coordinate Mimetic Operators
 
----
-abstract: |
-  This document presents mimetic differences gradient and divergence
-  operators in structured curvilinear geometries. It uses mimetic
-  interpolation operators to move quantities among the staggered grids
-  of the mesh.
-author:
-- Miguel A. Dumett
-title: Curvilinear Coordinate Mimetic Operators
+> **Author:** Miguel A. Dumett  
+> **Abstract:** This document presents mimetic differences gradient and divergence
+> operators in structured curvilinear geometries. It uses mimetic
+> interpolation operators to move quantities among the staggered grids
+> of the mesh.
+
 ---
 
 ## Introduction

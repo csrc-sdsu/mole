@@ -173,6 +173,8 @@ Now, some cool pictures obtained with MOLE:
 ![Obtained with curvilinear operators](doc/assets/img/wave2D.png)
 ![Obtained with curvilinear operators](doc/assets/img/burgers.png)
 
+<!-- Link references -->
+
 [joss-badge]: https://joss.theoj.org/papers/10.21105/joss.06288/status.svg
 [joss-link]: https://doi.org/10.21105/joss.06288
 [matlab-badge]: https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg
