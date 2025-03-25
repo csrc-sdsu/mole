@@ -41,7 +41,7 @@ doc-deps:
 	@python3 -m pip install -r requirements.txt
 
 # HTML documentation
-doc-html: doc-deps doc-doxygen
+doc-html: 
 	@echo "Generating HTML documentation..."
 	@mkdir -p $(BUILDDIR)
 	@if [ ! -f "$(DOXYXML)/index.xml" ]; then \
