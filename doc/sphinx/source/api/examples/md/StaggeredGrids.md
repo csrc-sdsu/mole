@@ -41,10 +41,14 @@ $$
 
 Equations (1)-(3) are the continuity equation, and the momentum equations in the $x$- and $y$-direction, respectively.
 
-<figure style="text-align: center;">
-<img src="figures/StaggeredGrids_figure_1.svg" alt="Checkerboard pressure field">
-<figcaption>Checkerboard pressure field</figcaption>
-</figure>
+The checkerboard pressure field is shown in Figure 1.
+
+<div style="text-align: center">
+
+![Checkerboard pressure field](figures/StaggeredGrids_figure_1.svg)
+
+*Checkerboard pressure field showing the pressure oscillations*
+</div>
 
 The figure represents a checkerboard pressure field.
 
@@ -76,10 +80,14 @@ A remedy for the aforementioned problem is to use staggered grids. The
 idea is to store scalar variables at the ordinary nodal points, and
 vector variables at the cell faces in between the nodal points.
 
-<figure style="text-align: center;">
-<img src="figures/StaggeredGrids_figure_2.svg" alt="Staggered grid arrangement">
-<figcaption>Staggered grid arrangement</figcaption>
-</figure>
+The staggered grid arrangement is shown in Figure 2.
+
+<div style="text-align: center">
+
+![Staggered grid arrangement](figures/StaggeredGrids_figure_2.svg)
+
+*Staggered grid arrangement showing the location of different variables*
+</div>
 
 The figure shows the new arrangement.
 
