@@ -1,13 +1,9 @@
 # Why Staggered Grids?
 
----
-abstract: |
-  This document justifies the usage of staggered grids in mimetic
-  differences.
-author:
-- Johnny Corbino
-- Miguel A. Dumett
-title: Why Staggered Grids?
+> **Authors:** Johnny Corbino, Miguel A. Dumett  
+> **Abstract:** This document justifies the usage of staggered grids in mimetic
+> differences.
+
 ---
 
 ## Introduction

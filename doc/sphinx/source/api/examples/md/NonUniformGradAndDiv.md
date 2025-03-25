@@ -1,13 +1,10 @@
 # Non-Uniform Gradient and Divergence Operators
 
----
-abstract: |
-  This document provides formulas for the mimetic difference gradient
-  and divergence operators for non-uniform one-dimensional meshes.
-author:
-- Miguel A. Dumett [^1]
-date: 2025-03-23
-title: Non-Uniform Gradient and Divergence Operators [^2]
+> **Author:** Miguel A. Dumett  
+> **Date:** 2025-03-23  
+> **Abstract:** This document provides formulas for the mimetic difference gradient
+> and divergence operators for non-uniform one-dimensional meshes.
+
 ---
 
 ## Introduction
@@ -45,8 +42,3 @@ Then
     it will not be possible to compute the inverses of both components.
     To avoid these infinity values, one substitutes the first and last
     components of $D_u X_N$ by ones.
-
-[^1]: Computational Science Research Center at the San Diego State
-    University (mdumett@sdsu.edu).
-
-[^2]: This work was partially supported by SDSU
