@@ -56,6 +56,12 @@ extensions = [
     
     # Diagram support
     'sphinxcontrib.mermaid',  # Mermaid diagram support
+    
+    # MATLAB documentation
+    'sphinxcontrib.matlab',   # MATLAB domain support
+    
+    # Custom extensions
+    'matlab_doc_filter',      # Filter license info from MATLAB docstrings
 ]
 
 #------------------------------------------------------------------------------
@@ -141,6 +147,63 @@ else:
     print("WARNING: Mermaid CLI not found. Mermaid diagrams will not be rendered.")
     print("To install Mermaid CLI, run: npm install -g @mermaid-js/mermaid-cli")
     print("="*80 + "\n")
+
+#------------------------------------------------------------------------------
+# MATLAB domain configuration
+#------------------------------------------------------------------------------
+# Path to MATLAB source directory for cross-reference functionality
+matlab_src_dir = os.path.abspath(os.path.join(ROOT_DIR, 'src', 'matlab'))
+
+# Enhanced debug logging
+print("\nDEBUG: Enhanced MATLAB Configuration:")
+print(f"Current working directory: {os.getcwd()}")
+print(f"ROOT_DIR value: {ROOT_DIR}")
+print(f"MATLAB source directory: {matlab_src_dir}")
+print(f"Directory exists: {os.path.exists(matlab_src_dir)}")
+try:
+    if os.path.exists(os.path.dirname(matlab_src_dir)):
+        print(f"Parent directory contents: {os.listdir(os.path.dirname(matlab_src_dir))}")
+    else:
+        print(f"Parent directory {os.path.dirname(matlab_src_dir)} does not exist")
+except Exception as e:
+    print(f"Error listing parent directory: {e}")
+
+# Version compatibility check
+print("\nDEBUG: Version Information:")
+print(f"Python version: {sys.version}")
+print(f"Sphinx version: {pkg_resources.get_distribution('sphinx').version}")
+try:
+    print(f"sphinxcontrib-matlab version: {pkg_resources.get_distribution('sphinxcontrib-matlab').version}")
+except Exception as e:
+    print(f"Error getting sphinxcontrib-matlab version: {e}")
+
+# Add MATLAB directory to Python path if it exists
+if os.path.exists(matlab_src_dir):
+    sys.path.insert(0, matlab_src_dir)
+    print(f"\nAdded existing MATLAB directory to Python path: {matlab_src_dir}")
+
+# For matlabdomain, we need to treat MATLAB files as modules
+primary_domain = 'mat'  # Make MATLAB the primary domain for .m files
+
+# MATLAB documentation style settings
+matlab_keep_package_prefix = False
+matlab_short_links = True
+matlab_auto_link = "basic"  # Auto-link known MATLAB code elements
+matlab_show_property_default_value = False
+matlab_show_property_specs = False
+
+# MATLAB documentation filtering options
+matlab_filter_options = {
+    'remove_license': True,
+    'm2html_style': True,
+}
+
+# Add MATLAB to intersphinx mapping if needed
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+    'numpy': ('https://numpy.org/doc/stable', None),
+    'matplotlib': ('https://matplotlib.org/stable', None),
+}
 
 #------------------------------------------------------------------------------
 # Source configuration
