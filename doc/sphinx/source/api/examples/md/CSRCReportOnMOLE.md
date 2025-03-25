@@ -86,20 +86,24 @@ Mimetic operators are defined over staggered grids.
 
 In 1D:
 
-<figure style="text-align: center;">
-<img src="figures/CSRCReportOnMOLE_figure_1.svg" alt="CSRCReportOnMOLE_figure_1">
-<figcaption></figcaption>
-</figure>
+<div style="text-align: center">
+
+![Staggered grid representation in 1D](figures/CSRCReportOnMOLE_figure_1.svg)
+
+*Staggered grid representation in 1D showing scalar and vector field locations*
+</div>
 
 Scalar fields live in blue circles and vector fields in vertical red
 segments.
 
 In 2D:
 
-<figure style="text-align: center;">
-<img src="figures/CSRCReportOnMOLE_figure_2.svg" alt="CSRCReportOnMOLE_figure_2">
-<figcaption></figcaption>
-</figure>
+<div style="text-align: center">
+
+![Staggered grid representation in 2D](figures/CSRCReportOnMOLE_figure_2.svg)
+
+*Staggered grid representation in 2D showing scalar and vector field component locations*
+</div>
 
 Scalar fields are defined at blue circles, and horizontal and vertical
 vector field components are defined at horizontal and vertical red
