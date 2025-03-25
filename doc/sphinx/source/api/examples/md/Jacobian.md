@@ -1,4 +1,4 @@
-# Curvilinear Coordinate Mimetic Operators
+# Jacobian
 
 > **Author:** Miguel A. Dumett  
 > **Abstract:** This document presents mimetic differences gradient and divergence
@@ -13,6 +13,7 @@
 Suppose a PDE is given on a physical spatial domain $\mathcal P$ in
 three-dimensions (3D), with coordinates $x,y,z$. Suppose $\mathcal P$ is
 the result of a bijective smooth map $\mathcal X$ given by
+
 $$\begin{aligned}
 x & = & x(\xi,\eta,\kappa) \\
 y & = & y(\xi,\eta,\kappa) \\
@@ -20,6 +21,7 @@ z & = & z(\xi,\eta,\kappa),
 \end{aligned}$$
 
 and that the inverse map of $\mathcal X$ is $\Theta$ which is given by
+
 $$\begin{aligned}
 \xi & = & \xi(x,y,z) \\
 \eta & = & \eta(x,y,z) \\
@@ -33,16 +35,20 @@ an structured grid on $\mathcal P$, with centers/boundaries
 $\mathcal C = \mathcal X(C)$ and faces $\mathcal F = \mathcal X(F)$.
 
 The Jacobian of the transformation $\mathcal X$ is given by
+
 $$J = \frac{\partial(x,y,z)}{\partial(\xi,\eta,\kappa)} = \left[ \begin{array}{ccc}  x_\xi & x_\eta & x_\kappa \\ y_\xi & y_\eta & y_\kappa \\ z_\xi & z_\eta & z_\kappa \end{array} \right].$$
 
 For $u:\mathcal X \to \mathbb R$, with
 $u = u(x,y,z) = u(x(\xi,\eta,\kappa),y(\xi,\eta,\kappa),z(\xi,\eta,\kappa))$
 and hence $u = u(\xi,\theta,\kappa)$, the chain rule implies
-$$\begin{aligned}
+
+$$
+\begin{aligned}
 u_\xi &= u_x x_\xi + u_y y_\xi + u_z z_\xi \\
 u_\eta &= u_x x_\eta + u_y y_\xi + u_z z_\eta \\
 u_\kappa &= u_x x_\kappa + u_y y_\xi + u_z z_\kappa
-\end{aligned}$$
+\end{aligned}
+$$
 
 or equivalently, 
 
@@ -51,36 +57,45 @@ $$\begin{aligned}
 \end{aligned}$$
 
 Hence
+
 $$\left[ \begin{array}{c} u_x \\ u_y \\ u_z \end{array} \right] = (J^T)^{-1} \left[ \begin{array}{c} u_\xi \\ u_\eta \\ u_\kappa\end{array} \right].$$
 
 Since
+
 $$\left[ \begin{array}{ccc} a & b & c \\ d & e & f \\ g & h & i \end{array} \right]^{-1} = \frac{1}{\Delta} \left[ \begin{array}{ccc} ei - fh & ch-bi & bf - ce \\ fg - di & ai - cg & cd - af \\ dh - eg & bg - ah & ac - bd \end{array} \right],$$
-where $\Delta = a(ei-fh) - b(di-fg) + c(dh-eg)$.
+
+where 
+
+$\Delta = a(ei-fh) - b(di-fg) + c(dh-eg)$.
 
 If one denotes
-$$J^T = \left[ \begin{array}{c|c|c} \textcircled{1} = x_\xi & \textcircled{2} = y_\xi & \textcircled{3} = z_\xi \\ \hline \textcircled{4} = x_\eta & \textcircled{5} = y_\eta & \textcircled{6} = z_\eta \\ \hline \textcircled{7} = x_\kappa & \textcircled{8} = y_\kappa & \textcircled{9} = z_\kappa \end{array} \right],$$
+
+$$J^T = \left[ \begin{array}{c|c|c} (1) = x_\xi & (2) = y_\xi & (3) = z_\xi \\ \hline (4) = x_\eta & (5) = y_\eta & (6) = z_\eta \\ \hline (7) = x_\kappa & (8) = y_\kappa & (9) = z_\kappa \end{array} \right],$$
 
 then 
 
 $$(J^T)^{-1} = \frac{1}{\Delta} \left[ \begin{array}{c|c|c} 
-\textcircled{5} \textcircled{9} - \textcircled{6} \textcircled{8} & \textcircled{3} \textcircled{8} - \textcircled{2} \textcircled{9} & \textcircled{2} \textcircled{6} - \textcircled{3} \textcircled{5} \\ \hline
-\textcircled{6} \textcircled{7} - \textcircled{4} \textcircled{9} & \textcircled{1} \textcircled{9} - \textcircled{3} \textcircled{7} & \textcircled{3} \textcircled{4} - \textcircled{1} \textcircled{6} \\ \hline
-\textcircled{4} \textcircled{8} - \textcircled{5} \textcircled{7} & \textcircled{2} \textcircled{7} - \textcircled{1} \textcircled{8} & \textcircled{1} \textcircled{5} - \textcircled{2} \textcircled{4} 
+(5)(9) - (6)(8) & (3)(8) - (2)(9) & (2)(6) - (3)(5) \\ \hline
+(6)(7) - (4)(9) & (1)(9) - (3)(7) & (3)(4) - (1)(6) \\ \hline
+(4)(8) - (5)(7) & (2)(7) - (1)(8) & (1)(5) - (2)(4) 
 \end{array} \right],$$
 
 with
 
-$$\Delta = \textcircled{1}(\textcircled{5} \textcircled{9} - \textcircled{6} \textcircled{8}) - \textcircled{2}(\textcircled{4} \textcircled{9} - \textcircled{6} \textcircled{7}) + \textcircled{3}(\textcircled{4} \textcircled{8} - \textcircled{5} \textcircled{7}).$$
+$$\Delta = (1)((5)(9) - (6)(8)) - (2)((4)(9) - (6)(7)) + (3)((4)(8) - (5)(7)).$$
 
 If one uses the gradient to approximate the partial derivatives of the
 Jacobian, then
+
 $$J_G^T = I_{xyz}^{F \to C} {\tilde G}_{\xi \eta \kappa} %[ \text{vec}(\xi) | \text{vec}(\eta) | \text{vec}(\kappa)]$$
 
 where ${\tilde G}_{xyz}$ is the same as $G_{xyz}$ with ${\hat I}_p$
 replaced by $I_{p+2}$, the identity matrix of order $p+2$. If one
 computes the Jacobian at the centers then the physical gradient is given
 by
+
 $$G_{xyz} = I_{xyz}^{C \to F} (J_G^T)^{-1} I_{\xi \eta \kappa}^{F \to C} G_{\xi \eta \kappa}.$$
+
 Similarly, one can construct the Jacobian based on the divergence operator.
 
 
