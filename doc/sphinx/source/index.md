@@ -9,15 +9,15 @@
 
 <div class="grid-container" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2em; margin: 2em 0;">
     <div class="component-box">
-        <h3>Mathematically Precise</h3>
+        <h3>High-order Accuracy</h3>
         <p>Discrete analogs of vector calculus operators that satisfy local and global conservation laws</p>
     </div>
     <div class="component-box">
-        <h3>Multi-Grid Support</h3>
+        <h3>Structured Grids</h3>
         <p>Works with uniform, non-uniform, and curvilinear staggered grids</p>
     </div>
     <div class="component-box">
-        <h3>Complete Operator Set</h3>
+        <h3>Operator Set</h3>
         <p>Includes Gradient, Divergence, and Laplacian operators with various boundary conditions</p>
     </div>
     <div class="component-box">
