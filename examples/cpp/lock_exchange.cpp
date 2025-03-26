@@ -171,13 +171,11 @@ int main() {
 
     // Solve the pressure Poisson equation
     vec p_vec;
-#ifdef SuperLU
-    p_vec = spsolve(L, b);
-#elif EIGEN
+#ifdef EIGEN
     p_vec = Utils::spsolve_eigen(L, b);
 #else
-    std::cerr << "Error: No solver available." << std::endl;
-    return -1;
+    // Default to SuperLU if EIGEN is not defined
+    p_vec = spsolve(L, b);
 #endif
 
     // Reshape the solution vector back into a matrix
