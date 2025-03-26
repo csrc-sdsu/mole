@@ -1,19 +1,8 @@
 /*
- * SPDX-License-Identifier: GPL-3.0-only
- * 
- * Copyright 2008-2024 San Diego State University Research Foundation (SDSURF).
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, version 3.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * LICENSE file or on the web GNU General Public License 
- * <https:*www.gnu.org/licenses/> for more details.
- *  
- */
+* SPDX-License-Identifier: GPL-3.0-or-later
+* © 2008-2024 San Diego State University Research Foundation (SDSURF).
+* See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details. 
+*/
 
 /*
  * @file utils.h
@@ -80,7 +69,7 @@ public:
   static vec spsolve_eigen(const sp_mat &A, const vec &b);
 
   /**
-  * @brief An analog to the MATLAB 2D meshgrid operation
+  * @brief An analog to the MATLAB/Octave 2D meshgrid operation
   *
   * returns 2-D grid coordinates based on the coordinates contained 
   * in vectors x and y. X is a matrix where each row is a copy of x, 
@@ -98,7 +87,7 @@ public:
   void meshgrid(const vec &x, const vec &y, mat &X, mat &Y);
 
   /**
-  * @brief An analog to the MATLAB 3D meshgrid operation
+  * @brief An analog to the MATLAB/Octave 3D meshgrid operation
   *
   * meshgrid(x,y,z,X,Y,Z) returns 3-D grid coordinates defined by the 
   * vectors x, y, and z. The grid represented by X, Y, and Z has size

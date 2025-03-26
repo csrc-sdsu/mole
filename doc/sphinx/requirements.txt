@@ -1,14 +1,42 @@
-altair>=5.0
-breathe>=4.30
-myst-parser[linkify]>=0.14.0
-sphinx-hoverxref>=0.3b1
-sphinx-design
-sphinx>=5.3,<6
-sphinx_rtd_theme
-sphinxcontrib-bibtex==2.5
-sphinxcontrib-katex
-sphinxcontrib-mermaid
-sphinxcontrib-svg2pdfconverter
-sphinxext-altair
+# ======= System Dependencies =======
+# These must be installed separately using your system package manager:
+# - Doxygen (required for API documentation generation)
+#   Ubuntu/Debian: sudo apt install doxygen
+#   macOS: brew install doxygen
+#   RHEL/CentOS/Fedora: sudo dnf install doxygen
+# - Graphviz (required for generating diagrams)
+#   Ubuntu/Debian: sudo apt install graphviz
+#   macOS: brew install graphviz
+#   RHEL/CentOS/Fedora: sudo dnf install graphviz
+# - LaTeX (required for PDF generation only)
+#   Ubuntu/Debian: sudo apt install texlive-latex-base texlive-fonts-recommended texlive-latex-extra
+#   macOS: brew install --cask mactex
+#   RHEL/CentOS/Fedora: sudo dnf install texlive-latex
+
+# ======= Sphinx =======
+
+# Core Sphinx
+sphinx>=5.3,<6                   # Using older version to avoid epub3 issues
 docutils<0.21
-xindy
+Pillow                          # Required for imghdr module
+setuptools                      # Required for pkg_resources
+
+# Theme
+sphinx_rtd_theme
+
+# Extensions used in conf.py
+breathe>=4.30                    # C++ documentation integration
+myst-parser[linkify]>=0.14.0    # Markdown support
+sphinx-design                    # UI components
+sphinxcontrib-bibtex==2.5       # Bibliography support
+sphinxcontrib-mermaid           # Diagrams
+sphinxcontrib-katex             # Math rendering
+standard-imghdr
+
+# Visualization
+altair>=5.0                     # Data visualization
+sphinxext-altair                # Altair integration
+
+# Optional but useful
+sphinx-hoverxref>=0.3b1         # Hover tooltips for references
+
