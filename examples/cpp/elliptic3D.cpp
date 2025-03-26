@@ -21,6 +21,7 @@
 
 #include <fstream>  
 #include <iostream>
+#include <cstdlib>
 
 #include "mole.h"
 
@@ -32,14 +33,22 @@ int main() {
   constexpr int n = 6;  // Horizontal resolution
   constexpr int p = 7;  // Depth resolution
 
+  // Output filenames
+  const string DATA_FILENAME = "solution_data.txt";
+  const string GNUPLOT_SCRIPT = "plot.gnu";
+
   // Grid spacing in the x, y, and z directions
   constexpr double dx = 1.0;
   constexpr double dy = 1.0;
   constexpr double dz = 1.0;
 
+  // Boundary condition constants
+  constexpr double DIRICHLET_COEF = 1.0;  // Coefficient for Dirichlet term in Robin BC
+  constexpr double NEUMANN_COEF = 0.0;    // Coefficient for Neumann term in Robin BC
+
   // Get mimetic operators
   Laplacian L(k, m, n, p, dx, dy, dz);
-  RobinBC BC(k, m, dx, n, dy, p, dz, 1, 0);  // Dirichlet BC
+  RobinBC BC(k, m, dx, n, dy, p, dz, DIRICHLET_COEF, NEUMANN_COEF);  // Dirichlet BC
   L = L + BC;
 
   // Build RHS for system of equations
@@ -48,25 +57,21 @@ int main() {
 
   arma::vec sol;  // Declare sol
 
-#ifdef SuperLU
-  cout << "Using SuperLU solver" << endl;
-  sol = arma::spsolve(L, arma::vectorise(rhs));  // Use SuperLU
-#elif EIGEN
-  cout << "Using Eigen solver" << endl;
-  sol = arma::Utils::spsolve_eigen(L, arma::vectorise(rhs));
+#ifdef EIGEN
+    sol = arma::Utils::spsolve_eigen(L, arma::vectorise(rhs));
 #else
-  cerr << "Error: No solver available." << endl;
-  return -1;
+    // Default to SuperLU if EIGEN is not defined
+    sol = arma::spsolve(L, arma::vectorise(rhs));
 #endif
 
   // Reshape solution into a 3D cube
   arma::cube sol_cube(sol.memptr(), m + 2, n + 2, p + 2);
 
   // Save numerical solution to a file (for GNUplot)
-  ofstream data_file("solution_data.txt");
+  ofstream data_file(DATA_FILENAME);
   if (!data_file) {
     cerr << "Error: Unable to open file for writing data.\n";
-    return 1;
+    return EXIT_FAILURE;
   }
 
   // Save middle slice (z = p/2) for 2D visualization
@@ -78,13 +83,13 @@ int main() {
     data_file << "\n";  // Blank line for GNUplot matrix format
   }
   data_file.close();
-  cout << "Solution saved to solution_data.txt\n";
+  cout << "Solution saved to " << DATA_FILENAME << "\n";
 
   // Generate GNUplot script
-  ofstream plot_script("plot.gnu");
+  ofstream plot_script(GNUPLOT_SCRIPT);
   if (!plot_script) {
     cerr << "Error: Failed to create GNUplot script.\n";
-    return 1;
+    return EXIT_FAILURE;
   }
 
   plot_script << "set title 'Numerical Solution (MOLE)'\n";
@@ -94,15 +99,16 @@ int main() {
   plot_script << "set view map\n";
   plot_script << "set dgrid3d 20,20\n";
   plot_script << "set pm3d\n";
-  plot_script << "splot 'solution_data.txt' using 1:2:3 with lines title "
+  plot_script << "splot '" << DATA_FILENAME << "' using 1:2:3 with lines title "
                  "'Numerical Solution'\n";
   plot_script.close();
 
   // Execute GNUplot
-  if (system("gnuplot -persist plot.gnu") != 0) {
+  string gnuplot_command = "gnuplot -persist " + GNUPLOT_SCRIPT;
+  if (system(gnuplot_command.c_str()) != 0) {
     cerr << "Error: Failed to execute GNUplot.\n";
-    return 1;
+    return EXIT_FAILURE;
   }
 
-  return 0;
+  return EXIT_SUCCESS;
 }

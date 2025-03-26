@@ -59,10 +59,3 @@ Thumbs.db
 /examples/cpp/transport1D
 /examples/cpp/plot.gnu
 /tests/cpp/test[1-5]
-
-# build
-build/
-mole/
-
-#clang
-.clang-format
