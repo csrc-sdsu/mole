@@ -64,7 +64,7 @@ calculus,
 In addition, the discrete version of the extended Gauss' divergence
 theorem is also satisfied with high-order accuracy:
 
-$$\langle D \, v, f \rangle_Q + \langle v, G \, f \rangle_P = \langle B \, v, f \rangle$$
+$$\langle D \, v, f \rangle_Q + \langle v, G \, f \rangle_P = \langle B \, v, f \rangle$$ --- (1)
 
 The deduction of equation (1) can be found in [[4]](#ref4).
 
