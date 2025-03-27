@@ -12,33 +12,22 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * LICENSE file or on the web GNU General Public License 
  * <https:*www.gnu.org/licenses/> for more details.
- *
- */
-
-/*
- * @file mole.h
- * 
- * @brief Mimetic Operator Header File
- * 
- * @date 2024/10/15
  * 
  */
 
-#ifndef MOLE_H
-#define MOLE_H
+/* 
+ * @file debug.cpp
+ * @brief Debugging function, used if DEBUG_MODE is defined in build
+ * @date 2025/03/15
+ */
+#include "debug.h"
+#include <iostream>
 
-#include "divcurv.h"
-#include "divergence.h"
-#include "gradcurv.h"
-#include "gradient.h"
-#include "interpol.h"
-#include "interpolator.h"
-#include "jacobian.h"
-#include "laplacian.h"
-#include "mixedbc.h"
-#include "nodal.h"
-#include "operators.h"
-#include "robinbc.h"
-#include "utils.h"
-
-#endif // MOLE_H
+void moleDebugLog ( const char *file, int line, const std::string &message )
+{
+    std::cerr << "[" << file << "]:" << line << ", " << message << endl;
+}
+void moleDebugLog ( const char *file, int line, const std::string &message, double value )
+{
+    std::cerr << "[" << file << "]:" << line << ", " << message << " is " << value << endl;
+}

@@ -28,6 +28,8 @@
 #define UTILS_H
 
 #include <armadillo>
+#include <assert.h>     /* assert */
+#include "debug.h"
 
 using Real = double;
 using namespace arma;
@@ -114,6 +116,32 @@ public:
   */
   void meshgrid(const vec &x, const vec &y, const vec &z, cube &X, cube &Y,
                 cube &Z);
+  /**
+  * @brief A circular shift for sparse matrices
+  *
+  * circshift shifts the sparse matrix Q by the value in 
+  * shift, along the dimensions specified by axes.  
+  * 
+  * @param Q a sparse matrix to shift
+  * @param shift a signed integer for the shift amount 
+  * @param axes a direction of shift, 0=up/down, 1=left/right
+  */             
+  static sp_mat circshift( const sp_mat &Q, const s32 shift, const u16 axes );
+
+  /**
+  * @brief Counts the number of shifts which were cyclic.
+  *
+  * Sparse matrix indices must be in order, (row,column). A cyclic shift
+  * may change the order of existing indices. Instead of resorting the entire set
+  * of indices, it is easier to remember the values cycled, and move only those.
+  * This function counts the number of indices that are looped from
+  * one edge of the matrix to the other (cycled). This value is used to 
+  * quickly organize the resulting shifted sparse matrix.
+  * 
+  * @param ivec a vector of indices to shift
+  * @param size the amount to shift ( output )
+  */  
+  int handleCyclicShift(ivec &indices, const uint size);
 };
 
 #endif // UTILS_H
