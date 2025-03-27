@@ -1,84 +1,122 @@
 #!/bin/bash
 set -e
 
-echo "=== Cleaning build directory ==="
-rm -rf build/
-mkdir -p build/latex/_images
+echo "=== MOLE Documentation Build Script ==="
 
-echo "=== Converting SVG files ==="
-find source -name "*.svg" -print0 | while IFS= read -r -d '' f; do
-    echo "Converting $f..."
-    basename_no_ext=$(basename "${f%.svg}")
-    output_pdf="build/latex/_images/${basename_no_ext}.pdf"
-    rsvg-convert -f pdf -o "$output_pdf" \
-        --dpi-x 600 --dpi-y 600 --page-width 2500 --page-height 2000 \
-        --keep-aspect-ratio "$f"
+# Directories
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SOURCE_DIR="$SCRIPT_DIR/source"
+BUILD_DIR="$SCRIPT_DIR/build"
+LATEX_DIR="$BUILD_DIR/latex"
+PDF_DIR="$LATEX_DIR/PDF"
+SVG_DIR="$SOURCE_DIR/api/examples/md/figures"
+
+# Clean build directory
+echo "Cleaning build directory..."
+rm -rf "$BUILD_DIR"
+mkdir -p "$BUILD_DIR"
+
+# Run Sphinx to generate LaTeX
+echo "Running Sphinx to generate LaTeX..."
+sphinx-build -b latex "$SOURCE_DIR" "$LATEX_DIR"
+
+# Create directories for images and PDF output
+mkdir -p "$LATEX_DIR/_images"
+mkdir -p "$LATEX_DIR/figures"
+mkdir -p "$PDF_DIR"
+
+# Find all SVG files in the figures directory
+echo "Finding SVG files..."
+SVG_FILES=$(find "$SVG_DIR" -name "*.svg")
+
+# Convert all SVGs to high-quality PDFs
+echo "Converting SVGs to high-quality PDFs..."
+for svg in $SVG_FILES; do
+  base_name=$(basename "$svg" .svg)
+  echo "  Converting: $base_name.svg"
+  
+  # Using Inkscape with very high DPI
+  inkscape "$svg" \
+    --export-filename="$LATEX_DIR/_images/$base_name.pdf" \
+    --export-area-drawing \
+    --export-dpi=2400
     
-    echo "  Created: $output_pdf ($(du -h "$output_pdf" | cut -f1))"
+  # Copy to figures directory
+  cp "$LATEX_DIR/_images/$base_name.pdf" "$LATEX_DIR/figures/"
 done
 
-echo "=== Creating mathconf.js for math fixes ==="
-mkdir -p source/_static
-cat > source/_static/mathconf.js << 'EOL'
-// Fix math rendering issues
-window.MathJax = {
-  tex: {
-    inlineMath: [['\\(', '\\)']],
-    displayMath: [['\\[', '\\]'], ['$$', '$$']],
-    processEscapes: true,
-    processEnvironments: true,
-    packages: ['base', 'ams', 'noerrors', 'noundefined']
-  },
-  options: {
-    ignoreHtmlClass: 'tex2jax_ignore',
-    processHtmlClass: 'tex2jax_process'
-  }
-};
+# Create a fix for image includes
+echo "Creating LaTeX image fix..."
+cat > "$LATEX_DIR/imagequality.sty" << EOL
+% High-quality PDF settings
+\\pdfminorversion=7
+\\pdfcompresslevel=0
+\\pdfobjcompresslevel=0
+\\pdfimageresolution=2400
+
+% Graphics paths
+\\graphicspath{
+  {_images/}
+  {figures/}
+  {./}
+}
+
+% Use PDF figures instead of SVG
+\\let\\oldsphinxincludegraphics\\sphinxincludegraphics
+\\renewcommand{\\sphinxincludegraphics}[2][]{%
+  \\includegraphics[#1]{#2}%
+}
+
+% Fix for Unicode characters
+\\DeclareUnicodeCharacter{FE0F}{}
 EOL
 
-echo "=== Building LaTeX files ==="
-sphinx-build -b latex source build/latex
+# Fix the LaTeX file
+echo "Updating LaTeX file..."
+cd "$LATEX_DIR"
 
-echo "=== Fixing LaTeX file issues ==="
-# Fix extensions in includegraphics commands
-sed -i.bak 's/includegraphics{{/includegraphics[width=\\linewidth]{{/g' build/latex/MOLE-docs.tex
-sed -i.bak 's/}.svg}/}.pdf}/g' build/latex/MOLE-docs.tex
-sed -i.bak 's/}.png}/}.pdf}/g' build/latex/MOLE-docs.tex
+# Replace SVG with PDF in image references
+sed -i.bak 's/\.svg}/.pdf}/g' MOLE-docs.tex
 
-# Check for math environment issues in the LaTeX file
-if grep -q "\\\\begin{split}" build/latex/MOLE-docs.tex; then
-    echo "=== WARNING: Found split environments in the LaTeX file ==="
-    
-    # Fix problematic split environments
-    sed -i.bak 's/\\begin{equation\*}\\begin{split}/\\begin{align}/g' build/latex/MOLE-docs.tex
-    sed -i.bak 's/\\end{split}\\end{equation\*}/\\end{align}/g' build/latex/MOLE-docs.tex
-    
-    # Remove any \tag commands inside split environments
-    sed -i.bak 's/\\tag{[^}]*}//g' build/latex/MOLE-docs.tex
+# Add our fix package after sphinx package
+sed -i.bak2 's/\\usepackage{sphinx}/\\usepackage{sphinx}\\usepackage{imagequality}/' MOLE-docs.tex
+
+# Specifically fix the broken image includes
+echo "Fixing problematic image includes..."
+sed -i.bak3 's/\\sphinxincludegraphics\[{[^}]*}\]{{/\\includegraphics[width=\\linewidth]{/g' MOLE-docs.tex
+sed -i.bak4 's/\.svg}/.pdf}/g' MOLE-docs.tex
+
+# Fix math environment issues if present
+if grep -q "\\\\begin{split}" MOLE-docs.tex; then
+    echo "Fixing math environment issues..."
+    sed -i.bak5 's/\\begin{equation\*}\\begin{split}/\\begin{align}/g' MOLE-docs.tex
+    sed -i.bak6 's/\\end{split}\\end{equation\*}/\\end{align}/g' MOLE-docs.tex
+    sed -i.bak7 's/\\tag{[^}]*}//g' MOLE-docs.tex
 fi
 
 # Fix the \\capstart command redefinition issue
-sed -i.bak 's/\\newcommand{\\capstart}{}/\\providecommand{\\capstart}{}/g' build/latex/MOLE-docs.tex
+sed -i.bak8 's/\\newcommand{\\capstart}{}/\\providecommand{\\capstart}{}/g' MOLE-docs.tex
 
-echo "=== Compiling PDF ==="
-cd build/latex
-pdflatex -interaction=nonstopmode MOLE-docs.tex
-pdflatex -interaction=nonstopmode MOLE-docs.tex
-pdflatex -interaction=nonstopmode MOLE-docs.tex
+# Compile PDF
+echo "Compiling LaTeX to PDF..."
+pdflatex -interaction=nonstopmode MOLE-docs.tex || true
+pdflatex -interaction=nonstopmode MOLE-docs.tex || true
+pdflatex -interaction=nonstopmode MOLE-docs.tex || true
 
-if [ -f MOLE-docs.pdf ]; then
-    echo "=== Success! ==="
-    echo "PDF generated at: $(pwd)/MOLE-docs.pdf"
-    ls -lh MOLE-docs.pdf
-    
-    # Copy PDF to a more accessible location
-    cp MOLE-docs.pdf ../../MOLE-docs.pdf
-    echo "PDF also copied to: $(cd ../.. && pwd)/MOLE-docs.pdf"
+# Check if PDF was generated successfully
+if [ -f "MOLE-docs.pdf" ]; then
+  # Move PDF to the PDF directory 
+  mv "MOLE-docs.pdf" "$PDF_DIR/MOLE-docs.pdf"
+  echo "Success! PDF generated at: $PDF_DIR/MOLE-docs.pdf"
+  ls -lh "$PDF_DIR/MOLE-docs.pdf"
+  
+  # No copies or symlinks to other locations, only one original at PDF_DIR
+  exit 0
 else
-    echo "=== Error: PDF generation failed ==="
-    echo "=== DEBUG: Examining LaTeX log for errors ==="
-    grep -A 5 "Error:" MOLE-docs.log || echo "No specific error messages found"
-    grep -A 5 "! LaTeX Error:" MOLE-docs.log || echo "No LaTeX errors found"
-    grep -A 5 "! Package amsmath Error:" MOLE-docs.log || echo "No amsmath errors found"
-    exit 1
+  echo "Failed to generate PDF."
+  echo "=== DEBUG: Examining LaTeX log for errors ==="
+  grep -A 5 "Error:" MOLE-docs.log || echo "No specific error messages found"
+  grep -A 5 "! LaTeX Error:" MOLE-docs.log || echo "No LaTeX errors found"
+  grep -A 5 "! Package amsmath Error:" MOLE-docs.log || echo "No amsmath errors found"
+  exit 1
 fi 

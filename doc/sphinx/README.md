@@ -48,7 +48,19 @@ Before building the documentation, ensure you have:
    sudo dnf install graphviz
    ```
 
-3. **Python dependencies**:
+3. **Inkscape** installed for high-quality SVG to PDF conversion (required for PDF output)
+   ```bash
+   # Ubuntu/Debian
+   sudo apt install inkscape
+   
+   # macOS with Homebrew
+   brew install inkscape
+   
+   # RHEL/CentOS/Fedora
+   sudo dnf install inkscape
+   ```
+
+4. **Python dependencies**:
    First, ensure Python 3 and pip are installed:
    ```bash
    # Ubuntu/Debian
@@ -76,13 +88,13 @@ Before building the documentation, ensure you have:
    python3 -m pip install -r requirements.txt
    ```
 
-4. **LaTeX** (only needed for PDF generation):
+5. **LaTeX** (required for PDF generation):
    ```bash
    # Ubuntu/Debian
    sudo apt install texlive-latex-base texlive-fonts-recommended texlive-latex-extra
    
    # RHEL/CentOS/Fedora
-   sudo dnf install texlive-latex
+   sudo dnf install texlive-scheme-medium
    
    # macOS
    brew install --cask mactex
@@ -99,7 +111,7 @@ make doc-doxygen
 # Build HTML documentation
 make doc-html
 
-# PDF output (requires LaTeX)
+# PDF output (requires LaTeX and Inkscape)
 make doc-latexpdf
 
 # Clean build files (Doxygen + Sphinx)
@@ -111,8 +123,20 @@ make doc-all
 
 The documentation will be generated in:
 - HTML: `doc/sphinx/build/html/`
-- PDF: `doc/sphinx/build/pdf/`
+- PDF: `doc/sphinx/build/latex/MOLE-docs.pdf` and at the project root (`MOLE-docs.pdf`)
 - API Docs: `doc/doxygen/`
+
+### PDF Generation Process
+
+The PDF generation process does the following:
+
+1. Runs Sphinx to generate LaTeX files
+2. Converts SVG figures to high-quality PDF using Inkscape (2400 DPI)
+3. Applies special fixes to LaTeX files for proper math rendering
+4. Compiles the LaTeX document into a PDF
+5. Copies the final PDF to the project root directory
+
+This process is handled by the `build.sh` script, which is called by the `doc-latexpdf` make target.
 
 ### Image Handling
 
@@ -121,6 +145,7 @@ Images are automatically handled when building the documentation using the Makef
 The image handling process:
 - Copies images from `doc/assets/img/` to `doc/sphinx/build/html/_static/img/`
 - Fixes image paths in the HTML output
+- For PDF output, converts SVG files to high-quality PDFs (using Inkscape)
 
 If you're running Sphinx directly without the Makefile, you'll need to run the image copy script separately:
 
