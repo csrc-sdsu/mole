@@ -47,24 +47,24 @@ boundary), but they also satisfy fundamental identities from vector
 calculus,
 
 -   Gradient of a constant 
-   $$G \, f = 0$$
+   $G \, f = 0$
 
 -   Free stream preservation 
-    $$D \, v = 0$$
+    $D \, v = 0$
 
 -   Curl of the gradient 
-    $$C \, G \, f = 0$$
+    $C \, G \, f = 0$
 
 -   Divergence of the curl 
-    $$D \, C \, v = 0$$
+    $D \, C \, v = 0$
 
 -   Divergence of the gradient 
-    $$D \, G \, f = L \, f$$
+    $D \, G \, f = L \, f$
 
 In addition, the discrete version of the extended Gauss' divergence
 theorem is also satisfied with high-order accuracy:
 
-$$  \langle D \, v, f \rangle_Q + \langle v, G \, f \rangle_P = \langle B \, v, f \rangle \tag{1}$$
+$$\langle D \, v, f \rangle_Q + \langle v, G \, f \rangle_P = \langle B \, v, f \rangle \tag{1}$$
 
 The deduction of equation (1) can be found in [[4]](#ref4).
 
