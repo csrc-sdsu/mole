@@ -80,16 +80,6 @@ html_copy_source = True
 html_show_sourcelink = True
 
 # Image and static file configuration
-# NOTE: Important guidelines for adding images to documentation:
-# 1. Place SVG/image files in a 'figures' directory next to the markdown files
-# 2. In markdown files, use the following format for images with centered captions:
-#    <div style="text-align: center">
-#    ![Alt text](figures/image.svg)
-#    *Caption text*
-#    </div>
-# 3. This format ensures compatibility with both Sphinx and standard Markdown viewers (e.g., GitHub)
-# 4. Add any new image directories to html_extra_path below to ensure they're copied to build
-
 html_static_path = ['_static']
 html_extra_path = [
     str(ROOT_DIR / 'README.md'),
@@ -99,14 +89,11 @@ html_extra_path = [
     str(ROOT_DIR / 'doc/sphinx/source/api/examples/md/figures')  # Figures for markdown docs
 ]
 
-# Configure image handling
-html_static_images = ['*.svg', '*.png', '*.jpg', '*.gif']
-
 # Additional MyST settings
 myst_heading_anchors = 3                     # Generate anchors for headings
 myst_url_schemes = ("http", "https", "mailto", "ftp", "file", "doc")
 myst_all_links_external = True
-myst_ref_domains = None                      # Disable automatic reference domain
+myst_ref_domains = None
 
 #------------------------------------------------------------------------------
 # Breathe configuration (Doxygen integration)
@@ -185,16 +172,6 @@ html_theme_options = {
     "collapse_navigation": False
 }
 
-# Path settings
-html_static_path = ['_static']
-html_extra_path = [
-    str(ROOT_DIR / 'README.md'),
-    str(ROOT_DIR / 'doc' / 'doxygen'), 
-    str(ROOT_DIR / 'doc' / 'assets'),
-    str(ROOT_DIR / 'doc' / 'sphinx' / 'README.md')
-    ]
-html_use_symlinks = True
-
 # Appearance
 html_logo = str(ROOT_DIR / "logo.png")
 html_css_files = [
@@ -211,12 +188,7 @@ suppress_warnings = [
     'epub.unknown_project_files',
     'image.nonlocal_uri',
     'app.add_source_parser',
-    'autosectionlabel.*',
-    'ref.python',
-    'ref.cpp',
-    'ref.c',
-    'toc.excluded',
-    'image.svg_to_png'
+    'autosectionlabel.*'
 ]
 
 def setup(app):
