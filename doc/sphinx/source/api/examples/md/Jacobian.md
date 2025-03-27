@@ -70,19 +70,27 @@ $\Delta = a(ei-fh) - b(di-fg) + c(dh-eg)$.
 
 If one denotes
 
-$$J^T = \left[ \begin{array}{c|c|c} (1) = x_\xi & (2) = y_\xi & (3) = z_\xi \\ \hline (4) = x_\eta & (5) = y_\eta & (6) = z_\eta \\ \hline (7) = x_\kappa & (8) = y_\kappa & (9) = z_\kappa \end{array} \right],$$
+$$
+J^T = \left[ \begin{array}{ccc} 
+(1) = x_\xi & (2) = y_\xi & (3) = z_\xi \\ 
+\midrule
+(4) = x_\eta & (5) = y_\eta & (6) = z_\eta \\ 
+\midrule
+(7) = x_\kappa & (8) = y_\kappa & (9) = z_\kappa 
+\end{array} \right]
+$$
 
 then 
 
-$$(J^T)^{-1} = \frac{1}{\Delta} \left[ \begin{array}{c|c|c} 
+$(J^T)^{-1} = \frac{1}{\Delta} \left[ \begin{array}{c|c|c} 
 (5)(9) - (6)(8) & (3)(8) - (2)(9) & (2)(6) - (3)(5) \\ \hline
 (6)(7) - (4)(9) & (1)(9) - (3)(7) & (3)(4) - (1)(6) \\ \hline
 (4)(8) - (5)(7) & (2)(7) - (1)(8) & (1)(5) - (2)(4) 
-\end{array} \right],$$
+\end{array} \right],$
 
 with
 
-$$\Delta = (1)((5)(9) - (6)(8)) - (2)((4)(9) - (6)(7)) + (3)((4)(8) - (5)(7)).$$
+$\Delta = (1)((5)(9) - (6)(8)) - (2)((4)(9) - (6)(7)) + (3)((4)(8) - (5)(7)).$
 
 If one uses the gradient to approximate the partial derivatives of the
 Jacobian, then
