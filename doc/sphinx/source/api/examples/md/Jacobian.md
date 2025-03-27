@@ -71,13 +71,11 @@ $\Delta = a(ei-fh) - b(di-fg) + c(dh-eg)$.
 If one denotes
 
 $$
-J^T = \left[ \begin{array}{ccc} 
-(1) = x_\xi & (2) = y_\xi & (3) = z_\xi \\ 
-\midrule
-(4) = x_\eta & (5) = y_\eta & (6) = z_\eta \\ 
-\midrule
-(7) = x_\kappa & (8) = y_\kappa & (9) = z_\kappa 
-\end{array} \right]
+J^T = \begin{pmatrix}
+(1) = x_\xi & (2) = y_\xi & (3) = z_\xi \\[0.5em]
+(4) = x_\eta & (5) = y_\eta & (6) = z_\eta \\[0.5em]
+(7) = x_\kappa & (8) = y_\kappa & (9) = z_\kappa
+\end{pmatrix}
 $$
 
 then 
