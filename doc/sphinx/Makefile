@@ -11,6 +11,7 @@ BUILDDIR      = build
 DOXYDIR       = ../doxygen/cpp
 DOXYXML       = $(DOXYDIR)/xml
 PDFDIR        = $(BUILDDIR)/latex/PDF
+HTMLDIR       = $(BUILDDIR)/html
 
 # List of Sphinx builders
 SPHINX_TARGETS := html dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub text man changes linkcheck doctest coverage gettext
@@ -50,6 +51,14 @@ doc-html:
 		$(MAKE) doc-doxygen; \
 	fi
 	PYTHONPATH=../.. $(SPHINXBUILD) -b html "$(SOURCEDIR)" "$(BUILDDIR)/html"
+	@if [ -f "$(HTMLDIR)/index.html" ]; then \
+		echo "=== HTML documentation generated successfully ==="; \
+		echo "   View documentation at: $(HTMLDIR)/index.html"; \
+		echo "   Open with a browser:  file://$(CURDIR)/$(HTMLDIR)/index.html"; \
+	else \
+		echo "=== Error: HTML generation failed ==="; \
+		exit 1; \
+	fi
 
 # Clean built documentation
 doc-clean:
@@ -92,7 +101,7 @@ depcheck-inkscape:
 # Generate all documentation
 doc-all: doc-clean doc-doxygen doc-deps doc-html doc-latexpdf
 	@echo "Documentation generated in:"
-	@echo "  HTML: $(BUILDDIR)/html/"
+	@echo "  HTML: $(HTMLDIR)/index.html"
 	@echo "  PDF:  $(PDFDIR)/MOLE-docs.pdf"
 	@echo "  API:  $(DOXYDIR)/"
 
