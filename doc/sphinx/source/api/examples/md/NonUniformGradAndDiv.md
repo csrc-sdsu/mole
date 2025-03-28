@@ -13,10 +13,12 @@ On an interval $[a,b]$, consider $n$ equal size subintervals, each of
 length $h = \frac{b-a}{n}$. Then
 
 -   the uniform node grid (with $n+1$ points) is given by
-    $$X_N^u = \{ a, a+h, \cdots, b-h, b \},$$
+    $X_N^u = \{ a, a+h, \cdots, b-h, b \},$
 
 -   the uniform center grid (with $n+2$ points) is given by
-    $$X_C^u = \left\{ a, a+\frac{h}{2}, a+\frac{3h}{2}, \cdots, b-\frac{3h}{2}, b-\frac{h}{2}, b \right\},$$
+    ```{math}
+    X_C^u = \{ a, a+\frac{h}{2}, a+\frac{3h}{2}, \cdots, b-\frac{3h}{2}, b-\frac{h}{2}, b \}
+    ```
 
 Suppose a non-uniform grid on interval $[a,b]$, with $n$ non-equal
 subintervals, is given by
