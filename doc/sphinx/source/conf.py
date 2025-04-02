@@ -56,6 +56,12 @@ extensions = [
     
     # Diagram support
     'sphinxcontrib.mermaid',  # Mermaid diagram support
+    
+    # MATLAB documentation
+    'sphinxcontrib.matlab',   # MATLAB domain support
+    
+    # Custom extensions
+    'matlab_doc_filter',      # Filter license info from MATLAB docstrings
 ]
 
 #------------------------------------------------------------------------------
@@ -141,6 +147,47 @@ else:
     print("WARNING: Mermaid CLI not found. Mermaid diagrams will not be rendered.")
     print("To install Mermaid CLI, run: npm install -g @mermaid-js/mermaid-cli")
     print("="*80 + "\n")
+
+#------------------------------------------------------------------------------
+# MATLAB domain configuration
+#------------------------------------------------------------------------------
+# Path to MATLAB source files
+matlab_src_dir = str(ROOT_DIR / 'src/matlab')
+
+# Print debug information for MATLAB path
+print("\nDEBUG: MATLAB Configuration:")
+print(f"MATLAB source directory: {matlab_src_dir}")
+print(f"Directory exists: {os.path.exists(matlab_src_dir)}")
+print(f"Directory contents: {os.listdir(matlab_src_dir) if os.path.exists(matlab_src_dir) else 'DIRECTORY NOT FOUND'}")
+print(f"Python path: {sys.path}")
+
+# Add MATLAB directory to sys.path more explicitly
+sys.path.insert(0, matlab_src_dir)
+print(f"Updated Python path: {sys.path}")
+
+# For matlabdomain, we need to treat MATLAB files as modules
+primary_domain = 'mat'  # Make MATLAB the primary domain for .m files
+
+# MATLAB documentation style settings
+matlab_keep_package_prefix = False
+matlab_short_links = True
+matlab_auto_link = "basic"  # Auto-link known MATLAB code elements
+matlab_show_property_default_value = False
+matlab_show_property_specs = False
+
+# MATLAB documentation filtering options
+matlab_filter_options = {
+    'remove_license': True,             # Remove license information
+    'improve_formatting': True,         # Add formatting for section headers
+    'fix_missing_descriptions': True,   # Add placeholders for missing descriptions
+}
+
+# Add MATLAB to intersphinx mapping if needed
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+    'numpy': ('https://numpy.org/doc/stable', None),
+    'matplotlib': ('https://matplotlib.org/stable', None),
+}
 
 #------------------------------------------------------------------------------
 # Source configuration

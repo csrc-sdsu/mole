@@ -64,7 +64,8 @@ Building Documentation <api/intros/doc_readme_wrapper.md>
 :caption: API Reference
 
 api/cpp/index
-api/matlab/index
+Matlab (stable) <api/matlab/index.md>
+matlab (beta) <api/matlab/index-beta.rst>
 ```
 
 ```{toctree}
