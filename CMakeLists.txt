@@ -42,10 +42,18 @@ set(SUPERLU_INSTALL_DIR "${INSTALL_DIR}/superlu-${SUPERLU_VERSION}")
 
 file(DOWNLOAD ${SUPERLU_TARBALL_URL} ${BUILD_DIR}/superlu-${SUPERLU_VERSION}.tar.gz)
 execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf superlu-${SUPERLU_VERSION}.tar.gz WORKING_DIRECTORY ${BUILD_DIR})
-execute_process(
-    COMMAND sed -i "s/cmake_minimum_required(VERSION 2.8.12)/cmake_minimum_required(VERSION 3.10)/" CMakeLists.txt
-    WORKING_DIRECTORY ${SUPERLU_SRC_DIR}
-)
+# Detect platform and apply the correct sed command
+if(APPLE)
+    execute_process(
+        COMMAND sed -i "" "s/cmake_minimum_required(VERSION 2.8.12)/cmake_minimum_required(VERSION 3.10)/" CMakeLists.txt
+        WORKING_DIRECTORY ${SUPERLU_SRC_DIR}
+    )
+else()
+    execute_process(
+        COMMAND sed -i "s/cmake_minimum_required(VERSION 2.8.12)/cmake_minimum_required(VERSION 3.10)/" CMakeLists.txt
+        WORKING_DIRECTORY ${SUPERLU_SRC_DIR}
+    )
+endif()
 
 # Confirm the patch
 execute_process(
