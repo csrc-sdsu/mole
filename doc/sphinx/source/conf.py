@@ -177,9 +177,8 @@ matlab_show_property_specs = False
 
 # MATLAB documentation filtering options
 matlab_filter_options = {
-    'remove_license': True,             # Remove license information
-    'improve_formatting': True,         # Add formatting for section headers
-    'fix_missing_descriptions': True,   # Add placeholders for missing descriptions
+    'remove_license': True,
+    'm2html_style': True,
 }
 
 # Add MATLAB to intersphinx mapping if needed
