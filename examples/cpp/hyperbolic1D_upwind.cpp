@@ -62,15 +62,15 @@ sp_mat sidedNodalTemp(int m, double dx, const std::string& type) {
 
 int main()
 {
-    double a = 1.0;       // Velocity
-    double west = 0.0;    // Domain's left limit
-    double east = 1.0;    // Domain's right limit
+    constexpr double a = 1.0;       // Velocity
+    constexpr double west = 0.0;    // Domain's left limit
+    constexpr double east = 1.0;    // Domain's right limit
 
-    int m = 20;           // Number of cells
-    double dx = (east - west) / m;  // Grid spacing
+    constexpr int m = 20;           // Number of cells
+    constexpr double dx = (east - west) / m;  // Grid spacing
 
-    double t = 1.0;       // Simulation time
-    double dt = dx / std::abs(a);  // Time step based on CFL condition
+    constexpr double t = 1.0;       // Simulation time
+    constexpr double dt = dx / std::abs(a);  // Time step based on CFL condition
     
     sp_mat S = sidedNodalTemp(m, dx, (a > 0) ? "backward" : "forward"); // Use "forward" if a < 0
     
@@ -79,7 +79,7 @@ int main()
 
     S = speye<sp_mat>(S.n_rows, S.n_cols) - a * dt * S;
     
-    int steps = t / dt;
+    constexpr int steps = t / dt;
     
     std::ofstream dataFile("results.dat");
     if (!dataFile) {
