@@ -28,6 +28,7 @@
 #include "mole.h"
 #include <iostream>
 #include <cmath>
+#include <cstdlib>
 
 using namespace std::chrono_literals;
 constexpr double pi = 3.14159;
@@ -62,7 +63,7 @@ sp_mat sidedNodalTemp(int m, double dx, const std::string& type) {
 
 int main()
 {
-    constexpr double a = 1.0;       // Velocity
+    const double a = 1.0;       // Velocity
     constexpr double west = 0.0;    // Domain's left limit
     constexpr double east = 1.0;    // Domain's right limit
 
@@ -70,7 +71,7 @@ int main()
     constexpr double dx = (east - west) / m;  // Grid spacing
 
     constexpr double t = 1.0;       // Simulation time
-    constexpr double dt = dx / std::abs(a);  // Time step based on CFL condition
+    const double dt = dx / std::abs(a);  // Time step based on CFL condition
     
     sp_mat S = sidedNodalTemp(m, dx, (a > 0) ? "backward" : "forward"); // Use "forward" if a < 0
     
@@ -79,12 +80,12 @@ int main()
 
     S = speye<sp_mat>(S.n_rows, S.n_cols) - a * dt * S;
     
-    constexpr int steps = t / dt;
+    const int steps = t / dt;
     
     std::ofstream dataFile("results.dat");
     if (!dataFile) {
         std::cerr << "Error opening data file.\n";
-        return 1;
+        return EXIT_FAILURE;;
     }
 
     // Write all time steps to a single data file
@@ -105,7 +106,7 @@ int main()
     std::ofstream scriptFile("gp_script");
     if (!scriptFile) {
         std::cerr << "Error creating GNUplot script.\n";
-        return 1;
+        return EXIT_FAILURE;;
     }
 
     scriptFile << "set terminal qt\n";
@@ -124,4 +125,5 @@ int main()
 
     // Run GNUplot with the script
     system("gnuplot -persistent gp_script");
+    return EXIT_SUCCESS;
 }
