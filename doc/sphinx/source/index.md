@@ -64,8 +64,14 @@ Building Documentation <api/intros/doc_readme_wrapper.md>
 :caption: API Reference
 
 api/cpp/index
-Matlab (stable) <api/matlab/index.md>
-matlab (beta) <api/matlab/index-beta.rst>
+Matlab/ Octave <api/matlab/index.md>
+```
+
+```{toctree}
+:maxdepth: 4
+:caption: MATLAB API (Beta)
+
+Matlab/ Octave (beta) <api/matlab/index-beta.rst>
 ```
 
 ```{toctree}
