@@ -151,8 +151,8 @@ else:
 #------------------------------------------------------------------------------
 # MATLAB domain configuration
 #------------------------------------------------------------------------------
-# Path to MATLAB source files
-matlab_src_dir = str(ROOT_DIR / 'src/matlab')
+# Path to MATLAB source directory for cross-reference functionality
+matlab_src_dir = '/Users/pritchakalasiya/Development/mole/mole/src/matlab'
 
 # Print debug information for MATLAB path
 print("\nDEBUG: MATLAB Configuration:")
