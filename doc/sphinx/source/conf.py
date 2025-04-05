@@ -1,4 +1,4 @@
-################################################################################
+ ################################################################################
 # MOLE Documentation Sphinx Configuration
 ################################################################################
 
@@ -32,6 +32,8 @@ project = 'MOLE'
 copyright = '2023, CSRC SDSU'
 author = 'CSRC SDSU'
 release = '1.0.0'
+master_doc = 'index'
+root_doc = 'index'
 
 #------------------------------------------------------------------------------
 # Extensions configuration
@@ -73,11 +75,25 @@ myst_enable_extensions = [
     "tasklist"         # Task lists
 ]
 
+# Configure HTML image handling
+html_copy_source = True
+html_show_sourcelink = True
+
+# Image and static file configuration
+html_static_path = ['_static']
+html_extra_path = [
+    str(ROOT_DIR / 'README.md'),
+    str(ROOT_DIR / 'doc/doxygen'),
+    str(ROOT_DIR / 'doc/assets'),
+    str(ROOT_DIR / 'doc/sphinx/README.md'),
+    str(ROOT_DIR / 'doc/sphinx/source/api/examples/md/figures')  # Figures for markdown docs
+]
+
 # Additional MyST settings
 myst_heading_anchors = 3                     # Generate anchors for headings
-myst_url_schemes = ("http", "https", "mailto", "ftp", "file")
-myst_all_links_external = False
-myst_ref_domains = None                      # Disable automatic reference domain
+myst_url_schemes = ("http", "https", "mailto", "ftp", "file", "doc")
+myst_all_links_external = True
+myst_ref_domains = None
 
 #------------------------------------------------------------------------------
 # Breathe configuration (Doxygen integration)
@@ -106,12 +122,18 @@ if not os.path.exists(str(ROOT_DIR / "doc/doxygen/cpp/xml/index.xml")):
 has_mmdc = shutil.which('mmdc') is not None
 has_npx = shutil.which('npx') is not None
 
+print("\nDEBUG: Mermaid Configuration:")
+print(f"mmdc available: {has_mmdc}")
+print(f"npx available: {has_npx}")
+
 if has_mmdc:
     mermaid_cmd = 'mmdc'
     mermaid_output_format = 'svg'
+    print(f"Using direct mmdc command: {mermaid_cmd}")
 elif has_npx:
     mermaid_cmd = 'npx mmdc'
     mermaid_output_format = 'svg'
+    print(f"Using npx command: {mermaid_cmd}")
 else:
     # If Mermaid CLI is not available, disable the extension
     extensions.remove('sphinxcontrib.mermaid')
@@ -150,11 +172,6 @@ html_theme_options = {
     "collapse_navigation": False
 }
 
-# Path settings
-html_static_path = ['_static']
-html_extra_path = [str(ROOT_DIR / 'doc' / 'doxygen')]
-html_use_symlinks = True
-
 # Appearance
 html_logo = str(ROOT_DIR / "logo.png")
 html_css_files = [
@@ -171,25 +188,29 @@ suppress_warnings = [
     'epub.unknown_project_files',
     'image.nonlocal_uri',
     'app.add_source_parser',
-    'autosectionlabel.*',
-    'ref.python',
-    'ref.cpp',
-    'ref.c',
-    'toc.excluded'
+    'autosectionlabel.*'
 ]
 
 def setup(app):
     """Setup function for Sphinx extension."""
-    app.connect('build-finished', on_build_finished)
+    app.add_js_file('mathconf.js')
     
-def on_build_finished(app, exc):
-    """Handle build finished event."""
-    # This function is now minimal, we removed all custom LaTeX handling
-    pass
+    # Add capability to replace problematic math environments
+    app.connect('source-read', fix_math_environments)
 
-#------------------------------------------------------------------------------
-# Optional debugging section - uncomment when needed
-#------------------------------------------------------------------------------
+def fix_math_environments(app, docname, source):
+    """Fix problematic math environments in markdown source."""
+    src = source[0]
+    
+    # Replace \tag{} inside \begin{split}...\end{split} environments
+    import re
+    src = re.sub(r'(\\begin{split}.*?)\\tag{(.*?)}(.*?\\end{split})', r'\1\3', src)
+    
+    # Ensure split environments are in align, not equation*
+    src = re.sub(r'\\begin{equation\*}\s*\\begin{split}', r'\\begin{align}', src)
+    src = re.sub(r'\\end{split}\s*\\end{equation\*}', r'\\end{align}', src)
+    
+    source[0] = src
 
 #------------------------------------------------------------------------------
 # LaTeX and PDF output configuration
@@ -197,50 +218,19 @@ def on_build_finished(app, exc):
 # Use pdflatex for standard PDF generation
 latex_engine = 'pdflatex'
 
-# Minimal LaTeX configuration options
+# Configure LaTeX elements
 latex_elements = {
-    # Paper size
-    'papersize': 'letterpaper',
-    
-    # Document class (report provides chapters)
-    'pointsize': '11pt',
-    
-    # Simplified preamble
     'preamble': r'''
-\usepackage{booktabs}  % Better tables
-\usepackage{xcolor}    % Colors
-
-% Fix the headheight warning from fancyhdr
-\setlength{\headheight}{14pt}
-
-% Define missing commands from sphinxVerbatim
-\newcommand{\capstart}{}
-
-% Debug log for LaTeX variables
-\typeout{DEBUG: headheight=\the\headheight}
-\typeout{DEBUG: topmargin=\the\topmargin}
-
-% Fix for Unicode character handling
-\DeclareUnicodeCharacter{FE0F}{}
-
-% Turn off SVG handling since we removed SVG images
-\usepackage{silence}
-\WarningFilter{latex}{Unknown graphics extension}
-''',
+    \usepackage{graphicx}
+    \DeclareGraphicsExtensions{.pdf,.png,.jpg}
     
-    # No empty pages
-    'classoptions': ',oneside',
-    
-    # Hyperref setup
-    'hyperref': r'''
-\usepackage{hyperref}
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    filecolor=blue,
-    urlcolor=blue,
-}
-''',
+    % Set up graphics paths
+    \graphicspath{
+      {_images/}
+      {figures/}
+      {./}
+    }
+    ''',
 }
 
 # Main LaTeX/PDF document configuration
@@ -257,3 +247,11 @@ latex_documents = [
 
 # If false, no module index is generated
 latex_domain_indices = True
+
+# Fix math rendering in MyST markdown
+myst_update_mathjax = True
+myst_dmath_allow_labels = True
+myst_dmath_double_inline = False
+
+# For LaTeX output
+latex_use_xindy = False  # Disable xindy for better compatibility
