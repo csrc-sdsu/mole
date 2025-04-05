@@ -95,14 +95,18 @@ $\Delta = (1) ((5)(9) - (6)(8)) - (2)((4)(9) - (6)(7)) + (3)((4)(8) - (5)(7)).$
 If one uses the gradient to approximate the partial derivatives of the
 Jacobian, then
 
-$$J_G^T = I_{xyz}^{F \to C} {\tilde G}_{\xi \eta \kappa} %[ \text{vec}(\xi) | \text{vec}(\eta) | \text{vec}(\kappa)]$$
+$$
+J_G^T = I_{xyz}^{F \to C} {\tilde G}_{\xi \eta \kappa}
+$$
 
 where ${\tilde G}_{xyz}$ is the same as $G_{xyz}$ with ${\hat I}_p$
 replaced by $I_{p+2}$, the identity matrix of order $p+2$. If one
 computes the Jacobian at the centers then the physical gradient is given
 by
 
-$$G_{xyz} = I_{xyz}^{C \to F} (J_G^T)^{-1} I_{\xi \eta \kappa}^{F \to C} G_{\xi \eta \kappa}.$$
+$$
+G_{xyz} = I_{xyz}^{C \to F} (J_G^T)^{-1} I_{\xi \eta \kappa}^{F \to C} G_{\xi \eta \kappa}.
+$$
 
 Similarly, one can construct the Jacobian based on the divergence operator.
 
