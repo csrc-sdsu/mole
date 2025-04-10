@@ -23,7 +23,7 @@ nc = [0;0];
 v = [0;0];
 A = - lapGral1D(k,m,dx,dc,nc);
 b = 4*pi^2 * sin(2*pi*xc);
-[A0,b0] = addGralBC1D(A,b,k,m,dx,dc,nc,v);
+[A0,b0] = addScalarBC1D(A,b,k,m,dx,dc,nc,v);
 ua = A0\b0; % approximate solution (there are infinity solutions) 
 ua = ua - ua(1) + ue(1); % shifting ua to match ue(1) with ua(1)
 

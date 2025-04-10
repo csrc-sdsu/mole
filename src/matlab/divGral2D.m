@@ -1,19 +1,3 @@
-% SPDX-License-Identifier: GPL-3.0-only
-% 
-% Copyright 2008-2024 San Diego State University Research Foundation (SDSURF).
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, version 3.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% LICENSE file or on the web GNU General Public License 
-% <https://www.gnu.org/licenses/> for more details.
-%
-% ------------------------------------------------------------------------
-
 function D = divGral2D(k, m, dx, n, dy, dc, nc)
 % Returns a two-dimensional mimetic divergence operator depending on whether
 % or not the operator will contain a periodic boundary condition type
@@ -27,6 +11,13 @@ function D = divGral2D(k, m, dx, n, dy, dc, nc)
 %               dy : Step size along y-axis
 %               dc : a0 (2x1 vector for left and right vertices, resp.)
 %               nc : b0 (2x1 vector for left and right vertices, resp.)
+%
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
+%
 
     % verify bc-type sizes
     assert(all(size(dc) == [4 1]), 'dc is a 4x1 vector');
@@ -35,7 +26,7 @@ function D = divGral2D(k, m, dx, n, dy, dc, nc)
     % D depends on whether bc is periodic or not in each axis
     qrl = find(dc(1:2).*dc(1:2) + nc(1:2).*nc(1:2),1);
     if isempty(qrl)
-        Dx = divPer(k, m, dx);
+        Dx = divPeriodic(k, m, dx);
         Im = speye(m, m);
     else
         Dx = div(k, m, dx);
@@ -45,7 +36,7 @@ function D = divGral2D(k, m, dx, n, dy, dc, nc)
 
     qbt = find(dc(3:4).*dc(3:4) + nc(3:4).*nc(3:4),1);
     if isempty(qbt)
-        Dy = divPer(k, n, dy);
+        Dy = divPeriodic(k, n, dy);
         In = speye(n, n);
     else
         Dy = div(k, n, dy);

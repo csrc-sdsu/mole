@@ -1,19 +1,3 @@
-% SPDX-License-Identifier: GPL-3.0-only
-% 
-% Copyright 2008-2024 San Diego State University Research Foundation (SDSURF).
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, version 3.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% LICENSE file or on the web GNU General Public License 
-% <https://www.gnu.org/licenses/> for more details.
-%
-% ------------------------------------------------------------------------
-
 function D = divGral1D(k, m, dx, dc, nc)
 % Returns a one-dimensional mimetic divergence operator depending on whether
 % or not the operator will contain a periodic boundary condition type
@@ -25,6 +9,13 @@ function D = divGral1D(k, m, dx, dc, nc)
 %               dx : Step size
 %               dc : a0 (2x1 vector for left and right vertices, resp.)
 %               nc : b0 (2x1 vector for left and right vertices, resp.)
+%
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
+%
 
     % Assertions:
     assert(k >= 2, 'k >= 2');
@@ -35,7 +26,7 @@ function D = divGral1D(k, m, dx, dc, nc)
     q = find(dc.*dc + nc.*nc,1);
 
     if isempty(q)
-        D = divPer(k, m, dx);
+        D = divPeriodic(k, m, dx);
     else
         D = div(k, m, dx);
     end

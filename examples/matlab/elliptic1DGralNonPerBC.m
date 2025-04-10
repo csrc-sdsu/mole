@@ -22,7 +22,7 @@ nc = [0;0];
 v = [0;0];
 A = - lapGral1D(k,m,dx,dc,nc);
 b = ones(size(A,2),1);
-[A0,b0] = addGralBC1D(A,b,k,m,dx,dc,nc,v);
+[A0,b0] = addScalarBC1D(A,b,k,m,dx,dc,nc,v);
 ua = A0\b0; % approximate solution
 
 % plot

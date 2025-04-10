@@ -1,4 +1,4 @@
-function [Abcl,Abcr,Abcb,Abct] = addGralBC2Dlhs(k, m, dx, n, dy, dc, nc)
+function [Abcl,Abcr,Abcb,Abct] = addScalarBC2Dlhs(k, m, dx, n, dy, dc, nc)
 % This functions uses geometry and boundary type conditions to create
 % modifications of matrix A associated to each of the boundary edges.
 %
@@ -17,6 +17,13 @@ function [Abcl,Abcr,Abcb,Abct] = addGralBC2Dlhs(k, m, dx, n, dy, dc, nc)
 %        dy : Horizontal cell size
 %        dc : a0 (4x1 vector for left, right, bottom, top boundaries, resp.)
 %        nc : b0 (4x1 vector for left, right, bottom, top boundaries resp.)
+%
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
+%
 
     Abcl = 0; Abcr = 0; Abcb = 0; Abct = 0; % periodic case
 
@@ -26,7 +33,7 @@ function [Abcl,Abcr,Abcb,Abct] = addGralBC2Dlhs(k, m, dx, n, dy, dc, nc)
 
     % 2D boundary operator
     if ~isempty(qrl)    
-        [Abcl0,Abcr0] = addGralBC1Dlhs(k, m, dx, dc(1:2,1), nc(1:2,1));
+        [Abcl0,Abcr0] = addScalarBC1Dlhs(k, m, dx, dc(1:2,1), nc(1:2,1));
         if isempty(qbt)
             In = speye(n);
         else
@@ -40,7 +47,7 @@ function [Abcl,Abcr,Abcb,Abct] = addGralBC2Dlhs(k, m, dx, n, dy, dc, nc)
     end
 
     if ~isempty(qbt)    
-        [Abcb0,Abct0] = addGralBC1Dlhs(k, n, dy, dc(3:4,1), nc(3:4,1));
+        [Abcb0,Abct0] = addScalarBC1Dlhs(k, n, dy, dc(3:4,1), nc(3:4,1));
         if isempty(qrl) 
             Im = speye(m);
         else

@@ -3,7 +3,7 @@
 % -(u_xx + u_yy) = 2 sin(2 pi x) (1+2 pi^2 y(1-y)), 0 < x,y < 1, u(x,0) = 0 = u(x,1)
 % exact solution: u(x) = y(1-y)sin(2 pi x)
 % ===================================================
-% example that uses addGralBC2D
+% example that uses addScalarBC2D
 %
 close all; clc;
 
@@ -31,7 +31,7 @@ ue = Y.*(1-Y).*sin(2*pi*X); % exact solution
 A = - lapGral2D(k,m,dx,n,dy,dc,nc);
 b = 2*sin(2*pi*X).*(1+2*pi^2*Y.*(1-Y));
 b = reshape(b,[],1);
-[A0, b0] = addGralBC2D(A, b, k, m, dx, n, dy, dc, nc, v);
+[A0, b0] = addScalarBC2D(A, b, k, m, dx, n, dy, dc, nc, v);
 ua = A0\b0; % approximate solution (there are infinity solutions) 
 ua = reshape(ua,m,n+2);
 

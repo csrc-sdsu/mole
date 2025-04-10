@@ -39,7 +39,7 @@ v = {bcl;bcr;bcb;bct;bcf;bcz};
 A = - lapGral3D(k,m,dx,n,dy,o,dz,dc,nc);
 b = 2*sin(2*pi*Y).*Z.*(1+2*pi^2*X.*(1-X));
 b = reshape(b,[],1);
-[A0,b0] = addGralBC3D(A,b,k,m,dx,n,dy,o,dz,dc,nc,v);
+[A0,b0] = addScalarBC3D(A,b,k,m,dx,n,dy,o,dz,dc,nc,v);
 ua = A0\b0; % approximate solution
 ua = reshape(ua,m+2,n,o+2);
 

@@ -1,19 +1,3 @@
-% SPDX-License-Identifier: GPL-3.0-only
-% 
-% Copyright 2008-2024 San Diego State University Research Foundation (SDSURF).
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, version 3.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% LICENSE file or on the web GNU General Public License 
-% <https://www.gnu.org/licenses/> for more details.
-%
-% ------------------------------------------------------------------------
-
 function G = gradGral3D(k, m, dx, n, dy, o, dz, dc, nc)
 % Returns a three-dimensional mimetic gradient operator depending on whether
 % or not the operator will contain a periodic boundary condition type
@@ -29,6 +13,13 @@ function G = gradGral3D(k, m, dx, n, dy, o, dz, dc, nc)
 %               dz : Step size along z-axis
 %               dc : a0 (6x1 vector for left, right, bottom, top, front, back boundary types, resp.)
 %               nc : b0 (6x1 vector for left, right, bottom, top, front, back boundary types, resp.)
+%
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
+%
 
     % verify bc-type sizes
     assert(all(size(dc) == [6 1]), 'dc is a 6x1 vector');
@@ -37,7 +28,7 @@ function G = gradGral3D(k, m, dx, n, dy, o, dz, dc, nc)
     % G depends on whether bc is periodic or not in each axis
     qrl = find(dc(1:2).*dc(1:2) + nc(1:2).*nc(1:2),1);
     if isempty(qrl)
-        Gx = gradPer(k, m, dx);
+        Gx = gradPeriodic(k, m, dx);
         Im = speye(m, m);
     else
         Gx = grad(k, m, dx);
@@ -47,7 +38,7 @@ function G = gradGral3D(k, m, dx, n, dy, o, dz, dc, nc)
 
     qbt = find(dc(3:4).*dc(3:4) + nc(3:4).*nc(3:4),1);
     if isempty(qbt)
-        Gy = gradPer(k, n, dy);
+        Gy = gradPeriodic(k, n, dy);
         In = speye(n, n);
     else
         Gy = grad(k, n, dy);
@@ -57,7 +48,7 @@ function G = gradGral3D(k, m, dx, n, dy, o, dz, dc, nc)
 
     qzf = find(dc(5:6).*dc(5:6) + nc(5:6).*nc(5:6),1);
     if isempty(qzf)
-        Gz = gradPer(k, o, dz);
+        Gz = gradPeriodic(k, o, dz);
         Io = speye(o, o);
     else
         Gz = grad(k, o, dz);

@@ -1,14 +1,10 @@
-function L = lapGral1D(k, m, dx, dc, nc)
-% Returns a one-dimensional mimetic Laplacian operator depending on whether
-% or not the operator will contain a periodic boundary condition type
-%                              a0 U + b0 dU/dn = g,
+function L = lapPeriodic(k, m, dx)
+% Returns a m by m one-dimensional mimetic laplacian operator
 %
 % Parameters:
 %                k : Order of accuracy
 %                m : Number of cells
 %               dx : Step size
-%               dc : a0 (2x1 vector for left and right vertices, resp.)
-%               nc : b0 (2x1 vector for left and right vertices, resp.)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
@@ -17,8 +13,8 @@ function L = lapGral1D(k, m, dx, dc, nc)
 % ----------------------------------------------------------------------------
 %
 
-    D = divGral1D(k, m, dx, dc, nc);
-    G = gradGral1D(k, m, dx, dc, nc);
+    D = divPeriodic(k, m, dx);
+    G = gradPeriodic(k, m, dx);
     
     L = D*G;
 end

@@ -1,4 +1,4 @@
-function [A, b] = addGralBC2D(A, b, k, m, dx, n, dy, dc, nc, v)
+function [A, b] = addScalarBC2D(A, b, k, m, dx, n, dy, dc, nc, v)
 % This function assumes that the unknown u, which represents the discrete
 % solution the continuous second-order 2D PDE operator 
 %                                   L U = f, 
@@ -61,6 +61,13 @@ function [A, b] = addGralBC2D(A, b, k, m, dx, n, dy, dc, nc, v)
 %        dc : a0 (4x1 vector for left, right, bottom, top boundaries, resp.)
 %        nc : b0 (4x1 vector for left, right, bottom, top boundaries, resp.)
 %         v : g (4x1 vector of arrays for left, right, bottom, top boundaries, resp.)
+%
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
+%
 
     % verify bc sizes and square linear system
     cellsz = cellfun(@size,v,'uni',false);
@@ -93,7 +100,7 @@ function [A, b] = addGralBC2D(A, b, k, m, dx, n, dy, dc, nc, v)
     rl = 0; rr = 0; rb = 0; rt = 0; % periodic case
 
     % get modifications of A for left, right, bottom, top edges, resp.
-    [Abcl,Abcr,Abcb,Abct] = addGralBC2Dlhs(k, m, dx, n, dy, dc, nc);
+    [Abcl,Abcr,Abcb,Abct] = addScalarBC2Dlhs(k, m, dx, n, dy, dc, nc);
 
     % get rhs entries affected by bcs for left, right, bottom, top edges, resp.
     if ~isempty(qrl)    
@@ -126,6 +133,6 @@ function [A, b] = addGralBC2D(A, b, k, m, dx, n, dy, dc, nc, v)
 
     % update b with boundary information
     if ~(isempty(qrl) && isempty(qbt))  
-        b = addGralBC2Drhs(b, dc, nc, v, rl, rr, rb, rt);
+        b = addScalarBC2Drhs(b, dc, nc, v, rl, rr, rb, rt);
     end
 end

@@ -1,4 +1,4 @@
-function [A, b] = addGralBC3D(A, b, k, m, dx, n, dy, o, dz, dc, nc, v)
+function [A, b] = addScalarBC3D(A, b, k, m, dx, n, dy, o, dz, dc, nc, v)
 % This function assumes that the unknown u, which represents the discrete
 % solution the continuous second-order 3D PDE operator 
 %                                   L U = f, 
@@ -68,6 +68,13 @@ function [A, b] = addGralBC3D(A, b, k, m, dx, n, dy, o, dz, dc, nc, v)
 %        dc : a0 (6x1 vector for left, right, bottom, top, front, back boundary types, resp.)
 %        nc : b0 (6x1 vector for left, right, bottom, top, front, back boundary types, resp.)
 %         v : g (6x1 vector of arrays for left, right, bottom, top, front, back boundaries, resp.)
+%
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------    
+%
 
     % verify bc sizes and square linear system
     cellsz = cellfun(@size,v,'uni',false);
@@ -120,7 +127,7 @@ function [A, b] = addGralBC3D(A, b, k, m, dx, n, dy, o, dz, dc, nc, v)
     rl = 0; rr = 0; rb = 0; rt = 0; rf = 0; rz = 0; % periodic case
 
     % get modifications of A for left, right, bottom, top, front, back faces, resp.
-    [Abcl,Abcr,Abcb,Abct,Abcf,Abcz] = addGralBC3Dlhs(k, m, dx, n, dy, o, dz, dc, nc);
+    [Abcl,Abcr,Abcb,Abct,Abcf,Abcz] = addScalarBC3Dlhs(k, m, dx, n, dy, o, dz, dc, nc);
 
     % get rhs entries affected by bcs for left, right, bottom, top, front, back faces, resp.
     if ~isempty(qrl)    
@@ -173,6 +180,6 @@ function [A, b] = addGralBC3D(A, b, k, m, dx, n, dy, o, dz, dc, nc, v)
 
     % update b with boundary information
     if ~(isempty(qrl) && isempty(qbt) && isempty(qzf))  
-        b = addGralBC3Drhs(b, dc, nc, v, rl, rr, rb, rt, rf, rz);
+        b = addScalarBC3Drhs(b, dc, nc, v, rl, rr, rb, rt, rf, rz);
     end
 end

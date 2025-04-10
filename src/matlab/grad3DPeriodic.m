@@ -1,7 +1,6 @@
-function L = lapGral2D(k, m, dx, n, dy, dc, nc)
-% Returns a two-dimensional mimetic Laplacian operator depending on whether
-% or not the operator will contain a periodic boundary condition type
-%                              a0 U + b0 dU/dn = g,
+function G = grad3DPeriodic(k, m, dx, n, dy, o, dz)
+% Returns a three-dimensional mimetic gradient operator
+% when the boundary condition is periodic
 %
 % Parameters:
 %                k : Order of accuracy
@@ -9,8 +8,8 @@ function L = lapGral2D(k, m, dx, n, dy, dc, nc)
 %               dx : Step size along x-axis
 %                n : Number of cells along y-axis
 %               dy : Step size along y-axis
-%               dc : a0 (4x1 vector for left, right, bottom, top boundaries, resp.)
-%               nc : b0 (4x1 vector for left, right, bottom, top boundaries, resp.)
+%                o : Number of cells along z-axis
+%               dz : Step size along z-axis
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
@@ -19,8 +18,17 @@ function L = lapGral2D(k, m, dx, n, dy, dc, nc)
 % ----------------------------------------------------------------------------
 %
 
-    D = divGral2D(k, m, dx, n, dy, dc, nc);
-    G = gradGral2D(k, m, dx, n, dy, dc, nc);
+    Im = speye(m, m);
+    In = speye(n, n);
+    Io = speye(o, o);
     
-    L = D*G;
+    Gx = gradPer(k, m, dx);   
+    Gy = gradPer(k, n, dy);
+    Gz = gradPer(k, o, dz);
+    
+    Sx = kron(kron(Io, In), Gx);
+    Sy = kron(kron(Io, Gy), Im);
+    Sz = kron(kron(Gz, In), Im);
+    
+    G = [Sx; Sy; Sz];
 end
