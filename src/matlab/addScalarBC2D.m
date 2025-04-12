@@ -106,6 +106,8 @@ function [A, b] = addScalarBC2D(A, b, k, m, dx, n, dy, dc, nc, v)
     if ~isempty(qrl)    
         [rl,~,~] = find(Abcl);
         [rr,~,~] = find(Abcr);
+        rl = unique(rl);
+        rr = unique(rr);
         % remove rows of A associated to boundary
         Abc1 = Abcl + Abcr;
         [rowsbc1,~,~] = find(Abc1);
@@ -120,6 +122,8 @@ function [A, b] = addScalarBC2D(A, b, k, m, dx, n, dy, dc, nc, v)
     if ~isempty(qbt)
         [rb,~,~] = find(Abcb);
         [rt,~,~] = find(Abct);
+        rb = unique(rb);
+        rt = unique(rt);
         % remove rows of A associated to boundary
         Abc2 = Abct + Abcb;
         [rowsbc2,~,~] = find(Abc2);

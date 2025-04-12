@@ -16,8 +16,8 @@ function G = grad2DPeriodic(k, m, dx, n, dy)
 % ----------------------------------------------------------------------------
 %
 
-    Gx = gradPer(k, m, dx);
-    Gy = gradPer(k, n, dy);
+    Gx = gradPeriodic(k, m, dx);
+    Gy = gradPeriodic(k, n, dy);
     
     Im = speye(m, m);
     In = speye(n, n);

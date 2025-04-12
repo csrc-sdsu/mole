@@ -82,10 +82,15 @@ function [A, b] = addBC2D(A, b, k, m, dx, n, dy, dc, nc, v)
     [rr,~,~] = find(Abcr);
     [rb,~,~] = find(Abcb);
     [rt,~,~] = find(Abct);
+    rl = unique(rl);
+    rr = unique(rr);
+    rb = unique(rb);
+    rt = unique(rt);
 
     % remove rows of A associated to boundary
     Abc = Abcl + Abcr + Abct + Abcb;
     [rowsbc,~,~] = find(Abc);
+    rowsbc = unique(rowsbc);
     [rows,cols,s] = find(A(rowsbc,:));
     A = A - sparse(rows, cols, s, size(A,1), size(A,2));
     % update matrix A with boundary information

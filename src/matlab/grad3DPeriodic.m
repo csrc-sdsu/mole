@@ -22,9 +22,9 @@ function G = grad3DPeriodic(k, m, dx, n, dy, o, dz)
     In = speye(n, n);
     Io = speye(o, o);
     
-    Gx = gradPer(k, m, dx);   
-    Gy = gradPer(k, n, dy);
-    Gz = gradPer(k, o, dz);
+    Gx = gradPeriodic(k, m, dx);   
+    Gy = gradPeriodic(k, n, dy);
+    Gz = gradPeriodic(k, o, dz);
     
     Sx = kron(kron(Io, In), Gx);
     Sy = kron(kron(Io, Gy), Im);
