@@ -60,7 +60,19 @@ Before building the documentation, ensure you have:
    sudo dnf install inkscape
    ```
 
-4. **Python dependencies**:
+5. **LaTeX** (required for PDF generation):
+   ```bash
+   # Ubuntu/Debian
+   sudo apt install texlive-latex-base texlive-fonts-recommended texlive-latex-extra
+
+   # RHEL/CentOS/Fedora
+   sudo dnf install texlive-scheme-medium
+
+   # macOS
+   brew install --cask mactex
+   ```
+
+5. **Python dependencies**:
    First, ensure Python 3 and pip are installed:
    ```bash
    # Ubuntu/Debian
@@ -86,18 +98,6 @@ Before building the documentation, ensure you have:
    make doc-deps
    # Or install directly:
    python3 -m pip install -r requirements.txt
-   ```
-
-5. **LaTeX** (required for PDF generation):
-   ```bash
-   # Ubuntu/Debian
-   sudo apt install texlive-latex-base texlive-fonts-recommended texlive-latex-extra
-   
-   # RHEL/CentOS/Fedora
-   sudo dnf install texlive-scheme-medium
-   
-   # macOS
-   brew install --cask mactex
    ```
 
 ### Building Steps
