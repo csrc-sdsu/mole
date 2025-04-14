@@ -11,10 +11,12 @@ LATEX_DIR="$BUILD_DIR/latex"
 PDF_DIR="$LATEX_DIR/PDF"
 SVG_DIR="$SOURCE_DIR/api/examples/md/figures"
 
-# Clean build directory
-echo "Cleaning build directory..."
-rm -rf "$BUILD_DIR"
-mkdir -p "$BUILD_DIR"
+# Clean latex directory but preserve html
+echo "Cleaning LaTeX build directory but preserving HTML..."
+if [ -d "$LATEX_DIR" ]; then
+  rm -rf "$LATEX_DIR"
+fi
+mkdir -p "$LATEX_DIR"
 
 # Run Sphinx to generate LaTeX
 echo "Running Sphinx to generate LaTeX..."

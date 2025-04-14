@@ -100,11 +100,13 @@ depcheck-inkscape:
 
 # Generate all documentation
 doc-all: doc-clean doc-doxygen doc-deps doc-html doc-latexpdf
+	@echo "================================================================"
 	@echo "Documentation generated in:"
 	@echo "  HTML: $(HTMLDIR)/index.html"
+	@echo "  Open with a browser:  file://$(CURDIR)/$(HTMLDIR)/index.html"
 	@echo "  PDF:  $(PDFDIR)/MOLE-docs.pdf"
-	@echo "  API:  $(DOXYDIR)/"
-
+	@echo "  API:  ../doxygen/cpp/"
+	@echo "================================================================"
 # Explicit Sphinx targets
 $(SPHINX_TARGETS):
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS)
