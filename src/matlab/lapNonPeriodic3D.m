@@ -1,7 +1,5 @@
-function L = lapGral3D(k, m, dx, n, dy, o, dz, dc, nc)
-% Returns a three-dimensional mimetic Laplacian operator depending on whether
-% or not the operator will contain a periodic boundary condition type
-%                              a0 U + b0 dU/dn = g,
+function L = lapNonPeriodic3D(k, m, dx, n, dy, o, dz)
+% Returns a three-dimensional mimetic laplacian operator
 %
 % Parameters:
 %                k : Order of accuracy
@@ -19,8 +17,8 @@ function L = lapGral3D(k, m, dx, n, dy, o, dz, dc, nc)
 % ----------------------------------------------------------------------------
 %
 
-    D = divGral3D(k, m, dx, n, dy, o, dz, dc, nc);
-    G = gradGral3D(k, m, dx, n, dy, o, dz, dc, nc);
+    D = divNonPeriodic3D(k, m, dx, n, dy, o, dz);
+    G = gradNonPeriodic3D(k, m, dx, n, dy, o, dz);
     
     L = D*G;
 end

@@ -51,10 +51,8 @@ ua(:,2) = ue(:,2); % from exact solution instead of using initial velocity
 % time loop
 for idx = 3:ft/dt + 1
     b = 2*ua(:,idx-1) - A*ua(:,idx-2);
-    [A0,b0] = addBC1D(A,b,k,m,dx,dc,nc,v);
+    [A0,b0] = addScalarBC1D(A,b,k,m,dx,dc,nc,v);
     ua(:,idx) = A0\b0; % approximate solution
-    % ua0 = ua(:,idx)'
-    % ue0 = ue(:,idx)'
 end
 
 figure(bvp)

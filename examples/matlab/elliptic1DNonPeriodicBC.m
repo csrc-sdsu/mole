@@ -3,7 +3,7 @@
 % - u'' = 1, 0 < x < 1, u(0) = 0, u(1) = 0
 % exact solution: u(x) = x(1-x)/2
 % ===================================================
-% example that uses lapGral1D
+% example that uses addScalarBC1D with non-periodic boundary conditions
 %
 close all; clc;
 
@@ -20,7 +20,7 @@ ue = 0.5*xc.*(1-xc); % exact solution
 dc = [1;1];
 nc = [0;0];
 v = [0;0];
-A = - lapGral1D(k,m,dx,dc,nc);
+A = - lap(k,m,dx,dc,nc);
 b = ones(size(A,2),1);
 [A0,b0] = addScalarBC1D(A,b,k,m,dx,dc,nc,v);
 ua = A0\b0; % approximate solution

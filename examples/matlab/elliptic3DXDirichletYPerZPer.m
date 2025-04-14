@@ -5,7 +5,7 @@
 % BC: u(-1,y,z) = 0, u(1,x,y) = 0, u(x,0,z) = u(x,2 pi,z), u_y(x,0,z) = u_y(x,2 pi,z), u(x,y,0) = u(x,y,2 pi), u_z(x,y,0) = u_z(x,y,2 pi)
 % exact solution: (cos(4x)+sin(2y)+sin(4z))*(1-x^2)
 % ===================================================
-% example that uses addGral3D
+% example that uses addScalarGral3D
 %
 close all; clc;
 
@@ -35,7 +35,7 @@ bct = 0; % zeros((m+2)*o,1);
 bcf = 0; % zeros((n+2)*(m+2),1);
 bcz = 0; % zeros((n+2)*(m+2),1);
 v = {bcl;bcr;bcb;bct;bcf;bcz};
-A = - lapGral3D(k,m,dx,n,dy,o,dz,dc,nc);
+A = - lap3D(k,m,dx,n,dy,o,dz,dc,nc);
 b = 16*(1-X.^2).*cos(4*X) - 16*X.*sin(4*X) + 2*(cos(4*X)+sin(2*Y)+sin(4*Z)) + (1-X.^2).*(4*sin(2*Y) + 16*sin(4*Z));
 b = reshape(b,[],1);
 [A0,b0] = addScalarBC3D(A,b,k,m,dx,n,dy,o,dz,dc,nc,v);

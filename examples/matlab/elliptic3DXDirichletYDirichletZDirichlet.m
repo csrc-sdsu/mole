@@ -4,7 +4,7 @@
 % BC: u(-1,y,z) = -1+y^3+z^3, u(1,y,z) = 1+y^3+z^3, u(x,-1,z) = -1+x^3+z^3, u(x,1,z) = 1+x^3+z^3, u(x,y,-1) = -1+x^3+y^3, u(x,y,1) = 1+x^3+y^3, 
 % exact solution: u(x,y,z) = x^3 + y^3 + z^3
 % ===================================================
-% example that uses addBC3D
+% example that uses addScalarBC3D
 %
 close all; clc;
 
@@ -43,13 +43,12 @@ bcf = reshape(bcf,[],1);
 bcz = reshape(bcz,[],1);
 v = {bcl;bcr;bcb;bct;bcf;bcz};
 % construct linear system
-A = - lap3D(k,m,dx,n,dy,o,dz);
+A = - lap3D(k,m,dx,n,dy,o,dz,dc,nc);
 b = - 6*(X+Y+Z);
 b = reshape(b,[],1);
-[A0,b0] = addBC3D(A,b,k,m,dx,n,dy,o,dz,dc,nc,v);
+[A0,b0] = addScalarBC3D(A,b,k,m,dx,n,dy,o,dz,dc,nc,v);
 ua = A0\b0; % approximate solution
 ua = reshape(ua,m+2,n+2,o+2);
-ua = ua - ua((m+1)/2,(n+3)/2,(o+3)/2);
 
 % plot slices as surfaces
 figure(bvp)

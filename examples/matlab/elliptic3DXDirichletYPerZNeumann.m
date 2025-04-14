@@ -4,7 +4,7 @@
 % BC: u(-1,y,z) = 0, u(1,x,y) = 0, periodic along Y-axis, u_z(x,y,0) = -x(1-x)sin(2 pi y), u_z(x,y,0) = x(1-x)sin(2 pi y)
 % exact solution: x(1-x)sin(2 pi y)z
 % ===================================================
-% example that uses addGral3D
+% example that uses addScalarGral3D
 %
 close all; clc;
 
@@ -36,7 +36,7 @@ bcz = zeros(n*(m+2),1);
 % bcf = zeros((n+2)*(m+2),1);
 % bcz = zeros((n+2)*(m+2),1);
 v = {bcl;bcr;bcb;bct;bcf;bcz};
-A = - lapGral3D(k,m,dx,n,dy,o,dz,dc,nc);
+A = - lap3D(k,m,dx,n,dy,o,dz,dc,nc);
 b = 2*sin(2*pi*Y).*Z.*(1+2*pi^2*X.*(1-X));
 b = reshape(b,[],1);
 [A0,b0] = addScalarBC3D(A,b,k,m,dx,n,dy,o,dz,dc,nc,v);

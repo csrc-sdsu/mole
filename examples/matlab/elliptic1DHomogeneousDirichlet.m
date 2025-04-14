@@ -3,7 +3,7 @@
 % - u'' = 1, 0 < x < 1, u(0) = 0, u(1) = 0
 % exact solution: u(x) = x(1-x)/2
 % ===================================================
-% example that uses addBC1D
+% example that uses addScalarBC1D
 %
 close all; clc;
 
@@ -22,7 +22,7 @@ nc = [0;0];
 v = [0;0];
 A = - lap(k,m,dx);
 b = ones(size(A,2),1);
-[A0,b0] = addBC1D(A,b,k,m,dx,dc,nc,v);
+[A0,b0] = addScalarBC1D(A,b,k,m,dx,dc,nc,v);
 ua = A0\b0; % approximate solution
 
 % plot

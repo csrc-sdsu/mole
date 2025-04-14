@@ -89,7 +89,7 @@ function [Abcl,Abcr,Abcb,Abct,Abcf,Abcz] = addScalarBC3Dlhs(k, m, dx, n, dy, o, 
         else
             In = speye(n+2);
         end
-        % left and right faces
+        % front and back faces
         Abcf = kron(kron(Abcf0, In), Im);
         Abcz = kron(kron(Abcz0, In), Im);
     end

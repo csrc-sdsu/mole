@@ -163,8 +163,8 @@ function [A, b] = addScalarBC3D(A, b, k, m, dx, n, dy, o, dz, dc, nc, v)
     end
 
     if ~isempty(qzf)    
-        [rf,~,~] = find(Abcz);
-        [rz,~,~] = find(Abcf);
+        [rz,~,~] = find(Abcz);
+        [rf,~,~] = find(Abcf);
         rf = unique(rf);
         rz = unique(rz);
         % remove rows of A associated to boundary

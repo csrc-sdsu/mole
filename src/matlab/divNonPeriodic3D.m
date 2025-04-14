@@ -1,6 +1,5 @@
-function G = grad3DPeriodic(k, m, dx, n, dy, o, dz)
-% Returns a three-dimensional mimetic gradient operator
-% when the boundary condition is periodic
+function D = divNonPeriodic3D(k, m, dx, n, dy, o, dz)
+% Returns a three-dimensional mimetic divergence operator
 %
 % Parameters:
 %                k : Order of accuracy
@@ -18,17 +17,24 @@ function G = grad3DPeriodic(k, m, dx, n, dy, o, dz)
 % ----------------------------------------------------------------------------
 %
 
-    Im = speye(m, m);
-    In = speye(n, n);
-    Io = speye(o, o);
+    Im = sparse(m + 2, m);
+    Im(2:(m + 2) - 1, :) = speye(m, m);
     
-    Gx = gradPeriodic(k, m, dx);   
-    Gy = gradPeriodic(k, n, dy);
-    Gz = gradPeriodic(k, o, dz);
+    Dx = divNonPeriodic(k, m, dx);
     
-    Sx = kron(kron(Io, In), Gx);
-    Sy = kron(kron(Io, Gy), Im);
-    Sz = kron(kron(Gz, In), Im);
+    In = sparse(n + 2, n);
+    In(2:(n + 2) - 1, :) = speye(n, n);
     
-    G = [Sx; Sy; Sz];
+    Dy = divNonPeriodic(k, n, dy);
+    
+    Io = sparse(o + 2, o);
+    Io(2:(o + 2) - 1, :) = speye(o, o);
+    
+    Dz = divNonPeriodic(k, o, dz);
+    
+    Sx = kron(kron(Io, In), Dx);
+    Sy = kron(kron(Io, Dy), Im);
+    Sz = kron(kron(Dz, In), Im);
+    
+    D = [Sx Sy Sz];
 end

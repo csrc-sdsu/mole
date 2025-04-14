@@ -2,11 +2,10 @@
 % 3D Poisson BVP: Robin (on left and right faces), Periodic, Periodic BC
 % -(u_xx + u_yy + u_zz) = - f(x,y,z), -1 < x < 1, 0 < y,z < 2 pi
 % - f(x,y,z) = 16(1-x^2)cos(4x) - 16x sin(4x) + 2(cos(4x)+sin(2y)+sin(4z)) + (1-x^2)(4 sin(2y) + 16 sin(4z))
-% % f(x,y,z) = 16(1-x^2)cos(4x) - 16x sin(4x) + 2 cos(4x) + (1-x^2)(4 sin(2y) + 16 sin(4z))
 % BC: u(-1,y,z) = 0, u(1,x,y) = 0, u(x,0,z) = u(x,2 pi,z), u_y(x,0,z) = u_y(x,2 pi,z), u(x,y,0) = u(x,y,2 pi), u_z(x,y,0) = u_z(x,y,2 pi)
 % exact solution: (cos(4x)+sin(2y)+sin(4z))*(1-x^2)
 % ===================================================
-% example that uses addBC3D
+% example that uses addScalarBC3D
 %
 close all; clc;
 
@@ -22,8 +21,10 @@ dy = 2*pi/n;
 dz = 2*pi/o;
 % centers and vertices
 xc = [-1 -1+dx/2:dx:1-dx/2 1]';
-yc = [0 dy/2:dy:2*pi-dy/2 2*pi]';
-zc = [0 dz/2:dz:2*pi-dz/2 2*pi]';
+yc = (dy/2:dy:2*pi-dy/2)';
+zc = (dz/2:dz:2*pi-dz/2)';
+% yc = [0 dy/2:dy:2*pi-dy/2 2*pi]';
+% zc = [0 dz/2:dz:2*pi-dz/2 2*pi]';
 [Y,X,Z] = meshgrid(yc,xc,zc);
 t = 'u_xx + u_yy + u_zz = f(x,y,z), -1 < x < 1, 0 < y,z < 2 pi, u(-1,y,z) = 0, u(1,y,z) = 0, periodic BC on y,z, with exact solution u(x,y,z) = (cos(4x)+sin(2y)+sin(4z))*(1-x^2)';
 ue = (cos(4*X)+sin(2*Y)+sin(4*Z)).*(1-X.^2);
@@ -33,21 +34,20 @@ bcl = -2*(cos(4)+sin(2*Y)+sin(4*Z));
 bcr = -2*(cos(4)+sin(2*Y)+sin(4*Z));
 bcl = squeeze(bcl(1,:,:)); % left bc (y increase along rows, z increase along cols)
 bcr = squeeze(bcr(end,:,:)); % right bc (y increase along rows, z increase along cols)
-bcl = reshape(bcl(2:end-1,2:end-1),[],1);
-bcr = reshape(bcr(2:end-1,2:end-1),[],1);
-bcb = zeros((m+2)*o,1);
-bct = zeros((m+2)*o,1);
-bcf = zeros((n+2)*(m+2),1);
-bcz = zeros((n+2)*(m+2),1);
+bcl = reshape(bcl,[],1);
+bcr = reshape(bcr,[],1);
+% bcl = reshape(bcl(2:end-1,2:end-1),[],1);
+% bcr = reshape(bcr(2:end-1,2:end-1),[],1);
+bcb = 0; bct = 0; bcf = 0; bcz = 0;
 v = {bcl;bcr;bcb;bct;bcf;bcz};
-A = - lap3D(k,m,dx,n,dy,o,dz);
+A = - lap3D(k,m,dx,n,dy,o,dz,dc,nc);
 b = 16*(1-X.^2).*cos(4*X) - 16*X.*sin(4*X) + 2*(cos(4*X)+sin(2*Y)+sin(4*Z)) + (1-X.^2).*(4*sin(2*Y) + 16*sin(4*Z));
 b = reshape(b,[],1);
-[A0,b0] = addBC3D(A,b,k,m,dx,n,dy,o,dz,dc,nc,v);
+[A0,b0] = addScalarBC3D(A,b,k,m,dx,n,dy,o,dz,dc,nc,v);
 ua = A0\b0; % approximate solution
-ua = reshape(ua,m+2,n+2,o+2);
+ua = reshape(ua,m+2,n,o);
+% ua = reshape(ua,m+2,n+2,o+2);
 ua = ua - ua(1) + ue(1);
-% ua = ua - ua((m+1)/2,(n+3)/2,(o+3)/2);
 
 
 % plot slices as surfaces

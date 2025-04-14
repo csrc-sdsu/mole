@@ -1,6 +1,5 @@
-function G = grad2DPeriodic(k, m, dx, n, dy)
+function G = gradNonPeriodic2D(k, m, dx, n, dy)
 % Returns a two-dimensional mimetic gradient operator
-% when the boundary condition is periodic
 %
 % Parameters:
 %                k : Order of accuracy
@@ -16,14 +15,17 @@ function G = grad2DPeriodic(k, m, dx, n, dy)
 % ----------------------------------------------------------------------------
 %
 
-    Gx = gradPeriodic(k, m, dx);
-    Gy = gradPeriodic(k, n, dy);
+    Gx = gradNonPeriodic(k, m, dx);
+    Gy = gradNonPeriodic(k, n, dy);
     
-    Im = speye(m, m);
-    In = speye(n, n);
+    Im = sparse(m + 2, m);
+    In = sparse(n + 2, n);
     
-    Sx = kron(In, Gx);
-    Sy = kron(Gy, Im);
+    Im(2:(m+2)-1, :) = speye(m, m);
+    In(2:(n+2)-1, :) = speye(n, n);
+    
+    Sx = kron(In', Gx);
+    Sy = kron(Gy, Im');
     
     G = [Sx; Sy];
 end
