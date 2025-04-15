@@ -11,8 +11,8 @@ function D = div3D(k, m, dx, n, dy, o, dz, dc, nc)
 %               dy : Step size along y-axis
 %                o : Number of cells along z-axis
 %               dz : Step size along z-axis
-%               dc : a0 (6x1 vector for left, right, bottom, top, front, back boundary types, resp.)
-%               nc : b0 (6x1 vector for left, right, bottom, top, front, back boundary types, resp.)
+%    (optional) dc : a0 (6x1 vector for left, right, bottom, top, front, back boundary types, resp.)
+%    (optional) nc : b0 (6x1 vector for left, right, bottom, top, front, back boundary types, resp.)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
@@ -21,8 +21,12 @@ function D = div3D(k, m, dx, n, dy, o, dz, dc, nc)
 % ----------------------------------------------------------------------------
 %
 
+    if nargin ~= 7 && nargin ~= 9
+        error('div:InvalidNumArgs', 'div expects 7 or 9 arguments');
+    end
+    
     % for legacy code
-    if nargin <= 7
+    if nargin == 7
         D = divNonPeriodic3D(k, m, dx, n, dy, o, dz);
         return;
     end

@@ -7,8 +7,8 @@ function D = div(k, m, dx, dc, nc)
 %                k : Order of accuracy
 %                m : Number of cells
 %               dx : Step size
-%               dc : a0 (2x1 vector for left and right vertices, resp.)
-%               nc : b0 (2x1 vector for left and right vertices, resp.)
+%    (optional) dc : a0 (2x1 vector for left and right vertices, resp.)
+%    (optional) nc : b0 (2x1 vector for left and right vertices, resp.)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
@@ -17,8 +17,12 @@ function D = div(k, m, dx, dc, nc)
 % ----------------------------------------------------------------------------
 %
 
+    if nargin ~= 3 && nargin ~= 5
+        error('div:InvalidNumArgs', 'div expects 3 or 5 arguments');
+    end
+
     % for legacy code
-    if nargin <= 3
+    if nargin == 3
         D = divNonPeriodic(k, m, dx);
         return;
     end

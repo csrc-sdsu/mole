@@ -9,8 +9,8 @@ function L = lap2D(k, m, dx, n, dy, dc, nc)
 %               dx : Step size along x-axis
 %                n : Number of cells along y-axis
 %               dy : Step size along y-axis
-%               dc : a0 (4x1 vector for left, right, bottom, top boundaries, resp.)
-%               nc : b0 (4x1 vector for left, right, bottom, top boundaries, resp.)
+%    (optional) dc : a0 (4x1 vector for left, right, bottom, top boundaries, resp.)
+%    (optional) nc : b0 (4x1 vector for left, right, bottom, top boundaries, resp.)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
@@ -19,8 +19,12 @@ function L = lap2D(k, m, dx, n, dy, dc, nc)
 % ----------------------------------------------------------------------------
 %
 
+    if nargin ~= 5 && nargin ~= 7
+        error('div:InvalidNumArgs', 'div expects 5 or 7 arguments');
+    end
+    
     % for legacy code
-    if nargin <= 5
+    if nargin == 5
         L = lapNonPeriodic2D(k, m, dx, n, dy);
         return;
     end
