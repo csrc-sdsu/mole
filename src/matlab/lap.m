@@ -18,7 +18,7 @@ function L = lap(k, m, dx, dc, nc)
 %
 
     if nargin ~= 3 && nargin ~= 5
-        error('div:InvalidNumArgs', 'div expects 3 or 5 arguments');
+        error('lap:InvalidNumArgs', 'lap expects 3 or 5 arguments');
     end
     
     % for legacy code

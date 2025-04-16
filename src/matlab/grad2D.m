@@ -20,7 +20,7 @@ function G = grad2D(k, m, dx, n, dy, dc, nc)
 %
 
     if nargin ~= 5 && nargin ~= 7
-        error('div:InvalidNumArgs', 'div expects 5 or 7 arguments');
+        error('grad2D:InvalidNumArgs', 'grad2D expects 5 or 7 arguments');
     end
     
     % for legacy code

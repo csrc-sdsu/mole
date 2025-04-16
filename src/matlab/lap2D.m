@@ -20,7 +20,7 @@ function L = lap2D(k, m, dx, n, dy, dc, nc)
 %
 
     if nargin ~= 5 && nargin ~= 7
-        error('div:InvalidNumArgs', 'div expects 5 or 7 arguments');
+        error('lap2D:InvalidNumArgs', 'lap2D expects 5 or 7 arguments');
     end
     
     % for legacy code

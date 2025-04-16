@@ -22,7 +22,7 @@ function L = lap3D(k, m, dx, n, dy, o, dz, dc, nc)
 %
 
     if nargin ~= 7 && nargin ~= 9
-        error('div:InvalidNumArgs', 'div expects 7 or 9 arguments');
+        error('lap3D:InvalidNumArgs', 'lap3D expects 7 or 9 arguments');
     end
     
     % for legacy code
