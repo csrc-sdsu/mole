@@ -8,10 +8,14 @@
 #   Ubuntu/Debian: sudo apt install graphviz
 #   macOS: brew install graphviz
 #   RHEL/CentOS/Fedora: sudo dnf install graphviz
-# - LaTeX (required for PDF generation only)
+# - LaTeX (required for PDF generation)
 #   Ubuntu/Debian: sudo apt install texlive-latex-base texlive-fonts-recommended texlive-latex-extra
 #   macOS: brew install --cask mactex
-#   RHEL/CentOS/Fedora: sudo dnf install texlive-latex
+#   RHEL/CentOS/Fedora: sudo dnf install texlive-scheme-medium
+# - Inkscape (required for high-quality SVG to PDF conversion)
+#   Ubuntu/Debian: sudo apt install inkscape
+#   macOS: brew install inkscape
+#   RHEL/CentOS/Fedora: sudo dnf install inkscape
 
 # ======= Sphinx =======
 
