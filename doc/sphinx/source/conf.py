@@ -155,32 +155,37 @@ else:
 matlab_src_dir = os.path.abspath(os.path.join(ROOT_DIR, 'src', 'matlab'))
 
 # Enhanced debug logging
-print("\nDEBUG: Enhanced MATLAB Configuration:")
-print(f"Current working directory: {os.getcwd()}")
-print(f"ROOT_DIR value: {ROOT_DIR}")
-print(f"MATLAB source directory: {matlab_src_dir}")
-print(f"Directory exists: {os.path.exists(matlab_src_dir)}")
+# print("\nDEBUG: Enhanced MATLAB Configuration:")
+# print(f"Current working directory: {os.getcwd()}")
+# print(f"ROOT_DIR value: {ROOT_DIR}")
+# print(f"MATLAB source directory: {matlab_src_dir}")
+# print(f"Directory exists: {os.path.exists(matlab_src_dir)}")
 try:
     if os.path.exists(os.path.dirname(matlab_src_dir)):
-        print(f"Parent directory contents: {os.listdir(os.path.dirname(matlab_src_dir))}")
+        # print(f"Parent directory contents: {os.listdir(os.path.dirname(matlab_src_dir))}")
+        pass # Placeholder if you remove the print statement
     else:
-        print(f"Parent directory {os.path.dirname(matlab_src_dir)} does not exist")
+        # print(f"Parent directory {os.path.dirname(matlab_src_dir)} does not exist")
+        pass # Placeholder
 except Exception as e:
-    print(f"Error listing parent directory: {e}")
+    # print(f"Error listing parent directory: {e}")
+    pass # Placeholder
 
 # Version compatibility check
-print("\nDEBUG: Version Information:")
-print(f"Python version: {sys.version}")
-print(f"Sphinx version: {pkg_resources.get_distribution('sphinx').version}")
+# print("\nDEBUG: Version Information:")
+# print(f"Python version: {sys.version}")
+# print(f"Sphinx version: {pkg_resources.get_distribution('sphinx').version}")
 try:
-    print(f"sphinxcontrib-matlab version: {pkg_resources.get_distribution('sphinxcontrib-matlab').version}")
+    # print(f"sphinxcontrib-matlab version: {pkg_resources.get_distribution('sphinxcontrib-matlab').version}")
+    pass # Placeholder
 except Exception as e:
-    print(f"Error getting sphinxcontrib-matlab version: {e}")
+    # print(f"Error getting sphinxcontrib-matlab version: {e}")
+    pass # Placeholder
 
 # Add MATLAB directory to Python path if it exists
 if os.path.exists(matlab_src_dir):
     sys.path.insert(0, matlab_src_dir)
-    print(f"\nAdded existing MATLAB directory to Python path: {matlab_src_dir}")
+    # print(f"\nAdded existing MATLAB directory to Python path: {matlab_src_dir}")
 
 # For matlabdomain, we need to treat MATLAB files as modules
 primary_domain = 'mat'  # Make MATLAB the primary domain for .m files

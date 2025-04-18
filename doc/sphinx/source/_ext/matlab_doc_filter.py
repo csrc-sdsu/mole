@@ -63,7 +63,7 @@ def analyze_matlab_code(matlab_src_dir):
                 content = f.read()
             
             # DEBUG: Print the file being analyzed
-            print(f"Analyzing file: {os.path.basename(filepath)}")
+            # print(f"Analyzing file: {os.path.basename(filepath)}")
             
             # Look for function calls
             for other_func_lower in function_names:
@@ -78,7 +78,7 @@ def analyze_matlab_code(matlab_src_dir):
                         # This function calls other_func
                         _function_calls_graph[function_name].add(other_func)
                         # Debug: Log the function call detection
-                        print(f"  FOUND: {function_name} calls {other_func}")
+                        # print(f"  FOUND: {function_name} calls {other_func}")
                         
                         # other_func is called by this function
                         _function_dependency_graph[other_func].add(function_name)
@@ -92,15 +92,15 @@ def analyze_matlab_code(matlab_src_dir):
     print(f"Found {total_calls} function calls")
     
     # DEBUG: Print both graphs for comparison
-    print("\nFUNCTION CALLS GRAPH (functions that call others):")
-    for func, calls in _function_calls_graph.items():
-        if calls:  # Only print non-empty entries
-            print(f"{func} calls: {', '.join(calls)}")
-    
-    print("\nFUNCTION DEPENDENCY GRAPH (functions called by others):")
-    for func, called_by in _function_dependency_graph.items():
-        if called_by:  # Only print non-empty entries
-            print(f"{func} is called by: {', '.join(called_by)}")
+    # print("\nFUNCTION CALLS GRAPH (functions that call others):")
+    # for func, calls in _function_calls_graph.items():
+    #     if calls:  # Only print non-empty entries
+    #         print(f"{func} calls: {', '.join(calls)}")
+    # 
+    # print("\nFUNCTION DEPENDENCY GRAPH (functions called by others):")
+    # for func, called_by in _function_dependency_graph.items():
+    #     if called_by:  # Only print non-empty entries
+    #         print(f"{func} is called by: {', '.join(called_by)}")
     
     _analyzed_code = True
 
