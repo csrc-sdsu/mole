@@ -9,7 +9,13 @@ SOURCE_DIR="$SCRIPT_DIR/source"
 BUILD_DIR="$SCRIPT_DIR/build"
 LATEX_DIR="$BUILD_DIR/latex"
 PDF_DIR="$LATEX_DIR/PDF"
-SVG_DIR="$SOURCE_DIR/api/examples/md/figures"
+
+# Multiple SVG directories to check
+SVG_DIRS=(
+  "$SOURCE_DIR/api/examples/md/figures"
+  "$SOURCE_DIR/api/examples-m/md/figures"
+  "$SOURCE_DIR/math_functions/figures"
+)
 
 # Clean latex directory but preserve html
 echo "Cleaning LaTeX build directory but preserving HTML..."
@@ -27,24 +33,35 @@ mkdir -p "$LATEX_DIR/_images"
 mkdir -p "$LATEX_DIR/figures"
 mkdir -p "$PDF_DIR"
 
-# Find all SVG files in the figures directory
-echo "Finding SVG files..."
-SVG_FILES=$(find "$SVG_DIR" -name "*.svg")
-
-# Convert all SVGs to high-quality PDFs
-echo "Converting SVGs to high-quality PDFs..."
-for svg in $SVG_FILES; do
-  base_name=$(basename "$svg" .svg)
-  echo "  Converting: $base_name.svg"
-  
-  # Using Inkscape with very high DPI
-  inkscape "$svg" \
-    --export-filename="$LATEX_DIR/_images/$base_name.pdf" \
-    --export-area-drawing \
-    --export-dpi=2400
+# Process all SVG directories
+echo "Finding and processing SVG files..."
+for SVG_DIR in "${SVG_DIRS[@]}"; do
+  if [ -d "$SVG_DIR" ]; then
+    echo "Checking directory: $SVG_DIR"
+    SVG_FILES=$(find "$SVG_DIR" -name "*.svg" 2>/dev/null || echo "")
     
-  # Copy to figures directory
-  cp "$LATEX_DIR/_images/$base_name.pdf" "$LATEX_DIR/figures/"
+    # Convert all SVGs to high-quality PDFs
+    if [ -n "$SVG_FILES" ]; then
+      echo "Converting SVGs from $SVG_DIR to high-quality PDFs..."
+      for svg in $SVG_FILES; do
+        base_name=$(basename "$svg" .svg)
+        echo "  Converting: $base_name.svg"
+        
+        # Using Inkscape with very high DPI
+        inkscape "$svg" \
+          --export-filename="$LATEX_DIR/_images/$base_name.pdf" \
+          --export-area-drawing \
+          --export-dpi=2400
+          
+        # Copy to figures directory
+        cp "$LATEX_DIR/_images/$base_name.pdf" "$LATEX_DIR/figures/"
+      done
+    else
+      echo "No SVG files found in $SVG_DIR"
+    fi
+  else
+    echo "Directory does not exist, skipping: $SVG_DIR"
+  fi
 done
 
 # Create a fix for image includes
@@ -108,6 +125,7 @@ pdflatex -interaction=nonstopmode MOLE-docs.tex || true
 # Check if PDF was generated successfully
 if [ -f "MOLE-docs.pdf" ]; then
   # Move PDF to the PDF directory 
+  mkdir -p "$PDF_DIR"
   mv "MOLE-docs.pdf" "$PDF_DIR/MOLE-docs.pdf"
   echo "Success! PDF generated at: $PDF_DIR/MOLE-docs.pdf"
   ls -lh "$PDF_DIR/MOLE-docs.pdf"

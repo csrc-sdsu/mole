@@ -54,9 +54,9 @@
 :maxdepth: 2
 :caption: Getting Started
 
-Introduction <api/intros/introduction.rst>
-api/intros/gettingstarted.rst
-Building Documentation <api/intros/doc_readme_wrapper.md>
+Introduction <intros/introduction.rst>
+intros/gettingstarted.rst
+Building Documentation <intros/doc_readme_wrapper.md>
 ```
 
 ```{toctree}
@@ -78,22 +78,22 @@ Matlab/ Octave (beta) <api/matlab/index-beta.rst>
 :maxdepth: 2
 :caption: Mathematical Framework
 
-api/math_functions/index
+math_functions/index
 ```
 
 ```{toctree}
 :maxdepth: 2
 :caption: Examples
 
-api/examples/index
+examples/index
 ```
 
 ```{toctree}
 :maxdepth: 1
 :caption: Project
 
-Contributing <api/intros/contributing_wrapper.md>
-Code of Conduct <api/intros/code_of_conduct_wrapper.md>
+Contributing <intros/contributing_wrapper.md>
+Code of Conduct <intros/code_of_conduct_wrapper.md>
 ```
 
 <!--------------------------------------------------  toctree ends here  ----------------------------------------------------------------------->
