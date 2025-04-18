@@ -150,10 +150,16 @@ div[class^='highlight'] {
     border-left: 5px solid #2ecc71;
 }
 
-/* Mermaid diagram styling */
-.mermaid {
-    margin: 30px 0;
+/* GraphViz diagram styling */
+.graphviz {
     text-align: center;
+    margin: 30px 0;
+    max-width: 100%;
+}
+
+.graphviz svg {
+    max-width: 100%;
+    height: auto;
 }
 
 /* MATLAB specific styling */
@@ -202,8 +208,11 @@ div.highlight {
     border-color: #bee5eb;
 }
 
-/* Fix mermaid diagram styling */
-.mermaid {
-    text-align: center;
-    margin: 20px 0;
+/* Fix mermaid diagram styling - replaced with GraphViz styling */
+.graphviz svg {
+    background-color: transparent;
+    max-width: 100%;
+    height: auto;
+    margin: 20px auto;
+    display: block;
 } 
