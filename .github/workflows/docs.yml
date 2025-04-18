@@ -1,0 +1,63 @@
+name: Documentation
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'doc/**'
+      - '.github/workflows/docs.yml'
+      - '**/*.md'
+      - '**/*.rst'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'doc/**'
+      - '.github/workflows/docs.yml'
+      - '**/*.md'
+      - '**/*.rst'
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y doxygen graphviz inkscape
+          sudo apt-get install -y texlive-latex-base texlive-fonts-recommended texlive-latex-extra
+          # Verify graphviz installation
+          dot -V
+
+      - name: Install Python dependencies
+        run: |
+          cd doc/sphinx
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build Documentation
+        run: |
+          cd doc/sphinx
+          make doc-clean
+          make doc-doxygen
+          make doc-html
+          make doc-latexpdf
+
+      - name: Deploy to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./doc/sphinx/build/html
+          force_orphan: true
+          commit_message: "Deploy documentation updates" 

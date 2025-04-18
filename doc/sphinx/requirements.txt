@@ -33,7 +33,6 @@ breathe>=4.30                    # C++ documentation integration
 myst-parser[linkify]>=0.14.0    # Markdown support
 sphinx-design                    # UI components
 sphinxcontrib-bibtex>=2.5       # Bibliography support
-sphinxcontrib-mermaid           # Diagrams
 sphinxcontrib-katex             # Math rendering
 standard-imghdr
 

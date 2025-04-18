@@ -102,11 +102,12 @@ sudo yum install cmake openblas-devel eigen3-devel
 
 ## Testing
 
+Run from the `build` directory:
+
 ### C++ 
 
 A suite of four automatic tests that verify MOLE's installation and dependencies. These tests run automatically during the C++ library construction.
 
-Run from the `build` directory:
 ```bash
 make run_tests
 ```
@@ -115,9 +116,8 @@ make run_tests
 
 MATLAB/Octave equivalent of the C++ test suite. We recommend running these tests before using MOLE to ensure proper setup.
 
-Run from the `tests/matlab`:
 ```matlab
-run_tests
+make run_matlab_tests
 ```
 
 ## Examples

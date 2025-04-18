@@ -13,6 +13,7 @@ md/Poisson1D
 md/Schrodinger1D
 md/StaggeredGrids
 md/transport1D
+md/examples
 ```
 
 More examples will be added in the future. 

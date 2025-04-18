@@ -1,4 +1,4 @@
- ################################################################################
+################################################################################
 # MOLE Documentation Sphinx Configuration
 ################################################################################
 
@@ -43,6 +43,7 @@ extensions = [
     # Sphinx core extensions
     'sphinx.ext.autodoc',     # Generate documentation from docstrings
     'sphinx.ext.mathjax',     # Math rendering
+    'sphinx.ext.graphviz',    # GraphViz diagram support
     'sphinx.ext.viewcode',    # Link to source code
     'sphinx.ext.napoleon',    # Support for NumPy and Google style docstrings
     'sphinx.ext.intersphinx', # Link to other project's documentation
@@ -53,9 +54,6 @@ extensions = [
     # External documentation extensions
     'breathe',                # Doxygen integration
     'myst_parser',            # Markdown support
-    
-    # Diagram support
-    'sphinxcontrib.mermaid',  # Mermaid diagram support
     
     # MATLAB documentation
     'sphinxcontrib.matlab',   # MATLAB domain support
@@ -80,6 +78,9 @@ myst_enable_extensions = [
     "substitution",    # Substitution references
     "tasklist"         # Task lists
 ]
+
+# Make sure amsmath extension is enabled for math environments
+myst_enable_extensions += ["amsmath", "colon_fence"]
 
 # Configure HTML image handling
 html_copy_source = True
@@ -122,31 +123,15 @@ if not os.path.exists(str(ROOT_DIR / "doc/doxygen/cpp/xml/index.xml")):
     subprocess.call(["doxygen", "Doxyfile"], cwd=str(ROOT_DIR))
 
 #------------------------------------------------------------------------------
-# Mermaid diagram configuration
+# GraphViz configuration
 #------------------------------------------------------------------------------
-# Check if mermaid-cli is available
-has_mmdc = shutil.which('mmdc') is not None
-has_npx = shutil.which('npx') is not None
-
-print("\nDEBUG: Mermaid Configuration:")
-print(f"mmdc available: {has_mmdc}")
-print(f"npx available: {has_npx}")
-
-if has_mmdc:
-    mermaid_cmd = 'mmdc'
-    mermaid_output_format = 'svg'
-    print(f"Using direct mmdc command: {mermaid_cmd}")
-elif has_npx:
-    mermaid_cmd = 'npx mmdc'
-    mermaid_output_format = 'svg'
-    print(f"Using npx command: {mermaid_cmd}")
-else:
-    # If Mermaid CLI is not available, disable the extension
-    extensions.remove('sphinxcontrib.mermaid')
-    print("\n" + "="*80)
-    print("WARNING: Mermaid CLI not found. Mermaid diagrams will not be rendered.")
-    print("To install Mermaid CLI, run: npm install -g @mermaid-js/mermaid-cli")
-    print("="*80 + "\n")
+graphviz_output_format = 'svg'
+graphviz_dot_args = [
+    '-Tsvg',
+    '-Gfontname=Arial',
+    '-Nfontname=Arial',
+    '-Efontname=Arial'
+]
 
 #------------------------------------------------------------------------------
 # MATLAB domain configuration
