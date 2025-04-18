@@ -187,6 +187,32 @@ $$
 with $a=1$, $b=0$, and $g=0$.
 This corresponds to the call to robinBC3D of `robinBC2D(k, m, 1, n, 1, o, 1, 1, 0)`.
 
+### Poisson1D
+
+Solves the 1D Poisson equation with Robin boundary conditions.
+
+$$
+-\frac{d^2 C}{d x^2} = f(x)
+$$
+
+The boundary conditions are given by
+
+$$
+au + b\frac{du}{dx} = g
+$$
+
+The equation is discretized using mimetic operators.
+
+### Schrodinger1D
+
+Solves the 1D time-independent Schrödinger equation.
+
+$$
+H \psi = E \psi
+$$
+
+where $H$ is the Hamiltonian operator, $\psi$ is the wave function, and $E$ is the energy. The Hamiltonian includes the kinetic energy term represented by the Laplacian and a potential energy term.
+
 ## Hyperbolic
 
 ### Hyperbolic1D
@@ -410,3 +436,17 @@ u(x,0) = e^{\frac{-x^2}{50}}
 $$
 
 The wave is allowed to propagate across the domain while the area under the curve is calculated. 
+
+## Parabolic Equations
+
+### Transport1D
+
+Solves the 1D advection-reaction-dispersion equation:
+
+$$
+\frac{\partial C}{\partial t} + v\frac{\partial C}{\partial x} = D\frac{\partial^2 C}{\partial x^2}
+$$
+
+where $C$ is the concentration, $v$ is the pore-water flow velocity, and $D$ is the dispersion coefficient.
+
+### Under work  ....
