@@ -103,6 +103,7 @@ public:
   */
   void meshgrid(const vec &x, const vec &y, const vec &z, cube &X, cube &Y,
                 cube &Z);
+  static double trapz(const vec &x, const vec &y);
 };
 
 #endif // UTILS_H
