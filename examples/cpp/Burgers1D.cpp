@@ -11,11 +11,12 @@
  * Solution is computed using a staggered grid approach, explicit time-stepping, 
  * and mimetic finite difference operators for divergence and interpolation.
  */
-
 #include <iostream>
 #include <armadillo>
 #include <cmath>
+#include <cstdio>     // for popen
 #include "mole.h"
+#include "utils.h"
 
 using namespace arma;
 using namespace std;
@@ -23,61 +24,72 @@ using namespace std;
 int main() {
     constexpr double west = -15.0;
     constexpr double east = 15.0;
-    constexpr int k = 2;     // Operator's order of accuracy
-    constexpr int m = 300;   // Number of cells
+    constexpr int k = 2;
+    constexpr int m = 300;
 
-    double dx = (east - west) / m; // Grid spacing
-    double t = 10.0; // Simulation time
-    double dt = dx; // CFL condition for explicit schemes
+    double dx = (east - west) / m;
+    double t = 10.0;
+    double dt = dx;
 
-    // Divergence and interpolation operators (matching MATLAB's dimensions)
-    Divergence D(k, m, dx); // 1D Mimetic divergence operator
-    Interpol I(m, 1.0); // 1D interpolator (upwind)
+    Divergence D(k, m, dx);
+    Interpol I(m, 1.0);
 
-    // 1D Staggered grid (same as MATLAB)
     vec xgrid(m + 2);
     xgrid(0) = west;
     xgrid(m + 1) = east;
     for (int i = 1; i <= m; ++i) {
-        xgrid(i) = west + (i - 0.5) * dx; // Matches MATLAB's staggered grid
+        xgrid(i) = west + (i - 0.5) * dx;
     }
 
-    // Initial condition (matching MATLAB)
     vec U = exp(-square(xgrid) / 50.0);
-
-    // Premultiply D_matrix out of time loop
     mat D_matrix = (-dt / 2) * mat(D) * mat(I);
 
-    // Verify dimensions
     if (D_matrix.n_cols != U.n_rows) {
         cerr << "Error: Incompatible matrix dimensions!" << endl;
-        cerr << "D_matrix: " << D_matrix.n_rows << "x" << D_matrix.n_cols << endl;
-        cerr << "U: " << U.n_rows << "x" << U.n_cols << endl;
         return 1;
     }
 
-    // Time integration loop
     int total_steps = t / dt;
-    int print_interval = total_steps / 5;
+    int plot_interval = total_steps / 5;
 
-    for (double time = 0; time <= t; time += dt) {
-        // Update U (explicit scheme)
+    // Open a pipe to Gnuplot
+    FILE* gnuplotPipe = popen("gnuplot -persist", "w");
+    if (!gnuplotPipe) {
+        cerr << "Error: Could not open Gnuplot." << endl;
+        return 1;
+    }
+
+    for (int step = 0; step <= total_steps; ++step) {
+        double time = step * dt;
         U = U + D_matrix * square(U);
 
-        // Print only 5 times during the run
-        if ((int)(time / dt) % print_interval == 0) {
-            double area = sum(U) * dx;
-
-            cout << "Time step: " << (int)(time / dt)
+        if (step % plot_interval == 0) {
+            double area = Utils::trapz(xgrid, U);
+            cout << "Time step: " << step
                  << ", Time: " << time
-                 << ", Area: " << area
+                 << ", Trapz Area: " << area
                  << ", U_min: " << U.min()
                  << ", U_max: " << U.max()
                  << ", U_center: " << U(U.n_elem / 2)
                  << endl;
+
+            // Send commands directly to Gnuplot
+            fprintf(gnuplotPipe, "reset\n");
+            fprintf(gnuplotPipe, "set title '1D Inviscid Burgers'' Equation'\n");
+            fprintf(gnuplotPipe, "set xlabel 'x'\n");
+            fprintf(gnuplotPipe, "set ylabel 'U(x,t)'\n");
+            fprintf(gnuplotPipe, "set grid\n");
+            fprintf(gnuplotPipe, "plot '-' using 1:2 with lines lw 2 title 't = %.2f'\n", time);
+
+            for (uword i = 0; i < xgrid.n_elem; ++i)
+                fprintf(gnuplotPipe, "%f %f\n", xgrid(i), U(i));
+
+            fprintf(gnuplotPipe, "e\n");
+            fflush(gnuplotPipe);  // Ensure data is flushed immediately (like drawnow)
         }
     }
 
+    pclose(gnuplotPipe);
     return 0;
 }
 
