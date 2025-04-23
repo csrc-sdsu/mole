@@ -103,6 +103,16 @@ public:
   */
   void meshgrid(const vec &x, const vec &y, const vec &z, cube &X, cube &Y,
                 cube &Z);
+  /**
+  * @brief Implements the trapezoidal rule for 1D numerical integration
+  *
+  * Computes the area under a curve defined by vectors x and y using:
+  * A ≈ ∑ 0.5 * (xᵢ₊₁ - xᵢ) * (yᵢ + yᵢ₊₁)
+  *
+  * @param x Vector of x-coordinates
+  * @param y Vector of y-values at corresponding x
+  * @return Estimated area under the curve
+  */
   static double trapz(const vec &x, const vec &y);
 };
 
