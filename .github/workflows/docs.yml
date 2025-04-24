@@ -53,6 +53,10 @@ jobs:
           make doc-html
           make doc-latexpdf
 
+      - name: Prepare for deployment
+        run: |
+          touch doc/sphinx/build/html/.nojekyll
+
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: peaceiris/actions-gh-pages@v3
@@ -60,4 +64,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./doc/sphinx/build/html
           force_orphan: true
-          commit_message: "Deploy documentation updates" 
+          commit_message: "Deploy documentation updates"
+          enable_jekyll: false 
