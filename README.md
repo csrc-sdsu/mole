@@ -1,9 +1,12 @@
-MOLE: Mimetic Operators Library Enhanced
-========================================
+# MOLE: Mimetic Operators Library Enhanced
 
+[![JOSS paper][joss-badge]][joss-link]
+[![MATLAB File Exchange][matlab-badge]][matlab-link]
+[![License][license-badge]][license-link]
+[![Build Status][build-badge]][build-link]
+[![Documentation][docs-badge]][docs-link]
 
-1: Description
---------------
+## Description
 
 MOLE is a high-quality (C++ & MATLAB/Octave) library that implements 
 high-order mimetic operators to solve partial differential equations. 
@@ -12,141 +15,152 @@ Gradient, Divergence, Laplacian, Bilaplacian, and Curl. These operators (highly 
 on staggered grids (uniform, non-uniform, curvilinear) and satisfy local and 
 global conservation laws.
 
-Mathematics is based on the work of [Corbino and Castillo, 2020](https://doi.org/10.1016/j.cam.2019.06.042). 
-However, the user may find helpful previous publications, such as [Castillo and Grone, 2003](https://doi.org/10.1137/S0895479801398025),
+Mathematics is based on the work of [Corbino and Castillo][corbino-paper]. 
+However, the user may find helpful previous publications, such as [Castillo and Grone][castillo-paper],
 in which similar operators were derived using a matrix analysis approach.
 
+## Installation
 
-2: Licensing
-------------
+### Prerequisites
+
+To install the MOLE library, you'll need the following packages:
+
+- CMake (Minimum version 3.10)
+- OpenBLAS (Minimum version 0.3.10)
+- Eigen3
+- LAPACK (Mac only)
+- libomp (Mac only)
+
+For documentation build requirements, please refer to the [Documentation Guide][doc-guide].
+
+### Package Installation by OS
+
+#### Ubuntu/Debian Systems
+
+```bash
+# Install all required packages
+sudo apt install cmake libopenblas-dev libeigen3-dev
+```
+
+#### macOS Systems
+
+Install [Homebrew][homebrew] if you don't have it already, then run:
+
+```bash
+# Install all required packages
+brew install cmake openblas eigen libomp lapack
+```
+
+> **Troubleshooting Homebrew:** If you encounter installation errors, try these steps:
+> ```bash
+> # Fix permissions issues
+> sudo chown -R $(whoami) /usr/local/Cellar
+> # Fix shallow clone issues
+> git -C /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core fetch --unshallow
+> # Remove Java dependencies if they cause conflicts
+> brew uninstall --ignore-dependencies java
+> brew update
+> ```
+
+#### RHEL/CentOS/Fedora Systems
+
+```bash
+# Install all required packages
+sudo yum install cmake openblas-devel eigen3-devel
+```
+
+## Building and Installing
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/csrc-sdsu/mole.git  
+   cd mole  
+   ```
+
+2. Build the library:
+   ```bash
+   mkdir build && cd build  
+   cmake ..
+   make
+   ```
+
+3. Install the library:
+   - For a custom location:
+     ```bash
+     cmake --install . --prefix /path/to/location
+     ```
+   - For a system location (requires privileges):
+     ```bash
+     sudo cmake --install .
+     ```
+     Or
+     ```bash
+     sudo cmake --install . --prefix /path/to/privileged/location
+     ```
+
+**Note:** Armadillo and SuperLU will be automatically installed in the build directory during the build process.
+
+## Testing
+
+Run from the `build` directory:
+
+### C++ 
+
+A suite of four automatic tests that verify MOLE's installation and dependencies. These tests run automatically during the C++ library construction.
+
+```bash
+make run_tests
+```
+
+### MATLAB/Octave 
+
+MATLAB/Octave equivalent of the C++ test suite. We recommend running these tests before using MOLE to ensure proper setup.
+
+```matlab
+make run_matlab_tests
+```
+
+## Examples
+
+### C++ 
+
+Four self-contained, well-documented examples demonstrating typical PDE solutions. These are automatically built with `make` and serve as an excellent starting point for C++ users.
+
+### MATLAB/Octave Examples
+
+A collection of over 30 examples showcasing various PDE solutions, from simple linear one-dimensional problems to complex nonlinear multidimensional scenarios.
+
+## Documentation
+
+MOLE comes with comprehensive documentation:
+
+- **API Reference & User Guide**: Access our online [Documentation][docs-link]
+- **Building Documentation**: To build documentation locally, follow our [Documentation Guide][doc-guide].
+
+> **Important Note:** Performing non-unary operations involving operands constructed over different grids may lead to unexpected results. While MOLE allows such operations without throwing errors, users must exercise caution when manipulating operators across different grids.
+
+## Licensing
 
 MOLE is distributed under a GNU General Public License; please refer to the _LICENSE_ 
 file for more details.
 
+## Community Guidelines
 
-3: Installation
-------------
+We welcome contributions to MOLE, including:
+- Adding new functionalities
+- Providing examples
+- Addressing existing issues
+- Reporting bugs
+- Requesting new features
 
-### 3.1 Packages Required
+Please refer to our [Contribution Guidelines][contrib-guide] for more details.
 
-To install the MOLE library on your system, certain packages must be installed and configured beforehand. The required packages vary by operating system.
-
-For the macOS, Homebrew needs to be installed to download the required packages. Invoke the following command in the terminal app
-	
-	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-
-#### 3.1.1 OpenBLAS
-**Minimum Version Required**: OpenBLAS 0.3.10
-
-##### For Ubuntu systems:
-	sudo apt install libopenblas-dev 
-##### For Mac Systems
-	brew install openblas
-##### For Yum-based systems:  
-	sudo yum install openblas-devel
-
-#### 3.1.2 Eigen3
-**Minimum Version Required**: eigen-3
-
-##### For Ubuntu systems
-	sudo apt install libeigen3-dev
-##### For Mac Systems
-	brew install eigen  
-##### For Yum-based systems:  
-	sudo yum install eigen3-devel
-
-#### 3.1.3 libomp
-
-##### For Mac Systems
-	brew install libomp
-
-
-#### 3.1.4 LAPACK
-
-##### For Mac Systems
-	brew install lapack
- 
-
-### 3.2 MOLE Library Installation
-
-
-**Clone the MOLE repository and build the library**
-
-	git clone https://github.com/csrc-sdsu/mole.git  
-	cd mole  
-	mkdir build && cd build  
-	cmake ..
-	make  
- To install the library in a custom location (Eg. home/mole) 
-
- 	cmake --install . --prefix /path/to/location
- 
- To install the library in a previledged location (Eg. /opt/mole)
-
- 	sudo cmake --install .
- Or
-
- 	sudo cmake --install . --prefix /path/to/privileged/location	
- 
- Armadillo and SuperLu will be locally installed in the build directory once the cmake .. command is passed.
- By following the steps outlined above, you will successfully install the necessary packages and the MOLE library on your system. 
- The library will be installed in the location provided.
- The tests and examples to be executed will also be built locally inside the build directory. 
-	
-
-
-4: Running Examples & Tests
----------------------------
-
-Here are instructions on how to run the provided examples and tests for both the C++ and MATLAB versions of the library to help you quickly get started with MOLE.
-
-* **tests/cpp:**
-These tests, which are automatically executed upon constructing the library's C++ version, play a crucial role in verifying the correct installation of MOLE and its dependencies. There are four tests in total.
-
-* **tests/matlab:**
-We encourage MATLAB users to execute these tests before using MOLE by entering the `tests/matlab` directory and executing `run_tests.m` from MATLAB. These tests are analogous to those contained in `tests/cpp`.
-
-* **examples/cpp:**
-These will be automatically built after calling `make`. We encourage C++ users to make this their entry point to familiarize themselves with this library version. The four examples are self-contained and adequately documented, and they solve typical PDEs.
-
-* **examples/matlab:**
-Most of our examples are provided in the MATLAB scripting language. Over 30 examples range from linear one-dimensional PDEs to highly nonlinear multidimensional PDEs.
-
-
-5: Documentation
-----------------
-
-The folder `doc/api_docs/matlab` contains generated documentation about the MATLAB/Octave API.
-It was generated with a tool called [_m2html_](https://www.gllmflndn.com/software/matlab/m2html). However, for a quick start on MOLE's MATLAB/Octave version, we recommend starting with this short [guide](https://github.com/csrc-sdsu/mole/blob/master/doc/assets/manuals/CSRC%20Report%20on%20MOLE.pdf).
-
-For C++ users, we provide a short [guide](https://github.com/csrc-sdsu/mole/blob/master/doc/assets/manuals/MOLE_C%2B%2B_Quick_Guide.pdf) to MOLE's C++ flavor. However, for those in need of more details to interact with the library, we suggest to follow these instructions:
-
-To generate the C++ documentation, execute:
-
-`doxygen Doxyfile` (requires _Doxygen_ and _Graphviz_)
-
-this will create a folder called `doc_C++` containing a set of _html_ files. Please take a look at the _index.html_ file 
-to start browsing the documentation.
-
-**NOTE:**
-Performing non-unary operations involving operands constructed over different grids may lead to unexpected results. While MOLE allows such operations without throwing errors, users must exercise caution when manipulating operators across different grids.
-
-
-6: Community Guidelines
------------------------
-
-We welcome contributions to MOLE, whether they involve adding new functionalities, providing examples, addressing existing issues, reporting bugs, or requesting new features. Please refer to our [Contribution Guidelines](https://github.com/csrc-sdsu/mole/blob/master/CONTRIBUTING.md) for more details.
-
-
-7: Citations
-------------
+## Citations
 
 Please cite our work if you use MOLE in your research or software. 
-Citations are helpful for the continued development and maintenance of 
-the library [![DOI](https://joss.theoj.org/papers/10.21105/joss.06288/status.svg)](https://doi.org/10.21105/joss.06288)
+Citations are helpful for the continued development and maintenance of the library.
 
-[![View mole on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/124870-mole)
+## Gallery
 
 Now, some cool pictures obtained with MOLE:
 
@@ -158,3 +172,21 @@ Now, some cool pictures obtained with MOLE:
 ![Obtained with curvilinear operators](doc/assets/img/WavyGrid.png)
 ![Obtained with curvilinear operators](doc/assets/img/wave2D.png)
 ![Obtained with curvilinear operators](doc/assets/img/burgers.png)
+
+<!-- Link references -->
+
+[joss-badge]: https://joss.theoj.org/papers/10.21105/joss.06288/status.svg
+[joss-link]: https://doi.org/10.21105/joss.06288
+[matlab-badge]: https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg
+[matlab-link]: https://www.mathworks.com/matlabcentral/fileexchange/124870-mole
+[license-badge]: https://img.shields.io/badge/License-GPLv3-blue.svg
+[license-link]: https://www.gnu.org/licenses/gpl-3.0
+[build-badge]: https://img.shields.io/github/actions/workflow/status/csrc-sdsu/mole/cmake.yml?branch=master&label=Build
+[build-link]: https://github.com/csrc-sdsu/mole/actions
+[docs-badge]: https://img.shields.io/badge/docs-latest-brightgreen.svg
+[docs-link]: https://csrc-sdsu.github.io/mole/build/html/
+[corbino-paper]: https://doi.org/10.1016/j.cam.2019.06.042
+[castillo-paper]: https://doi.org/10.1137/S0895479801398025
+[doc-guide]: https://github.com/csrc-sdsu/mole/blob/master/doc/sphinx/README.md
+[homebrew]: https://brew.sh/
+[contrib-guide]: https://github.com/csrc-sdsu/mole/blob/master/CONTRIBUTING.md

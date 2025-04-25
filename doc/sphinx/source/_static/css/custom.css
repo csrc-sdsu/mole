@@ -1,0 +1,218 @@
+/* Custom styling for MOLE documentation */
+
+/* Main header style */
+h1 {
+    color: #2c3e50;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+    font-size: 2.2em;
+}
+
+/* Section header style */
+h2 {
+    color: #2980b9;
+    border-left: 4px solid #3498db;
+    padding-left: 10px;
+    margin-top: 35px;
+    font-size: 1.7em;
+}
+
+/* Subsection header style */
+h3 {
+    color: #1a5276;
+    margin-top: 25px;
+    font-size: 1.4em;
+    border-bottom: 1px dotted #3498db;
+    padding-bottom: 5px;
+}
+
+/* Component boxes style */
+.component-box {
+    padding: 15px;
+    margin: 15px 0;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.component-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Button styling */
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #3498db;
+    border-color: #2980b9;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #1a5276;
+    color: #fff;
+    text-decoration: none;
+}
+
+.btn-secondary {
+    color: #fff;
+    background-color: #95a5a6;
+    border-color: #7f8c8d;
+}
+
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+    border-color: #5d6566;
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Operator section icon color */
+.operator-icon {
+    color: #e74c3c;
+}
+
+/* Boundary section icon color */
+.boundary-icon {
+    color: #2ecc71;
+}
+
+/* Utils section icon color */
+.utils-icon {
+    color: #f39c12;
+}
+
+/* MATLAB section icon color */
+.matlab-icon {
+    color: #0076a8;
+}
+
+/* Links styling */
+a.reference {
+    text-decoration: none;
+    border-bottom: 1px dotted #3498db;
+    transition: color 0.2s ease, border-bottom 0.2s ease;
+}
+
+a.reference:hover {
+    color: #3498db;
+    border-bottom: 1px solid #3498db;
+}
+
+/* Code block styling */
+div[class^='highlight'] {
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Admonition styling */
+.admonition {
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin: 20px 0;
+}
+
+.admonition-title {
+    font-weight: bold;
+}
+
+.note {
+    background-color: #eef7fa;
+    border-left: 5px solid #3498db;
+}
+
+.important {
+    background-color: #f8eaf0;
+    border-left: 5px solid #e74c3c;
+}
+
+.tip {
+    background-color: #eafaf1;
+    border-left: 5px solid #2ecc71;
+}
+
+/* GraphViz diagram styling */
+.graphviz {
+    text-align: center;
+    margin: 30px 0;
+    max-width: 100%;
+}
+
+.graphviz svg {
+    max-width: 100%;
+    height: auto;
+}
+
+/* MATLAB specific styling */
+.matlab-code {
+    background-color: #f5f5f5;
+    border-left: 3px solid #0076a8;
+}
+
+/* Add styles to fix Doxygen integration issues */
+.breathe-sectiondef {
+    padding-bottom: 10px;
+}
+
+.breathe-sectiondef-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Fix image paths in Doxygen-generated content */
+.doxygen-content img {
+    max-width: 100%;
+}
+
+/* Improve code block styling */
+div.highlight {
+    background-color: #f8f8f8;
+    border-radius: 3px;
+}
+
+/* Fix table styling */
+.rst-content table.docutils {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* Fix warning messages */
+.admonition.warning {
+    background-color: #fff3cd;
+    border-color: #ffecb5;
+}
+
+/* Fix note messages */
+.admonition.note {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+/* Fix mermaid diagram styling - replaced with GraphViz styling */
+.graphviz svg {
+    background-color: transparent;
+    max-width: 100%;
+    height: auto;
+    margin: 20px auto;
+    display: block;
+} 
