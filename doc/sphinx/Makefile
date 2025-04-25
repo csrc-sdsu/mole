@@ -110,3 +110,29 @@ doc-all: doc-clean doc-doxygen doc-deps doc-html doc-latexpdf
 # Explicit Sphinx targets
 $(SPHINX_TARGETS):
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS)
+	
+.PHONY: copy-images
+copy-images:
+	mkdir -p source/_images
+	cp -r ../assets/img/* source/_images/ || true
+	# Copy README images to the _images directory for proper reference
+	mkdir -p source/intros/doc/assets/img
+	cp -r ../assets/img/* source/intros/doc/assets/img/ || true
+	# Create figure directories for SVG files
+	mkdir -p source/api/examples/md/figures
+	mkdir -p source/api/examples-m/md/figures
+	mkdir -p source/math_functions/figures
+
+.PHONY: clean
+clean:
+	rm -rf $(BUILDDIR)/*
+
+.PHONY: doc-clean
+doc-clean: clean
+	rm -rf source/examples
+	rm -rf source/_images
+	rm -rf source/intros/doc
+	rm -f source/README.md
+
+html: copy-images
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)

@@ -1,4 +1,4 @@
- ################################################################################
+################################################################################
 # MOLE Documentation Sphinx Configuration
 ################################################################################
 
@@ -12,6 +12,7 @@ import shutil
 import subprocess
 import importlib.util
 import pkg_resources
+import glob
 
 #------------------------------------------------------------------------------
 # Path configuration
@@ -43,6 +44,7 @@ extensions = [
     # Sphinx core extensions
     'sphinx.ext.autodoc',     # Generate documentation from docstrings
     'sphinx.ext.mathjax',     # Math rendering
+    'sphinx.ext.graphviz',    # GraphViz diagram support
     'sphinx.ext.viewcode',    # Link to source code
     'sphinx.ext.napoleon',    # Support for NumPy and Google style docstrings
     'sphinx.ext.intersphinx', # Link to other project's documentation
@@ -54,8 +56,11 @@ extensions = [
     'breathe',                # Doxygen integration
     'myst_parser',            # Markdown support
     
-    # Diagram support
-    'sphinxcontrib.mermaid',  # Mermaid diagram support
+    # MATLAB documentation
+    'sphinxcontrib.matlab',   # MATLAB domain support
+    
+    # Custom extensions
+    'matlab_doc_filter',      # Filter license info from MATLAB docstrings
 ]
 
 #------------------------------------------------------------------------------
@@ -75,6 +80,9 @@ myst_enable_extensions = [
     "tasklist"         # Task lists
 ]
 
+# Make sure amsmath extension is enabled for math environments
+myst_enable_extensions += ["amsmath", "colon_fence"]
+
 # Configure HTML image handling
 html_copy_source = True
 html_show_sourcelink = True
@@ -82,11 +90,8 @@ html_show_sourcelink = True
 # Image and static file configuration
 html_static_path = ['_static']
 html_extra_path = [
-    str(ROOT_DIR / 'README.md'),
     str(ROOT_DIR / 'doc/doxygen'),
-    str(ROOT_DIR / 'doc/assets'),
     str(ROOT_DIR / 'doc/sphinx/README.md'),
-    str(ROOT_DIR / 'doc/sphinx/source/api/examples/md/figures')  # Figures for markdown docs
 ]
 
 # Additional MyST settings
@@ -116,31 +121,77 @@ if not os.path.exists(str(ROOT_DIR / "doc/doxygen/cpp/xml/index.xml")):
     subprocess.call(["doxygen", "Doxyfile"], cwd=str(ROOT_DIR))
 
 #------------------------------------------------------------------------------
-# Mermaid diagram configuration
+# GraphViz configuration
 #------------------------------------------------------------------------------
-# Check if mermaid-cli is available
-has_mmdc = shutil.which('mmdc') is not None
-has_npx = shutil.which('npx') is not None
+graphviz_output_format = 'svg'
+graphviz_dot_args = [
+    '-Tsvg',
+    '-Gfontname=Arial',
+    '-Nfontname=Arial',
+    '-Efontname=Arial'
+]
 
-print("\nDEBUG: Mermaid Configuration:")
-print(f"mmdc available: {has_mmdc}")
-print(f"npx available: {has_npx}")
+#------------------------------------------------------------------------------
+# MATLAB domain configuration
+#------------------------------------------------------------------------------
+# Path to MATLAB source directory for cross-reference functionality
+matlab_src_dir = os.path.abspath(os.path.join(ROOT_DIR, 'src', 'matlab'))
 
-if has_mmdc:
-    mermaid_cmd = 'mmdc'
-    mermaid_output_format = 'svg'
-    print(f"Using direct mmdc command: {mermaid_cmd}")
-elif has_npx:
-    mermaid_cmd = 'npx mmdc'
-    mermaid_output_format = 'svg'
-    print(f"Using npx command: {mermaid_cmd}")
-else:
-    # If Mermaid CLI is not available, disable the extension
-    extensions.remove('sphinxcontrib.mermaid')
-    print("\n" + "="*80)
-    print("WARNING: Mermaid CLI not found. Mermaid diagrams will not be rendered.")
-    print("To install Mermaid CLI, run: npm install -g @mermaid-js/mermaid-cli")
-    print("="*80 + "\n")
+# Enhanced debug logging
+# print("\nDEBUG: Enhanced MATLAB Configuration:")
+# print(f"Current working directory: {os.getcwd()}")
+# print(f"ROOT_DIR value: {ROOT_DIR}")
+# print(f"MATLAB source directory: {matlab_src_dir}")
+# print(f"Directory exists: {os.path.exists(matlab_src_dir)}")
+try:
+    if os.path.exists(os.path.dirname(matlab_src_dir)):
+        # print(f"Parent directory contents: {os.listdir(os.path.dirname(matlab_src_dir))}")
+        pass # Placeholder if you remove the print statement
+    else:
+        # print(f"Parent directory {os.path.dirname(matlab_src_dir)} does not exist")
+        pass # Placeholder
+except Exception as e:
+    # print(f"Error listing parent directory: {e}")
+    pass # Placeholder
+
+# Version compatibility check
+# print("\nDEBUG: Version Information:")
+# print(f"Python version: {sys.version}")
+# print(f"Sphinx version: {pkg_resources.get_distribution('sphinx').version}")
+try:
+    # print(f"sphinxcontrib-matlab version: {pkg_resources.get_distribution('sphinxcontrib-matlab').version}")
+    pass # Placeholder
+except Exception as e:
+    # print(f"Error getting sphinxcontrib-matlab version: {e}")
+    pass # Placeholder
+
+# Add MATLAB directory to Python path if it exists
+if os.path.exists(matlab_src_dir):
+    sys.path.insert(0, matlab_src_dir)
+    # print(f"\nAdded existing MATLAB directory to Python path: {matlab_src_dir}")
+
+# For matlabdomain, we need to treat MATLAB files as modules
+primary_domain = 'mat'  # Make MATLAB the primary domain for .m files
+
+# MATLAB documentation style settings
+matlab_keep_package_prefix = False
+matlab_short_links = True
+matlab_auto_link = "basic"  # Auto-link known MATLAB code elements
+matlab_show_property_default_value = False
+matlab_show_property_specs = False
+
+# MATLAB documentation filtering options
+matlab_filter_options = {
+    'remove_license': True,
+    'm2html_style': True,
+}
+
+# Add MATLAB to intersphinx mapping if needed
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+    'numpy': ('https://numpy.org/doc/stable', None),
+    'matplotlib': ('https://matplotlib.org/stable', None),
+}
 
 #------------------------------------------------------------------------------
 # Source configuration
@@ -153,7 +204,11 @@ source_suffix = {
 
 # Directories and files to exclude
 templates_path = ['_templates']
-exclude_patterns = []
+exclude_patterns = [
+    'README.md',  # Only exclude the root README
+    'api/examples-m/tex/list.md',
+    'api/examples/index.md',
+]
 
 # Link handling
 follow_links = True
@@ -255,3 +310,108 @@ myst_dmath_double_inline = False
 
 # For LaTeX output
 latex_use_xindy = False  # Disable xindy for better compatibility
+
+#------------------------------------------------------------------------------
+# File copying configuration
+#------------------------------------------------------------------------------
+def mkdir_p(path):
+    try:
+        os.makedirs(path)
+    except FileExistsError:
+        pass
+
+# Clean up and copy example documentation from source tree
+example_dest = str(ROOT_DIR / "doc/sphinx/source/examples")
+try:
+    if os.path.exists(example_dest):
+        shutil.rmtree(example_dest)
+except FileNotFoundError:
+    pass
+
+# Debug info
+print("\nDEBUG: Exclude Patterns:")
+for pattern in exclude_patterns:
+    print(f"  - {pattern}")
+
+# Copy all markdown files from examples directory
+for filename in glob.glob(str(ROOT_DIR / "examples/**/*.md"), recursive=True):
+    rel_path = os.path.relpath(filename, str(ROOT_DIR / "examples"))
+    destdir = os.path.join(example_dest, os.path.dirname(rel_path))
+    dest_file = os.path.join(destdir, os.path.basename(rel_path))
+    
+    # Only exclude if the relative path exactly matches an exclude pattern
+    skip_file = rel_path in exclude_patterns
+    
+    if not skip_file:
+        mkdir_p(destdir)
+        shutil.copy2(filename, destdir)
+        print(f"DEBUG: Copied markdown file: {filename} to {destdir}")
+
+# Copy all image files from examples directory
+for ext in ['*.jpg', '*.jpeg', '*.png', '*.svg']:
+    for filename in glob.glob(str(ROOT_DIR / "examples/**/" / ext), recursive=True):
+        rel_path = os.path.relpath(filename, str(ROOT_DIR / "examples"))
+        destdir = os.path.join(example_dest, os.path.dirname(rel_path))
+        mkdir_p(destdir)
+        shutil.copy2(filename, destdir)
+        print(f"DEBUG: Copied image file: {filename} to {destdir}")
+
+# Debug info to help troubleshoot file copying
+print("\nDEBUG: Directory Structure Before File Operations:")
+if os.path.exists(example_dest):
+    for root, dirs, files in os.walk(example_dest):
+        rel_root = os.path.relpath(root, example_dest)
+        if rel_root == ".":
+            print(f"Directory: {example_dest}")
+        else:
+            print(f"Directory: {os.path.join(example_dest, rel_root)}")
+        for file in files:
+            print(f"  File: {file}")
+
+# Ensure README files that are referenced in toctree exist
+readme_files = [
+    os.path.join(example_dest, "README.md"),
+    os.path.join(example_dest, "cpp/README.md"),
+    os.path.join(example_dest, "matlab/compact_operators/README.md")
+]
+
+for readme_file in readme_files:
+    dir_path = os.path.dirname(readme_file)
+    if not os.path.exists(dir_path):
+        mkdir_p(dir_path)
+    
+    # If the README doesn't exist, create a basic one with a title
+    if not os.path.exists(readme_file):
+        basename = os.path.basename(os.path.dirname(readme_file))
+        if basename == "examples":
+            title = "MOLE Examples Overview"
+            content = "This directory contains examples demonstrating the usage of MOLE."
+        elif basename == "cpp":
+            title = "C++ Examples"
+            content = "This folder contains C++ examples for MOLE."
+        elif basename == "compact_operators":
+            title = "MATLAB Compact Operators"
+            content = "This folder contains MATLAB examples for compact operators."
+        
+        with open(readme_file, 'w') as f:
+            f.write(f"# {title}\n\n{content}\n")
+
+# Debug info after file operations
+print("\nDEBUG: Directory Structure After File Operations:")
+if os.path.exists(example_dest):
+    for root, dirs, files in os.walk(example_dest):
+        rel_root = os.path.relpath(root, example_dest)
+        if rel_root == ".":
+            print(f"Directory: {example_dest}")
+        else:
+            print(f"Directory: {os.path.join(example_dest, rel_root)}")
+        for file in files:
+            print(f"  File: {file}")
+
+# Check if specific README files exist
+print("\nDEBUG: Checking for specific README files:")
+for readme_file in readme_files:
+    if os.path.exists(readme_file):
+        print(f"  - {readme_file}: FOUND")
+    else:
+        print(f"  - {readme_file}: NOT FOUND")

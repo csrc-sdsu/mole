@@ -20,20 +20,19 @@
 # ======= Sphinx =======
 
 # Core Sphinx
-sphinx>=5.3,<6                   # Using older version to avoid epub3 issues
-docutils<0.21
+sphinx>=5.3,<7                   # Extended version range for Python 3.12
+docutils>=0.18                   # More flexible version requirement
 Pillow                          # Required for imghdr module
 setuptools                      # Required for pkg_resources
 
 # Theme
-sphinx_rtd_theme
+sphinx_rtd_theme>=1.0
 
 # Extensions used in conf.py
 breathe>=4.30                    # C++ documentation integration
 myst-parser[linkify]>=0.14.0    # Markdown support
 sphinx-design                    # UI components
-sphinxcontrib-bibtex==2.5       # Bibliography support
-sphinxcontrib-mermaid           # Diagrams
+sphinxcontrib-bibtex>=2.5       # Bibliography support
 sphinxcontrib-katex             # Math rendering
 standard-imghdr
 
@@ -44,3 +43,7 @@ sphinxext-altair                # Altair integration
 # Optional but useful
 sphinx-hoverxref>=0.3b1         # Hover tooltips for references
 
+# Documentation Dependencies
+sphinxcontrib-matlabdomain>=0.22.0,<0.23.0  # Pin version for Python 3.12 compatibility
+sphinxcontrib-serializinghtml
+sphinxcontrib-htmlhelp
