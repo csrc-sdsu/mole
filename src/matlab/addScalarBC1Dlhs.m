@@ -1,4 +1,4 @@
-function [Al, Ar] = addBC1Dlhs(k, m, dx, dc, nc)
+function [Al, Ar] = addScalarBC1Dlhs(k, m, dx, dc, nc)
 % This functions uses geometry and boundary type conditions to create
 % modifications of matrix A associated to each of the boundary faces.
 %
@@ -13,11 +13,13 @@ function [Al, Ar] = addBC1Dlhs(k, m, dx, dc, nc)
 %        dx : Step size
 %        dc : Dirichlet coefficient (2x1 vector for left and right vertices, resp.)
 %        nc : Neumann coefficient (2x1 vector for left and right vertices, resp.)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
+%
 
     % Dirichlet coefficient
     Al = sparse(m+2, m+2);
@@ -36,19 +38,4 @@ function [Al, Ar] = addBC1Dlhs(k, m, dx, dc, nc)
     % Robin coefficients
     Al = Al + Bl*Gl;
     Ar = Ar + Br*Gr;
-
-    % periodic boundary condition case
-    q = find(dc.*dc + nc.*nc,1);
-    if isempty(q)
-        % u at vertices are equal
-        Al(1,1) = 1;
-        Al(1,end) = -1;
-        % du/dn at vertices are equal
-        B = sparse(m+2, m+1);
-        B(1, 1) = -1;
-        B(end, end) = 1;
-        G = grad(k, m, dx);
-        BC = B*G;
-        Ar(end,:) = BC(1,:)+BC(end,:);
-    end
 end

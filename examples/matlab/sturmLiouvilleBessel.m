@@ -3,7 +3,7 @@
 % x^2 u'' + x u' + (x^2-nu^2) u = 0, 0 < x < 1, u(0) = 0, u(1) = Besselj(nu,1)
 % exact solution: u(x) = J_3(x) (Bessel function of order 3)
 % ===================================================
-% example that uses addBC1D
+% example that uses addScalarBC1D
 %
 close all; clc;
 
@@ -25,7 +25,7 @@ G = grad(k,m,dx);
 I = interpolFacesToCentersG1D(k,m);
 A = sparse(diag(xc.^2)*lap(k,m,dx) + diag(xc)*I*G + diag(xc.^2 - 9)*speye(m+2,m+2)); % nu = 3
 b = zeros(size(A,2),1);
-[A0,b0] = addBC1D(A,b,k,m,dx,dc,nc,v);
+[A0,b0] = addScalarBC1D(A,b,k,m,dx,dc,nc,v);
 ua = A0\b0; % approximate solution
 
 % plot

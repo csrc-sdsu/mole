@@ -1,4 +1,6 @@
 % Solves the 1D Poisson's equation with Robin boundary conditions
+% same example as elliptic1D that uses addScalarBC1D
+%
 
 clc
 close all
@@ -20,7 +22,7 @@ v = [0;2*exp(1)];
 
 L = lap(k, m, dx);  % 1D Mimetic laplacian operator
 U = exp(grid)'; % RHS
-[L0,U0] = addBC1D(L,U,k,m,dx,dc,nc,v); % add BC to system
+[L0,U0] = addScalarBC1D(L,U,k,m,dx,dc,nc,v); % add BC to system
 U0 = L0\U0;  % Solve a linear system of equations
 
 % Plot result

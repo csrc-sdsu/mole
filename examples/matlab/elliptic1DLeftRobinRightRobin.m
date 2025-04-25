@@ -11,7 +11,7 @@
 % a = -200, b = 400, c = 10, d = 15
 % So, E = (35 - pi)/403, F = (402 pi - 3995)/80600
 % ===================================================
-% example that uses addBC1D
+% example that uses addScalarBC1D
 %
 close all; clc;
 
@@ -30,7 +30,7 @@ nc = [1;1];
 v = [10;15];
 A = - lap(k,m,dx);
 b = pi^2 * sin(pi*xc);
-[A0,b0] = addBC1D(A,b,k,m,dx,dc,nc,v);
+[A0,b0] = addScalarBC1D(A,b,k,m,dx,dc,nc,v);
 ua = A0\b0; % approximate solution
 
 % plot

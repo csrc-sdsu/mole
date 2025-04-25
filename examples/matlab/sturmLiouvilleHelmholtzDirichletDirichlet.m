@@ -3,7 +3,7 @@
 % u'' + u = 0, 0 < x < 3, u(0) = 0, u(3) = sin(3)
 % exact solution: u(x) = sin(x)
 % ===================================================
-% example that uses addBC1D
+% example that uses addScalarBC1D
 %
 close all; clc;
 
@@ -21,7 +21,7 @@ nc = [0;0];
 v = [0;sin(3)];
 A = lap(k,m,dx) + speye(m+2,m+2);
 b = zeros(size(A,2),1);
-[A0,b0] = addBC1D(A,b,k,m,dx,dc,nc,v);
+[A0,b0] = addScalarBC1D(A,b,k,m,dx,dc,nc,v);
 ua = A0\b0; % approximate solution
 
 % plot

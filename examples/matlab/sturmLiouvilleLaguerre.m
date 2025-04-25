@@ -3,7 +3,7 @@
 % x u'' + (1 - x) u' + n u = 0, 0 < x < 2, u(0) = Laguerre(4,0), u(2) = Laguerre(4,2)
 % exact solution: u(x) = H_4(x) (Hermite function of order 4)
 % ===================================================
-% example that uses addBC1D
+% example that uses addScalarBC1D
 %
 close all; clc;
 
@@ -33,7 +33,7 @@ G = grad(k,m,dx);
 I = interpolFacesToCentersG1D(k,m);
 A = sparse(diag(xc)*lap(k,m,dx) + diag(1-xc)*I*G) + 4*speye(m+2,m+2); % n = 4
 b = zeros(size(A,2),1);
-[A0,b0] = addBC1D(A,b,k,m,dx,dc,nc,v);
+[A0,b0] = addScalarBC1D(A,b,k,m,dx,dc,nc,v);
 ua = A0\b0; % approximate solution
 
 % plot

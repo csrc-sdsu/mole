@@ -1,4 +1,6 @@
 % 3D Staggering example using a 3D Mimetic laplacian
+% same as example elliptic3D using addScalarBC3D
+%
 
 clc
 close all
@@ -21,11 +23,11 @@ bcf = 100*ones((n+2)*(m+2),1); % Dirichlet boundary condition
 bcz = zeros((n+2)*(m+2),1);
 v = {bcl;bcr;bcb;bct;bcf;bcz};
 
-L = lap3D(k, m, 1, n, 1, o, 1); % 3D Mimetic laplacian operator
+L = lap3D(k, m, 1, n, 1, o, 1, dc, nc); % 3D Mimetic laplacian operator
 RHS = zeros(m+2, n+2, o+2);
 RHS = reshape(RHS, [], 1);
 
-[L0, RHS0] = addBC3D(L,RHS,k,m,1,n,1,o,1,dc,nc,v); % add BC to linear system
+[L0, RHS0] = addScalarBC3D(L,RHS,k,m,1,n,1,o,1,dc,nc,v); % add BC to linear system
 SOL = L0\RHS0;
 SOL = reshape(SOL, m+2, n+2, o+2);
 

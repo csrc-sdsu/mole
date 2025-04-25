@@ -3,7 +3,7 @@
 % u'' - 2 x u' + 2 m u = 0, -1 < x < 1, u(-1) = Hermite(4,-1), u(1) = Hermite(4,1)
 % exact solution: u(x) = H_4(x) (Hermite function of order 4)
 % ===================================================
-% example that uses addBC1D
+% example that uses addScalarBC1D
 %
 close all; clc;
 
@@ -27,7 +27,7 @@ G = grad(k,m,dx);
 I = interpolFacesToCentersG1D(k,m);
 A = lap(k,m,dx) - 2*sparse(diag(xc)*I*G) + 8*speye(m+2,m+2); % m = 4
 b = zeros(size(A,2),1);
-[A0,b0] = addBC1D(A,b,k,m,dx,dc,nc,v);
+[A0,b0] = addScalarBC1D(A,b,k,m,dx,dc,nc,v);
 ua = A0\b0; % approximate solution
 
 % plot

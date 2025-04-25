@@ -3,7 +3,7 @@
 % (1-x^2) u'' - 2x u' + n(n+1) u = 0, -1 < x < 1, u(-1) = -1, u(1) = 1
 % exact solution: u(x) = P_n(x) (Legendre polynomial of order n)
 % ===================================================
-% example that uses addBC1D
+% example that uses addScalarBC1D
 %
 close all; clc;
 
@@ -27,7 +27,7 @@ G = grad(k,m,dx);
 I = interpolFacesToCentersG1D(k,m);
 A = sparse(diag(1-xc.^2)*lap(k,m,dx) - 2*diag(xc)*I*G) + 12*speye(m+2,m+2); % n = 3
 b = zeros(size(A,2),1);
-[A0,b0] = addBC1D(A,b,k,m,dx,dc,nc,v);
+[A0,b0] = addScalarBC1D(A,b,k,m,dx,dc,nc,v);
 ua = A0\b0; % approximate solution
 
 % plot

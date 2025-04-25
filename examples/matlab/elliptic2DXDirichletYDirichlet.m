@@ -4,7 +4,7 @@
 % BC: u(x,0) = e^x, u(x,pi) = - e^x, u(0,y) = cos(y), u(pi,y) = e^pi cos(y)
 % exact solution: u(x,y) = e^x cos(y)
 % ===================================================
-% example that uses addBC2D
+% example that uses addScalarBC2D
 %
 close all; clc;
 
@@ -31,10 +31,10 @@ bct = squeeze(ue(:,end)); % top bc (x increases)
 bcl = bcl(2:end-1,1);
 bcr = bcr(2:end-1,1);
 v = {bcl;bcr;bcb;bct};
-A = - lap2D(k,m,dx,n,dy);
+A = - lap2D(k,m,dx,n,dy,dc,nc);
 b = zeros(m+2,n+2);
 b = reshape(b,[],1);
-[A0,b0] = addBC2D(A,b,k,m,dx,n,dy,dc,nc,v);
+[A0,b0] = addScalarBC2D(A,b,k,m,dx,n,dy,dc,nc,v);
 ua = A0\b0; % approximate solution
 ua = reshape(ua,m+2,n+2);
 
