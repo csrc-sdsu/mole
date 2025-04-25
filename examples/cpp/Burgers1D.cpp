@@ -31,9 +31,11 @@ int main() {
     double t = 10.0;
     double dt = dx;
 
+    // Mimetic divergence and interpolation (sparse)
     Divergence D(k, m, dx);
     Interpol I(m, 1.0);
 
+    // Grid setup
     vec xgrid(m + 2);
     xgrid(0) = west;
     xgrid(m + 1) = east;
@@ -41,10 +43,13 @@ int main() {
         xgrid(i) = west + (i - 0.5) * dx;
     }
 
+    // Initial condition
     vec U = exp(-square(xgrid) / 50.0);
-    mat D_matrix = (-dt / 2) * mat(D) * mat(I);
 
-    if (D_matrix.n_cols != U.n_rows) {
+    // Check matrix dimensions if needed
+    sp_mat D_sp = sp_mat(D);
+    sp_mat I_sp = sp_mat(I);
+    if (D_sp.n_cols != I_sp.n_rows || I_sp.n_cols != U.n_rows) {
         cerr << "Error: Incompatible matrix dimensions!" << endl;
         return 1;
     }
@@ -52,7 +57,7 @@ int main() {
     int total_steps = t / dt;
     int plot_interval = total_steps / 5;
 
-    // Open a pipe to Gnuplot
+    // Gnuplot for visualization
     FILE* gnuplotPipe = popen("gnuplot -persist", "w");
     if (!gnuplotPipe) {
         cerr << "Error: Could not open Gnuplot." << endl;
@@ -61,7 +66,9 @@ int main() {
 
     for (int step = 0; step <= total_steps; ++step) {
         double time = step * dt;
-        U = U + D_matrix * square(U);
+
+        // Explicit time step: U = U + (-dt/2) * D * (I * U²)
+        U = U + (-dt / 2.0) * (D_sp * (I_sp * square(U)));
 
         if (step % plot_interval == 0) {
             double area = Utils::trapz(xgrid, U);
@@ -73,7 +80,7 @@ int main() {
                  << ", U_center: " << U(U.n_elem / 2)
                  << endl;
 
-            // Send commands directly to Gnuplot
+            // Plot with Gnuplot
             fprintf(gnuplotPipe, "reset\n");
             fprintf(gnuplotPipe, "set title '1D Inviscid Burgers'' Equation'\n");
             fprintf(gnuplotPipe, "set xlabel 'x'\n");
@@ -85,11 +92,10 @@ int main() {
                 fprintf(gnuplotPipe, "%f %f\n", xgrid(i), U(i));
 
             fprintf(gnuplotPipe, "e\n");
-            fflush(gnuplotPipe);  // Ensure data is flushed immediately (like drawnow)
+            fflush(gnuplotPipe);
         }
     }
 
     pclose(gnuplotPipe);
     return 0;
 }
-
