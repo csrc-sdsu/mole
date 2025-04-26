@@ -11,7 +11,6 @@
  * Solution is computed using a staggered grid approach, explicit time-stepping, 
  * and mimetic finite difference operators for divergence and interpolation.
  */  
-
 #include <armadillo>
 #include <cmath>
 #include <cstdlib>    // for EXIT_SUCCESS / EXIT_FAILURE
@@ -43,12 +42,11 @@ int main() {
         xgrid(i) = west + (i - 0.5) * dx;
     }
 
+    // Initial condition
     arma::vec U = arma::exp(-arma::square(xgrid) / 50.0);
 
-    arma::sp_mat D_sp = arma::sp_mat(D);
-    arma::sp_mat I_sp = arma::sp_mat(I);
-
-    if (D_sp.n_cols != I_sp.n_rows || I_sp.n_cols != U.n_rows) {
+    // Sanity check: matrix dimensions
+    if (D.n_cols != I.n_rows || I.n_cols != U.n_rows) {
         std::cerr << "Error: Incompatible matrix dimensions!" << std::endl;
         return EXIT_FAILURE;
     }
@@ -60,7 +58,7 @@ int main() {
         double time = step * dt;
 
         // Explicit update
-        U = U + (-dt / 2.0) * (D_sp * (I_sp * arma::square(U)));
+        U += (-dt / 2.0) * (D * (I * arma::square(U)));
 
         if (step % plot_interval == 0) {
             double area = Utils::trapz(xgrid, U);
@@ -89,3 +87,6 @@ int main() {
 
     return EXIT_SUCCESS;
 }
+
+
+
