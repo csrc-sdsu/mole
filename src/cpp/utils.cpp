@@ -233,3 +233,14 @@ void Utils::meshgrid(const vec &x, const vec &y, const vec &z, cube &X, cube &Y,
   for (int kk = 0; kk < o; ++kk)
     Z.slice(kk).fill(z(kk));
 }
+
+// Trapezoidal rule (trapz) for 1D integration
+double Utils::trapz(const vec &x, const vec &y) {
+  assert(x.n_elem == y.n_elem);
+  double sum = 0.0;
+  for (uword i = 0; i < x.n_elem - 1; ++i) {
+    sum += (x(i+1) - x(i)) * (y(i) + y(i+1));
+  }
+  return 0.5 * sum;
+}
+
