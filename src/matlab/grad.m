@@ -68,7 +68,7 @@ function G = grad(k, m, dx)
                 G(i, i-3:i+4) = [5/7168 -49/5120 245/3072 -1225/1024 1225/1024 -245/3072 49/5120 -5/7168];
             end
         otherwise 
-            G=gradienthelper(k,m)
+            G=gradienthelper(k,m);
     end
     G = (1/dx).*G;
 end

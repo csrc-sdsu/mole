@@ -26,12 +26,14 @@ function D = div(k, m, dx)
     assert(k >= 2, 'k >= 2');
     assert(mod(k, 2) == 0, 'k % 2 = 0');
     assert(m >= 2*k+1, ['m >= ' num2str(2*k+1) ' for k = ' num2str(k)]);
+    n_rows=m+2;
+    n_cols=m+1;
 
-    D = sparse(m+2, m+1);
+    D = sparse(n_rows,n_cols);
 
     switch k
         case 2
-            for i = 2:m+1
+            for i = 2:n_cols
                D(i, i-1:i) = [-1 1];
             end
 
@@ -39,7 +41,7 @@ function D = div(k, m, dx)
             A = [-11/12 17/24 3/8 -5/24 1/24];
             D(2, 1:5) = A;
             D(m+1, m-3:end) = -fliplr(A);
-            for i = 3:m
+            for i = 3:n_cols-1
                D(i, i-2:i+1) = [1/24 -9/8 9/8 -1/24];
             end
 
@@ -48,7 +50,7 @@ function D = div(k, m, dx)
                     31/960  -687/640 129/128   19/192 -3/32    21/640  -3/640];
             D(2:3, 1:7) = A;
             D(m:m+1, m-5:end) = -rot90(A,2);
-            for i = 4:m-1
+            for i = 4:n_cols-2
                 D(i, i-3:i+2) = [-3/640 25/384 -75/64 75/64 -25/384 3/640];
             end
 
@@ -58,11 +60,60 @@ function D = div(k, m, dx)
                    -59/17920    1175/21504 -1165/1024   1135/1024    25/3072  -251/5120   25/1024   -45/7168     5/7168];
             D(2:4, 1:9) = A;
             D(m-1:m+1, m-7:end) = -rot90(A,2);
-            for i = 5:m-2
+            for i = 5:n_cols-3
                 D(i, i-4:i+3) = [5/7168 -49/5120 245/3072 -1225/1024 1225/1024 -245/3072 49/5120 -5/7168];
             end
         otherwise 
-            D=divergencehelper(k,m);
+            neighbors = zeros(1, k); % Bandwidth = k
+            neighbors(1) = 1/2 - k/2;
+            for i = 2 : k
+                neighbors(i) = neighbors(i-1)+1;
+            end
+    
+    
+            A = invvander(neighbors);
+    
+   
+            b = zeros(k, 1);
+            b(2) = 1;
+    
+    
+            coeffs = A*b;
+    
+            j = 1;
+            for i = k/2+1 : n_rows - k/2
+                D(i, j:j+k-1) = coeffs;
+                j = j + 1;
+            end
+    
+            p = k/2-1;
+            q = k+1;
+            A = sparse(p, q);
+            for i = 1 : p % For each row of A
+                neighbors = zeros(1, q); % k+1 points are used for the boundaries
+                neighbors(1) = 1/2 - i; % Shifting the stencil to the right
+                for j = 2 : q
+                    neighbors(j) = neighbors(j-1)+1;
+                end
+                V = invvander(neighbors);
+                b = zeros(q, 1);
+                b(2) = 1;
+                coeffs = V*b;
+                A(i, 1:q) = coeffs;
+            end
+   
+            D(2:p+1, 1:q) = A;
+    
+    
+
+            Pp = fliplr(speye(p));
+            Pq = fliplr(speye(q));
+        
+            A = -Pp*A*Pq;
+    
+    
+           D(n_rows-p:n_rows-1, n_cols-q+1:n_cols) = A;
     end
     D = (1/dx).*D;
+
 end
