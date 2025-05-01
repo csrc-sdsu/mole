@@ -16,6 +16,19 @@ HTMLDIR       = $(BUILDDIR)/html
 # List of Sphinx builders
 SPHINX_TARGETS := html dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub text man changes linkcheck doctest coverage gettext
 
+# Detect operating system for open command
+UNAME := $(shell uname)
+ifeq ($(UNAME), Darwin)
+  # macOS
+  OPEN_CMD := open
+else ifeq ($(UNAME), Linux)
+  # Linux (using xdg-open)
+  OPEN_CMD := xdg-open
+else
+  # Windows or others (with limited functionality)
+  OPEN_CMD := start
+endif
+
 .PHONY: help clean doc-deps doc-html doc-clean doc-doxygen doc-all $(SPHINX_TARGETS) doc-latexpdf doc-latexpdf
 
 # Default target
@@ -23,8 +36,8 @@ help:
 	@echo "Documentation targets:"
 	@echo "  doc-doxygen  : Generate Doxygen documentation"
 	@echo "  doc-deps     : Install documentation dependencies"
-	@echo "  doc-html     : Build HTML documentation"
-	@echo "  doc-latexpdf : Build PDF documentation"
+	@echo "  doc-html     : Build HTML documentation and open in browser"
+	@echo "  doc-latexpdf : Build PDF documentation and open in viewer"
 	@echo "  doc-clean    : Remove all built documentation"
 	@echo "  doc-all      : Generate all HTML+PDF formats with a clean build"
 
@@ -55,6 +68,7 @@ doc-html:
 		echo "=== HTML documentation generated successfully ==="; \
 		echo "   View documentation at: $(HTMLDIR)/index.html"; \
 		echo "   Open with a browser:  file://$(CURDIR)/$(HTMLDIR)/index.html"; \
+		$(OPEN_CMD) "$(HTMLDIR)/index.html" || echo "Could not automatically open documentation"; \
 	else \
 		echo "=== Error: HTML generation failed ==="; \
 		exit 1; \
@@ -74,6 +88,7 @@ doc-latexpdf: depcheck-pdflatex depcheck-inkscape
 	@$(CURDIR)/build.sh
 	@if [ $$? -eq 0 ] && [ -f "$(PDFDIR)/MOLE-docs.pdf" ]; then \
 		echo "=== PDF generated successfully at $(PDFDIR)/MOLE-docs.pdf ==="; \
+		$(OPEN_CMD) "$(PDFDIR)/MOLE-docs.pdf" || echo "Could not automatically open PDF documentation"; \
 	else \
 		echo "=== Error: PDF generation failed ==="; \
 		exit 1; \
@@ -101,9 +116,8 @@ depcheck-inkscape:
 # Generate all documentation
 doc-all: doc-clean doc-doxygen doc-deps doc-html doc-latexpdf
 	@echo "================================================================"
-	@echo "Documentation generated in:"
+	@echo "Documentation generated and opened:"
 	@echo "  HTML: $(HTMLDIR)/index.html"
-	@echo "  Open with a browser:  file://$(CURDIR)/$(HTMLDIR)/index.html"
 	@echo "  PDF:  $(PDFDIR)/MOLE-docs.pdf"
 	@echo "  API:  ../doxygen/cpp/"
 	@echo "================================================================"

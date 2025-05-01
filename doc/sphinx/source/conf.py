@@ -49,8 +49,9 @@ extensions = [
     'sphinx.ext.napoleon',    # Support for NumPy and Google style docstrings
     'sphinx.ext.intersphinx', # Link to other project's documentation
     
-    # Theme
-    'sphinx_rtd_theme',       # Read the Docs theme
+    # Theme and theme extensions
+    'sphinx_book_theme',      # Book theme
+    'sphinx_design',          # UI components
     
     # External documentation extensions
     'breathe',                # Doxygen integration
@@ -217,21 +218,44 @@ follow_links = True
 # HTML output configuration
 #------------------------------------------------------------------------------
 # Theme settings
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'sphinx_book_theme'
 html_theme_options = {
-    "style_external_links": True,
-    "logo_only": True,
-    "navigation_depth": 3,
-    "includehidden": True,
-    "titles_only": False,
-    "collapse_navigation": False
+    # Repository configuration
+    "repository_url": "https://github.com/csrc-sdsu/mole",
+    "repository_branch": "main",
+    "use_repository_button": True,
+    
+    # Navigation options
+    "show_toc_level": 2,
+    "use_download_button": True,
+    "use_fullscreen_button": True,
+    
+    # Message banner
+    "announcement": "This documentation is using the sphinx-book-theme.",
 }
 
 # Appearance
 html_logo = str(ROOT_DIR / "logo.png")
-html_css_files = [
-    'css/custom.css',
-]
+html_title = "MOLE Documentation" 
+html_favicon = str(ROOT_DIR / "logo.png")
+html_css_files = ['css/custom.css']
+html_js_files = ['js/theme-custom.js']
+
+# Control sidebar contents - using defaults
+# html_sidebars = {
+#     "**": ["sbt-sidebar-nav.html"]
+# }
+
+# Custom template adjustments 
+templates_path = ['_templates']
+html_context = {
+    'display_github': True,
+    'github_user': 'csrc-sdsu',
+    'github_repo': 'mole',
+    'github_version': 'main',
+    'display_version': True,
+    'conf_py_path': '/doc/sphinx/source/',
+}
 
 #------------------------------------------------------------------------------
 # Warning suppression
