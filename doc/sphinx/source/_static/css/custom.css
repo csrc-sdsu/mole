@@ -1,27 +1,145 @@
+/* Custom CSS for improved compatibility with sphinx-book-theme */
+
+/* General page styling */
+:root {
+  --mole-primary: #1a73e8;
+  --mole-secondary: #4285f4;
+  --mole-accent: #34a853;
+}
+
+/* Dark mode overrides */
+html[data-theme="dark"] {
+  --pst-color-primary: var(--mole-primary);
+  --pst-color-secondary: var(--mole-secondary);
+  --pst-color-link: #81a9e3;
+  --pst-color-link-hover: #a8c6f0;
+}
+
+/* Light mode overrides */
+html[data-theme="light"] {
+  --pst-color-primary: var(--mole-primary);
+  --pst-color-secondary: var(--mole-secondary);
+}
+
+/* Enhance grid cards */
+.features-grid .sd-card {
+  transition: transform 0.3s, box-shadow 0.3s;
+  height: 100%;
+}
+
+.features-grid .sd-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.features-grid .sd-card-title {
+  font-weight: 600;
+  color: var(--mole-primary);
+}
+
+/* Quick links styling */
+.quick-links.sd-card {
+  border-left: 4px solid var(--mole-primary);
+}
+
+.quick-links .sd-card-header {
+  font-size: 1.5rem;
+  font-weight: 600;
+  background-color: transparent;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Make Mermaid diagrams responsive in both light and dark modes */
+.mermaid {
+  margin: 1.5rem auto;
+  text-align: center;
+}
+
+html[data-theme="dark"] .mermaid {
+  filter: invert(0.85) hue-rotate(180deg);
+}
+
+/* Fix code block appearance */
+div.highlight {
+  border-radius: 0.4rem;
+}
+
+.highlight button.copybtn {
+  opacity: 0.3;
+}
+
+.highlight:hover button.copybtn {
+  opacity: 1;
+}
+
+/* Fix admonition appearance */
+.admonition {
+  border-radius: 0.4rem;
+  margin: 1.5rem 0;
+}
+
+.admonition-title {
+  font-weight: 600;
+}
+
+/* Fix tab appearance */
+.sphinx-tabs {
+  margin: 1.5rem 0;
+}
+
+/* Fix dropdown appearance */
+details.dropdown {
+  margin: 1.5rem 0;
+}
+
+details.dropdown summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--mole-primary);
+}
+
+details.dropdown[open] summary {
+  margin-bottom: 0.5rem;
+}
+
+/* Lead text styling */
+.lead {
+  font-size: 1.2rem;
+  color: #666;
+  font-weight: 300;
+}
+
+/* Add responsive control for larger screens */
+@media (min-width: 992px) {
+  .container, .container-lg, .container-md, .container-sm {
+    max-width: 1140px;
+  }
+}
+
 /* Custom styling for MOLE documentation using sphinx-book-theme */
 
 /* ===== BASIC STYLING ===== */
 
 /* Typography enhancements */
 h1, h2, h3, h4, h5, h6 {
-  color: #2c3e50;
+    color: #2c3e50;
   margin-top: 1.5rem;
   margin-bottom: 1rem;
 }
 
 h1 {
-  border-bottom: 3px solid #3498db;
+    border-bottom: 3px solid #3498db;
   padding-bottom: 0.5rem;
 }
 
 h2 {
-  border-left: 4px solid #3498db;
-  padding-left: 10px;
+    border-left: 4px solid #3498db;
+    padding-left: 10px;
 }
 
 h3 {
-  border-bottom: 1px dotted #3498db;
-  padding-bottom: 5px;
+    border-bottom: 1px dotted #3498db;
+    padding-bottom: 5px;
 }
 
 /* Code styling */
@@ -64,31 +182,31 @@ tbody tr:nth-child(odd) {
 /* ===== CATEGORY ICONS ===== */
 
 .operator-icon {
-  color: #e74c3c;
+    color: #e74c3c;
 }
 
 .boundary-icon {
-  color: #2ecc71;
+    color: #2ecc71;
 }
 
 .utils-icon {
-  color: #f39c12;
+    color: #f39c12;
 }
 
 .matlab-icon {
-  color: #0076a8;
+    color: #0076a8;
 }
 
 /* ===== DOXYGEN INTEGRATION ===== */
 
 .breathe-sectiondef {
-  padding-bottom: 10px;
+    padding-bottom: 10px;
 }
 
 .breathe-sectiondef-title {
-  font-size: 1.1em;
+    font-size: 1.1em;
   font-weight: 600;
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 /* ===== GRAPHVIZ DIAGRAMS ===== */
@@ -99,6 +217,57 @@ tbody tr:nth-child(odd) {
 }
 
 .graphviz svg {
-  max-width: 100%;
-  height: auto;
+    max-width: 100%;
+    height: auto;
+}
+
+/* ===== RESPONSIVE TABLES ===== */
+
+/* Make tables responsive */
+@media screen and (max-width: 600px) {
+  table.responsive-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  table.responsive-table thead, 
+  table.responsive-table tbody, 
+  table.responsive-table th, 
+  table.responsive-table td, 
+  table.responsive-table tr {
+    display: block;
+  }
+  
+  table.responsive-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  
+  table.responsive-table tr { 
+    border: 1px solid #ddd; 
+    margin-bottom: 10px;
+  }
+  
+  table.responsive-table td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+    white-space: normal;
+    text-align: left;
+  }
+  
+  table.responsive-table td:before {
+    content: attr(data-title);
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+  }
 } 

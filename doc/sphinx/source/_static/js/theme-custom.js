@@ -209,4 +209,28 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     `;
     document.head.appendChild(style);
+
+    // Add feature to make all tables responsive
+    document.querySelectorAll('table:not(.responsive-table)').forEach(table => {
+        // Add responsive class
+        table.classList.add('responsive-table');
+        
+        // Get header cells
+        const headerCells = table.querySelectorAll('thead th');
+        
+        // If there are header cells, use them for data-title attributes
+        if (headerCells.length > 0) {
+            // Get header text values
+            const headerTexts = Array.from(headerCells).map(th => th.textContent.trim());
+            
+            // Add data-title attributes to all body cells
+            table.querySelectorAll('tbody tr').forEach(row => {
+                Array.from(row.cells).forEach((cell, i) => {
+                    if (i < headerTexts.length) {
+                        cell.setAttribute('data-title', headerTexts[i]);
+                    }
+                });
+            });
+        }
+    });
 }); 

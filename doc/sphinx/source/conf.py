@@ -51,7 +51,9 @@ extensions = [
     
     # Theme and theme extensions
     'sphinx_book_theme',      # Book theme
-    'sphinx_design',          # UI components
+    'sphinx_design',          # UI components (tabs, cards, dropdowns)
+    'sphinx_copybutton',      # Copy button for code blocks
+    'sphinxcontrib.mermaid',  # Mermaid diagrams support
     
     # External documentation extensions
     'breathe',                # Doxygen integration
@@ -62,6 +64,7 @@ extensions = [
     
     # Custom extensions
     'matlab_doc_filter',      # Filter license info from MATLAB docstrings
+    'matlab_args_fix',        # Fix MATLAB function argument warnings
 ]
 
 #------------------------------------------------------------------------------
@@ -232,6 +235,13 @@ html_theme_options = {
     
     # Message banner
     "announcement": "This documentation is using the sphinx-book-theme.",
+    
+    # Theme and appearance
+    "pygments_light_style": "tango",
+    
+    # Disable dark mode
+    "use_dark_theme": False,
+    "single_page": False,
 }
 
 # Appearance
@@ -239,7 +249,15 @@ html_logo = str(ROOT_DIR / "logo.png")
 html_title = "MOLE Documentation" 
 html_favicon = str(ROOT_DIR / "logo.png")
 html_css_files = ['css/custom.css']
-html_js_files = ['js/theme-custom.js']
+html_js_files = ['js/theme-custom.js', 'js/disable-dark-mode.js']
+
+# Logo for light/dark modes - uncomment and modify when dark logo is available
+# html_theme_options.update({
+#     "logo": {
+#         "image_light": "_static/logo.png",
+#         "image_dark": "_static/logo-dark.png",
+#     }
+# })
 
 # Control sidebar contents - using defaults
 # html_sidebars = {
@@ -256,6 +274,13 @@ html_context = {
     'display_version': True,
     'conf_py_path': '/doc/sphinx/source/',
 }
+
+# sphinx-copybutton configuration
+copybutton_prompt_text = r">>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: "
+copybutton_prompt_is_regexp = True
+copybutton_remove_prompts = True
+copybutton_line_continuation_character = "\\"
+copybutton_here_doc_delimiter = "EOT"
 
 #------------------------------------------------------------------------------
 # Warning suppression
@@ -439,3 +464,16 @@ for readme_file in readme_files:
         print(f"  - {readme_file}: FOUND")
     else:
         print(f"  - {readme_file}: NOT FOUND")
+
+# SEO and metadata settings
+html_baseurl = 'https://mole-pdes.readthedocs.io/'
+html_extra_path = []
+html_use_opensearch = ''
+
+# Additional meta tags for all pages
+html_meta = {
+    'keywords': 'mimetic operators, computational science, PDE solver, numerical methods, scientific computing, MATLAB, C++',
+    'description': 'MOLE: Mimetic Operators Library Enhanced - A high-order mimetic differential operators library for solving PDEs',
+    'author': 'CSRC SDSU',
+    'viewport': 'width=device-width, initial-scale=1',
+}
