@@ -1,5 +1,5 @@
 =========================================
-MOLE MATLAB/Octave Module
+MATLAB/Octave
 =========================================
 
 This section documents the MATLAB/Octave implementation of the MOLE toolkit.
@@ -12,65 +12,77 @@ The documentation is generated automatically from the docstrings in the MATLAB/O
         digraph "MOLE MATLAB Functions" {
             rankdir=LR;
             compound=true;
-            node [shape=box, style=filled, fillcolor=white, fontname="Arial", fontsize=10];
+            node [shape=box, style=filled, fontname="Arial", fontsize=10, margin="0.3,0.1"];
             edge [fontname="Arial", fontsize=9];
+            
+            // Color definitions for nodes
             
             // Main categories
             subgraph cluster_operators {
                 label="Core Operators";
-                style=dashed;
+                style=filled;
+                color="#F5F5F5";
                 
-                DifferentialOperators [label="Differential\nOperators"];
+                DifferentialOperators [label="Differential\nOperators", fillcolor="#D5E8D4"];
                 
                 subgraph cluster_diff_ops {
                     label="";
                     style=invis;
                     
-                    Grad [label="Gradient"];
-                    Div [label="Divergence"];
-                    Lap [label="Laplacian"];
-                    Curl [label="Curl"];
+                    Grad [label="Gradient", fillcolor="#D5E8D4"];
+                    Div [label="Divergence", fillcolor="#D5E8D4"];
+                    Lap [label="Laplacian", fillcolor="#D5E8D4"];
+                    Curl [label="Curl", fillcolor="#D5E8D4"];
                 }
             }
             
             subgraph cluster_variants {
                 label="Operator Variants";
-                style=dashed;
+                style=filled;
+                color="#F5F5F5";
                 
-                NonUniform [label="Non-Uniform"];
-                Curvilinear [label="Curvilinear"];
+                NonUniform [label="Non-Uniform", fillcolor="#FFE6CC"];
+                Curvilinear [label="Curvilinear", fillcolor="#FFE6CC"];
             }
             
             subgraph cluster_dimensions {
                 label="Dimensional\nImplementations";
-                style=dashed;
+                style=filled;
+                color="#F5F5F5";
                 
-                D1 [label="1D"];
-                D2 [label="2D"];
-                D3 [label="3D"];
+                D1 [label="1D", fillcolor="#DAE8FC"];
+                D2 [label="2D", fillcolor="#DAE8FC"];
+                D3 [label="3D", fillcolor="#DAE8FC"];
             }
             
             subgraph cluster_support {
                 label="Supporting Components";
-                style=dashed;
+                style=filled;
+                color="#F5F5F5";
                 
-                InterpolationOperators [label="Interpolation\nOperators"];
-                BoundaryConditions [label="Boundary\nConditions"];
-                GridTransformation [label="Grid\nTransformation"];
-                WeightFunctions [label="Weight\nFunctions"];
-                MimeticOperators [label="Mimetic\nOperators"];
+                InterpolationOperators [label="Interpolation\nOperators", fillcolor="#E1D5E7"];
+                BoundaryConditions [label="Boundary\nConditions", fillcolor="#E1D5E7"];
+                GridTransformation [label="Grid\nTransformation", fillcolor="#E1D5E7"];
+                WeightFunctions [label="Weight\nFunctions", fillcolor="#E1D5E7"];
+                MimeticOperators [label="Mimetic\nOperators", fillcolor="#E1D5E7"];
             }
             
             // Core relationships
+            edge [color="#0000AA", penwidth=1.0];
             DifferentialOperators -> {Grad Div Lap Curl} [style=dotted];
+            
+            // Dimension relationships
+            edge [color="#006600", penwidth=1.0];
             {Grad Div Lap} -> {D1 D2 D3} [style=dashed];
             Curl -> D2 [style=dashed];
             
             // Variant relationships
+            edge [color="#AA6600", penwidth=1.0];
             {D2 D3} -> NonUniform [dir=both];
             {D2 D3} -> Curvilinear [dir=both];
             
             // Support relationships
+            edge [color="#990000", penwidth=1.0];
             InterpolationOperators -> DifferentialOperators [dir=both, label="supports"];
             BoundaryConditions -> DifferentialOperators [dir=both, label="enhances"];
             GridTransformation -> DifferentialOperators [label="enables"];
@@ -78,8 +90,33 @@ The documentation is generated automatically from the docstrings in the MATLAB/O
             MimeticOperators -> DifferentialOperators [label="implements"];
             
             // Dimensional support
-            InterpolationOperators -> {D1 D2 D3} [style=dotted];
-            BoundaryConditions -> {D1 D2 D3} [style=dotted];
+            edge [color="#6600CC", style=dotted, penwidth=1.0];
+            InterpolationOperators -> {D1 D2 D3};
+            BoundaryConditions -> {D1 D2 D3};
+            
+            // Add a legend
+            subgraph cluster_legend {
+                label="Legend";
+                style=filled;
+                color="#F5F5F5";
+                fontsize=10;
+                
+                node [shape=none, style=none, fillcolor=none, label=""];
+                edge [style=none];
+                
+                leg_title [label="Connection Types:", shape=none, fontsize=9];
+                leg_core [label="Core Relationship", shape=none, fontsize=9];
+                leg_dim [label="Dimensional Implementation", shape=none, fontsize=9];
+                leg_variant [label="Variant Relationship", shape=none, fontsize=9];
+                leg_support [label="Support Relationship", shape=none, fontsize=9];
+                leg_dim_support [label="Dimensional Support", shape=none, fontsize=9];
+                
+                leg_title -> leg_core [style=dotted, color="#0000AA", penwidth=1.0];
+                leg_title -> leg_dim [style=dashed, color="#006600", penwidth=1.0];
+                leg_title -> leg_variant [style=solid, color="#AA6600", penwidth=1.0];
+                leg_title -> leg_support [style=solid, color="#990000", penwidth=1.0];
+                leg_title -> leg_dim_support [style=dotted, color="#6600CC", penwidth=1.0];
+            }
         }
 
 .. only:: latex
