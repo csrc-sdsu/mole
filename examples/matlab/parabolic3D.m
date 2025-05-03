@@ -12,8 +12,8 @@ method = "implicit";
 k = 2;
 
 m = 39; 
-n = 39; 
-o = 39; 
+n = 19; 
+o = 19; 
 
 dx = 2/m;
 dy = 1/n;
@@ -27,7 +27,7 @@ zc = [0 dz/2:dz:1-dz/2 1]';
 
 alph = tc/(cp*rho); 
 dt = 1/(2*alph*((1/dx^2)+(1/dy^2)+(1/dz^2)));
-t = dt*10;
+t = 30;
 
 %% Initial and boundary conditions (1st type, a.k.a Dirichlet)
 
