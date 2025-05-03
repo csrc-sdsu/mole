@@ -51,7 +51,7 @@ Available in both C++ and MATLAB with consistent interfaces
 
 intros/introduction
 intros/gettingstarted
-intros/doc_readme_wrapper
+Documentation Guide <intros/doc_readme_wrapper>
 features-demo
 ```
 
@@ -64,7 +64,7 @@ api/matlab/index-beta
 ```
 
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 1
 :caption: Mathematical Framework
 
 math_functions/index
@@ -81,8 +81,8 @@ examples/index
 :maxdepth: 1
 :caption: Project
 
-intros/contributing_wrapper
-intros/code_of_conduct_wrapper
+Contributing to MOLE <intros/contributing_wrapper>
+Code of Conduct <intros/code_of_conduct_wrapper>
 ```
 
 ```{div} quick-links
