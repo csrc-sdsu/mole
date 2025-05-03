@@ -1,3 +1,8 @@
+---
+html_meta:
+  "theme-announcement": "Annocement: MOLE is being presented at XYZ place on XYZ time "
+---
+
 # MOLE: Mimetic Operators Library Enhanced
 
 <p class="lead text-center my-4">

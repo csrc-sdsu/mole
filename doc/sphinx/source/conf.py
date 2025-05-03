@@ -233,9 +233,6 @@ html_theme_options = {
     "use_download_button": True,
     "use_fullscreen_button": True,
     
-    # Message banner
-    "announcement": "This documentation is using the sphinx-book-theme.",
-    
     # Theme and appearance
     "pygments_light_style": "tango",
     
@@ -248,8 +245,8 @@ html_theme_options = {
 html_logo = str(ROOT_DIR / "logo.png")
 html_title = "MOLE Documentation" 
 html_favicon = str(ROOT_DIR / "logo.png")
-html_css_files = ['css/custom.css']
-html_js_files = ['js/theme-custom.js', 'js/disable-dark-mode.js']
+html_css_files = ['css/custom.css', 'css/announcement.css']
+html_js_files = ['js/theme-custom.js', 'js/disable-dark-mode.js', 'js/announcement.js']
 
 # Logo for light/dark modes - uncomment and modify when dark logo is available
 # html_theme_options.update({
