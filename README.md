@@ -183,7 +183,7 @@ Now, some cool pictures obtained with MOLE:
 [license-link]: https://www.gnu.org/licenses/gpl-3.0
 [build-badge]: https://img.shields.io/github/actions/workflow/status/csrc-sdsu/mole/cmake.yml?branch=master&label=Build
 [build-link]: https://github.com/csrc-sdsu/mole/actions
-[docs-badge]: https://img.shields.io/badge/docs-latest-brightgreen.svg
+[docs-badge]: https://readthedocs.org/projects/mole-docs/badge/?version=latest
 [docs-link]: https://csrc-sdsu.github.io/mole/
 [corbino-paper]: https://doi.org/10.1016/j.cam.2019.06.042
 [castillo-paper]: https://doi.org/10.1137/S0895479801398025
