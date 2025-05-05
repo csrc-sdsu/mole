@@ -1,0 +1,350 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="classRobinBC" kind="class" language="C++" prot="public">
+    <compoundname>RobinBC</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sp_mat</basecompoundref>
+    <includes refid="robinbc_8h" local="no">robinbc.h</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classRobinBC_1a9760e8a40fb7436f9981d629e8eda46c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>RobinBC::RobinBC</definition>
+        <argsstring>(u16 k, u32 m, Real dx, Real a, Real b)</argsstring>
+        <name>RobinBC</name>
+        <qualifiedname>RobinBC::RobinBC</qualifiedname>
+        <param>
+          <type>u16</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dx</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+<para>1-D Robin boundary constructor </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>mimetic order of accuracy </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>number of cells in x-dimension </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>cell width in x-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>a</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Coefficient of the Dirichlet function </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>b</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Coefficient of the Neumann function </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/robinbc.h" line="38" column="3" bodyfile="src/cpp/robinbc.cpp" bodystart="16" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="classRobinBC_1a547bb79bb3b07d1f180e365dae4b7947" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>RobinBC::RobinBC</definition>
+        <argsstring>(u16 k, u32 m, Real dx, u32 n, Real dy, Real a, Real b)</argsstring>
+        <name>RobinBC</name>
+        <qualifiedname>RobinBC::RobinBC</qualifiedname>
+        <param>
+          <type>u16</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dx</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>n</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dy</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+<para>2-D Robin boundary constructor </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>mimetic order of accuracy </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>number of cells in x-dimension </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>cell width in x-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>number of cells in y-dimension </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>cell width in y-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>a</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Coefficient of the Dirichlet function </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>b</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Coefficient of the Neumann function</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>Uses 1-D Robin to build the 2-D operator </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/robinbc.h" line="54" column="3" bodyfile="src/cpp/robinbc.cpp" bodystart="32" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="classRobinBC_1ab71ad4759eb7d5abf0f0ccfed13c60d9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>RobinBC::RobinBC</definition>
+        <argsstring>(u16 k, u32 m, Real dx, u32 n, Real dy, u32 o, Real dz, Real a, Real b)</argsstring>
+        <name>RobinBC</name>
+        <qualifiedname>RobinBC::RobinBC</qualifiedname>
+        <param>
+          <type>u16</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dx</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>n</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dy</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>o</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dz</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+<para>3-D Robin boundary constructor </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>mimetic order of accuracy </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>number of cells in x-dimension </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>cell width in x-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>number of cells in y-dimension </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>cell width in y-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>o</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>number of cells in z-dimension </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dz</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>cell width in z-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>a</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Coefficient of the Dirichlet function </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>b</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Coefficient of the Neumann function</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>Uses 1-D Robin to build the 3-D operator </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/robinbc.h" line="72" column="3" bodyfile="src/cpp/robinbc.cpp" bodystart="49" bodyend="71"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Mimetic Robin Boundary Condition operator. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>RobinBC</label>
+        <link refid="classRobinBC"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sp_mat</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>RobinBC</label>
+        <link refid="classRobinBC"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sp_mat</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/cpp/robinbc.h" line="23" column="1" bodyfile="src/cpp/robinbc.h" bodystart="23" bodyend="74"/>
+    <listofallmembers>
+      <member refid="classRobinBC_1a9760e8a40fb7436f9981d629e8eda46c" prot="public" virt="non-virtual"><scope>RobinBC</scope><name>RobinBC</name></member>
+      <member refid="classRobinBC_1a547bb79bb3b07d1f180e365dae4b7947" prot="public" virt="non-virtual"><scope>RobinBC</scope><name>RobinBC</name></member>
+      <member refid="classRobinBC_1ab71ad4759eb7d5abf0f0ccfed13c60d9" prot="public" virt="non-virtual"><scope>RobinBC</scope><name>RobinBC</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

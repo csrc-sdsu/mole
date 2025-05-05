@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of grad</title>
+  <meta name="keywords" content="grad">
+  <meta name="description" content="Returns a m+1 by m+2 one-dimensional mimetic gradient operator">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html mole_MATLAB -->
+<h1>grad
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Returns a m+1 by m+2 one-dimensional mimetic gradient operator</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function G = grad(k, m, dx, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Returns a m+1 by m+2 one-dimensional mimetic gradient operator
+
+ Parameters:
+                k : Order of accuracy
+                m : Number of cells
+               dx : Step size</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="nodal.html" class="code" title="function N = nodal(k, m, dx)">nodal</a>	Returns a m+1 by m+1 one-dimensional operator that approximates the</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="grad2D.html" class="code" title="function G = grad2D(k, m, dx, n, dy)">grad2D</a>	Returns a two-dimensional mimetic gradient operator</li><li><a href="grad3D.html" class="code" title="function G = grad3D(k, m, dx, n, dy, o, dz)">grad3D</a>	Returns a three-dimensional mimetic gradient operator</li><li><a href="gradNonUniform.html" class="code" title="function G = gradNonUniform(k, ticks)">gradNonUniform</a>	Returns a m+1 by m+2 one-dimensional non-uniform mimetic gradient</li><li><a href="lap.html" class="code" title="function L = lap(k, m, dx)">lap</a>	Returns a m+2 by m+2 one-dimensional mimetic laplacian operator</li><li><a href="mimeticB.html" class="code" title="function B = mimeticB(k, m)">mimeticB</a>	Returns a m+2 by m+1 one-dimensional mimetic boundary operator</li><li><a href="nodal.html" class="code" title="function N = nodal(k, m, dx)">nodal</a>	Returns a m+1 by m+1 one-dimensional operator that approximates the</li><li><a href="robinBC.html" class="code" title="function BC = robinBC(k, m, dx, a, b)">robinBC</a>	Returns a m+2 by m+2 one-dimensional mimetic boundary operator that</li><li><a href="weightsP.html" class="code" title="function P = weightsP(k, m, dx)">weightsP</a>	Returns the m+1 weights of P</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function G = grad(k, m, dx, varargin)</a>
+0002 <span class="comment">% Returns a m+1 by m+2 one-dimensional mimetic gradient operator</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Parameters:</span>
+0005 <span class="comment">%                k : Order of accuracy</span>
+0006 <span class="comment">%                m : Number of cells</span>
+0007 <span class="comment">%               dx : Step size</span>
+0008     
+0009     <span class="comment">% Assertions:</span>
+0010     assert(k &gt;= 2, <span class="string">'k &gt;= 2'</span>);
+0011     assert(mod(k, 2) == 0, <span class="string">'k % 2 = 0'</span>);
+0012     assert(m &gt;= 2*k, [<span class="string">'m &gt;= '</span> num2str(2*k) <span class="string">' for k = '</span> num2str(k)]);
+0013     assert(nargin &lt; 5, <span class="string">'Too many input arguments.'</span>)
+0014     
+0015     <span class="comment">% Dimensions of G:</span>
+0016     <span class="keyword">if</span> nargin &lt; 4
+0017         <a href="nodal.html" class="code" title="function N = nodal(k, m, dx)">nodal</a> = false;
+0018         n_rows = m+1;
+0019         n_cols = m+2;
+0020     <span class="keyword">else</span>
+0021         <a href="nodal.html" class="code" title="function N = nodal(k, m, dx)">nodal</a> = true;
+0022         n_rows = m+1;
+0023         n_cols = n_rows;
+0024     <span class="keyword">end</span>
+0025     
+0026     G = sparse(n_rows, n_cols);
+0027     
+0028     <span class="comment">% Fill the middle of G -----------------------------------------------------</span>
+0029     <span class="keyword">if</span>  ~<a href="nodal.html" class="code" title="function N = nodal(k, m, dx)">nodal</a>
+0030         neighbors = zeros(1, k); <span class="comment">% Bandwidth = k</span>
+0031         neighbors(1) = 1/2-k/2;
+0032         len = k;
+0033         j = 2;
+0034     <span class="keyword">else</span>
+0035         neighbors = zeros(1, k+1); <span class="comment">% Bandwidth = k+1</span>
+0036         neighbors(1) = -k/2;
+0037         len = k+1;
+0038         j = 1;
+0039     <span class="keyword">end</span>
+0040     
+0041     <span class="keyword">for</span> i = 2 : len
+0042         neighbors(i) = neighbors(i-1)+1;
+0043     <span class="keyword">end</span>
+0044     
+0045     <span class="comment">% Create a k by k Vandermonde matrix based on the neighbors:</span>
+0046     A = vander(neighbors)';
+0047     
+0048     <span class="comment">% First-order derivative</span>
+0049     b = zeros(len, 1);
+0050     b(len-1) = 1;
+0051     
+0052     <span class="comment">% Solve the linear system to get the coefficients</span>
+0053     coeffs = A\b;
+0054     
+0055     <span class="keyword">for</span> i = k/2+1 : n_rows-k/2
+0056         G(i, j:j+len-1) = coeffs;
+0057         j = j+1;
+0058     <span class="keyword">end</span>
+0059     <span class="comment">% --------------------------------------------------------------------------</span>
+0060     
+0061     <span class="comment">% Create A -----------------------------------------------------------------</span>
+0062     p = k/2;
+0063     q = k+1;
+0064     A = sparse(p, q);
+0065     <span class="keyword">for</span> i = 1 : p <span class="comment">% For each row of A</span>
+0066         neighbors = zeros(1, q); <span class="comment">% k+1 points are used for the boundaries</span>
+0067         neighbors(1) = 1-i; <span class="comment">% Shifting the stencil to the right</span>
+0068         <span class="keyword">if</span> ~<a href="nodal.html" class="code" title="function N = nodal(k, m, dx)">nodal</a>
+0069             neighbors(2) = neighbors(1)+1/2;
+0070         <span class="keyword">else</span>
+0071             neighbors(2) = neighbors(1)+1;
+0072         <span class="keyword">end</span>
+0073         <span class="keyword">for</span> j = 3 : q
+0074             neighbors(j) = neighbors(j-1)+1;
+0075         <span class="keyword">end</span>
+0076         
+0077         V = vander(neighbors)';
+0078         b = zeros(q, 1);
+0079         b(q-1) = 1;
+0080         coeffs = V\b;
+0081         A(i, 1:q) = coeffs;
+0082     <span class="keyword">end</span>
+0083     <span class="comment">% --------------------------------------------------------------------------</span>
+0084     
+0085     <span class="comment">% Insert A into G (upper-left corner of G)</span>
+0086     G(1:p, 1:q) = A;
+0087     
+0088     <span class="comment">% Permutation matrices</span>
+0089     Pp = fliplr(speye(p));
+0090     Pq = fliplr(speye(q));
+0091     <span class="comment">% Construct A' (lower-right corner of G)</span>
+0092     A = -Pp*A*Pq;
+0093     
+0094     <span class="comment">% Insert A' into G</span>
+0095     G(n_rows-p+1:n_rows, n_cols-q+1:n_cols) = A;
+0096     
+0097     <span class="comment">% Scale G</span>
+0098     G = 1/dx*G;
+0099 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 27-Jan-2021 14:29:32 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

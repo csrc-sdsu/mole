@@ -1,0 +1,376 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jacobian &mdash; MOLE 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+
+  
+      <script src="../_static/jquery.js"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+      <script src="../_static/doctools.js"></script>
+      <script src="../_static/sphinx_highlight.js"></script>
+      <script src="../_static/mathconf.js"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Non-Uniform Gradient and Divergence Operators" href="NonUniformGradAndDiv.html" />
+    <link rel="prev" title="Why Staggered Grids?" href="StaggeredGrids.html" />
+ 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const headers = document.querySelectorAll('.collapsible-header');
+    
+    headers.forEach(header => {
+      header.addEventListener('click', function() {
+        this.classList.toggle('active');
+        const content = this.nextElementSibling;
+        if (content.style.display === 'block') {
+          content.style.display = 'none';
+        } else {
+          content.style.display = 'block';
+        }
+      });
+    });
+  });
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intros/introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../intros/introduction.html#licensing">Licensing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/introduction.html#community-guidelines">Community Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/introduction.html#citations">Citations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../intros/gettingstarted.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#package-installation-by-os">Package Installation by OS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#ubuntu-debian-systems">Ubuntu/Debian Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#macos-systems">macOS Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#rhel-centos-fedora-systems">RHEL/CentOS/Fedora Systems</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#building-and-installing">Building and Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#testing">Testing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#c">C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#matlab-octave">MATLAB/Octave</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#id1">C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#matlab-octave-examples">MATLAB/Octave Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#quick-start-examples">Quick Start Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#c-example">C++ Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#matlab-octave-example">MATLAB/Octave Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#licensing">Licensing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../intros/doc_readme_wrapper.html">Building Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../intros/doc_readme_wrapper.html#documentation-structure">Documentation Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/doc_readme_wrapper.html#building-documentation">️Building Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../intros/doc_readme_wrapper.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/doc_readme_wrapper.html#building-steps">Building Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/doc_readme_wrapper.html#pdf-generation-process">PDF Generation Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/doc_readme_wrapper.html#image-handling">Image Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/doc_readme_wrapper.html#development-workflow">Development Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/doc_readme_wrapper.html#documentation-standards">Documentation Standards</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/cpp/index.html">C++</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/cpp/index.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cpp/index.html#class-structure">Class Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/cpp/operators.html">Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/cpp/boundary.html">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/cpp/utils.html">Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/matlab/index-beta.html">Matlab/ Octave</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/matlab/matlab_index.html">MATLAB/Octave Function Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#gradient-operators">Gradient Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#divergence-operators">Divergence Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#laplacian-operators">Laplacian Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#nodal-operators">Nodal Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#interpolation-functions">Interpolation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#boundary-conditions">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#grid-and-transformation-functions">Grid and Transformation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/matlab/api.html">MATLAB/Octave API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#differential-operators">Differential Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#interpolation-functions">Interpolation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#boundary-conditions">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#grid-generation-and-transformation">Grid Generation and Transformation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#mimetic-weights">Mimetic Weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Mathematical Framework</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Mathematical Functions Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="CSRCReportOnMOLE.html">CSRC Report on MOLE Library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CSRCReportOnMOLE.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CSRCReportOnMOLE.html#on-the-mathematics">On the Mathematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CSRCReportOnMOLE.html#staggered-grids">Staggered Grids</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CSRCReportOnMOLE.html#using-the-operators">Using the Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CSRCReportOnMOLE.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="StaggeredGrids.html">Why Staggered Grids?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="StaggeredGrids.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="StaggeredGrids.html#justification">Justification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="StaggeredGrids.html#checkerboard-pressure-fields">Checkerboard pressure fields</a></li>
+<li class="toctree-l3"><a class="reference internal" href="StaggeredGrids.html#staggered-grids">Staggered grids</a></li>
+<li class="toctree-l3"><a class="reference internal" href="StaggeredGrids.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Jacobian</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="NonUniformGradAndDiv.html">Non-Uniform Gradient and Divergence Operators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="NonUniformGradAndDiv.html#introduction">Introduction</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/README.html">MOLE Examples Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/examples.html">MOLE Library Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/examples.html#elliptic-equations">Elliptic Equations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/examples.html#hyperbolic">Hyperbolic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/examples.html#parabolic-equations">Parabolic Equations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/cpp/README.html">C++ Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/matlab/compact_operators/README.html">MATLAB Compact Operators</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intros/contributing_wrapper.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../intros/contributing_wrapper.html#id1">1. Contributing to MOLE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/contributing_wrapper.html#reporting-issues-or-problems">2. Reporting Issues or Problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/contributing_wrapper.html#seeking-support">3. Seeking Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html">Code of Conduct</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html#our-pledge">Our Pledge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html#our-standards">Our Standards</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html#our-responsibilities">Our Responsibilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html#scope">Scope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html#enforcement">Enforcement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html#attribution">Attribution</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MOLE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Mathematical Functions Reference</a></li>
+      <li class="breadcrumb-item active">Jacobian</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/math_functions/Jacobian.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="jacobian">
+<h1>Jacobian<a class="headerlink" href="#jacobian" title="Permalink to this heading"></a></h1>
+<blockquote>
+<div><p><strong>Author:</strong> Miguel A. Dumett<br />
+<strong>Abstract:</strong> This document presents mimetic differences gradient and divergence
+operators in structured curvilinear geometries. It uses mimetic
+interpolation operators to move quantities among the staggered grids
+of the mesh.</p>
+</div></blockquote>
+<hr class="docutils" />
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
+<p>Suppose a PDE is given on a physical spatial domain <span class="math notranslate nohighlight">\(\mathcal P\)</span> in
+three-dimensions (3D), with coordinates <span class="math notranslate nohighlight">\(x,y,z\)</span>. Suppose <span class="math notranslate nohighlight">\(\mathcal P\)</span> is
+the result of a bijective smooth map <span class="math notranslate nohighlight">\(\mathcal X\)</span> given by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+x &amp; = &amp; x(\xi,\eta,\kappa) \\
+y &amp; = &amp; y(\xi,\eta,\kappa) \\
+z &amp; = &amp; z(\xi,\eta,\kappa),
+\end{aligned}\end{split}\]</div>
+<p>and that the inverse map of <span class="math notranslate nohighlight">\(\mathcal X\)</span> is <span class="math notranslate nohighlight">\(\Theta\)</span> which is given by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\xi &amp; = &amp; \xi(x,y,z) \\
+\eta &amp; = &amp; \eta(x,y,z) \\
+\kappa &amp; = &amp; \kappa(x,y,z),
+\end{aligned}\end{split}\]</div>
+<p>and it maps <span class="math notranslate nohighlight">\(\mathcal P\)</span> onto a 3D logical Cartesian domain
+<span class="math notranslate nohighlight">\(\mathcal L\)</span>. If one defines a staggered grid on <span class="math notranslate nohighlight">\(\mathcal L\)</span>, composed
+of faces <span class="math notranslate nohighlight">\(F\)</span> and centers/boundaries <span class="math notranslate nohighlight">\(C\)</span>, then <span class="math notranslate nohighlight">\(\mathcal X(C \cup F)\)</span> is
+an structured grid on <span class="math notranslate nohighlight">\(\mathcal P\)</span>, with centers/boundaries
+<span class="math notranslate nohighlight">\(\mathcal C = \mathcal X(C)\)</span> and faces <span class="math notranslate nohighlight">\(\mathcal F = \mathcal X(F)\)</span>.</p>
+<p>The Jacobian of the transformation <span class="math notranslate nohighlight">\(\mathcal X\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}J = \frac{\partial(x,y,z)}{\partial(\xi,\eta,\kappa)} = \left[ \begin{array}{ccc}  x_\xi &amp; x_\eta &amp; x_\kappa \\ y_\xi &amp; y_\eta &amp; y_\kappa \\ z_\xi &amp; z_\eta &amp; z_\kappa \end{array} \right].\end{split}\]</div>
+<p>For <span class="math notranslate nohighlight">\(u:\mathcal X \to \mathbb R\)</span>, with
+<span class="math notranslate nohighlight">\(u = u(x,y,z) = u(x(\xi,\eta,\kappa),y(\xi,\eta,\kappa),z(\xi,\eta,\kappa))\)</span>
+and hence <span class="math notranslate nohighlight">\(u = u(\xi,\theta,\kappa)\)</span>, the chain rule implies</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+u_\xi &amp;= u_x x_\xi + u_y y_\xi + u_z z_\xi \\
+u_\eta &amp;= u_x x_\eta + u_y y_\xi + u_z z_\eta \\
+u_\kappa &amp;= u_x x_\kappa + u_y y_\xi + u_z z_\kappa
+\end{aligned}
+\end{split}\]</div>
+<p>or equivalently,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\left[ \begin{array}{c} u_\xi \\ u_\eta \\ u_\kappa \end{array} \right] = \left[ \begin{array}{ccc} x_\xi &amp; y_\xi &amp; z_\xi \\ x_\eta &amp; y_\eta &amp; z_\eta \\ x_\kappa &amp; y_\kappa &amp; z_\kappa \end{array} \right] \left[ \begin{array}{c} u_x \\ u_y \\ u_z \end{array} \right] = J^T \left[ \begin{array}{c} u_x \\ u_y \\ u_z \end{array} \right]
+\end{aligned}\end{split}\]</div>
+<p>Hence</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left[ \begin{array}{c} u_x \\ u_y \\ u_z \end{array} \right] = (J^T)^{-1} \left[ \begin{array}{c} u_\xi \\ u_\eta \\ u_\kappa\end{array} \right].\end{split}\]</div>
+<p>Since</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left[ \begin{array}{ccc} a &amp; b &amp; c \\ d &amp; e &amp; f \\ g &amp; h &amp; i \end{array} \right]^{-1} = \frac{1}{\Delta} \left[ \begin{array}{ccc} ei - fh &amp; ch-bi &amp; bf - ce \\ fg - di &amp; ai - cg &amp; cd - af \\ dh - eg &amp; bg - ah &amp; ac - bd \end{array} \right],\end{split}\]</div>
+<p>where</p>
+<p><span class="math notranslate nohighlight">\(\Delta = a(ei-fh) - b(di-fg) + c(dh-eg)\)</span>.</p>
+<p>If one denotes</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+J^T = \begin{pmatrix}
+(1) = x_\xi &amp; (2) = y_\xi &amp; (3) = z_\xi \\
+(4) = x_\eta &amp; (5) = y_\eta &amp; (6) = z_\eta \\
+(7) = x_\kappa &amp; (8) = y_\kappa &amp; (9) = z_\kappa
+\end{pmatrix}
+\end{split}\]</div>
+<p>then</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+(J^T)^{-1} = \frac{1}{\Delta} \begin{pmatrix}
+(5)(9) - (6)(8) &amp; (3)(8) - (2)(9) &amp; (2)(6) - (3)(5) \\
+(6)(7) - (4)(9) &amp; (1)(9) - (3)(7) &amp; (3)(4) - (1)(6) \\
+(4)(8) - (5)(7) &amp; (2)(7) - (1)(8) &amp; (1)(5) - (2)(4)
+\end{pmatrix}
+\end{split}\]</div>
+<p>with</p>
+<p><span class="math notranslate nohighlight">\(\Delta = (1) ((5)(9) - (6)(8)) - (2)((4)(9) - (6)(7)) + (3)((4)(8) - (5)(7)).\)</span></p>
+<p>If one uses the gradient to approximate the partial derivatives of the
+Jacobian, then</p>
+<div class="math notranslate nohighlight">
+\[
+J_G^T = I_{xyz}^{F \to C} {\tilde G}_{\xi \eta \kappa}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\({\tilde G}_{xyz}\)</span> is the same as <span class="math notranslate nohighlight">\(G_{xyz}\)</span> with <span class="math notranslate nohighlight">\({\hat I}_p\)</span>
+replaced by <span class="math notranslate nohighlight">\(I_{p+2}\)</span>, the identity matrix of order <span class="math notranslate nohighlight">\(p+2\)</span>. If one
+computes the Jacobian at the centers then the physical gradient is given
+by</p>
+<div class="math notranslate nohighlight">
+\[
+G_{xyz} = I_{xyz}^{C \to F} (J_G^T)^{-1} I_{\xi \eta \kappa}^{F \to C} G_{\xi \eta \kappa}.
+\]</div>
+<p>Similarly, one can construct the Jacobian based on the divergence operator.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="StaggeredGrids.html" class="btn btn-neutral float-left" title="Why Staggered Grids?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="NonUniformGradAndDiv.html" class="btn btn-neutral float-right" title="Non-Uniform Gradient and Divergence Operators" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, CSRC SDSU.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

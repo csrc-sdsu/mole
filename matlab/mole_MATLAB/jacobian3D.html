@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of jacobian3D</title>
+  <meta name="keywords" content="jacobian3D">
+  <meta name="description" content="Returns:">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html mole_MATLAB -->
+<h1>jacobian3D
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Returns:</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3D(k, X, Y, Z) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Returns:
+                J : Determinant of the Jacobian
+               Xe : dx/de metric
+               Xn : dx/dn metric
+               Xc : dx/dc metric
+               Ye : dy/de metric
+               Yn : dy/dn metric
+               Yc : dy/dc metric
+               Ze : dz/de metric
+               Zn : dz/dn metric
+               Zc : dz/dc metric
+
+ Parameters:
+                k : Order of accuracy
+                X : x-coordinates (physical) of meshgrid
+                Y : y-coordinates (physical) of meshgrid
+                Z : z-coordinates (physical) of meshgrid</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="nodal3D.html" class="code" title="function N = nodal3D(k, m, dx, n, dy, o, dz)">nodal3D</a>	Returns a three-dimensional operator that approximates the first-order</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="div3DCurv.html" class="code" title="function D = div3DCurv(k, X, Y, Z)">div3DCurv</a>	Get the determinant of the jacobian and the metrics</li><li><a href="grad3DCurv.html" class="code" title="function G = grad3DCurv(k, X, Y, Z)">grad3DCurv</a>	Get the determinant of the jacobian and the metrics</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3D(k, X, Y, Z)</a>
+0002 <span class="comment">% Returns:</span>
+0003 <span class="comment">%                J : Determinant of the Jacobian</span>
+0004 <span class="comment">%               Xe : dx/de metric</span>
+0005 <span class="comment">%               Xn : dx/dn metric</span>
+0006 <span class="comment">%               Xc : dx/dc metric</span>
+0007 <span class="comment">%               Ye : dy/de metric</span>
+0008 <span class="comment">%               Yn : dy/dn metric</span>
+0009 <span class="comment">%               Yc : dy/dc metric</span>
+0010 <span class="comment">%               Ze : dz/de metric</span>
+0011 <span class="comment">%               Zn : dz/dn metric</span>
+0012 <span class="comment">%               Zc : dz/dc metric</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Parameters:</span>
+0015 <span class="comment">%                k : Order of accuracy</span>
+0016 <span class="comment">%                X : x-coordinates (physical) of meshgrid</span>
+0017 <span class="comment">%                Y : y-coordinates (physical) of meshgrid</span>
+0018 <span class="comment">%                Z : z-coordinates (physical) of meshgrid</span>
+0019     
+0020     [n, m, o] = size(X);
+0021     
+0022     X = reshape(permute(X, [2, 1, 3]), [], 1);
+0023     Y = reshape(permute(Y, [2, 1, 3]), [], 1);
+0024     Z = reshape(permute(Z, [2, 1, 3]), [], 1);
+0025     
+0026     N = <a href="nodal3D.html" class="code" title="function N = nodal3D(k, m, dx, n, dy, o, dz)">nodal3D</a>(k, m, 1, n, 1, o, 1);
+0027     
+0028     X = N*X;
+0029     Y = N*Y;
+0030     Z = N*Z;
+0031     
+0032     mno = m*n*o;
+0033     
+0034     Xe = X(1:mno);
+0035     Xn = X(mno+1:2*mno);
+0036     Xc = X(2*mno+1:end);
+0037     Ye = Y(1:mno);
+0038     Yn = Y(mno+1:2*mno);
+0039     Yc = Y(2*mno+1:end);
+0040     Ze = Z(1:mno);
+0041     Zn = Z(mno+1:2*mno);
+0042     Zc = Z(2*mno+1:end);
+0043     
+0044     J = Xe.*(Yn.*Zc-Yc.*Zn)-Ye.*(Xn.*Zc-Xc.*Zn)+Ze.*(Xn.*Yc-Xc.*Yn);
+0045 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 27-Jan-2021 14:29:32 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,372 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Why Staggered Grids? &mdash; MOLE 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+
+  
+      <script src="../_static/jquery.js"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+      <script src="../_static/doctools.js"></script>
+      <script src="../_static/sphinx_highlight.js"></script>
+      <script src="../_static/mathconf.js"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Jacobian" href="Jacobian.html" />
+    <link rel="prev" title="CSRC Report on MOLE Library" href="CSRCReportOnMOLE.html" />
+ 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const headers = document.querySelectorAll('.collapsible-header');
+    
+    headers.forEach(header => {
+      header.addEventListener('click', function() {
+        this.classList.toggle('active');
+        const content = this.nextElementSibling;
+        if (content.style.display === 'block') {
+          content.style.display = 'none';
+        } else {
+          content.style.display = 'block';
+        }
+      });
+    });
+  });
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intros/introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../intros/introduction.html#licensing">Licensing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/introduction.html#community-guidelines">Community Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/introduction.html#citations">Citations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../intros/gettingstarted.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#package-installation-by-os">Package Installation by OS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#ubuntu-debian-systems">Ubuntu/Debian Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#macos-systems">macOS Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#rhel-centos-fedora-systems">RHEL/CentOS/Fedora Systems</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#building-and-installing">Building and Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#testing">Testing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#c">C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#matlab-octave">MATLAB/Octave</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#id1">C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#matlab-octave-examples">MATLAB/Octave Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#quick-start-examples">Quick Start Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#c-example">C++ Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#matlab-octave-example">MATLAB/Octave Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#licensing">Licensing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../intros/doc_readme_wrapper.html">Building Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../intros/doc_readme_wrapper.html#documentation-structure">Documentation Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/doc_readme_wrapper.html#building-documentation">️Building Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../intros/doc_readme_wrapper.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/doc_readme_wrapper.html#building-steps">Building Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/doc_readme_wrapper.html#pdf-generation-process">PDF Generation Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/doc_readme_wrapper.html#image-handling">Image Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/doc_readme_wrapper.html#development-workflow">Development Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/doc_readme_wrapper.html#documentation-standards">Documentation Standards</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/cpp/index.html">C++</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/cpp/index.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cpp/index.html#class-structure">Class Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/cpp/operators.html">Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/cpp/boundary.html">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/cpp/utils.html">Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/matlab/index-beta.html">Matlab/ Octave</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/matlab/matlab_index.html">MATLAB/Octave Function Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#gradient-operators">Gradient Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#divergence-operators">Divergence Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#laplacian-operators">Laplacian Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#nodal-operators">Nodal Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#interpolation-functions">Interpolation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#boundary-conditions">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#grid-and-transformation-functions">Grid and Transformation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/matlab/api.html">MATLAB/Octave API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#differential-operators">Differential Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#interpolation-functions">Interpolation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#boundary-conditions">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#grid-generation-and-transformation">Grid Generation and Transformation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#mimetic-weights">Mimetic Weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Mathematical Framework</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Mathematical Functions Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="CSRCReportOnMOLE.html">CSRC Report on MOLE Library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CSRCReportOnMOLE.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CSRCReportOnMOLE.html#on-the-mathematics">On the Mathematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CSRCReportOnMOLE.html#staggered-grids">Staggered Grids</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CSRCReportOnMOLE.html#using-the-operators">Using the Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CSRCReportOnMOLE.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Why Staggered Grids?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#justification">Justification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#checkerboard-pressure-fields">Checkerboard pressure fields</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#staggered-grids">Staggered grids</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Jacobian.html">Jacobian</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Jacobian.html#introduction">Introduction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="NonUniformGradAndDiv.html">Non-Uniform Gradient and Divergence Operators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="NonUniformGradAndDiv.html#introduction">Introduction</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/README.html">MOLE Examples Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/examples.html">MOLE Library Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/examples.html#elliptic-equations">Elliptic Equations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/examples.html#hyperbolic">Hyperbolic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/examples.html#parabolic-equations">Parabolic Equations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/cpp/README.html">C++ Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/matlab/compact_operators/README.html">MATLAB Compact Operators</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intros/contributing_wrapper.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../intros/contributing_wrapper.html#id1">1. Contributing to MOLE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/contributing_wrapper.html#reporting-issues-or-problems">2. Reporting Issues or Problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/contributing_wrapper.html#seeking-support">3. Seeking Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html">Code of Conduct</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html#our-pledge">Our Pledge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html#our-standards">Our Standards</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html#our-responsibilities">Our Responsibilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html#scope">Scope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html#enforcement">Enforcement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html#attribution">Attribution</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MOLE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Mathematical Functions Reference</a></li>
+      <li class="breadcrumb-item active">Why Staggered Grids?</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/math_functions/StaggeredGrids.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="why-staggered-grids">
+<h1>Why Staggered Grids?<a class="headerlink" href="#why-staggered-grids" title="Permalink to this heading"></a></h1>
+<blockquote>
+<div><p><strong>Authors:</strong> Johnny Corbino, Miguel A. Dumett<br />
+<strong>Abstract:</strong> This document justifies the usage of staggered grids in mimetic
+differences.</p>
+</div></blockquote>
+<hr class="docutils" />
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
+<p>The general purpose for using staggered grids is to differentiate
+between (physical) quantities that utilize exterior and interior
+boundary orientations. Naturally, this splitting triggers the usage of a
+primal and a dual grids. Nevertheless, the current implementation of
+MOLE does not considers orientations, therefore in what follows an
+argument in favor of using staggered grids is given.</p>
+</section>
+<section id="justification">
+<h2>Justification<a class="headerlink" href="#justification" title="Permalink to this heading"></a></h2>
+<p>Mimetic difference operators are constructed for staggered grids
+[<a class="reference external" href="#ref1">1</a>].</p>
+<p>This allows:</p>
+<ul class="simple">
+<li><p>More accurate solutions.</p></li>
+<li><p>Expected physical behavior (overcomes checkerboard pressure fields).</p></li>
+</ul>
+</section>
+<section id="checkerboard-pressure-fields">
+<h2>Checkerboard pressure fields<a class="headerlink" href="#checkerboard-pressure-fields" title="Permalink to this heading"></a></h2>
+<p>Suppose a two-dimensional incompressible flow without a body force. The
+governing equations are:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} &amp;= 0 \\
+\rho \, u \, \frac{\partial u}{\partial x} + \rho \, v \, \frac{\partial u}{\partial y} &amp;= \frac{\partial}{\partial x} \left( \mu \, \frac{\partial u}{\partial x} \right) + \frac{\partial}{\partial y} \left( \mu \, \frac{\partial u}{\partial y} \right) - \frac{\partial p}{\partial x} \\
+\rho \, u \, \frac{\partial v}{\partial x} + \rho \, v \, \frac{\partial v}{\partial y} &amp;= \frac{\partial}{\partial x} \left( \mu \, \frac{\partial v}{\partial x} \right) + \frac{\partial}{\partial y} \left( \mu \, \frac{\partial v}{\partial y} \right) - \frac{\partial p}{\partial y}
+\end{aligned}
+\end{split}\]</div>
+<p>Equations (1)-(3) are the continuity equation, and the momentum equations in the <span class="math notranslate nohighlight">\(x\)</span>- and <span class="math notranslate nohighlight">\(y\)</span>-direction, respectively.</p>
+<p>The checkerboard pressure field is shown in Figure 1.</p>
+<div style="text-align: center">
+<p><img alt="Checkerboard pressure field" src="../_images/StaggeredGrids_figure_1.svg" /></p>
+<p><em>Checkerboard pressure field showing the pressure oscillations</em></p>
+</div>
+<p>The figure represents a checkerboard pressure field.</p>
+<p>The source term for the momentum equations in the <span class="math notranslate nohighlight">\(x\)</span>- and <span class="math notranslate nohighlight">\(y\)</span>-direction
+can be expressed as</p>
+<div class="math notranslate nohighlight">
+\[
+S_u = - \frac{\partial p}{\partial x} \quad \text{and} \quad S_v = - \frac{\partial p}{\partial y}
+\]</div>
+<p>respectively. If central difference is employed, the pressure gradient
+becomes,</p>
+<div class="math notranslate nohighlight">
+\[
+\left( \frac{\partial p}{\partial x} \right)_P = \frac{p_E - p_W}{\Delta x} = \frac{\frac{p_E + p_P}{2} - \frac{p_P + p_W}{2}}{\Delta x} = \frac{p_E - p_W}{2 \, \Delta x}
+\]</div>
+<p>and similarly,</p>
+<div class="math notranslate nohighlight">
+\[
+\left( \frac{\partial p}{\partial y} \right)_P = \frac{p_N - p_S}{2 \, \Delta y}
+\]</div>
+<p>From equations (4)-(5), we can see that <strong>the pressure gradient at point <span class="math notranslate nohighlight">\(P\)</span> is related to the pressures of the neighbor grid points and not to its own pressure</strong>. Therefore, if we have a pressure distribution as shown in the figure above, the discretization scheme represented by equations (4)-(5) will obtain <span class="math notranslate nohighlight">\(\frac{\partial p}{\partial x} = 0\)</span> and <span class="math notranslate nohighlight">\(\frac{\partial p}{\partial y} = 0\)</span> throughout the computational domain. This means that <strong>it will not recognize the difference between a checkerboard pressure field and a uniform pressure field</strong>. This behavior is obviously non-physical.</p>
+</section>
+<section id="staggered-grids">
+<h2>Staggered grids<a class="headerlink" href="#staggered-grids" title="Permalink to this heading"></a></h2>
+<p>A remedy for the aforementioned problem is to use staggered grids. The
+idea is to store scalar variables at the ordinary nodal points, and
+vector variables at the cell faces in between the nodal points.</p>
+<p>The staggered grid arrangement is shown in Figure 2.</p>
+<div style="text-align: center">
+<p><img alt="Staggered grid arrangement" src="../_images/StaggeredGrids_figure_2.svg" /></p>
+<p><em>Staggered grid arrangement showing the location of different variables</em></p>
+</div>
+<p>The figure shows the new arrangement.</p>
+<p>If we consider the checkerboard pressure field again, substitution of
+the appropriate nodal pressure values into equations
+(4)-(5) now yields very significant non-zero pressure
+gradient terms. The staggering of the velocity avoids the unrealistic
+behavior for spatially oscillating pressure fields. In addition, this
+new arrangement does not require interpolation to calculate velocities
+at the cell faces (where they are needed for the scalar
+transport-convection-diffusion computations.</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<p><a name="ref1"></a></p>
+<ol class="arabic simple">
+<li><p>J. Corbino, and J.E. Castillo, “High-order mimetic finite-difference operators satisfying the extended Gauss divergence theorem,” J. Comput. Appl. Math., vol. 364, 2020, 112326.</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="CSRCReportOnMOLE.html" class="btn btn-neutral float-left" title="CSRC Report on MOLE Library" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Jacobian.html" class="btn btn-neutral float-right" title="Jacobian" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, CSRC SDSU.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

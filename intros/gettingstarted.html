@@ -1,0 +1,526 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting Started &mdash; MOLE 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+
+  
+      <script src="../_static/jquery.js"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+      <script src="../_static/doctools.js"></script>
+      <script src="../_static/sphinx_highlight.js"></script>
+      <script src="../_static/mathconf.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="MOLE Documentation Guide" href="doc_readme_wrapper.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" />
+ 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const headers = document.querySelectorAll('.collapsible-header');
+    
+    headers.forEach(header => {
+      header.addEventListener('click', function() {
+        this.classList.toggle('active');
+        const content = this.nextElementSibling;
+        if (content.style.display === 'block') {
+          content.style.display = 'none';
+        } else {
+          content.style.display = 'block';
+        }
+      });
+    });
+  });
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#licensing">Licensing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#community-guidelines">Community Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#citations">Citations</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#package-installation-by-os">Package Installation by OS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ubuntu-debian-systems">Ubuntu/Debian Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#macos-systems">macOS Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rhel-centos-fedora-systems">RHEL/CentOS/Fedora Systems</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#building-and-installing">Building and Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#c">C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#matlab-octave">MATLAB/Octave</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#matlab-octave-examples">MATLAB/Octave Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start-examples">Quick Start Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#c-example">C++ Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#matlab-octave-example">MATLAB/Octave Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#licensing">Licensing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="doc_readme_wrapper.html">Building Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="doc_readme_wrapper.html#documentation-structure">Documentation Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc_readme_wrapper.html#building-documentation">️Building Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="doc_readme_wrapper.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="doc_readme_wrapper.html#building-steps">Building Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="doc_readme_wrapper.html#pdf-generation-process">PDF Generation Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="doc_readme_wrapper.html#image-handling">Image Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="doc_readme_wrapper.html#development-workflow">Development Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc_readme_wrapper.html#documentation-standards">Documentation Standards</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/cpp/index.html">C++</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/cpp/index.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cpp/index.html#class-structure">Class Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/cpp/operators.html">Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/cpp/boundary.html">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/cpp/utils.html">Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/matlab/index-beta.html">Matlab/ Octave</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/matlab/matlab_index.html">MATLAB/Octave Function Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#gradient-operators">Gradient Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#divergence-operators">Divergence Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#laplacian-operators">Laplacian Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#nodal-operators">Nodal Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#interpolation-functions">Interpolation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#boundary-conditions">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#grid-and-transformation-functions">Grid and Transformation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/matlab/api.html">MATLAB/Octave API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#differential-operators">Differential Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#interpolation-functions">Interpolation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#boundary-conditions">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#grid-generation-and-transformation">Grid Generation and Transformation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#mimetic-weights">Mimetic Weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Mathematical Framework</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../math_functions/index.html">Mathematical Functions Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../math_functions/CSRCReportOnMOLE.html">CSRC Report on MOLE Library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/CSRCReportOnMOLE.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/CSRCReportOnMOLE.html#on-the-mathematics">On the Mathematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../math_functions/CSRCReportOnMOLE.html#staggered-grids">Staggered Grids</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/CSRCReportOnMOLE.html#using-the-operators">Using the Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/CSRCReportOnMOLE.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../math_functions/StaggeredGrids.html">Why Staggered Grids?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/StaggeredGrids.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/StaggeredGrids.html#justification">Justification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/StaggeredGrids.html#checkerboard-pressure-fields">Checkerboard pressure fields</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/StaggeredGrids.html#staggered-grids">Staggered grids</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/StaggeredGrids.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../math_functions/Jacobian.html">Jacobian</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/Jacobian.html#introduction">Introduction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../math_functions/NonUniformGradAndDiv.html">Non-Uniform Gradient and Divergence Operators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/NonUniformGradAndDiv.html#introduction">Introduction</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/README.html">MOLE Examples Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/examples.html">MOLE Library Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/examples.html#elliptic-equations">Elliptic Equations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/examples.html#hyperbolic">Hyperbolic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/examples.html#parabolic-equations">Parabolic Equations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/cpp/README.html">C++ Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/matlab/compact_operators/README.html">MATLAB Compact Operators</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing_wrapper.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing_wrapper.html#id1">1. Contributing to MOLE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing_wrapper.html#reporting-issues-or-problems">2. Reporting Issues or Problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing_wrapper.html#seeking-support">3. Seeking Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="code_of_conduct_wrapper.html">Code of Conduct</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code_of_conduct_wrapper.html#our-pledge">Our Pledge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_of_conduct_wrapper.html#our-standards">Our Standards</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_of_conduct_wrapper.html#our-responsibilities">Our Responsibilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_of_conduct_wrapper.html#scope">Scope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_of_conduct_wrapper.html#enforcement">Enforcement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_of_conduct_wrapper.html#attribution">Attribution</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MOLE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Getting Started</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/intros/gettingstarted.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h1>
+<p>Welcome to the getting started guide for MOLE (Mimetic Operators Library Enhanced). This guide will help you set up and run your first MOLE project.</p>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h2>
+<p>To install the MOLE library, you’ll need the following packages:</p>
+<ul class="simple">
+<li><p>CMake (Minimum version 3.10)</p></li>
+<li><p>OpenBLAS (Minimum version 0.3.10)</p></li>
+<li><p>Eigen3</p></li>
+<li><p>LAPACK (Mac only)</p></li>
+<li><p>libomp (Mac only)</p></li>
+</ul>
+<p>For documentation build requirements, please refer to the [Documentation Guide][doc-guide].</p>
+</section>
+<section id="package-installation-by-os">
+<h2>Package Installation by OS<a class="headerlink" href="#package-installation-by-os" title="Permalink to this heading"></a></h2>
+<section id="ubuntu-debian-systems">
+<h3>Ubuntu/Debian Systems<a class="headerlink" href="#ubuntu-debian-systems" title="Permalink to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install all required packages</span>
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>cmake<span class="w"> </span>libopenblas-dev<span class="w"> </span>libeigen3-dev
+</pre></div>
+</div>
+</section>
+<section id="macos-systems">
+<h3>macOS Systems<a class="headerlink" href="#macos-systems" title="Permalink to this heading"></a></h3>
+<p>Install [Homebrew][homebrew] if you don’t have it already, then run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install all required packages</span>
+brew<span class="w"> </span>install<span class="w"> </span>cmake<span class="w"> </span>openblas<span class="w"> </span>eigen<span class="w"> </span>libomp<span class="w"> </span>lapack
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>Troubleshooting Homebrew:</strong> If you encounter installation errors, try these steps:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fix permissions issues</span>
+sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span><span class="k">$(</span>whoami<span class="k">)</span><span class="w"> </span>/usr/local/Cellar
+<span class="c1"># Fix shallow clone issues</span>
+git<span class="w"> </span>-C<span class="w"> </span>/usr/local/Homebrew/Library/Taps/homebrew/homebrew-core<span class="w"> </span>fetch<span class="w"> </span>--unshallow
+<span class="c1"># Remove Java dependencies if they cause conflicts</span>
+brew<span class="w"> </span>uninstall<span class="w"> </span>--ignore-dependencies<span class="w"> </span>java
+brew<span class="w"> </span>update
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="rhel-centos-fedora-systems">
+<h3>RHEL/CentOS/Fedora Systems<a class="headerlink" href="#rhel-centos-fedora-systems" title="Permalink to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install all required packages</span>
+sudo<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>cmake<span class="w"> </span>openblas-devel<span class="w"> </span>eigen3-devel
+</pre></div>
+</div>
+</section>
+</section>
+<section id="building-and-installing">
+<h2>Building and Installing<a class="headerlink" href="#building-and-installing" title="Permalink to this heading"></a></h2>
+<ol class="arabic">
+<li><p>Clone the repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/csrc-sdsu/mole.git
+<span class="nb">cd</span><span class="w"> </span>mole
+</pre></div>
+</div>
+</li>
+<li><p>Build the library:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>..
+make
+</pre></div>
+</div>
+</li>
+<li><p>Install the library:</p>
+<ul>
+<li><p>For a custom location:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>--install<span class="w"> </span>.<span class="w"> </span>--prefix<span class="w"> </span>/path/to/location
+</pre></div>
+</div>
+</li>
+<li><p>For a system location (requires privileges):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>cmake<span class="w"> </span>--install<span class="w"> </span>.
+</pre></div>
+</div>
+<p>Or</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>cmake<span class="w"> </span>--install<span class="w"> </span>.<span class="w"> </span>--prefix<span class="w"> </span>/path/to/privileged/location
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>Note:</strong> Armadillo and SuperLU will be automatically installed in the build directory during the build process.</p>
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this heading"></a></h2>
+<p>Run from the <code class="docutils literal notranslate"><span class="pre">build</span></code> directory:</p>
+<section id="c">
+<h3>C++<a class="headerlink" href="#c" title="Permalink to this heading"></a></h3>
+<p>A suite of four automatic tests that verify MOLE’s installation and dependencies. These tests run automatically during the C++ library construction.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>run_tests
+</pre></div>
+</div>
+</section>
+<section id="matlab-octave">
+<h3>MATLAB/Octave<a class="headerlink" href="#matlab-octave" title="Permalink to this heading"></a></h3>
+<p>MATLAB/Octave equivalent of the C++ test suite. We recommend running these tests before using MOLE to ensure proper setup.</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">make</span><span class="w"> </span><span class="s">run_matlab_tests</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<section id="id1">
+<h3>C++<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<p>Four self-contained, well-documented examples demonstrating typical PDE solutions. These are automatically built with <code class="docutils literal notranslate"><span class="pre">make</span></code> and serve as an excellent starting point for C++ users.</p>
+</section>
+<section id="matlab-octave-examples">
+<h3>MATLAB/Octave Examples<a class="headerlink" href="#matlab-octave-examples" title="Permalink to this heading"></a></h3>
+<p>A collection of over 30 examples showcasing various PDE solutions, from simple linear one-dimensional problems to complex nonlinear multidimensional scenarios.</p>
+</section>
+</section>
+<section id="quick-start-examples">
+<h2>Quick Start Examples<a class="headerlink" href="#quick-start-examples" title="Permalink to this heading"></a></h2>
+<p>Here are some simple examples to help you get started with MOLE:</p>
+<section id="c-example">
+<h3>C++ Example<a class="headerlink" href="#c-example" title="Permalink to this heading"></a></h3>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">transport1D example (examples/cpp/transport1D.cpp)</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cm">/**</span>
+<span class="linenos"> 2</span><span class="cm"> * This example uses MOLE to solve the 1D advection-reaction-dispersion</span>
+<span class="linenos"> 3</span><span class="cm"> * equation:</span>
+<span class="linenos"> 4</span><span class="cm"> * https://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/html/final-22.html</span>
+<span class="linenos"> 5</span><span class="cm"> */</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;mole.h&quot;</span>
+<span class="linenos"> 8</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">             </span><span class="c1">// Operators&#39; order of accuracy</span>
+<span class="linenos">13</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">            </span><span class="c1">// Left boundary</span>
+<span class="linenos">14</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">130</span><span class="p">;</span><span class="w">          </span><span class="c1">// Right boundary</span>
+<span class="linenos">15</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">26</span><span class="p">;</span><span class="w">            </span><span class="c1">// Number of cells</span>
+<span class="linenos">16</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">m</span><span class="p">;</span><span class="w"> </span><span class="c1">// Cell&#39;s width [m]</span>
+<span class="linenos">17</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w">            </span><span class="c1">// Simulation time [years]</span>
+<span class="linenos">18</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">208</span><span class="p">;</span><span class="w">        </span><span class="c1">// Number of iterations</span>
+<span class="linenos">19</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">iter</span><span class="p">;</span><span class="w">    </span><span class="c1">// Time step</span>
+<span class="linenos">20</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">dis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w">          </span><span class="c1">// Dispersivity [m]</span>
+<span class="linenos">21</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">vel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">15</span><span class="p">;</span><span class="w">         </span><span class="c1">// Pore-water flow velocity [m/year]</span>
+<span class="linenos">22</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.5</span><span class="p">;</span><span class="w">          </span><span class="c1">// Retardation (Cl^- = 1, Na^+ = 2.5)</span>
+<span class="linenos">23</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">C0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">           </span><span class="c1">// Displacing solution concentration [mmol/kgw]</span>
+<span class="linenos">24</span>
+<span class="linenos">25</span><span class="w">  </span><span class="c1">// Get 1D mimetic operators</span>
+<span class="linenos">26</span><span class="w">  </span><span class="n">Gradient</span><span class="w"> </span><span class="n">G</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">dx</span><span class="p">);</span>
+<span class="linenos">27</span><span class="w">  </span><span class="n">Divergence</span><span class="w"> </span><span class="n">D</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">dx</span><span class="p">);</span>
+<span class="linenos">28</span><span class="w">  </span><span class="n">Interpol</span><span class="w"> </span><span class="n">I</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">);</span>
+<span class="linenos">29</span>
+<span class="linenos">30</span><span class="w">  </span><span class="c1">// Allocate fields</span>
+<span class="linenos">31</span><span class="w">  </span><span class="n">vec</span><span class="w"> </span><span class="n">C</span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="c1">// Scalar field (concentrations)</span>
+<span class="linenos">32</span><span class="w">  </span><span class="n">vec</span><span class="w"> </span><span class="n">V</span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// Vector field (velocities)</span>
+<span class="linenos">33</span>
+<span class="linenos">34</span><span class="w">  </span><span class="c1">// Impose initial conditions</span>
+<span class="linenos">35</span><span class="w">  </span><span class="n">C</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">C0</span><span class="p">;</span>
+<span class="linenos">36</span><span class="w">  </span><span class="n">V</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">vel</span><span class="p">);</span>
+<span class="linenos">37</span>
+<span class="linenos">38</span><span class="w">  </span><span class="c1">// Hydrodynamic dispersion coefficient [m^2/year]</span>
+<span class="linenos">39</span><span class="w">  </span><span class="n">dis</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="n">vel</span><span class="p">;</span><span class="w"> </span><span class="c1">// 75</span>
+<span class="linenos">40</span>
+<span class="linenos">41</span><span class="w">  </span><span class="c1">// dt = dt/R (retardation)</span>
+<span class="linenos">42</span><span class="w">  </span><span class="n">dt</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">R</span><span class="p">;</span>
+<span class="linenos">43</span>
+<span class="linenos">44</span><span class="w">  </span><span class="c1">// Time integration loop</span>
+<span class="linenos">45</span><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">iter</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">46</span>
+<span class="linenos">47</span><span class="w">    </span><span class="c1">// First-order forward-time scheme</span>
+<span class="linenos">48</span><span class="w">    </span><span class="n">C</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">dis</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">G</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">C</span><span class="p">))</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">V</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="p">(</span><span class="n">I</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">C</span><span class="p">)));</span>
+<span class="linenos">49</span>
+<span class="linenos">50</span><span class="w">    </span><span class="c1">// Right boundary condition (reflection)</span>
+<span class="linenos">51</span><span class="w">    </span><span class="n">C</span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">C</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
+<span class="linenos">52</span><span class="w">  </span><span class="p">}</span>
+<span class="linenos">53</span>
+<span class="linenos">54</span><span class="w">  </span><span class="c1">// Spit out the new concentrations!</span>
+<span class="linenos">55</span><span class="w">  </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">C</span><span class="p">;</span>
+<span class="linenos">56</span>
+<span class="linenos">57</span><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">58</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="matlab-octave-example">
+<h3>MATLAB/Octave Example<a class="headerlink" href="#matlab-octave-example" title="Permalink to this heading"></a></h3>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">elliptic 1D example (examples/matlab/elliptic1D.m)</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c">% Solves the 1D Poisson&#39;s equation with Robin boundary conditions</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="nb">clc</span>
+<span class="linenos"> 4</span><span class="nb">close</span><span class="w"> </span><span class="nb">all</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="nb">addpath</span><span class="p">(</span><span class="s">&#39;../../src/matlab&#39;</span><span class="p">)</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="n">west</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">  </span><span class="c">% Domain&#39;s limits</span>
+<span class="linenos"> 9</span><span class="n">east</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="n">k</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span><span class="w">  </span><span class="c">% Operator&#39;s order of accuracy</span>
+<span class="linenos">12</span><span class="n">m</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="w">  </span><span class="c">% Minimum number of cells to attain the desired accuracy</span>
+<span class="linenos">13</span><span class="n">dx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">(</span><span class="n">east</span><span class="o">-</span><span class="n">west</span><span class="p">)</span><span class="o">/</span><span class="n">m</span><span class="p">;</span><span class="w">  </span><span class="c">% Step length</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="n">L</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">lap</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">dx</span><span class="p">);</span><span class="w">  </span><span class="c">% 1D Mimetic laplacian operator</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span><span class="c">% Impose Robin BC on laplacian operator</span>
+<span class="linenos">18</span><span class="n">a</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="linenos">19</span><span class="n">b</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="linenos">20</span><span class="n">L</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">L</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">robinBC</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="c">% 1D Staggered grid</span>
+<span class="linenos">23</span><span class="nb">grid</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="n">west</span><span class="w"> </span><span class="n">west</span><span class="o">+</span><span class="n">dx</span><span class="o">/</span><span class="mi">2</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">dx</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">east</span><span class="o">-</span><span class="n">dx</span><span class="o">/</span><span class="mi">2</span><span class="w"> </span><span class="n">east</span><span class="p">];</span>
+<span class="linenos">24</span>
+<span class="linenos">25</span><span class="c">% RHS</span>
+<span class="linenos">26</span><span class="n">U</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">exp</span><span class="p">(</span><span class="nb">grid</span><span class="p">)</span><span class="o">&#39;</span><span class="p">;</span>
+<span class="linenos">27</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">  </span><span class="c">% West BC</span>
+<span class="linenos">28</span><span class="n">U</span><span class="p">(</span><span class="k">end</span><span class="p">)</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">2</span><span class="o">*</span><span class="nb">exp</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w">  </span><span class="c">% East BC</span>
+<span class="linenos">29</span>
+<span class="linenos">30</span><span class="n">U</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">L</span><span class="o">\</span><span class="n">U</span><span class="p">;</span><span class="w">  </span><span class="c">% Solve a linear system of equations</span>
+<span class="linenos">31</span>
+<span class="linenos">32</span><span class="c">% Plot result</span>
+<span class="linenos">33</span><span class="nb">plot</span><span class="p">(</span><span class="nb">grid</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;o&#39;</span><span class="p">)</span>
+<span class="linenos">34</span><span class="nb">hold</span><span class="w"> </span><span class="n">on</span>
+<span class="linenos">35</span><span class="nb">plot</span><span class="p">(</span><span class="nb">grid</span><span class="p">,</span><span class="w"> </span><span class="nb">exp</span><span class="p">(</span><span class="nb">grid</span><span class="p">))</span>
+<span class="linenos">36</span><span class="nb">legend</span><span class="p">(</span><span class="s">&#39;Approximated&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Analytical&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Location&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;NorthWest&#39;</span><span class="p">)</span>
+<span class="linenos">37</span><span class="nb">title</span><span class="p">(</span><span class="s">&#39;Poisson&#39;&#39;s equation with Robin BC&#39;</span><span class="p">)</span>
+<span class="linenos">38</span><span class="nb">xlabel</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
+<span class="linenos">39</span><span class="nb">ylabel</span><span class="p">(</span><span class="s">&#39;u(x)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Check out more C++ examples in the <code class="docutils literal notranslate"><span class="pre">examples/cpp/</span></code> directory</p></li>
+<li><p>Explore the MATLAB/Octave examples in the <code class="docutils literal notranslate"><span class="pre">examples/matlab/</span></code> directory</p></li>
+<li><p>Join our community and <a class="reference external" href="../intros/contributing_wrapper.md">contribute</a></p></li>
+</ul>
+<p>Performing non-unary operations involving operands constructed over different grids may lead to unexpected results. While MOLE allows such operations without throwing errors, users must exercise caution when manipulating operators across different grids.</p>
+</section>
+<section id="licensing">
+<h2>Licensing<a class="headerlink" href="#licensing" title="Permalink to this heading"></a></h2>
+<p>MOLE is distributed under a GNU General Public License; please refer to the <em>LICENSE</em>
+file for more details.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="doc_readme_wrapper.html" class="btn btn-neutral float-right" title="MOLE Documentation Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, CSRC SDSU.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

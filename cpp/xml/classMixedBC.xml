@@ -1,0 +1,562 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="classMixedBC" kind="class" language="C++" prot="public">
+    <compoundname>MixedBC</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sp_mat</basecompoundref>
+    <includes refid="mixedbc_8h" local="no">mixedbc.h</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classMixedBC_1ad8d4d972fb3fbe62200aaa0534084f2e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>MixedBC::MixedBC</definition>
+        <argsstring>(u16 k, u32 m, Real dx, const std::string &amp;left, const std::vector&lt; Real &gt; &amp;coeffs_left, const std::string &amp;right, const std::vector&lt; Real &gt; &amp;coeffs_right)</argsstring>
+        <name>MixedBC</name>
+        <qualifiedname>MixedBC::MixedBC</qualifiedname>
+        <param>
+          <type>u16</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dx</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>left</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref> &gt; &amp;</type>
+          <declname>coeffs_left</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>right</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref> &gt; &amp;</type>
+          <declname>coeffs_right</declname>
+        </param>
+        <briefdescription>
+<para>1-D Constructor </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Order of accuracy </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Spacing between cells </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>left</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of boundary condition at the left boundary (&apos;Dirichlet&apos;, &apos;Neumann&apos;, &apos;Robin&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>coeffs_left</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Coefficients for the left boundary condition </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>right</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of boundary condition at the right boundary (&apos;Dirichlet&apos;, &apos;Neumann&apos;, &apos;Robin&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>coeffs_right</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Coefficients for the right boundary condition </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/mixedbc.h" line="45" column="3" bodyfile="src/cpp/mixedbc.cpp" bodystart="18" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="classMixedBC_1a94dbf382fbd88bba15cc8427d212a55b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>MixedBC::MixedBC</definition>
+        <argsstring>(u16 k, u32 m, Real dx, u32 n, Real dy, const std::string &amp;left, const std::vector&lt; Real &gt; &amp;coeffs_left, const std::string &amp;right, const std::vector&lt; Real &gt; &amp;coeffs_right, const std::string &amp;bottom, const std::vector&lt; Real &gt; &amp;coeffs_bottom, const std::string &amp;top, const std::vector&lt; Real &gt; &amp;coeffs_top)</argsstring>
+        <name>MixedBC</name>
+        <qualifiedname>MixedBC::MixedBC</qualifiedname>
+        <param>
+          <type>u16</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dx</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>n</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dy</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>left</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref> &gt; &amp;</type>
+          <declname>coeffs_left</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>right</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref> &gt; &amp;</type>
+          <declname>coeffs_right</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>bottom</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref> &gt; &amp;</type>
+          <declname>coeffs_bottom</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>top</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref> &gt; &amp;</type>
+          <declname>coeffs_top</declname>
+        </param>
+        <briefdescription>
+<para>2-D Constructor </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Order of accuracy </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells along x-axis </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Spacing between cells along x-axis </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells along y-axis </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Spacing between cells along y-axis </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>left</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of boundary condition at the left boundary (&apos;Dirichlet&apos;, &apos;Neumann&apos;, &apos;Robin&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>coeffs_left</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Coefficients for the left boundary condition </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>right</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of boundary condition at the right boundary (&apos;Dirichlet&apos;, &apos;Neumann&apos;, &apos;Robin&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>coeffs_right</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Coefficients for the right boundary condition </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>bottom</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of boundary condition at the bottom boundary (&apos;Dirichlet&apos;, &apos;Neumann&apos;, &apos;Robin&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>coeffs_bottom</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Coefficients for the bottom boundary condition </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>top</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of boundary condition at the top boundary (&apos;Dirichlet&apos;, &apos;Neumann&apos;, &apos;Robin&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>coeffs_top</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Coefficients for the top boundary condition </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/mixedbc.h" line="70" column="3" bodyfile="src/cpp/mixedbc.cpp" bodystart="62" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="function" id="classMixedBC_1a3f2ff6914cddbc8fba77ad91dc8d48a7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>MixedBC::MixedBC</definition>
+        <argsstring>(u16 k, u32 m, Real dx, u32 n, Real dy, u32 o, Real dz, const std::string &amp;left, const std::vector&lt; Real &gt; &amp;coeffs_left, const std::string &amp;right, const std::vector&lt; Real &gt; &amp;coeffs_right, const std::string &amp;bottom, const std::vector&lt; Real &gt; &amp;coeffs_bottom, const std::string &amp;top, const std::vector&lt; Real &gt; &amp;coeffs_top, const std::string &amp;front, const std::vector&lt; Real &gt; &amp;coeffs_front, const std::string &amp;back, const std::vector&lt; Real &gt; &amp;coeffs_back)</argsstring>
+        <name>MixedBC</name>
+        <qualifiedname>MixedBC::MixedBC</qualifiedname>
+        <param>
+          <type>u16</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dx</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>n</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dy</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>o</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dz</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>left</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref> &gt; &amp;</type>
+          <declname>coeffs_left</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>right</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref> &gt; &amp;</type>
+          <declname>coeffs_right</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>bottom</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref> &gt; &amp;</type>
+          <declname>coeffs_bottom</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>top</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref> &gt; &amp;</type>
+          <declname>coeffs_top</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>front</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref> &gt; &amp;</type>
+          <declname>coeffs_front</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>back</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref> &gt; &amp;</type>
+          <declname>coeffs_back</declname>
+        </param>
+        <briefdescription>
+<para>3-D Constructor </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Order of accuracy </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells along x-axis </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Spacing between cells along x-axis </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells along y-axis </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Spacing between cells along y-axis </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>o</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells along z-axis </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dz</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Spacing between cells along z-axis </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>left</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of boundary condition at the left boundary (&apos;Dirichlet&apos;, &apos;Neumann&apos;, &apos;Robin&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>coeffs_left</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Coefficients for the left boundary condition </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>right</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of boundary condition at the right boundary (&apos;Dirichlet&apos;, &apos;Neumann&apos;, &apos;Robin&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>coeffs_right</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Coefficients for the right boundary condition </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>bottom</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of boundary condition at the bottom boundary (&apos;Dirichlet&apos;, &apos;Neumann&apos;, &apos;Robin&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>coeffs_bottom</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Coefficients for the bottom boundary condition </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>top</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of boundary condition at the top boundary (&apos;Dirichlet&apos;, &apos;Neumann&apos;, &apos;Robin&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>coeffs_top</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Coefficients for the top boundary condition </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>front</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of boundary condition at the front boundary (&apos;Dirichlet&apos;, &apos;Neumann&apos;, &apos;Robin&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>coeffs_front</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Coefficients for the front boundary condition </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>back</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of boundary condition at the back boundary (&apos;Dirichlet&apos;, &apos;Neumann&apos;, &apos;Robin&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>coeffs_back</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Coefficients for the back boundary condition </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/mixedbc.h" line="105" column="3" bodyfile="src/cpp/mixedbc.cpp" bodystart="84" bodyend="113"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Mimetic Mixed Boundary Condition operator. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>MixedBC</label>
+        <link refid="classMixedBC"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sp_mat</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>MixedBC</label>
+        <link refid="classMixedBC"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sp_mat</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/cpp/mixedbc.h" line="27" column="1" bodyfile="src/cpp/mixedbc.h" bodystart="27" bodyend="112"/>
+    <listofallmembers>
+      <member refid="classMixedBC_1ad8d4d972fb3fbe62200aaa0534084f2e" prot="public" virt="non-virtual"><scope>MixedBC</scope><name>MixedBC</name></member>
+      <member refid="classMixedBC_1a94dbf382fbd88bba15cc8427d212a55b" prot="public" virt="non-virtual"><scope>MixedBC</scope><name>MixedBC</name></member>
+      <member refid="classMixedBC_1a3f2ff6914cddbc8fba77ad91dc8d48a7" prot="public" virt="non-virtual"><scope>MixedBC</scope><name>MixedBC</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

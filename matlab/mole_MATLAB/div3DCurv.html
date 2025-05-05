@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of div3DCurv</title>
+  <meta name="keywords" content="div3DCurv">
+  <meta name="description" content="Get the determinant of the jacobian and the metrics">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html mole_MATLAB -->
+<h1>div3DCurv
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Get the determinant of the jacobian and the metrics</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function D = div3DCurv(k, X, Y, Z) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Get the determinant of the jacobian and the metrics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="DI3.html" class="code" title="function I = DI3(m, n, o, type)">DI3</a>	</li><li><a href="div3D.html" class="code" title="function D = div3D(k, m, dx, n, dy, o, dz)">div3D</a>	Returns a three-dimensional mimetic divergence operator</li><li><a href="jacobian3D.html" class="code" title="function [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3D(k, X, Y, Z)">jacobian3D</a>	Returns:</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function D = div3DCurv(k, X, Y, Z)</a>
+0002     <span class="comment">% Get the determinant of the jacobian and the metrics</span>
+0003     [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = <a href="jacobian3D.html" class="code" title="function [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3D(k, X, Y, Z)">jacobian3D</a>(k, X, Y, Z);
+0004     
+0005     <span class="comment">% Dimensions of nodal grid</span>
+0006     [n, m, o] = size(X);
+0007     
+0008     <span class="comment">% Make them volumes so they can be interpolated</span>
+0009     J = permute(reshape(J, m, n, o), [2, 1, 3]);
+0010     A = permute(reshape(Yn.*Zc-Zn.*Yc, m, n, o), [2, 1, 3]);
+0011     B = permute(reshape(Zn.*Xc-Xn.*Zc, m, n, o), [2, 1, 3]);
+0012     C = permute(reshape(Xn.*Yc-Yn.*Xc, m, n, o), [2, 1, 3]);
+0013     D = permute(reshape(Ze.*Yc-Ye.*Zc, m, n, o), [2, 1, 3]);
+0014     E = permute(reshape(Xe.*Zc-Ze.*Xc, m, n, o), [2, 1, 3]);
+0015     F = permute(reshape(Ye.*Xc-Xe.*Yc, m, n, o), [2, 1, 3]);
+0016     G = permute(reshape(Ye.*Zn-Ze.*Yn, m, n, o), [2, 1, 3]);
+0017     H = permute(reshape(Ze.*Xn-Xe.*Zn, m, n, o), [2, 1, 3]);
+0018     I = permute(reshape(Xe.*Yn-Ye.*Xn, m, n, o), [2, 1, 3]);
+0019     
+0020     <span class="comment">% Logical grids</span>
+0021     [Xl, Yl, Zl] = meshgrid(1:m, 1:n, 1:o);
+0022     <span class="comment">% Staggered logical grid</span>
+0023     [Xs, Ys, Zs] = meshgrid([1 1.5 : 1 : m-0.5 m], [1 1.5 : 1 : n-0.5 n], [1 1.5 : 1 : o-0.5 o]);
+0024     
+0025     <span class="comment">% Interpolate the metrics on the logical grid for positions (Xs, Ys, Zs)</span>
+0026     J = interp3(Xl, Yl, Zl, J, Xs, Ys, Zs);
+0027     A = interp3(Xl, Yl, Zl, A, Xs, Ys, Zs);
+0028     B = interp3(Xl, Yl, Zl, B, Xs, Ys, Zs);
+0029     C = interp3(Xl, Yl, Zl, C, Xs, Ys, Zs);
+0030     D = interp3(Xl, Yl, Zl, D, Xs, Ys, Zs);
+0031     E = interp3(Xl, Yl, Zl, E, Xs, Ys, Zs);
+0032     F = interp3(Xl, Yl, Zl, F, Xs, Ys, Zs);
+0033     G = interp3(Xl, Yl, Zl, G, Xs, Ys, Zs);
+0034     H = interp3(Xl, Yl, Zl, H, Xs, Ys, Zs);
+0035     I = interp3(Xl, Yl, Zl, I, Xs, Ys, Zs);
+0036     
+0037     <span class="comment">% Convert metrics to diagonal matrices so they can be multiplied by the</span>
+0038     <span class="comment">% logical operators</span>
+0039     J = spdiags(1./reshape(permute(J, [2, 1, 3]), [], 1), 0, numel(J), numel(J));
+0040     A = spdiags(reshape(permute(A, [2, 1, 3]), [], 1), 0, numel(A), numel(A));
+0041     B = spdiags(reshape(permute(B, [2, 1, 3]), [], 1), 0, numel(B), numel(B));
+0042     C = spdiags(reshape(permute(C, [2, 1, 3]), [], 1), 0, numel(C), numel(C));
+0043     D = spdiags(reshape(permute(D, [2, 1, 3]), [], 1), 0, numel(D), numel(D));
+0044     E = spdiags(reshape(permute(E, [2, 1, 3]), [], 1), 0, numel(E), numel(E));
+0045     F = spdiags(reshape(permute(F, [2, 1, 3]), [], 1), 0, numel(F), numel(F));
+0046     G = spdiags(reshape(permute(G, [2, 1, 3]), [], 1), 0, numel(G), numel(G));
+0047     H = spdiags(reshape(permute(H, [2, 1, 3]), [], 1), 0, numel(H), numel(H));
+0048     I = spdiags(reshape(permute(I, [2, 1, 3]), [], 1), 0, numel(I), numel(I));
+0049     
+0050     <span class="comment">% Construct 3D uniform mimetic divergence operator (d/de + d/dn + d/dc)</span>
+0051     Div = <a href="div3D.html" class="code" title="function D = div3D(k, m, dx, n, dy, o, dz)">div3D</a>(k, m-1, 1, n-1, 1, o-1, 1);
+0052     De = Div(:, 1:m*(n-1)*(o-1));
+0053     Dn = Div(:, m*(n-1)*(o-1)+1:m*(n-1)*(o-1)+(m-1)*n*(o-1));
+0054     Dc = Div(:, m*(n-1)*(o-1)+(m-1)*n*(o-1)+1:end);
+0055     
+0056     <span class="comment">% Apply transformation</span>
+0057     Dx = J*(A*De+D*<a href="DI3.html" class="code" title="function I = DI3(m, n, o, type)">DI3</a>(m-1, n-1, o-1, <span class="string">'Dn'</span>)+G*<a href="DI3.html" class="code" title="function I = DI3(m, n, o, type)">DI3</a>(m-1, n-1, o-1, <span class="string">'Dc'</span>));
+0058     Dy = J*(B*<a href="DI3.html" class="code" title="function I = DI3(m, n, o, type)">DI3</a>(m-1, n-1, o-1, <span class="string">'De'</span>)+E*Dn+H*<a href="DI3.html" class="code" title="function I = DI3(m, n, o, type)">DI3</a>(m-1, n-1, o-1, <span class="string">'Dcc'</span>));
+0059     Dz = J*(C*<a href="DI3.html" class="code" title="function I = DI3(m, n, o, type)">DI3</a>(m-1, n-1, o-1, <span class="string">'Dee'</span>)+F*<a href="DI3.html" class="code" title="function I = DI3(m, n, o, type)">DI3</a>(m-1, n-1, o-1, <span class="string">'Dnn'</span>)+I*Dc);
+0060     
+0061     <span class="comment">% Final 3D curvilinear mimetic divergence operator (d/dx + d/dy + d/dz)</span>
+0062     D = [Dx Dy Dz];
+0063 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 27-Jan-2021 14:29:32 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

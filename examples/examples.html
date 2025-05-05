@@ -1,0 +1,690 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MOLE Library Examples &mdash; MOLE 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+
+  
+      <script src="../_static/jquery.js"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+      <script src="../_static/doctools.js"></script>
+      <script src="../_static/sphinx_highlight.js"></script>
+      <script src="../_static/mathconf.js"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="C++ Examples" href="cpp/README.html" />
+    <link rel="prev" title="MOLE Examples Overview" href="README.html" />
+ 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const headers = document.querySelectorAll('.collapsible-header');
+    
+    headers.forEach(header => {
+      header.addEventListener('click', function() {
+        this.classList.toggle('active');
+        const content = this.nextElementSibling;
+        if (content.style.display === 'block') {
+          content.style.display = 'none';
+        } else {
+          content.style.display = 'block';
+        }
+      });
+    });
+  });
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intros/introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../intros/introduction.html#licensing">Licensing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/introduction.html#community-guidelines">Community Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/introduction.html#citations">Citations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../intros/gettingstarted.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#package-installation-by-os">Package Installation by OS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#ubuntu-debian-systems">Ubuntu/Debian Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#macos-systems">macOS Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#rhel-centos-fedora-systems">RHEL/CentOS/Fedora Systems</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#building-and-installing">Building and Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#testing">Testing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#c">C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#matlab-octave">MATLAB/Octave</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#id1">C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#matlab-octave-examples">MATLAB/Octave Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#quick-start-examples">Quick Start Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#c-example">C++ Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/gettingstarted.html#matlab-octave-example">MATLAB/Octave Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/gettingstarted.html#licensing">Licensing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../intros/doc_readme_wrapper.html">Building Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../intros/doc_readme_wrapper.html#documentation-structure">Documentation Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/doc_readme_wrapper.html#building-documentation">️Building Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../intros/doc_readme_wrapper.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/doc_readme_wrapper.html#building-steps">Building Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/doc_readme_wrapper.html#pdf-generation-process">PDF Generation Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../intros/doc_readme_wrapper.html#image-handling">Image Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/doc_readme_wrapper.html#development-workflow">Development Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/doc_readme_wrapper.html#documentation-standards">Documentation Standards</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/cpp/index.html">C++</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/cpp/index.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cpp/index.html#class-structure">Class Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/cpp/operators.html">Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/cpp/boundary.html">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/cpp/utils.html">Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/matlab/index-beta.html">Matlab/ Octave</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/matlab/matlab_index.html">MATLAB/Octave Function Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#gradient-operators">Gradient Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#divergence-operators">Divergence Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#laplacian-operators">Laplacian Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#nodal-operators">Nodal Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#interpolation-functions">Interpolation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#boundary-conditions">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#grid-and-transformation-functions">Grid and Transformation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/matlab_index.html#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/matlab/api.html">MATLAB/Octave API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#differential-operators">Differential Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#interpolation-functions">Interpolation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#boundary-conditions">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#grid-generation-and-transformation">Grid Generation and Transformation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#mimetic-weights">Mimetic Weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/matlab/api.html#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Mathematical Framework</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../math_functions/index.html">Mathematical Functions Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../math_functions/CSRCReportOnMOLE.html">CSRC Report on MOLE Library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/CSRCReportOnMOLE.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/CSRCReportOnMOLE.html#on-the-mathematics">On the Mathematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../math_functions/CSRCReportOnMOLE.html#staggered-grids">Staggered Grids</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/CSRCReportOnMOLE.html#using-the-operators">Using the Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/CSRCReportOnMOLE.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../math_functions/StaggeredGrids.html">Why Staggered Grids?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/StaggeredGrids.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/StaggeredGrids.html#justification">Justification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/StaggeredGrids.html#checkerboard-pressure-fields">Checkerboard pressure fields</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/StaggeredGrids.html#staggered-grids">Staggered grids</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/StaggeredGrids.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../math_functions/Jacobian.html">Jacobian</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/Jacobian.html#introduction">Introduction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../math_functions/NonUniformGradAndDiv.html">Non-Uniform Gradient and Divergence Operators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../math_functions/NonUniformGradAndDiv.html#introduction">Introduction</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="README.html">MOLE Examples Overview</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">MOLE Library Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#elliptic-equations">Elliptic Equations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hyperbolic">Hyperbolic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parabolic-equations">Parabolic Equations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/README.html">C++ Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matlab/compact_operators/README.html">MATLAB Compact Operators</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intros/contributing_wrapper.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../intros/contributing_wrapper.html#id1">1. Contributing to MOLE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/contributing_wrapper.html#reporting-issues-or-problems">2. Reporting Issues or Problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/contributing_wrapper.html#seeking-support">3. Seeking Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html">Code of Conduct</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html#our-pledge">Our Pledge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html#our-standards">Our Standards</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html#our-responsibilities">Our Responsibilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html#scope">Scope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html#enforcement">Enforcement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intros/code_of_conduct_wrapper.html#attribution">Attribution</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MOLE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Examples</a></li>
+      <li class="breadcrumb-item active">MOLE Library Examples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/examples/examples.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="mole-library-examples">
+<h1>MOLE Library Examples<a class="headerlink" href="#mole-library-examples" title="Permalink to this heading"></a></h1>
+<p>The MOLE library contains many examples written in OCTAVE/MATLAB and C++. These examples span a broad range of partial differential equations (PDEs). Below are more technical explanations of the examples included in the library.</p>
+<p><strong>NOTE</strong>: The name for both OCTAVE/MATLAB and C++ will be the same. The files <code class="docutils literal notranslate"><span class="pre">elliptic1D.m</span></code> and <code class="docutils literal notranslate"><span class="pre">elliptic1D.cpp</span></code> solve the same differential equation explained here under Elliptic1D. There are many more OCTAVE/MATLAB examples, so if you cannot find a C++ example, it is only in the OCTAVE/MATLAB folder.</p>
+<section id="elliptic-equations">
+<h2>Elliptic Equations<a class="headerlink" href="#elliptic-equations" title="Permalink to this heading"></a></h2>
+<section id="elliptic1d">
+<h3>Elliptic1D<a class="headerlink" href="#elliptic1d" title="Permalink to this heading"></a></h3>
+<p>Solves the 1D Poisson equation with Robin boundary conditions.</p>
+<div class="math notranslate nohighlight">
+\[
+\nabla^2 u(x) = f(x)
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(x\in[0,1]\)</span>, and <span class="math notranslate nohighlight">\(f(x) =e^x\)</span>. The boundary conditions are given by</p>
+<div class="math notranslate nohighlight">
+\[
+au + b\frac{du}{dx} = g
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(a=1\)</span>, <span class="math notranslate nohighlight">\(b=1\)</span>, and <span class="math notranslate nohighlight">\(g=0\)</span>, and</p>
+<div class="math notranslate nohighlight">
+\[
+au(0) + b\frac{du(0)}{dx} = 0
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+au(1) + b\frac{du(1)}{dx} = 2e
+\]</div>
+<p>This corresponds to the call to robinBC2D of <code class="docutils literal notranslate"><span class="pre">robinBC2D(k,</span> <span class="pre">m,</span> <span class="pre">dx,</span> <span class="pre">a,</span> <span class="pre">b)</span></code>.</p>
+</section>
+<section id="elliptic2d">
+<h3>Elliptic2D<a class="headerlink" href="#elliptic2d" title="Permalink to this heading"></a></h3>
+<p>Solves the 2D Poisson equation with Robin boundary conditions on a nonuniform grid.</p>
+<div class="math notranslate nohighlight">
+\[
+\nabla^2 u(x,y) = f(x,y)
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(x\in[0,10], y\in[0,10]\)</span>, and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+f(x,y) = \begin{cases}
+    (x-0.5)^2+(y-0.5)^2 &amp; \text{ along boundaries } \\
+    4 &amp; \text{ otherwise }
+\end{cases}
+\end{split}\]</div>
+<p>The boundary conditions are given by</p>
+<div class="math notranslate nohighlight">
+\[
+au + b\nabla u = g
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(a=1\)</span>, <span class="math notranslate nohighlight">\(b=0\)</span>, and <span class="math notranslate nohighlight">\(g=0\)</span>, which is equivalent to Dirichlet conditions along each boundary.
+This corresponds to the call to robinBC2D of <code class="docutils literal notranslate"><span class="pre">robinBC2D(k,</span> <span class="pre">m,</span> <span class="pre">1,</span> <span class="pre">n,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">0)</span></code>.</p>
+</section>
+<section id="elliptic2d-case-2">
+<h3>Elliptic2D Case 2<a class="headerlink" href="#elliptic2d-case-2" title="Permalink to this heading"></a></h3>
+<p>Solves the 2D Poisson equation with Robin boundary conditions on a nonuniform sinusoidal grid.</p>
+<div class="math notranslate nohighlight">
+\[
+\nabla^2 u(x,y) = f(x,y)
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(x\in[-\pi, 2\pi], y\in[-\pi, \pi]\)</span>, and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+f(x,y) = \begin{cases}
+    \sin(x)\sin(y) &amp; \text{ along boundaries } \\
+    -2\sin(x)\sin(y) &amp; \text{ otherwise }
+\end{cases}
+\end{split}\]</div>
+<p>The boundary conditions are given by</p>
+<div class="math notranslate nohighlight">
+\[
+au + b\nabla u = g
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(a=1\)</span>, <span class="math notranslate nohighlight">\(b=0\)</span>, and <span class="math notranslate nohighlight">\(g=0\)</span>, which is equivalent to Dirichlet conditions along each boundary.
+This corresponds to the call to robinBC2D of <code class="docutils literal notranslate"><span class="pre">robinBC2D(k,</span> <span class="pre">m,</span> <span class="pre">1,</span> <span class="pre">n,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">0)</span></code>.</p>
+</section>
+<section id="elliptic2d-nodal-curv">
+<h3>Elliptic2D Nodal Curv<a class="headerlink" href="#elliptic2d-nodal-curv" title="Permalink to this heading"></a></h3>
+<p>Solves the 2D Poisson equation with Robin boundary conditions on a curvilinear grid using the nodal mimetic operator. This requires manually setting the boundary condition in the Laplacian, as there is no boundary condition operator for the nodal curvilinear operators.</p>
+<div class="math notranslate nohighlight">
+\[
+\nabla^2 u(x,y) = f(x,y)
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(x\in[0,50], y\in[0,50]\)</span>, and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+f(x,y) = \begin{cases}
+    (x-0.5)^2+(y-0.5)^2 &amp; \text{ along boundaries } \\
+    4 &amp; \text{ otherwise }
+\end{cases}
+\end{split}\]</div>
+<p>The boundary conditions are given by</p>
+<div class="math notranslate nohighlight">
+\[
+au + b\nabla u = g
+\]</div>
+<p>The MATLAB code uses the function <code class="docutils literal notranslate"><span class="pre">boundaryIdx2D</span></code> to find the correct locations for boundary condition weights in the nodal Laplacian. The code then sets the appropriate values to <span class="math notranslate nohighlight">\(0\)</span> or <span class="math notranslate nohighlight">\(1\)</span>.</p>
+</section>
+<section id="elliptic2d-nodal-curv-sinusoidal">
+<h3>Elliptic2D Nodal Curv Sinusoidal<a class="headerlink" href="#elliptic2d-nodal-curv-sinusoidal" title="Permalink to this heading"></a></h3>
+<p>Solves the 2D Poisson equation with Robin boundary conditions on a curvilinear sinusoidal grid using the nodal mimetic operator. This requires manually setting the boundary condition in the Laplacian, as there is no boundary condition operator for the nodal curvilinear operators.</p>
+<div class="math notranslate nohighlight">
+\[
+\nabla^2 u(x,y) = f(x,y)
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(x\in[-\pi, 2\pi], y\in[-\pi, \pi]\)</span>, and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+f(x,y) = \begin{cases}
+    \sin(x)+\cos(y) &amp; \text{ along boundaries } \\
+    -\sin(x) - \cos(y) &amp; \text{ otherwise }
+\end{cases}
+\end{split}\]</div>
+<p>The boundary conditions are given by</p>
+<div class="math notranslate nohighlight">
+\[
+au + b\nabla u = g
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(a=1\)</span>, <span class="math notranslate nohighlight">\(b=0\)</span>, and <span class="math notranslate nohighlight">\(g=0\)</span>, which is equivalent to Dirichlet conditions along each boundary.
+The MATLAB code uses the function <code class="docutils literal notranslate"><span class="pre">boundaryIdx2D</span></code> to find the correct locations for the weights of the boundary condition in the Laplacian node. The code then sets the appropriate values to <span class="math notranslate nohighlight">\(0\)</span> or <span class="math notranslate nohighlight">\(1\)</span>.</p>
+</section>
+<section id="minimal-poisson-2d">
+<h3>Minimal Poisson 2D<a class="headerlink" href="#minimal-poisson-2d" title="Permalink to this heading"></a></h3>
+<p>Solves the 2D Poisson equation with Robin boundary conditions on a uniform grid where <span class="math notranslate nohighlight">\(\Delta x=\Delta y = 1\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[
+\nabla^2 u(x,y) = f(x,y)
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(x\in[0,5], y\in[0,5]\)</span>, and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+f(x,y) = \begin{cases}
+    100 &amp; \text{ if y = 0} \\
+    0 &amp; \text{ otherwise }
+\end{cases}
+\end{split}\]</div>
+<p>The boundary conditions are given by</p>
+<div class="math notranslate nohighlight">
+\[
+au + b\nabla u = g
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(a=1\)</span>, <span class="math notranslate nohighlight">\(b=0\)</span>, and <span class="math notranslate nohighlight">\(g=0\)</span>.
+This corresponds to the call to robinBC2D of <code class="docutils literal notranslate"><span class="pre">robinBC2D(k,</span> <span class="pre">m,</span> <span class="pre">1,</span> <span class="pre">n,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">0)</span></code>.</p>
+</section>
+<section id="elliptic3d">
+<h3>Elliptic3D<a class="headerlink" href="#elliptic3d" title="Permalink to this heading"></a></h3>
+<p>Similar to <code class="docutils literal notranslate"><span class="pre">minimal_poisson2D</span></code>, this solves a 3D problem using mimetic Laplacian, where one side of the domain is set to 100, and allowed to diffuse.</p>
+<div class="math notranslate nohighlight">
+\[
+\nabla^2 u(x,y,z) = f(x,y,z)
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(x\in[0,5], y\in[0,6], z\in[0,7]\)</span>, and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+f(x,y) = \begin{cases}
+    100 &amp; \text{ if z = 0} \\
+    0 &amp; \text{ otherwise }
+\end{cases}
+\end{split}\]</div>
+<p>The boundary conditions are given by</p>
+<div class="math notranslate nohighlight">
+\[
+au + b\nabla u = g
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(a=1\)</span>, <span class="math notranslate nohighlight">\(b=0\)</span>, and <span class="math notranslate nohighlight">\(g=0\)</span>.
+This corresponds to the call to robinBC3D of <code class="docutils literal notranslate"><span class="pre">robinBC2D(k,</span> <span class="pre">m,</span> <span class="pre">1,</span> <span class="pre">n,</span> <span class="pre">1,</span> <span class="pre">o,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">0)</span></code>.</p>
+</section>
+<section id="poisson1d">
+<h3>Poisson1D<a class="headerlink" href="#poisson1d" title="Permalink to this heading"></a></h3>
+<p>Solves the 1D Poisson equation with Robin boundary conditions.</p>
+<div class="math notranslate nohighlight">
+\[
+-\frac{d^2 C}{d x^2} = f(x)
+\]</div>
+<p>The boundary conditions are given by</p>
+<div class="math notranslate nohighlight">
+\[
+au + b\frac{du}{dx} = g
+\]</div>
+<p>The equation is discretized using mimetic operators.</p>
+</section>
+<section id="schrodinger1d">
+<h3>Schrodinger1D<a class="headerlink" href="#schrodinger1d" title="Permalink to this heading"></a></h3>
+<p>Solves the 1D time-independent Schrödinger equation.</p>
+<div class="math notranslate nohighlight">
+\[
+H \psi = E \psi
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(H\)</span> is the Hamiltonian operator, <span class="math notranslate nohighlight">\(\psi\)</span> is the wave function, and <span class="math notranslate nohighlight">\(E\)</span> is the energy. The Hamiltonian includes the kinetic energy term represented by the Laplacian and a potential energy term.</p>
+</section>
+</section>
+<section id="hyperbolic">
+<h2>Hyperbolic<a class="headerlink" href="#hyperbolic" title="Permalink to this heading"></a></h2>
+<section id="hyperbolic1d">
+<h3>Hyperbolic1D<a class="headerlink" href="#hyperbolic1d" title="Permalink to this heading"></a></h3>
+<p>Solves the 1D advection equation with periodic boundary conditions.</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial U}{\partial t} + a\frac{\partial U}{\partial x} = 0
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(U=u(x,t)\)</span> and <span class="math notranslate nohighlight">\(a=1\)</span> is the advection velocity. The domain <span class="math notranslate nohighlight">\(x\in[0,1]\)</span> and <span class="math notranslate nohighlight">\(t\in[0,1]\)</span> with initial condition</p>
+<div class="math notranslate nohighlight">
+\[
+u(x,0) = \sin(2\pi x)
+\]</div>
+<p>Periodic boundary conditions are used</p>
+<div class="math notranslate nohighlight">
+\[
+u(0,t) = u(1,t)
+\]</div>
+<p>Using finite differences for the time derivative</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial U}{\partial t} = \frac{U^{n+1}_i - U^{n}_i}{\Delta t}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(U_i^n\)</span> is <span class="math notranslate nohighlight">\(u(x_i, t_n)\)</span>, and the mimetic operator <span class="math notranslate nohighlight">\(\mathbf{D}\)</span> for the space derivative.</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{U^{n+1}_i - U^{n}_i}{\Delta t} + a \mathbf{D} U^n_i = 0
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\frac{U^{n+1}_i - U^{n}_i}{\Delta t} = -a \mathbf{D} U^n_i
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+U^{n+1}_i = U^n_i - a \Delta t \mathbf{D} U^n_i
+\]</div>
+</section>
+<section id="hyperbolic1d-upwind">
+<h3>Hyperbolic1D upwind<a class="headerlink" href="#hyperbolic1d-upwind" title="Permalink to this heading"></a></h3>
+<p>Solves the 1D advection equation with periodic boundary conditions using a sided nodal mimetic operator. The main feature of this code is the lack of an interpolator.</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial U}{\partial t} + a\frac{\partial U}{\partial x} = 0
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(U=u(x,t)\)</span> and <span class="math notranslate nohighlight">\(a=1\)</span> is the advection velocity. The domain <span class="math notranslate nohighlight">\(x\in[0,1]\)</span> and <span class="math notranslate nohighlight">\(t\in[0,1]\)</span> with initial condition</p>
+<div class="math notranslate nohighlight">
+\[
+u(x,0) = \sin(2\pi x)
+\]</div>
+<p>Periodic boundary conditions are used</p>
+<div class="math notranslate nohighlight">
+\[
+u(0,t) = u(1,t)
+\]</div>
+<p>Using finite differences for the time derivative</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial U}{\partial t} = \frac{U^{n+1}_i - U^{n}_i}{\Delta t}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(U_i^n\)</span> is <span class="math notranslate nohighlight">\(u(x_i, t_n)\)</span>, and the mimetic operator <span class="math notranslate nohighlight">\(\mathbf{D}\)</span> for the space derivative.</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{U^{n+1}_i - U^{n}_i}{\Delta t} + a \mathbf{D} U^n_i = 0
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\frac{U^{n+1}_i - U^{n}_i}{\Delta t} = -a \mathbf{D} U^n_i
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+U^{n+1}_i = U^n_i - a \Delta t \mathbf{D} U^n_i
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+U^{n+1}_i = U^n_i ( I - S )
+\]</div>
+<p>The last line <span class="math notranslate nohighlight">\(I-S\)</span> is the identity matrix <span class="math notranslate nohighlight">\(I\)</span> minus the premultiplied <span class="math notranslate nohighlight">\(a\Delta t \mathbf{D}\)</span>.</p>
+</section>
+<section id="hyperbolic1d-lax-friedrichs">
+<h3>Hyperbolic1D Lax Friedrichs<a class="headerlink" href="#hyperbolic1d-lax-friedrichs" title="Permalink to this heading"></a></h3>
+<p>Solves the 1D advection equation with periodic boundary conditions using a sided nodal mimetic operator and the Lax-Friedrichs scheme for time integration. The main feature of this code is the lack of an interpolator. This is first order in both time and space, even though a second order mimetic operator is used.</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial U}{\partial t} + a\frac{\partial U}{\partial x} = 0
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(U=u(x,t)\)</span> and <span class="math notranslate nohighlight">\(a=1\)</span> is the advection velocity. The domain <span class="math notranslate nohighlight">\(x\in[0,1]\)</span> and <span class="math notranslate nohighlight">\(t\in[0,1]\)</span> with initial condition</p>
+<div class="math notranslate nohighlight">
+\[
+u(x,0) = \sin(2\pi x)
+\]</div>
+<p>Periodic boundary conditions are used</p>
+<div class="math notranslate nohighlight">
+\[
+u(0,t) = u(1,t)
+\]</div>
+<p>Using finite differences for the time derivative</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial U}{\partial t} = \frac{U^{n+1}_i - U^{n}_i}{\Delta t}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(U_i^n\)</span> is <span class="math notranslate nohighlight">\(u(x_i, t_n)\)</span>, and the mimetic operator <span class="math notranslate nohighlight">\(\mathbf{D}\)</span> for the space derivative.</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{U^{n+1}_i - U^{n}_i}{\Delta t} + a \mathbf{D} U^n_i = 0
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\frac{U^{n+1}_i - U^{n}_i}{\Delta t} = -a \mathbf{D} U^n_i
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+U^{n+1}_i = \mathbf{U}^n_i - a \Delta t \mathbf{D} U^n_i
+\]</div>
+<p>The last line <span class="math notranslate nohighlight">\(\mathbf{U}\)</span> is the derived (average) value of the U from the <span class="math notranslate nohighlight">\(U^n\)</span> timestep.</p>
+</section>
+<section id="wave-1d">
+<h3>Wave 1D<a class="headerlink" href="#wave-1d" title="Permalink to this heading"></a></h3>
+<p>Solves the one-way wave equation using the position Verlet or Forest-Ruth algorithms.</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial^2 U}{\partial t^2} - c^2\frac{\partial^2 U}{\partial x^2} = 0
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(U=u(x,t)\)</span> defined on the domains <span class="math notranslate nohighlight">\(x\in[0,1]\)</span> and <span class="math notranslate nohighlight">\(t\in[0,1]\)</span>, and wave speed <span class="math notranslate nohighlight">\(c=2\)</span>. Initial position and velocity are given as</p>
+<div class="math notranslate nohighlight">
+\[
+u(x,0) = \sin(\pi x)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+u'(x,0) = 0
+\]</div>
+</section>
+<section id="wave-1d-case-2">
+<h3>Wave 1D Case 2<a class="headerlink" href="#wave-1d-case-2" title="Permalink to this heading"></a></h3>
+<p>Solves the one-way wave equation using the position Verlet or Forest-Ruth algorithms with higher wave speed.</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial^2 U}{\partial t^2} - c^2\frac{\partial^2 U}{\partial x^2} = 0
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(U=u(x,t)\)</span> defined on the domains <span class="math notranslate nohighlight">\(x\in[0,1]\)</span> and <span class="math notranslate nohighlight">\(t\in[0,0.06]\)</span>, and wave speed <span class="math notranslate nohighlight">\(c=100\)</span>. Initial position and velocity are given as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+u(x,0) = \begin{cases}
+    \sin(\pi x) &amp; 2 &lt; x &lt; 3 \\
+    0 &amp; \text{ otherwise }
+\end{cases}
+\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[
+u'(x,0) = 0
+\]</div>
+</section>
+<section id="wave-2d">
+<h3>Wave 2D<a class="headerlink" href="#wave-2d" title="Permalink to this heading"></a></h3>
+<p>Solves the two-dimensional wave equation using the position Verlet algorithm.</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial^2 U}{\partial t^2} - c^2\frac{\partial^2 U}{\partial x^2} = 0
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(U=u(x,y,t)\)</span> defined on the domains <span class="math notranslate nohighlight">\(x\in[0,1], y\in[0,1]\)</span> and <span class="math notranslate nohighlight">\(t\in[0,1]\)</span>, and wave speed <span class="math notranslate nohighlight">\(c=1\)</span>. The boundaries are Dirichlet. Initial position and velocity are given as</p>
+<div class="math notranslate nohighlight">
+\[
+u(x,y,0) = \sin(\pi x) \sin(\pi y)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+u'(x,y,0) = 0
+\]</div>
+</section>
+<section id="wave-2d-case-2">
+<h3>Wave 2D Case 2<a class="headerlink" href="#wave-2d-case-2" title="Permalink to this heading"></a></h3>
+<p>Solves the two-dimensional wave equation using the position Verlet algorithm. This example uses the fourth order mimetic Laplacian, and extends the domain</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial^2 U}{\partial t^2} - c^2\frac{\partial^2 U}{\partial x^2} = 0
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(U=u(x,y,t)\)</span> defined on the domains <span class="math notranslate nohighlight">\(x\in[-5,10], y\in[-5,10]\)</span> and <span class="math notranslate nohighlight">\(t\in[0,0.3]\)</span>, and wave speed <span class="math notranslate nohighlight">\(c=100\)</span>. The boundaries are Dirichlet. Initial position and velocity are given as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+u(x,y,0) = \begin{cases}
+    \sin(\pi x)\sin(\pi y) &amp; 2 &lt; x &lt; 3,\,\,2 &lt; y &lt; 3 \\
+    0 &amp; \text{ otherwise }
+\end{cases}
+\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[
+u'(x,y,0) = 0
+\]</div>
+</section>
+<section id="burgers1d">
+<h3>Burgers1D<a class="headerlink" href="#burgers1d" title="Permalink to this heading"></a></h3>
+<p>This example deals with the conservative form of the inviscid Burgers equation in 1D.</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial U}{\partial t} + \frac{\partial}{\partial x}\Big(\frac{U^2}{2}\Big) = 0
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(U = u(x,t)\)</span> defined on the domain <span class="math notranslate nohighlight">\(x\in[-15,15]\)</span>, from time <span class="math notranslate nohighlight">\(t\in[0,10]\)</span> and initial conditions</p>
+<div class="math notranslate nohighlight">
+\[
+u(x,0) = e^{\frac{-x^2}{50}}
+\]</div>
+<p>The wave is allowed to propagate across the domain while the area under the curve is calculated.</p>
+</section>
+</section>
+<section id="parabolic-equations">
+<h2>Parabolic Equations<a class="headerlink" href="#parabolic-equations" title="Permalink to this heading"></a></h2>
+<section id="transport1d">
+<h3>Transport1D<a class="headerlink" href="#transport1d" title="Permalink to this heading"></a></h3>
+<p>Solves the 1D advection-reaction-dispersion equation:</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial C}{\partial t} + v\frac{\partial C}{\partial x} = D\frac{\partial^2 C}{\partial x^2}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(C\)</span> is the concentration, <span class="math notranslate nohighlight">\(v\)</span> is the pore-water flow velocity, and <span class="math notranslate nohighlight">\(D\)</span> is the dispersion coefficient.</p>
+</section>
+<section id="under-work">
+<h3>Under work  …<a class="headerlink" href="#under-work" title="Permalink to this heading"></a></h3>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="README.html" class="btn btn-neutral float-left" title="MOLE Examples Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cpp/README.html" class="btn btn-neutral float-right" title="C++ Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, CSRC SDSU.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

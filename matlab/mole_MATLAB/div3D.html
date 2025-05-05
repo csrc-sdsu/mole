@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of div3D</title>
+  <meta name="keywords" content="div3D">
+  <meta name="description" content="Returns a three-dimensional mimetic divergence operator">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html mole_MATLAB -->
+<h1>div3D
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Returns a three-dimensional mimetic divergence operator</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function D = div3D(k, m, dx, n, dy, o, dz) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Returns a three-dimensional mimetic divergence operator
+
+ Parameters:
+                k : Order of accuracy
+                m : Number of cells along x-axis
+               dx : Step size along x-axis
+                n : Number of cells along y-axis
+               dy : Step size along y-axis
+                o : Number of cells along z-axis
+               dz : Step size along z-axis</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="div.html" class="code" title="function D = div(k, m, dx)">div</a>	Returns a m+2 by m+1 one-dimensional mimetic divergence operator</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="div3DCurv.html" class="code" title="function D = div3DCurv(k, X, Y, Z)">div3DCurv</a>	Get the determinant of the jacobian and the metrics</li><li><a href="lap3D.html" class="code" title="function L = lap3D(k, m, dx, n, dy, o, dz)">lap3D</a>	Returns a three-dimensional mimetic laplacian operator</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function D = div3D(k, m, dx, n, dy, o, dz)</a>
+0002 <span class="comment">% Returns a three-dimensional mimetic divergence operator</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Parameters:</span>
+0005 <span class="comment">%                k : Order of accuracy</span>
+0006 <span class="comment">%                m : Number of cells along x-axis</span>
+0007 <span class="comment">%               dx : Step size along x-axis</span>
+0008 <span class="comment">%                n : Number of cells along y-axis</span>
+0009 <span class="comment">%               dy : Step size along y-axis</span>
+0010 <span class="comment">%                o : Number of cells along z-axis</span>
+0011 <span class="comment">%               dz : Step size along z-axis</span>
+0012 
+0013     Im = sparse(m + 2, m);
+0014     Im(2:(m + 2) - 1, :) = speye(m, m);
+0015     
+0016     Dx = <a href="div.html" class="code" title="function D = div(k, m, dx)">div</a>(k, m, dx);
+0017     
+0018     In = sparse(n + 2, n);
+0019     In(2:(n + 2) - 1, :) = speye(n, n);
+0020     
+0021     Dy = <a href="div.html" class="code" title="function D = div(k, m, dx)">div</a>(k, n, dy);
+0022     
+0023     Io = sparse(o + 2, o);
+0024     Io(2:(o + 2) - 1, :) = speye(o, o);
+0025     
+0026     Dz = <a href="div.html" class="code" title="function D = div(k, m, dx)">div</a>(k, o, dz);
+0027     
+0028     Sx = kron(kron(Io, In), Dx);
+0029     Sy = kron(kron(Io, Dy), Im);
+0030     Sz = kron(kron(Dz, In), Im);
+0031     
+0032     D = [Sx Sy Sz];
+0033 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 27-Jan-2021 14:29:32 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="laplacian_8h" kind="file" language="C++">
+    <compoundname>laplacian.h</compoundname>
+    <includes refid="divergence_8h" local="yes">divergence.h</includes>
+    <includes refid="gradient_8h" local="yes">gradient.h</includes>
+    <includedby refid="laplacian_8cpp" local="yes">src/cpp/laplacian.cpp</includedby>
+    <includedby refid="mole_8h" local="yes">src/cpp/mole.h</includedby>
+    <includedby refid="operators_8h" local="yes">src/cpp/operators.h</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>divergence.h</label>
+        <link refid="divergence_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>gradient.h</label>
+        <link refid="gradient_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/cpp/laplacian.h</label>
+        <link refid="laplacian_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>utils.h</label>
+        <link refid="utils_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>armadillo</label>
+      </node>
+      <node id="5">
+        <label>cassert</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>src/cpp/laplacian.cpp</label>
+        <link refid="laplacian_8cpp"/>
+      </node>
+      <node id="1">
+        <label>src/cpp/laplacian.h</label>
+        <link refid="laplacian_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>src/cpp/mole.h</label>
+        <link refid="mole_8h"/>
+      </node>
+      <node id="4">
+        <label>src/cpp/operators.h</label>
+        <link refid="operators_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classLaplacian" prot="public">Laplacian</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="2"><highlight class="comment">*<sp/>SPDX-License-Identifier:<sp/>GPL-3.0-or-later</highlight></codeline>
+<codeline lineno="3"><highlight class="comment">*<sp/>©<sp/>2008-2024<sp/>San<sp/>Diego<sp/>State<sp/>University<sp/>Research<sp/>Foundation<sp/>(SDSURF).</highlight></codeline>
+<codeline lineno="4"><highlight class="comment">*<sp/>See<sp/>LICENSE<sp/>file<sp/>or<sp/>https://www.gnu.org/licenses/gpl-3.0.html<sp/>for<sp/>details.<sp/></highlight></codeline>
+<codeline lineno="5"><highlight class="comment">*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*<sp/>@file<sp/>laplacian.h</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*<sp/></highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*<sp/>@brief<sp/>Mimetic<sp/>Laplacian<sp/>Class<sp/>and<sp/>Constructors</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/>*<sp/></highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/>*<sp/>@date<sp/>2024/10/15</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>LAPLACIAN_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>LAPLACIAN_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="divergence_8h" kindref="compound">divergence.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="gradient_8h" kindref="compound">gradient.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="25" refid="classLaplacian" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classLaplacian" kindref="compound">Laplacian</ref><sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/>sp_mat<sp/>{</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">sp_mat::operator=;</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><ref refid="classLaplacian" kindref="compound">Laplacian</ref>(u16<sp/>k,<sp/>u32<sp/>m,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dx);</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><ref refid="classLaplacian" kindref="compound">Laplacian</ref>(u16<sp/>k,<sp/>u32<sp/>m,<sp/>u32<sp/>n,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dx,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dy);</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><ref refid="classLaplacian" kindref="compound">Laplacian</ref>(u16<sp/>k,<sp/>u32<sp/>m,<sp/>u32<sp/>n,<sp/>u32<sp/>o,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dx,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dy,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dz);</highlight></codeline>
+<codeline lineno="63"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">//<sp/>LAPLACIAN_H</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/cpp/laplacian.h"/>
+  </compounddef>
+</doxygen>

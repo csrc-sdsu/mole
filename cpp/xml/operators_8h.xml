@@ -1,0 +1,299 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="operators_8h" kind="file" language="C++">
+    <compoundname>operators.h</compoundname>
+    <includes refid="interpol_8h" local="yes">interpol.h</includes>
+    <includes refid="laplacian_8h" local="yes">laplacian.h</includes>
+    <includes refid="mixedbc_8h" local="yes">mixedbc.h</includes>
+    <includes refid="robinbc_8h" local="yes">robinbc.h</includes>
+    <includedby refid="mole_8h" local="yes">src/cpp/mole.h</includedby>
+    <incdepgraph>
+      <node id="7">
+        <label>divergence.h</label>
+        <link refid="divergence_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>gradient.h</label>
+        <link refid="gradient_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>interpol.h</label>
+        <link refid="interpol_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>laplacian.h</label>
+        <link refid="laplacian_8h"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>mixedbc.h</label>
+        <link refid="mixedbc_8h"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/cpp/operators.h</label>
+        <link refid="operators_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>robinbc.h</label>
+        <link refid="robinbc_8h"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>utils.h</label>
+        <link refid="utils_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>armadillo</label>
+      </node>
+      <node id="5">
+        <label>cassert</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>src/cpp/mole.h</label>
+        <link refid="mole_8h"/>
+      </node>
+      <node id="1">
+        <label>src/cpp/operators.h</label>
+        <link refid="operators_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="operators_8h_1af587420d81213bb9cf4bdceba8adaec5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>sp_mat</type>
+        <definition>sp_mat operator*</definition>
+        <argsstring>(const Divergence &amp;div, const Gradient &amp;grad)</argsstring>
+        <name>operator*</name>
+        <param>
+          <type>const <ref refid="classDivergence" kindref="compound">Divergence</ref> &amp;</type>
+          <declname>div</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classGradient" kindref="compound">Gradient</ref> &amp;</type>
+          <declname>grad</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/operators.h" line="22" column="15" bodyfile="src/cpp/operators.h" bodystart="22" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="function" id="operators_8h_1ae69e8bf57452fb217205d6eee3478144" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>sp_mat</type>
+        <definition>sp_mat operator+</definition>
+        <argsstring>(const Laplacian &amp;lap, const RobinBC &amp;bc)</argsstring>
+        <name>operator+</name>
+        <param>
+          <type>const <ref refid="classLaplacian" kindref="compound">Laplacian</ref> &amp;</type>
+          <declname>lap</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classRobinBC" kindref="compound">RobinBC</ref> &amp;</type>
+          <declname>bc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/operators.h" line="26" column="15" bodyfile="src/cpp/operators.h" bodystart="26" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="operators_8h_1ab33810c53caef35987210a606cb3ed44" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>sp_mat</type>
+        <definition>sp_mat operator+</definition>
+        <argsstring>(const Laplacian &amp;lap, const MixedBC &amp;bc)</argsstring>
+        <name>operator+</name>
+        <param>
+          <type>const <ref refid="classLaplacian" kindref="compound">Laplacian</ref> &amp;</type>
+          <declname>lap</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classMixedBC" kindref="compound">MixedBC</ref> &amp;</type>
+          <declname>bc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/operators.h" line="30" column="15" bodyfile="src/cpp/operators.h" bodystart="30" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="operators_8h_1aa0f3c6d9ffa98e3308f1c654d7cb0d07" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>vec</type>
+        <definition>vec operator*</definition>
+        <argsstring>(const Divergence &amp;div, const vec &amp;v)</argsstring>
+        <name>operator*</name>
+        <param>
+          <type>const <ref refid="classDivergence" kindref="compound">Divergence</ref> &amp;</type>
+          <declname>div</declname>
+        </param>
+        <param>
+          <type>const vec &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/operators.h" line="34" column="12" bodyfile="src/cpp/operators.h" bodystart="34" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="operators_8h_1a02455656721dcb2948197aa6c053313a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>vec</type>
+        <definition>vec operator*</definition>
+        <argsstring>(const Gradient &amp;grad, const vec &amp;v)</argsstring>
+        <name>operator*</name>
+        <param>
+          <type>const <ref refid="classGradient" kindref="compound">Gradient</ref> &amp;</type>
+          <declname>grad</declname>
+        </param>
+        <param>
+          <type>const vec &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/operators.h" line="38" column="12" bodyfile="src/cpp/operators.h" bodystart="38" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="operators_8h_1a221ecf61e403f612c8a4811c88038b42" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>vec</type>
+        <definition>vec operator*</definition>
+        <argsstring>(const Laplacian &amp;lap, const vec &amp;v)</argsstring>
+        <name>operator*</name>
+        <param>
+          <type>const <ref refid="classLaplacian" kindref="compound">Laplacian</ref> &amp;</type>
+          <declname>lap</declname>
+        </param>
+        <param>
+          <type>const vec &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/operators.h" line="42" column="12" bodyfile="src/cpp/operators.h" bodystart="42" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="operators_8h_1a25e80adf88a4f071196e7ca1920cd164" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>vec</type>
+        <definition>vec operator*</definition>
+        <argsstring>(const Interpol &amp;I, const vec &amp;v)</argsstring>
+        <name>operator*</name>
+        <param>
+          <type>const <ref refid="classInterpol" kindref="compound">Interpol</ref> &amp;</type>
+          <declname>I</declname>
+        </param>
+        <param>
+          <type>const vec &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/operators.h" line="46" column="12" bodyfile="src/cpp/operators.h" bodystart="46" bodyend="48"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="2"><highlight class="comment">*<sp/>SPDX-License-Identifier:<sp/>GPL-3.0-or-later</highlight></codeline>
+<codeline lineno="3"><highlight class="comment">*<sp/>©<sp/>2008-2024<sp/>San<sp/>Diego<sp/>State<sp/>University<sp/>Research<sp/>Foundation<sp/>(SDSURF).</highlight></codeline>
+<codeline lineno="4"><highlight class="comment">*<sp/>See<sp/>LICENSE<sp/>file<sp/>or<sp/>https://www.gnu.org/licenses/gpl-3.0.html<sp/>for<sp/>details.<sp/></highlight></codeline>
+<codeline lineno="5"><highlight class="comment">*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*<sp/>@file<sp/>operators.h</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*<sp/></highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*<sp/>@brief<sp/>Sparse<sp/>operation<sp/>inline<sp/>definitions<sp/>for<sp/>mimetic<sp/>class<sp/>constructions</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/>*<sp/>@date<sp/>2024/10/15</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>OPERATORS_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>OPERATORS_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="interpol_8h" kindref="compound">interpol.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="laplacian_8h" kindref="compound">laplacian.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="mixedbc_8h" kindref="compound">mixedbc.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="robinbc_8h" kindref="compound">robinbc.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight></codeline>
+<codeline lineno="22" refid="operators_8h_1af587420d81213bb9cf4bdceba8adaec5" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/>sp_mat<sp/><ref refid="operators_8h_1af587420d81213bb9cf4bdceba8adaec5" kindref="member">operator*</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classDivergence" kindref="compound">Divergence</ref><sp/>&amp;div,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classGradient" kindref="compound">Gradient</ref><sp/>&amp;grad)<sp/>{</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(sp_mat)div<sp/>*<sp/>(sp_mat)grad;</highlight></codeline>
+<codeline lineno="24"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26" refid="operators_8h_1ae69e8bf57452fb217205d6eee3478144" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/>sp_mat<sp/><ref refid="operators_8h_1ae69e8bf57452fb217205d6eee3478144" kindref="member">operator+</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classLaplacian" kindref="compound">Laplacian</ref><sp/>&amp;lap,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classRobinBC" kindref="compound">RobinBC</ref><sp/>&amp;bc)<sp/>{</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(sp_mat)lap<sp/>+<sp/>(sp_mat)bc;</highlight></codeline>
+<codeline lineno="28"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="30" refid="operators_8h_1ab33810c53caef35987210a606cb3ed44" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/>sp_mat<sp/><ref refid="operators_8h_1ae69e8bf57452fb217205d6eee3478144" kindref="member">operator+</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classLaplacian" kindref="compound">Laplacian</ref><sp/>&amp;lap,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classMixedBC" kindref="compound">MixedBC</ref><sp/>&amp;bc)<sp/>{</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(sp_mat)lap<sp/>+<sp/>(sp_mat)bc;</highlight></codeline>
+<codeline lineno="32"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight></codeline>
+<codeline lineno="34" refid="operators_8h_1aa0f3c6d9ffa98e3308f1c654d7cb0d07" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/>vec<sp/><ref refid="operators_8h_1af587420d81213bb9cf4bdceba8adaec5" kindref="member">operator*</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classDivergence" kindref="compound">Divergence</ref><sp/>&amp;div,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>vec<sp/>&amp;v)<sp/>{</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(sp_mat)div<sp/>*<sp/>v;</highlight></codeline>
+<codeline lineno="36"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38" refid="operators_8h_1a02455656721dcb2948197aa6c053313a" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/>vec<sp/><ref refid="operators_8h_1af587420d81213bb9cf4bdceba8adaec5" kindref="member">operator*</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classGradient" kindref="compound">Gradient</ref><sp/>&amp;grad,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>vec<sp/>&amp;v)<sp/>{</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(sp_mat)grad<sp/>*<sp/>v;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42" refid="operators_8h_1a221ecf61e403f612c8a4811c88038b42" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/>vec<sp/><ref refid="operators_8h_1af587420d81213bb9cf4bdceba8adaec5" kindref="member">operator*</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classLaplacian" kindref="compound">Laplacian</ref><sp/>&amp;lap,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>vec<sp/>&amp;v)<sp/>{</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(sp_mat)lap<sp/>*<sp/>v;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight></codeline>
+<codeline lineno="46" refid="operators_8h_1a25e80adf88a4f071196e7ca1920cd164" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/>vec<sp/><ref refid="operators_8h_1af587420d81213bb9cf4bdceba8adaec5" kindref="member">operator*</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classInterpol" kindref="compound">Interpol</ref><sp/>&amp;I,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>vec<sp/>&amp;v)<sp/>{<sp/></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(sp_mat)I<sp/>*<sp/>v;<sp/></highlight></codeline>
+<codeline lineno="48"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">//<sp/>OPERATORS_H</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/cpp/operators.h"/>
+  </compounddef>
+</doxygen>

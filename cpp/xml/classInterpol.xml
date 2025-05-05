@@ -1,0 +1,472 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="classInterpol" kind="class" language="C++" prot="public">
+    <compoundname>Interpol</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sp_mat</basecompoundref>
+    <includes refid="interpol_8h" local="no">interpol.h</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classInterpol_1a1a3cbc8871f096a37b1e859bdee5d788" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Interpol::Interpol</definition>
+        <argsstring>(u32 m, Real c)</argsstring>
+        <name>Interpol</name>
+        <qualifiedname>Interpol::Interpol</qualifiedname>
+        <param>
+          <type>u32</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+<para>1-D Mimetic Interpolator Constructor </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>c</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Weight for ends, can be any value from 0.0&lt;=c&lt;=1.0 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/interpol.h" line="36" column="3" bodyfile="src/cpp/interpol.cpp" bodystart="19" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="classInterpol_1a54ae1f315bdaa0eba8176a1ac3756238" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Interpol::Interpol</definition>
+        <argsstring>(u32 m, u32 n, Real c1, Real c2)</argsstring>
+        <name>Interpol</name>
+        <qualifiedname>Interpol::Interpol</qualifiedname>
+        <param>
+          <type>u32</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>n</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>c1</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>c2</declname>
+        </param>
+        <briefdescription>
+<para>2-D Mimetic Interpolator Constructor </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells in x-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells in y-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>c1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Weight for ends in x-direction, can be any value from 0.0&lt;=c&lt;=1.0 </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>c2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Weight for ends in y-direction, can be any value from 0.0&lt;=c&lt;=1.0 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/interpol.h" line="46" column="3" bodyfile="src/cpp/interpol.cpp" bodystart="33" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="classInterpol_1a55d895e0f5f190b24bc4a9d9695bcd69" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Interpol::Interpol</definition>
+        <argsstring>(u32 m, u32 n, u32 o, Real c1, Real c2, Real c3)</argsstring>
+        <name>Interpol</name>
+        <qualifiedname>Interpol::Interpol</qualifiedname>
+        <param>
+          <type>u32</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>n</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>o</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>c1</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>c2</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>c3</declname>
+        </param>
+        <briefdescription>
+<para>3-D Mimetic Interpolator Constructor </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells in x-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells in y-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>o</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells in z-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>c1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Weight for ends in x-direction, can be any value from 0.0&lt;=c&lt;=1.0 </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>c2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Weight for ends in y-direction, can be any value from 0.0&lt;=c&lt;=1.0 </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>c3</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Weight for ends in z-direction, can be any value from 0.0&lt;=c&lt;=1.0 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/interpol.h" line="58" column="3" bodyfile="src/cpp/interpol.cpp" bodystart="60" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="function" id="classInterpol_1acd04ad5e9add7dccfba468aa4cc821c0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Interpol::Interpol</definition>
+        <argsstring>(bool type, u32 m, Real c)</argsstring>
+        <name>Interpol</name>
+        <qualifiedname>Interpol::Interpol</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+<para>1-D Mimetic Interpolator Constructor </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dummy holder to trigger overloaded function </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>c</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Weight for ends, can be any value from 0.0&lt;=c&lt;=1.0 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/interpol.h" line="67" column="3" bodyfile="src/cpp/interpol.cpp" bodystart="94" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="function" id="classInterpol_1a2efc6e31bcfbd0cac9b1a66b82823491" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Interpol::Interpol</definition>
+        <argsstring>(bool type, u32 m, u32 n, Real c1, Real c2)</argsstring>
+        <name>Interpol</name>
+        <qualifiedname>Interpol::Interpol</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>n</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>c1</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>c2</declname>
+        </param>
+        <briefdescription>
+<para>2-D Mimetic Interpolator Constructor </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dummy holder to trigger overloaded function </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells in x-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells in y-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>c1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Weight for ends in x-direction, can be any value from 0.0&lt;=c&lt;=1.0 </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>c2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Weight for ends in y-direction, can be any value from 0.0&lt;=c&lt;=1.0 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/interpol.h" line="78" column="3" bodyfile="src/cpp/interpol.cpp" bodystart="112" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="function" id="classInterpol_1a17290c4b037be2725c164516c309b823" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Interpol::Interpol</definition>
+        <argsstring>(bool type, u32 m, u32 n, u32 o, Real c1, Real c2, Real c3)</argsstring>
+        <name>Interpol</name>
+        <qualifiedname>Interpol::Interpol</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>n</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>o</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>c1</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>c2</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>c3</declname>
+        </param>
+        <briefdescription>
+<para>3-D Mimetic Interpolator Constructor </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dummy holder to trigger overloaded function </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells in x-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells in y-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>o</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells in z-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>c1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Weight for ends in x-direction, can be any value from 0.0&lt;=c&lt;=1.0 </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>c2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Weight for ends in y-direction, can be any value from 0.0&lt;=c&lt;=1.0 </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>c3</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Weight for ends in z-direction, can be any value from 0.0&lt;=c&lt;=1.0 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/interpol.h" line="91" column="3" bodyfile="src/cpp/interpol.cpp" bodystart="129" bodyend="148"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Mimetic Interpolator operator. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>Interpol</label>
+        <link refid="classInterpol"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sp_mat</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>Interpol</label>
+        <link refid="classInterpol"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sp_mat</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/cpp/interpol.h" line="25" column="1" bodyfile="src/cpp/interpol.h" bodystart="25" bodyend="92"/>
+    <listofallmembers>
+      <member refid="classInterpol_1a1a3cbc8871f096a37b1e859bdee5d788" prot="public" virt="non-virtual"><scope>Interpol</scope><name>Interpol</name></member>
+      <member refid="classInterpol_1a54ae1f315bdaa0eba8176a1ac3756238" prot="public" virt="non-virtual"><scope>Interpol</scope><name>Interpol</name></member>
+      <member refid="classInterpol_1a55d895e0f5f190b24bc4a9d9695bcd69" prot="public" virt="non-virtual"><scope>Interpol</scope><name>Interpol</name></member>
+      <member refid="classInterpol_1acd04ad5e9add7dccfba468aa4cc821c0" prot="public" virt="non-virtual"><scope>Interpol</scope><name>Interpol</name></member>
+      <member refid="classInterpol_1a2efc6e31bcfbd0cac9b1a66b82823491" prot="public" virt="non-virtual"><scope>Interpol</scope><name>Interpol</name></member>
+      <member refid="classInterpol_1a17290c4b037be2725c164516c309b823" prot="public" virt="non-virtual"><scope>Interpol</scope><name>Interpol</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

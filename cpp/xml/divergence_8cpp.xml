@@ -1,0 +1,213 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="divergence_8cpp" kind="file" language="C++">
+    <compoundname>divergence.cpp</compoundname>
+    <includes refid="divergence_8h" local="yes">divergence.h</includes>
+    <incdepgraph>
+      <node id="1">
+        <label>src/cpp/divergence.cpp</label>
+        <link refid="divergence_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>divergence.h</label>
+        <link refid="divergence_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>utils.h</label>
+        <link refid="utils_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>armadillo</label>
+      </node>
+      <node id="5">
+        <label>cassert</label>
+      </node>
+    </incdepgraph>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="2"><highlight class="comment">*<sp/>SPDX-License-Identifier:<sp/>GPL-3.0-or-later</highlight></codeline>
+<codeline lineno="3"><highlight class="comment">*<sp/>©<sp/>2008-2024<sp/>San<sp/>Diego<sp/>State<sp/>University<sp/>Research<sp/>Foundation<sp/>(SDSURF).</highlight></codeline>
+<codeline lineno="4"><highlight class="comment">*<sp/>See<sp/>LICENSE<sp/>file<sp/>or<sp/>https://www.gnu.org/licenses/gpl-3.0.html<sp/>for<sp/>details.<sp/></highlight></codeline>
+<codeline lineno="5"><highlight class="comment">*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*<sp/>@file<sp/>divergence.cpp</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*<sp/></highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*<sp/>@brief<sp/>Mimetic<sp/>Divergence<sp/>Operators</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/>*<sp/></highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/>*<sp/>@date<sp/>2024/10/15</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/>*<sp/></highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="divergence_8h" kindref="compound">divergence.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="comment">//<sp/>1-D<sp/>Constructor</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19" refid="classDivergence_1a9b42c5cfa0067fc9bae525d20e0ef75b" refkind="member"><highlight class="normal"><ref refid="classDivergence_1a9b42c5cfa0067fc9bae525d20e0ef75b" kindref="member">Divergence::Divergence</ref>(u16<sp/>k,<sp/>u32<sp/>m,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dx)<sp/>:<sp/>sp_mat(m<sp/>+<sp/>2,<sp/>m<sp/>+<sp/>1)<sp/>{</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/>assert(!(k<sp/>%<sp/>2));</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/>assert(k<sp/>&gt;<sp/>1<sp/>&amp;&amp;<sp/>k<sp/>&lt;<sp/>7);</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/>assert(m<sp/>&gt;<sp/>2<sp/>*<sp/>k);</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">switch</highlight><highlight class="normal"><sp/>(k)<sp/>{</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/>2:</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(u32<sp/>i<sp/>=<sp/>1;<sp/>i<sp/>&lt;<sp/>m<sp/>+<sp/>1;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>at(i,<sp/>i<sp/>-<sp/>1)<sp/>=<sp/>-1.0;</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>at(i,<sp/>i)<sp/>=<sp/>1.0;</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Weights</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/>Q<sp/>=<sp/>{<sp/>1.0,<sp/>1.0,<sp/>1.0,<sp/>1.0,<sp/>1.0<sp/>};</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/>4:</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>A</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/>at(1,<sp/>0)<sp/>=<sp/>-11.0<sp/>/<sp/>12.0;</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/>at(1,<sp/>1)<sp/>=<sp/>17.0<sp/>/<sp/>24.0;</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/>at(1,<sp/>2)<sp/>=<sp/>3.0<sp/>/<sp/>8.0;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/>at(1,<sp/>3)<sp/>=<sp/>-5.0<sp/>/<sp/>24.0;</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/>at(1,<sp/>4)<sp/>=<sp/>1.0<sp/>/<sp/>24.0;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>A&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/>at(m,<sp/>m)<sp/>=<sp/>11.0<sp/>/<sp/>12.0;</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/>at(m,<sp/>m<sp/>-<sp/>1)<sp/>=<sp/>-17.0<sp/>/<sp/>24.0;</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/>at(m,<sp/>m<sp/>-<sp/>2)<sp/>=<sp/>-3.0<sp/>/<sp/>8.0;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/>at(m,<sp/>m<sp/>-<sp/>3)<sp/>=<sp/>5.0<sp/>/<sp/>24.0;</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/>at(m,<sp/>m<sp/>-<sp/>4)<sp/>=<sp/>-1.0<sp/>/<sp/>24.0;</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Middle</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(u32<sp/>i<sp/>=<sp/>2;<sp/>i<sp/>&lt;<sp/>m;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>at(i,<sp/>i<sp/>-<sp/>2)<sp/>=<sp/>1.0<sp/>/<sp/>24.0;</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>at(i,<sp/>i<sp/>-<sp/>1)<sp/>=<sp/>-9.0<sp/>/<sp/>8.0;</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>at(i,<sp/>i)<sp/>=<sp/>9.0<sp/>/<sp/>8.0;</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>at(i,<sp/>i<sp/>+<sp/>1)<sp/>=<sp/>-1.0<sp/>/<sp/>24.0;</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>Q<sp/><sp/>=<sp/>{<sp/>2186.0<sp/>/<sp/>1943.0<sp/>,<sp/>2125.0<sp/>/<sp/>2828.0<sp/>,<sp/>1441.0<sp/>/<sp/>1240.0<sp/>,<sp/>648.0<sp/>/<sp/>673.0</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>349.0<sp/>/<sp/>350.0<sp/>,<sp/>648.0<sp/>/<sp/>673.0<sp/>,<sp/>1441.0<sp/>/<sp/>1240.0<sp/>,<sp/>2125.0<sp/>/<sp/>2828.0</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>2186.0<sp/>/<sp/>1943.0<sp/>};</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/>6:</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>A</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/>at(1,<sp/>0)<sp/>=<sp/>-1627.0<sp/>/<sp/>1920.0;</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/>at(1,<sp/>1)<sp/>=<sp/>211.0<sp/>/<sp/>640.0;</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/>at(1,<sp/>2)<sp/>=<sp/>59.0<sp/>/<sp/>48.0;</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/>at(1,<sp/>3)<sp/>=<sp/>-235.0<sp/>/<sp/>192.0;</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/>at(1,<sp/>4)<sp/>=<sp/>91.0<sp/>/<sp/>128.0;</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/>at(1,<sp/>5)<sp/>=<sp/>-443.0<sp/>/<sp/>1920.0;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/>at(1,<sp/>6)<sp/>=<sp/>31.0<sp/>/<sp/>960.0;</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/>at(2,<sp/>0)<sp/>=<sp/>31.0<sp/>/<sp/>960.0;</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/>at(2,<sp/>1)<sp/>=<sp/>-687.0<sp/>/<sp/>640.0;</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/>at(2,<sp/>2)<sp/>=<sp/>129.0<sp/>/<sp/>128.0;</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/>at(2,<sp/>3)<sp/>=<sp/>19.0<sp/>/<sp/>192.0;</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/>at(2,<sp/>4)<sp/>=<sp/>-3.0<sp/>/<sp/>32.0;</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/>at(2,<sp/>5)<sp/>=<sp/>21.0<sp/>/<sp/>640.0;</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/>at(2,<sp/>6)<sp/>=<sp/>-3.0<sp/>/<sp/>640.0;</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>A&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/>at(m,<sp/>m)<sp/>=<sp/>1627.0<sp/>/<sp/>1920.0;</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/>at(m,<sp/>m<sp/>-<sp/>1)<sp/>=<sp/>-211.0<sp/>/<sp/>640.0;</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/>at(m,<sp/>m<sp/>-<sp/>2)<sp/>=<sp/>-59.0<sp/>/<sp/>48.0;</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/>at(m,<sp/>m<sp/>-<sp/>3)<sp/>=<sp/>235.0<sp/>/<sp/>192.0;</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/>at(m,<sp/>m<sp/>-<sp/>4)<sp/>=<sp/>-91.0<sp/>/<sp/>128.0;</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/>at(m,<sp/>m<sp/>-<sp/>5)<sp/>=<sp/>443.0<sp/>/<sp/>1920.0;</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/>at(m,<sp/>m<sp/>-<sp/>6)<sp/>=<sp/>-31.0<sp/>/<sp/>960.0;</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/>at(m<sp/>-<sp/>1,<sp/>m)<sp/>=<sp/>-31.0<sp/>/<sp/>960.0;</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/>at(m<sp/>-<sp/>1,<sp/>m<sp/>-<sp/>1)<sp/>=<sp/>687.0<sp/>/<sp/>640.0;</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/>at(m<sp/>-<sp/>1,<sp/>m<sp/>-<sp/>2)<sp/>=<sp/>-129.0<sp/>/<sp/>128.0;</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/>at(m<sp/>-<sp/>1,<sp/>m<sp/>-<sp/>3)<sp/>=<sp/>-19.0<sp/>/<sp/>192.0;</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/>at(m<sp/>-<sp/>1,<sp/>m<sp/>-<sp/>4)<sp/>=<sp/>3.0<sp/>/<sp/>32.0;</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/>at(m<sp/>-<sp/>1,<sp/>m<sp/>-<sp/>5)<sp/>=<sp/>-21.0<sp/>/<sp/>640.0;</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/>at(m<sp/>-<sp/>1,<sp/>m<sp/>-<sp/>6)<sp/>=<sp/>3.0<sp/>/<sp/>640.0;</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Middle</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(u32<sp/>i<sp/>=<sp/>3;<sp/>i<sp/>&lt;<sp/>m<sp/>-<sp/>1;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>at(i,<sp/>i<sp/>-<sp/>3)<sp/>=<sp/>-3.0<sp/>/<sp/>640.0;</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>at(i,<sp/>i<sp/>-<sp/>2)<sp/>=<sp/>25.0<sp/>/<sp/>384.0;</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>at(i,<sp/>i<sp/>-<sp/>1)<sp/>=<sp/>-75.0<sp/>/<sp/>64.0;</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>at(i,<sp/>i)<sp/>=<sp/>75.0<sp/>/<sp/>64.0;</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>at(i,<sp/>i<sp/>+<sp/>1)<sp/>=<sp/>-25.0<sp/>/<sp/>384.0;</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>at(i,<sp/>i<sp/>+<sp/>2)<sp/>=<sp/>3.0<sp/>/<sp/>640.0;</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Weights</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/>Q<sp/><sp/>=<sp/>{<sp/>2383.0<sp/>/<sp/>2005.0<sp/>,<sp/>929.0<sp/>/<sp/>2002.0<sp/>,<sp/>887.0<sp/>/<sp/>531.0<sp/>,<sp/>3124.0<sp/>/<sp/>5901.0</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>1706.0<sp/>/<sp/>1457.0<sp/>,<sp/>457.0<sp/>/<sp/>467.0<sp/>,<sp/>1057.0<sp/>/<sp/>1061.0<sp/>,<sp/>457.0<sp/>/<sp/>467.0</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>1706.0<sp/>/<sp/>1457.0<sp/>,<sp/>3124.0<sp/>/<sp/>5901.0<sp/>,<sp/>887.0<sp/>/<sp/>531.0<sp/>,<sp/>929.0<sp/>/<sp/>2002.0</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/>2383.0<sp/>/<sp/>2005.0<sp/>};</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Scaling</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal"><sp/>/=<sp/>dx;</highlight></codeline>
+<codeline lineno="107"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"></highlight></codeline>
+<codeline lineno="109"><highlight class="normal"></highlight><highlight class="comment">//<sp/>2-D<sp/>Constructor</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="110" refid="classDivergence_1a2595df5ef9d63e852f47cd7c0097ded8" refkind="member"><highlight class="normal"><ref refid="classDivergence_1a9b42c5cfa0067fc9bae525d20e0ef75b" kindref="member">Divergence::Divergence</ref>(u16<sp/>k,<sp/>u32<sp/>m,<sp/>u32<sp/>n,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dx,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dy)<sp/>{</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><ref refid="classDivergence" kindref="compound">Divergence</ref><sp/>Dx(k,<sp/>m,<sp/>dx);</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><ref refid="classDivergence" kindref="compound">Divergence</ref><sp/>Dy(k,<sp/>n,<sp/>dy);</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"></highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/>sp_mat<sp/>Im<sp/>=<sp/>speye(m<sp/>+<sp/>2,<sp/>m<sp/>+<sp/>2);</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/>sp_mat<sp/>In<sp/>=<sp/>speye(n<sp/>+<sp/>2,<sp/>n<sp/>+<sp/>2);</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"></highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/>Im.shed_col(0);</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/>Im.shed_col(m);</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/>In.shed_col(0);</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/>In.shed_col(n);</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/>sp_mat<sp/>D1<sp/>=<sp/><ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(In,<sp/>Dx);</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/>sp_mat<sp/>D2<sp/>=<sp/><ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(Dy,<sp/>Im);</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Dimensions<sp/>=<sp/>(m+2)*(n+2),<sp/>2*m*n+m+n</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(m<sp/>!=<sp/>n)</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal"><sp/>=<sp/><ref refid="classUtils_1a29075e84565397491dce88c1db2779f8" kindref="member">Utils::spjoin_rows</ref>(D1,<sp/>D2);</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/>sp_mat<sp/>A1(1,<sp/>2);</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/>sp_mat<sp/>A2(1,<sp/>2);</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/>A1(0,<sp/>0)<sp/>=<sp/>A2(0,<sp/>1)<sp/>=<sp/>1.0;</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal"><sp/>=<sp/><ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(A1,<sp/>D1)<sp/>+<sp/><ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(A2,<sp/>D2);</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="134"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"></highlight></codeline>
+<codeline lineno="136"><highlight class="normal"></highlight><highlight class="comment">//<sp/>3-D<sp/>Constructor</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="137" refid="classDivergence_1a82c536fd470b56a1017ffebadbdbc315" refkind="member"><highlight class="normal"><ref refid="classDivergence_1a9b42c5cfa0067fc9bae525d20e0ef75b" kindref="member">Divergence::Divergence</ref>(u16<sp/>k,<sp/>u32<sp/>m,<sp/>u32<sp/>n,<sp/>u32<sp/>o,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dx,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dy,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dz)<sp/>{</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><ref refid="classDivergence" kindref="compound">Divergence</ref><sp/>Dx(k,<sp/>m,<sp/>dx);</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><ref refid="classDivergence" kindref="compound">Divergence</ref><sp/>Dy(k,<sp/>n,<sp/>dy);</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><ref refid="classDivergence" kindref="compound">Divergence</ref><sp/>Dz(k,<sp/>o,<sp/>dz);</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"></highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/>sp_mat<sp/>Im<sp/>=<sp/>speye(m<sp/>+<sp/>2,<sp/>m<sp/>+<sp/>2);</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/>sp_mat<sp/>In<sp/>=<sp/>speye(n<sp/>+<sp/>2,<sp/>n<sp/>+<sp/>2);</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/>sp_mat<sp/>Io<sp/>=<sp/>speye(o<sp/>+<sp/>2,<sp/>o<sp/>+<sp/>2);</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"></highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/>Im.shed_col(0);</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/>Im.shed_col(m);</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/>In.shed_col(0);</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/>In.shed_col(n);</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/>Io.shed_col(0);</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/>Io.shed_col(o);</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"></highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/>sp_mat<sp/>D1<sp/>=<sp/><ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(<ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(Io,<sp/>In),<sp/>Dx);</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/>sp_mat<sp/>D2<sp/>=<sp/><ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(<ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(Io,<sp/>Dy),<sp/>Im);</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/>sp_mat<sp/>D3<sp/>=<sp/><ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(<ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(Dz,<sp/>In),<sp/>Im);</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"></highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Dimensions<sp/>=<sp/>(m+2)*(n+2)*(o+2),<sp/>3*m*n*o+m*n+m*o+n*o</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>((m<sp/>!=<sp/>n)<sp/>||<sp/>(n<sp/>!=<sp/>o))</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal"><sp/>=<sp/><ref refid="classUtils_1a29075e84565397491dce88c1db2779f8" kindref="member">Utils::spjoin_rows</ref>(<ref refid="classUtils_1a29075e84565397491dce88c1db2779f8" kindref="member">Utils::spjoin_rows</ref>(D1,<sp/>D2),<sp/>D3);</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/>sp_mat<sp/>A1(1,<sp/>3);</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/><sp/><sp/>sp_mat<sp/>A2(1,<sp/>3);</highlight></codeline>
+<codeline lineno="163"><highlight class="normal"><sp/><sp/><sp/><sp/>sp_mat<sp/>A3(1,<sp/>3);</highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/>A1(0,<sp/>0)<sp/>=<sp/>A2(0,<sp/>1)<sp/>=<sp/>A3(0,<sp/>2)<sp/>=<sp/>1.0;</highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal"><sp/>=</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(A1,<sp/>D1)<sp/>+<sp/><ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(A2,<sp/>D2)<sp/>+<sp/><ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(A3,<sp/>D3);</highlight></codeline>
+<codeline lineno="167"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="168"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="169"><highlight class="normal"></highlight></codeline>
+<codeline lineno="170"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Returns<sp/>weights</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="171" refid="classDivergence_1a9ab0da6ee16064012c164592648e66c5" refkind="member"><highlight class="normal">vec<sp/><ref refid="classDivergence_1a9ab0da6ee16064012c164592648e66c5" kindref="member">Divergence::getQ</ref>()<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Q;<sp/>}</highlight></codeline>
+    </programlisting>
+    <location file="src/cpp/divergence.cpp"/>
+  </compounddef>
+</doxygen>
