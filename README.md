@@ -184,7 +184,7 @@ Now, some cool pictures obtained with MOLE:
 [build-badge]: https://img.shields.io/github/actions/workflow/status/csrc-sdsu/mole/cmake.yml?branch=master&label=Build
 [build-link]: https://github.com/csrc-sdsu/mole/actions
 [docs-badge]: https://readthedocs.org/projects/mole-docs/badge/?version=latest
-[docs-link]: https://csrc-sdsu.github.io/mole/
+[docs-link]: https://mole-docs.readthedocs.io/en/latest/
 [corbino-paper]: https://doi.org/10.1016/j.cam.2019.06.042
 [castillo-paper]: https://doi.org/10.1137/S0895479801398025
 [doc-guide]: https://github.com/csrc-sdsu/mole/blob/master/doc/sphinx/README.md
