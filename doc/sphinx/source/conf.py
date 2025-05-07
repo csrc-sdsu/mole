@@ -226,11 +226,13 @@ html_theme_options = {
     "repository_url": "https://github.com/csrc-sdsu/mole",
     "repository_branch": "main",
     "use_repository_button": True,
+    "path_to_docs": "doc/sphinx/source",
     
     # Navigation options
     "show_toc_level": 2,
     "use_download_button": True,
     "use_fullscreen_button": True,
+    "use_source_button": True,
     
     # Theme and appearance
     "pygments_light_style": "tango",
