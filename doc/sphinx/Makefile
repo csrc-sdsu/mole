@@ -29,7 +29,7 @@ else
   OPEN_CMD := start
 endif
 
-.PHONY: help clean doc-deps doc-html doc-clean doc-doxygen doc-all $(SPHINX_TARGETS) doc-latexpdf doc-latexpdf
+.PHONY: help clean doc-deps doc-html doc-clean-dirs doc-doxygen doc-all $(SPHINX_TARGETS) doc-latexpdf doc-latexpdf
 
 # Default target
 help:
@@ -63,6 +63,7 @@ doc-html:
 		echo "Error: Doxygen XML index file not found. Running doc-doxygen first..."; \
 		$(MAKE) doc-doxygen; \
 	fi
+	$(MAKE) copy-images
 	PYTHONPATH=../.. $(SPHINXBUILD) -b html "$(SOURCEDIR)" "$(BUILDDIR)/html"
 	@if [ -f "$(HTMLDIR)/index.html" ]; then \
 		echo "=== HTML documentation generated successfully ==="; \
@@ -74,7 +75,7 @@ doc-html:
 	fi
 
 # Clean built documentation
-doc-clean:
+doc-clean-dirs:
 	@echo "Cleaning documentation build directories..."
 	@rm -rf $(BUILDDIR)
 	@rm -rf $(DOXYDIR)
@@ -112,7 +113,7 @@ depcheck-inkscape:
 	}
 
 # Generate all documentation
-doc-all: doc-clean doc-doxygen doc-deps doc-html doc-latexpdf
+doc-all: doc-clean-dirs doc-doxygen doc-deps doc-html doc-latexpdf
 	@echo "================================================================"
 	@echo "Documentation generated successfully:"
 	@echo "  HTML: $(HTMLDIR)/index.html"
@@ -146,5 +147,7 @@ doc-clean: clean
 	rm -rf source/intros/doc
 	rm -f source/README.md
 
-html: copy-images
-	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+# Renamed to avoid conflict with the doc-clean target above
+.PHONY: html-with-copy
+html-with-copy: copy-images
+	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)

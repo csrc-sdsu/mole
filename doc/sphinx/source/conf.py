@@ -237,9 +237,9 @@ html_theme_options = {
     # Theme and appearance
     "pygments_light_style": "tango",
     
-    # Disable dark mode
-    "use_dark_theme": False,
-    "single_page": False,
+    # Removing unsupported theme options
+    # "use_dark_theme": False,
+    # "single_page": False,
 }
 
 # Appearance
