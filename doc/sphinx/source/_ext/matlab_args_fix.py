@@ -2,40 +2,39 @@
 Custom Sphinx extension to fix MATLAB function argument warnings.
 """
 
-import sys
-import os
-import logging
 import warnings
-from functools import wraps
+import logging
+from sphinx.util.logging import getLogger
+
+logger = getLogger(__name__)
+
+# Create a filter for MATLAB domain warnings
+class MATLABWarningsFilter(logging.Filter):
+    """Filter to suppress specific MATLAB domain warnings."""
+    
+    def filter(self, record):
+        # Suppress warnings about formatting arguments
+        if record.levelname == 'WARNING':
+            if "error while formatting arguments for" in record.getMessage():
+                if "'NoneType' object has no attribute 'args'" in record.getMessage():
+                    return False  # Don't log this warning
+        return True  # Log all other warnings
 
 def setup(app):
     """
     Setup function for Sphinx extension.
     
-    This extension modifies how MATLAB functions with missing args are handled.
+    This extension adds a filter to suppress MATLAB domain warnings.
     """
-    try:
-        # Now try to import
-        from sphinxcontrib.matlab import domain
-        
-        # Monkey patch the format_args method
-        old_format_args = domain.MatlabObject.format_args
-        
-        def new_format_args(self):
-            try:
-                return old_format_args(self)
-            except AttributeError:
-                return '(...)'
-            except Exception:
-                return '(...)'
-        
-        domain.MatlabObject.format_args = new_format_args
-        
-        app.info("MATLAB argument formatting patched successfully")
-    except ImportError as e:
-        warnings.warn(f"Could not patch MATLAB domain: {e}")
-    except Exception as e:
-        warnings.warn(f"Failed to patch MATLAB domain: {e}")
+    # Add the filter to the Sphinx warning logger
+    warning_logger = logging.getLogger('sphinx.domains.mat')
+    warning_logger.addFilter(MATLABWarningsFilter())
+    
+    # Also add the filter to the root logger as fallback
+    root_logger = logging.getLogger('sphinx')
+    root_logger.addFilter(MATLABWarningsFilter())
+    
+    logger.info("MATLAB argument warnings filter added")
     
     return {
         'version': '0.1',
