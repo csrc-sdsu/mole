@@ -68,7 +68,6 @@ doc-html:
 		echo "=== HTML documentation generated successfully ==="; \
 		echo "   View documentation at: $(HTMLDIR)/index.html"; \
 		echo "   Open with a browser:  file://$(CURDIR)/$(HTMLDIR)/index.html"; \
-		$(OPEN_CMD) "$(HTMLDIR)/index.html" || echo "Could not automatically open documentation"; \
 	else \
 		echo "=== Error: HTML generation failed ==="; \
 		exit 1; \
@@ -88,7 +87,6 @@ doc-latexpdf: depcheck-pdflatex depcheck-inkscape
 	@$(CURDIR)/build.sh
 	@if [ $$? -eq 0 ] && [ -f "$(PDFDIR)/MOLE-docs.pdf" ]; then \
 		echo "=== PDF generated successfully at $(PDFDIR)/MOLE-docs.pdf ==="; \
-		$(OPEN_CMD) "$(PDFDIR)/MOLE-docs.pdf" || echo "Could not automatically open PDF documentation"; \
 	else \
 		echo "=== Error: PDF generation failed ==="; \
 		exit 1; \
@@ -116,7 +114,7 @@ depcheck-inkscape:
 # Generate all documentation
 doc-all: doc-clean doc-doxygen doc-deps doc-html doc-latexpdf
 	@echo "================================================================"
-	@echo "Documentation generated and opened:"
+	@echo "Documentation generated successfully:"
 	@echo "  HTML: $(HTMLDIR)/index.html"
 	@echo "  PDF:  $(PDFDIR)/MOLE-docs.pdf"
 	@echo "  API:  ../doxygen/cpp/"
