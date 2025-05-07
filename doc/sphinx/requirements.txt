@@ -34,7 +34,6 @@ breathe>=4.30                    # C++ documentation integration
 myst-parser[linkify]>=0.14.0    # Markdown support
 sphinx-design                    # UI components
 sphinx-copybutton>=0.5.0         # Copy button for code blocks
-sphinx-mermaid                   # Mermaid diagrams support
 sphinxcontrib-bibtex>=2.5       # Bibliography support
 sphinxcontrib-katex             # Math rendering
 standard-imghdr
