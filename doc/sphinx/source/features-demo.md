@@ -135,13 +135,4 @@ GitHub Repository
 ```{button-link} examples/index
 :color: info
 Examples
-```
-
-## Interactive Mermaid Diagrams
-
-```{mermaid}
-flowchart LR
-    A[Input] --> B{Process}
-    B --> C[Output 1]
-    B --> D[Output 2]
 ``` 

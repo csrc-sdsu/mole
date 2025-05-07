@@ -49,16 +49,6 @@ html[data-theme="light"] {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-/* Make Mermaid diagrams responsive in both light and dark modes */
-.mermaid {
-  margin: 1.5rem auto;
-  text-align: center;
-}
-
-html[data-theme="dark"] .mermaid {
-  filter: invert(0.85) hue-rotate(180deg);
-}
-
 /* Fix code block appearance */
 div.highlight {
   border-radius: 0.4rem;

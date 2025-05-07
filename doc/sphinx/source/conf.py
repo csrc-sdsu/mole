@@ -53,7 +53,6 @@ extensions = [
     'sphinx_book_theme',      # Book theme
     'sphinx_design',          # UI components (tabs, cards, dropdowns)
     'sphinx_copybutton',      # Copy button for code blocks
-    'sphinxcontrib.mermaid',  # Mermaid diagrams support
     
     # External documentation extensions
     'breathe',                # Doxygen integration
