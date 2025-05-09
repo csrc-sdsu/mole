@@ -78,7 +78,8 @@ math_functions/index
 :maxdepth: 2
 :caption: Examples
 
-examples/index
+examples/examples-doc/index
+
 ```
 
 ```{toctree}

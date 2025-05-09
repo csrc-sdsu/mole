@@ -7,3 +7,8 @@ $$
 $$
 
 where $C$ is the concentration, $v$ is the pore-water flow velocity, and $D$ is the dispersion coefficient.
+
+---
+
+This example is implemented in:
+- [C++](../../../../cpp/Hyperbolic/1D/transport1D.cpp)
