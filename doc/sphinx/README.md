@@ -112,6 +112,13 @@ Before building the documentation, ensure you have:
    python3 -m pip install -r requirements.txt
    ```
 
+   Some additional packages have been added to enhance documentation features:
+   - `sphinx-togglebutton`: For collapsible content
+   - `sphinx-fontawesome`: For FontAwesome icons
+   - `sphinxcontrib-mermaid`: For Mermaid.js diagrams
+   - `sphinxext-altair`: For Altair chart integration
+   - `Pillow`: For image processing including dark mode logo
+
 ### Building Steps
 
 All commands should be run from the `doc/sphinx` directory:

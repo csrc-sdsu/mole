@@ -29,7 +29,7 @@ else
   OPEN_CMD := start
 endif
 
-.PHONY: help clean doc-deps doc-html doc-clean-dirs doc-doxygen doc-all $(SPHINX_TARGETS) doc-latexpdf doc-latexpdf
+.PHONY: help clean doc-deps doc-html doc-clean-dirs doc-doxygen doc-all $(SPHINX_TARGETS) doc-latexpdf doc-custom
 
 # Default target
 help:
@@ -120,6 +120,7 @@ doc-all: doc-clean-dirs doc-doxygen doc-deps doc-html doc-latexpdf
 	@echo "  PDF:  $(PDFDIR)/MOLE-docs.pdf"
 	@echo "  API:  ../doxygen/cpp/"
 	@echo "================================================================"
+
 # Explicit Sphinx targets
 $(SPHINX_TARGETS):
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS)
