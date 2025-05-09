@@ -80,6 +80,7 @@ math_functions/index
 
 examples/examples-doc/index
 
+examples-doc/index
 ```
 
 ```{toctree}
