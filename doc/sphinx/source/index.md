@@ -78,8 +78,6 @@ math_functions/index
 :maxdepth: 2
 :caption: Examples
 
-examples/examples-doc/index
-
 examples-doc/index
 ```
 
