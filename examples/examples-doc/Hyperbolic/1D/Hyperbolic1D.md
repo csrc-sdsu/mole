@@ -37,3 +37,12 @@ $$
 $$
 U^{n+1}_i = U^n_i - a \Delta t \mathbf{D} U^n_i
 $$
+
+---
+
+This example is implemented in:
+- [MATLAB](../../../../matlab/Hyperbolic/1D/hyperbolic1D.m)
+
+Additional MATLAB variants:
+- [Upwind Scheme](../../../../matlab/Hyperbolic/1D/hyperbolic1D_upwind.m)
+- [Lax-Friedrichs Scheme](../../../../matlab/Hyperbolic/1D/hyperbolic1D_lax_friedrichs.m)

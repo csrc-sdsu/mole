@@ -13,3 +13,9 @@ u(x,0) = e^{\frac{-x^2}{50}}
 $$
 
 The wave is allowed to propagate across the domain while the area under the curve is calculated. 
+
+---
+
+This example is implemented in:
+- [MATLAB](../../../../matlab/Hyperbolic/1D/burgers1D.m)
+- [C++](../../../../cpp/Hyperbolic/1D/Burgers1D.cpp) 

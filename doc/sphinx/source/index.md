@@ -40,7 +40,8 @@ math_functions/index
 :caption: Examples
 :name: examples-nav
 
-examples/index
+examples/examples-doc/index
+
 ```
 
 ```{toctree}

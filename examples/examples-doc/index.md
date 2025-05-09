@@ -6,12 +6,38 @@ The MOLE library contains many examples written in OCTAVE/MATLAB and C++. These 
 
 ```{toctree}
 :maxdepth: 2
-:caption: Examples
+:caption: Elliptic Problems
 
-README
-examples
-cpp/README
-matlab/compact_operators/README
+Elliptic/1D/Elliptic1D
+Elliptic/1D/Poisson1D
+Elliptic/2D/Elliptic2D
+Elliptic/2D/Elliptic2D-Case-2
+Elliptic/2D/Elliptic2D-Nodal-Curv
+Elliptic/2D/Elliptic2D-Nodal-Curv-Sinusoidal
+Elliptic/2D/Minimal-Poisson-2D
+Elliptic/3D/Elliptic3D
+```
+
+```{toctree}
+:maxdepth: 2
+:caption: Hyperbolic Problems
+
+Hyperbolic/1D/Wave-1D
+Hyperbolic/1D/Wave-1D-Case-2
+Hyperbolic/1D/Transport1D
+Hyperbolic/1D/Burgers1D
+Hyperbolic/1D/Hyperbolic1D
+Hyperbolic/1D/Hyperbolic1D-upwind
+Hyperbolic/1D/Hyperbolic1D-Lax-Friedrichs
+Hyperbolic/2D/Wave-2D
+Hyperbolic/2D/Wave-2D-Case-2
+```
+
+```{toctree}
+:maxdepth: 2
+:caption: Schrödinger Problems
+
+Schrodinger/1D/Schrodinger1D
 ```
 
 More examples will be added in the future. 
