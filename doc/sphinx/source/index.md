@@ -40,8 +40,6 @@ math_functions/index
 :caption: Examples
 :name: examples-nav
 
-examples/examples-doc/index
-
 examples-doc/index
 ```
 
