@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Sitemap: https://mole-pdes.readthedocs.io/sitemap.xml
+
+# Prevent archival of draft-state documentation
+User-agent: archive.org_bot
+Disallow: /en/latest/
+Allow: /en/stable/
+
+# Allow Google to access everything
+User-agent: Googlebot
+Allow: / 

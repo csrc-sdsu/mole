@@ -146,6 +146,6 @@ The documentation is generated automatically from the docstrings in the MATLAB/O
    :caption: Contents:
    :hidden:
 
-   matlab_index
-   api
+   Function Index <matlab_index>
+   API <api>
    

@@ -1,64 +1,29 @@
 ---
 myst:
   html_meta:
-    "theme-announcement": "Annocement: MOLE is being presented at XYZ place on XYZ time "
+    "description": "MOLE: Mimetic Operators Library Enhanced - A high-order mimetic differential operators library for solving PDEs"
+    "keywords": "mimetic operators, PDE solver, numerical methods, scientific computing"
 ---
 
-# MOLE: Mimetic Operators Library Enhanced
-
-<p class="lead text-center my-4">
-A high-order mimetic differential operators library for solving PDEs
-</p>
-
-````{grid} 2
-:gutter: 3
-:class-container: features-grid
-
-```{grid-item-card} High-order Accuracy
-Discrete analogs of vector calculus operators that satisfy local and global conservation laws
-```
-
-```{grid-item-card} Structured Grids
-Works with uniform, non-uniform, and curvilinear staggered grids
-```
-
-```{grid-item-card} Operator Set
-Includes Gradient, Divergence, and Laplacian operators with various boundary conditions
-```
-
-```{grid-item-card} Dual Implementation
-Available in both C++ and MATLAB with consistent interfaces
-```
-````
-
-```{admonition} Key Capabilities
-:class: tip
-
-**Suitable for PDEs:**
-- Elliptic (Poisson)
-- Parabolic (Heat, Diffusion)
-- Hyperbolic (Wave)
-
-**Boundary Conditions:**
-- Dirichlet
-- Neumann
-- Robin
-- Mixed
+```{include} overview.md
 ```
 
 ```{toctree}
 :maxdepth: 2
-:caption: Getting Started
+:caption: Index
+:name: Index-nav
+:class: Index-toc
 
 intros/introduction
 intros/gettingstarted
 Documentation Guide <intros/doc_readme_wrapper>
-features-demo
 ```
 
 ```{toctree}
 :maxdepth: 4
 :caption: API Reference
+:name: api-nav
+:class: api-toc
 
 api/cpp/index
 api/matlab/index-beta
@@ -67,6 +32,8 @@ api/matlab/index-beta
 ```{toctree}
 :maxdepth: 1
 :caption: Mathematical Framework
+:name: math-nav
+:class: math-toc
 
 math_functions/index
 ```
@@ -74,6 +41,8 @@ math_functions/index
 ```{toctree}
 :maxdepth: 2
 :caption: Examples
+:name: examples-nav
+:class: examples-toc
 
 examples/index
 ```
@@ -81,17 +50,16 @@ examples/index
 ```{toctree}
 :maxdepth: 1
 :caption: Project
+:name: project-nav
+:class: project-toc
 
 Contributing to MOLE <intros/contributing_wrapper>
 Code of Conduct <intros/code_of_conduct_wrapper>
 ```
 
-```{div} quick-links
-## Quick Links
+<!-- ```{toctree}
+:caption: Reference
+:hidden:
 
-- [Index](genindex)
-- [Search](search)
-- [GitHub Repository](https://github.com/csrc-sdsu/mole)
-- [Citation (JOSS)](https://doi.org/10.21105/joss.06288)
-- [MATLAB File Exchange](https://www.mathworks.com/matlabcentral/fileexchange/124870-mole)
-```
+genindex
+``` -->

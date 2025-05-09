@@ -20,20 +20,20 @@
 # ======= Sphinx =======
 
 # Core Sphinx
-sphinx>=5.3,<7                   # Extended version range for Python 3.12
-docutils>=0.18                   # More flexible version requirement
+sphinx<8.0
+docutils<0.20
 Pillow                          # Required for imghdr module
 setuptools                      # Required for pkg_resources
 
 # Theme
-sphinx-book-theme>=0.4.0         # Book theme (primary)
-sphinx_rtd_theme>=1.0            # Read the Docs theme (alternative)
+sphinx-book-theme
+sphinx-design
 
 # Extensions used in conf.py
 breathe>=4.30                    # C++ documentation integration
-myst-parser[linkify]>=0.14.0    # Markdown support
-sphinx-design                    # UI components
-sphinx-copybutton>=0.5.0         # Copy button for code blocks
+myst-parser
+sphinx-rtd-theme
+sphinx-copybutton
 sphinxcontrib-bibtex>=2.5       # Bibliography support
 sphinxcontrib-katex             # Math rendering
 standard-imghdr
@@ -49,3 +49,35 @@ sphinx-hoverxref>=0.3b1         # Hover tooltips for references
 sphinxcontrib-matlabdomain>=0.22.0,<0.23.0  # Pin version for Python 3.12 compatibility
 sphinxcontrib-serializinghtml
 sphinxcontrib-htmlhelp
+
+# Core documentation packages
+sphinx==6.2.1
+sphinx-book-theme==1.1.4
+myst-parser==3.0.1
+breathe==4.35.0
+
+# Theme enhancements
+sphinx-design==0.6.1
+sphinx-copybutton==0.5.2
+sphinx-togglebutton==0.3.2
+
+# Additional features
+sphinxcontrib-bibtex==2.5.0
+sphinxcontrib-katex==0.9.10
+sphinxcontrib-jquery==4.1
+
+# MATLAB domain
+sphinxcontrib-matlabdomain==0.22.1
+
+# Image handling
+Pillow==11.2.1
+
+# HTTP requests for contributors extension
+requests==2.32.3
+
+# For PDF generation
+latexcodec==3.0.0
+pygments==2.19.1
+
+# Development tools
+jinja2==3.1.6
