@@ -4,7 +4,7 @@ close all
 addpath('../../src/matlab')
 
 % Parameters
-method = "implicit";
+method = "explicit";
 
 alpha = 0.1;                     %Diffusion coefficient/viscocity
 
@@ -32,8 +32,8 @@ end
 U=zeros(nx+2,ny+2);              %Preallocating u
 
 
-xgrid = [a a+dx/2 : dx : b-dx/2 b];
-ygrid = [c c+dy/2 : dy : d-dy/2 d];
+xgrid = [0 dx/2 : dx : 2-dx/2 2];
+ygrid = [0 dy/2 : dy : 2-dy/2 2];
 
 % Initial Conditions: u(x, y, 0) = 2 
 for i=1:nx
