@@ -181,8 +181,8 @@ Now, some cool pictures obtained with MOLE:
 [matlab-link]: https://www.mathworks.com/matlabcentral/fileexchange/124870-mole
 [license-badge]: https://img.shields.io/badge/License-GPLv3-blue.svg
 [license-link]: https://www.gnu.org/licenses/gpl-3.0
-[build-badge]: https://img.shields.io/github/actions/workflow/status/csrc-sdsu/mole/cmake.yml?branch=master&label=Build
-[build-link]: https://github.com/csrc-sdsu/mole/actions
+[build-badge]: https://github.com/csrc-sdsu/mole/actions/workflows/build_and_gtest.yml/badge.svg
+[build-link]: https://github.com/csrc-sdsu/mole/actions/workflows/build_and_gtest.yml
 [docs-badge]: https://readthedocs.org/projects/mole-docs/badge/?version=latest
 [docs-link]: https://mole-docs.readthedocs.io/en/latest/
 [corbino-paper]: https://doi.org/10.1016/j.cam.2019.06.042
