@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of tfi</title>
+  <meta name="keywords" content="tfi">
+  <meta name="description" content="https://en.wikipedia.org/wiki/Transfinite_interpolation">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html mole_MATLAB -->
+<h1>tfi
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>https://en.wikipedia.org/wiki/Transfinite_interpolation</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [X, Y] = tfi(grid_name, m, n, plot_grid) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> https://en.wikipedia.org/wiki/Transfinite_interpolation
+ Returns X and Y which are both m by n matrices that contains the physical
+ coordinates
+
+ Parameters:
+        grid_name : String with the name of the grid folder
+                m : Number of nodes along the horizontal axis
+                n : Number of nodes along the vertical axis
+        plot_grid : If defined -&gt; grid will be plotted</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="gridGen.html" class="code" title="function [X, Y] = gridGen(method, grid_name, m, n, plot_grid, varargin)">gridGen</a>	Returns X and Y which are both m by n matrices that contains the physical</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% https://en.wikipedia.org/wiki/Transfinite_interpolation</span>
+0002 <a name="_sub0" href="#_subfunctions" class="code">function [X, Y] = tfi(grid_name, m, n, plot_grid)</a>
+0003 <span class="comment">% Returns X and Y which are both m by n matrices that contains the physical</span>
+0004 <span class="comment">% coordinates</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Parameters:</span>
+0007 <span class="comment">%        grid_name : String with the name of the grid folder</span>
+0008 <span class="comment">%                m : Number of nodes along the horizontal axis</span>
+0009 <span class="comment">%                n : Number of nodes along the vertical axis</span>
+0010 <span class="comment">%        plot_grid : If defined -&gt; grid will be plotted</span>
+0011     
+0012     assert(m &gt; 4 &amp;&amp; n &gt; 4, <span class="string">'m and n must be greater than 4'</span>)
+0013     
+0014     addpath([<span class="string">'grids/'</span> grid_name])
+0015     
+0016     <span class="comment">% Logical grid</span>
+0017     xi = linspace(0, 1, m);
+0018     eta = linspace(0, 1, n);
+0019     
+0020     <span class="comment">% Allocate space for physical grid</span>
+0021     X = zeros(m, n);
+0022     Y = zeros(m, n);
+0023     
+0024     <span class="keyword">for</span> i = 1 : m
+0025         u = xi(i);
+0026         <span class="keyword">for</span> j = 1 : n
+0027             v = eta(j);
+0028             <span class="comment">% Transfinite interpolation</span>
+0029             XY = (1-v)*bottom(u)+v*top(u)+(1-u)*left(v)+u*right(v)-<span class="keyword">...</span>
+0030                 (u*v*top(1)+u*(1-v)*bottom(1)+v*(1-u)*top(0)+(1-u)*(1-v)*bottom(0));
+0031             X(i, j) = XY(1);
+0032             Y(i, j) = XY(2);
+0033         <span class="keyword">end</span>
+0034     <span class="keyword">end</span>
+0035     
+0036     <span class="keyword">if</span> plot_grid
+0037         figure
+0038         mesh(X, Y, zeros(m, n), <span class="string">'Marker'</span>, <span class="string">'.'</span>, <span class="string">'MarkerSize'</span>, 10, <span class="string">'EdgeColor'</span>, <span class="string">'b'</span>)
+0039         title([<span class="string">'Physical grid. m = '</span> num2str(m) <span class="string">', n = '</span> num2str(n)])
+0040         set(gcf, <span class="string">'color'</span>, <span class="string">'w'</span>)
+0041         axis equal
+0042         axis off
+0043         view([0 90])
+0044     <span class="keyword">end</span>
+0045 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 27-Jan-2021 14:29:32 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

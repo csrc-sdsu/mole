@@ -1,0 +1,283 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="utils_8cpp" kind="file" language="C++">
+    <compoundname>utils.cpp</compoundname>
+    <includes refid="utils_8h" local="yes">utils.h</includes>
+    <includes local="no">cassert</includes>
+    <incdepgraph>
+      <node id="1">
+        <label>src/cpp/utils.cpp</label>
+        <link refid="utils_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>utils.h</label>
+        <link refid="utils_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>armadillo</label>
+      </node>
+      <node id="4">
+        <label>cassert</label>
+      </node>
+    </incdepgraph>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="2"><highlight class="comment">*<sp/>SPDX-License-Identifier:<sp/>GPL-3.0-or-later</highlight></codeline>
+<codeline lineno="3"><highlight class="comment">*<sp/>©<sp/>2008-2024<sp/>San<sp/>Diego<sp/>State<sp/>University<sp/>Research<sp/>Foundation<sp/>(SDSURF).</highlight></codeline>
+<codeline lineno="4"><highlight class="comment">*<sp/>See<sp/>LICENSE<sp/>file<sp/>or<sp/>https://www.gnu.org/licenses/gpl-3.0.html<sp/>for<sp/>details.<sp/></highlight></codeline>
+<codeline lineno="5"><highlight class="comment">*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="comment">/*<sp/></highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*<sp/>@file<sp/>utils.cpp</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*<sp/>@brief<sp/>Helpers<sp/>for<sp/>sparse<sp/>operations<sp/>and<sp/>MATLAB/Octave<sp/>analogs</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/>*<sp/>@date<sp/>2024/10/15</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/>*<sp/></highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/>*<sp/>Sparse<sp/>operations<sp/>that<sp/>repeatedly<sp/>are<sp/>needed,<sp/>but<sp/>not<sp/></highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/>*<sp/>necessarily<sp/>part<sp/>of<sp/>the<sp/>Armadillo<sp/>library.<sp/>Some<sp/>other<sp/>MATLAB/Octave</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/>*<sp/>type<sp/>functions<sp/>are<sp/>also<sp/>here,<sp/>like<sp/>meshgrid.</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="utils_8h" kindref="compound">utils.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cassert&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>EIGEN</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;eigen3/Eigen/SparseLU&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal">vec<sp/><ref refid="classUtils_1a390c28ce7358c06eefe7cd12afce6829" kindref="member">Utils::spsolve_eigen</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>sp_mat<sp/>&amp;A,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>vec<sp/>&amp;b)<sp/>{</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/>Eigen::SparseMatrix&lt;Real&gt;<sp/>eigen_A(A.n_rows,<sp/>A.n_cols);</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/>std::vector&lt;Eigen::Triplet&lt;Real&gt;&gt;<sp/>triplets;</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/>Eigen::SparseLU&lt;Eigen::SparseMatrix&lt;Real&gt;,<sp/>Eigen::COLAMDOrdering&lt;int&gt;&gt;<sp/>solver;</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/>Eigen::VectorXd<sp/>eigen_x(A.n_rows);</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/>triplets.reserve(5<sp/>*<sp/>A.n_rows);</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>it<sp/>=<sp/>A.begin();</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(it<sp/>!=<sp/>A.end())<sp/>{</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/>triplets.push_back(Eigen::Triplet&lt;Real&gt;(it.row(),<sp/>it.col(),<sp/>*it));</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/>++it;</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/>eigen_A.setFromTriplets(triplets.begin(),<sp/>triplets.end());</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/>triplets.clear();</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>b_<sp/>=<sp/>conv_to&lt;std::vector&lt;Real&gt;&gt;::from(b);</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/>Eigen::Map&lt;Eigen::VectorXd&gt;<sp/>eigen_b(b_.data(),<sp/>b_.size());</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/>solver.analyzePattern(eigen_A);</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/>solver.factorize(eigen_A);</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/>eigen_x<sp/>=<sp/>solver.solve(eigen_b);</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>vec(eigen_x.data(),<sp/>eigen_x.size());</highlight></codeline>
+<codeline lineno="49"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Basic<sp/>implementation<sp/>of<sp/>Kronecker<sp/>product</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="54"><highlight class="comment">sp_mat<sp/>Utils::spkron(const<sp/>sp_mat<sp/>&amp;A,<sp/>const<sp/>sp_mat<sp/>&amp;B)</highlight></codeline>
+<codeline lineno="55"><highlight class="comment">{</highlight></codeline>
+<codeline lineno="56"><highlight class="comment"><sp/><sp/><sp/><sp/>sp_mat<sp/>result;</highlight></codeline>
+<codeline lineno="57"><highlight class="comment"></highlight></codeline>
+<codeline lineno="58"><highlight class="comment"><sp/><sp/><sp/><sp/>for<sp/>(u32<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>A.n_rows;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="59"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sp_mat<sp/>BLOCK;</highlight></codeline>
+<codeline lineno="60"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>for<sp/>(u32<sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>A.n_cols;<sp/>j++)<sp/>{</highlight></codeline>
+<codeline lineno="61"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>BLOCK<sp/>=<sp/>join_rows(BLOCK,<sp/>A(i,<sp/>j)*B);</highlight></codeline>
+<codeline lineno="62"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="63"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>result<sp/>=<sp/>join_cols(result,<sp/>BLOCK);</highlight></codeline>
+<codeline lineno="64"><highlight class="comment"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="65"><highlight class="comment"></highlight></codeline>
+<codeline lineno="66"><highlight class="comment"><sp/><sp/><sp/><sp/>return<sp/>result;</highlight></codeline>
+<codeline lineno="67"><highlight class="comment">}</highlight></codeline>
+<codeline lineno="68"><highlight class="comment">*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight></codeline>
+<codeline lineno="70" refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" refkind="member"><highlight class="normal">sp_mat<sp/><ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>sp_mat<sp/>&amp;A,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>sp_mat<sp/>&amp;B)<sp/>{</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/>sp_mat::const_iterator<sp/>itA<sp/>=<sp/>A.begin();</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/>sp_mat::const_iterator<sp/>endA<sp/>=<sp/>A.end();</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/>sp_mat::const_iterator<sp/>itB<sp/>=<sp/>B.begin();</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/>sp_mat::const_iterator<sp/>endB<sp/>=<sp/>B.end();</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/>u32<sp/>j<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/>vec<sp/>a<sp/>=<sp/>nonzeros(A);</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/>vec<sp/>b<sp/>=<sp/>nonzeros(B);</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/>umat<sp/>locations(2,<sp/>a.n_elem<sp/>*<sp/>b.n_elem);</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/>vec<sp/>values(a.n_elem<sp/>*<sp/>b.n_elem);</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(itA<sp/>!=<sp/>endA)<sp/>{</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(itB<sp/>!=<sp/>endB)<sp/>{</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>locations(0,<sp/>j)<sp/>=<sp/>itA.row()<sp/>*<sp/>B.n_rows<sp/>+<sp/>itB.row();</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>locations(1,<sp/>j)<sp/>=<sp/>itA.col()<sp/>*<sp/>B.n_cols<sp/>+<sp/>itB.col();</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>values(j)<sp/>=<sp/>(*itA)<sp/>*<sp/>(*itB);</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>++j;</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>++itB;</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/>++itA;</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/>itB<sp/>=<sp/>B.begin();</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"></highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/>sp_mat<sp/>result(locations,<sp/>values,<sp/>A.n_rows<sp/>*<sp/>B.n_rows,<sp/>A.n_cols<sp/>*<sp/>B.n_cols,</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>result;</highlight></codeline>
+<codeline lineno="100"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"></highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight></codeline>
+<codeline lineno="103" refid="classUtils_1a29075e84565397491dce88c1db2779f8" refkind="member"><highlight class="normal">sp_mat<sp/><ref refid="classUtils_1a29075e84565397491dce88c1db2779f8" kindref="member">Utils::spjoin_rows</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>sp_mat<sp/>&amp;A,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>sp_mat<sp/>&amp;B)<sp/>{</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/>sp_mat::const_iterator<sp/>itA<sp/>=<sp/>A.begin();</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/>sp_mat::const_iterator<sp/>endA<sp/>=<sp/>A.end();</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/>sp_mat::const_iterator<sp/>itB<sp/>=<sp/>B.begin();</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/>sp_mat::const_iterator<sp/>endB<sp/>=<sp/>B.end();</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/>u32<sp/>j<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/>vec<sp/>a<sp/>=<sp/>nonzeros(A);</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/>vec<sp/>b<sp/>=<sp/>nonzeros(B);</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"></highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/>umat<sp/>locations(2,<sp/>a.n_elem<sp/>+<sp/>b.n_elem);</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/>vec<sp/>values(a.n_elem<sp/>+<sp/>b.n_elem);</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"></highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(itA<sp/>!=<sp/>endA)<sp/>{</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/>locations(0,<sp/>j)<sp/>=<sp/>itA.row();</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/>locations(1,<sp/>j)<sp/>=<sp/>itA.col();</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/>values(j)<sp/>=<sp/>(*itA);</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/>++itA;</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/>++j;</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(itB<sp/>!=<sp/>endB)<sp/>{</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/>locations(0,<sp/>j)<sp/>=<sp/>itB.row();</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/>locations(1,<sp/>j)<sp/>=<sp/>itB.col()<sp/>+<sp/>A.n_cols;</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/>values(j)<sp/>=<sp/>(*itB);</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/>++itB;</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/>++j;</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"></highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/>sp_mat<sp/>result(locations,<sp/>values,<sp/>A.n_rows,<sp/>A.n_cols<sp/>+<sp/>B.n_cols,<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"></highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>result;</highlight></codeline>
+<codeline lineno="135"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"></highlight></codeline>
+<codeline lineno="137"><highlight class="normal"></highlight></codeline>
+<codeline lineno="138" refid="classUtils_1a02c4cbc4ed5860b69635b480c326cea4" refkind="member"><highlight class="normal">sp_mat<sp/><ref refid="classUtils_1a02c4cbc4ed5860b69635b480c326cea4" kindref="member">Utils::spjoin_cols</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>sp_mat<sp/>&amp;A,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>sp_mat<sp/>&amp;B)<sp/>{</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/>sp_mat::const_iterator<sp/>itA<sp/>=<sp/>A.begin();</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/>sp_mat::const_iterator<sp/>endA<sp/>=<sp/>A.end();</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/>sp_mat::const_iterator<sp/>itB<sp/>=<sp/>B.begin();</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/>sp_mat::const_iterator<sp/>endB<sp/>=<sp/>B.end();</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/>u32<sp/>j<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"></highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/>vec<sp/>a<sp/>=<sp/>nonzeros(A);</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/>vec<sp/>b<sp/>=<sp/>nonzeros(B);</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"></highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/>umat<sp/>locations(2,<sp/>a.n_elem<sp/>+<sp/>b.n_elem);</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/>vec<sp/>values(a.n_elem<sp/>+<sp/>b.n_elem);</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"></highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(itA<sp/>!=<sp/>endA)<sp/>{</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/>locations(0,<sp/>j)<sp/>=<sp/>itA.row();</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/>locations(1,<sp/>j)<sp/>=<sp/>itA.col();</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/>values(j)<sp/>=<sp/>(*itA);</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/>++itA;</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/>++j;</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="158"><highlight class="normal"></highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(itB<sp/>!=<sp/>endB)<sp/>{</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"><sp/><sp/><sp/><sp/>locations(0,<sp/>j)<sp/>=<sp/>itB.row()<sp/>+<sp/>A.n_rows;</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/>locations(1,<sp/>j)<sp/>=<sp/>itB.col();</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/><sp/><sp/>values(j)<sp/>=<sp/>(*itB);</highlight></codeline>
+<codeline lineno="163"><highlight class="normal"><sp/><sp/><sp/><sp/>++itB;</highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/>++j;</highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"></highlight></codeline>
+<codeline lineno="167"><highlight class="normal"><sp/><sp/>sp_mat<sp/>result(locations,<sp/>values,<sp/>A.n_rows<sp/>+<sp/>B.n_rows,<sp/>A.n_cols,<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="168"><highlight class="normal"></highlight></codeline>
+<codeline lineno="169"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>result;</highlight></codeline>
+<codeline lineno="170"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="171"><highlight class="normal"></highlight></codeline>
+<codeline lineno="172"><highlight class="normal"></highlight></codeline>
+<codeline lineno="173" refid="classUtils_1aa3e71c29029c65932dd1be9db524a177" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classUtils_1aa3e71c29029c65932dd1be9db524a177" kindref="member">Utils::meshgrid</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>vec<sp/>&amp;x,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>vec<sp/>&amp;y,<sp/>mat<sp/>&amp;X,<sp/>mat<sp/>&amp;Y)<sp/>{</highlight></codeline>
+<codeline lineno="174"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>m<sp/>=<sp/>x.n_elem;</highlight></codeline>
+<codeline lineno="175"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>n<sp/>=<sp/>y.n_elem;</highlight></codeline>
+<codeline lineno="176"><highlight class="normal"></highlight></codeline>
+<codeline lineno="177"><highlight class="normal"><sp/><sp/>assert(m<sp/>&gt;<sp/>0);</highlight></codeline>
+<codeline lineno="178"><highlight class="normal"><sp/><sp/>assert(n<sp/>&gt;<sp/>0);</highlight></codeline>
+<codeline lineno="179"><highlight class="normal"></highlight></codeline>
+<codeline lineno="180"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Build<sp/>X</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="181"><highlight class="normal"><sp/><sp/>vec<sp/>t(n,<sp/>fill::ones);</highlight></codeline>
+<codeline lineno="182"><highlight class="normal"></highlight></codeline>
+<codeline lineno="183"><highlight class="normal"><sp/><sp/>X.zeros(n,<sp/>m);</highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/>Y.zeros(n,<sp/>m);</highlight></codeline>
+<codeline lineno="185"><highlight class="normal"></highlight></codeline>
+<codeline lineno="186"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>ii<sp/>=<sp/>0;<sp/>ii<sp/>&lt;<sp/>m;<sp/>++ii)<sp/>{</highlight></codeline>
+<codeline lineno="187"><highlight class="normal"><sp/><sp/><sp/><sp/>X.col(ii)<sp/>=<sp/>x(ii)<sp/>*<sp/>t;</highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/><sp/><sp/>t.ones();</highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"></highlight></codeline>
+<codeline lineno="191"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>ii<sp/>=<sp/>0;<sp/>ii<sp/>&lt;<sp/>m;<sp/>++ii)</highlight></codeline>
+<codeline lineno="192"><highlight class="normal"><sp/><sp/><sp/><sp/>Y.col(ii)<sp/>=<sp/>y;</highlight></codeline>
+<codeline lineno="193"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="194"><highlight class="normal"></highlight></codeline>
+<codeline lineno="195"><highlight class="normal"></highlight></codeline>
+<codeline lineno="196" refid="classUtils_1ae49c2bff1cd6d9469b1cd7fef823821d" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classUtils_1aa3e71c29029c65932dd1be9db524a177" kindref="member">Utils::meshgrid</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>vec<sp/>&amp;x,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>vec<sp/>&amp;y,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>vec<sp/>&amp;z,<sp/>cube<sp/>&amp;X,<sp/>cube<sp/>&amp;Y,</highlight></codeline>
+<codeline lineno="197"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cube<sp/>&amp;Z)<sp/>{</highlight></codeline>
+<codeline lineno="198"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>m<sp/>=<sp/>x.n_elem;</highlight></codeline>
+<codeline lineno="199"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>n<sp/>=<sp/>y.n_elem;</highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>o<sp/>=<sp/>z.n_elem;</highlight></codeline>
+<codeline lineno="201"><highlight class="normal"></highlight></codeline>
+<codeline lineno="202"><highlight class="normal"><sp/><sp/>assert(m<sp/>&gt;<sp/>0);</highlight></codeline>
+<codeline lineno="203"><highlight class="normal"><sp/><sp/>assert(n<sp/>&gt;<sp/>0);</highlight></codeline>
+<codeline lineno="204"><highlight class="normal"><sp/><sp/>assert(o<sp/>&gt;<sp/>0);</highlight></codeline>
+<codeline lineno="205"><highlight class="normal"></highlight></codeline>
+<codeline lineno="206"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Temporary<sp/>Holder<sp/>of<sp/>sheet<sp/>of<sp/>cube</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="207"><highlight class="normal"><sp/><sp/>mat<sp/>sheet(m,<sp/>n,<sp/>fill::zeros);</highlight></codeline>
+<codeline lineno="208"><highlight class="normal"></highlight></codeline>
+<codeline lineno="209"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Build<sp/>X</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="210"><highlight class="normal"><sp/><sp/>vec<sp/>t(n,<sp/>fill::ones);</highlight></codeline>
+<codeline lineno="211"><highlight class="normal"></highlight></codeline>
+<codeline lineno="212"><highlight class="normal"><sp/><sp/>X.zeros(m,<sp/>n,<sp/>o);</highlight></codeline>
+<codeline lineno="213"><highlight class="normal"><sp/><sp/>Y.zeros(m,<sp/>n,<sp/>o);</highlight></codeline>
+<codeline lineno="214"><highlight class="normal"><sp/><sp/>Z.zeros(m,<sp/>n,<sp/>o);</highlight></codeline>
+<codeline lineno="215"><highlight class="normal"></highlight></codeline>
+<codeline lineno="216"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Sheet<sp/>that<sp/>repeats<sp/>each<sp/>slice</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="217"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>ii<sp/>=<sp/>0;<sp/>ii<sp/>&lt;<sp/>m;<sp/>++ii)<sp/>{</highlight></codeline>
+<codeline lineno="218"><highlight class="normal"><sp/><sp/><sp/><sp/>sheet.row(ii)<sp/>=<sp/>x(ii)<sp/>*<sp/>t.t();</highlight></codeline>
+<codeline lineno="219"><highlight class="normal"><sp/><sp/><sp/><sp/>t.ones();</highlight></codeline>
+<codeline lineno="220"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="221"><highlight class="normal"></highlight></codeline>
+<codeline lineno="222"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>kk<sp/>=<sp/>0;<sp/>kk<sp/>&lt;<sp/>o;<sp/>++kk)</highlight></codeline>
+<codeline lineno="223"><highlight class="normal"><sp/><sp/><sp/><sp/>X.slice(kk)<sp/>=<sp/>sheet;</highlight></codeline>
+<codeline lineno="224"><highlight class="normal"></highlight></codeline>
+<codeline lineno="225"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Y<sp/>Cube,<sp/>repeats<sp/>same<sp/>sheet<sp/>as<sp/>well</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="226"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>ii<sp/>=<sp/>0;<sp/>ii<sp/>&lt;<sp/>m;<sp/>++ii)</highlight></codeline>
+<codeline lineno="227"><highlight class="normal"><sp/><sp/><sp/><sp/>sheet.row(ii)<sp/>=<sp/>y.t();</highlight></codeline>
+<codeline lineno="228"><highlight class="normal"></highlight></codeline>
+<codeline lineno="229"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>kk<sp/>=<sp/>0;<sp/>kk<sp/>&lt;<sp/>o;<sp/>++kk)</highlight></codeline>
+<codeline lineno="230"><highlight class="normal"><sp/><sp/><sp/><sp/>Y.slice(kk)<sp/>=<sp/>sheet;</highlight></codeline>
+<codeline lineno="231"><highlight class="normal"></highlight></codeline>
+<codeline lineno="232"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Z<sp/>cube<sp/>goes<sp/>by<sp/>slices<sp/>each<sp/>with<sp/>same<sp/>value</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="233"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>kk<sp/>=<sp/>0;<sp/>kk<sp/>&lt;<sp/>o;<sp/>++kk)</highlight></codeline>
+<codeline lineno="234"><highlight class="normal"><sp/><sp/><sp/><sp/>Z.slice(kk).fill(z(kk));</highlight></codeline>
+<codeline lineno="235"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="236"><highlight class="normal"></highlight></codeline>
+<codeline lineno="237"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Trapezoidal<sp/>rule<sp/>(trapz)<sp/>for<sp/>1D<sp/>integration</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="238" refid="classUtils_1afdfd6b3f99267fb13b8c5539f810b2f6" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classUtils_1afdfd6b3f99267fb13b8c5539f810b2f6" kindref="member">Utils::trapz</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>vec<sp/>&amp;x,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>vec<sp/>&amp;y)<sp/>{</highlight></codeline>
+<codeline lineno="239"><highlight class="normal"><sp/><sp/>assert(x.n_elem<sp/>==<sp/>y.n_elem);</highlight></codeline>
+<codeline lineno="240"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>sum<sp/>=<sp/>0.0;</highlight></codeline>
+<codeline lineno="241"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(uword<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>x.n_elem<sp/>-<sp/>1;<sp/>++i)<sp/>{</highlight></codeline>
+<codeline lineno="242"><highlight class="normal"><sp/><sp/><sp/><sp/>sum<sp/>+=<sp/>(x(i+1)<sp/>-<sp/>x(i))<sp/>*<sp/>(y(i)<sp/>+<sp/>y(i+1));</highlight></codeline>
+<codeline lineno="243"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="244"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0.5<sp/>*<sp/>sum;</highlight></codeline>
+<codeline lineno="245"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="246"><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/cpp/utils.cpp"/>
+  </compounddef>
+</doxygen>

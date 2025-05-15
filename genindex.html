@@ -1,0 +1,609 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Index &mdash; MOLE 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+
+  
+      <script src="_static/jquery.js"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+      <script src="_static/doctools.js"></script>
+      <script src="_static/sphinx_highlight.js"></script>
+      <script src="_static/mathconf.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" />
+ 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const headers = document.querySelectorAll('.collapsible-header');
+    
+    headers.forEach(header => {
+      header.addEventListener('click', function() {
+        this.classList.toggle('active');
+        const content = this.nextElementSibling;
+        if (content.style.display === 'block') {
+          content.style.display = 'none';
+        } else {
+          content.style.display = 'block';
+        }
+      });
+    });
+  });
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intros/introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="intros/introduction.html#licensing">Licensing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intros/introduction.html#community-guidelines">Community Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intros/introduction.html#citations">Citations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="intros/gettingstarted.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="intros/gettingstarted.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intros/gettingstarted.html#package-installation-by-os">Package Installation by OS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="intros/gettingstarted.html#ubuntu-debian-systems">Ubuntu/Debian Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intros/gettingstarted.html#macos-systems">macOS Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intros/gettingstarted.html#rhel-centos-fedora-systems">RHEL/CentOS/Fedora Systems</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="intros/gettingstarted.html#building-and-installing">Building and Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intros/gettingstarted.html#testing">Testing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="intros/gettingstarted.html#c">C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intros/gettingstarted.html#matlab-octave">MATLAB/Octave</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="intros/gettingstarted.html#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="intros/gettingstarted.html#id1">C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intros/gettingstarted.html#matlab-octave-examples">MATLAB/Octave Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="intros/gettingstarted.html#quick-start-examples">Quick Start Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="intros/gettingstarted.html#c-example">C++ Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intros/gettingstarted.html#matlab-octave-example">MATLAB/Octave Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="intros/gettingstarted.html#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intros/gettingstarted.html#licensing">Licensing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="intros/doc_readme_wrapper.html">Building Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="intros/doc_readme_wrapper.html#documentation-structure">Documentation Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intros/doc_readme_wrapper.html#building-documentation">️Building Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="intros/doc_readme_wrapper.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intros/doc_readme_wrapper.html#building-steps">Building Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intros/doc_readme_wrapper.html#pdf-generation-process">PDF Generation Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intros/doc_readme_wrapper.html#image-handling">Image Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="intros/doc_readme_wrapper.html#development-workflow">Development Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intros/doc_readme_wrapper.html#documentation-standards">Documentation Standards</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/cpp/index.html">C++</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/cpp/index.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cpp/index.html#class-structure">Class Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/cpp/operators.html">Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/cpp/boundary.html">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/cpp/utils.html">Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/matlab/index-beta.html">Matlab/ Octave</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/matlab/matlab_index.html">MATLAB/Octave Function Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/matlab/matlab_index.html#gradient-operators">Gradient Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/matlab/matlab_index.html#divergence-operators">Divergence Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/matlab/matlab_index.html#laplacian-operators">Laplacian Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/matlab/matlab_index.html#nodal-operators">Nodal Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/matlab/matlab_index.html#interpolation-functions">Interpolation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/matlab/matlab_index.html#boundary-conditions">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/matlab/matlab_index.html#grid-and-transformation-functions">Grid and Transformation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/matlab/matlab_index.html#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/matlab/api.html">MATLAB/Octave API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/matlab/api.html#differential-operators">Differential Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/matlab/api.html#interpolation-functions">Interpolation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/matlab/api.html#boundary-conditions">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/matlab/api.html#grid-generation-and-transformation">Grid Generation and Transformation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/matlab/api.html#mimetic-weights">Mimetic Weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/matlab/api.html#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Mathematical Framework</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="math_functions/index.html">Mathematical Functions Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="math_functions/CSRCReportOnMOLE.html">CSRC Report on MOLE Library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="math_functions/CSRCReportOnMOLE.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math_functions/CSRCReportOnMOLE.html#on-the-mathematics">On the Mathematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="math_functions/CSRCReportOnMOLE.html#staggered-grids">Staggered Grids</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="math_functions/CSRCReportOnMOLE.html#using-the-operators">Using the Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math_functions/CSRCReportOnMOLE.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="math_functions/StaggeredGrids.html">Why Staggered Grids?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="math_functions/StaggeredGrids.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math_functions/StaggeredGrids.html#justification">Justification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math_functions/StaggeredGrids.html#checkerboard-pressure-fields">Checkerboard pressure fields</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math_functions/StaggeredGrids.html#staggered-grids">Staggered grids</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math_functions/StaggeredGrids.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="math_functions/Jacobian.html">Jacobian</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="math_functions/Jacobian.html#introduction">Introduction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="math_functions/NonUniformGradAndDiv.html">Non-Uniform Gradient and Divergence Operators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="math_functions/NonUniformGradAndDiv.html#introduction">Introduction</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/README.html">MOLE Examples Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/examples.html">MOLE Library Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples/examples.html#elliptic-equations">Elliptic Equations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/examples.html#hyperbolic">Hyperbolic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/examples.html#parabolic-equations">Parabolic Equations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples/cpp/README.html">C++ Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/matlab/compact_operators/README.html">MATLAB Compact Operators</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intros/contributing_wrapper.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="intros/contributing_wrapper.html#id1">1. Contributing to MOLE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intros/contributing_wrapper.html#reporting-issues-or-problems">2. Reporting Issues or Problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intros/contributing_wrapper.html#seeking-support">3. Seeking Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="intros/code_of_conduct_wrapper.html">Code of Conduct</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="intros/code_of_conduct_wrapper.html#our-pledge">Our Pledge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intros/code_of_conduct_wrapper.html#our-standards">Our Standards</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intros/code_of_conduct_wrapper.html#our-responsibilities">Our Responsibilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intros/code_of_conduct_wrapper.html#scope">Scope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intros/code_of_conduct_wrapper.html#enforcement">Enforcement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intros/code_of_conduct_wrapper.html#attribution">Attribution</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MOLE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Index</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
+ | <a href="#W"><strong>W</strong></a>
+ 
+</div>
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#addBC1D">addBC1D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#addBC1Dlhs">addBC1Dlhs() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#addBC1Drhs">addBC1Drhs() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#addBC2D">addBC2D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#addBC2Dlhs">addBC2Dlhs() (built-in function)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#addBC2Drhs">addBC2Drhs() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#addBC3D">addBC3D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#addBC3Dlhs">addBC3Dlhs() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#addBC3Drhs">addBC3Drhs() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#amean">amean() (built-in function)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#boundaryIdx2D">boundaryIdx2D() (built-in function)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#curl2D">curl2D() (built-in function)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#DI2">DI2() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#DI3">DI3() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#div">div() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#div2D">div2D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#div2DCurv">div2DCurv() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#div2DNonUniform">div2DNonUniform() (built-in function)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#div3D">div3D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#div3DCurv">div3DCurv() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#div3DNonUniform">div3DNonUniform() (built-in function)</a>
+</li>
+      <li><a href="api/cpp/operators.html#_CPPv410Divergence">Divergence (C++ class)</a>
+</li>
+      <li><a href="api/cpp/operators.html#_CPPv4N10Divergence10DivergenceE3u163u323u323u324Real4Real4Real">Divergence::Divergence (C++ function)</a>, <a href="api/cpp/operators.html#_CPPv4N10Divergence10DivergenceE3u163u323u324Real4Real">[1]</a>, <a href="api/cpp/operators.html#_CPPv4N10Divergence10DivergenceE3u163u324Real">[2]</a>
+</li>
+      <li><a href="api/cpp/operators.html#_CPPv4N10Divergence4getQEv">Divergence::getQ (C++ function)</a>
+</li>
+      <li><a href="api/matlab/api.html#divNonUniform">divNonUniform() (built-in function)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#GI1">GI1() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#GI13">GI13() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#GI2">GI2() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#grad">grad() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#grad2D">grad2D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#grad2DCurv">grad2DCurv() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#grad2DNonUniform">grad2DNonUniform() (built-in function)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#grad3D">grad3D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#grad3DCurv">grad3DCurv() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#grad3DNonUniform">grad3DNonUniform() (built-in function)</a>
+</li>
+      <li><a href="api/cpp/operators.html#_CPPv48Gradient">Gradient (C++ class)</a>
+</li>
+      <li><a href="api/cpp/operators.html#_CPPv4N8Gradient4getPEv">Gradient::getP (C++ function)</a>
+</li>
+      <li><a href="api/cpp/operators.html#_CPPv4N8Gradient8GradientE3u163u323u323u324Real4Real4Real">Gradient::Gradient (C++ function)</a>, <a href="api/cpp/operators.html#_CPPv4N8Gradient8GradientE3u163u323u324Real4Real">[1]</a>, <a href="api/cpp/operators.html#_CPPv4N8Gradient8GradientE3u163u324Real">[2]</a>
+</li>
+      <li><a href="api/matlab/api.html#gradNonUniform">gradNonUniform() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#gridGen">gridGen() (built-in function)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#hmean">hmean() (built-in function)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/cpp/operators.html#_CPPv48Interpol">Interpol (C++ class)</a>
+</li>
+      <li><a href="api/matlab/api.html#interpol">interpol() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#interpol2D">interpol2D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#interpol3D">interpol3D() (built-in function)</a>
+</li>
+      <li><a href="api/cpp/operators.html#_CPPv4N8Interpol8InterpolE3u323u323u324Real4Real4Real">Interpol::Interpol (C++ function)</a>, <a href="api/cpp/operators.html#_CPPv4N8Interpol8InterpolE3u323u324Real4Real">[1]</a>, <a href="api/cpp/operators.html#_CPPv4N8Interpol8InterpolE3u324Real">[2]</a>, <a href="api/cpp/operators.html#_CPPv4N8Interpol8InterpolEb3u323u323u324Real4Real4Real">[3]</a>, <a href="api/cpp/operators.html#_CPPv4N8Interpol8InterpolEb3u323u324Real4Real">[4]</a>, <a href="api/cpp/operators.html#_CPPv4N8Interpol8InterpolEb3u324Real">[5]</a>
+</li>
+      <li><a href="api/matlab/api.html#interpolCentersToNodes1D">interpolCentersToNodes1D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#interpolCentersToNodes2D">interpolCentersToNodes2D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#interpolCentersToNodes3D">interpolCentersToNodes3D() (built-in function)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#interpolD">interpolD() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#interpolD2D">interpolD2D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#interpolD3D">interpolD3D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#interpolFacesToCentersG1D">interpolFacesToCentersG1D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#interpolFacesToCentersG2D">interpolFacesToCentersG2D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#interpolFacesToCentersG3D">interpolFacesToCentersG3D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#interpolNodesToCenters1D">interpolNodesToCenters1D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#interpolNodesToCenters2D">interpolNodesToCenters2D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#interpolNodesToCenters3D">interpolNodesToCenters3D() (built-in function)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#jacobian2D">jacobian2D() (built-in function)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#jacobian3D">jacobian3D() (built-in function)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#lap">lap() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#lap2D">lap2D() (built-in function)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#lap3D">lap3D() (built-in function)</a>
+</li>
+      <li><a href="api/cpp/operators.html#_CPPv49Laplacian">Laplacian (C++ class)</a>
+</li>
+      <li><a href="api/cpp/operators.html#_CPPv4N9Laplacian9LaplacianE3u163u323u323u324Real4Real4Real">Laplacian::Laplacian (C++ function)</a>, <a href="api/cpp/operators.html#_CPPv4N9Laplacian9LaplacianE3u163u323u324Real4Real">[1]</a>, <a href="api/cpp/operators.html#_CPPv4N9Laplacian9LaplacianE3u163u324Real">[2]</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#mimeticB">mimeticB() (built-in function)</a>
+</li>
+      <li><a href="api/cpp/boundary.html#_CPPv47MixedBC">MixedBC (C++ class)</a>
+</li>
+      <li><a href="api/matlab/api.html#mixedBC">mixedBC() (built-in function)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#mixedBC2D">mixedBC2D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#mixedBC3D">mixedBC3D() (built-in function)</a>
+</li>
+      <li><a href="api/cpp/boundary.html#_CPPv4N7MixedBC7MixedBCE3u163u324Real3u324Real3u324RealRKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEE">MixedBC::MixedBC (C++ function)</a>, <a href="api/cpp/boundary.html#_CPPv4N7MixedBC7MixedBCE3u163u324Real3u324RealRKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEE">[1]</a>, <a href="api/cpp/boundary.html#_CPPv4N7MixedBC7MixedBCE3u163u324RealRKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEE">[2]</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#neumann2DCurv">neumann2DCurv() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#neumann3DCurv">neumann3DCurv() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#nodal">nodal() (built-in function)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#nodal2D">nodal2D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#nodal2DCurv">nodal2DCurv() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#nodal3D">nodal3D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#nodal3DCurv">nodal3DCurv() (built-in function)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#rk4">rk4() (built-in function)</a>
+</li>
+      <li><a href="api/cpp/boundary.html#_CPPv47RobinBC">RobinBC (C++ class)</a>
+</li>
+      <li><a href="api/matlab/api.html#robinBC">robinBC() (built-in function)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#robinBC2D">robinBC2D() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#robinBC3D">robinBC3D() (built-in function)</a>
+</li>
+      <li><a href="api/cpp/boundary.html#_CPPv4N7RobinBC7RobinBCE3u163u324Real3u324Real3u324Real4Real4Real">RobinBC::RobinBC (C++ function)</a>, <a href="api/cpp/boundary.html#_CPPv4N7RobinBC7RobinBCE3u163u324Real3u324Real4Real4Real">[1]</a>, <a href="api/cpp/boundary.html#_CPPv4N7RobinBC7RobinBCE3u163u324Real4Real4Real">[2]</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#sidedNodal">sidedNodal() (built-in function)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#tensorGrad2D">tensorGrad2D() (built-in function)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#tfi">tfi() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#ttm">ttm() (built-in function)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/cpp/utils.html#_CPPv45Utils">Utils (C++ class)</a>
+</li>
+      <li><a href="api/cpp/utils.html#_CPPv4N5Utils8meshgridERK3vecRK3vecR3matR3mat">Utils::meshgrid (C++ function)</a>, <a href="api/cpp/utils.html#_CPPv4N5Utils8meshgridERK3vecRK3vecRK3vecR4cubeR4cubeR4cube">[1]</a>
+</li>
+      <li><a href="api/cpp/utils.html#_CPPv4N5Utils11spjoin_colsERK6sp_matRK6sp_mat">Utils::spjoin_cols (C++ function)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/cpp/utils.html#_CPPv4N5Utils11spjoin_rowsERK6sp_matRK6sp_mat">Utils::spjoin_rows (C++ function)</a>
+</li>
+      <li><a href="api/cpp/utils.html#_CPPv4N5Utils6spkronERK6sp_matRK6sp_mat">Utils::spkron (C++ function)</a>
+</li>
+      <li><a href="api/cpp/utils.html#_CPPv4N5Utils13spsolve_eigenERK6sp_matRK3vec">Utils::spsolve_eigen (C++ function)</a>
+</li>
+      <li><a href="api/cpp/utils.html#_CPPv4N5Utils5trapzERK3vecRK3vec">Utils::trapz (C++ function)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#weightsP">weightsP() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#weightsP2D">weightsP2D() (built-in function)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/matlab/api.html#weightsQ">weightsQ() (built-in function)</a>
+</li>
+      <li><a href="api/matlab/api.html#weightsQ2D">weightsQ2D() (built-in function)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, CSRC SDSU.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ttm</title>
+  <meta name="keywords" content="ttm">
+  <meta name="description" content="https://www.sciencedirect.com/science/article/pii/0022247X78902172?via%3Dihub">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html mole_MATLAB -->
+<h1>ttm
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>https://www.sciencedirect.com/science/article/pii/0022247X78902172?via%3Dihub</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [X, Y] = ttm(grid_name, m, n, iters, plot_grid) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> https://www.sciencedirect.com/science/article/pii/0022247X78902172?via%3Dihub
+ Returns X and Y which are both m by n matrices that contains the physical
+ coordinates
+
+ Parameters:
+        grid_name : String with the name of the grid folder
+                m : Number of nodes along the horizontal axis
+                n : Number of nodes along the vertical axis
+        plot_grid : If defined -&gt; grid will be plotted</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="gridGen.html" class="code" title="function [X, Y] = gridGen(method, grid_name, m, n, plot_grid, varargin)">gridGen</a>	Returns X and Y which are both m by n matrices that contains the physical</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% https://www.sciencedirect.com/science/article/pii/0022247X78902172?via%3Dihub</span>
+0002 <a name="_sub0" href="#_subfunctions" class="code">function [X, Y] = ttm(grid_name, m, n, iters, plot_grid)</a>
+0003 <span class="comment">% Returns X and Y which are both m by n matrices that contains the physical</span>
+0004 <span class="comment">% coordinates</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Parameters:</span>
+0007 <span class="comment">%        grid_name : String with the name of the grid folder</span>
+0008 <span class="comment">%                m : Number of nodes along the horizontal axis</span>
+0009 <span class="comment">%                n : Number of nodes along the vertical axis</span>
+0010 <span class="comment">%        plot_grid : If defined -&gt; grid will be plotted</span>
+0011     
+0012     assert(m &gt; 4 &amp;&amp; n &gt; 4, <span class="string">'m and n must be greater than 4'</span>)
+0013     
+0014     addpath([<span class="string">'grids/'</span> grid_name])
+0015     
+0016     <span class="comment">% Error tolerance for iterative method</span>
+0017     tol = 10^-6;
+0018     
+0019     <span class="comment">% Preallocation</span>
+0020     X = zeros(m, n);
+0021     Y = zeros(m, n);
+0022     alpha = zeros(m, n);
+0023     beta = zeros(m, n);
+0024     gamma = zeros(m, n);
+0025     
+0026     <span class="comment">% BCs</span>
+0027     <span class="keyword">for</span> i = 1 : m
+0028         xi = (i-1)/(m-1);
+0029         XY = top(xi);
+0030         X(i, end) = XY(1);
+0031         Y(i, end) = XY(2);
+0032         XY = bottom(xi);
+0033         X(i, 1) = XY(1);
+0034         Y(i, 1) = XY(2);
+0035     <span class="keyword">end</span>
+0036     <span class="keyword">for</span> j = 1 : n
+0037         eta = (j-1)/(n-1);
+0038         XY = left(eta);
+0039         X(1, j) = XY(1);
+0040         Y(1, j) = XY(2);
+0041         XY = right(eta);
+0042         X(<span class="keyword">end</span>, j) = XY(1);
+0043         Y(<span class="keyword">end</span>, j) = XY(2);
+0044     <span class="keyword">end</span>
+0045     
+0046     newX = X;
+0047     newY = Y;
+0048     
+0049     errX = zeros(1, iters);
+0050     errY = zeros(1, iters);
+0051     
+0052     <span class="comment">% SOR</span>
+0053     <span class="keyword">for</span> t = 1 : iters
+0054         i = 2 : m-1;
+0055         j = 2 : n-1;
+0056         
+0057         alpha(i, j) = 0.25*((X(i, j+1)-X(i, j-1)).^2+(Y(i, j+1)-Y(i, j-1)).^2);
+0058         beta(i, j) = 0.0625*((X(i+1, j)-X(i-1, j)).*(X(i, j+1)-X(i, j-1))+(Y(i+1, j)<span class="keyword">...</span>
+0059            -Y(i-1, j)).*(Y(i, j+1)-Y(i, j-1)));
+0060         gamma(i, j) = 0.25*((X(i+1, j)-X(i-1, j)).^2+(Y(i+1, j)-Y(i-1, j)).^2);
+0061         
+0062         newX(i, j) = ((-0.5)./(alpha(i, j)+gamma(i, j)+1e-10)).*(2*beta(i, j)<span class="keyword">...</span>
+0063             .*(X(i+1, j+1)-X(i-1, j+1)-X(i+1, j-1)+X(i-1, j-1))-alpha(i, j)<span class="keyword">...</span>
+0064             .*(X(i+1, j)+X(i-1, j))-gamma(i, j).*(X(i, j+1)+X(i, j-1)));
+0065         newY(i, j) = ((-0.5)./(alpha(i, j)+gamma(i, j)+1e-10)).*(2*beta(i, j)<span class="keyword">...</span>
+0066             .*(Y(i+1, j+1)-Y(i-1, j+1)-Y(i+1, j-1)+Y(i-1, j-1))-alpha(i, j)<span class="keyword">...</span>
+0067             .*(Y(i+1, j)+Y(i-1, j))-gamma(i, j).*(Y(i, j+1)+Y(i, j-1)));
+0068         
+0069         errX(1, t) = max(max(abs(newX-X)));
+0070         errY(1, t) = max(max(abs(newY-Y)));
+0071         
+0072         <span class="comment">% Update</span>
+0073         X = newX;
+0074         Y = newY;
+0075         
+0076         <span class="keyword">if</span> errX(t) &lt; tol &amp;&amp; errY(t) &lt; tol
+0077             <span class="keyword">break</span>
+0078         <span class="keyword">end</span>
+0079     <span class="keyword">end</span>
+0080     
+0081     <span class="keyword">if</span> plot_grid
+0082         figure
+0083         mesh(X, Y, zeros(m, n), <span class="string">'Marker'</span>, <span class="string">'.'</span>, <span class="string">'MarkerSize'</span>, 10, <span class="string">'EdgeColor'</span>, <span class="string">'b'</span>)
+0084         title([<span class="string">'Physical grid. m = '</span> num2str(m) <span class="string">', n = '</span> num2str(n)])
+0085         set(gcf, <span class="string">'color'</span>, <span class="string">'w'</span>)
+0086         axis equal
+0087         axis off
+0088         view([0 90])
+0089     <span class="keyword">end</span>
+0090 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 27-Jan-2021 14:29:32 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,402 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MATLAB/Octave Function Index &mdash; MOLE 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+      <script src="../../_static/jquery.js"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+      <script src="../../_static/doctools.js"></script>
+      <script src="../../_static/sphinx_highlight.js"></script>
+      <script src="../../_static/mathconf.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="MATLAB/Octave API" href="api.html" />
+    <link rel="prev" title="MOLE MATLAB/Octave Module" href="index-beta.html" />
+ 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const headers = document.querySelectorAll('.collapsible-header');
+    
+    headers.forEach(header => {
+      header.addEventListener('click', function() {
+        this.classList.toggle('active');
+        const content = this.nextElementSibling;
+        if (content.style.display === 'block') {
+          content.style.display = 'none';
+        } else {
+          content.style.display = 'block';
+        }
+      });
+    });
+  });
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intros/introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/introduction.html#licensing">Licensing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/introduction.html#community-guidelines">Community Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/introduction.html#citations">Citations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../intros/gettingstarted.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/gettingstarted.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/gettingstarted.html#package-installation-by-os">Package Installation by OS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/gettingstarted.html#ubuntu-debian-systems">Ubuntu/Debian Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/gettingstarted.html#macos-systems">macOS Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/gettingstarted.html#rhel-centos-fedora-systems">RHEL/CentOS/Fedora Systems</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/gettingstarted.html#building-and-installing">Building and Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/gettingstarted.html#testing">Testing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/gettingstarted.html#c">C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/gettingstarted.html#matlab-octave">MATLAB/Octave</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/gettingstarted.html#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/gettingstarted.html#id1">C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/gettingstarted.html#matlab-octave-examples">MATLAB/Octave Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/gettingstarted.html#quick-start-examples">Quick Start Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/gettingstarted.html#c-example">C++ Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/gettingstarted.html#matlab-octave-example">MATLAB/Octave Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/gettingstarted.html#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/gettingstarted.html#licensing">Licensing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../intros/doc_readme_wrapper.html">Building Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/doc_readme_wrapper.html#documentation-structure">Documentation Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/doc_readme_wrapper.html#building-documentation">️Building Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/doc_readme_wrapper.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/doc_readme_wrapper.html#building-steps">Building Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/doc_readme_wrapper.html#pdf-generation-process">PDF Generation Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/doc_readme_wrapper.html#image-handling">Image Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/doc_readme_wrapper.html#development-workflow">Development Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/doc_readme_wrapper.html#documentation-standards">Documentation Standards</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../cpp/index.html">C++</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/index.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cpp/index.html#class-structure">Class Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../cpp/operators.html">Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cpp/boundary.html">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cpp/utils.html">Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index-beta.html">Matlab/ Octave</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">MATLAB/Octave Function Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gradient-operators">Gradient Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#divergence-operators">Divergence Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#laplacian-operators">Laplacian Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nodal-operators">Nodal Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#interpolation-functions">Interpolation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boundary-conditions">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#grid-and-transformation-functions">Grid and Transformation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">MATLAB/Octave API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.html#differential-operators">Differential Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#interpolation-functions">Interpolation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#boundary-conditions">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#grid-generation-and-transformation">Grid Generation and Transformation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#mimetic-weights">Mimetic Weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Mathematical Framework</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../math_functions/index.html">Mathematical Functions Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../math_functions/CSRCReportOnMOLE.html">CSRC Report on MOLE Library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/CSRCReportOnMOLE.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/CSRCReportOnMOLE.html#on-the-mathematics">On the Mathematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../math_functions/CSRCReportOnMOLE.html#staggered-grids">Staggered Grids</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/CSRCReportOnMOLE.html#using-the-operators">Using the Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/CSRCReportOnMOLE.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../math_functions/StaggeredGrids.html">Why Staggered Grids?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/StaggeredGrids.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/StaggeredGrids.html#justification">Justification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/StaggeredGrids.html#checkerboard-pressure-fields">Checkerboard pressure fields</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/StaggeredGrids.html#staggered-grids">Staggered grids</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/StaggeredGrids.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../math_functions/Jacobian.html">Jacobian</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/Jacobian.html#introduction">Introduction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../math_functions/NonUniformGradAndDiv.html">Non-Uniform Gradient and Divergence Operators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/NonUniformGradAndDiv.html#introduction">Introduction</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/README.html">MOLE Examples Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/examples.html">MOLE Library Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/examples.html#elliptic-equations">Elliptic Equations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/examples.html#hyperbolic">Hyperbolic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/examples.html#parabolic-equations">Parabolic Equations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/cpp/README.html">C++ Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/matlab/compact_operators/README.html">MATLAB Compact Operators</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intros/contributing_wrapper.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/contributing_wrapper.html#id1">1. Contributing to MOLE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/contributing_wrapper.html#reporting-issues-or-problems">2. Reporting Issues or Problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/contributing_wrapper.html#seeking-support">3. Seeking Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../intros/code_of_conduct_wrapper.html">Code of Conduct</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/code_of_conduct_wrapper.html#our-pledge">Our Pledge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/code_of_conduct_wrapper.html#our-standards">Our Standards</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/code_of_conduct_wrapper.html#our-responsibilities">Our Responsibilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/code_of_conduct_wrapper.html#scope">Scope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/code_of_conduct_wrapper.html#enforcement">Enforcement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/code_of_conduct_wrapper.html#attribution">Attribution</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MOLE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index-beta.html">MOLE MATLAB/Octave Module</a></li>
+      <li class="breadcrumb-item active">MATLAB/Octave Function Index</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/matlab/matlab_index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="matlab-octave-function-index">
+<h1>MATLAB/Octave Function Index<a class="headerlink" href="#matlab-octave-function-index" title="Permalink to this heading"></a></h1>
+<p>This page provides an index of all MATLAB/Octave functions in the MOLE library.</p>
+<section id="gradient-operators">
+<h2>Gradient Operators<a class="headerlink" href="#gradient-operators" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="api.html#grad" title="grad"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">grad()</span></code></a> - Returns a m+1 by m+2 one-dimensional mimetic gradient operator</p></li>
+<li><p><a class="reference internal" href="api.html#grad2D" title="grad2D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">grad2D()</span></code></a> - Returns a two-dimensional mimetic gradient operator</p></li>
+<li><p><a class="reference internal" href="api.html#grad2DCurv" title="grad2DCurv"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">grad2DCurv()</span></code></a> - Returns a 2D curvilinear mimetic gradient</p></li>
+<li><p><a class="reference internal" href="api.html#grad2DNonUniform" title="grad2DNonUniform"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">grad2DNonUniform()</span></code></a> - Returns a two-dimensional non-uniform mimetic gradient</p></li>
+<li><p><a class="reference internal" href="api.html#grad3D" title="grad3D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">grad3D()</span></code></a> - Returns a three-dimensional mimetic gradient operator</p></li>
+<li><p><a class="reference internal" href="api.html#grad3DCurv" title="grad3DCurv"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">grad3DCurv()</span></code></a> - Returns a 3D curvilinear mimetic gradient</p></li>
+<li><p><a class="reference internal" href="api.html#grad3DNonUniform" title="grad3DNonUniform"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">grad3DNonUniform()</span></code></a> - Returns a three-dimensional non-uniform mimetic gradient</p></li>
+<li><p><a class="reference internal" href="api.html#gradNonUniform" title="gradNonUniform"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">gradNonUniform()</span></code></a> - Returns a m+1 by m+2 one-dimensional non-uniform mimetic gradient</p></li>
+</ul>
+</section>
+<section id="divergence-operators">
+<h2>Divergence Operators<a class="headerlink" href="#divergence-operators" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="api.html#div" title="div"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">div()</span></code></a> - Returns a m+2 by m+1 one-dimensional mimetic divergence operator</p></li>
+<li><p><a class="reference internal" href="api.html#div2D" title="div2D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">div2D()</span></code></a> - Returns a two-dimensional mimetic divergence operator</p></li>
+<li><p><a class="reference internal" href="api.html#div2DCurv" title="div2DCurv"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">div2DCurv()</span></code></a> - Returns a 2D curvilinear mimetic divergence</p></li>
+<li><p><a class="reference internal" href="api.html#div2DNonUniform" title="div2DNonUniform"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">div2DNonUniform()</span></code></a> - Returns a two-dimensional non-uniform mimetic divergence</p></li>
+<li><p><a class="reference internal" href="api.html#div3D" title="div3D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">div3D()</span></code></a> - Returns a three-dimensional mimetic divergence operator</p></li>
+<li><p><a class="reference internal" href="api.html#div3DCurv" title="div3DCurv"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">div3DCurv()</span></code></a> - Returns a 3D curvilinear mimetic divergence</p></li>
+<li><p><a class="reference internal" href="api.html#div3DNonUniform" title="div3DNonUniform"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">div3DNonUniform()</span></code></a> - Returns a three-dimensional non-uniform mimetic divergence</p></li>
+<li><p><a class="reference internal" href="api.html#divNonUniform" title="divNonUniform"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">divNonUniform()</span></code></a> - Returns a m+2 by m+1 one-dimensional non-uniform mimetic divergence</p></li>
+</ul>
+</section>
+<section id="laplacian-operators">
+<h2>Laplacian Operators<a class="headerlink" href="#laplacian-operators" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="api.html#lap" title="lap"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">lap()</span></code></a> - Returns a m+2 by m+2 one-dimensional mimetic laplacian operator</p></li>
+<li><p><a class="reference internal" href="api.html#lap2D" title="lap2D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">lap2D()</span></code></a> - Returns a two-dimensional mimetic laplacian operator</p></li>
+<li><p><a class="reference internal" href="api.html#lap3D" title="lap3D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">lap3D()</span></code></a> - Returns a three-dimensional mimetic laplacian operator</p></li>
+</ul>
+</section>
+<section id="nodal-operators">
+<h2>Nodal Operators<a class="headerlink" href="#nodal-operators" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="api.html#nodal" title="nodal"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">nodal()</span></code></a> - Returns a one-dimensional operator that approximates the first-order</p></li>
+<li><p><a class="reference internal" href="api.html#nodal2D" title="nodal2D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">nodal2D()</span></code></a> - Returns a two-dimensional operator that approximates the first-order</p></li>
+<li><p><a class="reference internal" href="api.html#nodal2DCurv" title="nodal2DCurv"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">nodal2DCurv()</span></code></a> - Returns a 2D curvilinear nodal operator</p></li>
+<li><p><a class="reference internal" href="api.html#nodal3D" title="nodal3D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">nodal3D()</span></code></a> - Returns a three-dimensional operator that approximates the first-order</p></li>
+<li><p><a class="reference internal" href="api.html#nodal3DCurv" title="nodal3DCurv"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">nodal3DCurv()</span></code></a> - Returns a 3D curvilinear nodal operator</p></li>
+<li><p><a class="reference internal" href="api.html#sidedNodal" title="sidedNodal"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">sidedNodal()</span></code></a> - Returns a one-dimensional nodal operator with one-sided stencils</p></li>
+</ul>
+</section>
+<section id="interpolation-functions">
+<h2>Interpolation Functions<a class="headerlink" href="#interpolation-functions" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="api.html#interpol" title="interpol"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">interpol()</span></code></a> - Returns a m+1 by m+2 one-dimensional interpolation operator</p></li>
+<li><p><a class="reference internal" href="api.html#interpol2D" title="interpol2D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">interpol2D()</span></code></a> - Returns a two-dimensional interpolation operator</p></li>
+<li><p><a class="reference internal" href="api.html#interpol3D" title="interpol3D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">interpol3D()</span></code></a> - Returns a three-dimensional interpolation operator</p></li>
+<li><p><a class="reference internal" href="api.html#interpolD" title="interpolD"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">interpolD()</span></code></a> - Returns a m+1 by m+2 one-dimensional interpolation operator</p></li>
+<li><p><a class="reference internal" href="api.html#interpolD2D" title="interpolD2D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">interpolD2D()</span></code></a> - Returns a two-dimensional interpolation operator</p></li>
+<li><p><a class="reference internal" href="api.html#interpolD3D" title="interpolD3D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">interpolD3D()</span></code></a> - Returns a three-dimensional interpolation operator</p></li>
+<li><p><code class="xref mat mat-func docutils literal notranslate"><span class="pre">interpolCentersToFacesD1D()</span></code> - Interpolates values from cell centers to faces</p></li>
+<li><p><code class="xref mat mat-func docutils literal notranslate"><span class="pre">interpolCentersToFacesD2D()</span></code> - Interpolates values from cell centers to faces</p></li>
+<li><p><code class="xref mat mat-func docutils literal notranslate"><span class="pre">interpolCentersToFacesD3D()</span></code> - Interpolates values from cell centers to faces</p></li>
+<li><p><a class="reference internal" href="api.html#interpolCentersToNodes1D" title="interpolCentersToNodes1D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">interpolCentersToNodes1D()</span></code></a> - Interpolates values from cell centers to nodes</p></li>
+<li><p><a class="reference internal" href="api.html#interpolCentersToNodes2D" title="interpolCentersToNodes2D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">interpolCentersToNodes2D()</span></code></a> - Interpolates values from cell centers to nodes</p></li>
+<li><p><a class="reference internal" href="api.html#interpolCentersToNodes3D" title="interpolCentersToNodes3D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">interpolCentersToNodes3D()</span></code></a> - Interpolates values from cell centers to nodes</p></li>
+<li><p><a class="reference internal" href="api.html#interpolFacesToCentersG1D" title="interpolFacesToCentersG1D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">interpolFacesToCentersG1D()</span></code></a> - Interpolates values from faces to cell centers</p></li>
+<li><p><a class="reference internal" href="api.html#interpolFacesToCentersG2D" title="interpolFacesToCentersG2D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">interpolFacesToCentersG2D()</span></code></a> - Interpolates values from faces to cell centers</p></li>
+<li><p><a class="reference internal" href="api.html#interpolFacesToCentersG3D" title="interpolFacesToCentersG3D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">interpolFacesToCentersG3D()</span></code></a> - Interpolates values from faces to cell centers</p></li>
+<li><p><a class="reference internal" href="api.html#interpolNodesToCenters1D" title="interpolNodesToCenters1D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">interpolNodesToCenters1D()</span></code></a> - Interpolates values from nodes to cell centers</p></li>
+<li><p><a class="reference internal" href="api.html#interpolNodesToCenters2D" title="interpolNodesToCenters2D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">interpolNodesToCenters2D()</span></code></a> - Interpolates values from nodes to cell centers</p></li>
+<li><p><a class="reference internal" href="api.html#interpolNodesToCenters3D" title="interpolNodesToCenters3D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">interpolNodesToCenters3D()</span></code></a> - Interpolates values from nodes to cell centers</p></li>
+</ul>
+</section>
+<section id="boundary-conditions">
+<h2>Boundary Conditions<a class="headerlink" href="#boundary-conditions" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="api.html#addBC1D" title="addBC1D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">addBC1D()</span></code></a> - Apply boundary conditions to a 1D system</p></li>
+<li><p><a class="reference internal" href="api.html#addBC1Dlhs" title="addBC1Dlhs"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">addBC1Dlhs()</span></code></a> - Create left-hand side matrix for 1D boundary conditions</p></li>
+<li><p><a class="reference internal" href="api.html#addBC1Drhs" title="addBC1Drhs"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">addBC1Drhs()</span></code></a> - Create right-hand side vector for 1D boundary conditions</p></li>
+<li><p><a class="reference internal" href="api.html#addBC2D" title="addBC2D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">addBC2D()</span></code></a> - Apply boundary conditions to a 2D system</p></li>
+<li><p><a class="reference internal" href="api.html#addBC2Dlhs" title="addBC2Dlhs"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">addBC2Dlhs()</span></code></a> - Create left-hand side matrix for 2D boundary conditions</p></li>
+<li><p><a class="reference internal" href="api.html#addBC2Drhs" title="addBC2Drhs"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">addBC2Drhs()</span></code></a> - Create right-hand side vector for 2D boundary conditions</p></li>
+<li><p><a class="reference internal" href="api.html#addBC3D" title="addBC3D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">addBC3D()</span></code></a> - Apply boundary conditions to a 3D system</p></li>
+<li><p><a class="reference internal" href="api.html#addBC3Dlhs" title="addBC3Dlhs"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">addBC3Dlhs()</span></code></a> - Create left-hand side matrix for 3D boundary conditions</p></li>
+<li><p><a class="reference internal" href="api.html#addBC3Drhs" title="addBC3Drhs"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">addBC3Drhs()</span></code></a> - Create right-hand side vector for 3D boundary conditions</p></li>
+<li><p><a class="reference internal" href="api.html#boundaryIdx2D" title="boundaryIdx2D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">boundaryIdx2D()</span></code></a> - Get boundary indices for a 2D domain</p></li>
+<li><p><a class="reference internal" href="api.html#mixedBC" title="mixedBC"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">mixedBC()</span></code></a> - Constructs a 1D mimetic mixed boundary conditions operator</p></li>
+<li><p><a class="reference internal" href="api.html#mixedBC2D" title="mixedBC2D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">mixedBC2D()</span></code></a> - Constructs a 2D mimetic mixed boundary conditions operator</p></li>
+<li><p><a class="reference internal" href="api.html#mixedBC3D" title="mixedBC3D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">mixedBC3D()</span></code></a> - Constructs a 3D mimetic mixed boundary conditions operator</p></li>
+<li><p><a class="reference internal" href="api.html#neumann2DCurv" title="neumann2DCurv"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">neumann2DCurv()</span></code></a> - Returns a 2D curvilinear Neumann BC operator</p></li>
+<li><p><a class="reference internal" href="api.html#neumann3DCurv" title="neumann3DCurv"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">neumann3DCurv()</span></code></a> - Returns a 3D curvilinear Neumann BC operator</p></li>
+<li><p><a class="reference internal" href="api.html#robinBC" title="robinBC"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">robinBC()</span></code></a> - Returns a m+2 by m+2 one-dimensional mimetic boundary operator that</p></li>
+<li><p><a class="reference internal" href="api.html#robinBC2D" title="robinBC2D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">robinBC2D()</span></code></a> - Returns a two-dimensional mimetic boundary operator that implements</p></li>
+<li><p><a class="reference internal" href="api.html#robinBC3D" title="robinBC3D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">robinBC3D()</span></code></a> - Returns a three-dimensional mimetic boundary operator that</p></li>
+</ul>
+</section>
+<section id="grid-and-transformation-functions">
+<h2>Grid and Transformation Functions<a class="headerlink" href="#grid-and-transformation-functions" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="api.html#gridGen" title="gridGen"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">gridGen()</span></code></a> - Generate a grid using transfinite interpolation</p></li>
+<li><p><a class="reference internal" href="api.html#tfi" title="tfi"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">tfi()</span></code></a> - Transfinite interpolation for grid generation</p></li>
+<li><p><a class="reference internal" href="api.html#ttm" title="ttm"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">ttm()</span></code></a> - Tensor-product transfinite mapping</p></li>
+<li><p><a class="reference internal" href="api.html#jacobian2D" title="jacobian2D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">jacobian2D()</span></code></a> - Calculate the Jacobian matrix for 2D grid transformations</p></li>
+<li><p><a class="reference internal" href="api.html#jacobian3D" title="jacobian3D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">jacobian3D()</span></code></a> - Calculate the Jacobian matrix for 3D grid transformations</p></li>
+</ul>
+</section>
+<section id="utility-functions">
+<h2>Utility Functions<a class="headerlink" href="#utility-functions" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="api.html#amean" title="amean"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">amean()</span></code></a> - Returns the arithmetic mean for every two pairs in a column vector</p></li>
+<li><p><a class="reference internal" href="api.html#hmean" title="hmean"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">hmean()</span></code></a> - Returns the harmonic mean for every two pairs in a column vector</p></li>
+<li><p><a class="reference internal" href="api.html#weightsP" title="weightsP"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">weightsP()</span></code></a> - Returns the m+1 weights of P</p></li>
+<li><p><a class="reference internal" href="api.html#weightsP2D" title="weightsP2D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">weightsP2D()</span></code></a> - Returns the two-dimensional weights of P</p></li>
+<li><p><a class="reference internal" href="api.html#weightsQ" title="weightsQ"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">weightsQ()</span></code></a> - Returns the m+2 weights of Q</p></li>
+<li><p><a class="reference internal" href="api.html#weightsQ2D" title="weightsQ2D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">weightsQ2D()</span></code></a> - Returns the two-dimensional weights of Q</p></li>
+<li><p><a class="reference internal" href="api.html#rk4" title="rk4"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">rk4()</span></code></a> - Explicit Runge-Kutta 4th-order method</p></li>
+<li><p><a class="reference internal" href="api.html#curl2D" title="curl2D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">curl2D()</span></code></a> - Returns a two-dimensional mimetic curl operator</p></li>
+<li><p><a class="reference internal" href="api.html#DI2" title="DI2"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">DI2()</span></code></a> - Returns a 2D diagonal scaling matrix</p></li>
+<li><p><a class="reference internal" href="api.html#DI3" title="DI3"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">DI3()</span></code></a> - Returns a 3D diagonal scaling matrix</p></li>
+<li><p><a class="reference internal" href="api.html#GI1" title="GI1"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GI1()</span></code></a> - Returns a 1D geomeric interpretation matrix</p></li>
+<li><p><a class="reference internal" href="api.html#GI13" title="GI13"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GI13()</span></code></a> - Returns a 3D geometric interpretation matrix</p></li>
+<li><p><a class="reference internal" href="api.html#GI2" title="GI2"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">GI2()</span></code></a> - Returns a 2D geometric interpretation matrix</p></li>
+<li><p><a class="reference internal" href="api.html#mimeticB" title="mimeticB"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">mimeticB()</span></code></a> - Returns a m+2 by m+1 one-dimensional mimetic boundary operator</p></li>
+<li><p><a class="reference internal" href="api.html#tensorGrad2D" title="tensorGrad2D"><code class="xref mat mat-func docutils literal notranslate"><span class="pre">tensorGrad2D()</span></code></a> - Calculate tensor gradient in 2D</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index-beta.html" class="btn btn-neutral float-left" title="MOLE MATLAB/Octave Module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="MATLAB/Octave API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, CSRC SDSU.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

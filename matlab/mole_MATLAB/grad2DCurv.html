@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of grad2DCurv</title>
+  <meta name="keywords" content="grad2DCurv">
+  <meta name="description" content="Get the determinant of the jacobian and the metrics">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html mole_MATLAB -->
+<h1>grad2DCurv
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Get the determinant of the jacobian and the metrics</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function G = grad2DCurv(k, X, Y) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Get the determinant of the jacobian and the metrics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="GI2.html" class="code" title="function I = GI2(M, m, n, type)">GI2</a>	</li><li><a href="grad2D.html" class="code" title="function G = grad2D(k, m, dx, n, dy)">grad2D</a>	Returns a two-dimensional mimetic gradient operator</li><li><a href="jacobian2D.html" class="code" title="function [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y)">jacobian2D</a>	Returns:</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function G = grad2DCurv(k, X, Y)</a>
+0002     <span class="comment">% Get the determinant of the jacobian and the metrics</span>
+0003     [J, Xe, Xn, Ye, Yn] = <a href="jacobian2D.html" class="code" title="function [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y)">jacobian2D</a>(k, X, Y);
+0004     
+0005     <span class="comment">% Dimensions of nodal grid</span>
+0006     [n, m] = size(X);
+0007     
+0008     <span class="comment">% Make them surfaces so they can be interpolated</span>
+0009     J = reshape(J, m, n)';
+0010     Xe = reshape(Xe, m, n)';
+0011     Xn = reshape(Xn, m, n)';
+0012     Ye = reshape(Ye, m, n)';
+0013     Yn = reshape(Yn, m, n)';
+0014     
+0015     <span class="comment">% Logical grids</span>
+0016     [Xl, Yl] = meshgrid(1:m, 1:n);
+0017     
+0018     <span class="comment">% Interpolate the metrics on the logical grid for positions u and v</span>
+0019     Ju = interp2(Xl, Yl, J, (Xl(1:end-1, :)+Xl(2:<span class="keyword">end</span>, :))/2,<span class="keyword">...</span>
+0020                                             (Yl(1:end-1, :)+Yl(2:<span class="keyword">end</span>, :))/2);
+0021     Jv = interp2(Xl, Yl, J, (Xl(:, 1:end-1)+Xl(:, 2:end))/2,<span class="keyword">...</span>
+0022                                             (Yl(:, 1:end-1)+Yl(:, 2:end))/2);
+0023     Xev = interp2(Xl, Yl, Xe, (Xl(:, 1:end-1)+Xl(:, 2:end))/2,<span class="keyword">...</span>
+0024                                             (Yl(:, 1:end-1)+Yl(:, 2:end))/2);
+0025     Xnv = interp2(Xl, Yl, Xn, (Xl(:, 1:end-1)+Xl(:, 2:end))/2,<span class="keyword">...</span>
+0026                                             (Yl(:, 1:end-1)+Yl(:, 2:end))/2);
+0027     Yeu = interp2(Xl, Yl, Ye, (Xl(1:end-1, :)+Xl(2:<span class="keyword">end</span>, :))/2,<span class="keyword">...</span>
+0028                                             (Yl(1:end-1, :)+Yl(2:<span class="keyword">end</span>, :))/2);
+0029     Ynu = interp2(Xl, Yl, Yn, (Xl(1:end-1, :)+Xl(2:<span class="keyword">end</span>, :))/2,<span class="keyword">...</span>
+0030                                             (Yl(1:end-1, :)+Yl(2:<span class="keyword">end</span>, :))/2);
+0031     
+0032     <span class="comment">% Convert metrics to diagonal matrices so they can be multiplied by the</span>
+0033     <span class="comment">% logical operators</span>
+0034     Ju = spdiags(1./reshape(Ju', [], 1), 0, numel(Ju), numel(Ju));
+0035     Jv = spdiags(1./reshape(Jv', [], 1), 0, numel(Jv), numel(Jv));
+0036     Xev = spdiags(reshape(Xev', [], 1), 0, numel(Xev), numel(Xev));
+0037     Xnv = spdiags(reshape(Xnv', [], 1), 0, numel(Xnv), numel(Xnv));
+0038     Yeu = spdiags(reshape(Yeu', [], 1), 0, numel(Yeu), numel(Yeu));
+0039     Ynu = spdiags(reshape(Ynu', [], 1), 0, numel(Ynu), numel(Ynu));
+0040     
+0041     <span class="comment">% Construct 2D uniform mimetic gradient operator (d/de, d/dn)</span>
+0042     G = <a href="grad2D.html" class="code" title="function G = grad2D(k, m, dx, n, dy)">grad2D</a>(k, m-1, 1, n-1, 1);
+0043     Ge = G(1:m*(n-1), :);
+0044     Gn = G(m*(n-1)+1:<span class="keyword">end</span>, :);
+0045     
+0046     <span class="comment">% Apply transformation</span>
+0047     Gx = Ju*(Ynu*Ge-Yeu*<a href="GI2.html" class="code" title="function I = GI2(M, m, n, type)">GI2</a>(Gn, m-1, n-1, <span class="string">'Gn'</span>));
+0048     Gy = Jv*(-Xnv*<a href="GI2.html" class="code" title="function I = GI2(M, m, n, type)">GI2</a>(Ge, m-1, n-1, <span class="string">'Ge'</span>)+Xev*Gn);
+0049     
+0050     <span class="comment">% Final 2D curvilinear mimetic gradient operator (d/dx, d/dy)</span>
+0051     G = [Gx; Gy];
+0052 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 27-Jan-2021 14:29:32 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

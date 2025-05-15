@@ -1,0 +1,792 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Operators &mdash; MOLE 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+      <script src="../../_static/jquery.js"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+      <script src="../../_static/doctools.js"></script>
+      <script src="../../_static/sphinx_highlight.js"></script>
+      <script src="../../_static/mathconf.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Boundary Conditions" href="boundary.html" />
+    <link rel="prev" title="MOLE C++ API Reference" href="index.html" />
+ 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const headers = document.querySelectorAll('.collapsible-header');
+    
+    headers.forEach(header => {
+      header.addEventListener('click', function() {
+        this.classList.toggle('active');
+        const content = this.nextElementSibling;
+        if (content.style.display === 'block') {
+          content.style.display = 'none';
+        } else {
+          content.style.display = 'block';
+        }
+      });
+    });
+  });
+</script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intros/introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/introduction.html#licensing">Licensing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/introduction.html#community-guidelines">Community Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/introduction.html#citations">Citations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../intros/gettingstarted.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/gettingstarted.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/gettingstarted.html#package-installation-by-os">Package Installation by OS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/gettingstarted.html#ubuntu-debian-systems">Ubuntu/Debian Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/gettingstarted.html#macos-systems">macOS Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/gettingstarted.html#rhel-centos-fedora-systems">RHEL/CentOS/Fedora Systems</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/gettingstarted.html#building-and-installing">Building and Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/gettingstarted.html#testing">Testing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/gettingstarted.html#c">C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/gettingstarted.html#matlab-octave">MATLAB/Octave</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/gettingstarted.html#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/gettingstarted.html#id1">C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/gettingstarted.html#matlab-octave-examples">MATLAB/Octave Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/gettingstarted.html#quick-start-examples">Quick Start Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/gettingstarted.html#c-example">C++ Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/gettingstarted.html#matlab-octave-example">MATLAB/Octave Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/gettingstarted.html#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/gettingstarted.html#licensing">Licensing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../intros/doc_readme_wrapper.html">Building Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/doc_readme_wrapper.html#documentation-structure">Documentation Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/doc_readme_wrapper.html#building-documentation">️Building Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/doc_readme_wrapper.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/doc_readme_wrapper.html#building-steps">Building Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/doc_readme_wrapper.html#pdf-generation-process">PDF Generation Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../intros/doc_readme_wrapper.html#image-handling">Image Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/doc_readme_wrapper.html#development-workflow">Development Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/doc_readme_wrapper.html#documentation-standards">Documentation Standards</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">C++</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#overview">Overview</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#class-structure">Class Structure</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="boundary.html">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html">Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../matlab/index-beta.html">Matlab/ Octave</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../matlab/matlab_index.html">MATLAB/Octave Function Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../matlab/matlab_index.html#gradient-operators">Gradient Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../matlab/matlab_index.html#divergence-operators">Divergence Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../matlab/matlab_index.html#laplacian-operators">Laplacian Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../matlab/matlab_index.html#nodal-operators">Nodal Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../matlab/matlab_index.html#interpolation-functions">Interpolation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../matlab/matlab_index.html#boundary-conditions">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../matlab/matlab_index.html#grid-and-transformation-functions">Grid and Transformation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../matlab/matlab_index.html#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../matlab/api.html">MATLAB/Octave API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../matlab/api.html#differential-operators">Differential Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../matlab/api.html#interpolation-functions">Interpolation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../matlab/api.html#boundary-conditions">Boundary Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../matlab/api.html#grid-generation-and-transformation">Grid Generation and Transformation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../matlab/api.html#mimetic-weights">Mimetic Weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../matlab/api.html#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Mathematical Framework</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../math_functions/index.html">Mathematical Functions Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../math_functions/CSRCReportOnMOLE.html">CSRC Report on MOLE Library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/CSRCReportOnMOLE.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/CSRCReportOnMOLE.html#on-the-mathematics">On the Mathematics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../math_functions/CSRCReportOnMOLE.html#staggered-grids">Staggered Grids</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/CSRCReportOnMOLE.html#using-the-operators">Using the Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/CSRCReportOnMOLE.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../math_functions/StaggeredGrids.html">Why Staggered Grids?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/StaggeredGrids.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/StaggeredGrids.html#justification">Justification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/StaggeredGrids.html#checkerboard-pressure-fields">Checkerboard pressure fields</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/StaggeredGrids.html#staggered-grids">Staggered grids</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/StaggeredGrids.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../math_functions/Jacobian.html">Jacobian</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/Jacobian.html#introduction">Introduction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../math_functions/NonUniformGradAndDiv.html">Non-Uniform Gradient and Divergence Operators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../math_functions/NonUniformGradAndDiv.html#introduction">Introduction</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/README.html">MOLE Examples Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/examples.html">MOLE Library Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/examples.html#elliptic-equations">Elliptic Equations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/examples.html#hyperbolic">Hyperbolic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/examples.html#parabolic-equations">Parabolic Equations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/cpp/README.html">C++ Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/matlab/compact_operators/README.html">MATLAB Compact Operators</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intros/contributing_wrapper.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/contributing_wrapper.html#id1">1. Contributing to MOLE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/contributing_wrapper.html#reporting-issues-or-problems">2. Reporting Issues or Problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/contributing_wrapper.html#seeking-support">3. Seeking Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../intros/code_of_conduct_wrapper.html">Code of Conduct</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/code_of_conduct_wrapper.html#our-pledge">Our Pledge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/code_of_conduct_wrapper.html#our-standards">Our Standards</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/code_of_conduct_wrapper.html#our-responsibilities">Our Responsibilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/code_of_conduct_wrapper.html#scope">Scope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/code_of_conduct_wrapper.html#enforcement">Enforcement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intros/code_of_conduct_wrapper.html#attribution">Attribution</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MOLE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">MOLE C++ API Reference</a></li>
+      <li class="breadcrumb-item active">Operators</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/cpp/operators.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="operators">
+<h1>Operators<a class="headerlink" href="#operators" title="Permalink to this heading"></a></h1>
+<p>MOLE provides a comprehensive set of mimetic operators for numerical computations. These operators are designed to preserve important mathematical properties of the continuous operators they approximate.</p>
+<section id="gradient-operator">
+<h2>Gradient Operator<a class="headerlink" href="#gradient-operator" title="Permalink to this heading"></a></h2>
+<p>The Gradient operator computes the gradient of a scalar field in the MOLE library.</p>
+<!-- ### Mathematical Background -->
+<!-- TODO: Add mathematical background, principles, and mimetic properties -->
+<section id="api-reference">
+<h3>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this heading"></a></h3>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv48Gradient">
+<span id="_CPPv38Gradient"></span><span id="_CPPv28Gradient"></span><span id="Gradient"></span><span class="target" id="classGradient"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Gradient</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">sp_mat</span></span><a class="headerlink" href="#_CPPv48Gradient" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Mimetic <a class="reference internal" href="#classGradient"><span class="std std-ref">Gradient</span></a> operator. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8Gradient8GradientE3u163u324Real">
+<span id="_CPPv3N8Gradient8GradientE3u163u324Real"></span><span id="_CPPv2N8Gradient8GradientE3u163u324Real"></span><span id="Gradient::Gradient__u16.u32.Real"></span><span class="target" id="classGradient_1a8204a9fe5d8befed006900edd35b68c4"></span><span class="sig-name descname"><span class="n"><span class="pre">Gradient</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">u16</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dx</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Gradient8GradientE3u163u324Real" title="Permalink to this definition"></a><br /></dt>
+<dd><p>1-D Mimetic <a class="reference internal" href="#classGradient"><span class="std std-ref">Gradient</span></a> Constructor </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> – Order of accuracy </p></li>
+<li><p><strong>m</strong> – Number of cells </p></li>
+<li><p><strong>dx</strong> – Spacing between cells </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8Gradient8GradientE3u163u323u324Real4Real">
+<span id="_CPPv3N8Gradient8GradientE3u163u323u324Real4Real"></span><span id="_CPPv2N8Gradient8GradientE3u163u323u324Real4Real"></span><span id="Gradient::Gradient__u16.u32.u32.Real.Real"></span><span class="target" id="classGradient_1aa11106a1359db938b1f19f2dd3f2347e"></span><span class="sig-name descname"><span class="n"><span class="pre">Gradient</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">u16</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dx</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dy</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Gradient8GradientE3u163u323u324Real4Real" title="Permalink to this definition"></a><br /></dt>
+<dd><p>2-D Mimetic <a class="reference internal" href="#classGradient"><span class="std std-ref">Gradient</span></a> Constructor </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> – Order of accuracy </p></li>
+<li><p><strong>m</strong> – Number of cells in x-direction </p></li>
+<li><p><strong>n</strong> – Number of cells in y-direction </p></li>
+<li><p><strong>dx</strong> – Spacing between cells in x-direction </p></li>
+<li><p><strong>dy</strong> – Spacing between cells in y-direction </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8Gradient8GradientE3u163u323u323u324Real4Real4Real">
+<span id="_CPPv3N8Gradient8GradientE3u163u323u323u324Real4Real4Real"></span><span id="_CPPv2N8Gradient8GradientE3u163u323u323u324Real4Real4Real"></span><span id="Gradient::Gradient__u16.u32.u32.u32.Real.Real.Real"></span><span class="target" id="classGradient_1a69aa8ea8edca7baed115cec4e2e6317d"></span><span class="sig-name descname"><span class="n"><span class="pre">Gradient</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">u16</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">o</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dx</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dy</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dz</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Gradient8GradientE3u163u323u323u324Real4Real4Real" title="Permalink to this definition"></a><br /></dt>
+<dd><p>3-D Mimetic <a class="reference internal" href="#classGradient"><span class="std std-ref">Gradient</span></a> Constructor </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> – Order of accuracy </p></li>
+<li><p><strong>m</strong> – Number of cells in x-direction </p></li>
+<li><p><strong>n</strong> – Number of cells in y-direction </p></li>
+<li><p><strong>o</strong> – Number of cells in z-direction </p></li>
+<li><p><strong>dx</strong> – Spacing between cells in x-direction </p></li>
+<li><p><strong>dy</strong> – Spacing between cells in y-direction </p></li>
+<li><p><strong>dz</strong> – Spacing between cells in z-direction </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8Gradient4getPEv">
+<span id="_CPPv3N8Gradient4getPEv"></span><span id="_CPPv2N8Gradient4getPEv"></span><span id="Gradient::getP"></span><span class="target" id="classGradient_1a6099174246fa7784d9702b5cf26694d7"></span><span class="n"><span class="pre">vec</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getP</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Gradient4getPEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Returns the weights used in the Mimeitc <a class="reference internal" href="#classGradient"><span class="std std-ref">Gradient</span></a> Operators. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>for informational purposes only, can be used in constructing new operators. </p>
+</div>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+<section id="divergence-operator">
+<h2>Divergence Operator<a class="headerlink" href="#divergence-operator" title="Permalink to this heading"></a></h2>
+<p>The Divergence operator computes the divergence of a vector field in the MOLE library.</p>
+<!-- ### Mathematical Background -->
+<!-- TODO: Add mathematical background, principles, and mimetic properties -->
+<section id="id1">
+<h3>API Reference<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv410Divergence">
+<span id="_CPPv310Divergence"></span><span id="_CPPv210Divergence"></span><span id="Divergence"></span><span class="target" id="classDivergence"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Divergence</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">sp_mat</span></span><a class="headerlink" href="#_CPPv410Divergence" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Mimetic <a class="reference internal" href="#classDivergence"><span class="std std-ref">Divergence</span></a> operator. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10Divergence10DivergenceE3u163u324Real">
+<span id="_CPPv3N10Divergence10DivergenceE3u163u324Real"></span><span id="_CPPv2N10Divergence10DivergenceE3u163u324Real"></span><span id="Divergence::Divergence__u16.u32.Real"></span><span class="target" id="classDivergence_1a9b42c5cfa0067fc9bae525d20e0ef75b"></span><span class="sig-name descname"><span class="n"><span class="pre">Divergence</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">u16</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dx</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10Divergence10DivergenceE3u163u324Real" title="Permalink to this definition"></a><br /></dt>
+<dd><p>1-D Mimetic <a class="reference internal" href="#classDivergence"><span class="std std-ref">Divergence</span></a> Constructor </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> – Order of accuracy </p></li>
+<li><p><strong>m</strong> – Number of cells </p></li>
+<li><p><strong>dx</strong> – Spacing between cells </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10Divergence10DivergenceE3u163u323u324Real4Real">
+<span id="_CPPv3N10Divergence10DivergenceE3u163u323u324Real4Real"></span><span id="_CPPv2N10Divergence10DivergenceE3u163u323u324Real4Real"></span><span id="Divergence::Divergence__u16.u32.u32.Real.Real"></span><span class="target" id="classDivergence_1a2595df5ef9d63e852f47cd7c0097ded8"></span><span class="sig-name descname"><span class="n"><span class="pre">Divergence</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">u16</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dx</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dy</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10Divergence10DivergenceE3u163u323u324Real4Real" title="Permalink to this definition"></a><br /></dt>
+<dd><p>2-D Mimetic <a class="reference internal" href="#classDivergence"><span class="std std-ref">Divergence</span></a> Constructor </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> – Order of accuracy </p></li>
+<li><p><strong>m</strong> – Number of cells in x-direction </p></li>
+<li><p><strong>n</strong> – Number of cells in y-direction </p></li>
+<li><p><strong>dx</strong> – Spacing between cells in x-direction </p></li>
+<li><p><strong>dy</strong> – Spacing between cells in y-direction </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10Divergence10DivergenceE3u163u323u323u324Real4Real4Real">
+<span id="_CPPv3N10Divergence10DivergenceE3u163u323u323u324Real4Real4Real"></span><span id="_CPPv2N10Divergence10DivergenceE3u163u323u323u324Real4Real4Real"></span><span id="Divergence::Divergence__u16.u32.u32.u32.Real.Real.Real"></span><span class="target" id="classDivergence_1a82c536fd470b56a1017ffebadbdbc315"></span><span class="sig-name descname"><span class="n"><span class="pre">Divergence</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">u16</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">o</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dx</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dy</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dz</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10Divergence10DivergenceE3u163u323u323u324Real4Real4Real" title="Permalink to this definition"></a><br /></dt>
+<dd><p>3-D Mimetic <a class="reference internal" href="#classDivergence"><span class="std std-ref">Divergence</span></a> Constructor </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> – Order of accuracy </p></li>
+<li><p><strong>m</strong> – Number of cells in x-direction </p></li>
+<li><p><strong>n</strong> – Number of cells in y-direction </p></li>
+<li><p><strong>o</strong> – Number of cells in z-direction </p></li>
+<li><p><strong>dx</strong> – Spacing between cells in x-direction </p></li>
+<li><p><strong>dy</strong> – Spacing between cells in y-direction </p></li>
+<li><p><strong>dz</strong> – Spacing between cells in z-direction </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10Divergence4getQEv">
+<span id="_CPPv3N10Divergence4getQEv"></span><span id="_CPPv2N10Divergence4getQEv"></span><span id="Divergence::getQ"></span><span class="target" id="classDivergence_1a9ab0da6ee16064012c164592648e66c5"></span><span class="n"><span class="pre">vec</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getQ</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10Divergence4getQEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Returns the weights used in the Mimeitc <a class="reference internal" href="#classDivergence"><span class="std std-ref">Divergence</span></a> Operators. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>for informational purposes only, can be used in constructing new operators. </p>
+</div>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+<section id="laplacian-operator">
+<h2>Laplacian Operator<a class="headerlink" href="#laplacian-operator" title="Permalink to this heading"></a></h2>
+<p>The Laplacian operator computes the Laplacian of a scalar field in the MOLE library.</p>
+<!-- ### Mathematical Background -->
+<!-- TODO: Add mathematical background, principles, and mimetic properties -->
+<section id="id2">
+<h3>API Reference<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv49Laplacian">
+<span id="_CPPv39Laplacian"></span><span id="_CPPv29Laplacian"></span><span id="Laplacian"></span><span class="target" id="classLaplacian"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Laplacian</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">sp_mat</span></span><a class="headerlink" href="#_CPPv49Laplacian" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Mimetic <a class="reference internal" href="#classLaplacian"><span class="std std-ref">Laplacian</span></a> operator. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9Laplacian9LaplacianE3u163u324Real">
+<span id="_CPPv3N9Laplacian9LaplacianE3u163u324Real"></span><span id="_CPPv2N9Laplacian9LaplacianE3u163u324Real"></span><span id="Laplacian::Laplacian__u16.u32.Real"></span><span class="target" id="classLaplacian_1a93f5709f140e54cfb5e5b1060fb3c304"></span><span class="sig-name descname"><span class="n"><span class="pre">Laplacian</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">u16</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dx</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Laplacian9LaplacianE3u163u324Real" title="Permalink to this definition"></a><br /></dt>
+<dd><p>1-D Mimetic <a class="reference internal" href="#classLaplacian"><span class="std std-ref">Laplacian</span></a> Constructor </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> – Order of accuracy </p></li>
+<li><p><strong>m</strong> – Number of cells </p></li>
+<li><p><strong>dx</strong> – Spacing between cells </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9Laplacian9LaplacianE3u163u323u324Real4Real">
+<span id="_CPPv3N9Laplacian9LaplacianE3u163u323u324Real4Real"></span><span id="_CPPv2N9Laplacian9LaplacianE3u163u323u324Real4Real"></span><span id="Laplacian::Laplacian__u16.u32.u32.Real.Real"></span><span class="target" id="classLaplacian_1a3d7e3fbdacb97048d2f05045b0ad7db1"></span><span class="sig-name descname"><span class="n"><span class="pre">Laplacian</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">u16</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dx</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dy</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Laplacian9LaplacianE3u163u323u324Real4Real" title="Permalink to this definition"></a><br /></dt>
+<dd><p>2-D Mimetic <a class="reference internal" href="#classLaplacian"><span class="std std-ref">Laplacian</span></a> Constructor </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> – Order of accuracy </p></li>
+<li><p><strong>m</strong> – Number of cells in x-direction </p></li>
+<li><p><strong>n</strong> – Number of cells in y-direction </p></li>
+<li><p><strong>dx</strong> – Spacing between cells in x-direction </p></li>
+<li><p><strong>dy</strong> – Spacing between cells in y-direction </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9Laplacian9LaplacianE3u163u323u323u324Real4Real4Real">
+<span id="_CPPv3N9Laplacian9LaplacianE3u163u323u323u324Real4Real4Real"></span><span id="_CPPv2N9Laplacian9LaplacianE3u163u323u323u324Real4Real4Real"></span><span id="Laplacian::Laplacian__u16.u32.u32.u32.Real.Real.Real"></span><span class="target" id="classLaplacian_1a0de6529680231ec75a13b9ec4ab58a40"></span><span class="sig-name descname"><span class="n"><span class="pre">Laplacian</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">u16</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">o</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dx</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dy</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dz</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Laplacian9LaplacianE3u163u323u323u324Real4Real4Real" title="Permalink to this definition"></a><br /></dt>
+<dd><p>3-D Mimetic <a class="reference internal" href="#classLaplacian"><span class="std std-ref">Laplacian</span></a> Constructor </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> – Order of accuracy </p></li>
+<li><p><strong>m</strong> – Number of cells in x-direction </p></li>
+<li><p><strong>n</strong> – Number of cells in y-direction </p></li>
+<li><p><strong>o</strong> – Number of cells in z-direction </p></li>
+<li><p><strong>dx</strong> – Spacing between cells in x-direction </p></li>
+<li><p><strong>dy</strong> – Spacing between cells in y-direction </p></li>
+<li><p><strong>dz</strong> – Spacing between cells in z-direction </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+<section id="interpolation-operator">
+<h2>Interpolation Operator<a class="headerlink" href="#interpolation-operator" title="Permalink to this heading"></a></h2>
+<p>The Interpol class performs interpolation operations in the MOLE library.</p>
+<!-- ### Mathematical Background -->
+<!-- TODO: Add mathematical background, principles, and mimetic properties -->
+<section id="id3">
+<h3>API Reference<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv48Interpol">
+<span id="_CPPv38Interpol"></span><span id="_CPPv28Interpol"></span><span id="Interpol"></span><span class="target" id="classInterpol"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Interpol</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">sp_mat</span></span><a class="headerlink" href="#_CPPv48Interpol" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Mimetic Interpolator operator. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8Interpol8InterpolE3u324Real">
+<span id="_CPPv3N8Interpol8InterpolE3u324Real"></span><span id="_CPPv2N8Interpol8InterpolE3u324Real"></span><span id="Interpol::Interpol__u32.Real"></span><span class="target" id="classInterpol_1a1a3cbc8871f096a37b1e859bdee5d788"></span><span class="sig-name descname"><span class="n"><span class="pre">Interpol</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">c</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Interpol8InterpolE3u324Real" title="Permalink to this definition"></a><br /></dt>
+<dd><p>1-D Mimetic Interpolator Constructor </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m</strong> – Number of cells </p></li>
+<li><p><strong>c</strong> – Weight for ends, can be any value from 0.0&lt;=c&lt;=1.0 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8Interpol8InterpolE3u323u324Real4Real">
+<span id="_CPPv3N8Interpol8InterpolE3u323u324Real4Real"></span><span id="_CPPv2N8Interpol8InterpolE3u323u324Real4Real"></span><span id="Interpol::Interpol__u32.u32.Real.Real"></span><span class="target" id="classInterpol_1a54ae1f315bdaa0eba8176a1ac3756238"></span><span class="sig-name descname"><span class="n"><span class="pre">Interpol</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">c1</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">c2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Interpol8InterpolE3u323u324Real4Real" title="Permalink to this definition"></a><br /></dt>
+<dd><p>2-D Mimetic Interpolator Constructor </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m</strong> – Number of cells in x-direction </p></li>
+<li><p><strong>n</strong> – Number of cells in y-direction </p></li>
+<li><p><strong>c1</strong> – Weight for ends in x-direction, can be any value from 0.0&lt;=c&lt;=1.0 </p></li>
+<li><p><strong>c2</strong> – Weight for ends in y-direction, can be any value from 0.0&lt;=c&lt;=1.0 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8Interpol8InterpolE3u323u323u324Real4Real4Real">
+<span id="_CPPv3N8Interpol8InterpolE3u323u323u324Real4Real4Real"></span><span id="_CPPv2N8Interpol8InterpolE3u323u323u324Real4Real4Real"></span><span id="Interpol::Interpol__u32.u32.u32.Real.Real.Real"></span><span class="target" id="classInterpol_1a55d895e0f5f190b24bc4a9d9695bcd69"></span><span class="sig-name descname"><span class="n"><span class="pre">Interpol</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">o</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">c1</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">c2</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">c3</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Interpol8InterpolE3u323u323u324Real4Real4Real" title="Permalink to this definition"></a><br /></dt>
+<dd><p>3-D Mimetic Interpolator Constructor </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m</strong> – Number of cells in x-direction </p></li>
+<li><p><strong>n</strong> – Number of cells in y-direction </p></li>
+<li><p><strong>o</strong> – Number of cells in z-direction </p></li>
+<li><p><strong>c1</strong> – Weight for ends in x-direction, can be any value from 0.0&lt;=c&lt;=1.0 </p></li>
+<li><p><strong>c2</strong> – Weight for ends in y-direction, can be any value from 0.0&lt;=c&lt;=1.0 </p></li>
+<li><p><strong>c3</strong> – Weight for ends in z-direction, can be any value from 0.0&lt;=c&lt;=1.0 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8Interpol8InterpolEb3u324Real">
+<span id="_CPPv3N8Interpol8InterpolEb3u324Real"></span><span id="_CPPv2N8Interpol8InterpolEb3u324Real"></span><span id="Interpol::Interpol__b.u32.Real"></span><span class="target" id="classInterpol_1acd04ad5e9add7dccfba468aa4cc821c0"></span><span class="sig-name descname"><span class="n"><span class="pre">Interpol</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">c</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Interpol8InterpolEb3u324Real" title="Permalink to this definition"></a><br /></dt>
+<dd><p>1-D Mimetic Interpolator Constructor </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> – Dummy holder to trigger overloaded function </p></li>
+<li><p><strong>m</strong> – Number of cells </p></li>
+<li><p><strong>c</strong> – Weight for ends, can be any value from 0.0&lt;=c&lt;=1.0 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8Interpol8InterpolEb3u323u324Real4Real">
+<span id="_CPPv3N8Interpol8InterpolEb3u323u324Real4Real"></span><span id="_CPPv2N8Interpol8InterpolEb3u323u324Real4Real"></span><span id="Interpol::Interpol__b.u32.u32.Real.Real"></span><span class="target" id="classInterpol_1a2efc6e31bcfbd0cac9b1a66b82823491"></span><span class="sig-name descname"><span class="n"><span class="pre">Interpol</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">c1</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">c2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Interpol8InterpolEb3u323u324Real4Real" title="Permalink to this definition"></a><br /></dt>
+<dd><p>2-D Mimetic Interpolator Constructor </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> – Dummy holder to trigger overloaded function </p></li>
+<li><p><strong>m</strong> – Number of cells in x-direction </p></li>
+<li><p><strong>n</strong> – Number of cells in y-direction </p></li>
+<li><p><strong>c1</strong> – Weight for ends in x-direction, can be any value from 0.0&lt;=c&lt;=1.0 </p></li>
+<li><p><strong>c2</strong> – Weight for ends in y-direction, can be any value from 0.0&lt;=c&lt;=1.0 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8Interpol8InterpolEb3u323u323u324Real4Real4Real">
+<span id="_CPPv3N8Interpol8InterpolEb3u323u323u324Real4Real4Real"></span><span id="_CPPv2N8Interpol8InterpolEb3u323u323u324Real4Real4Real"></span><span id="Interpol::Interpol__b.u32.u32.u32.Real.Real.Real"></span><span class="target" id="classInterpol_1a17290c4b037be2725c164516c309b823"></span><span class="sig-name descname"><span class="n"><span class="pre">Interpol</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">o</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">c1</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">c2</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">c3</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8Interpol8InterpolEb3u323u323u324Real4Real4Real" title="Permalink to this definition"></a><br /></dt>
+<dd><p>3-D Mimetic Interpolator Constructor </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> – Dummy holder to trigger overloaded function </p></li>
+<li><p><strong>m</strong> – Number of cells in x-direction </p></li>
+<li><p><strong>n</strong> – Number of cells in y-direction </p></li>
+<li><p><strong>o</strong> – Number of cells in z-direction </p></li>
+<li><p><strong>c1</strong> – Weight for ends in x-direction, can be any value from 0.0&lt;=c&lt;=1.0 </p></li>
+<li><p><strong>c2</strong> – Weight for ends in y-direction, can be any value from 0.0&lt;=c&lt;=1.0 </p></li>
+<li><p><strong>c3</strong> – Weight for ends in z-direction, can be any value from 0.0&lt;=c&lt;=1.0 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+<section id="usage-examples">
+<h2>Usage Examples<a class="headerlink" href="#usage-examples" title="Permalink to this heading"></a></h2>
+<section id="transport-example-gradient-divergence">
+<h3>Transport Example (Gradient &amp; Divergence)<a class="headerlink" href="#transport-example-gradient-divergence" title="Permalink to this heading"></a></h3>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Transport 1D Example using Gradient and Divergence (examples/cpp/transport1D.cpp)</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cm">/**</span>
+<span class="linenos"> 2</span><span class="cm"> * This example uses MOLE to solve the 1D advection-reaction-dispersion</span>
+<span class="linenos"> 3</span><span class="cm"> * equation:</span>
+<span class="linenos"> 4</span><span class="cm"> * https://wwwbrr.cr.usgs.gov/projects/GWC_coupled/phreeqc/html/final-22.html</span>
+<span class="linenos"> 5</span><span class="cm"> */</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;mole.h&quot;</span>
+<span class="linenos"> 8</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">             </span><span class="c1">// Operators&#39; order of accuracy</span>
+<span class="linenos">13</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">            </span><span class="c1">// Left boundary</span>
+<span class="linenos">14</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">130</span><span class="p">;</span><span class="w">          </span><span class="c1">// Right boundary</span>
+<span class="linenos">15</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">26</span><span class="p">;</span><span class="w">            </span><span class="c1">// Number of cells</span>
+<span class="linenos">16</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">m</span><span class="p">;</span><span class="w"> </span><span class="c1">// Cell&#39;s width [m]</span>
+<span class="linenos">17</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w">            </span><span class="c1">// Simulation time [years]</span>
+<span class="linenos">18</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">208</span><span class="p">;</span><span class="w">        </span><span class="c1">// Number of iterations</span>
+<span class="linenos">19</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">iter</span><span class="p">;</span><span class="w">    </span><span class="c1">// Time step</span>
+<span class="linenos">20</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">dis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w">          </span><span class="c1">// Dispersivity [m]</span>
+<span class="linenos">21</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">vel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">15</span><span class="p">;</span><span class="w">         </span><span class="c1">// Pore-water flow velocity [m/year]</span>
+<span class="linenos">22</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.5</span><span class="p">;</span><span class="w">          </span><span class="c1">// Retardation (Cl^- = 1, Na^+ = 2.5)</span>
+<span class="linenos">23</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">C0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">           </span><span class="c1">// Displacing solution concentration [mmol/kgw]</span>
+<span class="linenos">24</span>
+<span class="linenos">25</span><span class="w">  </span><span class="c1">// Get 1D mimetic operators</span>
+<span class="linenos">26</span><span class="w">  </span><span class="n">Gradient</span><span class="w"> </span><span class="n">G</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">dx</span><span class="p">);</span>
+<span class="linenos">27</span><span class="w">  </span><span class="n">Divergence</span><span class="w"> </span><span class="n">D</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">dx</span><span class="p">);</span>
+<span class="linenos">28</span><span class="w">  </span><span class="n">Interpol</span><span class="w"> </span><span class="n">I</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">);</span>
+<span class="linenos">29</span>
+<span class="linenos">30</span><span class="w">  </span><span class="c1">// Allocate fields</span>
+<span class="linenos">31</span><span class="w">  </span><span class="n">vec</span><span class="w"> </span><span class="n">C</span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="c1">// Scalar field (concentrations)</span>
+<span class="linenos">32</span><span class="w">  </span><span class="n">vec</span><span class="w"> </span><span class="n">V</span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// Vector field (velocities)</span>
+<span class="linenos">33</span>
+<span class="linenos">34</span><span class="w">  </span><span class="c1">// Impose initial conditions</span>
+<span class="linenos">35</span><span class="w">  </span><span class="n">C</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">C0</span><span class="p">;</span>
+<span class="linenos">36</span><span class="w">  </span><span class="n">V</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">vel</span><span class="p">);</span>
+<span class="linenos">37</span>
+<span class="linenos">38</span><span class="w">  </span><span class="c1">// Hydrodynamic dispersion coefficient [m^2/year]</span>
+<span class="linenos">39</span><span class="w">  </span><span class="n">dis</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="n">vel</span><span class="p">;</span><span class="w"> </span><span class="c1">// 75</span>
+<span class="linenos">40</span>
+<span class="linenos">41</span><span class="w">  </span><span class="c1">// dt = dt/R (retardation)</span>
+<span class="linenos">42</span><span class="w">  </span><span class="n">dt</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">R</span><span class="p">;</span>
+<span class="linenos">43</span>
+<span class="linenos">44</span><span class="w">  </span><span class="c1">// Time integration loop</span>
+<span class="linenos">45</span><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">iter</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">46</span>
+<span class="linenos">47</span><span class="w">    </span><span class="c1">// First-order forward-time scheme</span>
+<span class="linenos">48</span><span class="w">    </span><span class="n">C</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">dis</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">G</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">C</span><span class="p">))</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">V</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="p">(</span><span class="n">I</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">C</span><span class="p">)));</span>
+<span class="linenos">49</span>
+<span class="linenos">50</span><span class="w">    </span><span class="c1">// Right boundary condition (reflection)</span>
+<span class="linenos">51</span><span class="w">    </span><span class="n">C</span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">C</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
+<span class="linenos">52</span><span class="w">  </span><span class="p">}</span>
+<span class="linenos">53</span>
+<span class="linenos">54</span><span class="w">  </span><span class="c1">// Spit out the new concentrations!</span>
+<span class="linenos">55</span><span class="w">  </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">C</span><span class="p">;</span>
+<span class="linenos">56</span>
+<span class="linenos">57</span><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">58</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="elliptic-example-laplacian">
+<h3>Elliptic Example (Laplacian)<a class="headerlink" href="#elliptic-example-laplacian" title="Permalink to this heading"></a></h3>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Elliptic 2D Example using Laplacian (examples/cpp/elliptic2D.cpp)</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cm">/**</span>
+<span class="linenos"> 2</span><span class="cm"> * This example uses MOLE to solve a 2D BVP</span>
+<span class="linenos"> 3</span><span class="cm"> * It is the equivalent to examples_MATLAB/minimal_poisson2D.m</span>
+<span class="linenos"> 4</span><span class="cm"> * The output can be plotted via:</span>
+<span class="linenos"> 5</span><span class="cm"> * gnuplot&gt; plot &#39;solution&#39; matrix with image</span>
+<span class="linenos"> 6</span><span class="cm"> */</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;mole.h&quot;</span>
+<span class="linenos"> 9</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">12</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="c1">// Operators&#39; order of accuracy</span>
+<span class="linenos">13</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span><span class="p">;</span><span class="w"> </span><span class="c1">// Vertical resolution</span>
+<span class="linenos">14</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span><span class="p">;</span><span class="w"> </span><span class="c1">// Horizontal resolution</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="w">  </span><span class="c1">// Get mimetic operators</span>
+<span class="linenos">17</span><span class="w">  </span><span class="n">Laplacian</span><span class="w"> </span><span class="n">L</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="linenos">18</span><span class="w">  </span><span class="n">RobinBC</span><span class="w"> </span><span class="n">BC</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">// Dirichlet BC</span>
+<span class="linenos">19</span><span class="w">  </span><span class="n">L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">L</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">BC</span><span class="p">;</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="w">  </span><span class="c1">// Build RHS for system of equations</span>
+<span class="linenos">22</span><span class="w">  </span><span class="n">mat</span><span class="w"> </span><span class="n">rhs</span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="o">::</span><span class="n">zeros</span><span class="p">);</span>
+<span class="linenos">23</span><span class="w">  </span><span class="n">rhs</span><span class="p">.</span><span class="n">row</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="c1">// Known value at the bottom boundary</span>
+<span class="linenos">24</span>
+<span class="linenos">25</span><span class="w">  </span><span class="c1">// Solve the system of linear equations</span>
+<span class="linenos">26</span><span class="cp">#ifdef EIGEN</span>
+<span class="linenos">27</span><span class="w">  </span><span class="c1">// Use Eigen only if SuperLU (faster) is not available</span>
+<span class="linenos">28</span><span class="w">  </span><span class="n">vec</span><span class="w"> </span><span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Utils</span><span class="o">::</span><span class="n">spsolve_eigen</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="w"> </span><span class="n">vectorise</span><span class="p">(</span><span class="n">rhs</span><span class="p">));</span>
+<span class="linenos">29</span><span class="cp">#else</span>
+<span class="linenos">30</span><span class="w">  </span><span class="n">vec</span><span class="w"> </span><span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spsolve</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="w"> </span><span class="n">vectorise</span><span class="p">(</span><span class="n">rhs</span><span class="p">));</span><span class="w"> </span><span class="c1">// Will use SuperLU</span>
+<span class="linenos">31</span><span class="cp">#endif</span>
+<span class="linenos">32</span>
+<span class="linenos">33</span><span class="w">  </span><span class="c1">// Print out the solution</span>
+<span class="linenos">34</span><span class="w">  </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">reshape</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+<span class="linenos">35</span>
+<span class="linenos">36</span><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">37</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="schrodinger-example-complex-operators">
+<h3>Schrödinger Example (Complex Operators)<a class="headerlink" href="#schrodinger-example-complex-operators" title="Permalink to this heading"></a></h3>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">Schrödinger 1D Example (examples/cpp/schrodinger1D.cpp)</span><a class="headerlink" href="#id6" title="Permalink to this code"></a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cm">/**</span>
+<span class="linenos"> 2</span><span class="cm"> * This example uses MOLE to solve the 1D Schrodinger equation</span>
+<span class="linenos"> 3</span><span class="cm"> */</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;mole.h&quot;</span>
+<span class="linenos"> 6</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;algorithm&gt;</span>
+<span class="linenos"> 7</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w">   </span><span class="c1">// Operators&#39; order of accuracy</span>
+<span class="linenos">12</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-5</span><span class="p">;</span><span class="w"> </span><span class="c1">// Left boundary</span>
+<span class="linenos">13</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w">  </span><span class="c1">// Right boundary</span>
+<span class="linenos">14</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">500</span><span class="p">;</span><span class="w"> </span><span class="c1">// Number of cells</span>
+<span class="linenos">15</span><span class="w">  </span><span class="n">vec</span><span class="w"> </span><span class="n">grid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">linspace</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">);</span>
+<span class="linenos">16</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">grid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">grid</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">// Step size</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="w">  </span><span class="c1">// Get mimetic Laplacian operator</span>
+<span class="linenos">19</span><span class="w">  </span><span class="n">Laplacian</span><span class="w"> </span><span class="n">L</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">dx</span><span class="p">);</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">transform</span><span class="p">(</span><span class="n">grid</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">grid</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class="w"> </span><span class="n">grid</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span>
+<span class="linenos">22</span><span class="w">                 </span><span class="p">[](</span><span class="n">Real</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="linenos">23</span>
+<span class="linenos">24</span><span class="w">  </span><span class="n">sp_mat</span><span class="w"> </span><span class="n">V</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w"> </span><span class="c1">// Potential energy operator</span>
+<span class="linenos">25</span><span class="w">  </span><span class="n">V</span><span class="p">.</span><span class="n">diag</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">grid</span><span class="p">;</span>
+<span class="linenos">26</span>
+<span class="linenos">27</span><span class="w">  </span><span class="c1">// Hamiltonian</span>
+<span class="linenos">28</span><span class="w">  </span><span class="n">sp_mat</span><span class="w"> </span><span class="n">H</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">-0.5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">sp_mat</span><span class="p">)</span><span class="n">L</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">V</span><span class="p">;</span>
+<span class="linenos">29</span>
+<span class="linenos">30</span><span class="w">  </span><span class="n">cx_vec</span><span class="w"> </span><span class="n">eigval</span><span class="p">;</span>
+<span class="linenos">31</span><span class="w">  </span><span class="n">eig_gen</span><span class="p">(</span><span class="n">eigval</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">mat</span><span class="p">)</span><span class="n">H</span><span class="p">);</span><span class="w"> </span><span class="c1">// Compute eigenvalues</span>
+<span class="linenos">32</span>
+<span class="linenos">33</span><span class="w">  </span><span class="n">eigval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sort</span><span class="p">(</span><span class="n">eigval</span><span class="p">);</span>
+<span class="linenos">34</span>
+<span class="linenos">35</span><span class="w">  </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Energy levels = [ &quot;</span><span class="p">;</span>
+<span class="linenos">36</span><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+<span class="linenos">37</span><span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">real</span><span class="p">(</span><span class="n">eigval</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">eigval</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39; &#39;</span><span class="p">;</span>
+<span class="linenos">38</span><span class="w">  </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="linenos">39</span>
+<span class="linenos">40</span><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">41</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="notes-and-considerations">
+<h2>Notes and Considerations<a class="headerlink" href="#notes-and-considerations" title="Permalink to this heading"></a></h2>
+<!-- TODO: Add important notes and considerations for using these operators --> 
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="MOLE C++ API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="boundary.html" class="btn btn-neutral float-right" title="Boundary Conditions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, CSRC SDSU.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

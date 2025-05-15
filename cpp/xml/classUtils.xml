@@ -1,0 +1,398 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="classUtils" kind="class" language="C++" prot="public">
+    <compoundname>Utils</compoundname>
+    <includes refid="utils_8h" local="no">utils.h</includes>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sp_mat</type>
+        <definition>sp_mat Utils::spkron</definition>
+        <argsstring>(const sp_mat &amp;A, const sp_mat &amp;B)</argsstring>
+        <name>spkron</name>
+        <qualifiedname>Utils::spkron</qualifiedname>
+        <param>
+          <type>const sp_mat &amp;</type>
+          <declname>A</declname>
+        </param>
+        <param>
+          <type>const sp_mat &amp;</type>
+          <declname>B</declname>
+        </param>
+        <briefdescription>
+<para>A wrappper for implementing a sparse Kroenecker product. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>A</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a sparse matrix </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>B</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a sparse matrix</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>This is available in Armadillo &gt;8.0 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/utils.h" line="39" column="17" bodyfile="src/cpp/utils.cpp" bodystart="70" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="classUtils_1a29075e84565397491dce88c1db2779f8" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sp_mat</type>
+        <definition>sp_mat Utils::spjoin_rows</definition>
+        <argsstring>(const sp_mat &amp;A, const sp_mat &amp;B)</argsstring>
+        <name>spjoin_rows</name>
+        <qualifiedname>Utils::spjoin_rows</qualifiedname>
+        <param>
+          <type>const sp_mat &amp;</type>
+          <declname>A</declname>
+        </param>
+        <param>
+          <type>const sp_mat &amp;</type>
+          <declname>B</declname>
+        </param>
+        <briefdescription>
+<para>An in place operation for joining two matrices by rows. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>A</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a sparse matrix </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>B</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a sparse matrix</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>This is available in Armadillo &gt;8.0 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/utils.h" line="49" column="17" bodyfile="src/cpp/utils.cpp" bodystart="103" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="function" id="classUtils_1a02c4cbc4ed5860b69635b480c326cea4" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sp_mat</type>
+        <definition>sp_mat Utils::spjoin_cols</definition>
+        <argsstring>(const sp_mat &amp;A, const sp_mat &amp;B)</argsstring>
+        <name>spjoin_cols</name>
+        <qualifiedname>Utils::spjoin_cols</qualifiedname>
+        <param>
+          <type>const sp_mat &amp;</type>
+          <declname>A</declname>
+        </param>
+        <param>
+          <type>const sp_mat &amp;</type>
+          <declname>B</declname>
+        </param>
+        <briefdescription>
+<para>An in place operation for joining two matrices by columns. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>A</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a sparse matrix </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>B</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a sparse matrix</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>This is available in Armadillo &gt;=8.5 </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/utils.h" line="59" column="17" bodyfile="src/cpp/utils.cpp" bodystart="138" bodyend="170"/>
+      </memberdef>
+      <memberdef kind="function" id="classUtils_1a390c28ce7358c06eefe7cd12afce6829" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>vec</type>
+        <definition>static vec Utils::spsolve_eigen</definition>
+        <argsstring>(const sp_mat &amp;A, const vec &amp;b)</argsstring>
+        <name>spsolve_eigen</name>
+        <qualifiedname>Utils::spsolve_eigen</qualifiedname>
+        <param>
+          <type>const sp_mat &amp;</type>
+          <declname>A</declname>
+        </param>
+        <param>
+          <type>const vec &amp;</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+<para>A wrappper for implementing a sparse solve using Eigen from SuperLU. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>A</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a sparse matrix LHS of Ax=b </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>b</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a vector for the RHS of Ax=b</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>This function requires the EIGEN to be used when Armadillo is built </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/utils.h" line="69" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classUtils_1afdfd6b3f99267fb13b8c5539f810b2f6" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double Utils::trapz</definition>
+        <argsstring>(const vec &amp;x, const vec &amp;y)</argsstring>
+        <name>trapz</name>
+        <qualifiedname>Utils::trapz</qualifiedname>
+        <param>
+          <type>const vec &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>const vec &amp;</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+<para>Implements the trapezoidal rule for 1D numerical integration. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Computes the area under a curve defined by vectors x and y using: A ≈ ∑ 0.5 * (xᵢ₊₁ - xᵢ) * (yᵢ + yᵢ₊₁)</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>x</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Vector of x-coordinates </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Vector of y-values at corresponding x </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Estimated area under the curve </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/utils.h" line="116" column="17" bodyfile="src/cpp/utils.cpp" bodystart="238" bodyend="245"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classUtils_1aa3e71c29029c65932dd1be9db524a177" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Utils::meshgrid</definition>
+        <argsstring>(const vec &amp;x, const vec &amp;y, mat &amp;X, mat &amp;Y)</argsstring>
+        <name>meshgrid</name>
+        <qualifiedname>Utils::meshgrid</qualifiedname>
+        <param>
+          <type>const vec &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>const vec &amp;</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>mat &amp;</type>
+          <declname>X</declname>
+        </param>
+        <param>
+          <type>mat &amp;</type>
+          <declname>Y</declname>
+        </param>
+        <briefdescription>
+<para>An analog to the MATLAB/Octave 2D meshgrid operation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>returns 2-D grid coordinates based on the coordinates contained in vectors x and y. X is a matrix where each row is a copy of x, and Y is a matrix where each column is a copy of y. The grid represented by the coordinates X and Y has length(y) rows and length(x) columns. Key here is the rows is the y-coordinate, and the columns are the x-coordinate.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>x</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a vector of x-indices </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a vector of y-indices </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>X</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a sparse matrix, will be filled by the function </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a sparse matrix, will be filled by the function </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/utils.h" line="87" column="8" bodyfile="src/cpp/utils.cpp" bodystart="173" bodyend="193"/>
+      </memberdef>
+      <memberdef kind="function" id="classUtils_1ae49c2bff1cd6d9469b1cd7fef823821d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Utils::meshgrid</definition>
+        <argsstring>(const vec &amp;x, const vec &amp;y, const vec &amp;z, cube &amp;X, cube &amp;Y, cube &amp;Z)</argsstring>
+        <name>meshgrid</name>
+        <qualifiedname>Utils::meshgrid</qualifiedname>
+        <param>
+          <type>const vec &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>const vec &amp;</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>const vec &amp;</type>
+          <declname>z</declname>
+        </param>
+        <param>
+          <type>cube &amp;</type>
+          <declname>X</declname>
+        </param>
+        <param>
+          <type>cube &amp;</type>
+          <declname>Y</declname>
+        </param>
+        <param>
+          <type>cube &amp;</type>
+          <declname>Z</declname>
+        </param>
+        <briefdescription>
+<para>An analog to the MATLAB/Octave 3D meshgrid operation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>meshgrid(x,y,z,X,Y,Z) returns 3-D grid coordinates defined by the vectors x, y, and z. The grid represented by X, Y, and Z has size length(y)-by-length(x)-by-length(z).</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>x</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a vector of x-indices </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a vector of y-indices </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>z</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a vector of z-indices </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>X</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a sparse matrix, will be filled by the function </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a sparse matrix, will be filled by the function </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Z</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a sparse matrix, will be filled by the function </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/utils.h" line="104" column="8" bodyfile="src/cpp/utils.cpp" bodystart="196" bodyend="235"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Utility Functions. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/cpp/utils.h" line="28" column="1" bodyfile="src/cpp/utils.h" bodystart="28" bodyend="117"/>
+    <listofallmembers>
+      <member refid="classUtils_1aa3e71c29029c65932dd1be9db524a177" prot="public" virt="non-virtual"><scope>Utils</scope><name>meshgrid</name></member>
+      <member refid="classUtils_1ae49c2bff1cd6d9469b1cd7fef823821d" prot="public" virt="non-virtual"><scope>Utils</scope><name>meshgrid</name></member>
+      <member refid="classUtils_1a02c4cbc4ed5860b69635b480c326cea4" prot="public" virt="non-virtual"><scope>Utils</scope><name>spjoin_cols</name></member>
+      <member refid="classUtils_1a29075e84565397491dce88c1db2779f8" prot="public" virt="non-virtual"><scope>Utils</scope><name>spjoin_rows</name></member>
+      <member refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" prot="public" virt="non-virtual"><scope>Utils</scope><name>spkron</name></member>
+      <member refid="classUtils_1a390c28ce7358c06eefe7cd12afce6829" prot="public" virt="non-virtual"><scope>Utils</scope><name>spsolve_eigen</name></member>
+      <member refid="classUtils_1afdfd6b3f99267fb13b8c5539f810b2f6" prot="public" virt="non-virtual"><scope>Utils</scope><name>trapz</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

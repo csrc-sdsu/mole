@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="mixedbc_8cpp" kind="file" language="C++">
+    <compoundname>mixedbc.cpp</compoundname>
+    <includes refid="mixedbc_8h" local="yes">mixedbc.h</includes>
+    <incdepgraph>
+      <node id="3">
+        <label>gradient.h</label>
+        <link refid="gradient_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/cpp/mixedbc.cpp</label>
+        <link refid="mixedbc_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>mixedbc.h</label>
+        <link refid="mixedbc_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>utils.h</label>
+        <link refid="utils_8h"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>armadillo</label>
+      </node>
+      <node id="6">
+        <label>cassert</label>
+      </node>
+    </incdepgraph>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="2"><highlight class="comment">*<sp/>SPDX-License-Identifier:<sp/>GPL-3.0-or-later</highlight></codeline>
+<codeline lineno="3"><highlight class="comment">*<sp/>©<sp/>2008-2024<sp/>San<sp/>Diego<sp/>State<sp/>University<sp/>Research<sp/>Foundation<sp/>(SDSURF).</highlight></codeline>
+<codeline lineno="4"><highlight class="comment">*<sp/>See<sp/>LICENSE<sp/>file<sp/>or<sp/>https://www.gnu.org/licenses/gpl-3.0.html<sp/>for<sp/>details.<sp/></highlight></codeline>
+<codeline lineno="5"><highlight class="comment">*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*<sp/>@file<sp/>mixedbc.cpp</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*<sp/></highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*<sp/>@brief<sp/>Mixed<sp/>Boundary<sp/>Condition<sp/>Class<sp/>functions</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/>*<sp/></highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/>*<sp/>@date<sp/>2024/10/15</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="mixedbc_8h" kindref="compound">mixedbc.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="comment">//<sp/>1-D<sp/>Constructor</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18" refid="classMixedBC_1ad8d4d972fb3fbe62200aaa0534084f2e" refkind="member"><highlight class="normal"><ref refid="classMixedBC_1ad8d4d972fb3fbe62200aaa0534084f2e" kindref="member">MixedBC::MixedBC</ref>(u16<sp/>k,<sp/>u32<sp/>m,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dx,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;left,</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;Real&gt;<sp/>&amp;coeffs_left,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;right,</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;Real&gt;<sp/>&amp;coeffs_right)<sp/>{</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/>sp_mat<sp/>A(m<sp/>+<sp/>2,<sp/>m<sp/>+<sp/>2);</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/>sp_mat<sp/>BG(m<sp/>+<sp/>2,<sp/>m<sp/>+<sp/>2);</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><ref refid="classGradient" kindref="compound">Gradient</ref><sp/>*grad<sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Handle<sp/>the<sp/>left<sp/>boundary<sp/>condition</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(left<sp/>==<sp/></highlight><highlight class="stringliteral">&quot;Dirichlet&quot;</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/>A.at(0,<sp/>0)<sp/>=<sp/>coeffs_left[0];</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(left<sp/>==<sp/></highlight><highlight class="stringliteral">&quot;Neumann&quot;</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/>grad<sp/>=<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/><ref refid="classGradient" kindref="compound">Gradient</ref>(k,<sp/>m,<sp/>dx);</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/>BG.row(0)<sp/>=<sp/>-coeffs_left[0]<sp/>*<sp/>grad-&gt;row(0);</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(left<sp/>==<sp/></highlight><highlight class="stringliteral">&quot;Robin&quot;</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/>A.at(0,<sp/>0)<sp/>=<sp/>coeffs_left[0];</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/>grad<sp/>=<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/><ref refid="classGradient" kindref="compound">Gradient</ref>(k,<sp/>m,<sp/>dx);</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/>BG.row(0)<sp/>=<sp/>-coeffs_left[1]<sp/>*<sp/>grad-&gt;row(0);</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">throw</highlight><highlight class="normal"><sp/>std::invalid_argument(</highlight><highlight class="stringliteral">&quot;Unknown<sp/>boundary<sp/>condition<sp/>type&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Handle<sp/>the<sp/>right<sp/>boundary<sp/>condition</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(right<sp/>==<sp/></highlight><highlight class="stringliteral">&quot;Dirichlet&quot;</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/>A.at(m<sp/>+<sp/>1,<sp/>m<sp/>+<sp/>1)<sp/>=<sp/>coeffs_right[0];</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(right<sp/>==<sp/></highlight><highlight class="stringliteral">&quot;Neumann&quot;</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!grad)</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>grad<sp/>=<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/><ref refid="classGradient" kindref="compound">Gradient</ref>(k,<sp/>m,<sp/>dx);</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>BG.row(m<sp/>+<sp/>1)<sp/>=<sp/>coeffs_right[0]<sp/>*<sp/>grad-&gt;row(m);</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(right<sp/>==<sp/></highlight><highlight class="stringliteral">&quot;Robin&quot;</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/>A.at(m<sp/>+<sp/>1,<sp/>m<sp/>+<sp/>1)<sp/>=<sp/>coeffs_right[0];</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!grad)</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>grad<sp/>=<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/><ref refid="classGradient" kindref="compound">Gradient</ref>(k,<sp/>m,<sp/>dx);</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>BG.row(m<sp/>+<sp/>1)<sp/>=<sp/>coeffs_right[1]<sp/>*<sp/>grad-&gt;row(m);</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">throw</highlight><highlight class="normal"><sp/>std::invalid_argument(</highlight><highlight class="stringliteral">&quot;Unknown<sp/>boundary<sp/>condition<sp/>type&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal"><sp/>=<sp/>A<sp/>+<sp/>BG;</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">delete</highlight><highlight class="normal"><sp/>grad;</highlight></codeline>
+<codeline lineno="59"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight><highlight class="comment">//<sp/>2-D<sp/>Constructor</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="62" refid="classMixedBC_1a94dbf382fbd88bba15cc8427d212a55b" refkind="member"><highlight class="normal"><ref refid="classMixedBC_1ad8d4d972fb3fbe62200aaa0534084f2e" kindref="member">MixedBC::MixedBC</ref>(u16<sp/>k,<sp/>u32<sp/>m,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dx,<sp/>u32<sp/>n,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dy,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;left,</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;Real&gt;<sp/>&amp;coeffs_left,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;right,</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;Real&gt;<sp/>&amp;coeffs_right,</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;bottom,</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;Real&gt;<sp/>&amp;coeffs_bottom,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;top,</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;Real&gt;<sp/>&amp;coeffs_top)<sp/>{</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><ref refid="classMixedBC" kindref="compound">MixedBC</ref><sp/>Bm(k,<sp/>m,<sp/>dx,<sp/>left,<sp/>coeffs_left,<sp/>right,<sp/>coeffs_right);</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><ref refid="classMixedBC" kindref="compound">MixedBC</ref><sp/>Bn(k,<sp/>n,<sp/>dy,<sp/>bottom,<sp/>coeffs_bottom,<sp/>top,<sp/>coeffs_top);</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/>sp_mat<sp/>Im<sp/>=<sp/>speye(m<sp/>+<sp/>2,<sp/>m<sp/>+<sp/>2);</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/>sp_mat<sp/>In<sp/>=<sp/>speye(n<sp/>+<sp/>2,<sp/>n<sp/>+<sp/>2);</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"></highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/>In.at(0,<sp/>0)<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/>In.at(n<sp/>+<sp/>1,<sp/>n<sp/>+<sp/>1)<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/>sp_mat<sp/>BC1<sp/>=<sp/><ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(In,<sp/>Bm);</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/>sp_mat<sp/>BC2<sp/>=<sp/><ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(Bn,<sp/>Im);</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal"><sp/>=<sp/>BC1<sp/>+<sp/>BC2;</highlight></codeline>
+<codeline lineno="81"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight><highlight class="comment">//<sp/>3-D<sp/>Constructor</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="84" refid="classMixedBC_1a3f2ff6914cddbc8fba77ad91dc8d48a7" refkind="member"><highlight class="normal"><ref refid="classMixedBC_1ad8d4d972fb3fbe62200aaa0534084f2e" kindref="member">MixedBC::MixedBC</ref>(u16<sp/>k,<sp/>u32<sp/>m,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dx,<sp/>u32<sp/>n,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dy,<sp/>u32<sp/>o,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dz,</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;left,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;Real&gt;<sp/>&amp;coeffs_left,</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;right,</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;Real&gt;<sp/>&amp;coeffs_right,</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;bottom,</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;Real&gt;<sp/>&amp;coeffs_bottom,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;top,</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;Real&gt;<sp/>&amp;coeffs_top,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;front,</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;Real&gt;<sp/>&amp;coeffs_front,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;back,</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;Real&gt;<sp/>&amp;coeffs_back)<sp/>{</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><ref refid="classMixedBC" kindref="compound">MixedBC</ref><sp/>Bm(k,<sp/>m,<sp/>dx,<sp/>left,<sp/>coeffs_left,<sp/>right,<sp/>coeffs_right);</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><ref refid="classMixedBC" kindref="compound">MixedBC</ref><sp/>Bn(k,<sp/>n,<sp/>dy,<sp/>bottom,<sp/>coeffs_bottom,<sp/>top,<sp/>coeffs_top);</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><ref refid="classMixedBC" kindref="compound">MixedBC</ref><sp/>Bo(k,<sp/>o,<sp/>dz,<sp/>front,<sp/>coeffs_front,<sp/>back,<sp/>coeffs_back);</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"></highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/>sp_mat<sp/>Im<sp/>=<sp/>speye(m<sp/>+<sp/>2,<sp/>m<sp/>+<sp/>2);</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/>sp_mat<sp/>In<sp/>=<sp/>speye(n<sp/>+<sp/>2,<sp/>n<sp/>+<sp/>2);</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/>sp_mat<sp/>Io<sp/>=<sp/>speye(o<sp/>+<sp/>2,<sp/>o<sp/>+<sp/>2);</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"></highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/>Io.at(0,<sp/>0)<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/>Io.at(o<sp/>+<sp/>1,<sp/>o<sp/>+<sp/>1)<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/>sp_mat<sp/>In2<sp/>=<sp/>In;</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/>In2.at(0,<sp/>0)<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/>In2.at(n<sp/>+<sp/>1,<sp/>n<sp/>+<sp/>1)<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"></highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/>sp_mat<sp/>BC1<sp/>=<sp/><ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(<ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(Io,<sp/>In2),<sp/>Bm);</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/>sp_mat<sp/>BC2<sp/>=<sp/><ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(<ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(Io,<sp/>Bn),<sp/>Im);</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/>sp_mat<sp/>BC3<sp/>=<sp/><ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(<ref refid="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658" kindref="member">Utils::spkron</ref>(Bo,<sp/>In),<sp/>Im);</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"></highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal"><sp/>=<sp/>BC1<sp/>+<sp/>BC2<sp/>+<sp/>BC3;</highlight></codeline>
+<codeline lineno="113"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="src/cpp/mixedbc.cpp"/>
+  </compounddef>
+</doxygen>

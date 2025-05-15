@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of robinBC</title>
+  <meta name="keywords" content="robinBC">
+  <meta name="description" content="Returns a m+2 by m+2 one-dimensional mimetic boundary operator that">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html mole_MATLAB -->
+<h1>robinBC
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Returns a m+2 by m+2 one-dimensional mimetic boundary operator that</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function BC = robinBC(k, m, dx, a, b) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Returns a m+2 by m+2 one-dimensional mimetic boundary operator that 
+ imposes a boundary condition of Robin's type
+
+ Parameters:
+                k : Order of accuracy
+                m : Number of cells
+               dx : Step size
+                a : Dirichlet Coefficient
+                b : Neumann Coefficient</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="grad.html" class="code" title="function G = grad(k, m, dx, varargin)">grad</a>	Returns a m+1 by m+2 one-dimensional mimetic gradient operator</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="robinBC2D.html" class="code" title="function BC = robinBC2D(k, m, dx, n, dy, a, b)">robinBC2D</a>	Returns a two-dimensional mimetic boundary operator that</li><li><a href="robinBC3D.html" class="code" title="function BC = robinBC3D(k, m, dx, n, dy, o, dz, a, b)">robinBC3D</a>	Returns a three-dimensional mimetic boundary operator that</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function BC = robinBC(k, m, dx, a, b)</a>
+0002 <span class="comment">% Returns a m+2 by m+2 one-dimensional mimetic boundary operator that</span>
+0003 <span class="comment">% imposes a boundary condition of Robin's type</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Parameters:</span>
+0006 <span class="comment">%                k : Order of accuracy</span>
+0007 <span class="comment">%                m : Number of cells</span>
+0008 <span class="comment">%               dx : Step size</span>
+0009 <span class="comment">%                a : Dirichlet Coefficient</span>
+0010 <span class="comment">%                b : Neumann Coefficient</span>
+0011 
+0012     A = sparse(m+2, m+2);
+0013     A(1, 1) = a;
+0014     A(<span class="keyword">end</span>, end) = a;
+0015     
+0016     B = sparse(m+2, m+1);
+0017     B(1, 1) = -b;
+0018     B(<span class="keyword">end</span>, end) = b;
+0019     
+0020     G = <a href="grad.html" class="code" title="function G = grad(k, m, dx, varargin)">grad</a>(k, m, dx);
+0021     
+0022     BC = A + B*G;
+0023 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 27-Jan-2021 14:29:32 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

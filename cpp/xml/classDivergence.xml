@@ -1,0 +1,310 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="classDivergence" kind="class" language="C++" prot="public">
+    <compoundname>Divergence</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sp_mat</basecompoundref>
+    <includes refid="divergence_8h" local="no">divergence.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classDivergence_1aa2de26d9acde7caa7e0d8d409ffe85e7" prot="private" static="no" mutable="no">
+        <type>vec</type>
+        <definition>vec Divergence::Q</definition>
+        <argsstring></argsstring>
+        <name>Q</name>
+        <qualifiedname>Divergence::Q</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/divergence.h" line="72" column="7" bodyfile="src/cpp/divergence.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classDivergence_1a9b42c5cfa0067fc9bae525d20e0ef75b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Divergence::Divergence</definition>
+        <argsstring>(u16 k, u32 m, Real dx)</argsstring>
+        <name>Divergence</name>
+        <qualifiedname>Divergence::Divergence</qualifiedname>
+        <param>
+          <type>u16</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dx</declname>
+        </param>
+        <briefdescription>
+<para>1-D Mimetic <ref refid="classDivergence" kindref="compound">Divergence</ref> Constructor </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Order of accuracy </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Spacing between cells </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/divergence.h" line="38" column="3" bodyfile="src/cpp/divergence.cpp" bodystart="19" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="function" id="classDivergence_1a2595df5ef9d63e852f47cd7c0097ded8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Divergence::Divergence</definition>
+        <argsstring>(u16 k, u32 m, u32 n, Real dx, Real dy)</argsstring>
+        <name>Divergence</name>
+        <qualifiedname>Divergence::Divergence</qualifiedname>
+        <param>
+          <type>u16</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>n</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dx</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dy</declname>
+        </param>
+        <briefdescription>
+<para>2-D Mimetic <ref refid="classDivergence" kindref="compound">Divergence</ref> Constructor </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Order of accuracy </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells in x-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells in y-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Spacing between cells in x-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Spacing between cells in y-direction </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/divergence.h" line="49" column="3" bodyfile="src/cpp/divergence.cpp" bodystart="110" bodyend="134"/>
+      </memberdef>
+      <memberdef kind="function" id="classDivergence_1a82c536fd470b56a1017ffebadbdbc315" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Divergence::Divergence</definition>
+        <argsstring>(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz)</argsstring>
+        <name>Divergence</name>
+        <qualifiedname>Divergence::Divergence</qualifiedname>
+        <param>
+          <type>u16</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>n</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>o</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dx</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dy</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dz</declname>
+        </param>
+        <briefdescription>
+<para>3-D Mimetic <ref refid="classDivergence" kindref="compound">Divergence</ref> Constructor </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Order of accuracy </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells in x-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells in y-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>o</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells in z-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Spacing between cells in x-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Spacing between cells in y-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dz</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Spacing between cells in z-direction </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/divergence.h" line="62" column="3" bodyfile="src/cpp/divergence.cpp" bodystart="137" bodyend="168"/>
+      </memberdef>
+      <memberdef kind="function" id="classDivergence_1a9ab0da6ee16064012c164592648e66c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>vec</type>
+        <definition>vec Divergence::getQ</definition>
+        <argsstring>()</argsstring>
+        <name>getQ</name>
+        <qualifiedname>Divergence::getQ</qualifiedname>
+        <briefdescription>
+<para>Returns the weights used in the Mimeitc <ref refid="classDivergence" kindref="compound">Divergence</ref> Operators. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="note"><para>for informational purposes only, can be used in constructing new operators. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/divergence.h" line="69" column="7" bodyfile="src/cpp/divergence.cpp" bodystart="171" bodyend="171"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Mimetic <ref refid="classDivergence" kindref="compound">Divergence</ref> operator. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>Divergence</label>
+        <link refid="classDivergence"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sp_mat</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>Divergence</label>
+        <link refid="classDivergence"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sp_mat</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/cpp/divergence.h" line="26" column="1" bodyfile="src/cpp/divergence.h" bodystart="26" bodyend="73"/>
+    <listofallmembers>
+      <member refid="classDivergence_1a9b42c5cfa0067fc9bae525d20e0ef75b" prot="public" virt="non-virtual"><scope>Divergence</scope><name>Divergence</name></member>
+      <member refid="classDivergence_1a2595df5ef9d63e852f47cd7c0097ded8" prot="public" virt="non-virtual"><scope>Divergence</scope><name>Divergence</name></member>
+      <member refid="classDivergence_1a82c536fd470b56a1017ffebadbdbc315" prot="public" virt="non-virtual"><scope>Divergence</scope><name>Divergence</name></member>
+      <member refid="classDivergence_1a9ab0da6ee16064012c164592648e66c5" prot="public" virt="non-virtual"><scope>Divergence</scope><name>getQ</name></member>
+      <member refid="classDivergence_1aa2de26d9acde7caa7e0d8d409ffe85e7" prot="private" virt="non-virtual"><scope>Divergence</scope><name>Q</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

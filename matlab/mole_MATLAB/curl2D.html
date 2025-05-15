@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of curl2D</title>
+  <meta name="keywords" content="curl2D">
+  <meta name="description" content="Returns a two-dimensional mimetic curl operator">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html mole_MATLAB -->
+<h1>curl2D
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Returns a two-dimensional mimetic curl operator</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function C = curl2D(k, m, dx, n, dy, west, east, south, north, U, V) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Returns a two-dimensional mimetic curl operator
+
+ Parameters:
+                k : Order of accuracy
+                m : Number of cells along x-axis
+               dx : Step size along x-axis
+                n : Number of cells along y-axis
+               dy : Step size along y-axis
+      west, east,
+     south, north : west, east, south, north limits
+                U : Vector space function acting on x-direction
+                    U(X,Y) must be defined as function handle
+                V : Vector space function acting on y-direction
+                    V(X,Y) must be defined as function handle</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="div2D.html" class="code" title="function D = div2D(k, m, dx, n, dy)">div2D</a>	Returns a two-dimensional mimetic divergence operator</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function C = curl2D(k, m, dx, n, dy, west, east, south, north, U, V)</a>
+0002 <span class="comment">% Returns a two-dimensional mimetic curl operator</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Parameters:</span>
+0005 <span class="comment">%                k : Order of accuracy</span>
+0006 <span class="comment">%                m : Number of cells along x-axis</span>
+0007 <span class="comment">%               dx : Step size along x-axis</span>
+0008 <span class="comment">%                n : Number of cells along y-axis</span>
+0009 <span class="comment">%               dy : Step size along y-axis</span>
+0010 <span class="comment">%      west, east,</span>
+0011 <span class="comment">%     south, north : west, east, south, north limits</span>
+0012 <span class="comment">%                U : Vector space function acting on x-direction</span>
+0013 <span class="comment">%                    U(X,Y) must be defined as function handle</span>
+0014 <span class="comment">%                V : Vector space function acting on y-direction</span>
+0015 <span class="comment">%                    V(X,Y) must be defined as function handle</span>
+0016 
+0017 
+0018 <span class="comment">% Arguments validation</span>
+0019     assert(isa(U, <span class="string">'function_handle'</span>) &amp;&amp; isa(V, <span class="string">'function_handle'</span>), <span class="keyword">...</span>
+0020            <span class="string">'U and V must be defined as function handle'</span>);
+0021     assert(nargin(U) == 2 &amp;&amp; nargin(V) == 2, <span class="keyword">...</span>
+0022            <span class="string">'U and V must be defined as 2D vector functions'</span>);
+0023     assert(west &lt; east &amp;&amp; south &lt; north , <span class="string">'west &lt; east, south &lt; north'</span>);
+0024 
+0025 <span class="comment">% Variables initialization</span>
+0026     F = sparse(2*m*n+m+n, 1);
+0027     xaxis = west : (dx/2) : east;
+0028     yaxis = south : (dy/2) : north;
+0029 
+0030 <span class="comment">% Linearizing F as function of U and V: F = V_x - U_y</span>
+0031     f = 1;
+0032     <span class="keyword">for</span> j = 2 : 2 : 2*n+1
+0033         <span class="keyword">for</span> i = 1 : 2 : 2*m+1
+0034             F(f) = V(xaxis(i), yaxis(j));  <span class="comment">% F in the x direction (V_x)</span>
+0035             f = f + 1;
+0036         <span class="keyword">end</span>
+0037     <span class="keyword">end</span>
+0038 
+0039     <span class="keyword">for</span> j = 1 : 2 : 2*n+1
+0040         <span class="keyword">for</span> i = 2 : 2 : 2*m+1
+0041             F(f) = -U(xaxis(i), yaxis(j));  <span class="comment">% F in the y direction (-U_y)</span>
+0042             f = f + 1;
+0043         <span class="keyword">end</span>
+0044     <span class="keyword">end</span>
+0045 
+0046     C = <a href="div2D.html" class="code" title="function D = div2D(k, m, dx, n, dy)">div2D</a>(k, m, dx, n, dy)*F;  <span class="comment">% Mimetic curl as C = Div2D*F</span>
+0047     C = reshape(C, m+2, n+2);      <span class="comment">% Reshaping C as matrix</span>
+0048     C = C(2:end-1, 2:end-1);       <span class="comment">% Removing boundaries</span>
+0049 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 27-Jan-2021 14:29:32 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

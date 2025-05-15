@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of div3DNonUniform</title>
+  <meta name="keywords" content="div3DNonUniform">
+  <meta name="description" content="Returns a three-dimensional non-uniform mimetic divergence operator">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html mole_MATLAB -->
+<h1>div3DNonUniform
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Returns a three-dimensional non-uniform mimetic divergence operator</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function D = div3DNonUniform(k, xticks, yticks, zticks) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Returns a three-dimensional non-uniform mimetic divergence operator
+
+ Parameters:
+                k : Order of accuracy
+                xticks : Edges' ticks (x-axis)
+                yticks : Edges' ticks (y-axis)
+                zticks : Edges' ticks (z-axis)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="divNonUniform.html" class="code" title="function D = divNonUniform(k, ticks)">divNonUniform</a>	Returns a m+2 by m+1 one-dimensional non-uniform mimetic divergence</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function D = div3DNonUniform(k, xticks, yticks, zticks)</a>
+0002 <span class="comment">% Returns a three-dimensional non-uniform mimetic divergence operator</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Parameters:</span>
+0005 <span class="comment">%                k : Order of accuracy</span>
+0006 <span class="comment">%                xticks : Edges' ticks (x-axis)</span>
+0007 <span class="comment">%                yticks : Edges' ticks (y-axis)</span>
+0008 <span class="comment">%                zticks : Edges' ticks (z-axis)</span>
+0009 
+0010     Dx = <a href="divNonUniform.html" class="code" title="function D = divNonUniform(k, ticks)">divNonUniform</a>(k, xticks);
+0011     Dy = <a href="divNonUniform.html" class="code" title="function D = divNonUniform(k, ticks)">divNonUniform</a>(k, yticks);
+0012     Dz = <a href="divNonUniform.html" class="code" title="function D = divNonUniform(k, ticks)">divNonUniform</a>(k, zticks);
+0013     
+0014     m = size(Dx, 1) - 2;
+0015     n = size(Dy, 1) - 2;
+0016     o = size(Dz, 1) - 2;
+0017     
+0018     Im = sparse(m + 2, m);
+0019     Im(2:(m + 2) - 1, :) = speye(m, m);
+0020     
+0021     In = sparse(n + 2, n);
+0022     In(2:(n + 2) - 1, :) = speye(n, n);
+0023     
+0024     Io = sparse(o + 2, o);
+0025     Io(2:(o + 2) - 1, :) = speye(o, o);
+0026     
+0027     Sx = kron(kron(Io, In), Dx);
+0028     Sy = kron(kron(Io, Dy), Im);
+0029     Sz = kron(kron(Dz, In), Im);
+0030     
+0031     D = [Sx Sy Sz];
+0032 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 27-Jan-2021 14:29:32 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

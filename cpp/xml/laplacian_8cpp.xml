@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="laplacian_8cpp" kind="file" language="C++">
+    <compoundname>laplacian.cpp</compoundname>
+    <includes refid="laplacian_8h" local="yes">laplacian.h</includes>
+    <incdepgraph>
+      <node id="3">
+        <label>divergence.h</label>
+        <link refid="divergence_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>gradient.h</label>
+        <link refid="gradient_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/cpp/laplacian.cpp</label>
+        <link refid="laplacian_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>laplacian.h</label>
+        <link refid="laplacian_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>utils.h</label>
+        <link refid="utils_8h"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>armadillo</label>
+      </node>
+      <node id="6">
+        <label>cassert</label>
+      </node>
+    </incdepgraph>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="2"><highlight class="comment">*<sp/>SPDX-License-Identifier:<sp/>GPL-3.0-or-later</highlight></codeline>
+<codeline lineno="3"><highlight class="comment">*<sp/>©<sp/>2008-2024<sp/>San<sp/>Diego<sp/>State<sp/>University<sp/>Research<sp/>Foundation<sp/>(SDSURF).</highlight></codeline>
+<codeline lineno="4"><highlight class="comment">*<sp/>See<sp/>LICENSE<sp/>file<sp/>or<sp/>https://www.gnu.org/licenses/gpl-3.0.html<sp/>for<sp/>details.<sp/></highlight></codeline>
+<codeline lineno="5"><highlight class="comment">*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*<sp/>@file<sp/>laplacian.cpp</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*<sp/></highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*<sp/>@brief<sp/>Mimetic<sp/>Laplacian<sp/>Constructors</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/>*<sp/></highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/>*<sp/>@date<sp/>2024/10/15</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/>*<sp/></highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="laplacian_8h" kindref="compound">laplacian.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="comment">//<sp/>1-D<sp/>Constructor</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21" refid="classLaplacian_1a93f5709f140e54cfb5e5b1060fb3c304" refkind="member"><highlight class="normal"><ref refid="classLaplacian_1a93f5709f140e54cfb5e5b1060fb3c304" kindref="member">Laplacian::Laplacian</ref>(u16<sp/>k,<sp/>u32<sp/>m,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dx)<sp/>{</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><ref refid="classDivergence" kindref="compound">Divergence</ref><sp/>div(k,<sp/>m,<sp/>dx);</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><ref refid="classGradient" kindref="compound">Gradient</ref><sp/>grad(k,<sp/>m,<sp/>dx);</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Dimensions<sp/>=<sp/>m+2,<sp/>m+2</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal"><sp/>=<sp/>(sp_mat)div<sp/>*<sp/>(sp_mat)grad;</highlight></codeline>
+<codeline lineno="27"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="comment">//<sp/>2-D<sp/>Constructor</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30" refid="classLaplacian_1a3d7e3fbdacb97048d2f05045b0ad7db1" refkind="member"><highlight class="normal"><ref refid="classLaplacian_1a93f5709f140e54cfb5e5b1060fb3c304" kindref="member">Laplacian::Laplacian</ref>(u16<sp/>k,<sp/>u32<sp/>m,<sp/>u32<sp/>n,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dx,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dy)<sp/>{</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><ref refid="classDivergence" kindref="compound">Divergence</ref><sp/>div(k,<sp/>m,<sp/>n,<sp/>dx,<sp/>dy);</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><ref refid="classGradient" kindref="compound">Gradient</ref><sp/>grad(k,<sp/>m,<sp/>n,<sp/>dx,<sp/>dy);</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Dimensions<sp/>=<sp/>(m+2)*(n+2),<sp/>(m+2)*(n+2)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal"><sp/>=<sp/>(sp_mat)div<sp/>*<sp/>(sp_mat)grad;</highlight></codeline>
+<codeline lineno="36"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="comment">//<sp/>3-D<sp/>Constructor</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39" refid="classLaplacian_1a0de6529680231ec75a13b9ec4ab58a40" refkind="member"><highlight class="normal"><ref refid="classLaplacian_1a93f5709f140e54cfb5e5b1060fb3c304" kindref="member">Laplacian::Laplacian</ref>(u16<sp/>k,<sp/>u32<sp/>m,<sp/>u32<sp/>n,<sp/>u32<sp/>o,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dx,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dy,<sp/><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref><sp/>dz)<sp/>{</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><ref refid="classDivergence" kindref="compound">Divergence</ref><sp/>div(k,<sp/>m,<sp/>n,<sp/>o,<sp/>dx,<sp/>dy,<sp/>dz);</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><ref refid="classGradient" kindref="compound">Gradient</ref><sp/>grad(k,<sp/>m,<sp/>n,<sp/>o,<sp/>dx,<sp/>dy,<sp/>dz);</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Dimensions<sp/>=<sp/>(m+2)*(n+2)*(o+2),<sp/>(m+2)*(n+2)*(o+2)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal"><sp/>=<sp/>(sp_mat)div<sp/>*<sp/>(sp_mat)grad;</highlight></codeline>
+<codeline lineno="45"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="src/cpp/laplacian.cpp"/>
+  </compounddef>
+</doxygen>

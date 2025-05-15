@@ -1,0 +1,310 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="classGradient" kind="class" language="C++" prot="public">
+    <compoundname>Gradient</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sp_mat</basecompoundref>
+    <includes refid="gradient_8h" local="no">gradient.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classGradient_1af3007d2e1e57ee2a04ea300aa613c520" prot="private" static="no" mutable="no">
+        <type>vec</type>
+        <definition>vec Gradient::P</definition>
+        <argsstring></argsstring>
+        <name>P</name>
+        <qualifiedname>Gradient::P</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/gradient.h" line="74" column="7" bodyfile="src/cpp/gradient.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classGradient_1a8204a9fe5d8befed006900edd35b68c4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gradient::Gradient</definition>
+        <argsstring>(u16 k, u32 m, Real dx)</argsstring>
+        <name>Gradient</name>
+        <qualifiedname>Gradient::Gradient</qualifiedname>
+        <param>
+          <type>u16</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dx</declname>
+        </param>
+        <briefdescription>
+<para>1-D Mimetic <ref refid="classGradient" kindref="compound">Gradient</ref> Constructor </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Order of accuracy </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Spacing between cells </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/gradient.h" line="39" column="3" bodyfile="src/cpp/gradient.cpp" bodystart="20" bodyend="237"/>
+      </memberdef>
+      <memberdef kind="function" id="classGradient_1aa11106a1359db938b1f19f2dd3f2347e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gradient::Gradient</definition>
+        <argsstring>(u16 k, u32 m, u32 n, Real dx, Real dy)</argsstring>
+        <name>Gradient</name>
+        <qualifiedname>Gradient::Gradient</qualifiedname>
+        <param>
+          <type>u16</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>n</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dx</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dy</declname>
+        </param>
+        <briefdescription>
+<para>2-D Mimetic <ref refid="classGradient" kindref="compound">Gradient</ref> Constructor </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Order of accuracy </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells in x-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells in y-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Spacing between cells in x-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Spacing between cells in y-direction </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/gradient.h" line="50" column="3" bodyfile="src/cpp/gradient.cpp" bodystart="240" bodyend="264"/>
+      </memberdef>
+      <memberdef kind="function" id="classGradient_1a69aa8ea8edca7baed115cec4e2e6317d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gradient::Gradient</definition>
+        <argsstring>(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz)</argsstring>
+        <name>Gradient</name>
+        <qualifiedname>Gradient::Gradient</qualifiedname>
+        <param>
+          <type>u16</type>
+          <declname>k</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>n</declname>
+        </param>
+        <param>
+          <type>u32</type>
+          <declname>o</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dx</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dy</declname>
+        </param>
+        <param>
+          <type><ref refid="utils_8h_1a4b04262b81aa7d31eb5d2f607e2a35de" kindref="member">Real</ref></type>
+          <declname>dz</declname>
+        </param>
+        <briefdescription>
+<para>3-D Mimetic <ref refid="classGradient" kindref="compound">Gradient</ref> Constructor </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>k</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Order of accuracy </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells in x-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells in y-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>o</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of cells in z-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Spacing between cells in x-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Spacing between cells in y-direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dz</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Spacing between cells in z-direction </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/gradient.h" line="63" column="3" bodyfile="src/cpp/gradient.cpp" bodystart="267" bodyend="298"/>
+      </memberdef>
+      <memberdef kind="function" id="classGradient_1a6099174246fa7784d9702b5cf26694d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>vec</type>
+        <definition>vec Gradient::getP</definition>
+        <argsstring>()</argsstring>
+        <name>getP</name>
+        <qualifiedname>Gradient::getP</qualifiedname>
+        <briefdescription>
+<para>Returns the weights used in the Mimeitc <ref refid="classGradient" kindref="compound">Gradient</ref> Operators. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="note"><para>for informational purposes only, can be used in constructing new operators. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cpp/gradient.h" line="71" column="7" bodyfile="src/cpp/gradient.cpp" bodystart="301" bodyend="301"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Mimetic <ref refid="classGradient" kindref="compound">Gradient</ref> operator. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>Gradient</label>
+        <link refid="classGradient"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sp_mat</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>Gradient</label>
+        <link refid="classGradient"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sp_mat</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/cpp/gradient.h" line="27" column="1" bodyfile="src/cpp/gradient.h" bodystart="27" bodyend="75"/>
+    <listofallmembers>
+      <member refid="classGradient_1a6099174246fa7784d9702b5cf26694d7" prot="public" virt="non-virtual"><scope>Gradient</scope><name>getP</name></member>
+      <member refid="classGradient_1a8204a9fe5d8befed006900edd35b68c4" prot="public" virt="non-virtual"><scope>Gradient</scope><name>Gradient</name></member>
+      <member refid="classGradient_1aa11106a1359db938b1f19f2dd3f2347e" prot="public" virt="non-virtual"><scope>Gradient</scope><name>Gradient</name></member>
+      <member refid="classGradient_1a69aa8ea8edca7baed115cec4e2e6317d" prot="public" virt="non-virtual"><scope>Gradient</scope><name>Gradient</name></member>
+      <member refid="classGradient_1af3007d2e1e57ee2a04ea300aa613c520" prot="private" virt="non-virtual"><scope>Gradient</scope><name>P</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
