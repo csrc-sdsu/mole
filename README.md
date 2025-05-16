@@ -122,6 +122,12 @@ make run_matlab_tests
 
 ## Examples
 
+Many of the examples require 'gnuplot' to visualize the results. You can get gnuplot on macOSX with 
+```bash
+brew install gnuplot
+```
+and on Windows downlaoding and running the file from [here](https://sourceforge.net/projects/gnuplot/files/gnuplot/6.0.2/gp602-win64-mingw.exe/download)
+
 ### C++
 
 Four self-contained, well-documented examples demonstrating typical PDE solutions. These are automatically built with `make` and serve as an excellent starting point for C++ users.
