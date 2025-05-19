@@ -6,6 +6,15 @@
 [![Build Status][build-badge]][build-link]
 [![Documentation][docs-badge]][docs-link]
 
+[![Platform: Ubuntu 22.04][ubuntu-badge]][ubuntu-link]
+[![Platform: Windows][windows-badge]][windows-link]
+[![Platform: macOS][macos-badge]][macos-link]
+[![Compiler: MSVC][msvc-badge]][msvc-link]
+[![Compiler: AppleClang][appleclang-badge]][appleclang-link]
+[![Compiler: IntelLLVM][intelllvm-badge]][intelllvm-link]
+[![CMake >= 3.10][cmake-badge]][cmake-link]
+
+
 ## Description
 
 MOLE is a high-quality (C++ & MATLAB/Octave) library that implements
@@ -190,3 +199,24 @@ Now, some cool pictures obtained with MOLE:
 [doc-guide]: https://github.com/csrc-sdsu/mole/blob/master/doc/sphinx/README.md
 [homebrew]: https://brew.sh/
 [contrib-guide]: https://github.com/csrc-sdsu/mole/blob/master/CONTRIBUTING.md
+
+[ubuntu-badge]: https://img.shields.io/badge/Platform-Ubuntu%2022.04-blueviolet?logo=ubuntu
+[ubuntu-link]: https://ubuntu.com/
+
+[windows-badge]: https://img.shields.io/badge/Platform-Windows-0078D6?logo=windows
+[windows-link]: https://www.microsoft.com/windows/
+
+[macos-badge]: https://img.shields.io/badge/Platform-macOS-lightgrey?logo=apple
+[macos-link]: https://www.apple.com/macos/
+
+[msvc-badge]: https://img.shields.io/badge/Compiler-MSVC-blue?logo=visual-studio
+[msvc-link]: https://visualstudio.microsoft.com/
+
+[appleclang-badge]: https://img.shields.io/badge/Compiler-AppleClang-orange?logo=apple
+[appleclang-link]: https://developer.apple.com/documentation/xcode-release-notes/
+
+[intelllvm-badge]: https://img.shields.io/badge/Compiler-IntelLLVM-9cf?logo=intel
+[intelllvm-link]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/dpc-compiler.html
+
+[cmake-badge]: https://img.shields.io/badge/CMake-%3E=3.10-green?logo=cmake
+[cmake-link]: https://cmake.org/
