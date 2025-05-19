@@ -1,3 +1,4 @@
+---
 name: Build and Test
 
 on:
@@ -9,32 +10,137 @@ on:
       - '**' 
 
 jobs:
-  build-and-test:
+  lint-new-code:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: read
+      statuses: write
+      
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # Full git history is needed to get a proper
+          # list of changed files within `super-linter`
+          fetch-depth: 0
 
-    - name: Update Libraries
-      run: sudo apt-get update
+      - name: Run super-linter
+        uses: super-linter/super-linter/slim@v5
+        env:
+          DISABLE_ERRORS: true
+          VALIDATE_ALL_CODEBASE: false
+          DEFAULT_BRANCH: master
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Install dependencies
-      run: |
-        sudo apt-get install -y cmake g++ libgtest-dev libarmadillo-dev libopenblas-dev libsuperlu-dev libeigen3-dev
-        # Build and install Google Test (if not pre-installed)
-        cd /usr/src/googletest && sudo cmake . && sudo make && sudo make install
+  build-MOLE-ubuntu:
+    runs-on: ubuntu-latest
+    needs: lint-new-code
 
-    - name: Create build directory
-      run: mkdir build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Run CMake
-      run: cmake -S . -B build
+      - name: Update Libraries
+        run: sudo apt-get update
 
-    - name: Build library
-      run: cmake --build build
+      - name: Install dependencies
+        run: |
+          sudo apt-get install -y cmake g++ libgtest-dev libarmadillo-dev libopenblas-dev libsuperlu-dev libeigen3-dev
+          cd /usr/src/googletest && sudo cmake . && sudo make && sudo make install
 
-    - name: Run tests
-      run: |
-        cd build
-        make run_tests
+      - name: Create build directory
+        run: mkdir -p build
+
+      - name: Run CMake
+        run: cmake -S . -B build
+
+      - name: Build MOLE library
+        run: cmake --build build
+
+      - name: Run tests
+        run: |
+          cd build
+          make run_tests
+
+  build-MOLE-macOSX:
+    runs-on: macOS-latest
+    needs: lint-new-code
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+          
+      - name: Install dependencies
+        run: |
+          brew install cmake openblas eigen libomp lapack
+          sudo ln -s /opt/homebrew/bin/gfortran-14 /opt/homebrew/bin/gfortran
+        
+      - name: Export Environment Variables
+        run: |
+          ls /opt/homebrew/bin/gfortran*
+          # brew link gcc
+          export FC="/opt/homebrew/bin/gfortran-14"
+          export CMAKE_Fortran_COMPILER="/opt/homebrew/bin/gfortran-14"
+          export LDFLAGS+=" -L/opt/homebrew/opt/openblas/lib"
+          export CPPFLAGS+=" -I/opt/homebrew/opt/openblas/include"
+          export PKG_CONFIG_PATH+=" /opt/homebrew/opt/openblas/lib/pkgconfig"
+
+          export LDFLAGS+=" -L/opt/homebrew/opt/libomp/lib"
+          export CPPFLAGS+=" -I/opt/homebrew/opt/libomp/include"
+          export LDFLAGS+=" -L/opt/homebrew/opt/lapack/lib"
+          export CPPFLAGS+=" -I/opt/homebrew/opt/lapack/include"
+          export PKG_CONFIG_PATH+=" /opt/homebrew/opt/lapack/lib/pkgconfig"
+
+      - name: Create build directory
+        run: mkdir -p build
+
+      - name: Run CMake
+        run: cmake -DCMAKE_Fortran_COMPILER="/opt/homebrew/bin/gfortran-14" -S . -B build
+
+      - name: Build MOLE library
+        run: cmake --build build
+
+      - name: Run tests
+        run: |
+          cd build
+          make run_tests
+
+  Recompile-JOSS-paper:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Check if subfolder changed
+        id: changes
+        run: |
+          git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
+          CHANGED=$(git diff --name-only FETCH_HEAD HEAD | grep '^doc/papers/' || true)
+    
+          # git fetch origin ${{ github.base_ref }}
+          # CHANGED=$(git diff --name-only origin/${{ github.base_ref }} HEAD | grep '^doc/papers/' || true)
+          if [ -n "$CHANGED" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run build if subfolder changed
+        if: steps.changes.outputs.changed == 'true'
+        run: echo "Building subfolder components..."
+
+      - name: Build draft PDF
+        if: steps.changes.outputs.changed == 'true'
+        uses: openjournals/openjournals-draft-action@master
+        with:
+          journal: joss
+          paper-path: doc/papers/joss/paper.md
+
+      - name: Upload a Build Artifact
+        if: steps.changes.outputs.changed == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: paper
+          path: doc/papers/joss/paper.pdf
