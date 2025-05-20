@@ -13,12 +13,14 @@ set(INSTALL_DIR "${CMAKE_BINARY_DIR}/third_party_install")
 message(STATUS "Detected CXX Compiler ID: ${CMAKE_CXX_COMPILER_ID}")
 
 # Compiler-specific CXX_FLAGS and linker flags
+
 # Compiler ID = AppleClang
 if (CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
     set(CMAKE_CXX_FLAGS "-O3 -Xclang -fopenmp -DARMA_DONT_USE_WRAPPER -DARMA_USE_SUPERLU")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/usr/local/opt/libomp/lib -L/opt/homebrew/opt/libomp/lib -lomp")
     message(STATUS "Using AppleClang-specific flags.")
     include_directories("/usr/local/opt/libomp/include" "/opt/homebrew/opt/libomp/include")
+
 # Compiler ID = IntelLLVM
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM")
     set(CMAKE_CXX_FLAGS "-O3 -qopenmp -DARMA_DONT_USE_WRAPPER -DARMA_USE_SUPERLU -diag-disable=10430")
@@ -35,11 +37,13 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM")
     set(LAPACK_LIBRARIES "${MKLROOT}/lib/intel64/libmkl_rt.so" CACHE STRING "LAPACK library path for MKL")
     set(ARMA_USE_WRAPPER OFF CACHE BOOL "Disable Armadillo wrapper to directly use MKL")
     message(STATUS "Using MKL from: ${MKLROOT}")
-# Compiler ID = MSVC
+
+    # Compiler ID = MSVC
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     message(STATUS "Detected MSVC Compiler")
     # Set MSVC flags
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /O2 /openmp /DARMADILLO_DONT_USE_WRAPPER /DARMADILLO_USE_SUPERLU")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /O2 /openmp /DARMADILLO_DONT_USE_WRAPPER /DARMADILLO_USE_SUPERLU ")
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL" CACHE STRING "" FORCE)
     message(STATUS "Using MSVC compiler flags: ${CMAKE_CXX_FLAGS}")
     
 # Compiler ID = Non-Clang
@@ -78,29 +82,79 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 
     message(STATUS "Downloading and extracting OpenBLAS...")
     file(DOWNLOAD ${OPENBLAS_TARBALL_URL} ${BUILD_DIR}/OpenBLAS-${OPENBLAS_VERSION}.tar.gz SHOW_PROGRESS)
-    execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf OpenBLAS-${OPENBLAS_VERSION}.tar.gz WORKING_DIRECTORY ${BUILD_DIR})
+    execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf OpenBLAS-${OPENBLAS_VERSION}.tar.gz 
+        WORKING_DIRECTORY ${BUILD_DIR}
+        RESULT_VARIABLE extract_result
+    )
+
+    if(NOT extract_result EQUAL 0)
+        message(FATAL_ERROR "Failed to extract OpenBLAS: ${extract_result}")
+    endif()
 
     file(MAKE_DIRECTORY ${OPENBLAS_BUILD_DIR})
     file(MAKE_DIRECTORY ${OPENBLAS_INSTALL_DIR})
 
     message(STATUS "Building OpenBLAS...")
-    execute_process(COMMAND ${CMAKE_COMMAND} ${OPENBLAS_SRC_DIR}
-        -DCMAKE_INSTALL_PREFIX=${OPENBLAS_INSTALL_DIR}
-        -DBUILD_SHARED_LIBS=OFF
-        -DCMAKE_BUILD_TYPE=Release
-        WORKING_DIRECTORY ${OPENBLAS_BUILD_DIR})
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} ${OPENBLAS_SRC_DIR}
+            -DCMAKE_INSTALL_PREFIX=${OPENBLAS_INSTALL_DIR}
+            -DBUILD_SHARED_LIBS=OFF
+            -DCMAKE_BUILD_TYPE=Release
+            -DNO_FORTRAN=ON  # Disable Fortran for better compatibility
+        WORKING_DIRECTORY ${OPENBLAS_BUILD_DIR}
+        RESULT_VARIABLE config_result
+    )
 
-    execute_process(COMMAND ${CMAKE_COMMAND} --build . --config Release
-        WORKING_DIRECTORY ${OPENBLAS_BUILD_DIR})
+    if(NOT config_result EQUAL 0)
+        message(FATAL_ERROR "OpenBLAS configuration failed: ${config_result}")
+    endif()
 
-    execute_process(COMMAND ${CMAKE_COMMAND} --install . --config Release
-        WORKING_DIRECTORY ${OPENBLAS_BUILD_DIR})
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} --build . --config Release
+        WORKING_DIRECTORY ${OPENBLAS_BUILD_DIR}
+        RESULT_VARIABLE build_result
+    )
 
-    # Set OpenBLAS variables
-    set(OpenBLAS_LIBRARIES "${OPENBLAS_INSTALL_DIR}/lib/openblas.lib" CACHE FILEPATH "OpenBLAS library")
-    set(OPENBLAS_DIR "${OPENBLAS_INSTALL_DIR}")
-    set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${OPENBLAS_DIR}/lib")
-    set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "${OPENBLAS_DIR}/include")
+    if(NOT build_result EQUAL 0)
+        message(FATAL_ERROR "OpenBLAS build failed: ${build_result}")
+    endif()
+
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} --install . --config Release
+        WORKING_DIRECTORY ${OPENBLAS_BUILD_DIR}
+        RESULT_VARIABLE install_result
+    )
+
+    if(NOT install_result EQUAL 0)
+        message(FATAL_ERROR "OpenBLAS installation failed: ${install_result}")
+    endif()
+
+    # Verify the library was created
+    set(OpenBLAS_LIB "${OPENBLAS_INSTALL_DIR}/lib/openblas.lib")
+    if(NOT EXISTS "${OpenBLAS_LIB}")
+        # Check for alternative library names
+        file(GLOB possible_libs "${OPENBLAS_INSTALL_DIR}/lib/*blas*.lib")
+        if(possible_libs)
+            list(GET possible_libs 0 OpenBLAS_LIB)
+            message(STATUS "Using alternative OpenBLAS library: ${OpenBLAS_LIB}")
+        else()
+            message(FATAL_ERROR "OpenBLAS library not found in: ${OPENBLAS_INSTALL_DIR}/lib/")
+        endif()
+    endif()
+
+    # Set variables for other parts of the build
+    set(OpenBLAS_LIBRARIES ${OpenBLAS_LIB} CACHE FILEPATH "OpenBLAS library" FORCE)
+    set(OPENBLAS_DIR ${OPENBLAS_INSTALL_DIR} CACHE PATH "OpenBLAS installation directory" FORCE)
+    set(OpenBLAS_INCLUDE_DIR "${OPENBLAS_INSTALL_DIR}/include" CACHE PATH "OpenBLAS include directory" FORCE)
+
+    message(STATUS "OpenBLAS successfully installed to: ${OPENBLAS_INSTALL_DIR}")
+    message(STATUS "OpenBLAS library: ${OpenBLAS_LIB}")
+    message(STATUS "OpenBLAS includes: ${OpenBLAS_INCLUDE_DIR}")
+
+    # Add to search paths
+    include_directories(${OpenBLAS_INCLUDE_DIR})
+    link_directories(${OPENBLAS_INSTALL_DIR}/lib)
+
 
 endif()
 # Required libraries and link settings
@@ -210,32 +264,50 @@ endif()
 
     #Configuring Armadillo for MSVC
 if(WIN32)
+
+    message(STATUS "OpenBLAS_LIB = ${OpenBLAS_LIB}")
+    message(STATUS "SUPERLU_INSTALL_DIR = ${SUPERLU_INSTALL_DIR}")
+    message(STATUS "ARMADILLO_BUILD_DIR = ${ARMADILLO_BUILD_DIR}")
+
+    # Print directory contents for debugging
+    execute_process(COMMAND cmd /c dir "${OPENBLAS_INSTALL_DIR}/lib"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+        OUTPUT_VARIABLE DIR_OUTPUT
+    )
+    message(STATUS "OpenBLAS lib contents:\n${DIR_OUTPUT}")
     message(STATUS "Configuring Armadillo build for Windows using MSVC...")
     
-    include_directories(${OPENBLAS_DIR}/include  ${EIGEN_SRC_DIR})
-    link_directories(${OPENBLAS_DIR}/lib )
-
-    # Define library files
-    set(OpenBLAS_LIB "${OPENBLAS_DIR}/lib/openblas.lib")
-    #set(LAPACK_LIB "${LAPACK_DIR}/lib/lapack.lib")
-
+    # Verify OpenBLAS installation
+    foreach(DEP IN ITEMS OpenBLAS_LIB SUPERLU_INSTALL_DIR)
+        if(NOT EXISTS "${${DEP}}")
+            message(FATAL_ERROR "Dependency not found: ${DEP} = ${${DEP}}")
+        endif()
+    endforeach()
+    # Additional MSVC flags
+    add_definitions(-D_USE_MATH_DEFINES -DNOMINMAX)
+    
     execute_process(COMMAND ${CMAKE_COMMAND}
-        -DCMAKE_INSTALL_PREFIX=${ARMADILLO_INSTALL_DIR}
-        -DSuperLU_INCLUDE_DIR=${SUPERLU_INSTALL_DIR}/include
-        -DSuperLU_LIBRARY=${SUPERLU_INSTALL_DIR}/lib/superlu.lib
-        -DARMA_USE_WRAPPER=OFF
-        -DARMA_USE_LAPACK=OFF
-        -DARMA_USE_BLAS=ON
-        -DBLAS_LIBRARIES=${OpenBLAS_LIB}
-        
-        .
-        WORKING_DIRECTORY ${ARMADILLO_BUILD_DIR})
+    -DCMAKE_INSTALL_PREFIX:PATH=${ARMADILLO_INSTALL_DIR}
+    -DSuperLU_INCLUDE_DIR:PATH=${SUPERLU_INSTALL_DIR}/include
+    -DSuperLU_LIBRARY:FILEPATH=${SUPERLU_INSTALL_DIR}/lib/superlu.lib
+    -DOpenBLAS_FOUND:BOOL=TRUE
+    -DOPENBLAS_PROVIDES_LAPACK:BOOL=ON
+    -DBLAS_LIBRARIES:FILEPATH=${OpenBLAS_LIB}
+    -DLAPACK_LIBRARIES:FILEPATH=${OpenBLAS_LIB}
+    -DARMA_USE_BLAS:BOOL=ON
+    -DARMA_USE_LAPACK:BOOL=ON
+    -DARMA_USE_SUPERLU:BOOL=ON
+    -DARMA_USE_WRAPPER:BOOL=OFF
+    -DBUILD_SHARED_LIBS:BOOL=OFF
+    .
+    WORKING_DIRECTORY ${ARMADILLO_BUILD_DIR}
+    )
+
     execute_process(COMMAND ${CMAKE_COMMAND} --build . --config Release WORKING_DIRECTORY ${ARMADILLO_BUILD_DIR})
     execute_process(COMMAND ${CMAKE_COMMAND} --install . --config Release WORKING_DIRECTORY ${ARMADILLO_BUILD_DIR})
 
     message(STATUS "Armadillo build and installation complete on Windows.")
 endif()
-
 #Configuring Armadillo for other compilers
 if (NOT WIN32)
     execute_process(COMMAND ${CMAKE_COMMAND}
@@ -274,14 +346,19 @@ endif()
 
 if(WIN32)
     set(SUPERLU_LIB ${SUPERLU_INSTALL_DIR}/lib/superlu.lib)
+    set(ARMADILLO_LIB ${ARMADILLO_INSTALL_DIR}/lib/armadillo.lib)
+    set(OPENBLAS_LIB ${OPENBLAS_INSTALL_DIR}/lib/openblas.lib)
 else()
     set(SUPERLU_LIB ${SUPERLU_INSTALL_DIR}/lib/libsuperlu.a)
+    set(ARMADILLO_LIB ${ARMADILLO_INSTALL_DIR}/lib/libarmadillo.a)
+    set(OPENBLAS_LIB ${OPENBLAS_INSTALL_DIR}/lib/libopenblas.a)
 endif()
 
-set(LINK_LIBS ${ARMADILLO_LIBRARIES}
-              ${OpenBLAS_LIBRARIES}
-              ${SUPERLU_LIB}
-              )
+set(LINK_LIBS 
+    ${ARMADILLO_LIB}
+    ${SUPERLU_LIB}
+    ${OPENBLAS_LIB}
+    )
 
 # Add subdirectories
 add_subdirectory(src/cpp)
