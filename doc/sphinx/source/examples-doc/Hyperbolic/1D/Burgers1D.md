@@ -17,5 +17,5 @@ The wave is allowed to propagate across the domain while the area under the curv
 ---
 
 This example is implemented in:
-- [MATLAB](../../../../../../examples/matlab/burgers1D.m)
-- [C++](../../../../../../examples/cpp/Burgers1D.cpp) 
+- [MATLAB](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/burgers1D.m)
+- [C++](https://github.com/csrc-sdsu/mole/blob/master/examples/cpp/Burgers1D.cpp) 
