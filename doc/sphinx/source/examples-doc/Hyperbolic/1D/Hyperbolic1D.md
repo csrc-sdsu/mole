@@ -41,8 +41,8 @@ $$
 ---
 
 This example is implemented in:
-- [MATLAB](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab/Hyperbolic/1D/hyperbolic1D.m)
+- [MATLAB](../../../../matlab/Hyperbolic/1D/hyperbolic1D.m)
 
 Additional MATLAB variants:
-- [Upwind Scheme](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab/Hyperbolic/1D/hyperbolic1D_upwind.m)
-- [Lax-Friedrichs Scheme](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab/Hyperbolic/1D/hyperbolic1D_lax_friedrichs.m)
+- [Upwind Scheme](../../../../matlab/Hyperbolic/1D/hyperbolic1D_upwind.m)
+- [Lax-Friedrichs Scheme](../../../../matlab/Hyperbolic/1D/hyperbolic1D_lax_friedrichs.m)

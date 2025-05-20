@@ -17,5 +17,5 @@ The wave is allowed to propagate across the domain while the area under the curv
 ---
 
 This example is implemented in:
-- [MATLAB](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab/Hyperbolic/1D/burgers1D.m)
-- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/Hyperbolic/1D/Burgers1D.cpp) 
+- [MATLAB](../../../../matlab/Hyperbolic/1D/burgers1D.m)
+- [C++](../../../../cpp/Hyperbolic/1D/Burgers1D.cpp) 
