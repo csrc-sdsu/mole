@@ -19,8 +19,8 @@ $$
 ---
 
 This example is implemented in:
-- [MATLAB](../../../../matlab/Hyperbolic/1D/wave1D.m)
+- [MATLAB](- [MATLAB](../../../../../../examples/matlab/wave1D.m)
 
 Additional MATLAB variants:
-- [Wave 1D Case 2](../../../../matlab/Hyperbolic/1D/wave1D_case2.m)
-- [Wave 1D with Time-Varying BC](../../../../matlab/Hyperbolic/1D/wave1DTimeVaryingBC.m)
+- [Wave 1D Case 2](../../../../../../examples/matlab/wave1D_case2.m)
+- [Wave 1D with Time-Varying BC](../../../../../../examples/matlab/wave1DTimeVaryingBC.m)

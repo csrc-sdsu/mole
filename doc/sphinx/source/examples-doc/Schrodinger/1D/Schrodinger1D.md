@@ -11,4 +11,4 @@ where $H$ is the Hamiltonian operator, $\psi$ is the wave function, and $E$ is t
 ---
 
 This example is implemented in:
-- [C++](../../../../cpp/Schrodinger/schrodinger1D.cpp)
+- [C++](../../../../../../examples/cpp/schrodinger1D.cpp)
