@@ -1,22 +1,11 @@
 # Hyperbolic Problems
 
+Hyperbolic PDEs model wave propagation and transport phenomena where information travels along characteristic curves. Examples include the wave equation, transport equation, and conservation laws such as Burgers' equation.
+
 ```{toctree}
 :maxdepth: 2
-:caption: 1D Problems
+:caption: Contents
 
-1D/Wave-1D
-1D/Wave-1D-Case-2
-1D/Transport1D
-1D/Burgers1D
-1D/Hyperbolic1D
-1D/Hyperbolic1D-upwind
-1D/Hyperbolic1D-Lax-Friedrichs
+1D/index
+2D/index
 ```
-
-```{toctree}
-:maxdepth: 2
-:caption: 2D Problems
-
-2D/Wave-2D
-2D/Wave-2D-Case-2
-``` 

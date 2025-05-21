@@ -1,5 +1,7 @@
 # 2D Elliptic Problems
 
+These examples cover two-dimensional elliptic PDEs across various geometries, including examples on curved domains and specialized cases of the Poisson equation.
+
 ```{toctree}
 :maxdepth: 1
 
