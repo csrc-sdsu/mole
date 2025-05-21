@@ -3,7 +3,9 @@
  % u_t = a(u_xx + u_yy), 0 < x,y < 2, t > 0, a = 0.1 
  % IC: u(x,y,0) = 2 in square [1,1.5] x [1,1.5], else 0
  % BC: Dirichlet (u = 0) on all boundaries
- % exact solution: unknown 
+ % Exact solution: unknown 
+ % Based on the following code implemented with the finite difference method:
+ % https://www.mathworks.com/matlabcentral/fileexchange/38088-diffusion-in-1d-and-2d
  % =================================================== 
 
 clc
