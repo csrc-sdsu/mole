@@ -89,14 +89,14 @@ plot(grid, exp(grid))
 :::::
 
 For full examples, see:
-- C++: [transport1D.cpp](../../../../examples/cpp/transport1D.cpp)
-- MATLAB: [elliptic1D.m](../../../../examples/matlab/elliptic1D.m)
+- C++: [transport1D.cpp](https://github.com/csrc-sdsu/mole/blob/master/examples/cpp/transport1D.cpp)
+- MATLAB: [elliptic1D.m](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1D.m)
 
 ## Next Steps
 
-- Check out more C++ examples in the `examples/cpp/` directory
-- Explore the MATLAB/Octave examples in the `examples/matlab/` directory
-- Join our community and [contribute](../intros/contributing_wrapper.md)
+- Check out more C++ examples in the [examples/cpp/](https://github.com/csrc-sdsu/mole/blob/master/examples/cpp) directory
+- Explore the MATLAB/Octave examples in the [examples/matlab/](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab) directory
+- Join our community and [contribute](https://github.com/csrc-sdsu/mole/blob/master/CONTRIBUTING.md)
 
 ```{include} ../../../../README.md
 :start-after: "**Important Note:**"
