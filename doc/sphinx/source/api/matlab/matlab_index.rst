@@ -69,15 +69,15 @@ Interpolation Functions
 Boundary Conditions
 ----------------------------
 
-* :mat:func:`addBC1D` - Apply boundary conditions to a 1D system
-* :mat:func:`addBC1Dlhs` - Create left-hand side matrix for 1D boundary conditions
-* :mat:func:`addBC1Drhs` - Create right-hand side vector for 1D boundary conditions
-* :mat:func:`addBC2D` - Apply boundary conditions to a 2D system
-* :mat:func:`addBC2Dlhs` - Create left-hand side matrix for 2D boundary conditions
-* :mat:func:`addBC2Drhs` - Create right-hand side vector for 2D boundary conditions
-* :mat:func:`addBC3D` - Apply boundary conditions to a 3D system
-* :mat:func:`addBC3Dlhs` - Create left-hand side matrix for 3D boundary conditions
-* :mat:func:`addBC3Drhs` - Create right-hand side vector for 3D boundary conditions
+* :mat:func:`addScalarBC1D` - Apply boundary conditions to a 1D system
+* :mat:func:`addScalarBC1Dlhs` - Create left-hand side matrix for 1D boundary conditions
+* :mat:func:`addScalarBC1Drhs` - Create right-hand side vector for 1D boundary conditions
+* :mat:func:`addScalarBC2D` - Apply boundary conditions to a 2D system
+* :mat:func:`addScalarBC2Dlhs` - Create left-hand side matrix for 2D boundary conditions
+* :mat:func:`addScalarBC2Drhs` - Create right-hand side vector for 2D boundary conditions
+* :mat:func:`addScalarBC3D` - Apply boundary conditions to a 3D system
+* :mat:func:`addScalarBC3Dlhs` - Create left-hand side matrix for 3D boundary conditions
+* :mat:func:`addScalarBC3Drhs` - Create right-hand side vector for 3D boundary conditions
 * :mat:func:`boundaryIdx2D` - Get boundary indices for a 2D domain
 * :mat:func:`mixedBC` - Constructs a 1D mimetic mixed boundary conditions operator
 * :mat:func:`mixedBC2D` - Constructs a 2D mimetic mixed boundary conditions operator
