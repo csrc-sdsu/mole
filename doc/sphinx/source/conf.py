@@ -233,7 +233,7 @@ html_theme = 'sphinx_book_theme'
 html_theme_options = {
     # Repository configuration
     "repository_url": "https://github.com/csrc-sdsu/mole",
-    "repository_branch": "main",
+    "repository_branch": "master",
     "use_repository_button": True,
     "path_to_docs": "doc/sphinx/source",
     
@@ -315,7 +315,7 @@ html_context = {
     'display_github': True,
     'github_user': 'csrc-sdsu',
     'github_repo': 'mole',
-    'github_version': 'main',
+    'github_version': 'master',
     'display_version': True,
     'conf_py_path': '/doc/sphinx/source/',
 }
