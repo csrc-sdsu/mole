@@ -479,7 +479,7 @@ if os.path.exists(example_dest):
 readme_files = [
     os.path.join(example_dest, "README.md"),
     os.path.join(example_dest, "cpp/README.md"),
-    os.path.join(example_dest, "matlab/compact_operators/README.md")
+    os.path.join(example_dest, "matlab/Compact_operators/README.md")
 ]
 
 for readme_file in readme_files:
@@ -496,7 +496,7 @@ for readme_file in readme_files:
         elif basename == "cpp":
             title = "C++ Examples"
             content = "This folder contains C++ examples for MOLE."
-        elif basename == "compact_operators":
+        elif basename == "Compact_operators":
             title = "MATLAB Compact Operators"
             content = "This folder contains MATLAB examples for compact operators."
         

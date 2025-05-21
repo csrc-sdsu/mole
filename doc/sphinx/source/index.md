@@ -12,7 +12,6 @@ myst:
 :maxdepth: 2
 :caption: Index
 :name: Index-nav
-:class: Index-toc
 
 intros/introduction
 intros/gettingstarted
@@ -23,7 +22,6 @@ Documentation Guide <intros/doc_readme_wrapper>
 :maxdepth: 4
 :caption: API Reference
 :name: api-nav
-:class: api-toc
 
 api/cpp/index
 api/matlab/index-beta
@@ -33,7 +31,6 @@ api/matlab/index-beta
 :maxdepth: 1
 :caption: Mathematical Framework
 :name: math-nav
-:class: math-toc
 
 math_functions/index
 ```
@@ -42,7 +39,6 @@ math_functions/index
 :maxdepth: 2
 :caption: Examples
 :name: examples-nav
-:class: examples-toc
 
 examples/index
 ```
@@ -51,7 +47,6 @@ examples/index
 :maxdepth: 1
 :caption: Project
 :name: project-nav
-:class: project-toc
 
 Contributing to MOLE <intros/contributing_wrapper>
 Code of Conduct <intros/code_of_conduct_wrapper>

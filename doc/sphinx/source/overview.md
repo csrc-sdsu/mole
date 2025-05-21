@@ -1,7 +1,9 @@
 # MOLE: Mimetic Operators Library Enhanced
 
-```{hero} A high-order mimetic differential operators library for solving PDEs
-:class-title: bold-title
+```{admonition} About MOLE
+:class: note
+
+A high-order mimetic differential operators library for solving PDEs
 ```
 
 ````{grid} 1 1 2 2
