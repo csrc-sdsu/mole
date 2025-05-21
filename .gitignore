@@ -20,7 +20,6 @@ cmake_install.cmake
 # /doc/doxygen/matlab # TODO: add this back in once we work to update or integrate the MATLAB API.
 /doc/sphinx/build/
 /doc/sphinx/_build/
-/doc/sphinx/source/examples/
 /doc/sphinx/source/README.md
 /doc/sphinx/source/_images/
 /doc/sphinx/source/intros/doc/
