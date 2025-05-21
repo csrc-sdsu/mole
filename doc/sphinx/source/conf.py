@@ -429,91 +429,91 @@ def mkdir_p(path):
 
 # Clean up and copy example documentation from source tree
 example_dest = str(ROOT_DIR / "doc/sphinx/source/examples")
-try:
-    if os.path.exists(example_dest):
-        shutil.rmtree(example_dest)
-except FileNotFoundError:
-    pass
+# try:
+#     if os.path.exists(example_dest):
+#         shutil.rmtree(example_dest)
+# except FileNotFoundError:
+#     pass
 
 # Debug info
 print("\nDEBUG: Exclude Patterns:")
 for pattern in exclude_patterns:
     print(f"  - {pattern}")
 
-# Copy all markdown files from examples directory
-for filename in glob.glob(str(ROOT_DIR / "examples/**/*.md"), recursive=True):
-    rel_path = os.path.relpath(filename, str(ROOT_DIR / "examples"))
-    destdir = os.path.join(example_dest, os.path.dirname(rel_path))
-    dest_file = os.path.join(destdir, os.path.basename(rel_path))
-    
-    # Only exclude if the relative path exactly matches an exclude pattern
-    skip_file = rel_path in exclude_patterns
-    
-    if not skip_file:
-        mkdir_p(destdir)
-        shutil.copy2(filename, destdir)
-        print(f"DEBUG: Copied markdown file: {filename} to {destdir}")
+# # Copy all markdown files from examples directory
+# for filename in glob.glob(str(ROOT_DIR / "examples/**/*.md"), recursive=True):
+#     rel_path = os.path.relpath(filename, str(ROOT_DIR / "examples"))
+#     destdir = os.path.join(example_dest, os.path.dirname(rel_path))
+#     dest_file = os.path.join(destdir, os.path.basename(rel_path))
+#     
+#     # Only exclude if the relative path exactly matches an exclude pattern
+#     skip_file = rel_path in exclude_patterns
+#     
+#     if not skip_file:
+#         mkdir_p(destdir)
+#         shutil.copy2(filename, destdir)
+#         print(f"DEBUG: Copied markdown file: {filename} to {destdir}")
 
-# Copy all image files from examples directory
-for ext in ['*.jpg', '*.jpeg', '*.png', '*.svg']:
-    for filename in glob.glob(str(ROOT_DIR / "examples/**/" / ext), recursive=True):
-        rel_path = os.path.relpath(filename, str(ROOT_DIR / "examples"))
-        destdir = os.path.join(example_dest, os.path.dirname(rel_path))
-        mkdir_p(destdir)
-        shutil.copy2(filename, destdir)
-        print(f"DEBUG: Copied image file: {filename} to {destdir}")
+# # Copy all image files from examples directory
+# for ext in ['*.jpg', '*.jpeg', '*.png', '*.svg']:
+#     for filename in glob.glob(str(ROOT_DIR / "examples/**/" / ext), recursive=True):
+#         rel_path = os.path.relpath(filename, str(ROOT_DIR / "examples"))
+#         destdir = os.path.join(example_dest, os.path.dirname(rel_path))
+#         mkdir_p(destdir)
+#         shutil.copy2(filename, destdir)
+#         print(f"DEBUG: Copied image file: {filename} to {destdir}")
 
 # Debug info to help troubleshoot file copying
-print("\nDEBUG: Directory Structure Before File Operations:")
-if os.path.exists(example_dest):
-    for root, dirs, files in os.walk(example_dest):
-        rel_root = os.path.relpath(root, example_dest)
-        if rel_root == ".":
-            print(f"Directory: {example_dest}")
-        else:
-            print(f"Directory: {os.path.join(example_dest, rel_root)}")
-        for file in files:
-            print(f"  File: {file}")
+# print("\nDEBUG: Directory Structure Before File Operations:")
+# if os.path.exists(example_dest):
+#     for root, dirs, files in os.walk(example_dest):
+#         rel_root = os.path.relpath(root, example_dest)
+#         if rel_root == ".":
+#             print(f"Directory: {example_dest}")
+#         else:
+#             print(f"Directory: {os.path.join(example_dest, rel_root)}")
+#         for file in files:
+#             print(f"  File: {file}")
 
-# Ensure README files that are referenced in toctree exist
-readme_files = [
-    os.path.join(example_dest, "README.md"),
-    os.path.join(example_dest, "cpp/README.md"),
-    os.path.join(example_dest, "matlab/Compact_operators/README.md")
-]
-
-for readme_file in readme_files:
-    dir_path = os.path.dirname(readme_file)
-    if not os.path.exists(dir_path):
-        mkdir_p(dir_path)
-    
-    # If the README doesn't exist, create a basic one with a title
-    if not os.path.exists(readme_file):
-        basename = os.path.basename(os.path.dirname(readme_file))
-        if basename == "examples":
-            title = "MOLE Examples Overview"
-            content = "This directory contains examples demonstrating the usage of MOLE."
-        elif basename == "cpp":
-            title = "C++ Examples"
-            content = "This folder contains C++ examples for MOLE."
-        elif basename == "Compact_operators":
-            title = "MATLAB Compact Operators"
-            content = "This folder contains MATLAB examples for compact operators."
-        
-        with open(readme_file, 'w') as f:
-            f.write(f"# {title}\n\n{content}\n")
+# # Ensure README files that are referenced in toctree exist
+# readme_files = [
+#     os.path.join(example_dest, "README.md"),
+#     os.path.join(example_dest, "cpp/README.md"),
+#     os.path.join(example_dest, "matlab/compact_operators/README.md")
+# ]
+# 
+# for readme_file in readme_files:
+#     dir_path = os.path.dirname(readme_file)
+#     if not os.path.exists(dir_path):
+#         mkdir_p(dir_path)
+#     
+#     # If the README doesn't exist, create a basic one with a title
+#     if not os.path.exists(readme_file):
+#         basename = os.path.basename(os.path.dirname(readme_file))
+#         if basename == "examples":
+#             title = "MOLE Examples Overview"
+#             content = "This directory contains examples demonstrating the usage of MOLE."
+#         elif basename == "cpp":
+#             title = "C++ Examples"
+#             content = "This folder contains C++ examples for MOLE."
+#         elif basename == "compact_operators":
+#             title = "MATLAB Compact Operators"
+#             content = "This folder contains MATLAB examples for compact operators."
+#         
+#         with open(readme_file, 'w') as f:
+#             f.write(f"# {title}\n\n{content}\n")
 
 # Debug info after file operations
-print("\nDEBUG: Directory Structure After File Operations:")
-if os.path.exists(example_dest):
-    for root, dirs, files in os.walk(example_dest):
-        rel_root = os.path.relpath(root, example_dest)
-        if rel_root == ".":
-            print(f"Directory: {example_dest}")
-        else:
-            print(f"Directory: {os.path.join(example_dest, rel_root)}")
-        for file in files:
-            print(f"  File: {file}")
+# print("\nDEBUG: Directory Structure After File Operations:")
+# if os.path.exists(example_dest):
+#     for root, dirs, files in os.walk(example_dest):
+#         rel_root = os.path.relpath(root, example_dest)
+#         if rel_root == ".":
+#             print(f"Directory: {example_dest}")
+#         else:
+#             print(f"Directory: {os.path.join(example_dest, rel_root)}")
+#         for file in files:
+#             print(f"  File: {file}")
 
 # Check if specific README files exist
 print("\nDEBUG: Checking for specific README files:")
@@ -616,3 +616,9 @@ def copytree_ignore_existing(src, dst, *args, **kwargs):
 
 # Monkey patch for Sphinx to use our custom copy function
 shutil.copytree = copytree_ignore_existing
+# print("\nDEBUG: Checking for specific README files:")
+# for readme_file in readme_files:
+#     if os.path.exists(readme_file):
+#         print(f"  - {readme_file}: FOUND")
+#     else:
+#         print(f"  - {readme_file}: NOT FOUND")
