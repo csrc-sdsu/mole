@@ -6,5 +6,7 @@ Mixed problems combine characteristics of different PDE types (elliptic, parabol
 :maxdepth: 2
 :caption: Contents
 
-Convection-Diffusion
+1D/index
+2D/index
+3D/index
 ``` 

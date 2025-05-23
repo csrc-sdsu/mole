@@ -5,11 +5,10 @@ These examples demonstrate one-dimensional hyperbolic equations, including wave 
 ```{toctree}
 :maxdepth: 1
 
-Wave-1D
-Wave-1D-Case-2
-Transport1D
-Burgers1D
 Hyperbolic1D
 Hyperbolic1D-upwind
 Hyperbolic1D-Lax-Friedrichs
+Wave-1D
+Wave-1D-Case-2
+Burgers1D
 ``` 
