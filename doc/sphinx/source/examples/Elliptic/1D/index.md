@@ -6,5 +6,4 @@ These examples demonstrate the solution of elliptic equations in one dimension, 
 :maxdepth: 1
 
 Elliptic1D
-Poisson1D
 ``` 

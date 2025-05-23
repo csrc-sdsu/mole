@@ -92,6 +92,9 @@ myst_enable_extensions = [
     "tasklist"         # Task lists
 ]
 
+# Reduce MyST verbosity
+myst_suppress_warnings = ["myst.domains"]
+
 # Make sure amsmath extension is enabled for math environments
 myst_enable_extensions += ["amsmath", "colon_fence"]
 
@@ -198,6 +201,9 @@ matlab_filter_options = {
     'm2html_style': True,
 }
 
+# Reduce MATLAB domain verbosity
+matlab_suppress_warnings = True
+
 # Add MATLAB to intersphinx mapping if needed
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
@@ -283,7 +289,7 @@ if os.path.exists(logo_path) and not os.path.exists(dark_logo_path):
             dark_img = ImageOps.invert(img.convert('RGB'))
         
         dark_img.save(dark_logo_path)
-        print(f"Created dark mode logo at {dark_logo_path}")
+        # print(f"Created dark mode logo at {dark_logo_path}")  # Commented for cleaner output
     except Exception as e:
         print(f"Error creating dark logo: {e}")
         # If there's an error, just use the normal logo
@@ -332,13 +338,21 @@ copybutton_here_doc_delimiter = "EOT"
 #------------------------------------------------------------------------------
 suppress_warnings = [
     'myst.domains',
-    'myst.anchor',
+    'myst.anchor', 
     'myst.header',
     'epub.unknown_project_files',
     'image.nonlocal_uri',
     'app.add_source_parser',
-    'autosectionlabel.*'
+    'autosectionlabel.*',
+    'autosummary',
+    'matlab.duplicate_object'
 ]
+
+# Set logging level to reduce verbosity
+import logging
+logging.getLogger('sphinx').setLevel(logging.WARNING)
+logging.getLogger('myst_parser').setLevel(logging.WARNING)
+logging.getLogger('sphinxcontrib.matlab').setLevel(logging.WARNING)
 
 def fix_math_environments(app, docname, source):
     """Fix problematic math environments in markdown source."""
@@ -435,10 +449,10 @@ example_dest = str(ROOT_DIR / "doc/sphinx/source/examples")
 # except FileNotFoundError:
 #     pass
 
-# Debug info
-print("\nDEBUG: Exclude Patterns:")
-for pattern in exclude_patterns:
-    print(f"  - {pattern}")
+# Debug info - commented out for cleaner build output
+# print("\nDEBUG: Exclude Patterns:")
+# for pattern in exclude_patterns:
+#     print(f"  - {pattern}")
 
 # # Copy all markdown files from examples directory
 # for filename in glob.glob(str(ROOT_DIR / "examples/**/*.md"), recursive=True):
@@ -516,12 +530,12 @@ for pattern in exclude_patterns:
 #             print(f"  File: {file}")
 
 # Check if specific README files exist
-print("\nDEBUG: Checking for specific README files:")
-for readme_file in readme_files:
-    if os.path.exists(readme_file):
-        print(f"  - {readme_file}: FOUND")
-    else:
-        print(f"  - {readme_file}: NOT FOUND")
+# print("\nDEBUG: Checking for specific README files:")
+# for readme_file in readme_files:
+#     if os.path.exists(readme_file):
+#         print(f"  - {readme_file}: FOUND")
+#     else:
+#         print(f"  - {readme_file}: NOT FOUND")
 
 # SEO and metadata settings
 html_baseurl = 'https://mole-pdes.readthedocs.io/'
