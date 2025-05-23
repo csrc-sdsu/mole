@@ -37,6 +37,15 @@ else()
     message(STATUS "Using non-Clang compiler flags.")
 endif()
 
+if(UNIX AND NOT APPLE AND NOT MSVC)
+    message(STATUS "Checking for Fortran compiler (gfortran)...")
+    enable_language(Fortran OPTIONAL)
+    if(NOT CMAKE_Fortran_COMPILER)
+        message(FATAL_ERROR "gfortran is required but was not found. Please install it using 'sudo apt install gfortran'.")
+    endif()
+endif()
+
+
 find_package(Eigen3 3.3.7 REQUIRED)
 find_library(OpenBLAS_LIBRARIES NAMES openblas blas PATHS "/usr/lib/x86_64-linux-gnu" "/usr/local/opt/" "usr/local/lib" REQUIRED)
 find_library(LAPACK_LIBRARY lapack REQUIRED PATHS "/usr/lib" "/usr/lib/x86_64-linux-gnu" "/usr/local/lib" "/usr/local/opt/")
