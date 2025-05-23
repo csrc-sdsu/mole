@@ -16,15 +16,28 @@ HTMLDIR       = $(BUILDDIR)/html
 # List of Sphinx builders
 SPHINX_TARGETS := html dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub text man changes linkcheck doctest coverage gettext
 
-.PHONY: help clean doc-deps doc-html doc-clean doc-doxygen doc-all $(SPHINX_TARGETS) doc-latexpdf doc-latexpdf
+# Detect operating system for open command
+UNAME := $(shell uname)
+ifeq ($(UNAME), Darwin)
+  # macOS
+  OPEN_CMD := open
+else ifeq ($(UNAME), Linux)
+  # Linux (using xdg-open)
+  OPEN_CMD := xdg-open
+else
+  # Windows or others (with limited functionality)
+  OPEN_CMD := start
+endif
+
+.PHONY: help clean doc-deps doc-html doc-clean-dirs doc-doxygen doc-all $(SPHINX_TARGETS) doc-latexpdf doc-custom
 
 # Default target
 help:
 	@echo "Documentation targets:"
 	@echo "  doc-doxygen  : Generate Doxygen documentation"
 	@echo "  doc-deps     : Install documentation dependencies"
-	@echo "  doc-html     : Build HTML documentation"
-	@echo "  doc-latexpdf : Build PDF documentation"
+	@echo "  doc-html     : Build HTML documentation and open in browser"
+	@echo "  doc-latexpdf : Build PDF documentation and open in viewer"
 	@echo "  doc-clean    : Remove all built documentation"
 	@echo "  doc-all      : Generate all HTML+PDF formats with a clean build"
 
@@ -50,6 +63,7 @@ doc-html:
 		echo "Error: Doxygen XML index file not found. Running doc-doxygen first..."; \
 		$(MAKE) doc-doxygen; \
 	fi
+	$(MAKE) copy-images
 	PYTHONPATH=../.. $(SPHINXBUILD) -b html "$(SOURCEDIR)" "$(BUILDDIR)/html"
 	@if [ -f "$(HTMLDIR)/index.html" ]; then \
 		echo "=== HTML documentation generated successfully ==="; \
@@ -61,7 +75,7 @@ doc-html:
 	fi
 
 # Clean built documentation
-doc-clean:
+doc-clean-dirs:
 	@echo "Cleaning documentation build directories..."
 	@rm -rf $(BUILDDIR)
 	@rm -rf $(DOXYDIR)
@@ -99,14 +113,14 @@ depcheck-inkscape:
 	}
 
 # Generate all documentation
-doc-all: doc-clean doc-doxygen doc-deps doc-html doc-latexpdf
+doc-all: doc-clean-dirs doc-doxygen doc-deps doc-html doc-latexpdf
 	@echo "================================================================"
-	@echo "Documentation generated in:"
+	@echo "Documentation generated successfully:"
 	@echo "  HTML: $(HTMLDIR)/index.html"
-	@echo "  Open with a browser:  file://$(CURDIR)/$(HTMLDIR)/index.html"
 	@echo "  PDF:  $(PDFDIR)/MOLE-docs.pdf"
 	@echo "  API:  ../doxygen/cpp/"
 	@echo "================================================================"
+
 # Explicit Sphinx targets
 $(SPHINX_TARGETS):
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS)
@@ -134,5 +148,7 @@ doc-clean: clean
 	rm -rf source/intros/doc
 	rm -f source/README.md
 
-html: copy-images
-	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+# Renamed to avoid conflict with the doc-clean target above
+.PHONY: html-with-copy
+html-with-copy: copy-images
+	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)

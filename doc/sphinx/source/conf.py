@@ -13,6 +13,8 @@ import subprocess
 import importlib.util
 import pkg_resources
 import glob
+from PIL import Image, ImageOps
+import errno
 
 #------------------------------------------------------------------------------
 # Path configuration
@@ -48,9 +50,16 @@ extensions = [
     'sphinx.ext.viewcode',    # Link to source code
     'sphinx.ext.napoleon',    # Support for NumPy and Google style docstrings
     'sphinx.ext.intersphinx', # Link to other project's documentation
+    'sphinx.ext.todo',        # Support for TODO items
+    'sphinx.ext.autosectionlabel', # Auto-generate section labels
+    'sphinx.ext.autosummary', # Generate summaries automatically
+    'sphinx.ext.coverage',    # Check documentation coverage
     
-    # Theme
-    'sphinx_rtd_theme',       # Read the Docs theme
+    # Theme and theme extensions
+    'sphinx_book_theme',      # Book theme
+    'sphinx_design',          # UI components (tabs, cards, dropdowns)
+    'sphinx_copybutton',      # Copy button for code blocks
+    'sphinx_togglebutton',    # Collapsible content
     
     # External documentation extensions
     'breathe',                # Doxygen integration
@@ -61,6 +70,9 @@ extensions = [
     
     # Custom extensions
     'matlab_doc_filter',      # Filter license info from MATLAB docstrings
+    'matlab_args_fix',        # Fix MATLAB function argument warnings
+    'generate_sitemap',       # Generate sitemap.xml for SEO
+    'github_contributors',    # Display GitHub contributors
 ]
 
 #------------------------------------------------------------------------------
@@ -217,21 +229,103 @@ follow_links = True
 # HTML output configuration
 #------------------------------------------------------------------------------
 # Theme settings
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'sphinx_book_theme'
 html_theme_options = {
-    "style_external_links": True,
-    "logo_only": True,
-    "navigation_depth": 3,
-    "includehidden": True,
-    "titles_only": False,
-    "collapse_navigation": False
+    # Repository configuration
+    "repository_url": "https://github.com/csrc-sdsu/mole",
+    "repository_branch": "master",
+    "use_repository_button": True,
+    "path_to_docs": "doc/sphinx/source",
+    
+    # Navigation options
+    "show_toc_level": 2,
+    "use_download_button": True,
+    "use_fullscreen_button": True,
+    "use_source_button": True,
+    
+    # Theme and appearance
+    "pygments_light_style": "tango",
+    
+    # Removing unsupported theme options
+    # "use_dark_theme": False,
+    # "single_page": False,
 }
 
+# Logo for light/dark modes - uncomment and modify when dark logo is available
+html_theme_options.update({
+    "logo": {
+        "image_light": "_static/logo.png",
+        "image_dark": "_static/logo-dark.png",
+    }
+})
+
+# Create the dark logo if it doesn't exist
+logo_path = str(ROOT_DIR / "logo.png")
+dark_logo_path = str(ROOT_DIR / "doc/sphinx/source/_static/logo-dark.png")
+if os.path.exists(logo_path) and not os.path.exists(dark_logo_path):
+    try:
+        # Create the _static directory if it doesn't exist
+        os.makedirs(os.path.dirname(dark_logo_path), exist_ok=True)
+        
+        # Copy the logo to _static
+        import shutil
+        shutil.copy2(logo_path, str(ROOT_DIR / "doc/sphinx/source/_static/logo.png"))
+        
+        # Create a dark version of the logo
+        img = Image.open(logo_path)
+        if img.mode == 'RGBA':
+            # For PNG with transparency
+            r, g, b, a = img.split()
+            img_gray = ImageOps.invert(Image.merge('RGB', (r, g, b)))
+            dark_img = Image.merge('RGBA', (img_gray.split() + (a,)))
+        else:
+            # For JPG or other formats
+            dark_img = ImageOps.invert(img.convert('RGB'))
+        
+        dark_img.save(dark_logo_path)
+        print(f"Created dark mode logo at {dark_logo_path}")
+    except Exception as e:
+        print(f"Error creating dark logo: {e}")
+        # If there's an error, just use the normal logo
+        html_theme_options.update({
+            "logo": {
+                "image_light": "_static/logo.png",
+                "image_dark": "_static/logo.png",
+            }
+        })
+
 # Appearance
-html_logo = str(ROOT_DIR / "logo.png")
+html_title = "MOLE Documentation" 
+html_favicon = str(ROOT_DIR / "logo.png")
 html_css_files = [
     'css/custom.css',
+    'css/announcement.css',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'
 ]
+html_js_files = ['js/theme-custom.js', 'js/theme-mode-toggle.js', 'js/announcement.js']
+
+# Control sidebar contents - using defaults
+# html_sidebars = {
+#     "**": ["sbt-sidebar-nav.html"]
+# }
+
+# Custom template adjustments 
+templates_path = ['_templates']
+html_context = {
+    'display_github': True,
+    'github_user': 'csrc-sdsu',
+    'github_repo': 'mole',
+    'github_version': 'master',
+    'display_version': True,
+    'conf_py_path': '/doc/sphinx/source/',
+}
+
+# sphinx-copybutton configuration
+copybutton_prompt_text = r">>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: "
+copybutton_prompt_is_regexp = True
+copybutton_remove_prompts = True
+copybutton_line_continuation_character = "\\"
+copybutton_here_doc_delimiter = "EOT"
 
 #------------------------------------------------------------------------------
 # Warning suppression
@@ -246,13 +340,6 @@ suppress_warnings = [
     'autosectionlabel.*'
 ]
 
-def setup(app):
-    """Setup function for Sphinx extension."""
-    app.add_js_file('mathconf.js')
-    
-    # Add capability to replace problematic math environments
-    app.connect('source-read', fix_math_environments)
-
 def fix_math_environments(app, docname, source):
     """Fix problematic math environments in markdown source."""
     src = source[0]
@@ -266,6 +353,26 @@ def fix_math_environments(app, docname, source):
     src = re.sub(r'\\end{split}\s*\\end{equation\*}', r'\\end{align}', src)
     
     source[0] = src
+
+def setup(app):
+    """Setup function for Sphinx extension."""
+    app.add_js_file('mathconf.js')
+    
+    # Add capability to replace problematic math environments
+    app.connect('source-read', fix_math_environments)
+    
+    # Patch graphviz extension to avoid file exists errors
+    from sphinx.ext import graphviz
+    original_on_build_finished = graphviz.on_build_finished
+    
+    def patched_on_build_finished(app, exception):
+        """Patched version of graphviz on_build_finished that ignores file exists errors."""
+        try:
+            original_on_build_finished(app, exception)
+        except FileExistsError:
+            pass
+    
+    graphviz.on_build_finished = patched_on_build_finished
 
 #------------------------------------------------------------------------------
 # LaTeX and PDF output configuration
@@ -372,7 +479,7 @@ if os.path.exists(example_dest):
 readme_files = [
     os.path.join(example_dest, "README.md"),
     os.path.join(example_dest, "cpp/README.md"),
-    os.path.join(example_dest, "matlab/compact_operators/README.md")
+    os.path.join(example_dest, "matlab/Compact_operators/README.md")
 ]
 
 for readme_file in readme_files:
@@ -389,7 +496,7 @@ for readme_file in readme_files:
         elif basename == "cpp":
             title = "C++ Examples"
             content = "This folder contains C++ examples for MOLE."
-        elif basename == "compact_operators":
+        elif basename == "Compact_operators":
             title = "MATLAB Compact Operators"
             content = "This folder contains MATLAB examples for compact operators."
         
@@ -415,3 +522,97 @@ for readme_file in readme_files:
         print(f"  - {readme_file}: FOUND")
     else:
         print(f"  - {readme_file}: NOT FOUND")
+
+# SEO and metadata settings
+html_baseurl = 'https://mole-pdes.readthedocs.io/'
+html_extra_path = []
+html_use_opensearch = ''
+
+# Additional meta tags for all pages
+html_meta = {
+    'keywords': 'mimetic operators, computational science, PDE solver, numerical methods, scientific computing, MATLAB, C++',
+    'description': 'MOLE: Mimetic Operators Library Enhanced - A high-order mimetic differential operators library for solving PDEs',
+    'author': 'CSRC SDSU',
+    'viewport': 'width=device-width, initial-scale=1',
+}
+
+# Add version information display
+html_last_updated_fmt = '%b %d, %Y'
+html_use_smartypants = True
+
+# Add a sitemap
+html_additional_pages = {}
+html_extra_path.append('robots.txt')
+
+# Enable Google Analytics if you have a tracking ID
+# html_theme_options.update({
+#     "google_analytics_id": "UA-XXXXX-X",
+# })
+
+# SEO and metadata settings
+html_baseurl = 'https://mole-pdes.readthedocs.io/'
+html_use_opensearch = ''
+
+# Additional meta tags for all pages
+html_meta.update({
+    'og:title': 'MOLE Documentation',
+    'og:site_name': 'MOLE: Mimetic Operators Library Enhanced',
+    'og:url': 'https://mole-pdes.readthedocs.io/',
+    'og:image': 'https://mole-pdes.readthedocs.io/_static/logo.png',
+    'og:type': 'website',
+    'twitter:card': 'summary_large_image',
+    'twitter:title': 'MOLE Documentation',
+    'twitter:description': 'MOLE: Mimetic Operators Library Enhanced - A high-order mimetic differential operators library for solving PDEs',
+})
+
+# Add Open Graph protocol markup
+html_theme_options.update({
+    # Other options
+    # "announcement": "Latest release: v1.0.0",
+    "use_edit_page_button": True,
+    "extra_footer": """
+        <div class="footer-extra">
+            <p>MOLE is a project by CSRC SDSU.</p>
+        </div>
+    """,
+    "home_page_in_toc": True,
+    "show_navbar_depth": 2,
+    "icon_links": [
+        {
+            "name": "GitHub",
+            "url": "https://github.com/csrc-sdsu/mole",
+            "icon": "fab fa-github",
+        },
+        {
+            "name": "MATLAB",
+            "url": "https://www.mathworks.com/matlabcentral/fileexchange/124870-mole",
+            "icon": "fas fa-cube",
+        },
+    ],
+})
+
+# Configure sphinx-copybutton
+copybutton_selector = "div.highlight pre"
+
+# Fix for static file copying issues
+def copy_file_safe(src, dst):
+    """Copy file without raising error if destination exists."""
+    try:
+        shutil.copy2(src, dst)
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
+
+# Override default copytree function for static files
+original_copytree = shutil.copytree
+
+def copytree_ignore_existing(src, dst, *args, **kwargs):
+    """Copy directory tree but ignore existing files."""
+    try:
+        return original_copytree(src, dst, *args, **kwargs)
+    except FileExistsError:
+        # If dst exists as a file or dir, just return without raising error
+        return dst
+
+# Monkey patch for Sphinx to use our custom copy function
+shutil.copytree = copytree_ignore_existing
