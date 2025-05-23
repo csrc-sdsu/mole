@@ -74,6 +74,8 @@ doc-html:
 		exit 1; \
 	fi
 
+
+
 # Clean built documentation
 doc-clean-dirs:
 	@echo "Cleaning documentation build directories..."
@@ -143,7 +145,7 @@ clean:
 
 .PHONY: doc-clean
 doc-clean: clean
-	rm -rf source/examples
+	# rm -rf source/examples  # Commented out to preserve examples folder
 	rm -rf source/_images
 	rm -rf source/intros/doc
 	rm -f source/README.md
