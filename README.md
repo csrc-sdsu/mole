@@ -1,10 +1,10 @@
 # MOLE: Mimetic Operators Library Enhanced
 
-[![JOSS paper][joss-badge]][joss-link]
-[![MATLAB File Exchange][matlab-badge]][matlab-link]
-[![License][license-badge]][license-link]
-[![Build Status][build-badge]][build-link]
-[![Documentation][docs-badge]][docs-link]
+[![JOSS paper](https://joss.theoj.org/papers/10.21105/joss.06288/status.svg)](https://doi.org/10.21105/joss.06288)
+[![MATLAB File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/124870-mole)
+[![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Build Status](https://github.com/csrc-sdsu/mole/actions/workflows/build_and_gtest.yml/badge.svg)](https://github.com/csrc-sdsu/mole/actions/workflows/build_and_gtest.yml)
+[![Documentation](https://readthedocs.org/projects/mole-docs/badge/?version=latest)](https://mole-docs.readthedocs.io/en/latest/)
 
 ## Description
 
@@ -15,8 +15,8 @@ Gradient, Divergence, Laplacian, Bilaplacian, and Curl. These operators (highly 
 on staggered grids (uniform, non-uniform, curvilinear) and satisfy local and
 global conservation laws.
 
-Mathematics is based on the work of [Corbino and Castillo][corbino-paper].
-However, the user may find helpful previous publications, such as [Castillo and Grone][castillo-paper],
+Mathematics is based on the work of [Corbino and Castillo](https://doi.org/10.1016/j.cam.2019.06.042).
+However, the user may find helpful previous publications, such as [Castillo and Grone](https://doi.org/10.1137/S0895479801398025),
 in which similar operators were derived using a matrix analysis approach.
 
 ## Installation
@@ -31,7 +31,7 @@ To install the MOLE library, you'll need the following packages:
 - LAPACK (Mac only)
 - libomp (Mac only)
 
-For documentation build requirements, please refer to the [Documentation Guide][doc-guide].
+For documentation build requirements, please refer to the [Documentation Guide](https://github.com/csrc-sdsu/mole/blob/master/doc/sphinx/README.md).
 
 ### Package Installation by OS
 
@@ -44,7 +44,7 @@ sudo apt install cmake libopenblas-dev libeigen3-dev
 
 #### macOS Systems
 
-Install [Homebrew][homebrew] if you don't have it already, then run:
+Install [Homebrew](https://brew.sh/) if you don't have it already, then run:
 
 ```bash
 # Install all required packages
@@ -140,8 +140,8 @@ A collection of over 30 examples showcasing various PDE solutions, from simple l
 
 MOLE comes with comprehensive documentation:
 
-- **API Reference & User Guide**: Access our online [Documentation][docs-link]
-- **Building Documentation**: To build documentation locally, follow our [Documentation Guide][doc-guide].
+- **API Reference & User Guide**: Access our online [Documentation](https://mole-docs.readthedocs.io/en/latest/)
+- **Building Documentation**: To build documentation locally, follow our [Documentation Guide](https://github.com/csrc-sdsu/mole/blob/master/doc/sphinx/README.md).
 
 > **Important Note:** Performing non-unary operations involving operands constructed over different grids may lead to unexpected results. While MOLE allows such operations without throwing errors, users must exercise caution when manipulating operators across different grids.
 
@@ -159,7 +159,7 @@ We welcome contributions to MOLE, including:
 - Reporting bugs
 - Requesting new features
 
-Please refer to our [Contribution Guidelines][contrib-guide] for more details.
+Please refer to our [Contribution Guidelines](https://github.com/csrc-sdsu/mole/blob/master/CONTRIBUTING.md) for more details.
 
 ## Citations
 
@@ -178,21 +178,3 @@ Now, some cool pictures obtained with MOLE:
 ![Obtained with curvilinear operators](doc/assets/img/WavyGrid.png)
 ![Obtained with curvilinear operators](doc/assets/img/wave2D.png)
 ![Obtained with curvilinear operators](doc/assets/img/burgers.png)
-
-<!-- Link references -->
-
-[joss-badge]: https://joss.theoj.org/papers/10.21105/joss.06288/status.svg
-[joss-link]: https://doi.org/10.21105/joss.06288
-[matlab-badge]: https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg
-[matlab-link]: https://www.mathworks.com/matlabcentral/fileexchange/124870-mole
-[license-badge]: https://img.shields.io/badge/License-GPLv3-blue.svg
-[license-link]: https://www.gnu.org/licenses/gpl-3.0
-[build-badge]: https://github.com/csrc-sdsu/mole/actions/workflows/build_and_gtest.yml/badge.svg
-[build-link]: https://github.com/csrc-sdsu/mole/actions/workflows/build_and_gtest.yml
-[docs-badge]: https://readthedocs.org/projects/mole-docs/badge/?version=latest
-[docs-link]: https://mole-docs.readthedocs.io/en/latest/
-[corbino-paper]: https://doi.org/10.1016/j.cam.2019.06.042
-[castillo-paper]: https://doi.org/10.1137/S0895479801398025
-[doc-guide]: https://github.com/csrc-sdsu/mole/blob/master/doc/sphinx/README.md
-[homebrew]: https://brew.sh/
-[contrib-guide]: https://github.com/csrc-sdsu/mole/blob/master/CONTRIBUTING.md
