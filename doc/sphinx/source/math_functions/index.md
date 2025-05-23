@@ -3,7 +3,7 @@
 This section provides detailed mathematical descriptions of the operators implemented in MOLE.
 
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 1
 :caption: Mathematical Functions
 
 CSRCReportOnMOLE
