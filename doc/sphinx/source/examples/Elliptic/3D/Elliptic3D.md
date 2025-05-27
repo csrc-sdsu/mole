@@ -9,7 +9,7 @@ $$
 with $x\in[0,5], y\in[0,6], z\in[0,7]$, and
 
 $$
-f(x,y) = \begin{cases}
+f(x,y,z) = \begin{cases}
     100 & \text{ if z = 0} \\
     0 & \text{ otherwise }
 \end{cases}
@@ -22,4 +22,4 @@ au + b\nabla u = g
 $$
 
 with $a=1$, $b=0$, and $g=0$.
-This corresponds to the call to robinBC3D of `robinBC2D(k, m, 1, n, 1, o, 1, 1, 0)`.
+This corresponds to the call to robinBC3D of `robinBC3D(k, m, 1, n, 1, o, 1, 1, 0)`.
