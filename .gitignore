@@ -17,6 +17,7 @@ cmake_install.cmake
 
 # Documentation generated files
 /doc/doxygen/cpp
+/doc/doxygen/doxygen_warnings.log
 /doc/sphinx/build/
 /doc/sphinx/_build/
 /doc/sphinx/source/README.md
