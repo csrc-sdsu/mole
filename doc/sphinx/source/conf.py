@@ -92,6 +92,9 @@ myst_enable_extensions = [
     "tasklist"         # Task lists
 ]
 
+# Reduce MyST verbosity
+myst_suppress_warnings = ["myst.domains"]
+
 # Make sure amsmath extension is enabled for math environments
 myst_enable_extensions += ["amsmath", "colon_fence"]
 
@@ -198,6 +201,9 @@ matlab_filter_options = {
     'm2html_style': True,
 }
 
+# Reduce MATLAB domain verbosity
+matlab_suppress_warnings = True
+
 # Add MATLAB to intersphinx mapping if needed
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
@@ -239,6 +245,7 @@ html_theme_options = {
     
     # Navigation options
     "show_toc_level": 2,
+    "show_navbar_depth": 1,  # Control expansion: 1 = only top-level expanded by default
     "use_download_button": True,
     "use_fullscreen_button": True,
     "use_source_button": True,
@@ -283,7 +290,7 @@ if os.path.exists(logo_path) and not os.path.exists(dark_logo_path):
             dark_img = ImageOps.invert(img.convert('RGB'))
         
         dark_img.save(dark_logo_path)
-        print(f"Created dark mode logo at {dark_logo_path}")
+        # print(f"Created dark mode logo at {dark_logo_path}")  # Commented for cleaner output
     except Exception as e:
         print(f"Error creating dark logo: {e}")
         # If there's an error, just use the normal logo
@@ -332,13 +339,21 @@ copybutton_here_doc_delimiter = "EOT"
 #------------------------------------------------------------------------------
 suppress_warnings = [
     'myst.domains',
-    'myst.anchor',
+    'myst.anchor', 
     'myst.header',
     'epub.unknown_project_files',
     'image.nonlocal_uri',
     'app.add_source_parser',
-    'autosectionlabel.*'
+    'autosectionlabel.*',
+    'autosummary',
+    'matlab.duplicate_object'
 ]
+
+# Set logging level to reduce verbosity
+import logging
+logging.getLogger('sphinx').setLevel(logging.WARNING)
+logging.getLogger('myst_parser').setLevel(logging.WARNING)
+logging.getLogger('sphinxcontrib.matlab').setLevel(logging.WARNING)
 
 def fix_math_environments(app, docname, source):
     """Fix problematic math environments in markdown source."""
@@ -429,99 +444,99 @@ def mkdir_p(path):
 
 # Clean up and copy example documentation from source tree
 example_dest = str(ROOT_DIR / "doc/sphinx/source/examples")
-try:
-    if os.path.exists(example_dest):
-        shutil.rmtree(example_dest)
-except FileNotFoundError:
-    pass
+# try:
+#     if os.path.exists(example_dest):
+#         shutil.rmtree(example_dest)
+# except FileNotFoundError:
+#     pass
 
-# Debug info
-print("\nDEBUG: Exclude Patterns:")
-for pattern in exclude_patterns:
-    print(f"  - {pattern}")
+# Debug info - commented out for cleaner build output
+# print("\nDEBUG: Exclude Patterns:")
+# for pattern in exclude_patterns:
+#     print(f"  - {pattern}")
 
-# Copy all markdown files from examples directory
-for filename in glob.glob(str(ROOT_DIR / "examples/**/*.md"), recursive=True):
-    rel_path = os.path.relpath(filename, str(ROOT_DIR / "examples"))
-    destdir = os.path.join(example_dest, os.path.dirname(rel_path))
-    dest_file = os.path.join(destdir, os.path.basename(rel_path))
-    
-    # Only exclude if the relative path exactly matches an exclude pattern
-    skip_file = rel_path in exclude_patterns
-    
-    if not skip_file:
-        mkdir_p(destdir)
-        shutil.copy2(filename, destdir)
-        print(f"DEBUG: Copied markdown file: {filename} to {destdir}")
+# # Copy all markdown files from examples directory
+# for filename in glob.glob(str(ROOT_DIR / "examples/**/*.md"), recursive=True):
+#     rel_path = os.path.relpath(filename, str(ROOT_DIR / "examples"))
+#     destdir = os.path.join(example_dest, os.path.dirname(rel_path))
+#     dest_file = os.path.join(destdir, os.path.basename(rel_path))
+#     
+#     # Only exclude if the relative path exactly matches an exclude pattern
+#     skip_file = rel_path in exclude_patterns
+#     
+#     if not skip_file:
+#         mkdir_p(destdir)
+#         shutil.copy2(filename, destdir)
+#         print(f"DEBUG: Copied markdown file: {filename} to {destdir}")
 
-# Copy all image files from examples directory
-for ext in ['*.jpg', '*.jpeg', '*.png', '*.svg']:
-    for filename in glob.glob(str(ROOT_DIR / "examples/**/" / ext), recursive=True):
-        rel_path = os.path.relpath(filename, str(ROOT_DIR / "examples"))
-        destdir = os.path.join(example_dest, os.path.dirname(rel_path))
-        mkdir_p(destdir)
-        shutil.copy2(filename, destdir)
-        print(f"DEBUG: Copied image file: {filename} to {destdir}")
+# # Copy all image files from examples directory
+# for ext in ['*.jpg', '*.jpeg', '*.png', '*.svg']:
+#     for filename in glob.glob(str(ROOT_DIR / "examples/**/" / ext), recursive=True):
+#         rel_path = os.path.relpath(filename, str(ROOT_DIR / "examples"))
+#         destdir = os.path.join(example_dest, os.path.dirname(rel_path))
+#         mkdir_p(destdir)
+#         shutil.copy2(filename, destdir)
+#         print(f"DEBUG: Copied image file: {filename} to {destdir}")
 
 # Debug info to help troubleshoot file copying
-print("\nDEBUG: Directory Structure Before File Operations:")
-if os.path.exists(example_dest):
-    for root, dirs, files in os.walk(example_dest):
-        rel_root = os.path.relpath(root, example_dest)
-        if rel_root == ".":
-            print(f"Directory: {example_dest}")
-        else:
-            print(f"Directory: {os.path.join(example_dest, rel_root)}")
-        for file in files:
-            print(f"  File: {file}")
+# print("\nDEBUG: Directory Structure Before File Operations:")
+# if os.path.exists(example_dest):
+#     for root, dirs, files in os.walk(example_dest):
+#         rel_root = os.path.relpath(root, example_dest)
+#         if rel_root == ".":
+#             print(f"Directory: {example_dest}")
+#         else:
+#             print(f"Directory: {os.path.join(example_dest, rel_root)}")
+#         for file in files:
+#             print(f"  File: {file}")
 
-# Ensure README files that are referenced in toctree exist
-readme_files = [
-    os.path.join(example_dest, "README.md"),
-    os.path.join(example_dest, "cpp/README.md"),
-    os.path.join(example_dest, "matlab/Compact_operators/README.md")
-]
-
-for readme_file in readme_files:
-    dir_path = os.path.dirname(readme_file)
-    if not os.path.exists(dir_path):
-        mkdir_p(dir_path)
-    
-    # If the README doesn't exist, create a basic one with a title
-    if not os.path.exists(readme_file):
-        basename = os.path.basename(os.path.dirname(readme_file))
-        if basename == "examples":
-            title = "MOLE Examples Overview"
-            content = "This directory contains examples demonstrating the usage of MOLE."
-        elif basename == "cpp":
-            title = "C++ Examples"
-            content = "This folder contains C++ examples for MOLE."
-        elif basename == "Compact_operators":
-            title = "MATLAB Compact Operators"
-            content = "This folder contains MATLAB examples for compact operators."
-        
-        with open(readme_file, 'w') as f:
-            f.write(f"# {title}\n\n{content}\n")
+# # Ensure README files that are referenced in toctree exist
+# readme_files = [
+#     os.path.join(example_dest, "README.md"),
+#     os.path.join(example_dest, "cpp/README.md"),
+#     os.path.join(example_dest, "matlab/compact_operators/README.md")
+# ]
+# 
+# for readme_file in readme_files:
+#     dir_path = os.path.dirname(readme_file)
+#     if not os.path.exists(dir_path):
+#         mkdir_p(dir_path)
+#     
+#     # If the README doesn't exist, create a basic one with a title
+#     if not os.path.exists(readme_file):
+#         basename = os.path.basename(os.path.dirname(readme_file))
+#         if basename == "examples":
+#             title = "MOLE Examples Overview"
+#             content = "This directory contains examples demonstrating the usage of MOLE."
+#         elif basename == "cpp":
+#             title = "C++ Examples"
+#             content = "This folder contains C++ examples for MOLE."
+#         elif basename == "compact_operators":
+#             title = "MATLAB Compact Operators"
+#             content = "This folder contains MATLAB examples for compact operators."
+#         
+#         with open(readme_file, 'w') as f:
+#             f.write(f"# {title}\n\n{content}\n")
 
 # Debug info after file operations
-print("\nDEBUG: Directory Structure After File Operations:")
-if os.path.exists(example_dest):
-    for root, dirs, files in os.walk(example_dest):
-        rel_root = os.path.relpath(root, example_dest)
-        if rel_root == ".":
-            print(f"Directory: {example_dest}")
-        else:
-            print(f"Directory: {os.path.join(example_dest, rel_root)}")
-        for file in files:
-            print(f"  File: {file}")
+# print("\nDEBUG: Directory Structure After File Operations:")
+# if os.path.exists(example_dest):
+#     for root, dirs, files in os.walk(example_dest):
+#         rel_root = os.path.relpath(root, example_dest)
+#         if rel_root == ".":
+#             print(f"Directory: {example_dest}")
+#         else:
+#             print(f"Directory: {os.path.join(example_dest, rel_root)}")
+#         for file in files:
+#             print(f"  File: {file}")
 
 # Check if specific README files exist
-print("\nDEBUG: Checking for specific README files:")
-for readme_file in readme_files:
-    if os.path.exists(readme_file):
-        print(f"  - {readme_file}: FOUND")
-    else:
-        print(f"  - {readme_file}: NOT FOUND")
+# print("\nDEBUG: Checking for specific README files:")
+# for readme_file in readme_files:
+#     if os.path.exists(readme_file):
+#         print(f"  - {readme_file}: FOUND")
+#     else:
+#         print(f"  - {readme_file}: NOT FOUND")
 
 # SEO and metadata settings
 html_baseurl = 'https://mole-pdes.readthedocs.io/'
@@ -576,7 +591,6 @@ html_theme_options.update({
         </div>
     """,
     "home_page_in_toc": True,
-    "show_navbar_depth": 2,
     "icon_links": [
         {
             "name": "GitHub",
@@ -616,3 +630,9 @@ def copytree_ignore_existing(src, dst, *args, **kwargs):
 
 # Monkey patch for Sphinx to use our custom copy function
 shutil.copytree = copytree_ignore_existing
+# print("\nDEBUG: Checking for specific README files:")
+# for readme_file in readme_files:
+#     if os.path.exists(readme_file):
+#         print(f"  - {readme_file}: FOUND")
+#     else:
+#         print(f"  - {readme_file}: NOT FOUND")

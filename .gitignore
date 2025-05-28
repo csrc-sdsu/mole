@@ -17,14 +17,12 @@ cmake_install.cmake
 
 # Documentation generated files
 /doc/doxygen/cpp
-# /doc/doxygen/matlab # TODO: add this back in once we work to update or integrate the MATLAB API.
+/doc/doxygen/doxygen_warnings.log
 /doc/sphinx/build/
 /doc/sphinx/_build/
-/doc/sphinx/source/examples/
 /doc/sphinx/source/README.md
 /doc/sphinx/source/_images/
 /doc/sphinx/source/intros/doc/
-# /doc/sphinx/source/api/ # TODO: add this back in once the API is updated and the final docs are built.
 
 # Python related
 __pycache__/

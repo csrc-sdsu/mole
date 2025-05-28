@@ -85,15 +85,15 @@ Boundary Conditions
 General Boundary Conditions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. mat:autofunction:: addBC1D
-.. mat:autofunction:: addBC1Dlhs
-.. mat:autofunction:: addBC1Drhs
-.. mat:autofunction:: addBC2D
-.. mat:autofunction:: addBC2Dlhs
-.. mat:autofunction:: addBC2Drhs
-.. mat:autofunction:: addBC3D
-.. mat:autofunction:: addBC3Dlhs
-.. mat:autofunction:: addBC3Drhs
+.. mat:autofunction:: addScalarBC1D
+.. mat:autofunction:: addScalarBC1Dlhs
+.. mat:autofunction:: addScalarBC1Drhs
+.. mat:autofunction:: addScalarBC2D
+.. mat:autofunction:: addScalarBC2Dlhs
+.. mat:autofunction:: addScalarBC2Drhs
+.. mat:autofunction:: addScalarBC3D
+.. mat:autofunction:: addScalarBC3Dlhs
+.. mat:autofunction:: addScalarBC3Drhs
 
 Neumann Boundary Conditions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

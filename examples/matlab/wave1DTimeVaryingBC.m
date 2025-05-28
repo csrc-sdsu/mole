@@ -1,6 +1,6 @@
 % ====================== Test 2 =====================
 % 1D wave equation 
-% using addBC time central difference and implicit scheme: BC Homogeneous Dirichlet
+% using addScalarBC time central difference and implicit scheme: BC Homogeneous Dirichlet
 % u_tt = c^2 u_xx, 0 < x < M, 0 < t < T, 
 % initial condition: u(0,t) = sin(pi x), u_t(0,t) = 0
 % boundary condition: u(0,t) = 0, u(M,t) = 0
@@ -9,7 +9,7 @@
 % Taken from example 1 of 
 % https://www.uni-muenster.de/Physik.TP/archive/fileadmin/lehre/NumMethoden/WS1011/script1011Wave.pdf
 % ===================================================
-% example that uses addBC1D
+% example that uses addScalarBC1D
 %
 % scheme:
 % ((U^(n+1) - 2 U^(n) + U^(n-1))/dt = (c^2/2) L (U^(n+1) + U^(n-1))

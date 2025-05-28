@@ -72,19 +72,7 @@ Before building the documentation, ensure you have:
    brew install --cask mactex
    ```
 
-6. **GraphViz** (required for diagrams):
-   ```bash
-   # Ubuntu/Debian
-   sudo apt install graphviz
-
-   # macOS
-   brew install graphviz
-
-   # RHEL/CentOS/Fedora
-   sudo dnf install graphviz
-   ```
-
-7. **Python dependencies**:
+6. **Python dependencies**:
    First, ensure Python 3 and pip are installed:
    ```bash
    # Ubuntu/Debian

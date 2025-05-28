@@ -27,6 +27,6 @@ Includes Gradient, Divergence, and Laplacian operators with various boundary con
 
 ```{grid-item-card} <i class="fas fa-laptop-code"></i> Dual Implementation
 :class-card: feature-card
-Available in both C++ and MATLAB with consistent interfaces
+Available in both C++ and MATLAB/ Octave with consistent interfaces
 ```
 ````
