@@ -245,6 +245,7 @@ html_theme_options = {
     
     # Navigation options
     "show_toc_level": 2,
+    "show_navbar_depth": 1,  # Control expansion: 1 = only top-level expanded by default
     "use_download_button": True,
     "use_fullscreen_button": True,
     "use_source_button": True,
@@ -590,7 +591,6 @@ html_theme_options.update({
         </div>
     """,
     "home_page_in_toc": True,
-    "show_navbar_depth": 2,
     "icon_links": [
         {
             "name": "GitHub",
