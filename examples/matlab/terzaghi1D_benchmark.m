@@ -1,6 +1,6 @@
 % Benchmark for Terzaghi's 1D equation
-clc
-close all
+%clc
+%close all
 
 % Parameters
 P0 = 1;         % Initial pressure amplitude
@@ -60,6 +60,10 @@ for t = t_vals
 
     drawnow
 end
+
+%for comparing with benchmark
+p_analytical = p;
+
 
 %print the final pressure value
 fprintf('\nFinal pressure p(x,t=%.2f):\n', t);
