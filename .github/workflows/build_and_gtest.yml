@@ -75,7 +75,7 @@ jobs:
       - name: Install dependencies
         run: |
           brew install cmake openblas eigen libomp lapack
-          sudo ln -s /opt/homebrew/bin/gfortran-14 /opt/homebrew/bin/gfortran
+          sudo ln -sf /opt/homebrew/bin/gfortran-14 /opt/homebrew/bin/gfortran
         
       - name: Export Environment Variables
         run: |
