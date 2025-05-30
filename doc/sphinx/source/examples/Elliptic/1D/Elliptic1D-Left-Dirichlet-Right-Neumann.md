@@ -19,6 +19,7 @@ $$
 $$
 
 and the right hand boundary condition (Dirichlet) satisfying
+
 $$
 1u(1) + 0\frac{du(1)}{dx} = 0
 $$
