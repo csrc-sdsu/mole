@@ -23,6 +23,7 @@ $$
 $$
 
 This corresponds to the call to addScalarBC1D of `addScalarBC1D(A,b,k,m,dx,dc,nc,v)`, where `dc`, `nc`, and `vc` are vectors which hold the coefficients for $a$, $b$, and $g$ in the above system of equations. $a=[1,1]$, $b=[1,1]$ and $g=[0,2e]$. Substituting these values in gives:
+
 $$
 u(0) +\frac{du(0)}{dx} = 0
 $$ 
@@ -34,6 +35,7 @@ $$
 The key difference is the implementation of the boundary condition operators. In [elliptic1D](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1D.m), the RHS of the Robin operator is included on lines 26-28, yet in this example, they are built directly into the boundary conditions.
 
 The true solution is
+
 $$
 u(x) = e^x
 $$

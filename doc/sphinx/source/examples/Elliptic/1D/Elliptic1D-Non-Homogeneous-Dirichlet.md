@@ -23,6 +23,7 @@ $$
 $$
 
 This corresponds to the call to addScalarBC1D of `addScalarBC1D(A,b,k,m,dx,dc,nc,v)`, where `dc`, `nc`, and `vc` are vectors which hold the coefficients for $a$, $b$, and $g$ in the above system of equations. $a=[1,1]$, $b=[0,0]$ and $g=[1/2, 1/2]$. Substituting these values in gives:
+
 $$
 u(0) = \frac{1}{2}
 $$ 
@@ -32,6 +33,7 @@ u(1) = \frac{1}{2}
 $$
 
 The true solution is
+
 $$
 u(x) = \frac{-x^2 + x + 1}{2}
 $$

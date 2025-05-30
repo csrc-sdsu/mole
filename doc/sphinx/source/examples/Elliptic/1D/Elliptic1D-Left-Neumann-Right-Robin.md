@@ -21,12 +21,14 @@ $$
 $$
 
 and the right hand boundary condition (Robin) satisfying
+
 $$
 400u(1) + 1\frac{du(1)}{dx} = 15
 $$
 
 This corresponds to the call to addScalarBC1D of `addScalarBC1D(A,b,k,m,dx,dc,nc,v)`, where `dc`, `nc`, and `vc` are vectors which hold the coefficients for $a$, $b$, and $g$ in the above system of equations. $a=[0,400]$, $b=[1,1]$ and $g=[10,15]$. 
 Substituting these values in gives:
+
 $$
 \frac{du(0)}{dx} = 10
 $$
@@ -36,6 +38,7 @@ $$
 $$
 
 The exact solution is:
+
 $$
 u(x) = \sin(\pi x) + -(10 + \pi)x + \frac{402\pi + 4025}{400}
 $$

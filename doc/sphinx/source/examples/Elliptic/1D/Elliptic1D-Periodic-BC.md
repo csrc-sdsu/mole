@@ -7,10 +7,13 @@ $$
 $$
 
 with $x\in[0,1]$. The boundary conditions here are a special case, and periodicity is all that is required. Mathematically,
+
 $$
 u(0) = u(1)
 $$
+
 and
+
 $$
 \frac{du(0)}{dx} = \frac{du(1)}{dx}
 $$
@@ -21,9 +24,11 @@ This tells the MOLE library to build a 1D periodic boundary operator. This same 
 
 
 The true solution ( where $C$ is a constant ) is
+
 $$
 u(x) = \sin(2\pi x) + C
 $$
+
 ---
 
 This example is implemented in:

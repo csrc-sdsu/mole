@@ -27,6 +27,7 @@ $$
 
 This corresponds to the call to addScalarBC1D of `addScalarBC1D(A,b,k,m,dx,dc,nc,v)`, where `dc`, `nc`, and `vc` are vectors which hold the coefficients for $a$, $b$, and $g$ in the above system of equations. $a=[-200,400]$, $b=[1,1]$ and $g=[10,15]$. 
 Substituting these values in gives:
+
 $$
 -200u(0) + \frac{du(0)}{dx} = 10
 $$
@@ -36,6 +37,7 @@ $$
 $$
 
 The exact solution is:
+
 $$
 u(x) = \sin(\pi x) + \frac{35 - \pi}{403}x + \frac{402\pi - 3995}{80600}
 $$
