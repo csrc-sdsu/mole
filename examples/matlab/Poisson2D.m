@@ -6,8 +6,8 @@ close all
 addpath('../../src/matlab')
 
 k = 2; % Order of accuracy
-m = 5; % Vertical resolution
-n = 6; % Horizontal resolution
+m = 5; % Vertical resolution - minimal number of grid points required for the operator
+n = 6; % Horizontal resolution - minimal number of grid points required for the operator
 
 L = lap2D(k, m, 1, n, 1); % 2D Mimetic laplacian operator
 L = L + robinBC2D(k, m, 1, n, 1, 1, 0); % Dirichlet BC
