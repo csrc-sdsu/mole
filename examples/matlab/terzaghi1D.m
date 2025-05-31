@@ -1,6 +1,6 @@
 % Numerical solution of Terzaghi's 1D consolidation equation using MOLE
-%clc;
-%close all;
+clc;
+close all;
 
 addpath('../../src/matlab');  % Update this path to your MOLE operators
 

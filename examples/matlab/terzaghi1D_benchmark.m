@@ -1,35 +1,40 @@
 % Benchmark for Terzaghi's 1D equation
-%clc
-%close all
+clc;
+close all;
 
 % Parameters
-P0 = 1;         % Initial pressure amplitude
-cf = 0.01;      % Decay/diffusion constant
-L = 1;          % Domain length
-N_max = 100;    % Number of terms in Fourier series
+P0 = 10e6;        % Face load in Pascals
+cf = 1e-6;      % Diffusion constant
+L = 1;            % Domain length in meters
+N_max = 100;      % Fourier terms
 
 % Spatial discretization
-k = 2;                 % Order of accuracy (not used here, for consistency)
-m = 50;                % Number of cells
-a = 0; b = 1;          % Domain boundaries
-dx = (b-a)/m;          % Step size
+m = 50;
+a = 0; b = L;
+dx = (b - a)/m;
 xgrid = [a a+dx/2 : dx : b-dx/2 b];  % Staggered grid
 
-% Time parameters
-TIME = 0.5;            % Final time
-dt = 0.002;            % Time step (you can match CFL if needed)
-t_vals = 0:dt:TIME;    % Time loop
+% Times to evaluate (in hours)
+times_hr = [1, 10, 40, 70];
+times_sec = times_hr * 3600;
 
-% Fluid and medium properties
-K = 1e-12;       % Permeability [m^2]
-mu = 1e-3;       % Dynamic viscosity [Pa·s]
-rho = 1000;      % Fluid density [kg/m^3]
-g = 9.81;        % Gravity [m/s^2]
+% Fluid properties
+K = 1e-12;        % Permeability [m^2]
+mu = 1e-3;        % Dynamic viscosity [Pa·s]
+rho = 1000;       % Fluid density [kg/m^3]
+g = 9.81;         % Gravity [m/s^2]
 
-% Loop over time
-for t = t_vals
-    
-    %compute analytical p(x,t)
+% Store results
+p_all = zeros(length(xgrid), length(times_sec));
+q_all = zeros(length(xgrid), length(times_sec));  % Will truncate later
+
+% Plot pressure
+figure(1);
+hold on;
+for i = 1:length(times_sec)
+    t = times_sec(i);
+
+    % Analytical pressure solution
     p = zeros(size(xgrid));
     for N = 0:N_max
         n = 2*N + 1;
@@ -37,38 +42,37 @@ for t = t_vals
         p = p + term;
     end
     p = (4/pi) * P0 * p;
+    p_all(:,i) = p;
 
-   % Compute gradient of p (finite difference)
-    dpdx = gradient(p, dx);
-
-    % Compute Darcy flux q
-    q = - (K/mu) * (dpdx - rho*g);
-
-    % Plot p
-    subplot(2,1,1);
-    plot(xgrid, p, '-o')
-    title(['Pressure p(x,t) at t = ' num2str(t, '%.2f')])
-    xlabel('x'); ylabel('p(x,t)');
-    axis([0 1 -0.2 1.2]); grid on;
-
-    % Plot q
-    subplot(2,1,2);
-    plot(xgrid, q, '-s')
-    title(['Darcy flux q(x,t) at t = ' num2str(t, '%.2f')])
-    xlabel('x'); ylabel('q(x,t)');
-    grid on;
-
-    drawnow
+    semilogy(xgrid, p/1e6, '-o', 'DisplayName', ['t = ' num2str(times_hr(i)) ' hr']);
 end
+title('Pressure p(x,t) at various times');
+xlabel('x (m)');
+ylabel('p(x,t) [MPa]');
+legend;
+grid on;
 
-%for comparing with benchmark
-p_analytical = p;
+% Plot Darcy flux
+figure(2);
+hold on;
+x_flux = linspace(a + dx/2, b - dx/2, m+1);
+for i = 1:length(times_sec)
+    p = p_all(:,i);
+    dpdx = gradient(p, dx);
+    q = - (K / mu) * (dpdx - rho * g);
+    q_all(1:m+1,i) = q(1:m+1);  % avoid including ghost point
+    semilogy(x_flux, q(1:m+1), '-s', 'DisplayName', ['t = ' num2str(times_hr(i)) ' hr']);
+end
+title('Darcy Flux q(x,t) at various times');
+xlabel('x (m)');
+ylabel('q(x,t) [m/s]');
+legend;
+grid on;
 
-
-%print the final pressure value
-fprintf('\nFinal pressure p(x,t=%.2f):\n', t);
-disp(p');
-
-%print the final Darcy flux value
-fprintf('\nFinal Darcy flux q(x,t=%.2f):\n', t);
-disp(q');
+% Print results
+for i = 1:length(times_hr)
+    fprintf('\nFinal pressure p(x,t = %.2f hr):\n', times_hr(i));
+    disp(p_all(:,i)');
+    fprintf('Final Darcy flux q(x,t = %.2f hr):\n', times_hr(i));
+    disp(q_all(1:m+1,i)');
+end
