@@ -3,10 +3,10 @@ clc;
 close all;
 
 % Parameters
-P0 = 10e6;        % Face load in Pascals
-cf = 1e-6;      % Diffusion constant
-L = 1;            % Domain length in meters
-N_max = 100;      % Fourier terms
+P0 = 10e6;         % Face load in Pascals
+cf = 1e-4;         % Diffusion constant
+L = 25;            % Domain length in meters
+N_max = 100;       % Fourier terms
 
 % Spatial discretization
 m = 50;
@@ -48,8 +48,8 @@ for i = 1:length(times_sec)
 end
 title('Pressure p(x,t) at various times');
 xlabel('x (m)');
-ylabel('p(x,t) [MPa]');
-legend;
+ylabel('Excess Pore Pressure p(x,t) [MPa]');
+legend('Location', 'southeast');
 grid on;
 
 % Plot Darcy flux
@@ -66,7 +66,7 @@ end
 title('Darcy Flux q(x,t) at various times');
 xlabel('x (m)');
 ylabel('q(x,t) [m/s]');
-legend;
+legend('Location', 'southeast');
 grid on;
 
 % Print results
