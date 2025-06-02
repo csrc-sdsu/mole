@@ -1,0 +1,895 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Utilities &#8212; MOLE Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/announcement.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/mathconf.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/cpp/utils';</script>
+    <script src="../../_static/js/theme-custom.js"></script>
+    <script src="../../_static/js/theme-mode-toggle.js"></script>
+    <script src="../../_static/js/announcement.js"></script>
+    <link rel="canonical" href="https://mole-pdes.readthedocs.io/api/cpp/utils.html" />
+    <link rel="icon" href="../../_static/logo.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="MATLAB/Octave" href="../matlab/index-beta.html" />
+    <link rel="prev" title="Boundary Conditions" href="boundary.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Jun 02, 2025"/>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const headers = document.querySelectorAll('.collapsible-header');
+    
+    headers.forEach(header => {
+      header.addEventListener('click', function() {
+        this.classList.toggle('active');
+        const content = this.nextElementSibling;
+        if (content.style.display === 'block') {
+          content.style.display = 'none';
+        } else {
+          content.style.display = 'block';
+        }
+      });
+    });
+  });
+</script>
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="MOLE Documentation - Home"/>
+    <script>document.write(`<img src="../../_static/logo-dark.png" class="logo__image only-dark" alt="MOLE Documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/csrc-sdsu/mole" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.mathworks.com/matlabcentral/fileexchange/124870-mole" title="MATLAB" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-cube fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">MATLAB</span></a>
+        </li>
+</ul></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    MOLE: Mimetic Operators Library Enhanced
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Index</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../intros/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intros/gettingstarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intros/doc_readme_wrapper.html">Documentation Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">C++</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="operators.html">Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="boundary.html">Boundary Conditions</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Utilities</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../matlab/index-beta.html">MATLAB/Octave</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../matlab/matlab_index.html">Function Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../matlab/api.html">API</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Mathematical Framework</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../math_functions/index.html">Mathematical Functions Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../math_functions/CSRCReportOnMOLE.html">CSRC Report on MOLE Library</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../math_functions/StaggeredGrids.html">Why Staggered Grids?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../math_functions/Jacobian.html">Jacobian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../math_functions/NonUniformGradAndDiv.html">Non-Uniform Gradient and Divergence Operators</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/Elliptic/index.html">Elliptic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../examples/Elliptic/1D/index.html">1D Elliptic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D.html">Elliptic1D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D-add-Scalar-BC.html">Elliptic1D Add Scalar Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D-Homogeneous-Dirichlet.html">Elliptic1D Homogenous Dirichlet Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D-Left-Dirichlet-Right-Neumann.html">Elliptic1D Left Dirichlet and Right Neumann Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D-Left-Dirichlet-Right-Robin.html">Elliptic1D Left Dirichlet and Right Robin Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D-Left-Neumann-Right-Neumann.html">Elliptic1D Pure Neumann Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D-Left-Neumann-Right-Robin.html">Elliptic1D Left Neumann Right Robin Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D-Left-Robin-Right-Robin.html">Elliptic1D Pure Robin Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D-Non-Homogeneous-Dirichlet.html">Elliptic1D Non-Homogenous Dirichlet Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D-Non-Periodic-BC.html">Elliptic1D Non-Periodic Dirichlet Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D-Periodic-BC.html">Elliptic1D Periodic Dirichlet Boundary Conditions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../examples/Elliptic/2D/index.html">2D Elliptic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/2D/Elliptic2D.html">Elliptic2D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/2D/Elliptic2D-Case-2.html">Elliptic2D Case 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/2D/Elliptic2D-Nodal-Curv.html">Elliptic2D Nodal Curv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/2D/Elliptic2D-Nodal-Curv-Sinusoidal.html">Elliptic2D Nodal Curv Sinusoidal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/2D/Minimal-Poisson-2D.html">Minimal Poisson 2D</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../examples/Elliptic/3D/index.html">3D Elliptic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/3D/Elliptic3D.html">Elliptic3D</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/Parabolic/index.html">Parabolic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../examples/Parabolic/1D/index.html">1D Parabolic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Parabolic/1D/Parabolic1D.html">1D Heat Equation</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/Hyperbolic/index.html">Hyperbolic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../examples/Hyperbolic/1D/index.html">1D Hyperbolic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Hyperbolic/1D/Hyperbolic1D.html">Hyperbolic1D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Hyperbolic/1D/Hyperbolic1D-upwind.html">Hyperbolic1D upwind</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Hyperbolic/1D/Hyperbolic1D-Lax-Friedrichs.html">Hyperbolic1D Lax Friedrichs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Hyperbolic/1D/Wave-1D.html">Wave 1D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Hyperbolic/1D/Wave-1D-Case-2.html">Wave 1D Case 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Hyperbolic/1D/Burgers1D.html">Burgers1D</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../examples/Hyperbolic/2D/index.html">2D Hyperbolic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Hyperbolic/2D/Wave-2D.html">Wave 2D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Hyperbolic/2D/Wave-2D-Case-2.html">Wave 2D Case 2</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/Schrodinger/index.html">Schrödinger Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../examples/Schrodinger/1D/index.html">1D Schrödinger Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Schrodinger/1D/Schrodinger1D.html">Schrodinger1D</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/Sturm-Liouville/index.html">Sturm-Liouville Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/Sturm-Liouville/Chebyshev.html">Chebyshev Sturm-Liouville Problem</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/Navier-Stokes/index.html">Navier-Stokes Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/Navier-Stokes/Lock-Exchange.html">Lock Exchange Problem</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/Mixed/index.html">Mixed Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../examples/Mixed/1D/index.html">1D Mixed Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Mixed/1D/Transport1D.html">Transport1D</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../examples/Mixed/2D/index.html">2D Mixed Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Mixed/2D/work-in-progress.html">Work in Progress</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../examples/Mixed/3D/index.html">3D Mixed Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Mixed/3D/Convection-Diffusion.html">3D Convection-Diffusion Equation</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/Time-Integrators/index.html">Time Integrators</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/Time-Integrators/RK2.html">Second-Order Runge-Kutta Method (RK2)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/Time-Integrators/RK4.html">4th-Order Runge-Kutta Method (RK4)</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../intros/contributing_wrapper.html">Contributing to MOLE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intros/code_of_conduct_wrapper.html">Code of Conduct</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/csrc-sdsu/mole" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/csrc-sdsu/mole/blob/master/doc/sphinx/source/api/cpp/utils.md?plain=1" target="_blank"
+   class="btn btn-sm btn-source-file-button dropdown-item"
+   title="Show source"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="btn__text-container">Show source</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/csrc-sdsu/mole/edit/master/doc/sphinx/source/api/cpp/utils.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/api/cpp/utils.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Utilities</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-reference">API Reference</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-examples">Usage Examples</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="utilities">
+<h1>Utilities<a class="headerlink" href="#utilities" title="Permalink to this heading">#</a></h1>
+<p>MOLE provides a set of utility functions and classes to simplify common tasks when working with mimetic operators and boundary conditions.</p>
+<!-- ### Mathematical Background -->
+<!-- TODO: Add mathematical background and principles where applicable -->
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this heading">#</a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv45Utils">
+<span id="_CPPv35Utils"></span><span id="_CPPv25Utils"></span><span id="Utils"></span><span class="target" id="classUtils"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Utils</span></span></span><a class="headerlink" href="#_CPPv45Utils" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>Utility Functions. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Utils8meshgridERK3vecRK3vecR3matR3mat">
+<span id="_CPPv3N5Utils8meshgridERK3vecRK3vecR3matR3mat"></span><span id="_CPPv2N5Utils8meshgridERK3vecRK3vecR3matR3mat"></span><span id="Utils::meshgrid__vecCR.vecCR.matR.matR"></span><span class="target" id="classUtils_1aa3e71c29029c65932dd1be9db524a177"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">meshgrid</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">vec</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">vec</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">y</span></span>, <span class="n"><span class="pre">mat</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">X</span></span>, <span class="n"><span class="pre">mat</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">Y</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Utils8meshgridERK3vecRK3vecR3matR3mat" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>An analog to the MATLAB/Octave 2D meshgrid operation. </p>
+<p>returns 2-D grid coordinates based on the coordinates contained in vectors x and y. X is a matrix where each row is a copy of x, and Y is a matrix where each column is a copy of y. The grid represented by the coordinates X and Y has length(y) rows and length(x) columns. Key here is the rows is the y-coordinate, and the columns are the x-coordinate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – a vector of x-indices </p></li>
+<li><p><strong>y</strong> – a vector of y-indices </p></li>
+<li><p><strong>X</strong> – a sparse matrix, will be filled by the function </p></li>
+<li><p><strong>Y</strong> – a sparse matrix, will be filled by the function </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Utils8meshgridERK3vecRK3vecRK3vecR4cubeR4cubeR4cube">
+<span id="_CPPv3N5Utils8meshgridERK3vecRK3vecRK3vecR4cubeR4cubeR4cube"></span><span id="_CPPv2N5Utils8meshgridERK3vecRK3vecRK3vecR4cubeR4cubeR4cube"></span><span id="Utils::meshgrid__vecCR.vecCR.vecCR.cubeR.cubeR.cubeR"></span><span class="target" id="classUtils_1ae49c2bff1cd6d9469b1cd7fef823821d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">meshgrid</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">vec</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">vec</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">y</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">vec</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">z</span></span>, <span class="n"><span class="pre">cube</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">X</span></span>, <span class="n"><span class="pre">cube</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">Y</span></span>, <span class="n"><span class="pre">cube</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">Z</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Utils8meshgridERK3vecRK3vecRK3vecR4cubeR4cubeR4cube" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>An analog to the MATLAB/Octave 3D meshgrid operation. </p>
+<p>meshgrid(x,y,z,X,Y,Z) returns 3-D grid coordinates defined by the vectors x, y, and z. The grid represented by X, Y, and Z has size length(y)-by-length(x)-by-length(z).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – a vector of x-indices </p></li>
+<li><p><strong>y</strong> – a vector of y-indices </p></li>
+<li><p><strong>z</strong> – a vector of z-indices </p></li>
+<li><p><strong>X</strong> – a sparse matrix, will be filled by the function </p></li>
+<li><p><strong>Y</strong> – a sparse matrix, will be filled by the function </p></li>
+<li><p><strong>Z</strong> – a sparse matrix, will be filled by the function </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Utils6spkronERK6sp_matRK6sp_mat">
+<span id="_CPPv3N5Utils6spkronERK6sp_matRK6sp_mat"></span><span id="_CPPv2N5Utils6spkronERK6sp_matRK6sp_mat"></span><span id="Utils::spkron__sp_matCR.sp_matCR"></span><span class="target" id="classUtils_1a6f8a5b8b6441b0d15ce7c8326e486658"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">sp_mat</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">spkron</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">sp_mat</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">A</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">sp_mat</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">B</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Utils6spkronERK6sp_matRK6sp_mat" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>A wrappper for implementing a sparse Kroenecker product. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is available in Armadillo &gt;8.0 </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> – a sparse matrix </p></li>
+<li><p><strong>B</strong> – a sparse matrix</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Utils11spjoin_rowsERK6sp_matRK6sp_mat">
+<span id="_CPPv3N5Utils11spjoin_rowsERK6sp_matRK6sp_mat"></span><span id="_CPPv2N5Utils11spjoin_rowsERK6sp_matRK6sp_mat"></span><span id="Utils::spjoin_rows__sp_matCR.sp_matCR"></span><span class="target" id="classUtils_1a29075e84565397491dce88c1db2779f8"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">sp_mat</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">spjoin_rows</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">sp_mat</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">A</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">sp_mat</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">B</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Utils11spjoin_rowsERK6sp_matRK6sp_mat" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>An in place operation for joining two matrices by rows. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is available in Armadillo &gt;8.0 </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> – a sparse matrix </p></li>
+<li><p><strong>B</strong> – a sparse matrix</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Utils11spjoin_colsERK6sp_matRK6sp_mat">
+<span id="_CPPv3N5Utils11spjoin_colsERK6sp_matRK6sp_mat"></span><span id="_CPPv2N5Utils11spjoin_colsERK6sp_matRK6sp_mat"></span><span id="Utils::spjoin_cols__sp_matCR.sp_matCR"></span><span class="target" id="classUtils_1a02c4cbc4ed5860b69635b480c326cea4"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">sp_mat</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">spjoin_cols</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">sp_mat</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">A</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">sp_mat</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">B</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Utils11spjoin_colsERK6sp_matRK6sp_mat" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>An in place operation for joining two matrices by columns. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is available in Armadillo &gt;=8.5 </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> – a sparse matrix </p></li>
+<li><p><strong>B</strong> – a sparse matrix</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Utils13spsolve_eigenERK6sp_matRK3vec">
+<span id="_CPPv3N5Utils13spsolve_eigenERK6sp_matRK3vec"></span><span id="_CPPv2N5Utils13spsolve_eigenERK6sp_matRK3vec"></span><span id="Utils::spsolve_eigen__sp_matCR.vecCR"></span><span class="target" id="classUtils_1a390c28ce7358c06eefe7cd12afce6829"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">vec</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">spsolve_eigen</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">sp_mat</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">A</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">vec</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Utils13spsolve_eigenERK6sp_matRK3vec" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>A wrappper for implementing a sparse solve using Eigen from SuperLU. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function requires the EIGEN to be used when Armadillo is built </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> – a sparse matrix LHS of Ax=b </p></li>
+<li><p><strong>b</strong> – a vector for the RHS of Ax=b</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5Utils5trapzERK3vecRK3vec">
+<span id="_CPPv3N5Utils5trapzERK3vecRK3vec"></span><span id="_CPPv2N5Utils5trapzERK3vecRK3vec"></span><span id="Utils::trapz__vecCR.vecCR"></span><span class="target" id="classUtils_1afdfd6b3f99267fb13b8c5539f810b2f6"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">trapz</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">vec</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">vec</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">y</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5Utils5trapzERK3vecRK3vec" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>Implements the trapezoidal rule for 1D numerical integration. </p>
+<p>Computes the area under a curve defined by vectors x and y using: A ≈ ∑ 0.5 * (xᵢ₊₁ - xᵢ) * (yᵢ + yᵢ₊₁)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – Vector of x-coordinates </p></li>
+<li><p><strong>y</strong> – Vector of y-values at corresponding x </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Estimated area under the curve </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="usage-examples">
+<h2>Usage Examples<a class="headerlink" href="#usage-examples" title="Permalink to this heading">#</a></h2>
+<p>Here’s an example using utility functions in a parabolic equation:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Parabolic 1D Example (examples/cpp/parabolic1D.cpp)</span><a class="headerlink" href="#id1" title="Permalink to this code">#</a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="linenos"> 2</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;math.h&gt;</span><span class="c1"> </span>
+<span class="linenos"> 3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;mole.h&quot;</span>
+<span class="linenos"> 4</span><span class="cm">/**</span>
+<span class="linenos"> 5</span><span class="cm"> * This example uses MOLE to solve the heat equation u_t-alpha*u_xx=0[with alpha=1] over [0,1]^2,</span>
+<span class="linenos"> 6</span><span class="cm"> * u(x,0)=0 for x in (-1,1), u(1,t)=u(-1,t)=100 for t in [0,1]. </span>
+<span class="linenos"> 7</span><span class="cm"> */</span>
+<span class="linenos"> 8</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span><span class="c1">// Operators&#39; order of accuracy</span>
+<span class="linenos">10</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">t0</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="c1">//initial time</span>
+<span class="linenos">11</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">tf</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="c1">//final time</span>
+<span class="linenos">12</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">a</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="c1">//left boundary</span>
+<span class="linenos">13</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="c1">//right boundary</span>
+<span class="linenos">14</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">m</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="c1">//num of cells</span>
+<span class="linenos">15</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">dx</span><span class="o">=</span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">m</span><span class="p">;</span>
+<span class="linenos">16</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">dt</span><span class="o">=</span><span class="n">tf</span><span class="o">/</span><span class="p">(</span><span class="n">ceil</span><span class="p">((</span><span class="mi">3</span><span class="o">*</span><span class="n">tf</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">dx</span><span class="o">*</span><span class="n">dx</span><span class="p">)));</span><span class="w"> </span><span class="c1">//Von Neumann stability criterion for explicit scheme, if k &gt; 2 then dt/dx^2&lt;0.5.  </span>
+<span class="linenos">17</span><span class="w">    </span><span class="cm">/*Note that unlike the matlab example, dt isn&#39;t dx^2/3 because if a and b are changed or the final time is changed</span>
+<span class="linenos">18</span><span class="cm">    *the final time tf may not be a multiple of dt. This value of dt guarantees that the final time will be a mutiple of dt.</span>
+<span class="linenos">19</span><span class="cm">    * while still satisfying Von Neumann stablity criterion</span>
+<span class="linenos">20</span><span class="cm">    *Note that in this example dt=dx^2/3 like it is in the matlab example. </span>
+<span class="linenos">21</span><span class="cm">    */</span>
+<span class="linenos">22</span><span class="w">    </span><span class="n">Laplacian</span><span class="w"> </span><span class="n">L</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">dx</span><span class="p">);</span><span class="w"> </span>
+<span class="linenos">23</span><span class="w">    </span><span class="n">vec</span><span class="w"> </span><span class="n">solution</span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w"> </span>
+<span class="linenos">24</span><span class="w">    </span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">=</span><span class="mi">100</span><span class="p">;</span>
+<span class="linenos">25</span><span class="w">    </span><span class="n">solution</span><span class="p">(</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mi">100</span><span class="p">;</span>
+<span class="linenos">26</span><span class="w">    </span><span class="n">vec</span><span class="w"> </span><span class="n">k1</span><span class="p">(</span><span class="n">m</span><span class="o">+</span><span class="mi">2</span><span class="p">);</span><span class="w"> </span>
+<span class="linenos">27</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">t</span><span class="o">=</span><span class="n">t0</span><span class="p">;</span>
+<span class="linenos">28</span><span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">tf</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">//time integration with euler method. </span>
+<span class="linenos">29</span><span class="w">        </span><span class="n">k1</span><span class="o">=</span><span class="n">L</span><span class="o">*</span><span class="p">(</span><span class="n">solution</span><span class="p">);</span>
+<span class="linenos">30</span><span class="w">        </span><span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="o">+</span><span class="n">dt</span><span class="o">*</span><span class="n">k1</span><span class="p">;</span>
+<span class="linenos">31</span><span class="w">        </span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="o">+</span><span class="n">dt</span><span class="p">;</span>
+<span class="linenos">32</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">33</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">solution</span><span class="p">;</span>
+<span class="linenos">34</span>
+<span class="linenos">35</span>
+<span class="linenos">36</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">37</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<!-- ## Notes and Considerations -->
+<!-- TODO: Add important notes and considerations for using these utilities --> 
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="boundary.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Boundary Conditions</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../matlab/index-beta.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">MATLAB/Octave</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-reference">API Reference</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-examples">Usage Examples</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By CSRC SDSU
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, CSRC SDSU.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Jun 02, 2025.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  
+        <div class="footer-extra">
+            <p>MOLE is a project by CSRC SDSU.</p>
+        </div>
+    
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

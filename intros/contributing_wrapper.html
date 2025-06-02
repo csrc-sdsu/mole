@@ -1,0 +1,916 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Contributing to MOLE &#8212; MOLE Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/announcement.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/mathconf.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'intros/contributing_wrapper';</script>
+    <script src="../_static/js/theme-custom.js"></script>
+    <script src="../_static/js/theme-mode-toggle.js"></script>
+    <script src="../_static/js/announcement.js"></script>
+    <link rel="canonical" href="https://mole-pdes.readthedocs.io/intros/contributing_wrapper.html" />
+    <link rel="icon" href="../_static/logo.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contributor Covenant Code of Conduct" href="code_of_conduct_wrapper.html" />
+    <link rel="prev" title="4th-Order Runge-Kutta Method (RK4)" href="../examples/Time-Integrators/RK4.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Jun 02, 2025"/>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const headers = document.querySelectorAll('.collapsible-header');
+    
+    headers.forEach(header => {
+      header.addEventListener('click', function() {
+        this.classList.toggle('active');
+        const content = this.nextElementSibling;
+        if (content.style.display === 'block') {
+          content.style.display = 'none';
+        } else {
+          content.style.display = 'block';
+        }
+      });
+    });
+  });
+</script>
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="MOLE Documentation - Home"/>
+    <script>document.write(`<img src="../_static/logo-dark.png" class="logo__image only-dark" alt="MOLE Documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/csrc-sdsu/mole" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.mathworks.com/matlabcentral/fileexchange/124870-mole" title="MATLAB" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-cube fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">MATLAB</span></a>
+        </li>
+</ul></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    MOLE: Mimetic Operators Library Enhanced
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Index</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doc_readme_wrapper.html">Documentation Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/cpp/index.html">C++</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/cpp/operators.html">Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cpp/boundary.html">Boundary Conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/cpp/utils.html">Utilities</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/matlab/index-beta.html">MATLAB/Octave</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/matlab/matlab_index.html">Function Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/matlab/api.html">API</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Mathematical Framework</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../math_functions/index.html">Mathematical Functions Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../math_functions/CSRCReportOnMOLE.html">CSRC Report on MOLE Library</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../math_functions/StaggeredGrids.html">Why Staggered Grids?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../math_functions/Jacobian.html">Jacobian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../math_functions/NonUniformGradAndDiv.html">Non-Uniform Gradient and Divergence Operators</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../examples/Elliptic/index.html">Elliptic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../examples/Elliptic/1D/index.html">1D Elliptic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Elliptic/1D/Elliptic1D.html">Elliptic1D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Elliptic/1D/Elliptic1D-add-Scalar-BC.html">Elliptic1D Add Scalar Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Elliptic/1D/Elliptic1D-Homogeneous-Dirichlet.html">Elliptic1D Homogenous Dirichlet Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Elliptic/1D/Elliptic1D-Left-Dirichlet-Right-Neumann.html">Elliptic1D Left Dirichlet and Right Neumann Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Elliptic/1D/Elliptic1D-Left-Dirichlet-Right-Robin.html">Elliptic1D Left Dirichlet and Right Robin Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Elliptic/1D/Elliptic1D-Left-Neumann-Right-Neumann.html">Elliptic1D Pure Neumann Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Elliptic/1D/Elliptic1D-Left-Neumann-Right-Robin.html">Elliptic1D Left Neumann Right Robin Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Elliptic/1D/Elliptic1D-Left-Robin-Right-Robin.html">Elliptic1D Pure Robin Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Elliptic/1D/Elliptic1D-Non-Homogeneous-Dirichlet.html">Elliptic1D Non-Homogenous Dirichlet Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Elliptic/1D/Elliptic1D-Non-Periodic-BC.html">Elliptic1D Non-Periodic Dirichlet Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Elliptic/1D/Elliptic1D-Periodic-BC.html">Elliptic1D Periodic Dirichlet Boundary Conditions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../examples/Elliptic/2D/index.html">2D Elliptic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Elliptic/2D/Elliptic2D.html">Elliptic2D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Elliptic/2D/Elliptic2D-Case-2.html">Elliptic2D Case 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Elliptic/2D/Elliptic2D-Nodal-Curv.html">Elliptic2D Nodal Curv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Elliptic/2D/Elliptic2D-Nodal-Curv-Sinusoidal.html">Elliptic2D Nodal Curv Sinusoidal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Elliptic/2D/Minimal-Poisson-2D.html">Minimal Poisson 2D</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../examples/Elliptic/3D/index.html">3D Elliptic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Elliptic/3D/Elliptic3D.html">Elliptic3D</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../examples/Parabolic/index.html">Parabolic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../examples/Parabolic/1D/index.html">1D Parabolic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Parabolic/1D/Parabolic1D.html">1D Heat Equation</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../examples/Hyperbolic/index.html">Hyperbolic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../examples/Hyperbolic/1D/index.html">1D Hyperbolic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Hyperbolic/1D/Hyperbolic1D.html">Hyperbolic1D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Hyperbolic/1D/Hyperbolic1D-upwind.html">Hyperbolic1D upwind</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Hyperbolic/1D/Hyperbolic1D-Lax-Friedrichs.html">Hyperbolic1D Lax Friedrichs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Hyperbolic/1D/Wave-1D.html">Wave 1D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Hyperbolic/1D/Wave-1D-Case-2.html">Wave 1D Case 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Hyperbolic/1D/Burgers1D.html">Burgers1D</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../examples/Hyperbolic/2D/index.html">2D Hyperbolic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Hyperbolic/2D/Wave-2D.html">Wave 2D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Hyperbolic/2D/Wave-2D-Case-2.html">Wave 2D Case 2</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../examples/Schrodinger/index.html">Schrödinger Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../examples/Schrodinger/1D/index.html">1D Schrödinger Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Schrodinger/1D/Schrodinger1D.html">Schrodinger1D</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../examples/Sturm-Liouville/index.html">Sturm-Liouville Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/Sturm-Liouville/Chebyshev.html">Chebyshev Sturm-Liouville Problem</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../examples/Navier-Stokes/index.html">Navier-Stokes Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/Navier-Stokes/Lock-Exchange.html">Lock Exchange Problem</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../examples/Mixed/index.html">Mixed Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../examples/Mixed/1D/index.html">1D Mixed Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Mixed/1D/Transport1D.html">Transport1D</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../examples/Mixed/2D/index.html">2D Mixed Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Mixed/2D/work-in-progress.html">Work in Progress</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../examples/Mixed/3D/index.html">3D Mixed Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/Mixed/3D/Convection-Diffusion.html">3D Convection-Diffusion Equation</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../examples/Time-Integrators/index.html">Time Integrators</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/Time-Integrators/RK2.html">Second-Order Runge-Kutta Method (RK2)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/Time-Integrators/RK4.html">4th-Order Runge-Kutta Method (RK4)</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Contributing to MOLE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_of_conduct_wrapper.html">Code of Conduct</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/csrc-sdsu/mole" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/csrc-sdsu/mole/blob/master/doc/sphinx/source/intros/contributing_wrapper.md?plain=1" target="_blank"
+   class="btn btn-sm btn-source-file-button dropdown-item"
+   title="Show source"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="btn__text-container">Show source</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/csrc-sdsu/mole/edit/master/doc/sphinx/source/intros/contributing_wrapper.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/intros/contributing_wrapper.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Contributing to MOLE</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">1. Contributing to MOLE</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reporting-issues-or-problems">2. Reporting Issues or Problems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seeking-support">3. Seeking Support</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#our-contributors">Our Contributors</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="contributing-to-mole">
+<h1>Contributing to MOLE<a class="headerlink" href="#contributing-to-mole" title="Permalink to this heading">#</a></h1>
+<p>Thank you for considering contributing to MOLE! We appreciate your interest and support. Here are some guidelines to help you get started:</p>
+<section id="id1">
+<h2>1. Contributing to MOLE<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Fork the Repository</strong>: Start by forking the MOLE repository to your GitHub account.</p></li>
+<li><p><strong>Create a Branch</strong>: Create a new branch for your feature or bug fix.</p></li>
+<li><p><strong>Make Your Changes</strong>: Implement your changes and open a pull request with a clear description.</p></li>
+</ul>
+</section>
+<section id="reporting-issues-or-problems">
+<h2>2. Reporting Issues or Problems<a class="headerlink" href="#reporting-issues-or-problems" title="Permalink to this heading">#</a></h2>
+<p>If you encounter any issues or bugs, please report them by following these steps:</p>
+<ul class="simple">
+<li><p><strong>Check for Existing Issues</strong>: Before creating a new issue, please check the <a class="reference external" href="https://github.com/csrc-sdsu/mole/issues">issue tracker</a> to see if the problem has already been reported.</p></li>
+<li><p><strong>Create a New Issue</strong>: If the issue has not been reported, create a new issue with a clear and descriptive title.</p></li>
+</ul>
+</section>
+<section id="seeking-support">
+<h2>3. Seeking Support<a class="headerlink" href="#seeking-support" title="Permalink to this heading">#</a></h2>
+<p>For support requests or general questions, please feel free to reach out to us via email at <a class="reference external" href="mailto:johnnycorbino&#37;&#52;&#48;gmail&#46;com">johnnycorbino<span>&#64;</span>gmail<span>&#46;</span>com</a>, <a class="reference external" href="mailto:angelboada2&#37;&#52;&#48;gmail&#46;com">angelboada2<span>&#64;</span>gmail<span>&#46;</span>com</a>, and <a class="reference external" href="mailto:jcastillo&#37;&#52;&#48;sdsu&#46;edu">jcastillo<span>&#64;</span>sdsu<span>&#46;</span>edu</a>.</p>
+<p>Thank you for your contributions and support!</p>
+<p>Thank you for considering contributing to MOLE!</p>
+</section>
+<section id="our-contributors">
+<h2>Our Contributors<a class="headerlink" href="#our-contributors" title="Permalink to this heading">#</a></h2>
+<p>We’re grateful to all our contributors who have helped make MOLE better:</p>
+<div class="contributors-grid docutils container">
+<style>.contributors-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 20px; }</style><div class="contributor docutils container">
+
+                    <div style="text-align: center; margin-bottom: 10px;">
+                        <a href="https://github.com/jcorbino" target="_blank" style="text-decoration: none;">
+                            <img src="https://avatars.githubusercontent.com/u/24197859?v=4" alt="jcorbino" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 5px;" />
+                            <div>jcorbino</div>
+                            <div style="font-size: 0.8em; color: #666;">548 commits</div>
+                        </a>
+                    </div>
+                    </div>
+<div class="contributor docutils container">
+
+                    <div style="text-align: center; margin-bottom: 10px;">
+                        <a href="https://github.com/JananiPSrinivasan" target="_blank" style="text-decoration: none;">
+                            <img src="https://avatars.githubusercontent.com/u/180591914?v=4" alt="JananiPSrinivasan" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 5px;" />
+                            <div>JananiPSrinivasan</div>
+                            <div style="font-size: 0.8em; color: #666;">68 commits</div>
+                        </a>
+                    </div>
+                    </div>
+<div class="contributor docutils container">
+
+                    <div style="text-align: center; margin-bottom: 10px;">
+                        <a href="https://github.com/jbrzensk" target="_blank" style="text-decoration: none;">
+                            <img src="https://avatars.githubusercontent.com/u/4073757?v=4" alt="jbrzensk" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 5px;" />
+                            <div>jbrzensk</div>
+                            <div style="font-size: 0.8em; color: #666;">57 commits</div>
+                        </a>
+                    </div>
+                    </div>
+<div class="contributor docutils container">
+
+                    <div style="text-align: center; margin-bottom: 10px;">
+                        <a href="https://github.com/pritkc" target="_blank" style="text-decoration: none;">
+                            <img src="https://avatars.githubusercontent.com/u/74728118?v=4" alt="pritkc" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 5px;" />
+                            <div>pritkc</div>
+                            <div style="font-size: 0.8em; color: #666;">43 commits</div>
+                        </a>
+                    </div>
+                    </div>
+<div class="contributor docutils container">
+
+                    <div style="text-align: center; margin-bottom: 10px;">
+                        <a href="https://github.com/arrowguy234" target="_blank" style="text-decoration: none;">
+                            <img src="https://avatars.githubusercontent.com/u/93762514?v=4" alt="arrowguy234" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 5px;" />
+                            <div>arrowguy234</div>
+                            <div style="font-size: 0.8em; color: #666;">27 commits</div>
+                        </a>
+                    </div>
+                    </div>
+<div class="contributor docutils container">
+
+                    <div style="text-align: center; margin-bottom: 10px;">
+                        <a href="https://github.com/aneeshs1729" target="_blank" style="text-decoration: none;">
+                            <img src="https://avatars.githubusercontent.com/u/78006458?v=4" alt="aneeshs1729" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 5px;" />
+                            <div>aneeshs1729</div>
+                            <div style="font-size: 0.8em; color: #666;">26 commits</div>
+                        </a>
+                    </div>
+                    </div>
+<div class="contributor docutils container">
+
+                    <div style="text-align: center; margin-bottom: 10px;">
+                        <a href="https://github.com/mdumett" target="_blank" style="text-decoration: none;">
+                            <img src="https://avatars.githubusercontent.com/u/114712722?v=4" alt="mdumett" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 5px;" />
+                            <div>mdumett</div>
+                            <div style="font-size: 0.8em; color: #666;">25 commits</div>
+                        </a>
+                    </div>
+                    </div>
+<div class="contributor docutils container">
+
+                    <div style="text-align: center; margin-bottom: 10px;">
+                        <a href="https://github.com/katayoonk" target="_blank" style="text-decoration: none;">
+                            <img src="https://avatars.githubusercontent.com/u/122122167?v=4" alt="katayoonk" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 5px;" />
+                            <div>katayoonk</div>
+                            <div style="font-size: 0.8em; color: #666;">24 commits</div>
+                        </a>
+                    </div>
+                    </div>
+<div class="contributor docutils container">
+
+                    <div style="text-align: center; margin-bottom: 10px;">
+                        <a href="https://github.com/cpaolini" target="_blank" style="text-decoration: none;">
+                            <img src="https://avatars.githubusercontent.com/u/1870173?v=4" alt="cpaolini" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 5px;" />
+                            <div>cpaolini</div>
+                            <div style="font-size: 0.8em; color: #666;">12 commits</div>
+                        </a>
+                    </div>
+                    </div>
+<div class="contributor docutils container">
+
+                    <div style="text-align: center; margin-bottom: 10px;">
+                        <a href="https://github.com/onzerem" target="_blank" style="text-decoration: none;">
+                            <img src="https://avatars.githubusercontent.com/u/84254273?v=4" alt="onzerem" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 5px;" />
+                            <div>onzerem</div>
+                            <div style="font-size: 0.8em; color: #666;">7 commits</div>
+                        </a>
+                    </div>
+                    </div>
+<div class="contributor docutils container">
+
+                    <div style="text-align: center; margin-bottom: 10px;">
+                        <a href="https://github.com/edfink234" target="_blank" style="text-decoration: none;">
+                            <img src="https://avatars.githubusercontent.com/u/84761455?v=4" alt="edfink234" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 5px;" />
+                            <div>edfink234</div>
+                            <div style="font-size: 0.8em; color: #666;">5 commits</div>
+                        </a>
+                    </div>
+                    </div>
+<div class="contributor docutils container">
+
+                    <div style="text-align: center; margin-bottom: 10px;">
+                        <a href="https://github.com/valeriabarra" target="_blank" style="text-decoration: none;">
+                            <img src="https://avatars.githubusercontent.com/u/39932030?v=4" alt="valeriabarra" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 5px;" />
+                            <div>valeriabarra</div>
+                            <div style="font-size: 0.8em; color: #666;">3 commits</div>
+                        </a>
+                    </div>
+                    </div>
+<div class="contributor docutils container">
+
+                    <div style="text-align: center; margin-bottom: 10px;">
+                        <a href="https://github.com/joehellmers" target="_blank" style="text-decoration: none;">
+                            <img src="https://avatars.githubusercontent.com/u/24215846?v=4" alt="joehellmers" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 5px;" />
+                            <div>joehellmers</div>
+                            <div style="font-size: 0.8em; color: #666;">3 commits</div>
+                        </a>
+                    </div>
+                    </div>
+<div class="contributor docutils container">
+
+                    <div style="text-align: center; margin-bottom: 10px;">
+                        <a href="https://github.com/valdeluxedition" target="_blank" style="text-decoration: none;">
+                            <img src="https://avatars.githubusercontent.com/u/148279402?v=4" alt="valdeluxedition" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 5px;" />
+                            <div>valdeluxedition</div>
+                            <div style="font-size: 0.8em; color: #666;">3 commits</div>
+                        </a>
+                    </div>
+                    </div>
+<div class="contributor docutils container">
+
+                    <div style="text-align: center; margin-bottom: 10px;">
+                        <a href="https://github.com/ArshiaIlaty" target="_blank" style="text-decoration: none;">
+                            <img src="https://avatars.githubusercontent.com/u/58371460?v=4" alt="ArshiaIlaty" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 5px;" />
+                            <div>ArshiaIlaty</div>
+                            <div style="font-size: 0.8em; color: #666;">2 commits</div>
+                        </a>
+                    </div>
+                    </div>
+<div class="contributor docutils container">
+
+                    <div style="text-align: center; margin-bottom: 10px;">
+                        <a href="https://github.com/Amey-kulkarni19" target="_blank" style="text-decoration: none;">
+                            <img src="https://avatars.githubusercontent.com/u/179423326?v=4" alt="Amey-kulkarni19" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 5px;" />
+                            <div>Amey-kulkarni19</div>
+                            <div style="font-size: 0.8em; color: #666;">1 commit</div>
+                        </a>
+                    </div>
+                    </div>
+<div class="contributor docutils container">
+
+                    <div style="text-align: center; margin-bottom: 10px;">
+                        <a href="https://github.com/aboada" target="_blank" style="text-decoration: none;">
+                            <img src="https://avatars.githubusercontent.com/u/15724233?v=4" alt="aboada" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 5px;" />
+                            <div>aboada</div>
+                            <div style="font-size: 0.8em; color: #666;">1 commit</div>
+                        </a>
+                    </div>
+                    </div>
+<div class="contributor docutils container">
+
+                    <div style="text-align: center; margin-bottom: 10px;">
+                        <a href="https://github.com/SavannaSpayd" target="_blank" style="text-decoration: none;">
+                            <img src="https://avatars.githubusercontent.com/u/132537819?v=4" alt="SavannaSpayd" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 5px;" />
+                            <div>SavannaSpayd</div>
+                            <div style="font-size: 0.8em; color: #666;">1 commit</div>
+                        </a>
+                    </div>
+                    </div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../examples/Time-Integrators/RK4.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">4th-Order Runge-Kutta Method (RK4)</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="code_of_conduct_wrapper.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Contributor Covenant Code of Conduct</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">1. Contributing to MOLE</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reporting-issues-or-problems">2. Reporting Issues or Problems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seeking-support">3. Seeking Support</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#our-contributors">Our Contributors</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By CSRC SDSU
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, CSRC SDSU.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Jun 02, 2025.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  
+        <div class="footer-extra">
+            <p>MOLE is a project by CSRC SDSU.</p>
+        </div>
+    
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

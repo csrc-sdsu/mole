@@ -1,0 +1,1169 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Boundary Conditions &#8212; MOLE Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/announcement.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/mathconf.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/cpp/boundary';</script>
+    <script src="../../_static/js/theme-custom.js"></script>
+    <script src="../../_static/js/theme-mode-toggle.js"></script>
+    <script src="../../_static/js/announcement.js"></script>
+    <link rel="canonical" href="https://mole-pdes.readthedocs.io/api/cpp/boundary.html" />
+    <link rel="icon" href="../../_static/logo.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Utilities" href="utils.html" />
+    <link rel="prev" title="Operators" href="operators.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Jun 02, 2025"/>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const headers = document.querySelectorAll('.collapsible-header');
+    
+    headers.forEach(header => {
+      header.addEventListener('click', function() {
+        this.classList.toggle('active');
+        const content = this.nextElementSibling;
+        if (content.style.display === 'block') {
+          content.style.display = 'none';
+        } else {
+          content.style.display = 'block';
+        }
+      });
+    });
+  });
+</script>
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="MOLE Documentation - Home"/>
+    <script>document.write(`<img src="../../_static/logo-dark.png" class="logo__image only-dark" alt="MOLE Documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/csrc-sdsu/mole" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.mathworks.com/matlabcentral/fileexchange/124870-mole" title="MATLAB" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-cube fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">MATLAB</span></a>
+        </li>
+</ul></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    MOLE: Mimetic Operators Library Enhanced
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Index</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../intros/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intros/gettingstarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intros/doc_readme_wrapper.html">Documentation Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">C++</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="operators.html">Operators</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Boundary Conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">Utilities</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../matlab/index-beta.html">MATLAB/Octave</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../matlab/matlab_index.html">Function Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../matlab/api.html">API</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Mathematical Framework</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../math_functions/index.html">Mathematical Functions Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../math_functions/CSRCReportOnMOLE.html">CSRC Report on MOLE Library</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../math_functions/StaggeredGrids.html">Why Staggered Grids?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../math_functions/Jacobian.html">Jacobian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../math_functions/NonUniformGradAndDiv.html">Non-Uniform Gradient and Divergence Operators</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/Elliptic/index.html">Elliptic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../examples/Elliptic/1D/index.html">1D Elliptic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D.html">Elliptic1D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D-add-Scalar-BC.html">Elliptic1D Add Scalar Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D-Homogeneous-Dirichlet.html">Elliptic1D Homogenous Dirichlet Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D-Left-Dirichlet-Right-Neumann.html">Elliptic1D Left Dirichlet and Right Neumann Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D-Left-Dirichlet-Right-Robin.html">Elliptic1D Left Dirichlet and Right Robin Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D-Left-Neumann-Right-Neumann.html">Elliptic1D Pure Neumann Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D-Left-Neumann-Right-Robin.html">Elliptic1D Left Neumann Right Robin Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D-Left-Robin-Right-Robin.html">Elliptic1D Pure Robin Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D-Non-Homogeneous-Dirichlet.html">Elliptic1D Non-Homogenous Dirichlet Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D-Non-Periodic-BC.html">Elliptic1D Non-Periodic Dirichlet Boundary Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/1D/Elliptic1D-Periodic-BC.html">Elliptic1D Periodic Dirichlet Boundary Conditions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../examples/Elliptic/2D/index.html">2D Elliptic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/2D/Elliptic2D.html">Elliptic2D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/2D/Elliptic2D-Case-2.html">Elliptic2D Case 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/2D/Elliptic2D-Nodal-Curv.html">Elliptic2D Nodal Curv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/2D/Elliptic2D-Nodal-Curv-Sinusoidal.html">Elliptic2D Nodal Curv Sinusoidal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/2D/Minimal-Poisson-2D.html">Minimal Poisson 2D</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../examples/Elliptic/3D/index.html">3D Elliptic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Elliptic/3D/Elliptic3D.html">Elliptic3D</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/Parabolic/index.html">Parabolic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../examples/Parabolic/1D/index.html">1D Parabolic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Parabolic/1D/Parabolic1D.html">1D Heat Equation</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/Hyperbolic/index.html">Hyperbolic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../examples/Hyperbolic/1D/index.html">1D Hyperbolic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Hyperbolic/1D/Hyperbolic1D.html">Hyperbolic1D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Hyperbolic/1D/Hyperbolic1D-upwind.html">Hyperbolic1D upwind</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Hyperbolic/1D/Hyperbolic1D-Lax-Friedrichs.html">Hyperbolic1D Lax Friedrichs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Hyperbolic/1D/Wave-1D.html">Wave 1D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Hyperbolic/1D/Wave-1D-Case-2.html">Wave 1D Case 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Hyperbolic/1D/Burgers1D.html">Burgers1D</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../examples/Hyperbolic/2D/index.html">2D Hyperbolic Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Hyperbolic/2D/Wave-2D.html">Wave 2D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Hyperbolic/2D/Wave-2D-Case-2.html">Wave 2D Case 2</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/Schrodinger/index.html">Schrödinger Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../examples/Schrodinger/1D/index.html">1D Schrödinger Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Schrodinger/1D/Schrodinger1D.html">Schrodinger1D</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/Sturm-Liouville/index.html">Sturm-Liouville Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/Sturm-Liouville/Chebyshev.html">Chebyshev Sturm-Liouville Problem</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/Navier-Stokes/index.html">Navier-Stokes Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/Navier-Stokes/Lock-Exchange.html">Lock Exchange Problem</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/Mixed/index.html">Mixed Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../examples/Mixed/1D/index.html">1D Mixed Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Mixed/1D/Transport1D.html">Transport1D</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../examples/Mixed/2D/index.html">2D Mixed Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Mixed/2D/work-in-progress.html">Work in Progress</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../examples/Mixed/3D/index.html">3D Mixed Problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../examples/Mixed/3D/Convection-Diffusion.html">3D Convection-Diffusion Equation</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/Time-Integrators/index.html">Time Integrators</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/Time-Integrators/RK2.html">Second-Order Runge-Kutta Method (RK2)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/Time-Integrators/RK4.html">4th-Order Runge-Kutta Method (RK4)</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../intros/contributing_wrapper.html">Contributing to MOLE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intros/code_of_conduct_wrapper.html">Code of Conduct</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/csrc-sdsu/mole" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/csrc-sdsu/mole/blob/master/doc/sphinx/source/api/cpp/boundary.md?plain=1" target="_blank"
+   class="btn btn-sm btn-source-file-button dropdown-item"
+   title="Show source"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="btn__text-container">Show source</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/csrc-sdsu/mole/edit/master/doc/sphinx/source/api/cpp/boundary.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/api/cpp/boundary.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Boundary Conditions</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mixed-boundary-conditions">Mixed Boundary Conditions</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#api-reference">API Reference</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#robin-boundary-conditions">Robin Boundary Conditions</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">API Reference</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-examples">Usage Examples</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elliptic-problem-with-mixed-boundary-conditions">Elliptic Problem with Mixed Boundary Conditions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complex-problem-with-advanced-boundary-handling">Complex Problem with Advanced Boundary Handling</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="boundary-conditions">
+<h1>Boundary Conditions<a class="headerlink" href="#boundary-conditions" title="Permalink to this heading">#</a></h1>
+<p>MOLE supports a variety of boundary conditions for solving PDEs with different physical constraints.</p>
+<section id="mixed-boundary-conditions">
+<h2>Mixed Boundary Conditions<a class="headerlink" href="#mixed-boundary-conditions" title="Permalink to this heading">#</a></h2>
+<p>The MixedBC class implements mixed boundary conditions in the MOLE library.</p>
+<!-- ### Mathematical Background -->
+<!-- TODO: Add mathematical background, principles, and mimetic properties -->
+<section id="api-reference">
+<h3>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this heading">#</a></h3>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv47MixedBC">
+<span id="_CPPv37MixedBC"></span><span id="_CPPv27MixedBC"></span><span id="MixedBC"></span><span class="target" id="classMixedBC"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MixedBC</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">sp_mat</span></span><a class="headerlink" href="#_CPPv47MixedBC" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>Mimetic Mixed Boundary Condition operator. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7MixedBC7MixedBCE3u163u324RealRKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEE">
+<span id="_CPPv3N7MixedBC7MixedBCE3u163u324RealRKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEE"></span><span id="_CPPv2N7MixedBC7MixedBCE3u163u324RealRKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEE"></span><span id="MixedBC::MixedBC__u16.u32.Real.ssCR.std::vector:Real:CR.ssCR.std::vector:Real:CR"></span><span class="target" id="classMixedBC_1ad8d4d972fb3fbe62200aaa0534084f2e"></span><span class="sig-name descname"><span class="n"><span class="pre">MixedBC</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">u16</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dx</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Real</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">coeffs_left</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Real</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">coeffs_right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7MixedBC7MixedBCE3u163u324RealRKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEE" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>1-D Constructor </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> – Order of accuracy </p></li>
+<li><p><strong>m</strong> – Number of cells </p></li>
+<li><p><strong>dx</strong> – Spacing between cells </p></li>
+<li><p><strong>left</strong> – Type of boundary condition at the left boundary (‘Dirichlet’, ‘Neumann’, ‘Robin’) </p></li>
+<li><p><strong>coeffs_left</strong> – Coefficients for the left boundary condition </p></li>
+<li><p><strong>right</strong> – Type of boundary condition at the right boundary (‘Dirichlet’, ‘Neumann’, ‘Robin’) </p></li>
+<li><p><strong>coeffs_right</strong> – Coefficients for the right boundary condition </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7MixedBC7MixedBCE3u163u324Real3u324RealRKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEE">
+<span id="_CPPv3N7MixedBC7MixedBCE3u163u324Real3u324RealRKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEE"></span><span id="_CPPv2N7MixedBC7MixedBCE3u163u324Real3u324RealRKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEE"></span><span id="MixedBC::MixedBC__u16.u32.Real.u32.Real.ssCR.std::vector:Real:CR.ssCR.std::vector:Real:CR.ssCR.std::vector:Real:CR.ssCR.std::vector:Real:CR"></span><span class="target" id="classMixedBC_1a94dbf382fbd88bba15cc8427d212a55b"></span><span class="sig-name descname"><span class="n"><span class="pre">MixedBC</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">u16</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dx</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dy</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Real</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">coeffs_left</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Real</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">coeffs_right</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">bottom</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Real</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">coeffs_bottom</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">top</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Real</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">coeffs_top</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7MixedBC7MixedBCE3u163u324Real3u324RealRKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEE" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>2-D Constructor </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> – Order of accuracy </p></li>
+<li><p><strong>m</strong> – Number of cells along x-axis </p></li>
+<li><p><strong>dx</strong> – Spacing between cells along x-axis </p></li>
+<li><p><strong>n</strong> – Number of cells along y-axis </p></li>
+<li><p><strong>dy</strong> – Spacing between cells along y-axis </p></li>
+<li><p><strong>left</strong> – Type of boundary condition at the left boundary (‘Dirichlet’, ‘Neumann’, ‘Robin’) </p></li>
+<li><p><strong>coeffs_left</strong> – Coefficients for the left boundary condition </p></li>
+<li><p><strong>right</strong> – Type of boundary condition at the right boundary (‘Dirichlet’, ‘Neumann’, ‘Robin’) </p></li>
+<li><p><strong>coeffs_right</strong> – Coefficients for the right boundary condition </p></li>
+<li><p><strong>bottom</strong> – Type of boundary condition at the bottom boundary (‘Dirichlet’, ‘Neumann’, ‘Robin’) </p></li>
+<li><p><strong>coeffs_bottom</strong> – Coefficients for the bottom boundary condition </p></li>
+<li><p><strong>top</strong> – Type of boundary condition at the top boundary (‘Dirichlet’, ‘Neumann’, ‘Robin’) </p></li>
+<li><p><strong>coeffs_top</strong> – Coefficients for the top boundary condition </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7MixedBC7MixedBCE3u163u324Real3u324Real3u324RealRKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEE">
+<span id="_CPPv3N7MixedBC7MixedBCE3u163u324Real3u324Real3u324RealRKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEE"></span><span id="_CPPv2N7MixedBC7MixedBCE3u163u324Real3u324Real3u324RealRKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEE"></span><span id="MixedBC::MixedBC__u16.u32.Real.u32.Real.u32.Real.ssCR.std::vector:Real:CR.ssCR.std::vector:Real:CR.ssCR.std::vector:Real:CR.ssCR.std::vector:Real:CR.ssCR.std::vector:Real:CR.ssCR.std::vector:Real:CR"></span><span class="target" id="classMixedBC_1a3f2ff6914cddbc8fba77ad91dc8d48a7"></span><span class="sig-name descname"><span class="n"><span class="pre">MixedBC</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">u16</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dx</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dy</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">o</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dz</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Real</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">coeffs_left</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Real</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">coeffs_right</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">bottom</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Real</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">coeffs_bottom</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">top</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Real</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">coeffs_top</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">front</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Real</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">coeffs_front</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">back</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Real</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">coeffs_back</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7MixedBC7MixedBCE3u163u324Real3u324Real3u324RealRKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEERKNSt6stringERKNSt6vectorI4RealEE" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>3-D Constructor </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> – Order of accuracy </p></li>
+<li><p><strong>m</strong> – Number of cells along x-axis </p></li>
+<li><p><strong>dx</strong> – Spacing between cells along x-axis </p></li>
+<li><p><strong>n</strong> – Number of cells along y-axis </p></li>
+<li><p><strong>dy</strong> – Spacing between cells along y-axis </p></li>
+<li><p><strong>o</strong> – Number of cells along z-axis </p></li>
+<li><p><strong>dz</strong> – Spacing between cells along z-axis </p></li>
+<li><p><strong>left</strong> – Type of boundary condition at the left boundary (‘Dirichlet’, ‘Neumann’, ‘Robin’) </p></li>
+<li><p><strong>coeffs_left</strong> – Coefficients for the left boundary condition </p></li>
+<li><p><strong>right</strong> – Type of boundary condition at the right boundary (‘Dirichlet’, ‘Neumann’, ‘Robin’) </p></li>
+<li><p><strong>coeffs_right</strong> – Coefficients for the right boundary condition </p></li>
+<li><p><strong>bottom</strong> – Type of boundary condition at the bottom boundary (‘Dirichlet’, ‘Neumann’, ‘Robin’) </p></li>
+<li><p><strong>coeffs_bottom</strong> – Coefficients for the bottom boundary condition </p></li>
+<li><p><strong>top</strong> – Type of boundary condition at the top boundary (‘Dirichlet’, ‘Neumann’, ‘Robin’) </p></li>
+<li><p><strong>coeffs_top</strong> – Coefficients for the top boundary condition </p></li>
+<li><p><strong>front</strong> – Type of boundary condition at the front boundary (‘Dirichlet’, ‘Neumann’, ‘Robin’) </p></li>
+<li><p><strong>coeffs_front</strong> – Coefficients for the front boundary condition </p></li>
+<li><p><strong>back</strong> – Type of boundary condition at the back boundary (‘Dirichlet’, ‘Neumann’, ‘Robin’) </p></li>
+<li><p><strong>coeffs_back</strong> – Coefficients for the back boundary condition </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+<section id="robin-boundary-conditions">
+<h2>Robin Boundary Conditions<a class="headerlink" href="#robin-boundary-conditions" title="Permalink to this heading">#</a></h2>
+<p>The RobinBC class implements Robin boundary conditions in the MOLE library.</p>
+<!-- ### Mathematical Background -->
+<!-- TODO: Add mathematical background, principles, and mimetic properties -->
+<section id="id1">
+<h3>API Reference<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv47RobinBC">
+<span id="_CPPv37RobinBC"></span><span id="_CPPv27RobinBC"></span><span id="RobinBC"></span><span class="target" id="classRobinBC"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RobinBC</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">sp_mat</span></span><a class="headerlink" href="#_CPPv47RobinBC" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>Mimetic Robin Boundary Condition operator. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7RobinBC7RobinBCE3u163u324Real4Real4Real">
+<span id="_CPPv3N7RobinBC7RobinBCE3u163u324Real4Real4Real"></span><span id="_CPPv2N7RobinBC7RobinBCE3u163u324Real4Real4Real"></span><span id="RobinBC::RobinBC__u16.u32.Real.Real.Real"></span><span class="target" id="classRobinBC_1a9760e8a40fb7436f9981d629e8eda46c"></span><span class="sig-name descname"><span class="n"><span class="pre">RobinBC</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">u16</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dx</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">a</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7RobinBC7RobinBCE3u163u324Real4Real4Real" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>1-D Robin boundary constructor </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> – mimetic order of accuracy </p></li>
+<li><p><strong>m</strong> – number of cells in x-dimension </p></li>
+<li><p><strong>dx</strong> – cell width in x-direction </p></li>
+<li><p><strong>a</strong> – Coefficient of the Dirichlet function </p></li>
+<li><p><strong>b</strong> – Coefficient of the Neumann function </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7RobinBC7RobinBCE3u163u324Real3u324Real4Real4Real">
+<span id="_CPPv3N7RobinBC7RobinBCE3u163u324Real3u324Real4Real4Real"></span><span id="_CPPv2N7RobinBC7RobinBCE3u163u324Real3u324Real4Real4Real"></span><span id="RobinBC::RobinBC__u16.u32.Real.u32.Real.Real.Real"></span><span class="target" id="classRobinBC_1a547bb79bb3b07d1f180e365dae4b7947"></span><span class="sig-name descname"><span class="n"><span class="pre">RobinBC</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">u16</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dx</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dy</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">a</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7RobinBC7RobinBCE3u163u324Real3u324Real4Real4Real" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>2-D Robin boundary constructor </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Uses 1-D Robin to build the 2-D operator </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> – mimetic order of accuracy </p></li>
+<li><p><strong>m</strong> – number of cells in x-dimension </p></li>
+<li><p><strong>dx</strong> – cell width in x-direction </p></li>
+<li><p><strong>n</strong> – number of cells in y-dimension </p></li>
+<li><p><strong>dy</strong> – cell width in y-direction </p></li>
+<li><p><strong>a</strong> – Coefficient of the Dirichlet function </p></li>
+<li><p><strong>b</strong> – Coefficient of the Neumann function</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7RobinBC7RobinBCE3u163u324Real3u324Real3u324Real4Real4Real">
+<span id="_CPPv3N7RobinBC7RobinBCE3u163u324Real3u324Real3u324Real4Real4Real"></span><span id="_CPPv2N7RobinBC7RobinBCE3u163u324Real3u324Real3u324Real4Real4Real"></span><span id="RobinBC::RobinBC__u16.u32.Real.u32.Real.u32.Real.Real.Real"></span><span class="target" id="classRobinBC_1ab71ad4759eb7d5abf0f0ccfed13c60d9"></span><span class="sig-name descname"><span class="n"><span class="pre">RobinBC</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">u16</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dx</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dy</span></span>, <span class="n"><span class="pre">u32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">o</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dz</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">a</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7RobinBC7RobinBCE3u163u324Real3u324Real3u324Real4Real4Real" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>3-D Robin boundary constructor </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Uses 1-D Robin to build the 3-D operator </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> – mimetic order of accuracy </p></li>
+<li><p><strong>m</strong> – number of cells in x-dimension </p></li>
+<li><p><strong>dx</strong> – cell width in x-direction </p></li>
+<li><p><strong>n</strong> – number of cells in y-dimension </p></li>
+<li><p><strong>dy</strong> – cell width in y-direction </p></li>
+<li><p><strong>o</strong> – number of cells in z-dimension </p></li>
+<li><p><strong>dz</strong> – cell width in z-direction </p></li>
+<li><p><strong>a</strong> – Coefficient of the Dirichlet function </p></li>
+<li><p><strong>b</strong> – Coefficient of the Neumann function</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+<section id="usage-examples">
+<h2>Usage Examples<a class="headerlink" href="#usage-examples" title="Permalink to this heading">#</a></h2>
+<section id="elliptic-problem-with-mixed-boundary-conditions">
+<h3>Elliptic Problem with Mixed Boundary Conditions<a class="headerlink" href="#elliptic-problem-with-mixed-boundary-conditions" title="Permalink to this heading">#</a></h3>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Elliptic 1D Example with Mixed Boundary Conditions (examples/cpp/elliptic1D.cpp)</span><a class="headerlink" href="#id2" title="Permalink to this code">#</a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cm">/**</span>
+<span class="linenos"> 2</span><span class="cm"> * This example uses MOLE to solve a 1D BVP</span>
+<span class="linenos"> 3</span><span class="cm"> */</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;mole.h&quot;</span>
+<span class="linenos"> 6</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span><span class="w">             </span><span class="c1">// Operators&#39; order of accuracy</span>
+<span class="linenos">11</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">            </span><span class="c1">// Left boundary</span>
+<span class="linenos">12</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">            </span><span class="c1">// Right boundary</span>
+<span class="linenos">13</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">     </span><span class="c1">// Number of cells</span>
+<span class="linenos">14</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">m</span><span class="p">;</span><span class="w"> </span><span class="c1">// Step size</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="w">  </span><span class="c1">// Get mimetic operators</span>
+<span class="linenos">17</span><span class="w">  </span><span class="n">Laplacian</span><span class="w"> </span><span class="n">L</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">dx</span><span class="p">);</span>
+<span class="linenos">18</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="c1">// Dirichlet coefficient</span>
+<span class="linenos">19</span><span class="w">  </span><span class="n">Real</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="c1">// Neumann coefficient</span>
+<span class="linenos">20</span><span class="w">  </span><span class="n">RobinBC</span><span class="w"> </span><span class="n">BC</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
+<span class="linenos">21</span><span class="w">  </span><span class="n">L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">L</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">BC</span><span class="p">;</span>
+<span class="linenos">22</span>
+<span class="linenos">23</span><span class="w">  </span><span class="c1">// 1D Staggered grid</span>
+<span class="linenos">24</span><span class="w">  </span><span class="n">vec</span><span class="w"> </span><span class="n">grid</span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+<span class="linenos">25</span><span class="w">  </span><span class="n">grid</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
+<span class="linenos">26</span><span class="w">  </span><span class="n">grid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dx</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">2.0</span><span class="p">;</span>
+<span class="linenos">27</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="linenos">28</span><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">m</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">29</span><span class="w">    </span><span class="n">grid</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">grid</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dx</span><span class="p">;</span>
+<span class="linenos">30</span><span class="w">  </span><span class="p">}</span>
+<span class="linenos">31</span><span class="w">  </span><span class="n">grid</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="linenos">32</span>
+<span class="linenos">33</span><span class="w">  </span><span class="c1">// Build RHS for system of equations</span>
+<span class="linenos">34</span><span class="w">  </span><span class="n">vec</span><span class="w"> </span><span class="n">rhs</span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+<span class="linenos">35</span><span class="w">  </span><span class="n">rhs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="n">grid</span><span class="p">);</span><span class="w"> </span><span class="c1">// rhs(0) = 1</span>
+<span class="linenos">36</span><span class="w">  </span><span class="n">rhs</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">37</span><span class="w">  </span><span class="n">rhs</span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// rhs(1) = 2e</span>
+<span class="linenos">38</span>
+<span class="linenos">39</span><span class="w">  </span><span class="c1">// Solve the system of linear equations</span>
+<span class="linenos">40</span><span class="cp">#ifdef EIGEN</span>
+<span class="linenos">41</span><span class="w">  </span><span class="c1">// Use Eigen only if SuperLU (faster) is not available</span>
+<span class="linenos">42</span><span class="w">  </span><span class="n">vec</span><span class="w"> </span><span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Utils</span><span class="o">::</span><span class="n">spsolve_eigen</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="w"> </span><span class="n">rhs</span><span class="p">);</span>
+<span class="linenos">43</span><span class="cp">#else</span>
+<span class="linenos">44</span><span class="w">  </span><span class="n">vec</span><span class="w"> </span><span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spsolve</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="w"> </span><span class="n">rhs</span><span class="p">);</span><span class="w"> </span><span class="c1">// Will use SuperLU</span>
+<span class="linenos">45</span><span class="cp">#endif</span>
+<span class="linenos">46</span>
+<span class="linenos">47</span><span class="w">  </span><span class="c1">// Print out the solution</span>
+<span class="linenos">48</span><span class="w">  </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">sol</span><span class="p">;</span>
+<span class="linenos">49</span>
+<span class="linenos">50</span><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">51</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="complex-problem-with-advanced-boundary-handling">
+<h3>Complex Problem with Advanced Boundary Handling<a class="headerlink" href="#complex-problem-with-advanced-boundary-handling" title="Permalink to this heading">#</a></h3>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">3D Convection-Diffusion Example with Complex Boundary Conditions (examples/cpp/convection_diffusion3D.cpp)</span><a class="headerlink" href="#id3" title="Permalink to this code">#</a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="cm">/**</span>
+<span class="linenos">  2</span><span class="cm"> * @file convection_diffusion3D.cpp</span>
+<span class="linenos">  3</span><span class="cm"> * @brief Solves a 3D Convection-Diffusion equation using Mimetic Operators for Linear Equations (MOLE).</span>
+<span class="linenos">  4</span><span class="cm"> *</span>
+<span class="linenos">  5</span><span class="cm"> * This program numerically solves the 3D convection-diffusion equation using MOLE techniques.</span>
+<span class="linenos">  6</span><span class="cm"> * It simulates the distribution of CO2 concentration over time within a porous medium,</span>
+<span class="linenos">  7</span><span class="cm"> * considering both diffusion and advection effects. </span>
+<span class="linenos">  8</span><span class="cm"> * </span>
+<span class="linenos">  9</span><span class="cm"> * If OUTPUT_FRAME_DATA is set to 1, slices (2D cross-sections) of the concentration field are extracted </span>
+<span class="linenos"> 10</span><span class="cm"> * and saved to a text file for visualization.</span>
+<span class="linenos"> 11</span><span class="cm"> */</span>
+<span class="linenos"> 12</span>
+<span class="linenos"> 13</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="linenos"> 14</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fstream&gt;</span>
+<span class="linenos"> 15</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mole.h&gt;</span>
+<span class="linenos"> 16</span>
+<span class="linenos"> 17</span><span class="cp">#define OUTPUT_FRAME_DATA 0</span>
+<span class="linenos"> 18</span>
+<span class="linenos"> 19</span><span class="c1">// Helper for linear indexing in 3D arrays (0-based indexing)</span>
+<span class="linenos"> 20</span><span class="kr">inline</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="nf">idx3D</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">o</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 21</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">j</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">k</span><span class="p">;</span>
+<span class="linenos"> 22</span><span class="p">}</span>
+<span class="linenos"> 23</span>
+<span class="linenos"> 24</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 25</span><span class="w">    </span><span class="c1">// Parameters</span>
+<span class="linenos"> 26</span><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="linenos"> 27</span><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">101</span><span class="p">;</span>
+<span class="linenos"> 28</span><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">51</span><span class="p">;</span>
+<span class="linenos"> 29</span><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">101</span><span class="p">;</span>
+<span class="linenos"> 30</span>
+<span class="linenos"> 31</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">101.0</span><span class="p">;</span>
+<span class="linenos"> 32</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">51.0</span><span class="p">;</span>
+<span class="linenos"> 33</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">101.0</span><span class="p">;</span>
+<span class="linenos"> 34</span>
+<span class="linenos"> 35</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">m</span><span class="p">;</span>
+<span class="linenos"> 36</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">dy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">d</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+<span class="linenos"> 37</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">dz</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">o</span><span class="p">;</span>
+<span class="linenos"> 38</span>
+<span class="linenos"> 39</span><span class="w">    </span><span class="c1">// Construct operators</span>
+<span class="linenos"> 40</span><span class="w">    </span><span class="n">sp_mat</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Divergence</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">o</span><span class="p">,</span><span class="w"> </span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">dy</span><span class="p">,</span><span class="w"> </span><span class="n">dz</span><span class="p">);</span>
+<span class="linenos"> 41</span><span class="w">    </span><span class="n">sp_mat</span><span class="w"> </span><span class="n">G</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Gradient</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">o</span><span class="p">,</span><span class="w"> </span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">dy</span><span class="p">,</span><span class="w"> </span><span class="n">dz</span><span class="p">);</span>
+<span class="linenos"> 42</span><span class="w">    </span><span class="n">sp_mat</span><span class="w"> </span><span class="n">I</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Interpol</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">o</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="linenos"> 43</span>
+<span class="linenos"> 44</span><span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">scalarSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">o</span><span class="o">+</span><span class="mi">2</span><span class="p">);</span>
+<span class="linenos"> 45</span><span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">vectorSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">G</span><span class="p">.</span><span class="n">n_rows</span><span class="p">;</span>
+<span class="linenos"> 46</span>
+<span class="linenos"> 47</span><span class="w">    </span><span class="c1">// Allocate fields</span>
+<span class="linenos"> 48</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">V</span><span class="p">(</span><span class="n">vectorSize</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">);</span>
+<span class="linenos"> 49</span><span class="w">    </span><span class="n">vec</span><span class="w"> </span><span class="n">C</span><span class="p">(</span><span class="n">scalarSize</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="o">::</span><span class="n">zeros</span><span class="p">);</span>
+<span class="linenos"> 50</span>
+<span class="linenos"> 51</span><span class="w">    </span><span class="c1">// Initial conditions</span>
+<span class="linenos"> 52</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">bottom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span>
+<span class="linenos"> 53</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">top</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">15</span><span class="p">;</span><span class="w">   </span>
+<span class="linenos"> 54</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">seal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">40</span><span class="p">;</span><span class="w">  </span>
+<span class="linenos"> 55</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">seal_idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">seal</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="linenos"> 56</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">seal5_idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">seal</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="linenos"> 57</span>
+<span class="linenos"> 58</span><span class="w">    </span><span class="c1">// Construct the velocity field</span>
+<span class="linenos"> 59</span><span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">yCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">o</span><span class="p">;</span>
+<span class="linenos"> 60</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="p">(</span><span class="n">yCount</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">);</span>
+<span class="linenos"> 61</span>
+<span class="linenos"> 62</span><span class="w">    </span><span class="c1">// Apply shale conditions on velocity field</span>
+<span class="linenos"> 63</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i_</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">m</span><span class="p">;</span><span class="w"> </span><span class="n">i_</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 64</span><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">k_</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">o</span><span class="p">;</span><span class="w"> </span><span class="n">k_</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 65</span><span class="w">            </span><span class="n">y</span><span class="p">[</span><span class="n">i_</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">m</span><span class="o">*</span><span class="n">seal_idx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">m</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">k_</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
+<span class="linenos"> 66</span><span class="w">            </span><span class="n">y</span><span class="p">[</span><span class="n">i_</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">m</span><span class="o">*</span><span class="n">seal5_idx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">m</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">k_</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
+<span class="linenos"> 67</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos"> 68</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos"> 69</span>
+<span class="linenos"> 70</span><span class="w">    </span><span class="c1">// Assign y into V at the correct offset</span>
+<span class="linenos"> 71</span><span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">n</span><span class="o">*</span><span class="n">o</span><span class="p">;</span><span class="w"> </span>
+<span class="linenos"> 72</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i_</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">yCount</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 73</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">offset</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i_</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">V</span><span class="p">.</span><span class="n">size</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 74</span><span class="w">            </span><span class="n">V</span><span class="p">[</span><span class="n">offset</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i_</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="p">[</span><span class="n">i_</span><span class="p">];</span>
+<span class="linenos"> 75</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos"> 76</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos"> 77</span>
+<span class="linenos"> 78</span><span class="w">    </span><span class="c1">// Set initial density</span>
+<span class="linenos"> 79</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">mid_x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">std</span><span class="o">::</span><span class="n">ceil</span><span class="p">((</span><span class="n">m</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span>
+<span class="linenos"> 80</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">mid_z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">std</span><span class="o">::</span><span class="n">ceil</span><span class="p">((</span><span class="n">o</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="linenos"> 81</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bottom</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">top</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 82</span><span class="w">        </span><span class="kt">size_t</span><span class="w"> </span><span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">idx3D</span><span class="p">(</span><span class="n">mid_x</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">mid_z</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">o</span><span class="p">);</span>
+<span class="linenos"> 83</span><span class="w">        </span><span class="n">C</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">;</span>
+<span class="linenos"> 84</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos"> 85</span>
+<span class="linenos"> 86</span><span class="w">    </span><span class="c1">// Well indices where C=1</span>
+<span class="linenos"> 87</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">wellIndices</span><span class="p">;</span>
+<span class="linenos"> 88</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i_</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">scalarSize</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 89</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">C</span><span class="p">(</span><span class="n">i_</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">1.0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 90</span><span class="w">            </span><span class="n">wellIndices</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i_</span><span class="p">);</span>
+<span class="linenos"> 91</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos"> 92</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos"> 93</span>
+<span class="linenos"> 94</span><span class="w">    </span><span class="c1">// Diffusivity and porosity</span>
+<span class="linenos"> 95</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">diff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">;</span>
+<span class="linenos"> 96</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">porosity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">;</span>
+<span class="linenos"> 97</span><span class="w">    </span><span class="n">diff</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="n">porosity</span><span class="p">;</span>
+<span class="linenos"> 98</span>
+<span class="linenos"> 99</span><span class="w">    </span><span class="c1">// Build K</span>
+<span class="linenos">100</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">K</span><span class="p">(</span><span class="n">vectorSize</span><span class="p">,</span><span class="w"> </span><span class="n">diff</span><span class="p">);</span>
+<span class="linenos">101</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">kk</span><span class="p">(</span><span class="n">yCount</span><span class="p">,</span><span class="w"> </span><span class="n">diff</span><span class="p">);</span>
+<span class="linenos">102</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i_</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">m</span><span class="p">;</span><span class="w"> </span><span class="n">i_</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">103</span><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">k_</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">o</span><span class="p">;</span><span class="w"> </span><span class="n">k_</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">104</span><span class="w">            </span><span class="n">kk</span><span class="p">[</span><span class="n">i_</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">m</span><span class="o">*</span><span class="n">seal_idx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">m</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">k_</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diff</span><span class="o">/</span><span class="mf">10.0</span><span class="p">;</span>
+<span class="linenos">105</span><span class="w">            </span><span class="n">kk</span><span class="p">[</span><span class="n">i_</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">m</span><span class="o">*</span><span class="n">seal5_idx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">m</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">k_</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diff</span><span class="o">/</span><span class="mf">40.0</span><span class="p">;</span>
+<span class="linenos">106</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">107</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">108</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i_</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">yCount</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">109</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">offset</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i_</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">K</span><span class="p">.</span><span class="n">size</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">110</span><span class="w">            </span><span class="n">K</span><span class="p">[</span><span class="n">offset</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i_</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kk</span><span class="p">[</span><span class="n">i_</span><span class="p">];</span>
+<span class="linenos">111</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">112</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">113</span>
+<span class="linenos">114</span><span class="w">    </span><span class="c1">// Time step calculation</span>
+<span class="linenos">115</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">dt1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dx</span><span class="o">*</span><span class="n">dx</span><span class="o">/</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">diff</span><span class="p">)</span><span class="o">/</span><span class="mf">3.0</span><span class="p">;</span>
+<span class="linenos">116</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">maxV</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
+<span class="linenos">117</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">val</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">V</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">118</span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">val</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">maxV</span><span class="p">)</span><span class="w"> </span><span class="n">maxV</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">val</span><span class="p">;</span>
+<span class="linenos">119</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">120</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">dt2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">maxV</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.0</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="p">(</span><span class="n">dx</span><span class="o">/</span><span class="n">maxV</span><span class="p">)</span><span class="o">/</span><span class="mf">3.0</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mf">1e-3</span><span class="p">;</span>
+<span class="linenos">121</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">min</span><span class="p">(</span><span class="n">dt1</span><span class="p">,</span><span class="w"> </span><span class="n">dt2</span><span class="p">);</span>
+<span class="linenos">122</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">iters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">120</span><span class="p">;</span>
+<span class="linenos">123</span>
+<span class="linenos">124</span><span class="w">    </span><span class="c1">// Convert V and K to arma::vec</span>
+<span class="linenos">125</span><span class="w">    </span><span class="n">arma</span><span class="o">::</span><span class="n">vec</span><span class="w"> </span><span class="n">K_arma</span><span class="p">(</span><span class="n">K</span><span class="p">);</span>
+<span class="linenos">126</span><span class="w">    </span><span class="n">arma</span><span class="o">::</span><span class="n">vec</span><span class="w"> </span><span class="n">V_arma</span><span class="p">(</span><span class="n">V</span><span class="p">);</span>
+<span class="linenos">127</span>
+<span class="linenos">128</span><span class="w">    </span><span class="n">arma</span><span class="o">::</span><span class="n">ivec</span><span class="w"> </span><span class="n">offsets_vec</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="linenos">129</span><span class="w">    </span><span class="n">offsets_vec</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">130</span>
+<span class="linenos">131</span><span class="w">    </span><span class="n">sp_mat</span><span class="w"> </span><span class="n">Kdiag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spdiags</span><span class="p">(</span><span class="n">K_arma</span><span class="p">,</span><span class="w"> </span><span class="n">offsets_vec</span><span class="p">,</span><span class="w"> </span><span class="n">K_arma</span><span class="p">.</span><span class="n">n_elem</span><span class="p">,</span><span class="w"> </span><span class="n">K_arma</span><span class="p">.</span><span class="n">n_elem</span><span class="p">);</span>
+<span class="linenos">132</span><span class="w">    </span><span class="n">sp_mat</span><span class="w"> </span><span class="n">Vdiag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spdiags</span><span class="p">(</span><span class="n">V_arma</span><span class="p">,</span><span class="w"> </span><span class="n">offsets_vec</span><span class="p">,</span><span class="w"> </span><span class="n">V_arma</span><span class="p">.</span><span class="n">n_elem</span><span class="p">,</span><span class="w"> </span><span class="n">V_arma</span><span class="p">.</span><span class="n">n_elem</span><span class="p">);</span>
+<span class="linenos">133</span>
+<span class="linenos">134</span><span class="w">    </span><span class="n">SizeMat</span><span class="w"> </span><span class="n">size_identity</span><span class="p">(</span><span class="n">D</span><span class="p">.</span><span class="n">n_rows</span><span class="p">,</span><span class="w"> </span><span class="n">D</span><span class="p">.</span><span class="n">n_rows</span><span class="p">);</span>
+<span class="linenos">135</span><span class="w">    </span><span class="n">sp_mat</span><span class="w"> </span><span class="n">I_sp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">speye</span><span class="p">(</span><span class="n">size_identity</span><span class="p">);</span>
+<span class="linenos">136</span>
+<span class="linenos">137</span><span class="w">    </span><span class="c1">// Operators: L and Dadv</span>
+<span class="linenos">138</span><span class="w">    </span><span class="n">sp_mat</span><span class="w"> </span><span class="n">L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Kdiag</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">G</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">I_sp</span><span class="p">;</span>
+<span class="linenos">139</span><span class="w">    </span><span class="n">sp_mat</span><span class="w"> </span><span class="n">Dadv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Vdiag</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">I</span><span class="p">;</span>
+<span class="linenos">140</span>
+<span class="linenos">141</span><span class="w">    </span><span class="cp">#if OUTPUT_FRAME_DATA</span>
+<span class="linenos">142</span><span class="w">    </span><span class="c1">// Open a single file to store selected frames</span>
+<span class="linenos">143</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">ofstream</span><span class="w"> </span><span class="n">frameFile</span><span class="p">(</span><span class="s">&quot;frames.txt&quot;</span><span class="p">);</span>
+<span class="linenos">144</span><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">frameFile</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">145</span><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Error opening frames.txt for writing.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="linenos">146</span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="linenos">147</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">148</span><span class="w">    </span><span class="cp">#endif</span>
+<span class="linenos">149</span>
+<span class="linenos">150</span><span class="w">    </span><span class="c1">// Time-stepping loop</span>
+<span class="linenos">151</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i_</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">iters</span><span class="o">*</span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">152</span><span class="w">        </span><span class="c1">// Diffusion step</span>
+<span class="linenos">153</span><span class="w">        </span><span class="n">vec</span><span class="w"> </span><span class="n">Cnew</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">L</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">C</span><span class="p">;</span>
+<span class="linenos">154</span><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">wellIndices</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">155</span><span class="w">            </span><span class="n">Cnew</span><span class="p">(</span><span class="n">w</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">;</span>
+<span class="linenos">156</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">157</span><span class="w">        </span><span class="n">C</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Cnew</span><span class="p">;</span>
+<span class="linenos">158</span>
+<span class="linenos">159</span><span class="w">        </span><span class="c1">// Advection step</span>
+<span class="linenos">160</span><span class="w">        </span><span class="n">vec</span><span class="w"> </span><span class="n">Cadv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Dadv</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">C</span><span class="p">;</span>
+<span class="linenos">161</span><span class="w">        </span><span class="n">Cadv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Cadv</span><span class="p">;</span>
+<span class="linenos">162</span><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">wellIndices</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">163</span><span class="w">            </span><span class="n">Cadv</span><span class="p">(</span><span class="n">w</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">;</span>
+<span class="linenos">164</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">165</span><span class="w">        </span><span class="n">C</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Cadv</span><span class="p">;</span>
+<span class="linenos">166</span>
+<span class="linenos">167</span><span class="w">        </span><span class="cp">#if OUTPUT_FRAME_DATA</span>
+<span class="linenos">168</span><span class="w">        </span><span class="c1">// Write only selected frames to a single file</span>
+<span class="linenos">169</span><span class="w">        </span><span class="n">frameFile</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;FRAME &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">i_</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="linenos">170</span><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">171</span><span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">k_</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">o</span><span class="o">+</span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="n">k_</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">172</span><span class="w">                </span><span class="kt">size_t</span><span class="w"> </span><span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">idx3D</span><span class="p">(</span><span class="n">seal_idx</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">k_</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">o</span><span class="p">);</span>
+<span class="linenos">173</span><span class="w">                </span><span class="n">frameFile</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">C</span><span class="p">(</span><span class="n">idx</span><span class="p">);</span>
+<span class="linenos">174</span><span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">k_</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">o</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="n">frameFile</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; &quot;</span><span class="p">;</span>
+<span class="linenos">175</span><span class="w">            </span><span class="p">}</span>
+<span class="linenos">176</span><span class="w">            </span><span class="n">frameFile</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="linenos">177</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">178</span><span class="w">        </span><span class="n">frameFile</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span><span class="w"> </span><span class="c1">// Blank line between frames</span>
+<span class="linenos">179</span><span class="w">        </span><span class="cp">#endif</span>
+<span class="linenos">180</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">181</span><span class="w">    </span>
+<span class="linenos">182</span><span class="w">    </span><span class="cp">#if OUTPUT_FRAME_DATA</span>
+<span class="linenos">183</span><span class="w">    </span><span class="n">frameFile</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
+<span class="linenos">184</span><span class="w">    </span><span class="cp">#endif</span>
+<span class="linenos">185</span>
+<span class="linenos">186</span><span class="w">    </span><span class="c1">// Display minimum and maximum concentration values</span>
+<span class="linenos">187</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Minimum CO2 concentration: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">C</span><span class="p">.</span><span class="n">min</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="linenos">188</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Maximum CO2 concentration: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">C</span><span class="p">.</span><span class="n">max</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="linenos">189</span>
+<span class="linenos">190</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">191</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="important admonition">
+<p class="admonition-title">Importance of Boundary Conditions</p>
+<p>Boundary conditions are critical for ensuring that differential equation solutions are unique and physically meaningful. They specify constraints at the boundaries of the computational domain.</p>
+</div>
+<!-- ## Notes and Considerations -->
+<!-- TODO: Add important notes and considerations for using these boundary conditions --> 
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="operators.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Operators</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="utils.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Utilities</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mixed-boundary-conditions">Mixed Boundary Conditions</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#api-reference">API Reference</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#robin-boundary-conditions">Robin Boundary Conditions</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">API Reference</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-examples">Usage Examples</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elliptic-problem-with-mixed-boundary-conditions">Elliptic Problem with Mixed Boundary Conditions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complex-problem-with-advanced-boundary-handling">Complex Problem with Advanced Boundary Handling</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By CSRC SDSU
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, CSRC SDSU.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Jun 02, 2025.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  
+        <div class="footer-extra">
+            <p>MOLE is a project by CSRC SDSU.</p>
+        </div>
+    
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

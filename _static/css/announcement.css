@@ -1,0 +1,16 @@
+/* Custom announcement banner styling */
+.bd-header-announcement {
+  background-color: rgb(59, 124, 168);
+  color: white;
+  font-weight: 600;
+  text-align: center;
+  padding: 0.5rem 0;
+  position: relative;
+  z-index: 10;
+}
+
+.bd-header-announcement .container-xl {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1320px;
+} 
