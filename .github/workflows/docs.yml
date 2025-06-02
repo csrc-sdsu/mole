@@ -3,35 +3,48 @@ name: Documentation
 on:
   push:
     branches:
-      - master
-    paths:
-      - 'doc/**'
-      - '.github/workflows/docs.yml'
-      - '**/*.md'
-      - '**/*.rst'
+      - '**'
   pull_request:
     branches:
-      - master
-    paths:
-      - 'doc/**'
-      - '.github/workflows/docs.yml'
-      - '**/*.md'
-      - '**/*.rst'
+      - '**'
 
 jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      - name: Check if documentation sources changed
+        id: changes
+        run: |
+          git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
+          CHANGED=$(git diff --name-only FETCH_HEAD HEAD | grep -E '^(doc/|.*\.md$|.*\.rst$|\.github/workflows/docs\.yml$)' || true)
+    
+          # For push events, check against previous commit
+          if [ "${{ github.event_name }}" = "push" ]; then
+            CHANGED=$(git diff --name-only HEAD~1 HEAD | grep -E '^(doc/|.*\.md$|.*\.rst$|\.github/workflows/docs\.yml$)' || true)
+          fi
+          
+          if [ -n "$CHANGED" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Documentation sources have changed:"
+            echo "$CHANGED"
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No documentation sources changed"
+          fi
+
       - name: Set up Python
+        if: steps.changes.outputs.changed == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
       - name: Install system dependencies
+        if: steps.changes.outputs.changed == 'true'
         run: |
           sudo apt-get update
           sudo apt-get install -y doxygen graphviz inkscape
@@ -40,12 +53,14 @@ jobs:
           dot -V
 
       - name: Install Python dependencies
+        if: steps.changes.outputs.changed == 'true'
         run: |
           cd doc/sphinx
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Build Documentation
+        if: steps.changes.outputs.changed == 'true'
         run: |
           cd doc/sphinx
           make doc-clean
@@ -54,12 +69,13 @@ jobs:
           make doc-latexpdf
 
       - name: Prepare for deployment
+        if: steps.changes.outputs.changed == 'true'
         run: |
           # Create .nojekyll file to prevent GitHub Pages from ignoring files that begin with an underscore
           touch doc/sphinx/build/html/.nojekyll
 
       - name: Deploy to GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: steps.changes.outputs.changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -67,3 +83,12 @@ jobs:
           force_orphan: true
           commit_message: "Deploy documentation updates"
           enable_jekyll: false
+
+      - name: Upload Documentation Artifacts
+        if: steps.changes.outputs.changed == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation
+          path: |
+            doc/sphinx/build/html/
+            doc/sphinx/build/latex/*.pdf
