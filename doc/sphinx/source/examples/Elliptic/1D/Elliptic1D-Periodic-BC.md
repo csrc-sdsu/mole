@@ -1,34 +1,38 @@
-### Elliptic1D
+### Elliptic1D Periodic Dirichlet Boundary Conditions
 
-Solves the 1D Poisson equation with Robin boundary conditions.
-
-$$
-\nabla^2 u(x) = f(x)
-$$
-
-with $x\in[0,1]$, and $f(x) =e^x$. The boundary conditions are given by
+Solves the 1D Poisson equation with periodic  boundary conditions.
 
 $$
-au + b\frac{du}{dx} = g
+-\nabla^2 u(x) = 4\pi^2 \sin( 2\pi x )
 $$
 
-with $a=1$, $b=1$, and $g=0$, and
+with $x\in[0,1]$. The boundary conditions here are a special case, and periodicity is all that is required. Mathematically,
 
 $$
-au(0) + b\frac{du(0)}{dx} = 0
+u(0) = u(1)
 $$
 
+and
+
 $$
-au(1) + b\frac{du(1)}{dx} = 2e
+\frac{du(0)}{dx} = \frac{du(1)}{dx}
 $$
 
-This corresponds to the call to robinBC1D of `robinBC1D(k, m, dx, a, b)`.
+This corresponds to the call to addScalarBC1D of `addScalarBC1D(A,b,k,m,dx,dc,nc,v)`, where `dc`, `nc`, and `vc` are vectors which hold the coefficients for $a$, $b$, and $g$ in the above system of equations. To request periodicity, the values must be all zeros. $a=[0,0]$, $b=[0,0]$ and $g=[0,0]$. 
+
+This tells the MOLE library to build a 1D periodic boundary operator. This same logic is extended to 2 and 3 dimensions. A periodic boundary operator is returned if ALL of the values for the appropriate boundary vector values `a,b,g` are zero.
+
+
+The true solution ( where $C$ is a constant ) is
+
+$$
+u(x) = \sin(2\pi x) + C
+$$
 
 ---
 
 This example is implemented in:
-- [MATLAB/ OCTAVE](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1D.m)
-- [C++](https://github.com/csrc-sdsu/mole/blob/master/examples/cpp/elliptic1D.cpp)
+- [MATLAB/ OCTAVE](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1DPeriodicBC.m)
 
 Additional MATLAB/ OCTAVE variants of this example with different boundary conditions:
 - [Homogeneous Dirichlet](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1DHomogeneousDirichlet.m)
@@ -38,5 +42,4 @@ Additional MATLAB/ OCTAVE variants of this example with different boundary condi
 - [Left Neumann, Right Neumann](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1DLeftNeumannRightNeumann.m)
 - [Left Neumann, Right Robin](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1DLeftNeumannRightRobin.m)
 - [Left Robin, Right Robin](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1DLeftRobinRightRobin.m)
-- [Periodic Boundary Conditions](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1DPeriodicBC.m)
 - [Non-Periodic Boundary Conditions](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1DNonPeriodicBC.m)
