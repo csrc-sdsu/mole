@@ -3,6 +3,7 @@
 Solves the 1D Poisson equation with homogeneous non-periodic Dirichlet boundary conditions.
 
 ( This is the same as [Homogeneous Dirichlet](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1DHomogeneousDirichlet.m) example )
+
 $$
 -\nabla^2 u(x) = 1
 $$
@@ -53,4 +54,3 @@ Additional MATLAB/ OCTAVE variants of this example with different boundary condi
 - [Left Neumann, Right Robin](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1DLeftNeumannRightRobin.m)
 - [Left Robin, Right Robin](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1DLeftRobinRightRobin.m)
 - [Periodic Boundary Conditions](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1DPeriodicBC.m)
-<!-- [Non-Periodic Boundary Conditions](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1DNonPeriodicBC.m)-->

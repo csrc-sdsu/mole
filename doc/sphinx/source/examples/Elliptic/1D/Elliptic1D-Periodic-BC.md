@@ -42,5 +42,4 @@ Additional MATLAB/ OCTAVE variants of this example with different boundary condi
 - [Left Neumann, Right Neumann](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1DLeftNeumannRightNeumann.m)
 - [Left Neumann, Right Robin](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1DLeftNeumannRightRobin.m)
 - [Left Robin, Right Robin](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1DLeftRobinRightRobin.m)
-<!-- [Periodic Boundary Conditions](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1DPeriodicBC.m) -->
 - [Non-Periodic Boundary Conditions](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1DNonPeriodicBC.m)

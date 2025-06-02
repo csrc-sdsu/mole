@@ -22,7 +22,7 @@ $$
 au(1) + b\frac{du(1)}{dx} = 2e
 $$
 
-This corresponds to the call to robinBC2D of `robinBC2D(k, m, dx, a, b)`.
+This corresponds to the call to robinBC1D of `robinBC1D(k, m, dx, a, b)`.
 
 ---
 

@@ -1,6 +1,6 @@
 ### Elliptic1D Add Scalar Boundary Conditions
 
-Solves the 1D Poisson equation with Robin boundary conditions. This is the exact same problem as [elliptic1D](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1D.m), with `addScalarBC1D` used instead of `addRobinBC`. The euqation to solve is
+Solves the 1D Poisson equation with Robin boundary conditions. This is the exact same problem as [elliptic1D.m](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1D.m), with `addScalarBC1D` used instead of `addRobinBC`. The equation to solve is
 
 $$
 -\nabla^2 u(x) = e^x
@@ -32,7 +32,7 @@ $$
 u(1) + \frac{du(1)}{dx} = 2e
 $$
 
-The key difference is the implementation of the boundary condition operators. In [elliptic1D](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1D.m), the RHS of the Robin operator is included on lines 26-28, yet in this example, they are built directly into the boundary conditions.
+The key difference is the implementation of the boundary condition operators. In [elliptic1D](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/elliptic1D.m), the RHS of the Robin operator is included on lines 26-28, yet in this example, the boundary conditions are set via the `addScalarBC1D` operator.
 
 The true solution is
 
