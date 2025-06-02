@@ -1,4 +1,28 @@
-% Terzaghi 1D: using MOLE operators
+% -------------------------------------------------------------------------
+% Terzaghi One-Dimensional Consolidation Example
+%
+% Consolidation is the process of transient fluid flow through a porous
+% medium that deforms over time.
+%
+% A constant compressive face load of P0 = 10 MPa is applied at the
+% left boundary (x = 0 m) of a saturated porous soil matrix.
+%
+% Zero displacement is assumed at the right boundary (x = L = 25 m),
+% representing a fixed wall or support.
+%
+% The matrix is assumed to be fully saturated, and fluid drainage is
+% permitted only at the loaded boundary (x = 0 m).
+%
+% The MOLE Laplacian operator is used to compute the excess pore pressure
+% p(x, t), satisfies a one-dimensional diffusion equation for pressure.
+%
+% The domain is defined on the interval x ∈ [0, L] meters.
+%
+% The simulation compares the MOLE-based numerical solution to an
+% analytical benchmark solution derived using Fourier series.
+% -------------------------------------------------------------------------
+
+%%
 clc;
 close all;
 
@@ -32,8 +56,10 @@ rho = 1000;       % Fluid density [kg/m^3]
 g = 9.81;         % Gravity [m/s^2]
 
 %% Numerical (MOLE) Solution
-L = lap(k, m, dx);
-G = grad(k, m, dx);
+L = lap(k, m, dx);       % Mimetic Laplacian operator for diffusion
+G = grad(k, m, dx);      % Mimetic gradient operator for Darcy flux
+
+% Boundary modifications to Laplacian
 L(1,:) = 0; L(end,:) = 0;
 
 p_numerical = zeros(length(xgrid), length(times_sec)); % Pressure field [Pa]
