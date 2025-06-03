@@ -6,7 +6,6 @@
 [![Build Status](https://github.com/csrc-sdsu/mole/actions/workflows/ci.yml/badge.svg)](https://github.com/csrc-sdsu/mole/actions/workflows/ci.yml)
 [![Documentation](https://readthedocs.org/projects/mole-docs/badge/?version=latest)](https://mole-docs.readthedocs.io/en/latest/)
 
-
 ## Description
 
 MOLE is a high-quality (C++ & MATLAB/Octave) library that implements
