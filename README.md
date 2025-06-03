@@ -5,14 +5,11 @@
 [![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Build Status](https://github.com/csrc-sdsu/mole/actions/workflows/build_and_gtest.yml/badge.svg)](https://github.com/csrc-sdsu/mole/actions/workflows/build_and_gtest.yml)
 [![Documentation](https://readthedocs.org/projects/mole-docs/badge/?version=latest)](https://mole-docs.readthedocs.io/en/latest/)
-
 ![OS: Ubuntu 22.04+](https://img.shields.io/badge/OS-Ubuntu%2022.04%2B-orange?logo=ubuntu&logoColor=white)
 ![macOS](https://img.shields.io/badge/OS-macOS-blue?logo=apple&logoColor=white)
-
 ![GCC 13.2.0](https://img.shields.io/badge/Compiler-GCC%2013.2.0-00599C?logo=gnu&logoColor=white)
 ![AppleClang](https://img.shields.io/badge/Compiler-AppleClang-black?logo=apple&logoColor=white)
 ![IntelLLVM (icpx)](https://img.shields.io/badge/Compiler-IntelLLVM%20%28icpx%29-blue?logo=intel&logoColor=white)
-
 ![MKL Support](https://img.shields.io/badge/MKL-Supported-success?logo=intel&logoColor=white)
 ![OpenMP](https://img.shields.io/badge/OpenMP-Enabled-brightgreen)
 
