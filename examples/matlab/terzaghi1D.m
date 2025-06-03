@@ -330,3 +330,41 @@ for i = 1:length(times_hr)
             times_hr(i), rel_err_p, rel_err_q, rel_err_e, rel_err_u, rel_err_r);
     end
 end
+
+%% Cumulative Surface Plots 
+% Prepare time matrix for plotting
+[X, T] = meshgrid(xgrid, times_sec / 3600);  % Time in hours
+
+% 1. Pressure surface plot
+figure('Name','Pressure Evolution Surface');
+surf(X, T, p_numerical');  % p_numerical': size (space x time)
+xlabel('x (m)');
+ylabel('Time (hr)');
+zlabel('Pressure p(x,t) [Pa]');
+title('Pore Pressure Evolution');
+shading interp; view(135, 30); colorbar;
+
+% 2. Displacement surface plot
+figure('Name','Displacement Evolution Surface');
+surf(X, T, u_numerical');
+xlabel('x (m)');
+ylabel('Time (hr)');
+zlabel('Displacement u(x,t) [m]');
+title('Displacement Evolution');
+shading interp; view(135, 30); colorbar;
+
+% 3. Mass balance residual surface plot (excluding ghost nodes)
+x_interior = xgrid(2:end-1);  % length 50
+[Xr, Tr] = meshgrid(x_interior, times_sec / 3600);  % size: (4 × 50)
+
+% Plot residual surface
+figure('Name','Mass Conservation Residual Surface');
+surf(Xr, Tr, residual(2:end-1,:)');
+xlabel('x (m)');
+ylabel('Time (hr)');
+zlabel('Residual [1/s]');
+title('Mass Conservation Residual Over Time');
+shading interp; view(135, 30); colorbar;
+
+
+
