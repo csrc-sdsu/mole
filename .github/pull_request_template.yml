@@ -1,0 +1,97 @@
+name: Pull Request
+description: Submit a pull request to contribute to MOLE
+title: "[Type]: Brief description of changes"
+labels: []
+body:
+  - type: dropdown
+    id: pr_type
+    attributes:
+      label: Type of Change
+      description: What type of change does this PR introduce?
+      options:
+        - Bug fix 🐛
+        - New feature ✨
+        - Documentation 📚
+        - Refactor 🔧
+        - Performance optimization ⚡
+        - Example 🧪
+        - Other
+      default: 0
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Provide a clear and concise description of what this PR does
+      placeholder: Describe your changes...
+    validations:
+      required: true
+
+  - type: textarea
+    id: related_issues
+    attributes:
+      label: Related Issues
+      description: Link any related issues using GitHub keywords
+      placeholder: "Closes #123, Fixes #456"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: tests_added
+    attributes:
+      label: Tests
+      description: Have you added or updated tests for your changes?
+      options:
+        - Yes, tests added/updated
+        - No tests needed
+        - Need help with tests
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      description: Please verify the following
+      options:
+        - label: Code follows project style guidelines
+          required: true
+        - label: Self-review of code completed
+          required: true
+        - label: All tests pass locally
+          required: true
+        - label: Documentation updated (if applicable)
+          required: false
+        - label: License information added for new files
+          required: false
+
+  - type: textarea
+    id: testing_instructions
+    attributes:
+      label: Testing Instructions
+      description: How should reviewers test this change?
+      placeholder: "1. Run tests with...\n2. Check that...\n3. Verify..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots/Recordings
+      description: If applicable, add visual evidence of your changes
+      placeholder: Drag and drop images or paste links here
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Contributing Guidelines
+      description: By submitting this PR, you confirm that
+      options:
+        - label: I have read and followed the [Contributing Guide](https://github.com/csrc-sdsu/mole/blob/master/CONTRIBUTING.md)
+          required: true
+        - label: I have read and agree to the [Code of Conduct](https://github.com/csrc-sdsu/mole/blob/master/CODE_OF_CONDUCT.md)
+          required: true 

@@ -1,0 +1,51 @@
+<!--
+     Before submitting a Pull Request, please ensure you've done the following:
+     - 📖 Read the MOLE Contributing Guide: https://github.com/csrc-sdsu/mole/blob/master/CONTRIBUTING.md
+     - 📖 Read the MOLE Code of Conduct: https://github.com/csrc-sdsu/mole/blob/master/CODE_OF_CONDUCT.md
+     - 👷‍♀️ Create small PRs. In most cases this will be possible.
+     - ✅ Provide tests for your changes.
+     - 📝 Use descriptive commit messages.
+     - 📗 Update any related documentation and include any relevant screenshots.
+     - 📝 Add license information in the appropriate place. See MATLAB or C++ code for reference.
+      
+          SPDX-License-Identifier: GPL-3.0-or-later
+          © 2008-2024 San Diego State University Research Foundation (SDSURF).
+          See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details. 
+
+     NOTE: Pull Requests from forked repositories need to be reviewed by
+     a MOLE Team member before any CI builds will run.
+
+     For a timely review/response, please avoid force-pushing additional
+     commits if your PR already received reviews or comments.
+-->
+
+## 🔍 Type of Change
+- [ ] 🐛 Bug fix
+- [ ] ✨ New feature  
+- [ ] 📚 Documentation
+- [ ] 🔧 Refactor
+- [ ] ⚡ Performance
+- [ ] 🧪 Example
+
+## 📝 Description
+<!-- Brief description of what this PR does -->
+
+## 🔗 Related Issues
+<!-- Link any related issues: Closes #123, Fixes #456 -->
+
+## 🧪 Testing
+- [ ] Added/updated tests
+- [ ] All tests pass
+- [ ] Manual testing completed
+
+## 📋 Checklist
+- [ ] Code follows project style guidelines
+- [ ] Self-review completed
+- [ ] Documentation updated (if needed)
+- [ ] License information added (if new files)
+
+## 🖼️ Screenshots/Recordings
+<!-- If applicable, add screenshots or recordings to help explain your changes -->
+
+---
+<sub>📖 [Contributing Guide](https://github.com/csrc-sdsu/mole/blob/master/CONTRIBUTING.md) • [Code of Conduct](https://github.com/csrc-sdsu/mole/blob/master/CODE_OF_CONDUCT.md)</sub>
