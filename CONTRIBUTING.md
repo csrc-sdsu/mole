@@ -560,4 +560,107 @@ By contributing to MOLE, you agree that your contributions will be licensed unde
 
 ---
 
+## Authorship and Recognition
+
+MOLE contains components authored by many individuals from the computational science community. We believe it is essential that contributors receive appropriate recognition through both informal acknowledgment and academically-recognized credit systems such as publications and citations.
+
+### Authorship Criteria
+
+Status as a named author in MOLE publications, the user manual, and DOI-bearing archives will be granted to those who:
+
+1. **Make significant contributions to MOLE** in any of the following areas:
+   - Implementation of core functionality (operators, boundary conditions, utilities)
+   - Creation of comprehensive examples and tutorials
+   - Documentation and mathematical framework development
+   - Conceptualization of new features or mathematical approaches
+   - Code review, testing, and validation
+   - Community building and user support
+
+2. **Maintain and support their contributions** over time, including:
+   - Responding to issues related to their contributions
+   - Updating code to maintain compatibility
+   - Providing ongoing documentation and support
+
+### Recognition Process
+
+- **Automatic Recognition**: Maintainers will monitor contributions and add qualifying contributors to the `AUTHORS` file
+- **Self-Nomination**: If you believe your contributions meet the authorship criteria but haven't been acknowledged, please:
+  - Email the maintainers at [johnnycorbino@gmail.com](mailto:johnnycorbino@gmail.com), [angelboada2@gmail.com](mailto:angelboada2@gmail.com), or [jcastillo@sdsu.edu](mailto:jcastillo@sdsu.edu)
+  - Create a GitHub issue describing your contributions
+- **Periodic Review**: The maintainer team regularly reviews the contributor list to ensure proper recognition
+
+### Publication Guidelines
+
+#### MOLE Software Publications
+
+Authors of publications about MOLE as a whole, including:
+- Software papers and technical reports
+- DOI-bearing software archives
+- Major release announcements
+- Comprehensive method descriptions
+
+**shall offer co-authorship to all individuals listed in the `AUTHORS` file** at the time of submission.
+
+#### Publications Using MOLE Features
+
+Authors of publications that describe **specific MOLE contributions or new features** shall:
+1. Review the `AUTHORS` file to identify relevant contributors
+2. Evaluate the intellectual contributions of listed authors to the specific work
+3. Offer co-authorship to those who made significant intellectual contributions to the featured work
+4. At minimum, acknowledge MOLE and cite appropriate references
+
+#### Publications Using MOLE for Research
+
+**No co-authorship expectation** exists for those publishing research that uses MOLE as a computational tool (versus creating new features in MOLE). However:
+
+- **Citation**: Please cite MOLE appropriately (see [CITATION.cff](../CITATION.cff))
+- **Acknowledgment**: Consider acknowledging significant support or advice received from MOLE developers
+- **Judgment**: Use your best judgment regarding the significance of support received in developing your use case and interpreting results
+
+### Citing MOLE
+
+When using MOLE in your research, please cite:
+
+```bibtex
+@misc{mole,
+  title = {{MOLE}: Mimetic Operators Library Enhanced},
+  author = {[See AUTHORS file for complete list]},
+  url = {https://github.com/csrc-sdsu/mole},
+  note = {Version X.X.X},
+  year = {2024}
+}
+```
+
+For specific mathematical methods or operators, also cite the relevant publications listed in our [documentation](https://mole-docs.readthedocs.io/).
+
+### Examples of Significant Contributions
+
+To clarify what constitutes "significant contributions," here are examples:
+
+**Core Development:**
+- Implementing new differential operators or boundary conditions
+- Adding support for new grid types or geometries
+- Developing new mathematical formulations
+- Creating fundamental algorithmic improvements
+
+**Documentation and Education:**
+- Writing comprehensive tutorials or guides
+- Creating educational examples with mathematical background
+- Developing API documentation for major components
+- Contributing to the mathematical framework documentation
+
+**Testing and Validation:**
+- Developing comprehensive test suites
+- Conducting convergence studies and validation
+- Cross-platform compatibility work
+- Performance optimization and benchmarking
+
+**Community Building:**
+- Mentoring new contributors
+- Organizing workshops or educational events
+- Significant bug reporting and issue management
+- Long-term maintenance and support
+
+---
+
 Thank you for contributing to MOLE! Your contributions help advance computational science and benefit the entire research community.
