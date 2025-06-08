@@ -12,8 +12,8 @@ with $x\in[0,25]$ meters. Displacement and strain are derived from the pressure,
 
 #### Boundary conditions:
 
-- **Dirichlet** at \( x = 0 \): \( p(0,t) = 0 \)  
-- **Neumann** at \( x = L \): \( \frac{dp}{dx}(L,t) = 0 \)
+- **Dirichlet** at $x = 0$: $p(0, t) = 0$   
+- **Neumann** at $x = L$: $\displaystyle \frac{dp}{dx}(L, t) = 0$
 
 This corresponds to a domain with **impermeable backing** and **open drainage at the loaded end**.
 
@@ -21,7 +21,7 @@ This corresponds to a domain with **impermeable backing** and **open drainage at
 
 #### Numerical Strategy
 
-- Pressure is initialized to a uniform value \( P_0 = 10 \text{ MPa} \)
+- Pressure is initialized to a uniform value $P_0 = 10\ \mathrm{MPa}$
 - Integration is performed using **Forward Euler**
 - Mimetic MOLE operators:
   - `lap()` for pressure diffusion
@@ -62,17 +62,17 @@ At selected time snapshots (1, 10, 40, 70 hours), the following are printed and 
 
 #### Physical Parameters
 
-| Parameter        | Value                         | Description                             |
-|------------------|-------------------------------|-----------------------------------------|
-| \( P_0 \)         | 10 MPa                        | Face load                               |
-| \( c_f \)         | \(1 \times 10^{-4}\)          | Diffusivity                             |
-| \( K \)           | \(1 \times 10^{-12} \, \text{m}^2\) | Permeability                      |
-| \( \mu \)         | \(1 \times 10^{-3} \, \text{Pa·s}\) | Dynamic viscosity                 |
-| \( K_s \)         | \(1 \times 10^8 \, \text{Pa}\) | Bulk modulus                            |
-| \( \alpha \)      | 1.0                           | Biot coefficient                        |
-| \( S_s \)         | \(1 \times 10^{-5} \, \text{Pa}^{-1}\) | Specific storage coefficient     |
-| \( \rho \)        | 1000 kg/m³                    | Fluid density                           |
-| \( g \)           | 9.81 m/s²                     | Gravitational acceleration              |
+| Parameter | Value                                 | Description                          |
+|----------:|---------------------------------------|--------------------------------------|
+| $P_0$      | 10 MPa                                | Face load                            |
+| $c_f$      | $1\times10^{-4}$                      | Diffusivity                          |
+| $K$        | $1\times10^{-12}\,\mathrm{m}^2$       | Permeability                         |
+| $\mu$      | $1\times10^{-3}\,\mathrm{Pa\cdot s}$  | Dynamic viscosity                    |
+| $K_s$      | $1\times10^8\,\mathrm{Pa}$            | Bulk modulus                         |
+| $\alpha$   | 1.0                                   | Biot coefficient                     |
+| $S_s$      | $1\times10^{-5}\,\mathrm{Pa}^{-1}$    | Specific storage coefficient         |
+| $\rho$     | $1000\,\mathrm{kg/m^3}$               | Fluid density                        |
+| $g$        | $9.81\,\mathrm{m/s^2}$                | Gravitational acceleration           |
 
 ---
 
