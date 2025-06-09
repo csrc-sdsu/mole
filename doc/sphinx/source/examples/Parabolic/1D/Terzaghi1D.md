@@ -1,5 +1,12 @@
 ### Terzaghi One-Dimensional Consolidation
 
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
+%
+
 Simulates **Terzaghi's 1D consolidation** using mimetic finite difference operators from the MOLE library. The system models **transient flow and deformation** in a saturated soil column under a **constant compressive load** at one end with **drainage permitted only at the loaded boundary**.
 
 The governing pressure equation is:
@@ -14,6 +21,7 @@ with $x\in[0,25]$ meters. Displacement and strain are derived from the pressure,
 
 - **Dirichlet** at $x = 0$: $p(0, t) = 0$   
 - **Neumann** at $x = L$: $\displaystyle \frac{dp}{dx}(L, t) = 0$
+This setup models **open drainage** at the loaded face and **no flow** at the fixed base.
 
 This corresponds to a domain with **impermeable backing** and **open drainage at the loaded end**.
 
