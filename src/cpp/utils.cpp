@@ -7,11 +7,11 @@
 
 /* 
  * @file utils.cpp
- * @brief Helpers for sparse operations and MATLAB/Octave analogs
+ * @brief Helpers for sparse operations and Matlab/Octave analogs
  * @date 2024/10/15
  * 
  * Sparse operations that repeatedly are needed, but not 
- * necessarily part of the Armadillo library. Some other MATLAB/Octave
+ * necessarily part of the Armadillo library. Some other Matlab/Octave
  * type functions are also here, like meshgrid.
  */
 
