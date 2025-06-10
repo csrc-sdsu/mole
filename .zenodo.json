@@ -157,7 +157,7 @@
             "name": "GNU General Public License v3.0", 
             "key": "gpl-3.0"
         }, 
-        "language": "MATLAB", 
+        "language": "Matlab/Octave", 
         "url": "https://api.github.com/repos/jcorbino/mole", 
         "subscribers_url": "https://api.github.com/repos/jcorbino/mole/subscribers", 
         "created_at": "2017-08-12T19:03:04Z", 
