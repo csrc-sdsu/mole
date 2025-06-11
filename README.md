@@ -19,15 +19,12 @@ Mathematics is based on the work of [Corbino and Castillo](https://doi.org/10.10
 However, the user may find helpful previous publications, such as [Castillo and Grone](https://doi.org/10.1137/S0895479801398025),
 in which similar operators were derived using a matrix analysis approach.
 
-
 ## Platform and Compiler compatibility
 
-| OS / Compiler | ![GCC 13.2.0](https://img.shields.io/badge/Compiler-GCC%2013.2.0-00599C?logo=gnu&logoColor=white) | ![AppleClang](https://img.shields.io/badge/Compiler-AppleClang-black?logo=apple&logoColor=white) | ![IntelLLVM (icpx)](https://img.shields.io/badge/Compiler-IntelLLVM%20%28icpx%29-blue?logo=intel&logoColor=white) |
-|---------------|:---------------------------------------------------------------:|:------------------------------------------------------------:|:------------------------------------------------------------------:|
-| ![Ubuntu](https://img.shields.io/badge/OS-Ubuntu%2022.04%2B-orange?logo=ubuntu&logoColor=white) | ✅ | ❌ | ✅ |
-| ![macOS](https://img.shields.io/badge/OS-macOS-blue?logo=apple&logoColor=white) | ❌ | ✅ | ✅ |
-
-
+| OS / Compiler | GCC 13.2.0 | AppleClang | IntelLLVM (icpx) |
+|---------------|------------|------------|------------------|
+| Ubuntu        | ![yes](https://img.shields.io/badge/-yes-brightgreen) | ![no](https://img.shields.io/badge/-no-lightgrey) | ![yes](https://img.shields.io/badge/-yes-brightgreen) |
+| macOS         | ![no](https://img.shields.io/badge/-no-lightgrey)    | ![yes](https://img.shields.io/badge/-yes-brightgreen) | ![yes](https://img.shields.io/badge/-yes-brightgreen) |
 
 ## Installation
 
