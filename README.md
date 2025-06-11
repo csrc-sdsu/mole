@@ -6,14 +6,6 @@
 [![Build Status](https://github.com/csrc-sdsu/mole/actions/workflows/ci.yml/badge.svg)](https://github.com/csrc-sdsu/mole/actions/workflows/ci.yml)
 [![Documentation](https://readthedocs.org/projects/mole-docs/badge/?version=latest)](https://mole-docs.readthedocs.io/en/latest/)
 
-## Platform and Compiler compatibility
-
-| OS / Compiler | ![GCC 13.2.0](https://img.shields.io/badge/Compiler-GCC%2013.2.0-00599C?logo=gnu&logoColor=white) | ![AppleClang](https://img.shields.io/badge/Compiler-AppleClang-black?logo=apple&logoColor=white) | ![IntelLLVM (icpx)](https://img.shields.io/badge/Compiler-IntelLLVM%20%28icpx%29-blue?logo=intel&logoColor=white) |
-|---------------|:---------------------------------------------------------------:|:------------------------------------------------------------:|:------------------------------------------------------------------:|
-| ![Ubuntu](https://img.shields.io/badge/OS-Ubuntu%2022.04%2B-orange?logo=ubuntu&logoColor=white) | ✅ | ❌ | ✅ |
-| ![macOS](https://img.shields.io/badge/OS-macOS-blue?logo=apple&logoColor=white) | ❌ | ✅ | ✅ |
-
-
 ## Description
 
 MOLE is a high-quality (C++ & MATLAB/Octave) library that implements
@@ -26,6 +18,16 @@ global conservation laws.
 Mathematics is based on the work of [Corbino and Castillo](https://doi.org/10.1016/j.cam.2019.06.042).
 However, the user may find helpful previous publications, such as [Castillo and Grone](https://doi.org/10.1137/S0895479801398025),
 in which similar operators were derived using a matrix analysis approach.
+
+
+## Platform and Compiler compatibility
+
+| OS / Compiler | ![GCC 13.2.0](https://img.shields.io/badge/Compiler-GCC%2013.2.0-00599C?logo=gnu&logoColor=white) | ![AppleClang](https://img.shields.io/badge/Compiler-AppleClang-black?logo=apple&logoColor=white) | ![IntelLLVM (icpx)](https://img.shields.io/badge/Compiler-IntelLLVM%20%28icpx%29-blue?logo=intel&logoColor=white) |
+|---------------|:---------------------------------------------------------------:|:------------------------------------------------------------:|:------------------------------------------------------------------:|
+| ![Ubuntu](https://img.shields.io/badge/OS-Ubuntu%2022.04%2B-orange?logo=ubuntu&logoColor=white) | ✅ | ❌ | ✅ |
+| ![macOS](https://img.shields.io/badge/OS-macOS-blue?logo=apple&logoColor=white) | ❌ | ✅ | ✅ |
+
+
 
 ## Installation
 
