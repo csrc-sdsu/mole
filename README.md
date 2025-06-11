@@ -8,9 +8,6 @@
 
 ## Platform and Compiler compatibility
 
-## 🧪 Platform-Compiler Support Matrix
-
-
 | OS / Compiler | ![GCC 13.2.0](https://img.shields.io/badge/Compiler-GCC%2013.2.0-00599C?logo=gnu&logoColor=white) | ![AppleClang](https://img.shields.io/badge/Compiler-AppleClang-black?logo=apple&logoColor=white) | ![IntelLLVM (icpx)](https://img.shields.io/badge/Compiler-IntelLLVM%20%28icpx%29-blue?logo=intel&logoColor=white) |
 |---------------|:---------------------------------------------------------------:|:------------------------------------------------------------:|:------------------------------------------------------------------:|
 | ![Ubuntu](https://img.shields.io/badge/OS-Ubuntu%2022.04%2B-orange?logo=ubuntu&logoColor=white) | ✅ | ❌ | ✅ |
