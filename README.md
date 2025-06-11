@@ -8,13 +8,14 @@
 
 ## Platform and Compiler compatibility
 
-Your project supports multiple platforms and compilers:
+## 🧪 Platform-Compiler Support Matrix
 
-| Platform | Compiler | CI Status |
-|----------|:---------|:----------|
-| Ubuntu   | GCC 13.2.0 | ![Ubuntu 22.04+](https://img.shields.io/badge/OS-Ubuntu%2022.04%2B-orange?logo=ubuntu&logoColor=white) ![GCC 13.2.0](https://img.shields.io/badge/Compiler-GCC%2013.2.0-00599C?logo=gnu&logoColor=white) ![OpenMP](https://img.shields.io/badge/OpenMP-Enabled-brightgreen) |
-| macOS    | AppleClang | ![macOS](https://img.shields.io/badge/OS-macOS-blue?logo=apple&logoColor=white) ![AppleClang](https://img.shields.io/badge/Compiler-AppleClang-black?logo=apple&logoColor=white) |
-| Ubuntu/macOS | IntelLLVM (icpx) | ![IntelLLVM (icpx)](https://img.shields.io/badge/Compiler-IntelLLVM%20%28icpx%29-blue?logo=intel&logoColor=white) ![MKL Support](https://img.shields.io/badge/MKL-Supported-success?logo=intel&logoColor=white) |
+
+| OS / Compiler | ![GCC 13.2.0](https://img.shields.io/badge/Compiler-GCC%2013.2.0-00599C?logo=gnu&logoColor=white) | ![AppleClang](https://img.shields.io/badge/Compiler-AppleClang-black?logo=apple&logoColor=white) | ![IntelLLVM (icpx)](https://img.shields.io/badge/Compiler-IntelLLVM%20%28icpx%29-blue?logo=intel&logoColor=white) |
+|---------------|:---------------------------------------------------------------:|:------------------------------------------------------------:|:------------------------------------------------------------------:|
+| ![Ubuntu](https://img.shields.io/badge/OS-Ubuntu%2022.04%2B-orange?logo=ubuntu&logoColor=white) | ✅ | ❌ | ✅ |
+| ![macOS](https://img.shields.io/badge/OS-macOS-blue?logo=apple&logoColor=white) | ❌ | ✅ | ✅ |
+
 
 ## Description
 
