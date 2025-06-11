@@ -6,4 +6,5 @@ These examples demonstrate one-dimensional parabolic equations, focusing on heat
 :maxdepth: 1
 
 Parabolic1D
+Terzaghi1D
 ``` 
