@@ -1,12 +1,6 @@
 % -------------------------------------------------------------------------
 % Terzaghi One-Dimensional Consolidation Example
 %
-% ----------------------------------------------------------------------------
-% SPDX-License-Identifier: GPL-3.0-or-later
-% © 2008-2024 San Diego State University Research Foundation (SDSURF).
-% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
-% ----------------------------------------------------------------------------
-%
 % Consolidation is the process of transient fluid flow through a porous
 % medium that deforms over time.
 %
@@ -26,8 +20,30 @@
 %
 % The simulation compares the MOLE-based numerical solution to an
 % analytical benchmark solution derived using Fourier series.
-% -------------------------------------------------------------------------
-
+%
+% Parameters:
+%      P0       : Applied face load [Pa]
+%      cf       : Consolidation coefficient or effective diffusion constant [m²/s]
+%      l        : Domain length [m]
+%      k        : Order of the mimetic operator (2, 4, or higher)
+%      m        : Number of cells (discretization resolution)
+%      K        : Permeability of the porous medium [m²]
+%      mu       : Dynamic viscosity of the fluid [Pa·s]
+%      rho      : Fluid density [kg/m³]
+%      g        : Acceleration due to gravity [m/s²]
+%      Ks       : Bulk modulus of the solid matrix [Pa]
+%      alpha    : Biot coefficient (typically between 0 and 1)
+%      Ss       : Specific storage coefficient [1/Pa]
+%      dx       : Grid spacing [m]
+%      xgrid    : Spatial grid points with ghost nodes [m]
+%      times_hr : Time points at which results are computed [hours]
+%
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
+%
 %%
 clc;
 close all;
