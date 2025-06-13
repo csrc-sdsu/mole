@@ -21,12 +21,14 @@ in which similar operators were derived using a matrix analysis approach.
 
 ## Installation
 ### Platform and Compiler Compatibility
-This matrix shows which compilers are supported on which platforms.
+
+## 🧪 Platform-Compiler Support Matrix
+
+The compatibility of compilers vs OS on which mole can be built is listed below.
 
 | OS / Compiler | ![GCC 13.2.0](https://img.shields.io/badge/Compiler-GCC%2013.2.0-00599C?logo=gnu&logoColor=white) | ![AppleClang](https://img.shields.io/badge/Compiler-AppleClang-black?logo=apple&logoColor=white) | ![IntelLLVM (icpx)](https://img.shields.io/badge/Compiler-IntelLLVM%20%28icpx%29-blue?logo=intel&logoColor=white) |
 |---------------|:---------------------------------------------------------------:|:------------------------------------------------------------:|:------------------------------------------------------------------:|
-| ![Linux](https://img.shields.io/badge/OS-Linux-lightgrey?logo=linux&logoColor=white)
-| ![yes](https://img.shields.io/badge/✔-yes-brightgreen) | ![no](https://img.shields.io/badge/✘-no-lightgrey) | ![yes](https://img.shields.io/badge/✔-yes-brightgreen) |
+| ![Linux](https://img.shields.io/badge/OS-Linux-lightgrey?logo=linux&logoColor=white) | ![yes](https://img.shields.io/badge/✔-yes-brightgreen) | ![no](https://img.shields.io/badge/✘-no-lightgrey) | ![yes](https://img.shields.io/badge/✔-yes-brightgreen) |
 | ![macOS](https://img.shields.io/badge/OS-macOS-blue?logo=apple&logoColor=white) | ![no](https://img.shields.io/badge/✘-no-lightgrey) | ![yes](https://img.shields.io/badge/✔-yes-brightgreen) | ![yes](https://img.shields.io/badge/✔-yes-brightgreen) |
 
 
