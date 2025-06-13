@@ -20,9 +20,9 @@ However, the user may find helpful previous publications, such as [Castillo and 
 in which similar operators were derived using a matrix analysis approach.
 
 ## Installation
-### Platform and Compiler Compatibility
 
-The compatibility of compilers vs OS on which mole can be built is listed below.
+### Platform and Compiler Compatibility
+Refer to the table below for compiler support across different operating systems when building MOLE.
 
 | OS / Compiler | GCC 13.2.0 | AppleClang | IntelLLVM (icpx) |
 |---------------|------------|------------|------------------|
