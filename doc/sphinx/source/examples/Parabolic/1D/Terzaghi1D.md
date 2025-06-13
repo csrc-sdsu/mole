@@ -38,7 +38,7 @@ $$
 
 The benchmark solution includes:
 - Pressure field
-- Flux via Darcy’s law
+- Flux via Darcy's law
 - Strain and displacement
 - Mass conservation residual
 
