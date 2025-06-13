@@ -18,8 +18,6 @@ This setup models **open drainage** at the loaded face and **no flow** at the fi
 
 This corresponds to a domain with **impermeable backing** and **open drainage at the loaded end**.
 
----
-
 #### Numerical Strategy
 
 - Pressure is initialized to a uniform value $P_0 = 10\ \mathrm{MPa}$
@@ -29,8 +27,6 @@ This corresponds to a domain with **impermeable backing** and **open drainage at
   - `grad()` for Darcy flux
   - `div()` for residual calculations
 - Spatial discretization uses a **staggered grid** with ghost cells to enforce boundary conditions
-
----
 
 #### Analytical Benchmark
 
@@ -46,8 +42,6 @@ The benchmark solution includes:
 - Strain and displacement
 - Mass conservation residual
 
----
-
 #### Outputs
 
 At selected time snapshots (1, 10, 40, 70 hours), the following are printed and plotted:
@@ -58,8 +52,6 @@ At selected time snapshots (1, 10, 40, 70 hours), the following are printed and 
 - **Mass balance residuals**
 - **Relative L2 error** tables
 - **3D surface plots** for pressure, displacement, and residual evolution
-
----
 
 #### Physical Parameters
 
@@ -75,11 +67,7 @@ At selected time snapshots (1, 10, 40, 70 hours), the following are printed and 
 | $\rho$     | $1000\,\mathrm{kg/m^3}$               | Fluid density                        |
 | $g$        | $9.81\,\mathrm{m/s^2}$                | Gravitational acceleration           |
 
----
-
 #### Code Location
 
 This example is implemented in:  
 - [MATLAB/ OCTAVE (terzaghi1D.m)](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/terzaghi1D.m)
-
----
