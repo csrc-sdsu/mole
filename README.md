@@ -21,6 +21,14 @@ in which similar operators were derived using a matrix analysis approach.
 
 ## Installation
 
+### Platform and Compiler Compatibility
+Refer to the table below for compiler support across different operating systems when building MOLE.
+
+| OS / Compiler | GCC 13.2.0 | AppleClang | IntelLLVM (icpx) |
+|---------------|------------|------------|------------------|
+| Linux         | Yes        | No         | Yes              |
+| macOS         | No         | Yes        | Yes              |
+
 ### Prerequisites
 
 To install the MOLE library, you'll need the following packages:
