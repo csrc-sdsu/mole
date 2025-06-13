@@ -22,8 +22,6 @@ in which similar operators were derived using a matrix analysis approach.
 ## Installation
 ### Platform and Compiler Compatibility
 
-## 🧪 Platform-Compiler Support Matrix
-
 The compatibility of compilers vs OS on which mole can be built is listed below.
 
 | OS / Compiler | ![GCC 13.2.0](https://img.shields.io/badge/Compiler-GCC%2013.2.0-00599C?logo=gnu&logoColor=white) | ![AppleClang](https://img.shields.io/badge/Compiler-AppleClang-black?logo=apple&logoColor=white) | ![IntelLLVM (icpx)](https://img.shields.io/badge/Compiler-IntelLLVM%20%28icpx%29-blue?logo=intel&logoColor=white) |
