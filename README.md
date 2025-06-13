@@ -20,49 +20,16 @@ However, the user may find helpful previous publications, such as [Castillo and 
 in which similar operators were derived using a matrix analysis approach.
 
 ## Installation
-```{only} html
+### Platform and Compiler Compatibility
+This matrix shows which compilers are supported on which platforms.
 
-<h3>Platform and Compiler Compatibility</h3>
+| OS / Compiler | ![GCC 13.2.0](https://img.shields.io/badge/Compiler-GCC%2013.2.0-00599C?logo=gnu&logoColor=white) | ![AppleClang](https://img.shields.io/badge/Compiler-AppleClang-black?logo=apple&logoColor=white) | ![IntelLLVM (icpx)](https://img.shields.io/badge/Compiler-IntelLLVM%20%28icpx%29-blue?logo=intel&logoColor=white) |
+|---------------|:---------------------------------------------------------------:|:------------------------------------------------------------:|:------------------------------------------------------------------:|
+| ![Linux](https://img.shields.io/badge/OS-Linux-lightgrey?logo=linux&logoColor=white)
+| ![yes](https://img.shields.io/badge/✔-yes-brightgreen) | ![no](https://img.shields.io/badge/✘-no-lightgrey) | ![yes](https://img.shields.io/badge/✔-yes-brightgreen) |
+| ![macOS](https://img.shields.io/badge/OS-macOS-blue?logo=apple&logoColor=white) | ![no](https://img.shields.io/badge/✘-no-lightgrey) | ![yes](https://img.shields.io/badge/✔-yes-brightgreen) | ![yes](https://img.shields.io/badge/✔-yes-brightgreen) |
 
-<table>
-  <thead>
-    <tr>
-      <th>OS / Compiler</th>
-      <th><img src="https://img.shields.io/badge/Compiler-GCC%2013.2.0-00599C?logo=gnu&logoColor=white" alt="GCC"></th>
-      <th><img src="https://img.shields.io/badge/Compiler-AppleClang-black?logo=apple&logoColor=white" alt="AppleClang"></th>
-      <th><img src="https://img.shields.io/badge/Compiler-IntelLLVM%20%28icpx%29-blue?logo=intel&logoColor=white" alt="IntelLLVM"></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><img src="https://img.shields.io/badge/OS-Linux-lightgrey?logo=linux&logoColor=white" alt="Linux"></td>
-      <td>✔</td><td>✘</td><td>✔</td>
-    </tr>
-    <tr>
-      <td><img src="https://img.shields.io/badge/OS-macOS-blue?logo=apple&logoColor=white" alt="macOS"></td>
-      <td>✘</td><td>✔</td><td>✔</td>
-    </tr>
-  </tbody>
-</table>
 
-```
-```{list-table}
-:header-rows: 1
-:widths: 15 15 15 20
-
-* - OS
-  - GCC 13.2.0
-  - AppleClang
-  - IntelLLVM (icpx)
-* - Linux
-  - Yes
-  - No
-  - Yes
-* - macOS
-  - No
-  - Yes
-  - Yes
-```
 ### Prerequisites
 
 To install the MOLE library, you'll need the following packages:
