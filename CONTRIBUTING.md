@@ -4,15 +4,6 @@ Thank you for considering contributing to MOLE (Mimetic Operators Library Enhanc
 
 ---
 
-## Maintainer Contact Information
-
-For questions, support, or contributions, contact the MOLE maintainers at:
-- [jcastillo@sdsu.edu](mailto:jcastillo@sdsu.edu)
-- [mdumett@sdsu.edu](mailto:mdumett@sdsu.edu) 
-- [paolini@engineering.sdsu.edu](mailto:paolini@engineering.sdsu.edu)
-- [jjbrzenski@sdsu.edu](mailto:jjbrzenski@sdsu.edu)
-- [vbarra@sdsu.edu](mailto:vbarra@sdsu.edu)
-
 ---
 
 ## Table of Contents
@@ -559,9 +550,15 @@ Any additional information or context.
 
 ### Contact
 
-For questions or support:
+For questions, support, or contributions, contact the MOLE maintainers at:
+- [jcastillo@sdsu.edu](mailto:jcastillo@sdsu.edu)
+- [mdumett@sdsu.edu](mailto:mdumett@sdsu.edu) 
+- [paolini@engineering.sdsu.edu](mailto:paolini@engineering.sdsu.edu)
+- [jjbrzenski@sdsu.edu](mailto:jjbrzenski@sdsu.edu)
+- [vbarra@sdsu.edu](mailto:vbarra@sdsu.edu)
 
-- **Email**: See [Maintainer Contact Information](#maintainer-contact-information) above
+For specific types of support:
+
 - **GitHub Issues**: For bug reports and feature requests  
 - **GitHub Discussions**: For general questions and discussions
 
@@ -596,7 +593,7 @@ Status as a named author in MOLE publications, the user manual, and DOI-bearing 
 
 - **Automatic Recognition**: Maintainers will monitor contributions and add qualifying contributors to the `AUTHORS` file
 - **Self-Nomination**: If you believe your contributions meet the authorship criteria but haven't been acknowledged, please:
-  - Email the maintainers (see [Maintainer Contact Information](#maintainer-contact-information) above)
+  - Email the maintainers (see [Contact](#contact) section)
   - Create a GitHub issue describing your contributions
 - **Periodic Review**: The maintainer team regularly reviews the contributor list to ensure proper recognition
 
