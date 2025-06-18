@@ -74,7 +74,7 @@ brew install cmake openblas eigen libomp lapack
 
 ```bash
 # Install all required packages
-sudo yum install cmake openblas-devel eigen3-devel
+sudo yum install cmake openblas-devel eigen3-devel lapack
 ```
 
 ## Building and Installing
