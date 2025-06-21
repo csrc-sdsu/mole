@@ -4,8 +4,6 @@ Thank you for considering contributing to MOLE (Mimetic Operators Library Enhanc
 
 ---
 
----
-
 ## Table of Contents
 
 1. [Getting Started](#getting-started)
