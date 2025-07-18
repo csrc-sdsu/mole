@@ -147,9 +147,9 @@ graphviz_dot_args = [
 ]
 
 #------------------------------------------------------------------------------
-# Matlab/Octave domain configuration
+# MATLAB/Octave domain configuration
 #------------------------------------------------------------------------------
-# Path to Matlab/Octave source directory for cross-reference functionality
+# Path to MATLAB/Octave source directory for cross-reference functionality
 matlab_src_dir = os.path.abspath(os.path.join(ROOT_DIR, 'src', 'matlab_octave'))
 
 # Enhanced debug logging
@@ -180,10 +180,10 @@ except Exception as e:
     # print(f"Error getting sphinxcontrib-matlab version: {e}")
     pass # Placeholder
 
-# Add Matlab/Octave directory to Python path if it exists
+# Add MATLAB/Octave directory to Python path if it exists
 if os.path.exists(matlab_src_dir):
     sys.path.insert(0, matlab_src_dir)
-    # print(f"\nAdded existing Matlab/Octave directory to Python path: {matlab_src_dir}")
+    # print(f"\nAdded existing MATLAB/Octave directory to Python path: {matlab_src_dir}")
 
 # For matlabdomain, we need to treat MATLAB files as modules
 primary_domain = 'mat'  # Make MATLAB the primary domain for .m files

@@ -58,7 +58,7 @@ else
     else
         % This precomputes the LU decomposition of L and stores it as a
         % decomposition object. Because it's being stored as a decomposition
-        % object, Matlab knows not to bother with LU factorizing L every time we
+        % object, MATLAB knows not to bother with LU factorizing L every time we
         % run \, which means that solving the system is sped up. This is 
         % only available in MATLAB.
         dL=decomposition(L);

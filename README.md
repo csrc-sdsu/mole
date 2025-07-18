@@ -8,7 +8,7 @@
 
 ## Description
 
-MOLE is a high-quality (C++ & Matlab/Octave) library that implements
+MOLE is a high-quality (C++ & MATLAB/Octave) library that implements
 high-order mimetic operators to solve partial differential equations.
 It provides discrete analogs of the most common vector calculus operators:
 Gradient, Divergence, Laplacian, Bilaplacian, and Curl. These operators (highly sparse matrices) act
@@ -120,9 +120,9 @@ A suite of four automatic tests that verify MOLE's installation and dependencies
 make run_tests
 ```
 
-### Matlab/Octave
+### MATLAB/Octave
 
-Matlab/Octave equivalent of the C++ test suite. We recommend running these tests before using MOLE to ensure proper setup.
+MATLAB/Octave equivalent of the C++ test suite. We recommend running these tests before using MOLE to ensure proper setup.
 
 ```matlab
 make run_matlab_octave_tests
@@ -140,7 +140,7 @@ and on Windows downlaoding and running the file from [here](https://sourceforge.
 
 Four self-contained, well-documented examples demonstrating typical PDE solutions. These are automatically built with `make` and serve as an excellent starting point for C++ users.
 
-### Matlab/Octave Examples
+### MATLAB/Octave Examples
 
 A collection of over 30 examples showcasing various PDE solutions, from simple linear one-dimensional problems to complex nonlinear multidimensional scenarios.
 

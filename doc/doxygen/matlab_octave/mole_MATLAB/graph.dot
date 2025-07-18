@@ -1,4 +1,4 @@
-/* Created by mdot for Matlab */
+/* Created by mdot for MATLAB */
 digraph m2html {
   curl2D -> div2D;
   div2D -> div;
