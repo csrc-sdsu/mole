@@ -26,7 +26,6 @@ Pillow                          # Required for imghdr module
 setuptools                      # Required for pkg_resources
 
 # Theme
-sphinx-book-theme
 sphinx-design
 
 # Extensions used in conf.py
