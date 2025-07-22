@@ -40,7 +40,7 @@ Boundary conditions are applied using the `addScalarBC1D` function.
 ---
 
 This example is implemented in:
-- [MATLAB/OCTAVE](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/sturmLiouvilleChebyshev.m)
+- [MATLAB/OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab/sturmLiouvilleChebyshev.m)
 
 ## Results
 

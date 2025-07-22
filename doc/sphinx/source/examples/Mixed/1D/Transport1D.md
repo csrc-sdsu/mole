@@ -11,4 +11,4 @@ where $C$ is the concentration, $v$ is the pore-water flow velocity, and $D$ is 
 ---
 
 This example is implemented in:
-- [C++](https://github.com/csrc-sdsu/mole/blob/master/examples/cpp/transport1D.cpp)
+- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/transport1D.cpp)

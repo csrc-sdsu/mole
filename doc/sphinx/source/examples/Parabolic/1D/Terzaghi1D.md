@@ -70,4 +70,4 @@ At selected time snapshots (1, 10, 40, 70 hours), the following are printed and 
 #### Code Location
 
 This example is implemented in:  
-- [MATLAB/ OCTAVE (terzaghi1D.m)](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/terzaghi1D.m)
+- [MATLAB/ OCTAVE (terzaghi1D.m)](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab/terzaghi1D.m)

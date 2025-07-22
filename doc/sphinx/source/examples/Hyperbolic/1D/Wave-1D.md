@@ -19,8 +19,8 @@ $$
 ---
 
 This example is implemented in:
-- [MATLAB/ OCTAVE](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/wave1D.m)
+- [MATLAB/ OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab/wave1D.m)
 
 Additional MATLAB/ OCTAVE variants:
-- [Wave 1D Case 2](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/wave1D_case2.m)
-- [Wave 1D with Time-Varying BC](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/wave1DTimeVaryingBC.m)
+- [Wave 1D Case 2](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab/wave1D_case2.m)
+- [Wave 1D with Time-Varying BC](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab/wave1DTimeVaryingBC.m)

@@ -47,7 +47,7 @@ A previous library [@MTK] was developed to implement the mimetic operators prese
 
 # The library
 
-MOLE was designed to be an intuitive software package to construct mimetic operators based on the method of @Corbino. MOLE is implemented in C++ and in MATLAB (these are two independent flavors) and every function in MOLE returns a sparse matrix of the requested mimetic operator. For information on the installation or usage of the library, please read the [documentation](https://github.com/jcorbino/mole/blob/master/README.md) included in the repository.
+MOLE was designed to be an intuitive software package to construct mimetic operators based on the method of @Corbino. MOLE is implemented in C++ and in MATLAB (these are two independent flavors) and every function in MOLE returns a sparse matrix of the requested mimetic operator. For information on the installation or usage of the library, please read the [documentation](https://github.com/csrc-sdsu/mole/blob/main/README.md) included in the repository.
 
 Mimetic operators can be easily used to build codes to solve PDEs with a few lines of code. For example, if the user wants to get a one-dimensional *k*-order mimetic Laplacian, they just need to invoke:
 ```matlab
@@ -97,7 +97,7 @@ ylabel('u(x)')
 
 # Concluding remarks
 
-In this short article we introduced MOLE, an open-source library that implements the mimetic operators from @Corbino. For conciseness purposes, we showed a one-dimensional Poisson problem as an example. However, MOLE includes over 30 examples that span a wide range of applications, from the one-way wave equation to highly nonlinear and computationally demanding problems, including the Navier-Stokes equation for fluid dynamics and Richard's equation for unsaturated flow in porous media. The user can find such examples in the [Examples](https://github.com/jcorbino/mole/blob/master/examples_MATLAB) folder.
+In this short article we introduced MOLE, an open-source library that implements the mimetic operators from @Corbino. For conciseness purposes, we showed a one-dimensional Poisson problem as an example. However, MOLE includes over 30 examples that span a wide range of applications, from the one-way wave equation to highly nonlinear and computationally demanding problems, including the Navier-Stokes equation for fluid dynamics and Richard's equation for unsaturated flow in porous media. The user can find such examples in the [Examples](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab) folder.
 
 # Acknowledgements
 

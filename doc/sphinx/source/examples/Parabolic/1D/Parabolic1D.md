@@ -26,8 +26,8 @@ $$\Delta t \leq \frac{\Delta x^2}{3\alpha}$$
 ---
 
 This example is implemented in:
-- [MATLAB/OCTAVE](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/parabolic1D.m)
-- [C++](https://github.com/csrc-sdsu/mole/blob/master/examples/cpp/parabolic1D.cpp)
+- [MATLAB/OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab/parabolic1D.m)
+- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/parabolic1D.cpp)
 
 ## Results
 
