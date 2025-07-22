@@ -5,7 +5,7 @@ This directory contains examples demonstrating how to use MOLE for various appli
 ## Directory Structure
 
 - `cpp/` - C++ examples demonstrating MOLE's C++ API
-- `matlab/` - MATLAB/ Octave examples showing how to use MOLE in MATLAB/ Octave
+- `matlab_octave/` - MATLAB/Octave examples showing how to use MOLE in MATLAB/Octave
   - `compact_operators/` - Examples of compact form operators
 
 Each example is self-contained and demonstrates different aspects of the MOLE library.
