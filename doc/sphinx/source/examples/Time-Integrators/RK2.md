@@ -33,7 +33,7 @@ where:
 - $y_i$ is the solution at time $t_i$
 
 This example is implemented in:
-- [MATLAB/OCTAVE](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/RK2.m)
-- [C++](https://github.com/csrc-sdsu/mole/blob/master/examples/cpp/RK2.cpp)
+- [MATLAB/OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab/RK2.m)
+- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/RK2.cpp)
 
 Both implementations include visualization of the solution using plotting tools (MATLAB's built-in plot function and GNUplot for C++). 

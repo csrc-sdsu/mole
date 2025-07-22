@@ -399,8 +399,8 @@ $$
 ---
 
 This example is implemented in:
-- [MATLAB/Octave](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/example_name.m)
-- [C++](https://github.com/csrc-sdsu/mole/blob/master/examples/cpp/example_name.cpp) *(if available)*
+- [MATLAB/Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab/example_name.m)
+- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/example_name.cpp) *(if available)*
 
 #### Variants
 

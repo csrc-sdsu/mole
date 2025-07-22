@@ -41,8 +41,8 @@ $$
 ---
 
 This example is implemented in:
-- [MATLAB/ OCTAVE](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/hyperbolic1D.m)
+- [MATLAB/ OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab/hyperbolic1D.m)
 
 Additional MATLAB/ OCTAVE variants:
-- [Upwind Scheme](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/hyperbolic1D_upwind.m)
-- [Lax-Friedrichs Scheme](https://github.com/csrc-sdsu/mole/blob/master/examples/matlab/hyperbolic1D_lax_friedrichs.m)
+- [Upwind Scheme](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab/hyperbolic1D_upwind.m)
+- [Lax-Friedrichs Scheme](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab/hyperbolic1D_lax_friedrichs.m)

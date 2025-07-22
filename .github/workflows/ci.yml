@@ -31,7 +31,7 @@ jobs:
         env:
           DISABLE_ERRORS: true
           VALIDATE_ALL_CODEBASE: false
-          DEFAULT_BRANCH: master
+          DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-MOLE-ubuntu:
@@ -211,7 +211,7 @@ jobs:
           touch doc/sphinx/build/html/.nojekyll
 
       - name: Deploy to GitHub Pages
-        if: steps.changes.outputs.changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: steps.changes.outputs.changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
