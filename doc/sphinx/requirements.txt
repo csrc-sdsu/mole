@@ -26,7 +26,6 @@ Pillow                          # Required for imghdr module
 setuptools                      # Required for pkg_resources
 
 # Theme
-sphinx-book-theme
 sphinx-design
 
 # Extensions used in conf.py
@@ -73,7 +72,7 @@ sphinxcontrib-matlabdomain==0.22.1
 Pillow==11.3.0
 
 # HTTP requests for contributors extension
-requests==2.32.3
+requests>=2.32.3
 
 # For PDF generation
 latexcodec==3.0.0
