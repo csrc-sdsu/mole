@@ -53,7 +53,7 @@ int main() {
 ```matlab
 % elliptic1D.m - 1D Poisson's equation with Robin boundary conditions
 
-addpath('../../src/matlab')
+addpath('../../src/matlab_octave')
 
 west = 0;  % Domain's limits
 east = 1;

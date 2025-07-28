@@ -125,7 +125,7 @@ make run_tests
 MATLAB/Octave equivalent of the C++ test suite. We recommend running these tests before using MOLE to ensure proper setup.
 
 ```matlab
-make run_matlab_tests
+make run_matlab_octave_tests
 ```
 
 ## Examples
