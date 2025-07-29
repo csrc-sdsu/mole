@@ -95,7 +95,7 @@ For full examples, see:
 ## Next Steps
 
 - Check out more C++ examples in the [examples/cpp/](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp) directory
-- Explore the MATLAB/Octave examples in the [examples/matlab_octave/](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab) directory
+- Explore the MATLAB/Octave examples in the [examples/matlab_octave/](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave) directory
 - Join our community and [contribute](https://github.com/csrc-sdsu/mole/blob/main/CONTRIBUTING.md)
 
 ```{include} ../../../../README.md
