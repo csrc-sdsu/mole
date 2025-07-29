@@ -36,7 +36,7 @@ $$y(t) = y_0 \exp\left(\int_0^t \sin^2(s) ds\right) = y_0 \exp\left(\frac{t}{2} 
 ---
 
 This example is implemented in:
-- [MATLAB/OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab/RK4.m)
+- [MATLAB/OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/RK4.m)
 - [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/RK4.cpp)
 
 ## Properties of RK4
