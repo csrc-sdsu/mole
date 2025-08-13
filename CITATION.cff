@@ -12,6 +12,8 @@ contact:
   given-names: Johnny
   orcid: "https://orcid.org/0000-0002-2638-9216"
 doi: 10.5281/zenodo.12752946
+version: "1.1.0"
+date-released: "2025-08-13"
 message: If you use this software, please cite our article in the
   Journal of Open Source Software.
 preferred-citation:
