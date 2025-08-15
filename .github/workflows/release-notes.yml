@@ -1,0 +1,79 @@
+name: Generate Release Notes
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  release-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate Release Notes
+        id: release_notes
+        run: |
+          # Get the previous tag
+          PREVIOUS_TAG=$(git tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+' | sed -n '2p')
+          CURRENT_TAG=${GITHUB_REF#refs/tags/}
+          
+          echo "Generating release notes from ${PREVIOUS_TAG} to ${CURRENT_TAG}"
+          
+          # Create release notes
+          echo "# Release Notes for ${CURRENT_TAG}" > release_notes.md
+          echo "" >> release_notes.md
+          
+          if [ -n "$PREVIOUS_TAG" ]; then
+            echo "## Changes since ${PREVIOUS_TAG}" >> release_notes.md
+            echo "" >> release_notes.md
+            
+            # Get commits since last tag
+            git log --first-parent --pretty=format:"* %s" ${PREVIOUS_TAG}..HEAD >> release_notes.md
+            echo "" >> release_notes.md
+            echo "" >> release_notes.md
+            
+            # Get merged PRs
+            echo "## Pull Requests Merged" >> release_notes.md
+            echo "" >> release_notes.md
+            git log --first-parent --grep="Merge pull request" --pretty=format:"* %s" ${PREVIOUS_TAG}..HEAD >> release_notes.md
+            echo "" >> release_notes.md
+            echo "" >> release_notes.md
+            
+            # Get contributors
+            echo "## Contributors" >> release_notes.md
+            echo "" >> release_notes.md
+            git log --first-parent --pretty=format:"%an" ${PREVIOUS_TAG}..HEAD | sort -u | sed 's/^/* /' >> release_notes.md
+          else
+            echo "## Initial Release" >> release_notes.md
+            echo "" >> release_notes.md
+            echo "This is the first tagged release of MOLE." >> release_notes.md
+          fi
+          
+          # Set output for use in next step
+          echo "release_notes_file=release_notes.md" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: MOLE ${{ github.ref_name }}
+          body_path: release_notes.md
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Release Notes as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-notes-${{ github.ref_name }}
+          path: release_notes.md
