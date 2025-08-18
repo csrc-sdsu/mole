@@ -1,5 +1,5 @@
 ################################################################################
-# MOLE Documentation Sphinx Configuration
+# MOLE User Manual Sphinx Configuration
 ################################################################################
 
 #------------------------------------------------------------------------------
@@ -34,7 +34,7 @@ sys.path.insert(0, os.path.abspath('_ext'))
 project = 'MOLE'
 copyright = '2023, CSRC SDSU'
 author = 'CSRC SDSU'
-release = '1.0.0'
+release = '1.1.0'
 master_doc = 'index'
 root_doc = 'index'
 
@@ -302,7 +302,7 @@ if os.path.exists(logo_path) and not os.path.exists(dark_logo_path):
         })
 
 # Appearance
-html_title = "MOLE Documentation" 
+html_title = "MOLE User Manual" 
 html_favicon = str(ROOT_DIR / "logo.png")
 html_css_files = [
     'css/custom.css',
@@ -415,7 +415,7 @@ latex_documents = [
     (
         'index',           # Source start file
         'MOLE-docs.tex',   # Target filename
-        'MOLE Documentation',      # Title
+        'MOLE User Manual',        # Title
         'CSRC SDSU',       # Author
         'manual',          # Document class
         False              # toctree_only
@@ -570,20 +570,20 @@ html_use_opensearch = ''
 
 # Additional meta tags for all pages
 html_meta.update({
-    'og:title': 'MOLE Documentation',
+    'og:title': 'MOLE User Manual',
     'og:site_name': 'MOLE: Mimetic Operators Library Enhanced',
     'og:url': 'https://mole-pdes.readthedocs.io/',
     'og:image': 'https://mole-pdes.readthedocs.io/_static/logo.png',
     'og:type': 'website',
     'twitter:card': 'summary_large_image',
-    'twitter:title': 'MOLE Documentation',
+    'twitter:title': 'MOLE User Manual',
     'twitter:description': 'MOLE: Mimetic Operators Library Enhanced - A high-order mimetic differential operators library for solving PDEs',
 })
 
 # Add Open Graph protocol markup
 html_theme_options.update({
     # Other options
-    # "announcement": "Latest release: v1.0.0",
+    # "announcement": "Latest release: v1.1.0",
     "use_edit_page_button": True,
     "extra_footer": """
         <div class="footer-extra">
