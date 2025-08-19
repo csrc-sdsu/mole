@@ -80,7 +80,7 @@ For DOI-bearing releases:
 
 1. **Generate documentation PDF**: The documentation workflow automatically generates a PDF version
 2. **Update Zenodo record**: 
-   - Visit the [MOLE Zenodo record](https://zenodo.org/record/12752946) (update URL as needed)
+   - Visit the [MOLE Zenodo record](https://zenodo.org/records/16898575) (update URL as needed)
    - Click "New version"
    - Upload the generated PDF documentation
    - Update author information if applicable
