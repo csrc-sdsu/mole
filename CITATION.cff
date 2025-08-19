@@ -1,22 +1,54 @@
 cff-version: "1.2.0"
+title: "MOLE: Mimetic Operators Library Enhanced"
+message: "Please cite the following works when using this software."
 authors:
-- family-names: Corbino
-  given-names: Johnny
-  orcid: "https://orcid.org/0000-0002-2638-9216"
-- family-names: Dumett
-  given-names: Miguel A.
+- family-names: Barra
+  given-names: Valeria
+  orcid: 0000-0003-1129-2056
+- family-names: Boada
+  given-names: Angel
+- family-names: Brzenski
+  given-names: Jared
 - family-names: Castillo
-  given-names: Jose E.
-contact:
+  given-names: Jose
+- family-names: Chakalasiya
+  given-names: Prit
+- family-names: Singh
+  given-names: Surinder Chhabra
 - family-names: Corbino
   given-names: Johnny
-  orcid: "https://orcid.org/0000-0002-2638-9216"
-doi: 10.5281/zenodo.12752946
+  orcid: 0000-0002-2638-9216
+- family-names: Drummond
+  given-names: Tony
+- family-names: Dumett
+  given-names: Miguel
+- family-names: Hellmers
+  given-names: Joe
+- family-names: Ilaty
+  given-names: Arshia
+- family-names: Kaviani
+  given-names: Katayoon
+- family-names: Nzerem
+  given-names: Oluchi
+- family-names: Pagallo
+  given-names: Giulia
+- family-names: Paolini
+  given-names: Christopher
+- family-names: Rosano
+  given-names: Valentina
+- family-names: Srinivas
+  given-names: Aneesh Murthy
+- family-names: Srinivasan
+  given-names: Janani Priyadharshini
+- family-names: Valera
+  given-names: Manuel
+doi: https://zenodo.org/records/16898575
 version: "1.1.0"
 date-released: "2025-08-13"
-message: If you use this software, please cite our article in the
-  Journal of Open Source Software.
+url: https://mole-docs.readthedocs.io/en/main/
+repository: https://github.com/csrc-sdsu/mole
 preferred-citation:
+  message: If you use this software, please also cite our article in the Journal of Open Source Software.
   authors:
   - family-names: Corbino
     given-names: Johnny
@@ -37,4 +69,3 @@ preferred-citation:
   type: article
   url: "https://joss.theoj.org/papers/10.21105/joss.06288"
   volume: 9
-title: "MOLE: Mimetic Operators Library Enhanced"
