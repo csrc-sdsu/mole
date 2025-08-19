@@ -33,7 +33,9 @@ sys.path.insert(0, os.path.abspath('_ext'))
 #------------------------------------------------------------------------------
 project = 'MOLE'
 copyright = '2023, CSRC SDSU'
-author = 'CSRC SDSU'
+with open("../../../AUTHORS") as f:
+    authorlist = f.readlines()
+author = ", ".join(authorlist)
 release = '1.1.0'
 master_doc = 'index'
 root_doc = 'index'
@@ -411,14 +413,16 @@ latex_elements = {
 }
 
 # Main LaTeX/PDF document configuration
+
+latexauthorslist = r" \and ".join(authorlist)
 latex_documents = [
     (
-        'index',           # Source start file
-        'MOLE-docs.tex',   # Target filename
-        'MOLE User Manual',        # Title
-        'CSRC SDSU',       # Author
-        'manual',          # Document class
-        False              # toctree_only
+        'index',            # Source start file
+        'MOLE-docs.tex',    # Target filename
+        'MOLE User Manual', # Title
+        latexauthorslist,   # Author
+        'manual',           # Document class
+        False               # toctree_only
     ),
 ]
 
