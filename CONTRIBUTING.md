@@ -42,6 +42,11 @@ Before contributing, ensure you have:
    git checkout -b feature/your-feature-name
    ```
 
+4. **Create an Issue or start from an existing one**: 
+  - Tackle an existing issue. We keep a list of [good first issues](https://github.com/csrc-sdsu/mole/issues?q=state%3Aopen%20label%3A%22Good%20first%20issue%22) that are self-contained and suitable for a newcomer to try and work on.
+  - If there is no existing Issue describing what you want to report/discuss/propose to the community, please create a new [Issue](https://github.com/csrc-sdsu/mole/issues)
+  - Once you are ready with your contribution (whether it is for core functionality, examples, or documentation), follow the guidelines below and remember to link your open Pull Request (PR) with the Issue describing what you propose to contribute. It is very important for the community project management to keep organized PR-Issue pairs. If you are not sure how to link a PR with an Issue, please review these [Linking a Pull Request to an Issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue) guidelines from GitHub. 
+
 ---
 
 ## Contributing to Core Functionality
@@ -54,7 +59,7 @@ The MOLE library follows a consistent structure across MATLAB and C++ implementa
 
 #### MATLAB/Octave Core Functions
 
-Core functions are located in `src/matlab/` and follow this pattern:
+Core functions are located in `src/matlab_octave/` and follow this pattern:
 
 ```matlab
 function OUTPUT = functionName(k, m, dx, ...)
@@ -152,7 +157,7 @@ When contributing core functionality, identify which category your contribution 
 
 If adding a new operator, follow this checklist:
 
-1. **MATLAB Implementation** (`src/matlab/newoperator.m`):
+1. **MATLAB Implementation** (`src/matlab_octave/newoperator.m`):
    ```matlab
    function OP = newoperator(k, m, dx)
    % Returns a new mimetic operator
@@ -190,7 +195,7 @@ Examples are organized by PDE type in the `examples/` directory:
 
 ```
 examples/
-├── matlab/                 # MATLAB/Octave examples
+├── matlab_octave/         # MATLAB/Octave examples
 │   ├── elliptic1D.m       # Basic examples
 │   ├── parabolic2D.m      # 2D examples
 │   └── compact_operators/ # Specialized examples
@@ -218,7 +223,7 @@ Organize your examples by PDE type:
 clc
 close all
 
-addpath('../../src/matlab')  % REQUIRED: Add path to MOLE library
+addpath('../../src/matlab_octave')  % REQUIRED: Add path to MOLE library
 
 %% Problem Parameters
 % [Describe each parameter with physical meaning]
@@ -399,7 +404,7 @@ $$
 ---
 
 This example is implemented in:
-- [MATLAB/Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab/example_name.m)
+- [MATLAB/Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/example_name.m)
 - [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/example_name.cpp) *(if available)*
 
 #### Variants
@@ -483,6 +488,7 @@ Additional variants with different boundary conditions or parameters:
 2. **Testing**: Run all relevant tests and examples
 3. **Documentation**: Ensure documentation is complete and accurate
 4. **Commit Messages**: Write clear, descriptive commit messages
+5. **Atomic commits**: Please make your commits well-organized and atomic, using ``git rebase --interactive`` as needed
 
 ### Pull Request Guidelines
 
@@ -491,6 +497,7 @@ Additional variants with different boundary conditions or parameters:
 3. **Testing**: Describe testing performed
 4. **Examples**: Include or reference relevant examples
 5. **Documentation**: Link to any new documentation
+6. **PR/Issue pair**: Link your PR to an existing Issue that describes your intended contribution
 
 ### Pull Request Template
 
@@ -544,7 +551,7 @@ Any additional information or context.
 1. **Documentation**: Read the [online documentation](https://mole-docs.readthedocs.io/)
 2. **Examples**: Study existing examples for patterns and best practices
 3. **Issues**: Check [GitHub issues](https://github.com/csrc-sdsu/mole/issues) for known problems
-4. **Discussions**: Use GitHub Discussions for questions and ideas
+4. **Discussions**: Use [GitHub Discussions](https://github.com/csrc-sdsu/mole/discussions) for questions and ideas
 
 ### Contact
 
