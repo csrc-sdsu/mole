@@ -6,9 +6,7 @@ close all
 m_cnt = 25;
 decimal_positions = 9;
 
-warning('off','all');
 mkdir('../dat');
-warning('on','all')
 
 fid = fopen('../dat/pweights.csv','wt');
 for i = 1:3
@@ -31,7 +29,6 @@ for i = 1:3
     for m = j:m_max 
         Q = weightsQ(k, m, dx);
         out = string(k) + ',' + string(m) + ',' + strjoin(compose("%."+string(decimal_positions)+"f",Q),",") + '\n';
-        disp(out);
         fprintf(fid, out);
     end;
 end;
