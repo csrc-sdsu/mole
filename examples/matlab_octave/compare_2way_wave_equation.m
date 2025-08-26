@@ -22,6 +22,8 @@ clc
 close all
 clear
 
+addpath('../../src/matlab_octave');
+
 %% Problem definition
 k    = 2;        % Mimetic Order of Accuracy, can change to 4,6,8
 c    = 0.1;      % Velocity, 1 makes it perfect
@@ -54,26 +56,26 @@ for ii=1:numel(m_points)
     %% Setup the domain
     m = m_points(ii);               % Number of cells, mimetics uses 'cells'
     nx = m+1;                       % number of grid points, for our usage
-    
+
     dx = (east - west) / m;         % spacial discretization size delta x
     dt = 0.001;                     % Time step constant for error analysis
 
     r2_fd = c^2*(dt^2 / dx^2);      % c in the equation
     r2_md = c^2*(dt^2);             % c in the equation, dx is in mimetic L
-    
+
     t = ceil( 1/(c*dt) ) ;          % first step euler, so t is one less
 
     % FD grid
-    grid_fd =  west : dx : east ;  
+    grid_fd =  west : dx : east ;
     % MD grid
-    grid_md = [ west west+dx/2 : dx : east-dx/2 east ] ;  
-    
+    grid_md = [ west west+dx/2 : dx : east-dx/2 east ] ;
+
     %% Initial Dislplacement is cos curve
     % Finite Difference
     U0_fd = u(grid_fd', 0);
 
     analytic_fd = u(grid_fd', (t+1)*dt);
-    
+
     % Mimetic Difference, same as above, just staggered grid
     U0_md = u(grid_md', 0);
 
@@ -94,27 +96,27 @@ for ii=1:numel(m_points)
     % Boundary Conditions
     FTCS(1,1) = 1; FTCS(1,2) = 0;
     FTCS(end,end) = 1; FTCS(end,end-1) = 0;
-    % 
+    %
     % Step one is different, precomputed using Euler method
     U1_fd = 0.5 * FTCS * U0_fd;
 
     U2_fd = U1_fd;      % Increment time step
-        
+
     %% Mimetic Scheme Matrix L
     L = lap(k,m,dx);    % mimetic Laplacian operator
     L = r2_md*L;        % premultiply by dt^2 * c^2
 
     U1_md = U0_md + 0.5*L*U0_md;  % First step, Euler
     U2_md = U1_md;      % Increment time step
-        
+
     %% FTCS Loop
-    % The number of flops is in this step, nnz(U2_fd) * 
+    % The number of flops is in this step, nnz(U2_fd) *
     nnz_fd = nnz(FTCS);
-    tic    
+    tic
     for i = 1 : t
         % Actual Calculations
         U2_fd = FTCS*U1_fd - U0_fd;
-        
+
         % Shift everyone back.
         U0_fd = U1_fd;
         U1_fd = U2_fd;
@@ -125,7 +127,7 @@ for ii=1:numel(m_points)
     % Number of flops
     flops_fd(ii) = (2 * nnz_fd + length(U0_fd) ) * t;
     error_fd(ii) = max(U2_fd-analytic_fd);
-    
+
     %% Mimetic try
     nnz_md = nnz(L);
     tic
@@ -152,31 +154,33 @@ end
 p_fd = polyfit(log(1./m_points), log(error_fd), 1)
 p_md = polyfit(log(1./m_points), log(error_md), 1)
 
-% error plots
+% error plots, should get close to slope of 2
 figure(21)
-loglog(1./m_points, error_fd)       % plot the errors over time
-hold on;
+loglog(1./m_points, error_fd); hold on;
 loglog(1./m_points, error_md)
-xlabel('dx'); ylabel('error'); grid on;
-legend('FD Error','MD error')
+xlim([0 1/m_points(1)]);
+xlabel('dx'); ylabel('error');
+grid on;
 title(['Error: FD slope~', num2str(p_fd(1)), ', MD slope~', num2str(p_md(1))]);
+legend('FD Error','MD error')
 
 % Time taken, there is some spooling MATLAB does, so may not be
 % super accurate. Givne here for reference
 figure(31)
-loglog(m_points, time_fd);
-hold on;
-loglog(m_points, time_md);
+plot(m_points, time_fd); hold on;
+plot(m_points, time_md);
+xlim([m_points(1) m_points(end)]);
+ylim([min( min(time_fd), min(time_md) )  max( max(time_fd), max(time_md) )]);
 xlabel('num points'); ylabel('time [s]');
 grid on;
 title(['Time taken, MD is order ', num2str(k)]);
 legend('FD time', 'MD time');
 
-% How much more time does the mimetic method take over the 
+% How much more time does the mimetic method take over the
 % standard finite difference method
 figure(32)
-loglog(m_points, time_md./time_fd);
-grid on;
+plot(m_points, time_md./time_fd);
+xlim([ m_points(1) m_points(end) ]); ylim([ 0.5 2 ]);
 xlabel('num points'); ylabel('times slower');
 grid on;
 title(['Slowdown for MD of order ', num2str(k)]);
@@ -184,9 +188,9 @@ legend('Time Ratio MD/FD');
 
 % Floating point operations needed for each method.
 figure(35)
-loglog(m_points, flops_fd);
-hold on;
+loglog(m_points, flops_fd); hold on;
 loglog(m_points, flops_md);
+xlim([ m_points(1) m_points(end) ]); ylim([ 1e5 1e8 ]);
 xlabel('num cells'); ylabel('FLOPs');
 grid on;
 title(['FLOPs for each method, mimetic order:', num2str(k)]);
