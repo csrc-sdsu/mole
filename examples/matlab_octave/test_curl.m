@@ -10,7 +10,7 @@
 
 clc
 close all
-clear all
+clear
 
 addpath('../../src/matlab_octave')
 
