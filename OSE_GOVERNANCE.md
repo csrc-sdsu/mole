@@ -99,5 +99,3 @@ The rich community of Open Source Software has provided the knowledge and materi
 - [NumPy](https://numpy.org/doc/stable/dev/governance/governance.html),
 - [TensorFlow](https://www.tensorflow.org/community/contribute),
 - and other OSE's in the high performance [E4S](https://e4s.io/index.html) community.
-
----

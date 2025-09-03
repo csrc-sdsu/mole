@@ -67,5 +67,3 @@ Anyone with an interest in **_Mimetic Discretization_** and the fast prototyping
 ## JOB OPPORTUNITIES
 
 Currently, there are no job opportunities. We will use this space to advertise employment and collaboration opportunities in the MOLE OSE.
-
----

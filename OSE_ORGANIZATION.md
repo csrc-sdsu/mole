@@ -120,5 +120,3 @@ Membership to this circle is extended to anyone who possesses expertise in compu
 The members of this circle are responsible for maintaining and advancing the implementation of mimetic methods (MM) and for promoting and recruiting applications that can benefit from the use of  MM, as new users of MM, or members from industry and academia who already use MM but are in need of robust, reliable and scalable MM implementations.  This circle supports the sustainability of key algorithmic and MOLE library functionalities through activities under the [OSE Evaluation and Growth](#evaluation-and-growth-pillar) pillar.
 
 Membership to this circle is extended to anyone who possesses expertise in mathematics and scientific computing, in particular in numerical solutions to partial differential equations. Participants can be removed from this circle if a proposal to do so passes the consensus process as described in the MOLE Governance document.
-
----
