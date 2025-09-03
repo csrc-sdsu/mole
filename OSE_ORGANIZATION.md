@@ -27,7 +27,7 @@ First, it is important to state the purpose and scope of the MOLE OSE organizati
 
 The MOLE organization is strategically supported by four working pillars;
 
-![MOLE OSE Pillar](doc/assets/img/MOLE_pillars.png)
+![MOLE OSE Pillar](../../../../doc/assets/img/MOLE_pillars.png)
 **Figure 1.** The four pillars of the MOLE Ecosystem Organization.  
 
 ---
@@ -38,16 +38,16 @@ This pillar hosts all activities and actions related to the management and suppo
 
 In order to engage and recruit new members, this pillar fosters the organization of the Annual MOLE Users meeting, yearly MOLE-centric hackathon called the MOLE Challenge, and in person community engagements like national and international workshops, active participation in conferences, and integration of MOLE into courses taught at SDSU. The production of the quarterly newsletters and targetted communications are managed also under this pillar.
 
-![MOLE OSE Community Engagement Pillar](doc/assets/img/CommunityEngagementPillar.png)
+![MOLE OSE Community Engagement Pillar](../../../../doc/assets/img/CommunityEngagementPillar.png)
 **Figure 2.** The MOLE OSE Community Engagement pillar and activities that are strategically organized under this pillar.
 
 ---
 
 ## Organization and Governance Pillar
 
-This pillar results from a well-defined governance model, the pillar fosters and promotes work interactions between the leadership team and all the MOLE OSE stakeholders. For instance, the creation and update the [Governance](./OSE_GOVERNANCE.md) and [Code of Conduct](./CODE_OF_CONDUCT.md) documents, the prompt resolution of conflicts, the design and implementation of the MOLE OSE strategic plan. Under this pillar, the leadership team ensures that all the pillars and organizational circles are relevant and effective to the MOLE OSE operations.
+This pillar results from a well-defined governance model, the pillar fosters and promotes work interactions between the leadership team and all the MOLE OSE stakeholders. For instance, the creation and update the [Governance](./OSE_GOVERNANCE.md) and [Code of Conduct](../../../../CODE_OF_CONDUCT.md) documents, the prompt resolution of conflicts, the design and implementation of the MOLE OSE strategic plan. Under this pillar, the leadership team ensures that all the pillars and organizational circles are relevant and effective to the MOLE OSE operations.
 
-![MOLE OSE Organization and Governance Pillar](doc/assets/img/OrganizationAndGovernancePillar.png)
+![MOLE OSE Organization and Governance Pillar](../../../../doc/assets/img/OrganizationAndGovernancePillar.png)
 **Figure 3.** The MOLE OSE Organization and Governance pillar and the activities that are strategically organized under this pillar.
 
 ---
@@ -58,7 +58,7 @@ This pillar supports the work of an interdisciplinary, multilocation, and cohesi
 
 It adopts agile and distributed open-source development practices, ensuring regular releases, responsive maintenance, and integration of community contributions. The OSE sustainable infrastructure is built on a well-maintained GitHub repository to support active collaborations between contributors and other sustainable OSEs.
 
-![MOLE OSE Sustainable Infrastructure Pillar](doc/assets/img/SustainableInfrastructurePillar.png)
+![MOLE OSE Sustainable Infrastructure Pillar](../../../../doc/assets/img/SustainableInfrastructurePillar.png)
 **Figure 4.** The MOLE OSE Sustainable Infrastructure pillar with the activities that are strategically organized under this pillar.
 
 ---
@@ -69,7 +69,7 @@ This pillar hosts the implementation and management of a set of well-defined met
 
 We have established proactive policies for software quality assurance, security audits, and mitigation of technical and governance risks within the MOLE OSE Evaluation and Growth pillar, where we have feedback loops to produce measurable performance indicators of the effectiveness of our 4-pillars OSE.
 
-![MOLE OSE Evaluation and Growth](doc/assets/img/EvaluationAndGrowthPillar.png)
+![MOLE OSE Evaluation and Growth](../../../../doc/assets/img/EvaluationAndGrowthPillar.png)
 **Figure 5.** The MOLE OSE Sustainable Infrastructure pillar with the activities that are strategically organized under this pillar.
 
 ---
@@ -78,7 +78,7 @@ We have established proactive policies for software quality assurance, security 
 
 The four MOLE OSE pillars have interconnected and synergetic activities that sustain the MOLE OSE Organization which actively relies on input from the MOLE community.  Our governance model has well-defined processes for contributions, library operations and management. Thus, the management of the MOLE organization is led by a steering council, and four governing  circles.
 
-![MOLE OSE Governance Model](doc/assets/img/MOLE_OSE_circles.png)
+![MOLE OSE Governance Model](../../../../doc/assets/img/MOLE_OSE_circles.png)
 **Figure 6.**  The MOLE OSE governance and leadership is organized in four strategic areas reflecting the domains of expertise and competence of the members in  the Leadership team and founders of MOLE library. These domains are; software engineering, computational sciences, mimetic methods, and community engagement.
 
 ---
@@ -95,7 +95,7 @@ All council members possess the required expertise in the software engineering a
 
 The members of this circle oversee some of the activities in the [MOLE Community Engagement](#community-engagement-pillar) and [MOLE Organization and Governance](#organization-and-governance-pillar) pillars pertaining to outreach and education events, promotion of the MOLE library functionality, and onboarding of new members to the MOLE community.  
 
-The circle is chaired by members of the MOLE Leadership team, and it is open to any member of the MOLE community, as long as they agree to comply with the [MOLE OSE Code of Conduct](./CODE_OF_CONDUCT.md), and there are no objections. Participants can be removed from this circle if a proposal to do so passes the consensus process as described in the MOLE Governance document.
+The circle is chaired by members of the MOLE Leadership team, and it is open to any member of the MOLE community, as long as they agree to comply with the [MOLE OSE Code of Conduct](../../../../CODE_OF_CONDUCT.md), and there are no objections. Participants can be removed from this circle if a proposal to do so passes the consensus process as described in the MOLE Governance document.
 
 ---
   

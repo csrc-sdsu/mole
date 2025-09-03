@@ -30,7 +30,7 @@ The current members of the MOLE Leadership team are:
 - Dr. Giulia Pagallo,
 - Prof. Chris Paolini,
 
-In addition to the MOLE Leadership Team, the MOLE OSE organization counts with a **MOLE Steering Council** to facilitate the decision-making processes based on community consensus. The council members are formed by the leadership team members, chairs from the MOLE governing circles, MOLE founders, and strategic partners who financially support the MOLE OSE. For more details consult the [MOLE OSE Organization page](doc/sphinx/source/intros/ose_organization_wrapper.md).
+In addition to the MOLE Leadership Team, the MOLE OSE organization counts with a **MOLE Steering Council** to facilitate the decision-making processes based on community consensus. The council members are formed by the leadership team members, chairs from the MOLE governing circles, MOLE founders, and strategic partners who financially support the MOLE OSE. For more details consult the [MOLE OSE Organization page](../../../../doc/sphinx/source/intros/ose_organization_wrapper.md).
 
 ---
 
