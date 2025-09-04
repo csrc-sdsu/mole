@@ -1,6 +1,10 @@
 # MOLE Open-Source Ecosystem Community Roles
 
+<<<<<<< HEAD
 The MOLE Open-Source Ecosystem (OSE) organization places great value in its community, and community engagement is one of the pillars of the organization. The **_MOLE OSE Community_** comprises all MOLE stakeholders from the MOLE leadership team to all individuals interested in the MOLE functionalities and applications that use the MOLE library. Here, we define the different roles that members in the MOLE community play.
+=======
+The MOLE OSE organization places great value in its community, and community engagement is one of the pillars of the organization. The **_MOLE OSE Community_** comprises all MOLE stakeholders from the MOLE leadership team to all individuals interested in the MOLE functionalities and applications that use the MOLE library. Here, we define the different roles that members in the MOLE community play.
+>>>>>>> 943dba5 (	new file:   COMMUNITY_ROLES.md)
 
 ---
 
@@ -64,6 +68,10 @@ Anyone with an interest in **_Mimetic Discretization_** and the fast prototyping
 
 ---
 
+<<<<<<< HEAD
 ## Job Opportunities
+=======
+## JOB OPPORTUNITIES
+>>>>>>> 943dba5 (	new file:   COMMUNITY_ROLES.md)
 
 Currently, there are no job opportunities. We will use this space to advertise employment and collaboration opportunities in the MOLE OSE.
