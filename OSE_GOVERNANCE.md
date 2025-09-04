@@ -15,15 +15,15 @@
 
 This document formalizes the description of the governing processes used by the MOLE Open-source Software Ecosystem (OSE) organization in the decision-making process involving ordinary and extraordinary operations in the sustainable development and maintenance of the MOLE Library, its software infrastructure and MOLE OSE organization. These processes and provisions also apply to all work with external collaborators from academia and industry.  It also describes the procedures the MOLE OSE steering council uses for conflict resolution.
 
-The ultimate goal of the governance definitions and processes is to promote a work environment that is collaborative, promotes openness and transparency, encourages software contributions to the MOLE library, and supports the advancement of multiple fields in computational sciences. This document is intended to be used in conjunction with the [MOLE OSE Code of Conduct](../../../../CODE_OF_CONDUCT.md) document,  which outlines the rules of engagement between a multidisciplinary and diverse group of contributors and members of the MOLE Community.
+The ultimate goal of the governance definitions and processes is to promote a work environment that is collaborative, promotes openness and transparency, encourages software contributions to the MOLE library, and supports the advancement of multiple fields in computational sciences. This document is intended to be used in conjunction with the [MOLE OSE Code of Conduct](https://mole-docs.readthedocs.io/en/main/intros/code_of_conduct_wrapper.html) document,  which outlines the rules of engagement between a multidisciplinary and diverse group of contributors and members of the MOLE Community.
 
 ---
 
 ## MOLE OSE Governance
 
-First, we are obliged to state the scope of the software ecosystem for the MOLE Library to provide the context for all the kinds of operations, activities and interactions expected within and around the MOLE OSE organization, and this well-defined purpose guides MOLE’s rules of collaborative engagement (see the [MOLE OSE Code of Conduct](../../../../CODE_OF_CONDUCT.md)) and the decision-making governing processes.
+First, we are obliged to state the scope of the software ecosystem for the MOLE Library to provide the context for all the kinds of operations, activities and interactions expected within and around the MOLE OSE organization, and this well-defined purpose guides MOLE’s rules of collaborative engagement (see the [MOLE OSE Code of Conduct](https://mole-docs.readthedocs.io/en/main/intros/code_of_conduct_wrapper.html)) and the decision-making governing processes.
 
-MOLE is a high-order mimetic differential operators library for solving PDEs. The library is developed by a distributed group of contributors led by the MOLE leadership team. The MOLE leadership team is responsible for maintaining the cohesiveness, robustness, security, reliability, succession plans, integrity, and quality of the software library, and contributors are individuals who contribute algorithms, code design, code implementations, documentation, or user support to the MOLE library or the MOLE OSE organization.  The role definitions for all the stakeholders in this organization are defined in the [Community Roles page](../../../../COMMUNITY_ROLES.md).
+MOLE is a high-order mimetic differential operators library for solving PDEs. The library is developed by a distributed group of contributors led by the MOLE leadership team. The MOLE leadership team is responsible for maintaining the cohesiveness, robustness, security, reliability, succession plans, integrity, and quality of the software library, and contributors are individuals who contribute algorithms, code design, code implementations, documentation, or user support to the MOLE library or the MOLE OSE organization.  The role definitions for all the stakeholders in this organization are defined in the [Community Roles page](https://mole-docs.readthedocs.io/en/main/intros/community_roles_wrapper.html).
 
 Anyone with an interest in mimetic methods and their use in the formulation of numerical solutions to computational problems can become a member of the MOLE community. Additionally, anyone with an interest in learning more about the MOLE library functionalities or mimetic discretizations and their wide-range of applicability is invited to join the MOLE community.  Lastly, as an open-source software library, the MOLE community also welcomes participants interested in its financial sustainability.
 
@@ -66,14 +66,14 @@ The outcome of any decision will be announced to the MOLE community. The MOLE co
 
 ## Removal of Members from the Community
 
-In order to promote a welcoming, intellectually stimulating and productive work environment, the MOLE OSE organization has a set of guiding rules of engagement listed in the [MOLE Code of Conduct](../../../../CODE_OF_CONDUCT.md) document. If a member is in direct violation of any of these rules,  a formal request for their removal from the MOLE community will be made to the steering committee.  This also applies to any community members that enters in conflict of interest with the MOLE OSE organization.
+In order to promote a welcoming, intellectually stimulating and productive work environment, the MOLE OSE organization has a set of guiding rules of engagement listed in the [MOLE Code of Conduct](https://mole-docs.readthedocs.io/en/main/intros/code_of_conduct_wrapper.html) document. If a member is in direct violation of any of these rules,  a formal request for their removal from the MOLE community will be made to the steering committee.  This also applies to any community members that enters in conflict of interest with the MOLE OSE organization.
 
 ---
 
 ## Removal of Members from the Steering Council or A Governance Circle
 
 When members of the steering council or a governance circle become inactive, or are unabled to participate in discussions and meetings, they will be removed from the steering council or governance committee, requiring 2/3 of majority vote from the members in a governance circle, or the steering committee.
-Members can also be removed if there are any conflicts of interests or violations of the [MOLE OSE Code of Conduct](../../../../CODE_OF_CONDUCT.md).
+Members can also be removed if there are any conflicts of interests or violations of the [MOLE OSE Code of Conduct](https://mole-docs.readthedocs.io/en/main/intros/code_of_conduct_wrapper.html).
 
 ---
 
