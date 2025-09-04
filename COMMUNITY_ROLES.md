@@ -36,7 +36,7 @@ In addition to the MOLE Leadership Team, the MOLE OSE organization counts with a
 
 ## MOLE OSE Contributors
 
-A contributor is anyone who has made contributions to the MOLE Library or the MOLE Open-Source Ecosystem.  A full list of contributors is available in the [Our Contributors Section](https://mole-docs.readthedocs.io/en/main/intros/contributing_wrapper.html) in the [MOLE repository](http://mole-docs.readthedocs.io). In addition to technical and conceptual contributions to the open-source software, the MOLE community includes contributions from industry, academic and professional connections that can also support the community through financial or managerial resources. Contributors help sustain the MOLE ecosystem and are invited to participate in the evaluation of the MOLE organizational pillars.
+A contributor is anyone who has made contributions to the MOLE Library or the MOLE Open-Source Ecosystem.  A full list of contributors is available in the [Our Contributors Section](https://mole-docs.readthedocs.io/en/main/intros/contributing_wrapper.html) in the [MOLE repository](https://github.com/csrc-sdsu/mole). In addition to technical and conceptual contributions to the open-source software, the MOLE community includes contributions from industry, academic and professional connections that can also support the community through financial or managerial resources. Contributors help sustain the MOLE ecosystem and are invited to participate in the evaluation of the MOLE organizational pillars.
 
 ---
 
