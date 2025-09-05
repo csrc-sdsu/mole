@@ -1,6 +1,6 @@
 # MOLE Open-Source Ecosystem Community Roles
 
-The MOLE OSE organization places great value in its community, and community engagement is one of the pillars of the organization. The **_MOLE OSE Community_** comprises all MOLE stakeholders from the MOLE leadership team to all individuals interested in the MOLE functionalities and applications that use the MOLE library. Here, we define the different roles that members in the MOLE community play.
+The MOLE Open-Source Ecosystem (OSE) organization places great value in its community, and community engagement is one of the pillars of the organization. The **_MOLE OSE Community_** comprises all MOLE stakeholders from the MOLE leadership team to all individuals interested in the MOLE functionalities and applications that use the MOLE library. Here, we define the different roles that members in the MOLE community play.
 
 ---
 
