@@ -1,10 +1,14 @@
 # MOLE Open-Source Ecosystem Community Roles
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 The MOLE Open-Source Ecosystem (OSE) organization places great value in its community, and community engagement is one of the pillars of the organization. The **_MOLE OSE Community_** comprises all MOLE stakeholders from the MOLE leadership team to all individuals interested in the MOLE functionalities and applications that use the MOLE library. Here, we define the different roles that members in the MOLE community play.
 =======
 The MOLE OSE organization places great value in its community, and community engagement is one of the pillars of the organization. The **_MOLE OSE Community_** comprises all MOLE stakeholders from the MOLE leadership team to all individuals interested in the MOLE functionalities and applications that use the MOLE library. Here, we define the different roles that members in the MOLE community play.
 >>>>>>> 943dba5 (	new file:   COMMUNITY_ROLES.md)
+=======
+The MOLE Open-Source Ecosystem (OSE) organization places great value in its community, and community engagement is one of the pillars of the organization. The **_MOLE OSE Community_** comprises all MOLE stakeholders from the MOLE leadership team to all individuals interested in the MOLE functionalities and applications that use the MOLE library. Here, we define the different roles that members in the MOLE community play.
+>>>>>>> ea9f5f2 (Included changes suggested by Giulia and Valeria to)
 
 ---
 
@@ -21,7 +25,7 @@ The MOLE OSE organization places great value in its community, and community eng
 
 ## MOLE Leadership Team
 
-This group is composed of the library development founders, current lead developers, and software maintainers and managers of the MOLE open-source ecosystem. The leadership team is responsible for maintaining the cohesiveness, robustness, security, reliability, succession plans, integrity, and quality of the software library.
+This group is composed of the library development founders, current lead developers, and software maintainers and managers of the MOLE OSE. The leadership team is responsible for maintaining the cohesiveness, robustness, security, reliability, succession plans, integrity, and quality of the software library.
 
 The current members of the MOLE Leadership team are:
 
@@ -46,7 +50,7 @@ A contributor is anyone who has made contributions to the MOLE Library or the MO
 
 ## MOLE OSE Collaborators
 
-Collaborators are a multidisciplinary group of members from industry and academia with whom the MOLE leadership team collaborates in the development of new computational applications using the MOLE library, or developers from other open-source ecosystems that interoperate with the MOLE library.  Collaborators are also MOLE Contributors, and together with the leadership team we work on the sustainability of the MOLE open-source ecosystem.  
+Collaborators are a multidisciplinary group of members from industry and academia with whom the MOLE leadership team collaborates in the development of new computational applications using the MOLE library, or developers from other open-source ecosystems that interoperate with the MOLE library.  Collaborators are also MOLE Contributors, and together with the leadership team work on the sustainability of the MOLE open-source ecosystem.  
 
 The current list of collaborators include:
 
