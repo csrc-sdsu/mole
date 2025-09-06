@@ -57,6 +57,7 @@ For full disclosure, the MOLE OSE organization also has these decisions that are
 - The election of chairs and co-chairs of a governance circle are elected by a majority vote of the steering committee..  All governance circle chairs and co-chairs are members of the steering committee.
 
 - The removal of MOLE community members will require a  2 /3 of the majority vote of the member of the steering council,
+- The removal of MOLE community members will require a 2/3 of the majority vote of the member of the steering council,
 
 - Any changes to the MOLE OSE organization, its structure, governance composition will require a vote by the steering committee,
 
