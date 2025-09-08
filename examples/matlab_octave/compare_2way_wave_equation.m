@@ -151,8 +151,10 @@ end
 %% Error analysis
 
 % Regression fit line to error plot, should be close to 2
-p_fd = polyfit(log(1./m_points), log(error_fd), 1)
-p_md = polyfit(log(1./m_points), log(error_md), 1)
+p_fd = polyfit(log(1./m_points), log(error_fd), 1);
+p_md = polyfit(log(1./m_points), log(error_md), 1);
+fprintf("Finite Difference Error Convergence Slope:  %3.4f\n", p_fd(1) );
+fprintf("Mimetic Difference Error Convergence Slope: %3.4f\n", p_md(1) );
 
 % error plots, should get close to slope of 2
 figure(21)
