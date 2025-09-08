@@ -4,7 +4,7 @@
 [![MATLAB File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/124870-mole)
 [![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Build Status](https://github.com/csrc-sdsu/mole/actions/workflows/ci.yml/badge.svg)](https://github.com/csrc-sdsu/mole/actions/workflows/ci.yml)
-[![Documentation](https://readthedocs.org/projects/mole-docs/badge/?version=latest)](https://mole-docs.readthedocs.io/en/latest/)
+[![Documentation](https://readthedocs.org/projects/mole-docs/badge/?version=main)](https://mole-docs.readthedocs.io/en/main/)
 
 ## Description
 
@@ -169,10 +169,57 @@ We welcome contributions to MOLE, including:
 
 Please refer to our [Contribution Guidelines](https://github.com/csrc-sdsu/mole/blob/main/CONTRIBUTING.md) for more details.
 
-## Citations
+## How to Cite
 
 Please cite our work if you use MOLE in your research or software.
 Citations are helpful for the continued development and maintenance of the library.
+
+```bibtex
+@article{Corbino2024, 
+   doi = {10.21105/joss.06288}, 
+   url = {https://doi.org/10.21105/joss.06288}, 
+   year = {2024}, 
+   publisher = {The Open Journal}, 
+   volume = {9}, 
+   number = {99}, 
+   pages = {6288}, 
+   author = {Corbino, Johnny and Dumett, Miguel A. and Castillo, Jose E.}, 
+   title = {MOLE: Mimetic Operators Library Enhanced}, 
+   journal = {Journal of Open Source Software} }
+```
+
+The archival copy of the MOLE User Manual is maintained on [Zenodo](https://zenodo.org/records/16898575). To cite the User Manual please use:
+
+```bibtex
+@misc{MOLE_user_manual,
+   author       = {Barra, Valeria and
+                  Boada, Angel and
+                  Brzenski, Jared and
+                  Castillo, Jose and
+                  Chakalasiya, Prit and
+                  Singh, Surinder Chhabra and
+                  Corbino, Johnny Delgado and
+                  Drummond, Tony and
+                  Dumett, Miguel and
+                  Hellmers, Joe and
+                  Ilaty, Arshia and
+                  Kaviani, Katayoon and
+                  Nzerem, Oluchi and
+                  Pagallo, Giulia and
+                  Paolini, Christopher and
+                  Rosano, Valentina and
+                  Srinivas, Aneesh Murthy and
+                  Srinivasan, Janani Priyadharshini and
+                  Valera, Manuel},
+   title        = {{MOLE User Manual}},
+   month        = aug,
+   year         = 2025,
+   publisher    = {Zenodo},
+   version      = {1.1.0},
+   doi          = {10.5281/zenodo.16898575},
+   url          = {https://doi.org/10.5281/zenodo.16898575},
+}
+```
 
 ## Gallery
 

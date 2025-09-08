@@ -43,7 +43,7 @@ Spatial discretization uses mimetic operators:
 ---
 
 This example is implemented in:
-- [MATLAB/OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab/lock_exchange.m)
+- [MATLAB/OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/lock_exchange.m)
 - [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/lock_exchange.cpp)
 
 ## Results
