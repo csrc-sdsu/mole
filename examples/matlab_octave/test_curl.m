@@ -1,12 +1,22 @@
 % This file does not uses the curl2D(...) function provided by the library.
-% It just tests the 2D mimetic divergence applied to an auxiliary vector 
-% field to obtain the equivalent curl. The proper way to solve problems 
+% It just tests the 2D mimetic divergence applied to an auxiliary vector
+% field to obtain the equivalent curl. The proper way to solve problems
 % that involve the curl operator is by calling the function curl2D(...)
+%
+% This calculates the curl using the divergence like equation 45 in
+% Corbino, Castillo, "High-order mimetic finite-difference operators
+% satisfying the extended Gauss divergence theorem". 2019
+% https://doi.org/10.1016/j.cam.2019.06.042
 
 clc
 close all
+clear
 
 addpath('../../src/matlab_octave')
+
+% This P and Q will produce a scalar curl = 2
+P = @(~, Y) -Y;   % U(x,y) = -y
+Q = @(X, ~)  X;   % V(x,y) =  x
 
 order =   2;
 west  = -10;
@@ -35,7 +45,7 @@ end
 for j = 1 : 2 : 2*n+1
     for i = 2 : 2 : 2*m+1
         F(k) = -P(xaxis(i), yaxis(j)); % Important!
-        k = k + 1;   
+        k = k + 1;
     end
 end
 
@@ -56,12 +66,3 @@ zlabel('z')
 set(gcf, 'color', 'w')
 view(0, 90)
 axis tight
-
-% This P and Q will produce a scalar curl = 2
-function U = P(~, Y)
-  U = -Y;
-end
-
-function V = Q(X, ~)
-  V = X;
-end
