@@ -2,3 +2,6 @@ name = "MOLE"
 
 [dependencies]
 armadillo-code = {git = "git@gitlab.com:rouson/armadillo-code.git", tag = "fpm"}
+
+[install]
+library = true
