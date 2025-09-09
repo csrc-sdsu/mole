@@ -45,7 +45,7 @@ In order to engage and recruit new members, this pillar fosters the organization
 
 ## Organization and Governance Pillar
 
-This pillar results from a well-defined governance model, the pillar fosters and promotes work interactions between the leadership team and all the MOLE OSE stakeholders. For instance, the creation and update the [Governance](OSE_GOVERNANCE.md) and [Code of Conduct](CODE_OF_CONDUCT.md) documents, the prompt resolution of conflicts, the design and implementation of the MOLE OSE strategic plan. Under this pillar, the leadership team ensures that all the pillars and organizational circles are relevant and effective to the MOLE OSE operations.
+This pillar results from a well-defined governance model, the pillar fosters and promotes work interactions between the leadership team and all the MOLE OSE stakeholders. For instance, the creation and update the [Governance](https://mole-docs.readthedocs.io/en/main/intros/ose_governance_wrapper.html) and [Code of Conduct](https://mole-docs.readthedocs.io/en/main/intros/code_of_conduct_wrapper.html) documents, the prompt resolution of conflicts, the design and implementation of the MOLE OSE strategic plan. Under this pillar, the leadership team ensures that all the pillars and organizational circles are relevant and effective to the MOLE OSE operations.
 
 ![MOLE OSE Organization and Governance Pillar](https://mole-docs.readthedocs.io/en/main/doc/assets/img/OrganizationAndGovernancePillar.png)
 **Figure 3.** The MOLE OSE Organization and Governance pillar and the activities that are strategically organized under this pillar.
@@ -95,7 +95,7 @@ All council members possess the required expertise in the software engineering a
 
 The members of this circle oversee some of the activities in the [MOLE Community Engagement](#community-engagement-pillar) and [MOLE Organization and Governance](#organization-and-governance-pillar) pillars pertaining to outreach and education events, promotion of the MOLE library functionality, and onboarding of new members to the MOLE community.  
 
-The circle is chaired by members of the MOLE Leadership team, and it is open to any member of the MOLE community, as long as they agree to comply with the [MOLE OSE Code of Conduct](CODE_OF_CONDUCT.md), and there are no objections. Participants can be removed from this circle if a proposal to do so passes the consensus process as described in the MOLE Governance document.
+The circle is chaired by members of the MOLE Leadership team, and it is open to any member of the MOLE community, as long as they agree to comply with the [MOLE OSE Code of Conduct](https://mole-docs.readthedocs.io/en/main/intros/code_of_conduct_wrapper.html), and there are no objections. Participants can be removed from this circle if a proposal to do so passes the consensus process as described in the MOLE Governance document.
 
 ---
   

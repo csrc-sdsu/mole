@@ -30,7 +30,7 @@ The current members of the MOLE Leadership team are:
 - Dr. Giulia Pagallo,
 - Prof. Chris Paolini,
 
-In addition to the MOLE Leadership Team, the MOLE OSE organization counts with a **MOLE Steering Council** to facilitate the decision-making processes based on community consensus. The council members are formed by the leadership team members, chairs from the MOLE governing circles, MOLE founders, and strategic partners who financially support the MOLE OSE. For more details consult the [MOLE OSE Organization page](OSE_ORGANIZATION.md).
+In addition to the MOLE Leadership Team, the MOLE OSE organization counts with a **MOLE Steering Council** to facilitate the decision-making processes based on community consensus. The council members are formed by the leadership team members, chairs from the MOLE governing circles, MOLE founders, and strategic partners who financially support the MOLE OSE. For more details consult the [MOLE OSE Organization page](https://mole-docs.readthedocs.io/en/main/intros/ose_organization_wrapper.html).
 
 ---
 
@@ -42,7 +42,7 @@ A contributor is anyone who has made contributions to the MOLE Library or the MO
 
 ## MOLE OSE Collaborators
 
-Collaborators are a multidisciplinary group of members from industry and academia with whom the MOLE leadership team collaborates in the development of new computational applications using the MOLE library, or developers from other open-source ecosystems that interoperate with the MOLE library.  Collaborators are also MOLE Contributors, and together with the leadership team work on the sustainability of the MOLE open-source ecosystem.
+Collaborators are a multidisciplinary group of members from industry and academia with whom the MOLE leadership team collaborates in the development of new computational applications using the MOLE library, or developers from other open-source ecosystems that interoperate with the MOLE library.  Collaborators are also MOLE Contributors, and together with the leadership team work on the sustainability of the MOLE open-source ecosystem.  
 
 The current list of collaborators include:
 
