@@ -50,7 +50,7 @@ For full disclosure, the MOLE OSE organization also has these decisions that are
 
 - Decisions that cannot be made by consensus will resolve with a binding decision through a simple majority vote of all council members,
 
-- The onboarding and offboarding of members of the steering council will require a 2/3 of the majority vote of the members of the steering council, 
+- The onboarding and offboarding of members of the steering council will require a 2/3 of the majority vote of the members of the steering council,
 
 - The onboarding and offboarding of members in a governance circle will be made by the active members in a circle.  
 
