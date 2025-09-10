@@ -72,7 +72,7 @@ In order to promote a welcoming, intellectually stimulating and productive work 
 
 ## Removal of Members from the Steering Council or A Governance Circle
 
-When members of the steering council or a governance circle become inactive, or are unabled to participate in discussions and meetings, they will be removed from the steering council or governance committee, requiring 2/3 of majority vote from the members in a governance circle, or the steering committee.
+When members of the steering council or a governance circle become inactive, or are unable to participate in discussions and meetings, they will be removed from the steering council or governance committee, requiring 2/3 of majority vote from the members in a governance circle, or the steering committee.
 Members can also be removed if there are any conflicts of interests or violations of the [MOLE OSE Code of Conduct](https://mole-docs.readthedocs.io/en/main/intros/code_of_conduct_wrapper.html).
 
 ---
