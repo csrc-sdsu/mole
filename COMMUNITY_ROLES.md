@@ -42,13 +42,7 @@ A contributor is anyone who has made contributions to the MOLE Library or the MO
 
 ## MOLE OSE Collaborators
 
-Collaborators are a multidisciplinary group of members from industry and academia with whom the MOLE leadership team collaborates in the development of new computational applications using the MOLE library, or developers from other open-source ecosystems that interoperate with the MOLE library.  Collaborators are also MOLE Contributors, and together with the leadership team work on the sustainability of the MOLE open-source ecosystem.  
-
-The current list of collaborators include:
-
-- [Chombo](https://commons.lbl.gov/spaces/chombo/pages/73468344/Chombo+-+Software+for+Adaptive+Solutions+of+Partial+Differential+Equations): Software for Adaptive Solutions of Partial Differential Equations
-- [Overture](https://www.overtureframework.org/): An Object-Oriented Toolkit for Solving Partial Differential Equations in Complex Geometry
-- Fortran API to the MOLE library, collaboration with Damian Rousson at Lawrence Berkeley National Laboratory.
+Collaborators are a multidisciplinary group of members from industry and academia with whom the MOLE leadership team collaborates in the development of new computational applications using the MOLE library, or developers from other open-source ecosystems that interoperate with the MOLE library.  Collaborators are also MOLE Contributors, and together with the leadership team work on the sustainability of the MOLE open-source ecosystem.
 
 ---
 

@@ -13,7 +13,7 @@
    2) [Community Engagement Governing Circle](#mole-community-engagement-circle)
    3) [Software Engineering Governing Circle](#mole-software-engineering-circle)
    4) [Computational Sciences Governing Circle](#mole-computational-sciences-circle)
-   5) [Mimetic Methods Governing Circle](#mole-mimetic-methods-circle)
+   5) [Mimetic Differences Governing Circle](#mole-mimetic-methods-circle)
 
 ---
 
@@ -34,21 +34,15 @@ The MOLE organization is strategically supported by four working pillars;
 
 ## Community Engagement Pillar
 
-This pillar hosts all activities and actions related to the management and support of a leadership team of experts in the fields of computational sciences, software engineering, and high-performance computing working cohesively with external collaborators, contributors and users of the MOLE library. Further,  the leadership team, collaborators, contributors and users form **_the MOLE community_**.
+This pillar hosts all activities and actions related to the management and support of a leadership team of experts in the fields of computational sciences, software engineering, and high-performance computing working cohesively with external collaborators, contributors and users of the MOLE library. Further, the leadership team, collaborators, contributors and users form **_the MOLE community_**.
 
-In order to engage and recruit new members, this pillar fosters the organization of the Annual MOLE Users meeting, yearly MOLE-centric hackathon called the MOLE Challenge, and in person community engagements like national and international workshops, active participation in conferences, and integration of MOLE into courses taught at SDSU. The production of the quarterly newsletters and targetted communications are managed also under this pillar.
-
-![MOLE OSE Community Engagement Pillar](https://mole-docs.readthedocs.io/en/main/doc/assets/img/CommunityEngagementPillar.png)
-**Figure 2.** The MOLE OSE Community Engagement pillar and activities that are strategically organized under this pillar.
+In order to engage and recruit new members, this pillar fosters the organization of the Annual MOLE Users meeting and in person community engagements like national and international workshops, active participation in conferences, and integration of MOLE into courses taught at SDSU. The production of the quarterly newsletters and targetted communications are managed also under this pillar.
 
 ---
 
 ## Organization and Governance Pillar
 
 This pillar results from a well-defined governance model, the pillar fosters and promotes work interactions between the leadership team and all the MOLE OSE stakeholders. For instance, the creation and update the [Governance](https://mole-docs.readthedocs.io/en/main/intros/ose_governance_wrapper.html) and [Code of Conduct](https://mole-docs.readthedocs.io/en/main/intros/code_of_conduct_wrapper.html) documents, the prompt resolution of conflicts, the design and implementation of the MOLE OSE strategic plan. Under this pillar, the leadership team ensures that all the pillars and organizational circles are relevant and effective to the MOLE OSE operations.
-
-![MOLE OSE Organization and Governance Pillar](https://mole-docs.readthedocs.io/en/main/doc/assets/img/OrganizationAndGovernancePillar.png)
-**Figure 3.** The MOLE OSE Organization and Governance pillar and the activities that are strategically organized under this pillar.
 
 ---
 
@@ -58,9 +52,6 @@ This pillar supports the work of an interdisciplinary, multilocation, and cohesi
 
 It adopts agile and distributed open-source development practices, ensuring regular releases, responsive maintenance, and integration of community contributions. The OSE sustainable infrastructure is built on a well-maintained GitHub repository to support active collaborations between contributors and other sustainable OSEs.
 
-![MOLE OSE Sustainable Infrastructure Pillar](https://mole-docs.readthedocs.io/en/main/doc/assets/img/SustainableInfrastructurePillar.png)
-**Figure 4.** The MOLE OSE Sustainable Infrastructure pillar with the activities that are strategically organized under this pillar.
-
 ---
 
 ## Evaluation and Growth Pillar
@@ -69,9 +60,6 @@ This pillar hosts the implementation and management of a set of well-defined met
 
 We have established proactive policies for software quality assurance, security audits, and mitigation of technical and governance risks within the MOLE OSE Evaluation and Growth pillar, where we have feedback loops to produce measurable performance indicators of the effectiveness of our 4-pillars OSE.
 
-![MOLE OSE Evaluation and Growth](https://mole-docs.readthedocs.io/en/main/doc/assets/img/EvaluationAndGrowthPillar.png)
-**Figure 5.** The MOLE OSE Sustainable Infrastructure pillar with the activities that are strategically organized under this pillar.
-
 ---
 
 ## MOLE OSE Governance Model
@@ -79,7 +67,7 @@ We have established proactive policies for software quality assurance, security 
 The four MOLE OSE pillars have interconnected and synergetic activities that sustain the MOLE OSE Organization which actively relies on input from the MOLE community.  Our governance model has well-defined processes for contributions, library operations and management. Thus, the management of the MOLE organization is led by a steering council, and four governing  circles.
 
 ![MOLE OSE Governance Model](https://mole-docs.readthedocs.io/en/main/doc/assets/img/MOLE_OSE_circles.png)
-**Figure 6.**  The MOLE OSE governance and leadership is organized in four strategic areas reflecting the domains of expertise and competence of the members in  the Leadership team and founders of MOLE library. These domains are; software engineering, computational sciences, mimetic methods, and community engagement.
+**Figure 2.**  The MOLE OSE governance and leadership is organized in four strategic areas reflecting the domains of expertise and competence of the members in  the Leadership team and founders of MOLE library. These domains are; software engineering, computational sciences, mimetic methods, and community engagement.
 
 ---
 
@@ -115,8 +103,8 @@ Membership to this circle is extended to anyone who possesses expertise in compu
 
 ---
 
-### MOLE Mimetic Methods Circle
+### MOLE Mimetic Differences Circle
 
-The members of this circle are responsible for maintaining and advancing the implementation of mimetic methods (MM) and for promoting and recruiting applications that can benefit from the use of  MM, as new users of MM, or members from industry and academia who already use MM but are in need of robust, reliable and scalable MM implementations.  This circle supports the sustainability of key algorithmic and MOLE library functionalities through activities under the [OSE Evaluation and Growth](#evaluation-and-growth-pillar) pillar.
+The members of this circle are responsible for maintaining and advancing the implementation of Mimetic Differences methods (MD) and for promoting and recruiting applications that can benefit from the use of MD as new users of MD, or members from industry and academia who already use MD but are in need of robust, reliable and scalable MD implementations.  This circle supports the sustainability of key algorithmic and MOLE library functionalities through activities under the [OSE Evaluation and Growth](#evaluation-and-growth-pillar) pillar.
 
 Membership to this circle is extended to anyone who possesses expertise in mathematics and scientific computing, in particular in numerical solutions to partial differential equations. Participants can be removed from this circle if a proposal to do so passes the consensus process as described in the MOLE Governance document.
