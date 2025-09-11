@@ -48,17 +48,17 @@ Whenever a vote is called to resolve a conflict, there will be a deadline for re
 
 For full disclosure, the MOLE OSE organization also has these decisions that are not open to a vote by the MOLE community. These decisions are handled within a governance circle or the MOLE steering council:
 
-- Decisions that cannot be made by consensus will resolve with a binding decision through a simple majority vote of all active steering council members,
+- Decisions that cannot be made by consensus will resolve with a binding decision through a simple majority vote of the active steering council members,
 
-- The onboarding and offboarding of members of the steering council will require a two-thirds majority vote of the active steering council members.
+- The onboarding and offboarding of members of the steering council will require a two-thirds majority vote of the active steering council members,
 
-- The onboarding and offboarding of members in a governance circle will be made by the active members in a circle.  
+- The onboarding and offboarding of members in a governance circle will require a simple majority vote of the active members in the circle,  
 
-- The election of chairs and co-chairs of a governance circle are elected by a majority vote of active members of the steering committee. All governance circle chairs and co-chairs are members of the steering committee.
+- The election of chairs and co-chairs of a governance circle are elected by a majority vote of active members of the steering council. All governance circle chairs and co-chairs are members of the steering council,
 
 - The removal of MOLE community members will require a two-thirds majority vote of the active steering council members,
 
-- Any changes to the MOLE OSE organization, its structure, governance composition will require a majority vote of the active steering committee members,
+- Any changes to the MOLE OSE organization, its structure, governance composition will require a two-third majority of the active steering council members,
 
 The outcome of any decision will be announced to the MOLE community. The MOLE community is encouraged to provide feedback and opinions on decisions made by any of the above voting scenarios.
 

@@ -64,10 +64,12 @@ We have established proactive policies for software quality assurance, security 
 
 ## MOLE OSE Governance Model
 
-The four MOLE OSE pillars have interconnected and synergetic activities that sustain the MOLE OSE Organization which actively relies on input from the MOLE community.  Our governance model has well-defined processes for contributions, library operations and management. Thus, the management of the MOLE organization is led by a steering council, and four governing  circles.
+The four MOLE OSE pillars have interconnected and synergetic activities that sustain the MOLE OSE Organization which actively relies on input from the MOLE community. Our governance model has well-defined processes for contributions, library operations and management. Thus, the management of the MOLE organization is led by a steering council, and four governing circles.
 
 ![MOLE OSE Governance Model](https://mole-docs.readthedocs.io/en/main/doc/assets/img/MOLE_OSE_circles.png)
-**Figure 2.**  The MOLE OSE governance and leadership is organized in four strategic areas reflecting the domains of expertise and competence of the members in  the Leadership team and founders of MOLE library. These domains are; software engineering, computational sciences, mimetic methods, and community engagement.
+**Figure 2.**  The MOLE OSE governance and leadership is organized in four strategic areas reflecting the domains of expertise and competence of the members in the Leadership team and founders of MOLE library. These domains are; software engineering, computational sciences, mimetic differences, and community engagement.
+
+See [the MOLE OSE Governance](https://mole-docs.readthedocs.io/en/main/intros/ose_governance_wrapper.html) document for more information on how the steering council or any of the governance circles onboard or offboard their members.
 
 ---
 
@@ -75,7 +77,7 @@ The four MOLE OSE pillars have interconnected and synergetic activities that sus
 
 The members of council are responsible for facilitating the establishment of community consensus, for stewarding project resources, and in some situations they may need to make project decisions whenever the normal decision-making process fails at reaching consensus by the community. The council members are formed by the leadership team members, chairs from the MOLE governing circles, MOLE founders, and strategic partners who financially support the MOLE OSE.  
 
-All council members possess the required expertise in the software engineering and numerical areas relevant to the purpose and scope of the MOLE organization.  Members of the Steering council are voted in by the members of the Steering council.
+All council members possess the required expertise in the software engineering and numerical areas relevant to the purpose and scope of the MOLE organization.
   
 ---
 
@@ -83,7 +85,7 @@ All council members possess the required expertise in the software engineering a
 
 The members of this circle oversee some of the activities in the [MOLE Community Engagement](#community-engagement-pillar) and [MOLE Organization and Governance](#organization-and-governance-pillar) pillars pertaining to outreach and education events, promotion of the MOLE library functionality, and onboarding of new members to the MOLE community.  
 
-The circle is chaired by members of the MOLE Leadership team, and it is open to any member of the MOLE community, as long as they agree to comply with the [MOLE OSE Code of Conduct](https://mole-docs.readthedocs.io/en/main/intros/code_of_conduct_wrapper.html), and there are no objections. Participants can be removed from this circle if a proposal to do so passes the consensus process as described in the MOLE Governance document.
+The circle is chaired by members of the MOLE Leadership team, and it is open to any member of the MOLE community, as long as they agree to comply with the [MOLE OSE Code of Conduct](https://mole-docs.readthedocs.io/en/main/intros/code_of_conduct_wrapper.html), and there are no objections.
 
 ---
   
@@ -91,15 +93,15 @@ The circle is chaired by members of the MOLE Leadership team, and it is open to 
 
 The members of this circle oversee most of the activities in the [MOLE OSE Sustainable Infrastructure](#sustainable-infrastructure-pillar) pillar and some in the [MOLE OSE Organization and Governance](#organization-and-governance-pillar) pillar. This includes: security of computer programs, library design and implementations, MOLE software ecosystem, and ecosystems of MOLE-required software, build systems, documentation systems, test harness, design and implementation of the MOLE APIs in the targeted languages, and compliance up-to-date software engineering standards, MOLE library licensing and periodic MOLE library releases.
 
-Membership of this circle will require demonstrated software engineering competency, in particular within the scope of the MOLE Ecosystem. Participants can be removed from this circle if a proposal to do so passes the consensus process as described in the MOLE Governance document.
+Membership of this circle will require demonstrated software engineering competency, in particular within the scope of the MOLE Ecosystem.
 
 ---
 
 ### MOLE Computational Sciences Circle
 
-The members of this circle safeguard the relevancy of the MOLE library by fostering strategy collaborations to solve PDE’s using mimetic methods in emerging computational applications and challenges in sciences and engineering. Members of this circle support activities in the [MOLE Community Engagement](#community-engagement-pillar) and [MOLE OSE Evaluation and Growth](#evaluation-and-growth-pillar) pillars. In particular, they produce MiniApps to showcase and demonstrate the applicability of the MOLE library, and also make decisions on library extensions to support needs from the community.
+The members of this circle safeguard the relevancy of the MOLE library by fostering strategic collaborations to solve PDE’s using mimetic differences in emerging computational applications and challenges in sciences and engineering. Members of this circle support activities in the [MOLE Community Engagement](#community-engagement-pillar) and [MOLE OSE Evaluation and Growth](#evaluation-and-growth-pillar) pillars. In particular, they produce MiniApps to showcase and demonstrate the applicability of the MOLE library, and also make decisions on library extensions to support needs from the community.
 
-Membership to this circle is extended to anyone who possesses expertise in computational areas where the MOLE library can be used. Participants can be removed from this circle if a proposal to do so passes the consensus process as described in the MOLE Governance document.
+Membership to this circle is extended to anyone who possesses expertise in computational areas where the MOLE library can be used.
 
 ---
 
@@ -107,4 +109,6 @@ Membership to this circle is extended to anyone who possesses expertise in compu
 
 The members of this circle are responsible for maintaining and advancing the implementation of Mimetic Differences methods (MD) and for promoting and recruiting applications that can benefit from the use of MD as new users of MD, or members from industry and academia who already use MD but are in need of robust, reliable and scalable MD implementations.  This circle supports the sustainability of key algorithmic and MOLE library functionalities through activities under the [OSE Evaluation and Growth](#evaluation-and-growth-pillar) pillar.
 
-Membership to this circle is extended to anyone who possesses expertise in mathematics and scientific computing, in particular in numerical solutions to partial differential equations. Participants can be removed from this circle if a proposal to do so passes the consensus process as described in the MOLE Governance document.
+Membership to this circle is extended to anyone who possesses expertise in mathematics and scientific computing, in particular in numerical solutions to partial differential equations.
+
+**_Participants can be removed from any of the governance circles whenever a proposal to do so passes the consensus process as described in the MOLE OSE Governance document._**
