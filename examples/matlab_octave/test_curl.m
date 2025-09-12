@@ -2,6 +2,11 @@
 % It just tests the 2D mimetic divergence applied to an auxiliary vector 
 % field to obtain the equivalent curl. The proper way to solve problems 
 % that involve the curl operator is by calling the function curl2D(...)
+%
+% This calculates the curl using the divergence like equation 45 in
+% Corbino, Castillo, "High-order mimetic finite-difference operators
+% satisfying the extended Gauss divergence theorem". 2019
+% https://doi.org/10.1016/j.cam.2019.06.042
 
 clc
 close all
