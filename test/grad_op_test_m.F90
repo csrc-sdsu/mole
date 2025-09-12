@@ -32,7 +32,7 @@ contains
     type(grad_op_test_t) grad_op_test
     type(test_result_t), allocatable :: test_results(:)
     test_results = grad_op_test%run( & 
-      [test_description_t('can be constructed', check_construction) &
+      [test_description_t('constructing a trivial operator object', check_construction) &
     ])
   end function
 
@@ -45,7 +45,7 @@ contains
       check_construction_ptr => check_construction
 
     test_results = grad_op_test%run( &
-      [test_description_t('can be constructed', check_construction_ptr) &
+      [test_description_t('constructing a trivial operator object', check_construction_ptr) &
     ])
   end function
 
