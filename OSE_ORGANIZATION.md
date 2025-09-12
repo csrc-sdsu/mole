@@ -27,7 +27,7 @@ First, it is important to state the purpose and scope of the MOLE OSE organizati
 
 The MOLE organization is strategically supported by four working pillars;
 
-![MOLE OSE Pillar](https://mole-docs.readthedocs.io/en/main/doc/assets/img/MOLE_pillars.png)
+![MOLE OSE Pillar](doc/assets/img/MOLE_pillars.png)
 **Figure 1.** The four pillars of the MOLE Ecosystem Organization.  
 
 ---
@@ -66,7 +66,7 @@ We have established proactive policies for software quality assurance, security 
 
 The four MOLE OSE pillars have interconnected and synergetic activities that sustain the MOLE OSE Organization which actively relies on input from the MOLE community. Our governance model has well-defined processes for contributions, library operations and management. Thus, the management of the MOLE organization is led by a steering council, and four governing circles.
 
-![MOLE OSE Governance Model](https://mole-docs.readthedocs.io/en/main/doc/assets/img/MOLE_OSE_circles.png)
+![MOLE OSE Governance Model](doc/assets/img/MOLE_OSE_circles.png)
 **Figure 2.**  The MOLE OSE governance and leadership is organized in four strategic areas reflecting the domains of expertise and competence of the members in the Leadership team and founders of MOLE library. These domains are; software engineering, computational sciences, mimetic differences, and community engagement.
 
 See [the MOLE OSE Governance](https://mole-docs.readthedocs.io/en/main/intros/ose_governance_wrapper.html) document for more information on how the steering council or any of the governance circles onboard or offboard their members.
