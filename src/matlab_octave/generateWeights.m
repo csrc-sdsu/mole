@@ -35,8 +35,8 @@ for i = 1:3
         P = weightsP(k, m, dx);
         out = string(k) + ',' + string(m) + ',' + strjoin(compose("%."+string(decimal_positions)+"f",P),",") + '\n';
         fprintf(fid, out);
-    end;
-end;
+    end
+end
 fclose(fid);
 
 % Generate Q weights
@@ -49,6 +49,6 @@ for i = 1:3
         Q = weightsQ(k, m, dx);
         out = string(k) + ',' + string(m) + ',' + strjoin(compose("%."+string(decimal_positions)+"f",Q),",") + '\n';
         fprintf(fid, out);
-    end;
-end;
+    end
+end
 fclose(fid);
