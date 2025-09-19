@@ -114,6 +114,8 @@ public:
   * @return Estimated area under the curve
   */
   static double trapz(const vec &x, const vec &y);
+
+  static void initQ(const int k, const int m, vec &q);
 };
 
 #endif // UTILS_H

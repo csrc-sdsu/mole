@@ -2,7 +2,8 @@
 #include <gtest/gtest.h>
 
 void run_nullity_test(int k, Real tol) {
-    int m = 2 * k + 1;
+    //int m = 2 * k + 1;
+    int m = 2 * k + 2;
     Real dx = 1;
 
     Divergence D(k, m, dx);

@@ -17,6 +17,10 @@
 
 #include "utils.h"
 #include <cassert>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <sstream>
 
 #ifdef EIGEN
 #include <eigen3/Eigen/SparseLU>
@@ -244,3 +248,29 @@ double Utils::trapz(const vec &x, const vec &y) {
   return 0.5 * sum;
 }
 
+void Utils::initQ(const int k, const int m, vec &q)
+{
+  assert(m >= 2*k+1);
+
+  std::ifstream file("/home/jlhellmers/github/joehellmersNOAA/mole/src/dat/qweights.csv");
+  if (!file.is_open()) {
+      return;
+  }
+  std::string line;
+  while (std::getline(file, line)) {
+      std::stringstream ss(line);
+      std::string token;
+      std::vector<std::string> result_vector;
+
+      while (std::getline(ss, token, ',')) {
+        result_vector.push_back(token);
+      }
+      if (std::stoi(result_vector[0]) == k && std::stoi(result_vector[1]) == m) {
+        q.set_size(m);
+        for (int i = 2;i < m;++i) {
+          q.at(i-2) = std::stod(result_vector[i]);
+        }
+      }
+  }
+  file.close();
+}

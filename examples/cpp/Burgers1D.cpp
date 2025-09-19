@@ -24,8 +24,9 @@
 int main() {
     constexpr double west = -15.0;
     constexpr double east = 15.0;
-    constexpr int k = 2;
-    constexpr int m = 300;
+    constexpr int k = 4;
+    //constexpr int m = 300;
+    constexpr int m = 30;
     constexpr double t = 10.0;
 
     const double dx = (east - west) / m;
