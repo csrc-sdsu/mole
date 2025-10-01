@@ -16,7 +16,7 @@ clc
 close all
 
 % Used to specify the number of grid points to calculate weights for
-m_cnt = 300;
+m_cnt = 500;
 decimal_positions = 9;
 dx = 1.0;
 
