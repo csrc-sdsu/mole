@@ -116,6 +116,8 @@ public:
   static double trapz(const vec &x, const vec &y);
 
   static void initQ(const int k, const int m, vec &q);
+  static void initP(const int k, const int m, vec &p);
+  static void initWeightsVec(const int k, const int m, vec &weightsVec, const char* weightsFileName);
 };
 
 #endif // UTILS_H

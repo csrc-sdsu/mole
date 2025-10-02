@@ -53,6 +53,9 @@ vec Utils::spsolve_eigen(const sp_mat &A, const vec &b) {
 }
 #endif
 
+const char* weightsPathEnvVar = "MOLE_WEIGHTS_PATH"; 
+const char* weightsDefaultPath = "../../../src/dat"; 
+
 // Basic implementation of Kronecker product
 /*
 sp_mat Utils::spkron(const sp_mat &A, const sp_mat &B)
@@ -248,14 +251,21 @@ double Utils::trapz(const vec &x, const vec &y) {
   return 0.5 * sum;
 }
 
-void Utils::initQ(const int k, const int m, vec &q)
+void Utils::initWeightsVec(const int k, const int m, vec &weightsVec, const char* weightsFileName)
 {
+  bool lineFnd = false;
+
   assert(m >= 2*k+1);
 
-  std::ifstream file("/home/jlhellmers/github/joehellmersNOAA/mole/src/dat/qweights.csv");
-  if (!file.is_open()) {
-      return;
+  //TODO: We need a rational way to store the location of the weights files
+  //      Using an environment variable is one way to do it
+  const char* weightsPath = std::getenv(weightsPathEnvVar);
+  if (weightsPath == NULL) {
+    weightsPath = weightsDefaultPath;
   }
+  std::string weightsFilePath = std::string(weightsPath) + "/" + weightsFileName;
+  std::ifstream file(weightsFilePath);
+  
   std::string line;
   while (std::getline(file, line)) {
       std::stringstream ss(line);
@@ -266,11 +276,21 @@ void Utils::initQ(const int k, const int m, vec &q)
         result_vector.push_back(token);
       }
       if (std::stoi(result_vector[0]) == k && std::stoi(result_vector[1]) == m) {
-        q.set_size(m);
+        lineFnd = true;
+        weightsVec.set_size(m);
         for (int i = 2;i < m;++i) {
-          q.at(i-2) = std::stod(result_vector[i]);
+          weightsVec.at(i-2) = std::stod(result_vector[i]);
         }
       }
   }
   file.close();
+  assert(lineFnd);
+}
+
+void Utils::initQ(const int k, const int m, vec &q) {
+  initWeightsVec(k, m, q, "qweights.csv");
+}
+
+void Utils::initP(const int k, const int m, vec &p) {
+  initWeightsVec(k, m, p, "pweights.csv");
 }

@@ -28,6 +28,8 @@ Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
       at(i, i) = 1.0;
     }
     // Weights
+    // TODO: Do we really need to retain the old Q weights initialization?
+    // Maybe we should just always get from the intialization routine? 
     if (m == 2*k+1) {
       Q = { 1.0, 1.0, 1.0, 1.0, 1.0 };
     }
