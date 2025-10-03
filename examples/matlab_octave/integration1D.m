@@ -2,7 +2,7 @@
 
 clc; close all;
 
-addpath('../../src/matlab_octave')
+addpath('../../src/matlab_octave');
 
 % Domain limits
 west = -5;
