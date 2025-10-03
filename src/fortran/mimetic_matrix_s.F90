@@ -1,7 +1,7 @@
 #include "mole-language-support.F90"
 #include "julienne-assert-macros.h"
 
-submodule(mimetic_matrix_m) mimetic_matrix_s
+submodule(face_values_m) mimetic_matrix_s
   use julienne_assert_m, only : call_julienne_assert_
   implicit none
 
@@ -15,7 +15,7 @@ contains
 
 #if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT
 
-  module procedure mimetic_matrix_x_vector
+  module procedure matvec
 
     double precision, allocatable :: product_inner(:)
 
@@ -28,7 +28,7 @@ contains
           product_inner(row) = dot_product(self%inner_, vector%f_(upper_rows + row : upper_rows + inner_bandwidth))
         end do
 
-        product_ = [ &
+        gradient%g_ = [ &
            matmul(self%upper_, vector%f_(1 : upper_rows)) &
           ,product_inner &
           ,matmul(self%lower_, vector%f_(upper_rows + inner_rows + 1 : )) &
@@ -55,7 +55,7 @@ contains
           end do
         end block
 
-        product_ = [ &
+        gradient%g_ = [ &
            matmul(self%upper_, vector%f_(1 : upper_rows)) &
           ,product_inner &
           ,matmul(self%lower_, vector%f_(upper_rows + inner_rows + 1 : )) &
