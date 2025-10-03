@@ -7,7 +7,7 @@
 module gradient_operator_test_m
   use julienne_m, only : &
      test_t, test_description_t, test_diagnosis_t, test_result_t, operator(.all.), operator(.approximates.), operator(.within.)
-  use mole_m, only : face_values_t
+  use mole_m, only : cell_centers_extended_t, gradient_t
 #if ! HAVE_PROCEDURE_ACTUAL_FOR_POINTER_DUMMY
   use julienne_m, only : diagnosis_function_i
 #endif
@@ -52,21 +52,12 @@ contains
 
   function check_gradient_of_line() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
-    double precision, parameter :: dx = 1D0, df_dx_exact = 1D0
-    double precision, parameter :: x(*) = [0D0,.5D0, 1.5D0, 2.5D0, 3.5D0, 4D0]*dx
-    double precision, parameter :: tolerance = 1D-15
-
-    associate(f => face_values_t(linear(x), k=2, dx=dx))
-      associate(grad_f => .grad. f)
-        test_diagnosis = .all. (grad_f%values() .approximates. df_dx_exact .within. tolerance)
-      end associate
-    end associate
-
-  contains
-    double precision elemental function linear(x)
-      double precision, intent(in) :: x
-      linear = x
-    end function
+    double precision, parameter :: dx = 1D0, tolerance = 1D-15
+    double precision, parameter :: x(*) = [0D0,.5D0, 1.5D0, 2.5D0, 3.5D0, 4D0]*dx !! grid from Corbino & Castillo (2020) Fig. 6
+    double precision, parameter :: f(*) = x, df_dx_exact = 1D0 !! f(x) = x, df_dx = 1
+    type(gradient_t) grad_f
+    grad_f = .grad. cell_centers_extended_t(f, k=2, dx=dx) ! gfortran blocks use of association
+    test_diagnosis = .all. (grad_f%values() .approximates. df_dx_exact .within. tolerance)
   end function
 
 end module

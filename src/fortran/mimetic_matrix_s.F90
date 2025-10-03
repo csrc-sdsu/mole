@@ -48,23 +48,28 @@ contains
 
     double precision, allocatable :: product_inner(:)
 
-    associate(upper_rows  => size(self%upper_,1), inner_bandwidth => size(self%inner_))
+    associate(upper_rows  => size(self%upper_,1))
       associate(inner_rows => (size(vector%f_) - 1) - 2*upper_rows) ! inner_rows = matrix rows - (upper rows + lower rows)
 
         allocate(product_inner(inner_rows))
 
-        block
+        associate(inner_bandwidth => size(self%inner_))
+          block
           integer row
-          do concurrent(row = 1 : inner_rows) default(none) shared(product_inner, self, vector, upper_rows, inner_bandwidth)
-            product_inner(row) = dot_product(self%inner_, vector%f_(upper_rows + row : upper_rows + inner_bandwidth))
-          end do
-        end block
+            do concurrent(row = 1 : inner_rows) default(none) &
+              shared(product_inner, self, vector, upper_rows, inner_bandwidth)
+              product_inner(row) = dot_product(self%inner_, vector%f_(upper_rows + row : upper_rows + row + inner_bandwidth - 1))
+            end do
+          end block
+        end associate
 
-        gradient%g_ = [ &
-           matmul(self%upper_, vector%f_(1 : upper_rows)) &
-          ,product_inner &
-          ,matmul(self%lower_, vector%f_(upper_rows + inner_rows + 1 : )) &
-        ]
+        associate(upper_bandwidth => size(self%upper_,2), lower_bandwidth => size(self%lower_,2))
+          gradient%g_ = [ &
+             matmul(self%upper_, vector%f_(1 : upper_bandwidth)) &
+            ,product_inner &
+            ,matmul(self%lower_, vector%f_(size(vector%f_) - lower_bandwidth + 1 : )) &
+          ]
+        end associate
       end associate
     end associate
   end procedure

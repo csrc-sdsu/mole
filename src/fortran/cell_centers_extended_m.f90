@@ -1,5 +1,6 @@
 module cell_centers_extended_m
-  !! Define an abstraction for face-centered values with a corresonding mimetic gradient operator
+  !! Define an abstraction for the collection of points used to compute gradidents:
+  !! cell centers plus oundaries.
   implicit none
 
   private
@@ -25,7 +26,7 @@ module cell_centers_extended_m
   end type
 
   type gradient_t
-    !! Encapsulate gradient values produced only by .grad. (private data, no constructors)
+    !! Encapsulate gradient values produced only by .grad. (no other constructors)
     private
     double precision, allocatable :: g_(:)
   contains
@@ -43,7 +44,7 @@ module cell_centers_extended_m
   end interface
 
   type cell_centers_extended_t
-    !! Face-centered values 
+    !! Encapsulate information at cell centers and boundaries
     private
     double precision, allocatable :: f_(:)
     type(gradient_operator_t) gradient_operator_
@@ -55,7 +56,7 @@ module cell_centers_extended_m
   interface cell_centers_extended_t
 
     pure module function construct(f, k, dx) result(cell_centers_extended)
-      !! Result is a collection of face-centered values with a mimetic gradient operator
+      !! Result is a collection of cell-centered-extended values with a mimetic gradient operator
       implicit none
       double precision, intent(in) :: f(:) !! face-centered values
       double precision, intent(in) :: dx !! face spacing (cell width)
