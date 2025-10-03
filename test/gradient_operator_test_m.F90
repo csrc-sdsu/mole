@@ -53,8 +53,10 @@ contains
 
   function check_construction() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
-    integer i
-    associate(face_values => face_values_t(f=[(dble(i), i = 1, 11)], k=2, dx=1D0))
+    double precision, parameter :: dx=1D0
+    associate(face_values => face_values_t(f=[0D0,.5D0, 1.5D0, 2.5D0, 3.5D0, 4D0]*dx, k=2, dx=dx))
+      associate(gradient => .grad. face_values)
+      end associate
     end associate
     test_diagnosis = test_diagnosis_t(test_passed=.true., diagnostics_string="failure is not an option")
   end function

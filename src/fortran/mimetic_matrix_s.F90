@@ -39,7 +39,7 @@ contains
 
 #else
 
-  module procedure mimetic_matrix_x_vector
+  module procedure matvec
 
     double precision, allocatable :: product_inner(:)
 

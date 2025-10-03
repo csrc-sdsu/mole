@@ -31,7 +31,7 @@ contains
     order_of_accuracy: &
     select case(k)
     case(2)
-      rows = reshape([-8D0/3D0, 3D0, -1D0/3D0] , shape=[3,1]) / dx        
+      rows = reshape([-8D0/3D0, 3D0, -1D0/3D0] , shape=[1,3]) / dx
     case(4)
       rows = transpose(reshape([ & 
          [-352D0/105D0,  35D0/ 8D0, -35D0/24D0, -21D0/40D0, -5D0/ 56D0] &
