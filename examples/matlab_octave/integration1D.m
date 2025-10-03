@@ -1,4 +1,10 @@
-% Program that integrates numerically using mimetic quadratures
+% This program performs numerical integration using mimetic quadratures.
+% In this problem, we only use the weights from matrix Q, but for context:
+% Q and P are positive definite diagonal weight matrices.
+% Their dimensions must allow the following operations:
+%   Q*D,   P*G,   and   G'*P
+% And the mimetic boundary operator is obtained by:
+%   B = Q*D + G'*P
 
 clc; close all;
 
