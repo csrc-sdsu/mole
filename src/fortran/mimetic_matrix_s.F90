@@ -25,7 +25,7 @@ contains
         allocate(product_inner(inner_rows))
 
         do concurrent(integer :: row = 1 : inner_rows) default(none) shared(product_inner, self, vector, upper_rows, inner_bandwidth)
-          product_inner(row) = dot_product(self%inner_, vector%f_(upper_rows + row : upper_rows + inner_bandwidth))
+          product_inner(row) = dot_product(self%inner_, vector%f_(upper_rows + row : upper_rows + row + inner_bandwidth - 1))
         end do
 
         gradient%g_ = [ &
