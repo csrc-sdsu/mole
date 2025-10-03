@@ -1,4 +1,4 @@
-submodule(face_values_m) gradient_s
+submodule(cell_centers_extended_m) gradient_s
   implicit none
 
 contains

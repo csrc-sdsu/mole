@@ -1,9 +1,9 @@
-module face_values_m
+module cell_centers_extended_m
   !! Define an abstraction for face-centered values with a corresonding mimetic gradient operator
   implicit none
 
   private
-  public :: face_values_t
+  public :: cell_centers_extended_t
   public :: gradient_t
   public :: gradient_operator_t
 
@@ -42,7 +42,7 @@ module face_values_m
 
   end interface
 
-  type face_values_t
+  type cell_centers_extended_t
     !! Face-centered values 
     private
     double precision, allocatable :: f_(:)
@@ -52,15 +52,15 @@ module face_values_m
     procedure, non_overridable, private :: grad
   end type
 
-  interface face_values_t
+  interface cell_centers_extended_t
 
-    pure module function construct(f, k, dx) result(face_values)
+    pure module function construct(f, k, dx) result(cell_centers_extended)
       !! Result is a collection of face-centered values with a mimetic gradient operator
       implicit none
       double precision, intent(in) :: f(:) !! face-centered values
       double precision, intent(in) :: dx !! face spacing (cell width)
       integer, intent(in) :: k !! order of accuracy
-      type(face_values_t) face_values
+      type(cell_centers_extended_t) cell_centers_extended
     end function
 
   end interface
@@ -70,7 +70,7 @@ module face_values_m
     pure module function grad(self) result(grad_f)
       !! Result is mimetic gradient of f
       implicit none
-      class(face_values_t), intent(in) :: self
+      class(cell_centers_extended_t), intent(in) :: self
       type(gradient_t) grad_f !! discrete gradient approximation
     end function
 
@@ -105,10 +105,10 @@ module face_values_m
       !! Apply a matrix operator to a vector
       implicit none
       class(mimetic_matrix_t), intent(in) :: self
-      type(face_values_t), intent(in) :: vector
+      type(cell_centers_extended_t), intent(in) :: vector
       type(gradient_t) gradient
     end function
 
   end interface
 
-end module face_values_m
+end module cell_centers_extended_m

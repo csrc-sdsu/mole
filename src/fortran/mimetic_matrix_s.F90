@@ -1,7 +1,7 @@
 #include "mole-language-support.F90"
 #include "julienne-assert-macros.h"
 
-submodule(face_values_m) mimetic_matrix_s
+submodule(cell_centers_extended_m) mimetic_matrix_s
   use julienne_m, only : call_julienne_assert_
   implicit none
 
