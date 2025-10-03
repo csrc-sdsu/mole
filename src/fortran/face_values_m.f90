@@ -1,5 +1,5 @@
 module face_values_m
-  !! Define an abstraction for face-center values with a corresonding mimetic gradient operator
+  !! Define an abstraction for face-centered values with a corresonding mimetic gradient operator
   implicit none
 
   private
