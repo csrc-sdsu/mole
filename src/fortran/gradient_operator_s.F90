@@ -75,7 +75,7 @@ contains
       allocate(rows , mold=A)
       reverse_and_flip_sign: &
       do concurrent(integer :: row = 1:size(rows,1)) default(none) shared(rows, A) 
-        rows(row,:) = -A(row,size(A,2):1)
+        rows(row,:) = -A(row,size(A,2):1:-1)
       end do reverse_and_flip_sign
     end associate
   end function
