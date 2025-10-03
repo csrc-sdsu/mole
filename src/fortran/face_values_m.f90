@@ -25,9 +25,22 @@ module face_values_m
   end type
 
   type gradient_t
+    !! Encapsulate gradient values produced only by .grad. (private data, no constructors)
     private
     double precision, allocatable :: g_(:)
+  contains
+    procedure values
   end type
+
+  interface 
+
+     pure module function values(self) result(gradients)
+       implicit none
+       class(gradient_t), intent(in) :: self
+       double precision, allocatable :: gradients(:)
+     end function
+
+  end interface
 
   type face_values_t
     !! Face-centered values 

@@ -6,8 +6,8 @@
 
 module gradient_operator_test_m
   use julienne_m, only : &
-     test_t, test_description_t, test_diagnosis_t, test_result_t
-  use face_values_m, only : face_values_t
+     test_t, test_description_t, test_diagnosis_t, test_result_t, operator(.all.), operator(.approximates.), operator(.within.)
+  use mole_m, only : face_values_t
 #if ! HAVE_PROCEDURE_ACTUAL_FOR_POINTER_DUMMY
   use julienne_m, only : diagnosis_function_i
 #endif
@@ -23,7 +23,7 @@ contains
 
   pure function subject() result(test_subject)
     character(len=:), allocatable :: test_subject
-    test_subject = 'A mimetic gradient operator'
+    test_subject = 'A 1D mimetic gradient operator'
   end function
 
 #if HAVE_PROCEDURE_ACTUAL_FOR_POINTER_DUMMY
@@ -32,7 +32,7 @@ contains
     type(gradient_operator_test_t) gradient_operator_test
     type(test_result_t), allocatable :: test_results(:)
     test_results = gradient_operator_test%run([ & 
-       test_description_t('constructing a trivial operator object', check_construction) &
+       test_description_t('computing the gradient of a linear function', check_gradient_of_line) &
     ])
   end function
 
@@ -42,23 +42,31 @@ contains
     type(gradient_operator_test_t) gradient_operator_test
     type(test_result_t), allocatable :: test_results(:)
     procedure(diagnosis_function_i), pointer :: &
-      check_construction_ptr => check_construction
-
+      check_gradient_of_line_ptr => check_gradient_of_line
     test_results = gradient_operator_test%run([ &
-       test_description_t('constructing a trivial operator object', check_construction_ptr) &
+       test_description_t('computing the gradient of a linear function', check_gradient_of_line_ptr) &
     ])
   end function
 
 #endif
 
-  function check_construction() result(test_diagnosis)
+  function check_gradient_of_line() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
-    double precision, parameter :: dx=1D0
-    associate(face_values => face_values_t(f=[0D0,.5D0, 1.5D0, 2.5D0, 3.5D0, 4D0]*dx, k=2, dx=dx))
-      associate(gradient => .grad. face_values)
+    double precision, parameter :: dx = 1D0, df_dx_exact = 1D0
+    double precision, parameter :: x(*) = [0D0,.5D0, 1.5D0, 2.5D0, 3.5D0, 4D0]*dx
+    double precision, parameter :: tolerance = 1D-15
+
+    associate(f => face_values_t(linear(x), k=2, dx=dx))
+      associate(grad_f => .grad. f)
+        test_diagnosis = .all. (grad_f%values() .approximates. df_dx_exact .within. tolerance)
       end associate
     end associate
-    test_diagnosis = test_diagnosis_t(test_passed=.true., diagnostics_string="failure is not an option")
+
+  contains
+    double precision elemental function linear(x)
+      double precision, intent(in) :: x
+      linear = x
+    end function
   end function
 
 end module
