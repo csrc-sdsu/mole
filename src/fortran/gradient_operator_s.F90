@@ -1,7 +1,7 @@
 #include "julienne-assert-macros.h"
 #include "mole-language-support.F90"
 
-submodule(face_values_m) gradient_operator_s
+submodule(cell_centers_extended_m) gradient_operator_s
   use julienne_m, only : call_julienne_assert_, string_t
 #if ASSERTIONS
   use julienne_m, only : operator(.isAtLeast.)
@@ -66,6 +66,7 @@ contains
 
 #if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT
 
+
   pure function corbino_castillo_Ap(k, dx) result(rows)
     integer, intent(in) :: k
     double precision, intent(in) :: dx
@@ -79,23 +80,20 @@ contains
       end do reverse_and_flip_sign
     end associate
   end function
-
 #else
 
   pure function corbino_castillo_Ap(k, dx) result(rows)
     integer, intent(in) :: k
     double precision, intent(in) :: dx
     double precision, allocatable :: rows(:,:)
+    integer row
 
     associate(A => corbino_castillo_A(k, dx))
       allocate(rows , mold=A)
-      block
-        integer row
-        reverse_and_flip_sign: &
-        do concurrent(row = 1:size(rows,1)) default(none) shared(rows, A) 
-          rows(row,:) = -A(row,size(A,2):1)
-        end do reverse_and_flip_sign
-      end block
+      reverse_and_flip_sign: &
+      do concurrent(row = 1:size(rows,1)) default(none) shared(rows, A) 
+        rows(row,:) = -A(row,size(A,2):1:-1)
+      end do reverse_and_flip_sign
     end associate
   end function
 
