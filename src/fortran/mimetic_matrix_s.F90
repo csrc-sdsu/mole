@@ -2,7 +2,7 @@
 #include "julienne-assert-macros.h"
 
 submodule(face_values_m) mimetic_matrix_s
-  use julienne_assert_m, only : call_julienne_assert_
+  use julienne_m, only : call_julienne_assert_
   implicit none
 
 contains
@@ -31,11 +31,11 @@ contains
           end do
         end associate
 
-        associate(upper_bandwidth => size(self%upper_,1))
+        associate(upper_bandwidth => size(self%upper_,2), lower_bandwidth => size(self%lower_,2))
           gradient%g_ = [ &
              matmul(self%upper_, vector%f_(1 : upper_bandwidth)) &
             ,product_inner &
-            ,matmul(self%lower_, vector%f_(upper_rows + inner_rows + 1 : )) &
+            ,matmul(self%lower_, vector%f_(size(vector%f_) - lower_bandwidth + 1 : )) &
           ]
         end associate
       end associate
