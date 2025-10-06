@@ -34,6 +34,13 @@ function [ U2_md, error_md, walltime_md, flops_md ] = mimetic_diff_two_way_wave_
 % k parameter.
 %
 % [ Compare with finite_diff_two_way_wave_eq.m ]
+%
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
+%
 
 %% Problem definition
 k    = 2;        % Mimetic Order of Accuracy, can change to 4,6,8
