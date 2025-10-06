@@ -27,8 +27,6 @@ Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
       at(i, i - 1) = -1.0;
       at(i, i) = 1.0;
     }
-    // Weights
-    Q = { 1.0, 1.0, 1.0, 1.0, 1.0 };
     break;
   case 4:
     // A
