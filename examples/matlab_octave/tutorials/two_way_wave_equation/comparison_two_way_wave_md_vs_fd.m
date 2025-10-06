@@ -42,7 +42,7 @@
 %
 %  EXPLANATION:
 %    We set the time step to be constant (dt=0.001) and vary the grid spacing to
-%    analyze the error of the spacial numerical scheme. The smiulation runs such
+%    analyze the error of the spacial numerical scheme. The simulation runs such
 %    that the wave traverses 1 unit. The domain is set to be 4 units wide.
 %    This removes any boundary, so we can compare just the methods, without
 %    having to do anything for the boundary. A straightforward comparison of
@@ -60,7 +60,7 @@
 %
 % Where the mimetic difference uses a staggered grid, with a half step at each
 % boundary.
-% A                                                                 B
+% A                                                         B
 %  <--dx/2--> <-----dx----->       <-----dx-----> <--dx/2-->    -- space
 % |--cell 1--|----cell 2----| ... |----cell N-1--|--cell N--|   -- cells
 % 0          1              2 ... N             N+1        N+2  -- index
@@ -77,10 +77,16 @@
 %     x0   x1         x2         x3         x4         x5    x6
 %
 %
-%   The FTCS has a second order accurate time scheme, so it will never get >2
-%   convergence. The user can change the orfer of the mimetic scheme very easily
+%   The CTCS has a second order accurate time scheme, so it will never get >2
+%   convergence. The user can change the order of the mimetic scheme very easily
 %   in the mimetic_diff_two_way_wave_eq.m file (k=2), which shows how easy it is
 %   to switch orders of the experiment, for very little cost.
+%
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
 %
 
 clc

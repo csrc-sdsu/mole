@@ -22,7 +22,7 @@ function [ U2_fd, error_fd, walltime_fd, flops_fd ] = finite_diff_two_way_wave_e
 %    mimetic_diff_two_way_wave_eq, comparison_two_way_wave_md_vs_fd
 %
 %  NOTES:
-% We use a larger domain for graphing wave movement without bondary issues.
+% We use a larger domain for graphing wave movement without boundary issues.
 % This removes any boundary, so we can compare just the methods, without
 % having to do anything for the boundary. A straightforward comparison of
 % just the methods.
@@ -31,9 +31,15 @@ function [ U2_fd, error_fd, walltime_fd, flops_fd ] = finite_diff_two_way_wave_e
 % get >2 convergence. This file is commented for first time users, to explain
 % and show differences with the mimetic difference method.
 %
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
+%
 
 %% Problem definition
-c    = 0.1;      % Velocity, 1 makes FD sceme exact
+c    = 0.1;      % Velocity, 1 makes FD scheme exact
 west = -2.0;     % Domain's leftmost limits
 east = 2.0;      % Domain's rightmost limit
 
@@ -48,7 +54,7 @@ flops_fd = zeros(size(num_cells));
 % Initial Condition Function
 f = @(x) ( (x > -0.5) & (x < 0.5) ) .* (cos(pi * x).^2);
 
-% Wave solution using d'Almbert
+% Wave solution using d'Alembert
 u = @(x,t) 0.5 * ( f(x - c * t) + f(x + c * t) );
 
 for cell_index = 1 : numel(num_cells)
@@ -60,9 +66,9 @@ for cell_index = 1 : numel(num_cells)
     dx = (east - west) / m;         % spacial discretization
     dt = 0.001;                     % Time step constant for error analysis
 
-    r2_fd = c^2 * (dt^2 / dx^2);      % c in the equation
+    r2_fd = c^2 * (dt^2 / dx^2);    % c in the equation
 
-    t = ceil( 1/(c * dt) );          % first step euler, so t is one less
+    t = ceil( 1/(c * dt) );         % first step euler, so t is one less
 
     % FD grid
     grid_fd =  west : dx : east;
