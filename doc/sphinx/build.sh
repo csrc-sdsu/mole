@@ -100,9 +100,10 @@ sed -i.bak 's/\.svg}/.pdf}/g' MOLE-docs.tex
 # Add our fix package after sphinx package
 sed -i.bak2 's/\\usepackage{sphinx}/\\usepackage{sphinx}\\usepackage{imagequality}/' MOLE-docs.tex
 
-# Specifically fix the broken image includes
-echo "Fixing problematic image includes..."
-sed -i.bak3 's/\\sphinxincludegraphics\[{[^}]*}\]{{/\\includegraphics[width=\\linewidth]{/g' MOLE-docs.tex
+# Specifically fix the image includes without overriding per-image options
+echo "Fixing image includes while preserving options..."
+# Preserve any sizing options Sphinx generated (e.g., from MyST {width=...})
+sed -i.bak3 's/\\sphinxincludegraphics/\\includegraphics/g' MOLE-docs.tex
 sed -i.bak4 's/\.svg}/.pdf}/g' MOLE-docs.tex
 
 # Fix math environment issues if present
