@@ -135,6 +135,8 @@ sed -E -i.bak5b 's#\\includegraphics\{[^}]*/([^/}]+\.(png|jpg|jpeg|pdf))\}#\\inc
 # Step 3: Apply default sizing to images without explicit width
 # Pattern: \includegraphics{filename.ext} -> \includegraphics[width=0.85\linewidth]{filename.ext}
 sed -E -i.bak6 's#\\includegraphics\{([^}]+\.(png|jpg|jpeg|pdf))\}#\\includegraphics[width=0.85\\linewidth]{\1}#g' MOLE-docs.tex
+# Also handle images with double braces: \includegraphics{{filename}.ext} -> \includegraphics[width=0.85\linewidth]{filename.ext}
+sed -E -i.bak6a 's#\\includegraphics\{\{([^}]+)\}\.((png|jpg|jpeg|pdf))\}#\\includegraphics[width=0.85\\linewidth]{\1.\2}#g' MOLE-docs.tex
 
 # Step 4: Handle special cases for specific image types
 # Large diagrams/charts: use full width
