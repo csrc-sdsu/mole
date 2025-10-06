@@ -34,16 +34,19 @@ We assume no boundary effects (large domain), allowing a clean comparison of the
 
 **Time-stepping scheme (CTCS):**
 If we discretize the equation with standard centered second order finite differences, Equation(1) turn into 
+
 $$
 \frac{U^{k-1}_i - 2U^{k}_i + U^{k+1}_i}{\Delta t^2} = c^2\frac{U_{i+1}^k - 2U_{i}^k + U_{i+1}^k}{\Delta x^2}
 $$
 
 Rearranging the equation for the unknown value $U^{k+1}_i$ we get:
+
 $$
 U^{k+1}_i = 2U^k_i - U^{k-1}_i + \frac{c^2\Delta t^2}{\Delta x^2}\Big(U^k_{i-1} - 2U^k_{i} + U^k_{i+1} \Big)
 $$
 
 Which can be expressed as a matrix $D_{fd}$ times the vector ${U^k}$
+
 $$
 U^{k+1} = 2U^k - U^{k-1} + D_{fd}U^k
 $$
@@ -62,6 +65,7 @@ D_{fd} = \frac{c^2\Delta t^2}{\Delta x^2}
 $$
 
 The new values are updated each time step with values from the previous two time steps (k, k-1).
+
 $$
 U^{k+1} = 2U^k - U^{k-1} + D_{fd}U^k
 $$
@@ -101,9 +105,11 @@ $$
 ensuring energy and flux consistency at the discrete level. The mimetic library Laplacian operator is just DG under the hood.
 
 Rearranging our equation for the unknown value $U^{k+1}$ leads us to:
+
 $$
 U^{k+1}_i = 2U^k_i - U^{k-1}_i + c^2\Delta t^2 L(U^k) 
 $$
+
 To save computations in the code, `L` is premultiplied by $C^2\Delta t^2$ before the computation loop.
 
 ### Outputs
