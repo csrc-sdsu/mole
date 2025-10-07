@@ -27,7 +27,7 @@ module gradient_operator_test_m
     procedure, nopass :: results
   end type
 
-  double precision, parameter :: line_tolerance = 1D-14
+  double precision, parameter :: tight_tolerance = 1D-14, loose_tolerance = 1D-10
 
 contains
 
@@ -42,7 +42,8 @@ contains
     type(gradient_operator_test_t) gradient_operator_test
     type(test_result_t), allocatable :: test_results(:)
     test_results = gradient_operator_test%run([ & 
-       test_description_t('computing gradients of lines within a tolerance of ' // string_t(line_tolerance), check_grad_const) &
+       test_description_t('computing the gradient of a constant function within a tolerance of ' // string_t(tight_tolerance), check_grad_const) &
+      ,test_description_t('computing the gradient of a line within a tolerance of ' // string_t(loose_tolerance), check_grad_line) &
     ])
   end function
 
@@ -52,9 +53,11 @@ contains
     type(gradient_operator_test_t) gradient_operator_test
     type(test_result_t), allocatable :: test_results(:)
     procedure(diagnosis_function_i), pointer :: &
-      check_grad_const_ptr => check_grad_const
+       check_grad_const_ptr => check_grad_const &
+      ,check_grad_line_ptr => check_grad_line
     test_results = gradient_operator_test%run([ &
-       test_description_t('computing gradients of lines within a tolerance of ' // string_t(line_tolerance), check_grad_const_ptr) &
+       test_description_t('computing the gradient of a constant function within a tolerance of ' // string_t(tight_tolerance), check_grad_const_ptr) &
+      ,test_description_t('computing the gradient of a line within a tolerance of ' // string_t(loose_tolerance), check_grad_line_ptr) &
     ])
   end function
 
@@ -63,7 +66,7 @@ contains
   elemental function const(x) result(c)
     double precision, intent(in) :: x
     double precision c
-    c = 2D0
+    c = 3D0
   end function
 
   function check_grad_const() result(test_diagnosis)
@@ -74,11 +77,56 @@ contains
       procedure, nopass, non_overridable :: f => const
     end type
     type(const_initializer_1D_t) :: const_initializer_1D
-
     double precision, parameter :: df_dx = 0D0
 
     grad_f = .grad. cell_centers_extended_t(const_initializer_1D, order=2, cells=4, domain=[0D0,1D0]) ! gfortran blocks use of association
-    test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. line_tolerance) // " (d(const)/dx)"
+    test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. tight_tolerance) // " (d(const)/dx)"
+  end function
+
+  elemental function line(x) result(y)
+    double precision, intent(in) :: x
+    double precision y
+    y = 14*x + 3
+  end function
+
+  function check_grad_line() result(test_diagnosis)
+    type(test_diagnosis_t) test_diagnosis
+    type(gradient_t) grad_f
+    type, extends(scalar_1D_initializer_t) :: line_initializer_1D_t
+    contains
+      procedure, nopass, non_overridable :: f => line
+    end type
+    type(line_initializer_1D_t) :: line_initializer_1D
+    double precision, parameter :: df_dx = 14D0
+
+    grad_f = .grad. cell_centers_extended_t(line_initializer_1D, order=2, cells=4, domain=[0D0,1D0]) ! gfortran blocks use of association
+    test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) // " (d(line)/dx)"
+
+  end function
+
+  elemental function parabola(x) result(y)
+    double precision, intent(in) :: x
+    double precision y
+    y = 7*x**2 + 3*x + 5
+  end function
+
+  function check_grad_parabola() result(test_diagnosis)
+    type(test_diagnosis_t) test_diagnosis
+    type(gradient_t) grad_f
+    type(cell_centers_extended_t) quadratic
+    type, extends(scalar_1D_initializer_t) :: parabola_initializer_1D_t
+    contains
+      procedure, nopass, non_overridable :: f => line
+    end type
+    type(parabola_initializer_1D_t) parabola_initializer_1D
+
+    quadratic = cell_centers_extended_t(parabola_initializer_1D, order=2, cells=4, domain=[0D0,1D0]) ! gfortran blocks use of association
+    grad_f = .grad. quadratic ! gfortran blocks use of association
+    print *, "grad_f = ", grad_f%values()
+    print *, "df_dx = ",parabola(quadratic%grid_)
+
+    test_diagnosis = test_diagnosis_t(.true., "") !.all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) // " (d(line)/dx)"
+
   end function
 
 end module

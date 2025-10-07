@@ -12,16 +12,12 @@ contains
 
     call_julienne_assert(size(domain) .equalsExpected. 2)
 
-    associate(x_min => domain(1), x_max => domain(2))
-      associate(dx => dble(domain(2) - domain(1))/dble(cells))
-        associate(x => [x_min, x_min + dx/2. + [(dble(cell-1)*dx, cell = 1, cells)], x_max]) !! boundaries + cell centers
-          cell_centers_extended%scalar_1D_ = scalar_1D_initializer%f(x)                         !! Corbino & Castillo (2020)
-        end associate                                                                           !! https://doi.org/10.1016/j.cam.2019.06.042
-      end associate
+    associate(x_min => domain(1), x_max => domain(2), dx => dble(domain(2) - domain(1))/dble(cells))
+      cell_centers_extended%grid_ = [x_min, x_min + dx/2. + [((cell-1)*dx, cell = 1, cells)], x_max] ! boundaries + cell centers as described in
+      cell_centers_extended%scalar_1D_ = scalar_1D_initializer%f(cell_centers_extended%grid_)        ! Corbino & Castillo (2020)
+      cell_centers_extended%gradient_operator_ = gradient_operator_t(k=order, dx=dx, m=cells)        ! https://doi.org/10.1016/j.cam.2019.06.042
     end associate
 
-    cell_centers_extended%domain_ = domain
-    cell_centers_extended%gradient_operator_ = gradient_operator_t(k=order, dx=(domain(2)-domain(1))/dble(cells), m=cells)
   end procedure
 
   module procedure grad
