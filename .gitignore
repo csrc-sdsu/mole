@@ -61,3 +61,12 @@ Thumbs.db
 /examples/cpp/transport1D
 /examples/cpp/plot.gnu
 /tests/cpp/test[1-5]
+
+# General executable files
+a.out
+*.exe
+
+# Compiler-generated Fortran files
+*.mod
+*.smod
+*.submod
