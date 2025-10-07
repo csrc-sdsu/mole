@@ -46,8 +46,8 @@ module cell_centers_extended_m
 
   type cell_centers_extended_t
     !! Encapsulate information at cell centers and boundaries
-    private
-    double precision, allocatable :: scalar_1D_(:), domain_(:)
+    !private
+    double precision, allocatable :: scalar_1D_(:), domain_(:), grid_(:)
     type(gradient_operator_t) gradient_operator_
   contains
     generic :: operator(.grad.) => grad
