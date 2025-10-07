@@ -123,7 +123,7 @@ contains
     quadratic = cell_centers_extended_t(parabola_initializer_1D, order=2, cells=4, x_min=0D0, x_max=1D0) ! gfortran blocks use of association
     grad_f = .grad. quadratic ! gfortran blocks use of association
     print *, "grad_f = ", grad_f%values()
-    print *, "df_dx = ",parabola(quadratic%grid_)
+    print *, "df_dx = ",parabola(quadratic%grid())
 
     test_diagnosis = test_diagnosis_t(.true., "") !.all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) // " (d(line)/dx)"
 

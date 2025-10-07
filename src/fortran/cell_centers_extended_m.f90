@@ -52,6 +52,7 @@ module cell_centers_extended_m
     integer cells_
     type(gradient_operator_t) gradient_operator_
   contains
+    procedure grid
     generic :: operator(.grad.) => grad
     procedure, non_overridable, private :: grad
   end type
@@ -72,6 +73,14 @@ module cell_centers_extended_m
   end interface
 
   interface
+
+    pure module function grid(self) result(x)
+      !! Result is array of cell-centers-extended grid locations (cell centers + boundaries) 
+      !! as described in Corbino & Castillo (2020) https://doi.org/10.1016/j.cam.2019.06.042
+      implicit none
+      class(cell_centers_extended_t), intent(in) :: self
+      double precision, allocatable :: x(:)
+    end function
 
     pure module function grad(self) result(grad_f)
       !! Result is mimetic gradient of f
