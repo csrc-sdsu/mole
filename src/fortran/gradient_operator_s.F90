@@ -21,6 +21,7 @@ contains
     )
     gradient_operator%k_  = k
     gradient_operator%dx_ = dx
+    gradient_operator%m_ = m
   end procedure
 
   pure function corbino_castillo_A(k, dx) result(rows)
@@ -80,6 +81,7 @@ contains
       end do reverse_and_flip_sign
     end associate
   end function
+ 
 #else
 
   pure function corbino_castillo_Ap(k, dx) result(rows)

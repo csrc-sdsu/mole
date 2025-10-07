@@ -15,7 +15,7 @@ module gradient_operator_test_m
     ,operator(.all.) &
     ,operator(.approximates.) &
     ,operator(.within.)
-  use mole_m, only : cell_centers_extended_t, gradient_t
+  use mole_m, only : cell_centers_extended_t, gradient_t, scalar_1D_initializer_t
 #if ! HAVE_PROCEDURE_ACTUAL_FOR_POINTER_DUMMY
   use julienne_m, only : diagnosis_function_i
 #endif
@@ -62,20 +62,23 @@ contains
 
   function check_line_slope() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
-    integer i
-    integer, parameter :: cells = 10
-    double precision, parameter :: x_min = 0., x_max = 10., dx = (x_max - x_min)/dble(cells)
-    double precision, parameter :: x(*) = [x_min, x_min + dx/2. + [(dble(i-1)*dx, i = 1, cells)], x_max]*dx
-      !! boundaries + grid cell centers -- see Corbino & Castillo (2020) https://doi.org/10.1016/j.cam.2019.06.042
-    double precision, parameter :: m = 2D0, b = 3D0, n = 5D0, c = 7D0
-    double precision, parameter :: f(*) = m*x + b, df_dx = m
-    double precision, parameter :: g(*) = n*x + c, dg_dx = n
-    type(gradient_t) grad_f, grad_g
-    grad_f = .grad. cell_centers_extended_t(f, k=2, dx=dx) ! gfortran blocks use of association
-    test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. line_tolerance) // " (df_dx)"
+    type(gradient_t) grad_f
+    type, extends(scalar_1D_initializer_t) :: const_initializer_1D_t
+    contains
+      procedure, nopass, non_overridable :: f => const
+    end type
+    type(const_initializer_1D_t) :: const_initializer_1D
 
-    grad_g = .grad. cell_centers_extended_t(g, k=2, dx=dx) ! gfortran blocks use of association
-    test_diagnosis = .all. (grad_g%values() .approximates. dg_dx .within. line_tolerance) // " (dg_dx)"
+    double precision, parameter :: df_dx = 0D0
+
+    grad_f = .grad. cell_centers_extended_t(const_initializer_1D, order=2, cells=4, domain=[0D0,1D0]) ! gfortran blocks use of association
+    test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. line_tolerance) // " (d(const)/dx)"
+  end function
+
+  elemental function const(x) result(c)
+    double precision, intent(in) :: x
+    double precision c
+    c = 2D0
   end function
 
 end module
