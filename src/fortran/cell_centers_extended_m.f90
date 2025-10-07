@@ -49,6 +49,7 @@ module cell_centers_extended_m
     !private
     double precision, allocatable :: scalar_1D_(:), grid_(:)
     double precision x_min_, x_max_
+    integer cells_
     type(gradient_operator_t) gradient_operator_
   contains
     generic :: operator(.grad.) => grad
