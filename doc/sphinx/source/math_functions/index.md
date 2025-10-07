@@ -10,6 +10,7 @@ CSRCReportOnMOLE
 StaggeredGrids
 Jacobian
 NonUniformGradAndDiv
+IntegrationByParts
 ```
 
 Additional operators will be documented in the future. 
