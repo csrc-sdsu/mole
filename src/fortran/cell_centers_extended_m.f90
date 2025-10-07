@@ -47,7 +47,8 @@ module cell_centers_extended_m
   type cell_centers_extended_t
     !! Encapsulate information at cell centers and boundaries
     !private
-    double precision, allocatable :: scalar_1D_(:), domain_(:), grid_(:)
+    double precision, allocatable :: scalar_1D_(:), grid_(:)
+    double precision x_min_, x_max_
     type(gradient_operator_t) gradient_operator_
   contains
     generic :: operator(.grad.) => grad
@@ -56,13 +57,14 @@ module cell_centers_extended_m
 
   interface cell_centers_extended_t
 
-    pure module function construct(scalar_1D_initializer, order, cells, domain) result(cell_centers_extended)
+    pure module function construct(scalar_1D_initializer, order, cells, x_min, x_max) result(cell_centers_extended)
       !! Result is a collection of cell-centered-extended values with a corresponding mimetic gradient operator
       implicit none
       class(scalar_1D_initializer_t), intent(in) :: scalar_1D_initializer !! elemental initialization function hook
       integer, intent(in) :: order !! order of accuracy
-      integer, intent(in) :: cells !! number of grid cells spanning domain
-      double precision, intent(in) :: domain(:) !! [grid minimum, grid maximum]
+      integer, intent(in) :: cells !! number of grid cells spanning the domain
+      double precision, intent(in) :: x_min !! grid location minimum
+      double precision, intent(in) :: x_max !! grid location maximum
       type(cell_centers_extended_t) cell_centers_extended
     end function
 
