@@ -42,7 +42,7 @@ contains
     type(gradient_operator_test_t) gradient_operator_test
     type(test_result_t), allocatable :: test_results(:)
     test_results = gradient_operator_test%run([ & 
-       test_description_t('computing gradients of lines within a tolerance of ' // string_t(line_tolerance), check_line_slope) &
+       test_description_t('computing gradients of lines within a tolerance of ' // string_t(line_tolerance), check_grad_const) &
     ])
   end function
 
@@ -52,15 +52,21 @@ contains
     type(gradient_operator_test_t) gradient_operator_test
     type(test_result_t), allocatable :: test_results(:)
     procedure(diagnosis_function_i), pointer :: &
-      check_line_slope_ptr => check_line_slope
+      check_grad_const_ptr => check_grad_const
     test_results = gradient_operator_test%run([ &
-       test_description_t('computing gradients of lines within a tolerance of ' // string_t(line_tolerance), check_line_slope_ptr) &
+       test_description_t('computing gradients of lines within a tolerance of ' // string_t(line_tolerance), check_grad_const_ptr) &
     ])
   end function
 
 #endif
 
-  function check_line_slope() result(test_diagnosis)
+  elemental function const(x) result(c)
+    double precision, intent(in) :: x
+    double precision c
+    c = 2D0
+  end function
+
+  function check_grad_const() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
     type(gradient_t) grad_f
     type, extends(scalar_1D_initializer_t) :: const_initializer_1D_t
@@ -73,12 +79,6 @@ contains
 
     grad_f = .grad. cell_centers_extended_t(const_initializer_1D, order=2, cells=4, domain=[0D0,1D0]) ! gfortran blocks use of association
     test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. line_tolerance) // " (d(const)/dx)"
-  end function
-
-  elemental function const(x) result(c)
-    double precision, intent(in) :: x
-    double precision c
-    c = 2D0
   end function
 
 end module
