@@ -22,6 +22,12 @@ $$
 
 where $f_0$ is the dominant frequency and $t_0$ is the source time delay.
 
+For this particular problem we use the function
+
+$$
+f(t) = ( 1-x^2 ) exp(\frac{-x^2}{2})
+$$
+
 ---
 
 ## MIMETIC DISCRETIZATION
@@ -31,14 +37,14 @@ gradient (G) and divergence (D) operators that satisfy a discrete analogue
 of the integration-by-parts identity:
 
 $$
-       <v, D u>_Q + <G v, u>_P = boundary_terms
+       \langle v, D u\rangle_Q + \langle G v, u \rangle_P = boundary \, terms
 $$
 
- where $<a,b>_Q = a^T Q b$ defines an inner product weighted by $Q$.
+ where $\langle a,b\rangle_Q = a^T Q b$ defines an inner product weighted by $Q$.
 
  Here:
-   - Q: Diagonal matrix of quadrature weights at *cell centers*
-   - P: Diagonal matrix of quadrature weights at *cell faces*
+   - $Q$ : Diagonal matrix of quadrature weights at *cell centers*
+   - $P$ : Diagonal matrix of quadrature weights at *cell faces*
 
  Both Q and P are positive definite diagonal matrices. Their dimensions are
  chosen so that the following operations are valid:
@@ -58,7 +64,7 @@ $$
 
  ## NUMERICAL INTEGRATION
 
- The second spatial derivative (∂²u/∂x²) is obtained through the mimetic Laplacian:
+ The second spatial derivative $\partial^2 u / \partial x^2$ is obtained through the mimetic Laplacian:
 
        L = D * (P⁻¹ * G)
 
@@ -70,24 +76,20 @@ $$
  quadrature weights for integration over the computational domain.
 
  In this implementation, we use the weights from Q explicitly for the
- numerical integration step. P and G are still conceptually part of the
+ numerical integration step. We have boundary conditions such that the only term of interest is the Q * f term. P and G are still conceptually part of the
  mimetic framework but are not directly required for this reduced problem.
 
  ---
 
 ## ALGORITHM OVERVIEW
 
- 1. Define grid spacing and boundary conditions.
- 2. Construct mimetic operators D, G, and the weight matrix Q.
- 3. Initialize the wavefield u(x, t=0) = 0 and velocity = 0.
- 4. Apply the Ricker source term f(t) at a chosen grid location.
- 5. Time-step the system using central finite differences:
-
-        u_tt = c² * L * u + f
-        u(t+Δt) = 2u(t) - u(t-Δt) + Δt² * Q⁻¹ * (c² Q L u + Q f)
-
- 6. Record and visualize the wavefield evolution.
+1. Define grid spacing and boundary conditions.
+2. Define the function to integrate
+3. Approximate the integral weights Q
+4. Set the boundary conditions at the ends
+5. Multiply weights * f to get estimate of the integral
+6. Compare to MATLAB trapz and integral functions
 
 
 This example is implemented in:
-- [MATLAB/OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/lock_exchange.m)
+- [MATLAB/OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/integration1D.m)
