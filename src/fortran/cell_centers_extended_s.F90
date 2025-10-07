@@ -12,13 +12,23 @@ contains
 
     call_julienne_assert(x_max .isGreaterThan. x_min)
 
-    associate(dx => dble(x_max - x_min)/dble(cells))
-      cell_centers_extended%grid_ = [x_min, x_min + dx/2. + [((cell-1)*dx, cell = 1, cells)], x_max] ! boundaries + cell centers as described in
-      cell_centers_extended%cells_ = cells
-      cell_centers_extended%scalar_1D_ = scalar_1D_initializer%f(cell_centers_extended%grid_)        ! Corbino & Castillo (2020)
-      cell_centers_extended%gradient_operator_ = gradient_operator_t(k=order, dx=dx, m=cells)        ! https://doi.org/10.1016/j.cam.2019.06.042
+    associate(dx => (x_max - x_min)/cells)
+      cell_centers_extended%gradient_operator_ = gradient_operator_t(k=order, dx=dx, m=cells)
     end associate
 
+    cell_centers_extended%x_min_ = x_min
+    cell_centers_extended%x_max_ = x_max
+    cell_centers_extended%cells_ = cells
+    cell_centers_extended%scalar_1D_ = scalar_1D_initializer%f(cell_centers_extended%grid())
+
+  end procedure
+
+  module procedure grid
+    integer cell
+
+    associate(dx => (self%x_max_ - self%x_min_)/self%cells_)
+      x = [self%x_min_, self%x_min_ + dx/2. + [((cell-1)*dx, cell = 1, self%cells_)], self%x_max_]
+    end associate
   end procedure
 
   module procedure grad
