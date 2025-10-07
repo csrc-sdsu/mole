@@ -49,7 +49,6 @@ Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
       at(i, i + 1) = -1.0 / 24.0;
     }
     break;
-  }
   case 6:
     // A
     at(1, 0) = -1627.0 / 1920.0;
@@ -92,7 +91,6 @@ Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
     }
     break;
   }
-
   // Scaling
   *this /= dx;
 }

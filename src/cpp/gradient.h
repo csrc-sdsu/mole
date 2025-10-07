@@ -61,5 +61,6 @@ public:
    * @param dz Spacing between cells in z-direction
    */  
   Gradient(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz);
+};
 
 #endif // GRADIENT_H

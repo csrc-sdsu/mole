@@ -60,6 +60,7 @@ public:
    * @param dz Spacing between cells in z-direction
    */  
   Divergence(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz);
+};
   
 
 #endif // DIVERGENCE_H
