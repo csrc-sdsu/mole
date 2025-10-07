@@ -79,7 +79,7 @@ contains
     type(const_initializer_1D_t) :: const_initializer_1D
     double precision, parameter :: df_dx = 0D0
 
-    grad_f = .grad. cell_centers_extended_t(const_initializer_1D, order=2, cells=4, domain=[0D0,1D0]) ! gfortran blocks use of association
+    grad_f = .grad. cell_centers_extended_t(const_initializer_1D, order=2, cells=4, x_min=0D0, x_max=1D0) ! gfortran blocks use of association
     test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. tight_tolerance) // " (d(const)/dx)"
   end function
 
@@ -99,7 +99,7 @@ contains
     type(line_initializer_1D_t) :: line_initializer_1D
     double precision, parameter :: df_dx = 14D0
 
-    grad_f = .grad. cell_centers_extended_t(line_initializer_1D, order=2, cells=4, domain=[0D0,1D0]) ! gfortran blocks use of association
+    grad_f = .grad. cell_centers_extended_t(line_initializer_1D, order=2, cells=4, x_min=0D0, x_max=1D0) ! gfortran blocks use of association
     test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) // " (d(line)/dx)"
 
   end function
@@ -120,7 +120,7 @@ contains
     end type
     type(parabola_initializer_1D_t) parabola_initializer_1D
 
-    quadratic = cell_centers_extended_t(parabola_initializer_1D, order=2, cells=4, domain=[0D0,1D0]) ! gfortran blocks use of association
+    quadratic = cell_centers_extended_t(parabola_initializer_1D, order=2, cells=4, x_min=0D0, x_max=1D0) ! gfortran blocks use of association
     grad_f = .grad. quadratic ! gfortran blocks use of association
     print *, "grad_f = ", grad_f%values()
     print *, "df_dx = ",parabola(quadratic%grid_)
