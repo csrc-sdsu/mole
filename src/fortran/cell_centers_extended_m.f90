@@ -1,6 +1,7 @@
 module cell_centers_extended_m
   !! Define an abstraction for the collection of points used to compute gradidents:
   !! cell centers plus oundaries.
+  use initializers_m, only : scalar_1D_initializer_t
   implicit none
 
   private
@@ -20,7 +21,7 @@ module cell_centers_extended_m
   type gradient_operator_t
     !! Encapsulate kth-order mimetic gradient operator on dx-sized cells
     private
-    integer k_
+    integer k_, m_
     double precision dx_
     type(mimetic_matrix_t) mimetic_matrix_
   end type
@@ -46,7 +47,7 @@ module cell_centers_extended_m
   type cell_centers_extended_t
     !! Encapsulate information at cell centers and boundaries
     private
-    double precision, allocatable :: f_(:)
+    double precision, allocatable :: scalar_1D_(:), domain_(:)
     type(gradient_operator_t) gradient_operator_
   contains
     generic :: operator(.grad.) => grad
@@ -55,12 +56,13 @@ module cell_centers_extended_m
 
   interface cell_centers_extended_t
 
-    pure module function construct(f, k, dx) result(cell_centers_extended)
-      !! Result is a collection of cell-centered-extended values with a mimetic gradient operator
+    pure module function construct(scalar_1D_initializer, order, cells, domain) result(cell_centers_extended)
+      !! Result is a collection of cell-centered-extended values with a corresponding mimetic gradient operator
       implicit none
-      double precision, intent(in) :: f(:) !! face-centered values
-      double precision, intent(in) :: dx !! face spacing (cell width)
-      integer, intent(in) :: k !! order of accuracy
+      class(scalar_1D_initializer_t), intent(in) :: scalar_1D_initializer !! elemental initialization function hook
+      integer, intent(in) :: order !! order of accuracy
+      integer, intent(in) :: cells !! number of grid cells spanning domain
+      double precision, intent(in) :: domain(:) !! [grid minimum, grid maximum]
       type(cell_centers_extended_t) cell_centers_extended
     end function
 
@@ -79,11 +81,12 @@ module cell_centers_extended_m
 
   interface gradient_operator_t
 
-    pure module function construct_from_parameters(k, dx) result(gradient_operator)
+    pure module function construct_from_parameters(k, dx, m) result(gradient_operator)
       !! Construct a mimetic gradient operator
       implicit none
       integer, intent(in) :: k !! order of accuracy
-      double precision, intent(in) :: dx !! step size
+      double precision, intent(in) :: dx !! step siz
+      integer, intent(in) :: m !! number of grid cells
       type(gradient_operator_t) gradient_operator
     end function
 
