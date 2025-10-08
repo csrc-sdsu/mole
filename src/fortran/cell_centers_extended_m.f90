@@ -1,13 +1,23 @@
 module cell_centers_extended_m
   !! Define an abstraction for the collection of points used to compute gradidents:
   !! cell centers plus oundaries.
-  use initializers_m, only : scalar_1D_initializer_t
   implicit none
 
   private
   public :: cell_centers_extended_t
   public :: gradient_t
   public :: gradient_operator_t
+  public :: scalar_1D_initializer_i
+
+  abstract interface
+
+    pure function scalar_1D_initializer_i(x) result(f)
+      implicit none
+      double precision, intent(in) :: x(:)
+      double precision, allocatable :: f(:)
+    end function
+
+  end interface
 
   type mimetic_matrix_t
     !! Encapsulate a mimetic matrix with a corresponding matrix-vector product operator
@@ -78,10 +88,10 @@ module cell_centers_extended_m
 
   interface cell_centers_extended_t
 
-    pure module function construct(scalar_1D_initializer, order, cells, x_min, x_max) result(cell_centers_extended)
+    pure module function construct_from_function(initializer, order, cells, x_min, x_max) result(cell_centers_extended)
       !! Result is a collection of cell-centered-extended values with a corresponding mimetic gradient operator
       implicit none
-      class(scalar_1D_initializer_t), intent(in) :: scalar_1D_initializer !! elemental initialization function hook
+      procedure(scalar_1D_initializer_i), pointer :: initializer 
       integer, intent(in) :: order !! order of accuracy
       integer, intent(in) :: cells !! number of grid cells spanning the domain
       double precision, intent(in) :: x_min !! grid location minimum

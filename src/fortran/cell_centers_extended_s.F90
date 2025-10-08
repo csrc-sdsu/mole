@@ -17,6 +17,17 @@ contains
     cell_centers_extended%scalar_1D_ = scalar_1D_initializer%f(grid_(x_min, x_max, cells))
   end procedure
 
+  module procedure construct_from_function
+    call_julienne_assert(x_max .isGreaterThan. x_min)
+    call_julienne_assert(cells .isAtLeast. 2*order)
+
+    cell_centers_extended%x_min_ = x_min
+    cell_centers_extended%x_max_ = x_max
+    cell_centers_extended%cells_ = cells
+    cell_centers_extended%gradient_operator_ = gradient_operator_t(k=order, dx=(x_max - x_min)/cells, m=cells)
+    cell_centers_extended%scalar_1D_ = initializer(grid_(x_min, x_max, cells))
+  end procedure
+
   pure function grid_(x_min, x_max, cells) result(x)
     double precision, intent(in) :: x_min, x_max
     integer, intent(in) :: cells
