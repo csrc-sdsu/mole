@@ -15,7 +15,7 @@ module gradient_operator_test_m
     ,operator(.all.) &
     ,operator(.approximates.) &
     ,operator(.within.)
-  use mole_m, only : cell_centers_extended_t, gradient_t, scalar_1D_initializer_t
+  use mole_m, only : cell_centers_extended_t, gradient_t, scalar_1D_initializer_i
 #if ! HAVE_PROCEDURE_ACTUAL_FOR_POINTER_DUMMY
   use julienne_m, only : diagnosis_function_i
 #endif
@@ -67,64 +67,52 @@ contains
 
 #endif
 
-  elemental function const(x) result(c)
-    double precision, intent(in) :: x
-    double precision c
-    c = 3D0
+  pure function const(x) result(y)
+    double precision, intent(in) :: x(:)
+    double precision, allocatable :: y(:)
+    integer i
+    y = [(5D0, i=1,size(x))]
   end function
 
   function check_grad_const() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
     type(gradient_t) grad_f
-    type, extends(scalar_1D_initializer_t) :: const_initializer_1D_t
-    contains
-      procedure, nopass, non_overridable :: f => const
-    end type
-    type(const_initializer_1D_t) :: const_initializer_1D
-    double precision, parameter :: df_dx = 0D0
+    double precision, parameter :: df_dx = 0.
+    procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => const
 
-    grad_f = .grad. cell_centers_extended_t(const_initializer_1D, order=2, cells=4, x_min=0D0, x_max=1D0) ! gfortran blocks use of association
-    test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. tight_tolerance) // " (d(const)/dx)"
+    grad_f = .grad. cell_centers_extended_t(scalar_1D_initializer, order=2, cells=4, x_min=0D0, x_max=1D0)
+    test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) // " (d(line)/dx)"
   end function
 
-  elemental function line(x) result(y)
-    double precision, intent(in) :: x
-    double precision y
+  pure function line(x) result(y)
+    double precision, intent(in) :: x(:)
+    double precision, allocatable :: y(:)
     y = 14*x + 3
   end function
 
   function check_grad_line() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
     type(gradient_t) grad_f
-    type, extends(scalar_1D_initializer_t) :: line_initializer_1D_t
-    contains
-      procedure, nopass, non_overridable :: f => line
-    end type
-    type(line_initializer_1D_t) :: line_initializer_1D
     double precision, parameter :: df_dx = 14D0
+    procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => line
 
-    grad_f = .grad. cell_centers_extended_t(line_initializer_1D, order=2, cells=4, x_min=0D0, x_max=1D0)
+    grad_f = .grad. cell_centers_extended_t(scalar_1D_initializer, order=2, cells=4, x_min=0D0, x_max=1D0)
     test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) // " (d(line)/dx)"
-
   end function
 
-  elemental function parabola(x) result(y)
-    double precision, intent(in) :: x
-    double precision y
+  pure function parabola(x) result(y)
+    double precision, intent(in) :: x(:)
+    double precision, allocatable :: y(:)
     y = 7*x**2 + 3*x + 5
   end function
 
   function check_grad_parabola() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
-    type, extends(scalar_1D_initializer_t) :: parabola_initializer_1D_t
-    contains
-      procedure, nopass, non_overridable :: f => parabola
-    end type
-    type(parabola_initializer_1D_t) parabola_initializer_1D
     type(cell_centers_extended_t) quadratic
     type(gradient_t) grad_f
+    procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => parabola
 
-    quadratic = cell_centers_extended_t(parabola_initializer_1D, order=2, cells=4, x_min=0D0, x_max=1D0)
+    quadratic = cell_centers_extended_t(scalar_1D_initializer , order=2, cells=4, x_min=0D0, x_max=1D0)
     grad_f = .grad. quadratic
 
     associate(x => grad_f%faces())
