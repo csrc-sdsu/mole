@@ -28,6 +28,20 @@ mkdir -p "$LATEX_DIR"
 echo "Running Sphinx to generate LaTeX..."
 sphinx-build -b latex "$SOURCE_DIR" "$LATEX_DIR"
 
+# Universal image asset copying - copy all images from various sources
+echo "Copying all image assets to LaTeX build directory..."
+mkdir -p "$LATEX_DIR/_images"
+
+# Copy governance images
+cp -f "$SCRIPT_DIR/../assets/img/"*.png "$LATEX_DIR/_images/" 2>/dev/null || true
+cp -f "$SCRIPT_DIR/../assets/img/"*.jpg "$LATEX_DIR/_images/" 2>/dev/null || true
+cp -f "$SCRIPT_DIR/../assets/img/"*.jpeg "$LATEX_DIR/_images/" 2>/dev/null || true
+
+# Copy images from source directories (figures, etc.)
+find "$SOURCE_DIR" -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" | while read img; do
+  cp -f "$img" "$LATEX_DIR/_images/" 2>/dev/null || true
+done
+
 # Create directories for images and PDF output
 mkdir -p "$LATEX_DIR/_images"
 mkdir -p "$LATEX_DIR/figures"
@@ -100,21 +114,47 @@ sed -i.bak 's/\.svg}/.pdf}/g' MOLE-docs.tex
 # Add our fix package after sphinx package
 sed -i.bak2 's/\\usepackage{sphinx}/\\usepackage{sphinx}\\usepackage{imagequality}/' MOLE-docs.tex
 
-# Specifically fix the broken image includes
-echo "Fixing problematic image includes..."
-sed -i.bak3 's/\\sphinxincludegraphics\[{[^}]*}\]{{/\\includegraphics[width=\\linewidth]{/g' MOLE-docs.tex
-sed -i.bak4 's/\.svg}/.pdf}/g' MOLE-docs.tex
+# Universal image processing - handle all images consistently
+echo "Processing all image includes with universal sizing..."
+
+# Step 0: Convert sphinxincludegraphics to includegraphics
+sed -i.bak3 's/\\sphinxincludegraphics/\\includegraphics/g' MOLE-docs.tex
+
+# Step 1: Convert MyST width tokens to proper LaTeX format
+# Pattern: \includegraphics{{filename}.ext}\{width=NN%\}
+sed -E -i.bak4 's#\\includegraphics\{\{([^}]+)\}\.([a-zA-Z]+)\}\\\{width=([0-9]{1,3})\\\%\\\}#\\includegraphics[width=0.\3\\linewidth]{\1.\2}#g' MOLE-docs.tex
+
+# Step 2: Normalize image paths - remove complex path structures and use simple filenames
+# Pattern: \includegraphics[width=...]{path/to/filename.ext} -> \includegraphics[width=...]{filename.ext}
+sed -E -i.bak5 's#\\includegraphics\[([^]]+)\]\{[^}]*/([^/}]+\.(png|jpg|jpeg|pdf))\}#\\includegraphics[\1]{\2}#g' MOLE-docs.tex
+# Pattern: \includegraphics{{path/to/filename}.ext} -> \includegraphics{filename.ext}
+sed -E -i.bak5a 's#\\includegraphics\{\{[^}]*/([^/}]+)\}\.([a-zA-Z]+)\}#\\includegraphics{\1.\2}#g' MOLE-docs.tex
+# Also handle paths without double braces: \includegraphics{path/to/filename.ext} -> \includegraphics{filename.ext}
+sed -E -i.bak5b 's#\\includegraphics\{[^}]*/([^/}]+\.(png|jpg|jpeg|pdf))\}#\\includegraphics{\1}#g' MOLE-docs.tex
+
+# Step 3: Apply default sizing to images without explicit width
+# Pattern: \includegraphics{filename.ext} -> \includegraphics[width=0.85\linewidth]{filename.ext}
+sed -E -i.bak6 's#\\includegraphics\{([^}]+\.(png|jpg|jpeg|pdf))\}#\\includegraphics[width=0.85\\linewidth]{\1}#g' MOLE-docs.tex
+# Also handle images with double braces: \includegraphics{{filename}.ext} -> \includegraphics[width=0.85\linewidth]{filename.ext}
+sed -E -i.bak6a 's#\\includegraphics\{\{([^}]+)\}\.((png|jpg|jpeg|pdf))\}#\\includegraphics[width=0.85\\linewidth]{\1.\2}#g' MOLE-docs.tex
+
+# Step 4: Handle special cases for specific image types
+# Large diagrams/charts: use full width
+sed -E -i.bak7 's#\\includegraphics\[width=0\.85\\linewidth\]\{(MOLE_pillars|MOLE_OSE_circles|governance|organization|chart|diagram)[^}]*\}#\\includegraphics[width=\\linewidth]{\1}#g' MOLE-docs.tex
+
+# Small technical figures: use smaller width
+sed -E -i.bak8 's#\\includegraphics\[width=0\.85\\linewidth\]\{(.*figure.*|.*plot.*|.*graph.*)\}#\\includegraphics[width=0.70\\linewidth]{\1}#g' MOLE-docs.tex
 
 # Fix math environment issues if present
 if grep -q "\\\\begin{split}" MOLE-docs.tex; then
     echo "Fixing math environment issues..."
-    sed -i.bak5 's/\\begin{equation\*}\\begin{split}/\\begin{align}/g' MOLE-docs.tex
-    sed -i.bak6 's/\\end{split}\\end{equation\*}/\\end{align}/g' MOLE-docs.tex
-    sed -i.bak7 's/\\tag{[^}]*}//g' MOLE-docs.tex
+    sed -i.bak9 's/\\begin{equation\*}\\begin{split}/\\begin{align}/g' MOLE-docs.tex
+    sed -i.bak10 's/\\end{split}\\end{equation\*}/\\end{align}/g' MOLE-docs.tex
+    sed -i.bak11 's/\\tag{[^}]*}//g' MOLE-docs.tex
 fi
 
 # Fix the \\capstart command redefinition issue
-sed -i.bak8 's/\\newcommand{\\capstart}{}/\\providecommand{\\capstart}{}/g' MOLE-docs.tex
+sed -i.bak12 's/\\newcommand{\\capstart}{}/\\providecommand{\\capstart}{}/g' MOLE-docs.tex
 
 # Compile PDF
 echo "Compiling LaTeX to PDF..."

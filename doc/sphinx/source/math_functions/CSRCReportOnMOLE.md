@@ -90,7 +90,7 @@ In 1D:
 
 <div style="text-align: center">
 
-![Staggered grid representation in 1D](figures/CSRCReportOnMOLE_figure_1.svg)
+![Staggered grid representation in 1D](figures/CSRCReportOnMOLE_figure_1.svg){width=80%}
 
 *Staggered grid representation in 1D showing scalar and vector field locations*
 </div>
@@ -102,7 +102,7 @@ In 2D:
 
 <div style="text-align: center">
 
-![Staggered grid representation in 2D](figures/CSRCReportOnMOLE_figure_2.svg)
+![Staggered grid representation in 2D](figures/CSRCReportOnMOLE_figure_2.svg){width=80%}
 
 *Staggered grid representation in 2D showing scalar and vector field component locations*
 </div>
