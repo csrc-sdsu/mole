@@ -13,9 +13,6 @@ module cell_centers_extended_m
     !! Encapsulate a mimetic matrix with a corresponding matrix-vector product operator
     private
     double precision, allocatable :: upper_(:,:), inner_(:), lower_(:,:)
-  contains
-    generic :: operator(.x.) => matvec
-    procedure, private, non_overridable :: matvec
   end type
 
   type gradient_operator_t
@@ -29,12 +26,34 @@ module cell_centers_extended_m
   type gradient_t
     !! Encapsulate gradient values produced only by .grad. (no other constructors)
     private
-    double precision, allocatable :: g_(:)
+    double precision, allocatable :: vector_1D_(:) !! gradient values at cell faces (nodes in 1D)
+    double precision x_min_ !! domain lower boundary
+    double precision x_max_ !! domain upper boundary
+    integer cells_ !! number of grid cells spanning the domain
   contains
     procedure values
+    procedure faces
   end type
 
+  interface gradient_t
+
+      pure module function construct_gradient(face_centered_values, x_min, x_max, cells) result(gradient)
+        !! Result is an object storing gradients at cell faces
+        implicit none
+        double precision, intent(in) :: face_centered_values(:), x_min, x_max
+        integer, intent(in) :: cells
+        type(gradient_t) gradient
+      end function
+
+  end interface
+
   interface 
+
+    pure module function faces(self) result(x)
+      implicit none
+      class(gradient_t), intent(in) :: self
+      double precision, allocatable :: x(:)
+    end function
 
      pure module function values(self) result(gradients)
        implicit none
@@ -46,8 +65,8 @@ module cell_centers_extended_m
 
   type cell_centers_extended_t
     !! Encapsulate information at cell centers and boundaries
-    !private
-    double precision, allocatable :: scalar_1D_(:), grid_(:)
+    private
+    double precision, allocatable :: scalar_1D_(:)
     double precision x_min_, x_max_
     integer cells_
     type(gradient_operator_t) gradient_operator_
@@ -117,12 +136,12 @@ module cell_centers_extended_m
 
   interface
 
-    pure module function matvec(self, vector) result(gradient)
+    pure module function matvec(self, vector) result(matvec_product)
       !! Apply a matrix operator to a vector
       implicit none
       class(mimetic_matrix_t), intent(in) :: self
       type(cell_centers_extended_t), intent(in) :: vector
-      type(gradient_t) gradient
+      double precision, allocatable :: matvec_product(:)
     end function
 
   end interface

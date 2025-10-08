@@ -27,7 +27,7 @@ module gradient_operator_test_m
     procedure, nopass :: results
   end type
 
-  double precision, parameter :: tight_tolerance = 1D-14, loose_tolerance = 1D-10
+  double precision, parameter :: tight_tolerance = 1D-14, loose_tolerance = 1D-12
 
 contains
 
@@ -42,8 +42,9 @@ contains
     type(gradient_operator_test_t) gradient_operator_test
     type(test_result_t), allocatable :: test_results(:)
     test_results = gradient_operator_test%run([ & 
-       test_description_t('computing the gradient of a constant function within a tolerance of ' // string_t(tight_tolerance), check_grad_const) &
+       test_description_t('computing the gradient of a constant within a tolerance of ' // string_t(tight_tolerance), check_grad_const) &
       ,test_description_t('computing the gradient of a line within a tolerance of ' // string_t(loose_tolerance), check_grad_line) &
+      ,test_description_t('computing the gradient of a parabola within a tolerance of ' // string_t(loose_tolerance), check_grad_parabola) &
     ])
   end function
 
@@ -55,9 +56,12 @@ contains
     procedure(diagnosis_function_i), pointer :: &
        check_grad_const_ptr => check_grad_const &
       ,check_grad_line_ptr => check_grad_line
+      ,check_grad_parabola_ptr => check_grad_parabola
+
     test_results = gradient_operator_test%run([ &
-       test_description_t('computing the gradient of a constant function within a tolerance of ' // string_t(tight_tolerance), check_grad_const_ptr) &
+       test_description_t('computing the gradient of a constant within a tolerance of ' // string_t(tight_tolerance), check_grad_const_ptr) &
       ,test_description_t('computing the gradient of a line within a tolerance of ' // string_t(loose_tolerance), check_grad_line_ptr) &
+      ,test_description_t('computing the gradient of a parabola within a tolerance of ' // string_t(loose_tolerance), check_grad_parabola_ptr) &
     ])
   end function
 
@@ -99,7 +103,7 @@ contains
     type(line_initializer_1D_t) :: line_initializer_1D
     double precision, parameter :: df_dx = 14D0
 
-    grad_f = .grad. cell_centers_extended_t(line_initializer_1D, order=2, cells=4, x_min=0D0, x_max=1D0) ! gfortran blocks use of association
+    grad_f = .grad. cell_centers_extended_t(line_initializer_1D, order=2, cells=4, x_min=0D0, x_max=1D0)
     test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) // " (d(line)/dx)"
 
   end function
@@ -112,20 +116,22 @@ contains
 
   function check_grad_parabola() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
-    type(gradient_t) grad_f
-    type(cell_centers_extended_t) quadratic
     type, extends(scalar_1D_initializer_t) :: parabola_initializer_1D_t
     contains
-      procedure, nopass, non_overridable :: f => line
+      procedure, nopass, non_overridable :: f => parabola
     end type
     type(parabola_initializer_1D_t) parabola_initializer_1D
+    type(cell_centers_extended_t) quadratic
+    type(gradient_t) grad_f
 
-    quadratic = cell_centers_extended_t(parabola_initializer_1D, order=2, cells=4, x_min=0D0, x_max=1D0) ! gfortran blocks use of association
-    grad_f = .grad. quadratic ! gfortran blocks use of association
-    print *, "grad_f = ", grad_f%values()
-    print *, "df_dx = ",parabola(quadratic%grid())
+    quadratic = cell_centers_extended_t(parabola_initializer_1D, order=2, cells=4, x_min=0D0, x_max=1D0)
+    grad_f = .grad. quadratic
 
-    test_diagnosis = test_diagnosis_t(.true., "") !.all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) // " (d(line)/dx)"
+    associate(x => grad_f%faces())
+      associate(df_dx => 14*x + 3)
+        test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) // " (d(parabola)/dx)"
+      end associate
+    end associate
 
   end function
 

@@ -28,7 +28,7 @@ contains
           product_inner(row) = dot_product(self%inner_, vector%scalar_1D_(row + 1 : row + size(self%inner_)))
         end do
 
-        gradient%g_ = [ &
+        matvec_product = [ &
            matmul(self%upper_, vector%scalar_1D_(1 : size(self%upper_,2))) &
           ,product_inner &
           ,matmul(self%lower_, vector%scalar_1D_(size(vector%scalar_1D_) - size(self%lower_,2) + 1 : )) &
