@@ -3,8 +3,23 @@ submodule(cell_centers_extended_m) gradient_s
 
 contains
 
+  module procedure construct_gradient
+    gradient%vector_1D_ = face_centered_values
+    gradient%x_min_ = x_min
+    gradient%x_max_ = x_max
+    gradient%cells_ = cells
+  end procedure
+
   module procedure values
-    gradients =  self%g_
+    gradients =  self%vector_1D_
+  end procedure
+
+  module procedure faces
+    integer cell
+    x = [ self%x_min_ &
+         ,self%x_min_ + [(cell*(self%x_max_ - self%x_min_)/self%cells_, cell = 1, self%cells_-1)] &
+         ,self%x_max_ &
+        ]
   end procedure
 
 end submodule gradient_s
