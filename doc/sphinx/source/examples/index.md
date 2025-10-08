@@ -15,6 +15,7 @@ Schrodinger/index
 Sturm-Liouville/index
 Navier-Stokes/index
 Mixed/index
+Integration/index
 Time-Integrators/index
 ```
 
