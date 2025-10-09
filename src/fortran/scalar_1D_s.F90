@@ -33,7 +33,7 @@ contains
   end procedure
 
   module procedure grad
-    grad_f = gradient_1D_t(matvec(self%gradient_operator_1D_%mimetic_matrix_, self), self%x_min_, self%x_max_, self%cells_)
+    grad_f = gradient_1D_t(matvec(self%gradient_operator_1D_%mimetic_matrix_1D_, self), self%x_min_, self%x_max_, self%cells_)
   end procedure
 
 end submodule scalar_1D_s

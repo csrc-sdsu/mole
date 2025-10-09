@@ -19,7 +19,7 @@ module scalar_1D_m
 
   end interface
 
-  type mimetic_matrix_t
+  type mimetic_matrix_1D_t
     !! Encapsulate a mimetic matrix with a corresponding matrix-vector product operator
     private
     double precision, allocatable :: upper_(:,:), inner_(:), lower_(:,:)
@@ -30,7 +30,7 @@ module scalar_1D_m
     private
     integer k_, m_
     double precision dx_
-    type(mimetic_matrix_t) mimetic_matrix_
+    type(mimetic_matrix_1D_t) mimetic_matrix_1D_
   end type
 
   type scalar_1D_t
@@ -93,13 +93,13 @@ module scalar_1D_m
 
   end interface
 
-  interface mimetic_matrix_t
+  interface mimetic_matrix_1D_t
 
-    pure module function construct_from_components(upper, inner, lower) result(mimetic_matrix)
+    pure module function construct_from_components(upper, inner, lower) result(mimetic_matrix_1D)
       !! Construct discrete operator from coefficient matrix
       implicit none
       double precision, intent(in) :: upper(:,:), inner(:), lower(:,:)
-      type(mimetic_matrix_t) mimetic_matrix
+      type(mimetic_matrix_1D_t) mimetic_matrix_1D
     end function
 
   end interface
@@ -109,7 +109,7 @@ module scalar_1D_m
     pure module function matvec(self, vector) result(matvec_product)
       !! Apply a matrix operator to a vector
       implicit none
-      class(mimetic_matrix_t), intent(in) :: self
+      class(mimetic_matrix_1D_t), intent(in) :: self
       type(scalar_1D_t), intent(in) :: vector
       double precision, allocatable :: matvec_product(:)
     end function
