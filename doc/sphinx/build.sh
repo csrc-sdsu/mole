@@ -28,6 +28,14 @@ mkdir -p "$LATEX_DIR"
 echo "Running Sphinx to generate LaTeX..."
 sphinx-build -b latex "$SOURCE_DIR" "$LATEX_DIR"
 
+# Diagnostics for the two governance figures in source and mirrored locations
+echo "[docs-diagnostics] Verifying source repo images exist:"
+if [ -f "$SCRIPT_DIR/../assets/img/MOLE_pillars.png" ]; then echo "[docs-diagnostics]  FOUND repo MOLE_pillars.png"; else echo "[docs-diagnostics]  MISSING repo MOLE_pillars.png"; fi
+if [ -f "$SCRIPT_DIR/../assets/img/MOLE_OSE_circles.png" ]; then echo "[docs-diagnostics]  FOUND repo MOLE_OSE_circles.png"; else echo "[docs-diagnostics]  MISSING repo MOLE_OSE_circles.png"; fi
+echo "[docs-diagnostics] Verifying mirrored images under source/ for HTML includes:"
+if [ -f "$SOURCE_DIR/intros/doc/assets/img/MOLE_pillars.png" ]; then echo "[docs-diagnostics]  FOUND mirrored MOLE_pillars.png"; else echo "[docs-diagnostics]  MISSING mirrored MOLE_pillars.png"; fi
+if [ -f "$SOURCE_DIR/intros/doc/assets/img/MOLE_OSE_circles.png" ]; then echo "[docs-diagnostics]  FOUND mirrored MOLE_OSE_circles.png"; else echo "[docs-diagnostics]  MISSING mirrored MOLE_OSE_circles.png"; fi
+
 # Universal image asset copying - copy all images from various sources
 echo "Copying all image assets to LaTeX build directory..."
 mkdir -p "$LATEX_DIR/_images"

@@ -14,6 +14,7 @@ import importlib.util
 import pkg_resources
 import glob
 from PIL import Image, ImageOps
+import datetime
 import errno
 
 #------------------------------------------------------------------------------
@@ -357,6 +358,50 @@ logging.getLogger('sphinx').setLevel(logging.WARNING)
 logging.getLogger('myst_parser').setLevel(logging.WARNING)
 logging.getLogger('sphinxcontrib.matlab').setLevel(logging.WARNING)
 
+# -----------------------------------------------------------------------------
+# Targeted diagnostics for missing OSE Organization figures in HTML
+# -----------------------------------------------------------------------------
+def _log(msg):
+    try:
+        print(f"[docs-diagnostics] {msg}")
+    except Exception:
+        pass
+
+def _check_repo_images():
+    repo_img_dir = ROOT_DIR / 'doc' / 'assets' / 'img'
+    pillars = repo_img_dir / 'MOLE_pillars.png'
+    circles = repo_img_dir / 'MOLE_OSE_circles.png'
+    _log(f"ROOT_DIR={ROOT_DIR}")
+    _log(f"Checking repo images in {repo_img_dir}")
+    _log(f"MOLE_pillars.png exists={pillars.exists()}")
+    _log(f"MOLE_OSE_circles.png exists={circles.exists()}")
+
+def _check_source_mirrors():
+    # Where Makefile copy-images mirrors assets for included markdown paths
+    mirror_dir = Path(__file__).resolve().parent / 'intros' / 'doc' / 'assets' / 'img'
+    pillars_m = mirror_dir / 'MOLE_pillars.png'
+    circles_m = mirror_dir / 'MOLE_OSE_circles.png'
+    _log(f"Checking mirrored images in {mirror_dir}")
+    _log(f"mirror MOLE_pillars.png exists={pillars_m.exists()}")
+    _log(f"mirror MOLE_OSE_circles.png exists={circles_m.exists()}")
+
+_check_repo_images()
+_check_source_mirrors()
+
+def _on_builder_inited(app):
+    try:
+        outdir = Path(getattr(app.builder, 'outdir', ''))
+        _log(f"builder name={getattr(app, 'builder', None) and app.builder.name}")
+        _log(f"outdir={outdir}")
+        if outdir and outdir.exists():
+            # Expected HTML relative path when using included root MD path 'doc/assets/img/...'
+            html_rel = outdir / 'intros' / 'doc' / 'assets' / 'img'
+            _log(f"checking HTML output dir for images: {html_rel}")
+            _log(f"html MOLE_pillars.png exists={(html_rel / 'MOLE_pillars.png').exists()}")
+            _log(f"html MOLE_OSE_circles.png exists={(html_rel / 'MOLE_OSE_circles.png').exists()}")
+    except Exception as e:
+        _log(f"builder_inited diagnostics error: {e}")
+
 def fix_math_environments(app, docname, source):
     """Fix problematic math environments in markdown source."""
     src = source[0]
@@ -390,6 +435,8 @@ def setup(app):
             pass
     
     graphviz.on_build_finished = patched_on_build_finished
+    # Register diagnostics
+    app.connect('builder-inited', _on_builder_inited)
 
 #------------------------------------------------------------------------------
 # LaTeX and PDF output configuration

@@ -130,10 +130,16 @@ $(SPHINX_TARGETS):
 .PHONY: copy-images
 copy-images:
 	mkdir -p source/_images
+	@echo "[docs-diagnostics] Copying repo images from ../assets/img to source/_images"
 	cp -r ../assets/img/* source/_images/ || true
+	@echo "[docs-diagnostics] Listing source/_images (after copy):"; ls -1 source/_images | sed 's/^/[docs-diagnostics]  /'
 	# Copy README images to the _images directory for proper reference
 	mkdir -p source/intros/doc/assets/img
+	@echo "[docs-diagnostics] Mirroring repo images to source/intros/doc/assets/img for included MD paths"
 	cp -r ../assets/img/* source/intros/doc/assets/img/ || true
+	@echo "[docs-diagnostics] Checking presence of target files:"
+	@if [ -f source/intros/doc/assets/img/MOLE_pillars.png ]; then echo "[docs-diagnostics]  FOUND MOLE_pillars.png"; else echo "[docs-diagnostics]  MISSING MOLE_pillars.png"; fi
+	@if [ -f source/intros/doc/assets/img/MOLE_OSE_circles.png ]; then echo "[docs-diagnostics]  FOUND MOLE_OSE_circles.png"; else echo "[docs-diagnostics]  MISSING MOLE_OSE_circles.png"; fi
 	# Create figure directories for SVG files
 	mkdir -p source/api/examples/md/figures
 	mkdir -p source/api/examples-m/md/figures
