@@ -1,9 +1,9 @@
-submodule(cell_centers_extended_m) gradient_s
+submodule(gradient_m) gradient_s
   implicit none
 
 contains
 
-  module procedure construct_gradient
+  module procedure construct_from_components
     gradient%vector_1D_ = face_centered_values
     gradient%x_min_ = x_min
     gradient%x_max_ = x_max
