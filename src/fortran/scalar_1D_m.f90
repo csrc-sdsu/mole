@@ -6,7 +6,7 @@ module scalar_1D_m
 
   private
   public :: scalar_1D_t
-  public :: gradient_operator_t
+  public :: gradient_operator_1D_t
   public :: scalar_1D_initializer_i
 
   abstract interface
@@ -25,7 +25,7 @@ module scalar_1D_m
     double precision, allocatable :: upper_(:,:), inner_(:), lower_(:,:)
   end type
 
-  type gradient_operator_t
+  type gradient_operator_1D_t
     !! Encapsulate kth-order mimetic gradient operator on dx-sized cells
     private
     integer k_, m_
@@ -39,7 +39,7 @@ module scalar_1D_m
     double precision, allocatable :: scalar_1D_(:)
     double precision x_min_, x_max_
     integer cells_
-    type(gradient_operator_t) gradient_operator_
+    type(gradient_operator_1D_t) gradient_operator_1D_
   contains
     procedure grid
     generic :: operator(.grad.) => grad
@@ -80,15 +80,15 @@ module scalar_1D_m
 
   end interface
 
-  interface gradient_operator_t
+  interface gradient_operator_1D_t
 
-    pure module function construct_from_parameters(k, dx, m) result(gradient_operator)
+    pure module function construct_from_parameters(k, dx, m) result(gradient_operator_1D)
       !! Construct a mimetic gradient operator
       implicit none
       integer, intent(in) :: k !! order of accuracy
       double precision, intent(in) :: dx !! step siz
       integer, intent(in) :: m !! number of grid cells
-      type(gradient_operator_t) gradient_operator
+      type(gradient_operator_1D_t) gradient_operator_1D
     end function
 
   end interface

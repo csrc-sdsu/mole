@@ -13,7 +13,7 @@ contains
     scalar_1D%x_min_ = x_min
     scalar_1D%x_max_ = x_max
     scalar_1D%cells_ = cells
-    scalar_1D%gradient_operator_ = gradient_operator_t(k=order, dx=(x_max - x_min)/cells, m=cells)
+    scalar_1D%gradient_operator_1D_ = gradient_operator_1D_t(k=order, dx=(x_max - x_min)/cells, m=cells)
     scalar_1D%scalar_1D_ = initializer(grid_(x_min, x_max, cells))
   end procedure
 
@@ -33,7 +33,7 @@ contains
   end procedure
 
   module procedure grad
-    grad_f = gradient_1D_t(matvec(self%gradient_operator_%mimetic_matrix_, self), self%x_min_, self%x_max_, self%cells_)
+    grad_f = gradient_1D_t(matvec(self%gradient_operator_1D_%mimetic_matrix_, self), self%x_min_, self%x_max_, self%cells_)
   end procedure
 
 end submodule scalar_1D_s

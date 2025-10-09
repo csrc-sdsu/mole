@@ -1,10 +1,7 @@
-! Copyright (c) 2024-2025, The Regents of the University of California and Sourcery Institute
-! Terms of use are as specified in https://github.com/BerkeleyLab/julienne/blob/3.1.2/LICENSE.txt
-
 #include "language-support.F90"
   !! include Julienne preprocessor  macros
 
-module gradient_operator_test_m
+module gradient_operator_1D_test_m
   use julienne_m, only : &
      string_t &
     ,test_t &
@@ -21,7 +18,7 @@ module gradient_operator_test_m
 #endif
   implicit none
 
-  type, extends(test_t) :: gradient_operator_test_t
+  type, extends(test_t) :: gradient_operator_1D_test_t
   contains
     procedure, nopass :: subject
     procedure, nopass :: results
@@ -39,9 +36,9 @@ contains
 #if HAVE_PROCEDURE_ACTUAL_FOR_POINTER_DUMMY
 
   function results() result(test_results)
-    type(gradient_operator_test_t) gradient_operator_test
+    type(gradient_operator_1D_test_t) gradient_operator_1D_test
     type(test_result_t), allocatable :: test_results(:)
-    test_results = gradient_operator_test%run([ & 
+    test_results = gradient_operator_1D_test%run([ & 
        test_description_t('computing the 2nd-order 1D gradient of a constant within a tolerance of ' // string_t(tight_tolerance), check_grad_const) &
       ,test_description_t('computing the 2nd-order 1D gradient of a line within a tolerance of ' // string_t(loose_tolerance), check_grad_line) &
       ,test_description_t('computing the 2nd-order 1D gradient of a parabola within a tolerance of ' // string_t(loose_tolerance), check_grad_parabola) &
@@ -51,14 +48,14 @@ contains
 #else
 
   function results() result(test_results)
-    type(gradient_operator_test_t) gradient_operator_test
+    type(gradient_operator_1D_test_t) gradient_operator_1D_test
     type(test_result_t), allocatable :: test_results(:)
     procedure(diagnosis_function_i), pointer :: &
        check_grad_const_ptr => check_grad_const &
       ,check_grad_line_ptr => check_grad_line &
       ,check_grad_parabola_ptr => check_grad_parabola
 
-    test_results = gradient_operator_test%run([ &
+    test_results = gradient_operator_1D_test%run([ &
        test_description_t('computing the 2nd-order 1D gradient of a constant within a tolerance of ' // string_t(tight_tolerance), check_grad_const_ptr) &
       ,test_description_t('computing the 2nd-order 1D gradient of a line within a tolerance of ' // string_t(loose_tolerance), check_grad_line_ptr) &
       ,test_description_t('computing the 2nd-order 1D gradient of a parabola within a tolerance of ' // string_t(loose_tolerance), check_grad_parabola_ptr) &
