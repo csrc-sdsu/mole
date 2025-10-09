@@ -1,7 +1,7 @@
 #include "julienne-assert-macros.h"
 #include "mole-language-support.F90"
 
-submodule(cell_centers_extended_m) gradient_operator_s
+submodule(scalar_1D_m) gradient_operator_s
   use julienne_m, only : call_julienne_assert_, string_t
 #if ASSERTIONS
   use julienne_m, only : operator(.isAtLeast.)

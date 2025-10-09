@@ -1,6 +1,6 @@
 #include "julienne-assert-macros.h"
 
-submodule(cell_centers_extended_m) cell_centers_extended_s
+submodule(scalar_1D_m) scalar_1D_s
   use julienne_m, only : call_julienne_assert_, operator(.equalsExpected.)
   implicit none
 
@@ -10,11 +10,11 @@ contains
     call_julienne_assert(x_max .isGreaterThan. x_min)
     call_julienne_assert(cells .isAtLeast. 2*order)
 
-    cell_centers_extended%x_min_ = x_min
-    cell_centers_extended%x_max_ = x_max
-    cell_centers_extended%cells_ = cells
-    cell_centers_extended%gradient_operator_ = gradient_operator_t(k=order, dx=(x_max - x_min)/cells, m=cells)
-    cell_centers_extended%scalar_1D_ = initializer(grid_(x_min, x_max, cells))
+    scalar_1D%x_min_ = x_min
+    scalar_1D%x_max_ = x_max
+    scalar_1D%cells_ = cells
+    scalar_1D%gradient_operator_ = gradient_operator_t(k=order, dx=(x_max - x_min)/cells, m=cells)
+    scalar_1D%scalar_1D_ = initializer(grid_(x_min, x_max, cells))
   end procedure
 
   pure function grid_(x_min, x_max, cells) result(x)
@@ -36,4 +36,4 @@ contains
     grad_f = gradient_t(matvec(self%gradient_operator_%mimetic_matrix_, self), self%x_min_, self%x_max_, self%cells_)
   end procedure
 
-end submodule cell_centers_extended_s
+end submodule scalar_1D_s

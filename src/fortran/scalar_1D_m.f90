@@ -1,11 +1,11 @@
-module cell_centers_extended_m
+module scalar_1D_m
   !! Define an abstraction for the collection of points used to compute gradidents:
   !! cell centers plus oundaries.
   use gradient_m, only : gradient_t
   implicit none
 
   private
-  public :: cell_centers_extended_t
+  public :: scalar_1D_t
   public :: gradient_operator_t
   public :: scalar_1D_initializer_i
 
@@ -33,7 +33,7 @@ module cell_centers_extended_m
     type(mimetic_matrix_t) mimetic_matrix_
   end type
 
-  type cell_centers_extended_t
+  type scalar_1D_t
     !! Encapsulate information at cell centers and boundaries
     private
     double precision, allocatable :: scalar_1D_(:)
@@ -46,9 +46,9 @@ module cell_centers_extended_m
     procedure, non_overridable, private :: grad
   end type
 
-  interface cell_centers_extended_t
+  interface scalar_1D_t
 
-    pure module function construct_from_function(initializer, order, cells, x_min, x_max) result(cell_centers_extended)
+    pure module function construct_from_function(initializer, order, cells, x_min, x_max) result(scalar_1D)
       !! Result is a collection of cell-centered-extended values with a corresponding mimetic gradient operator
       implicit none
       procedure(scalar_1D_initializer_i), pointer :: initializer 
@@ -56,7 +56,7 @@ module cell_centers_extended_m
       integer, intent(in) :: cells !! number of grid cells spanning the domain
       double precision, intent(in) :: x_min !! grid location minimum
       double precision, intent(in) :: x_max !! grid location maximum
-      type(cell_centers_extended_t) cell_centers_extended
+      type(scalar_1D_t) scalar_1D
     end function
 
   end interface
@@ -67,14 +67,14 @@ module cell_centers_extended_m
       !! Result is array of cell-centers-extended grid locations (cell centers + boundaries) 
       !! as described in Corbino & Castillo (2020) https://doi.org/10.1016/j.cam.2019.06.042
       implicit none
-      class(cell_centers_extended_t), intent(in) :: self
+      class(scalar_1D_t), intent(in) :: self
       double precision, allocatable :: x(:)
     end function
 
     pure module function grad(self) result(grad_f)
       !! Result is mimetic gradient of f
       implicit none
-      class(cell_centers_extended_t), intent(in) :: self
+      class(scalar_1D_t), intent(in) :: self
       type(gradient_t) grad_f !! discrete gradient approximation
     end function
 
@@ -110,10 +110,10 @@ module cell_centers_extended_m
       !! Apply a matrix operator to a vector
       implicit none
       class(mimetic_matrix_t), intent(in) :: self
-      type(cell_centers_extended_t), intent(in) :: vector
+      type(scalar_1D_t), intent(in) :: vector
       double precision, allocatable :: matvec_product(:)
     end function
 
   end interface
 
-end module cell_centers_extended_m
+end module scalar_1D_m
