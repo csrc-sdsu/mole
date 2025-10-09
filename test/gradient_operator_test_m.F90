@@ -15,7 +15,7 @@ module gradient_operator_test_m
     ,operator(.all.) &
     ,operator(.approximates.) &
     ,operator(.within.)
-  use mole_m, only : scalar_1D_t, gradient_t, scalar_1D_initializer_i
+  use mole_m, only : scalar_1D_t, gradient_1D_t, scalar_1D_initializer_i
 #if ! HAVE_PROCEDURE_ACTUAL_FOR_POINTER_DUMMY
   use julienne_m, only : diagnosis_function_i
 #endif
@@ -42,9 +42,9 @@ contains
     type(gradient_operator_test_t) gradient_operator_test
     type(test_result_t), allocatable :: test_results(:)
     test_results = gradient_operator_test%run([ & 
-       test_description_t('computing the 2nd-order 1D gradient of a constant within tolerance ' // string_t(tight_tolerance), check_grad_const) &
-      ,test_description_t('computing the 2nd-order 1D gradient of a line within tolerance ' // string_t(loose_tolerance), check_grad_line) &
-      ,test_description_t('computing the 2nd-order 1D gradient of a parabola within tolerance ' // string_t(loose_tolerance), check_grad_parabola) &
+       test_description_t('computing the 2nd-order 1D gradient of a constant within a tolerance of ' // string_t(tight_tolerance), check_grad_const) &
+      ,test_description_t('computing the 2nd-order 1D gradient of a line within a tolerance of ' // string_t(loose_tolerance), check_grad_line) &
+      ,test_description_t('computing the 2nd-order 1D gradient of a parabola within a tolerance of ' // string_t(loose_tolerance), check_grad_parabola) &
     ])
   end function
 
@@ -55,13 +55,13 @@ contains
     type(test_result_t), allocatable :: test_results(:)
     procedure(diagnosis_function_i), pointer :: &
        check_grad_const_ptr => check_grad_const &
-      ,check_grad_line_ptr => check_grad_line
+      ,check_grad_line_ptr => check_grad_line &
       ,check_grad_parabola_ptr => check_grad_parabola
 
     test_results = gradient_operator_test%run([ &
-       test_description_t('computing the 2nd-order 1D gradient of a constant within tolerance ' // string_t(tight_tolerance), check_grad_const_ptr) &
-      ,test_description_t('computing the 2nd-order 1D gradient of a line within tolerance ' // string_t(loose_tolerance), check_grad_line_ptr) &
-      ,test_description_t('computing the 2nd-order 1D gradient of a parabola within tolerance ' // string_t(loose_tolerance), check_grad_parabola_ptr) &
+       test_description_t('computing the 2nd-order 1D gradient of a constant within a tolerance of ' // string_t(tight_tolerance), check_grad_const_ptr) &
+      ,test_description_t('computing the 2nd-order 1D gradient of a line within a tolerance of ' // string_t(loose_tolerance), check_grad_line_ptr) &
+      ,test_description_t('computing the 2nd-order 1D gradient of a parabola within a tolerance of ' // string_t(loose_tolerance), check_grad_parabola_ptr) &
     ])
   end function
 
@@ -76,7 +76,7 @@ contains
 
   function check_grad_const() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
-    type(gradient_t) grad_f
+    type(gradient_1D_t) grad_f
     double precision, parameter :: df_dx = 0.
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => const
 
@@ -92,7 +92,7 @@ contains
 
   function check_grad_line() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
-    type(gradient_t) grad_f
+    type(gradient_1D_t) grad_f
     double precision, parameter :: df_dx = 14D0
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => line
 
@@ -109,7 +109,7 @@ contains
   function check_grad_parabola() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
     type(scalar_1D_t) quadratic
-    type(gradient_t) grad_f
+    type(gradient_1D_t) grad_f
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => parabola
 
     quadratic = scalar_1D_t(scalar_1D_initializer , order=2, cells=4, x_min=0D0, x_max=1D0)

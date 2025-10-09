@@ -1,7 +1,7 @@
 module scalar_1D_m
   !! Define an abstraction for the collection of points used to compute gradidents:
   !! cell centers plus oundaries.
-  use gradient_m, only : gradient_t
+  use gradient_1D_m, only : gradient_1D_t
   implicit none
 
   private
@@ -75,7 +75,7 @@ module scalar_1D_m
       !! Result is mimetic gradient of f
       implicit none
       class(scalar_1D_t), intent(in) :: self
-      type(gradient_t) grad_f !! discrete gradient approximation
+      type(gradient_1D_t) grad_f !! discrete gradient approximation
     end function
 
   end interface
