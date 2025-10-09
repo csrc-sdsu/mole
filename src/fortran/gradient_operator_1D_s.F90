@@ -14,7 +14,7 @@ contains
 
     call_julienne_assert(m .isAtLeast. 2*k)
 
-    gradient_operator_1D%mimetic_matrix_ = mimetic_matrix_t( &
+    gradient_operator_1D%mimetic_matrix_1D_ = mimetic_matrix_1D_t( &
        corbino_castillo_A( k, dx) & 
       ,corbino_castillo_M( k, dx) & 
       ,corbino_castillo_Ap(k, dx) &

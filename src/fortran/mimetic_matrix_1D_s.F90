@@ -1,16 +1,16 @@
 #include "mole-language-support.F90"
 #include "julienne-assert-macros.h"
 
-submodule(scalar_1D_m) mimetic_matrix_s
+submodule(scalar_1D_m) mimetic_matrix_1D_s
   use julienne_m, only : call_julienne_assert_, string_t
   implicit none
 
 contains
 
   module procedure construct_from_components
-    mimetic_matrix%upper_ = upper
-    mimetic_matrix%inner_ = inner
-    mimetic_matrix%lower_ = lower
+    mimetic_matrix_1D%upper_ = upper
+    mimetic_matrix_1D%inner_ = inner
+    mimetic_matrix_1D%lower_ = lower
   end procedure
 
 #if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT
@@ -41,4 +41,4 @@ contains
 
 #endif
 
-end submodule mimetic_matrix_s
+end submodule mimetic_matrix_1D_s
