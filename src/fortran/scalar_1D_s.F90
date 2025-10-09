@@ -1,13 +1,13 @@
 #include "julienne-assert-macros.h"
 
 submodule(scalar_1D_m) scalar_1D_s
-  use julienne_m, only : call_julienne_assert_, operator(.equalsExpected.)
+  use julienne_m, only : call_julienne_assert_, operator(.equalsExpected.), operator(.greaterThan.), operator(.isAtLeast.)
   implicit none
 
 contains
 
   module procedure construct_from_function
-    call_julienne_assert(x_max .isGreaterThan. x_min)
+    call_julienne_assert(x_max .greaterThan. x_min)
     call_julienne_assert(cells .isAtLeast. 2*order)
 
     scalar_1D%x_min_ = x_min
