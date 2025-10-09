@@ -24,7 +24,7 @@ contains
 
         allocate(product_inner(inner_rows))
 
-        do concurrent(integer :: row = 1 : size(product_inner)) default(none) shared(product_inner, self, vector)
+        do concurrent(integer :: row = 1 : inner_rows) default(none) shared(product_inner, self, vector)
           product_inner(row) = dot_product(self%inner_, vector%scalar_1D_(row + 1 : row + size(self%inner_)))
         end do
 
