@@ -1,7 +1,7 @@
 #include "julienne-assert-macros.h"
 #include "mole-language-support.F90"
 
-submodule(scalar_1D_m) gradient_operator_s
+submodule(scalar_1D_m) gradient_operator_1D_s
   use julienne_m, only : call_julienne_assert_, string_t
 #if ASSERTIONS
   use julienne_m, only : operator(.isAtLeast.)
@@ -14,14 +14,14 @@ contains
 
     call_julienne_assert(m .isAtLeast. 2*k)
 
-    gradient_operator%mimetic_matrix_ = mimetic_matrix_t( &
+    gradient_operator_1D%mimetic_matrix_ = mimetic_matrix_t( &
        corbino_castillo_A( k, dx) & 
       ,corbino_castillo_M( k, dx) & 
       ,corbino_castillo_Ap(k, dx) &
     )
-    gradient_operator%k_  = k
-    gradient_operator%dx_ = dx
-    gradient_operator%m_ = m
+    gradient_operator_1D%k_  = k
+    gradient_operator_1D%dx_ = dx
+    gradient_operator_1D%m_ = m
   end procedure
 
   pure function corbino_castillo_A(k, dx) result(rows)
@@ -101,4 +101,4 @@ contains
 
 #endif
 
-end submodule gradient_operator_s
+end submodule gradient_operator_1D_s
