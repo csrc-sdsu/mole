@@ -2,7 +2,7 @@
 #include "julienne-assert-macros.h"
 
 submodule(scalar_1D_m) mimetic_matrix_1D_s
-  use julienne_m, only : call_julienne_assert_, string_t
+  use julienne_m, only : call_julienne_assert_, string_t, operator(.equalsExpected.)
   implicit none
 
 contains
@@ -19,7 +19,7 @@ contains
 
     double precision, allocatable :: product_inner(:)
 
-    associate(upper => merge(0, 1, size(self%upper_)==0), lower => merge(0, 1, size(self%lower_)==0))
+    associate(upper => size(self%upper_,1), lower => size(self%lower_,1))
       associate(inner_rows => size(vector%scalar_1D_) - (upper + lower + 1))
 
         allocate(product_inner(inner_rows))
