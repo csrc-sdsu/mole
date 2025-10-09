@@ -1,13 +1,13 @@
-submodule(gradient_m) gradient_s
+submodule(gradient_1D_m) gradient_1D_s
   implicit none
 
 contains
 
   module procedure construct_from_components
-    gradient%vector_1D_ = face_centered_values
-    gradient%x_min_ = x_min
-    gradient%x_max_ = x_max
-    gradient%cells_ = cells
+    gradient_1D%vector_1D_ = face_centered_values
+    gradient_1D%x_min_ = x_min
+    gradient_1D%x_max_ = x_max
+    gradient_1D%cells_ = cells
   end procedure
 
   module procedure values
@@ -22,4 +22,4 @@ contains
         ]
   end procedure
 
-end submodule gradient_s
+end submodule gradient_1D_s
