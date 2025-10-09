@@ -35,8 +35,8 @@ contains
       rows = reshape([-8D0/3D0, 3D0, -1D0/3D0] , shape=[1,3]) / dx
     case(4)
       rows = transpose(reshape([ & 
-         [-352D0/105D0,  35D0/ 8D0, -35D0/24D0, -21D0/40D0, -5D0/ 56D0] &
-        ,[ -16D0/105D0, -31D0/24D0,  29D0/24D0,  -3D0/40D0,  1D0/168D0] &
+         [-352D0/105D0,  35D0/ 8D0, -35D0/24D0, 21D0/40D0, -5D0/ 56D0] &
+        ,[  16D0/105D0, -31D0/24D0,  29D0/24D0, -3D0/40D0,  1D0/168D0] &
       ], shape=[5,2]))
     case default
       associate(string_k => string_t(k))
