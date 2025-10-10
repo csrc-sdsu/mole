@@ -24,20 +24,20 @@ contains
     gradient_operator_1D%m_ = m
   end procedure
 
-  pure function corbino_castillo_A(k, dx) result(rows)
+  pure function corbino_castillo_A(k, dx) result(matrix_block)
     integer, intent(in) :: k
     double precision, intent(in) :: dx
-    double precision, allocatable :: rows(:,:)
+    double precision, allocatable :: matrix_block(:,:)
 
     order_of_accuracy: &
     select case(k)
     case(2)
-      rows = reshape([-8D0/3D0, 3D0, -1D0/3D0] , shape=[1,3]) / dx
+      matrix_block = reshape([-8D0/3D0, 3D0, -1D0/3D0] , shape=[1,3]) / dx
     case(4)
-      rows = transpose(reshape([ & 
-         [-352D0/105D0,  35D0/ 8D0, -35D0/24D0, 21D0/40D0, -5D0/ 56D0] &
-        ,[  16D0/105D0, -31D0/24D0,  29D0/24D0, -3D0/40D0,  1D0/168D0] &
-      ], shape=[5,2]))
+      matrix_block = reshape([ &
+         -352D0/105D0,  35D0/ 8D0, -35D0/24D0, 21D0/40D0, -5D0/ 56D0 &
+        ,  16D0/105D0, -31D0/24D0,  29D0/24D0, -3D0/40D0,  1D0/168D0 &
+      ], shape=[2,5], order=[2,1]) / dx
     case default
       associate(string_k => string_t(k))
         error stop "corbino_castillo_A: unsupported order of accuracy: " // string_k%string()
@@ -68,36 +68,25 @@ contains
 #if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT
 
 
-  pure function corbino_castillo_Ap(k, dx) result(rows)
+  pure function corbino_castillo_Ap(k, dx) result(matrix_block)
     integer, intent(in) :: k
     double precision, intent(in) :: dx
-    double precision, allocatable :: rows(:,:)
+    double precision, allocatable :: matrix_block(:,:)
 
     associate(A => corbino_castillo_A(k, dx))
-      allocate(rows , mold=A)
-      reverse_and_flip_sign: &
-      do concurrent(integer :: row = 1:size(rows,1)) default(none) shared(rows, A)
-        rows(row,:) = -A(row,size(A,2):1:-1)
-      end do reverse_and_flip_sign
+      allocate(matrix_block , mold=A)
+      reverse_elements_within_matrix_block_and_flip_sign: &
+      do concurrent(integer :: row = 1:size(matrix_block,1)) default(none) shared(matrix_block, A)
+        matrix_block(row,:) = -A(row,size(A,2):1:-1)
+      end do reverse_elements_within_matrix_block_and_flip_sign
+      reverse_elements_within_columns: &
+      do concurrent(integer :: column = 1 : size(matrix_block,2)) default(none) shared(matrix_block)
+        matrix_block(:,column) = matrix_block(size(matrix_block,1):1:-1,column)
+      end do reverse_elements_within_columns
     end associate
   end function
  
 #else
-
-  pure function corbino_castillo_Ap(k, dx) result(rows)
-    integer, intent(in) :: k
-    double precision, intent(in) :: dx
-    double precision, allocatable :: rows(:,:)
-    integer row
-
-    associate(A => corbino_castillo_A(k, dx))
-      allocate(rows , mold=A)
-      reverse_and_flip_sign: &
-      do concurrent(row = 1:size(rows,1)) default(none) shared(rows, A)
-        rows(row,:) = -A(row,size(A,2):1:-1)
-      end do reverse_and_flip_sign
-    end associate
-  end function
 
 #endif
 

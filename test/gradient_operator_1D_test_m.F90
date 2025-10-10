@@ -10,7 +10,9 @@ module gradient_operator_1D_test_m
     ,test_result_t &
     ,operator(//) &
     ,operator(.all.) &
+    ,operator(.also.) &
     ,operator(.approximates.) &
+    ,operator(.csv.) &
     ,operator(.within.)
   use mole_m, only : scalar_1D_t, gradient_1D_t, scalar_1D_initializer_i
 #if ! HAVE_PROCEDURE_ACTUAL_FOR_POINTER_DUMMY
@@ -39,9 +41,9 @@ contains
     type(gradient_operator_1D_test_t) gradient_operator_1D_test
     type(test_result_t), allocatable :: test_results(:)
     test_results = gradient_operator_1D_test%run([ & 
-       test_description_t('computing the 2nd-order 1D gradient of a constant within a tolerance of ' // string_t(tight_tolerance), check_grad_const) &
-      ,test_description_t('computing the 2nd-order 1D gradient of a line within a tolerance of ' // string_t(loose_tolerance), check_grad_line) &
-      ,test_description_t('computing the 2nd-order 1D gradient of a parabola within a tolerance of ' // string_t(loose_tolerance), check_grad_parabola) &
+       test_description_t('computing 2nd & 4th-order 1D gradients of a constant within tolerance ' // string_t(tight_tolerance), check_grad_const) &
+      ,test_description_t('computing 2nd & 4th-order 1D gradients of a line within tolerance ' // string_t(loose_tolerance), check_grad_line) &
+      ,test_description_t('computing 2nd & 4th-order 1D gradients of a parabola within tolerance ' // string_t(loose_tolerance), check_grad_parabola) &
     ])
   end function
 
@@ -56,9 +58,9 @@ contains
       ,check_grad_parabola_ptr => check_grad_parabola
 
     test_results = gradient_operator_1D_test%run([ &
-       test_description_t('computing the 2nd-order 1D gradient of a constant within a tolerance of ' // string_t(tight_tolerance), check_grad_const_ptr) &
-      ,test_description_t('computing the 2nd-order 1D gradient of a line within a tolerance of ' // string_t(loose_tolerance), check_grad_line_ptr) &
-      ,test_description_t('computing the 2nd-order 1D gradient of a parabola within a tolerance of ' // string_t(loose_tolerance), check_grad_parabola_ptr) &
+       test_description_t('computing 2nd & 4th-order 1D gradients of a constant within tolerance ' // string_t(tight_tolerance), check_grad_const_ptr) &
+      ,test_description_t('computing 2nd & 4th-order 1D gradients of a line within tolerance ' // string_t(loose_tolerance), check_grad_line_ptr) &
+      ,test_description_t('computing 2nd & 4th-order 1D gradients of a parabola within tolerance ' // string_t(loose_tolerance), check_grad_parabola_ptr) &
     ])
   end function
 
@@ -77,8 +79,11 @@ contains
     double precision, parameter :: df_dx = 0.
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => const
 
-    grad_f = .grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=4, x_min=0D0, x_max=1D0)
-    test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) // " (d(line)/dx)"
+    grad_f = .grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=4, x_min=0D0, x_max=4D0)
+    test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) // " (2nd-order d(line)/dx)"
+
+    grad_f = .grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=8, x_min=0D0, x_max=8D0)
+    test_diagnosis = test_diagnosis .also. (.all. (grad_f%values() .approximates. df_dx .within. loose_tolerance)) // " (4th-order d(line)/dx)"
   end function
 
   pure function line(x) result(y)
@@ -93,8 +98,12 @@ contains
     double precision, parameter :: df_dx = 14D0
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => line
 
-    grad_f = .grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=4, x_min=0D0, x_max=1D0)
-    test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) // " (d(line)/dx)"
+    grad_f = .grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=4, x_min=0D0, x_max=4D0)
+    test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) // " (2nd-order d(line)/dx)"
+
+    grad_f = .grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=8, x_min=0D0, x_max=8D0)
+    test_diagnosis = test_diagnosis .also. (.all. (grad_f%values() .approximates. df_dx .within. loose_tolerance)) // " (4th-order d(line)/dx)"
+
   end function
 
   pure function parabola(x) result(y)
@@ -109,15 +118,23 @@ contains
     type(gradient_1D_t) grad_f
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => parabola
 
-    quadratic = scalar_1D_t(scalar_1D_initializer , order=2, cells=4, x_min=0D0, x_max=1D0)
+    quadratic = scalar_1D_t(scalar_1D_initializer , order=2, cells=4, x_min=0D0, x_max=4D0)
     grad_f = .grad. quadratic
 
     associate(x => grad_f%faces())
       associate(df_dx => 14*x + 3)
-        test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) // " (d(parabola)/dx)"
+        test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) // " (2nd-order d(parabola)/dx)"
       end associate
     end associate
 
+    quadratic = scalar_1D_t(scalar_1D_initializer , order=4, cells=8, x_min=0D0, x_max=8D0)
+    grad_f = .grad. quadratic
+
+    associate(x => grad_f%faces())
+      associate(df_dx => 14*x + 3)
+        test_diagnosis = test_diagnosis .also. (.all. (grad_f%values() .approximates. df_dx .within. loose_tolerance)) // " (4th-order d(parabola)/dx)"
+      end associate
+    end associate
   end function
 
 end module
