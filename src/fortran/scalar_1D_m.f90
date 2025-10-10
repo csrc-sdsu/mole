@@ -1,6 +1,7 @@
 module scalar_1D_m
   !! Define an abstraction for the collection of points used to compute gradidents:
   !! cell centers plus oundaries.
+  use julienne_m, only : file_t
   use gradient_1D_m, only : gradient_1D_t
   implicit none
 
@@ -23,6 +24,8 @@ module scalar_1D_m
     !! Encapsulate a mimetic matrix with a corresponding matrix-vector product operator
     private
     double precision, allocatable :: upper_(:,:), inner_(:), lower_(:,:)
+  contains
+    procedure to_file_t
   end type
 
   type gradient_operator_1D_t
@@ -45,6 +48,16 @@ module scalar_1D_m
     generic :: operator(.grad.) => grad
     procedure, non_overridable, private :: grad
   end type
+
+  interface
+
+     pure module function to_file_t(self) result(file)
+       implicit none
+       class(mimetic_matrix_1D_t), intent(in) :: self
+       type(file_t) file
+     end function
+
+  end interface
 
   interface scalar_1D_t
 
