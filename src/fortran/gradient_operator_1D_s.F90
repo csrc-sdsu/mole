@@ -67,7 +67,6 @@ contains
 
 #if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT
 
-
   pure function corbino_castillo_Ap(k, dx) result(matrix_block)
     integer, intent(in) :: k
     double precision, intent(in) :: dx
@@ -88,6 +87,25 @@ contains
  
 #else
 
+  pure function corbino_castillo_Ap(k, dx) result(matrix_block)
+    integer, intent(in) :: k
+    double precision, intent(in) :: dx
+    double precision, allocatable :: matrix_block(:,:)
+    integer row, column
+
+    associate(A => corbino_castillo_A(k, dx))
+      allocate(matrix_block , mold=A)
+      reverse_elements_within_rows_and_flip_sign: &
+      do concurrent(row = 1:size(matrix_block,1)) default(none) shared(matrix_block, A)
+        matrix_block(row,:) = -A(row,size(A,2):1:-1)
+      end do reverse_elements_within_rows_and_flip_sign
+      reverse_elements_within_columns: &
+      do concurrent(column = 1 : size(matrix_block,2)) default(none) shared(matrix_block)
+        matrix_block(:,column) = matrix_block(size(matrix_block,1):1:-1,column)
+      end do reverse_elements_within_columns
+    end associate
+  end function
+ 
 #endif
 
 end submodule gradient_operator_1D_s
