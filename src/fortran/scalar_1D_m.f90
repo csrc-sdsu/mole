@@ -119,11 +119,11 @@ module scalar_1D_m
 
   interface
 
-    pure module function matvec(self, vector) result(matvec_product)
-      !! Apply a matrix operator to a vector
+    pure module function matvec(self, scalar_1D) result(matvec_product)
+      !! Apply a mimetic matrix operator to a vector encapsulated in a scalar_1D_t object
       implicit none
       class(mimetic_matrix_1D_t), intent(in) :: self
-      type(scalar_1D_t), intent(in) :: vector
+      type(scalar_1D_t), intent(in) :: scalar_1D
       double precision, allocatable :: matvec_product(:)
     end function
 
