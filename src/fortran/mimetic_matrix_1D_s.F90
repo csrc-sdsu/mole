@@ -2,7 +2,7 @@
 #include "julienne-assert-macros.h"
 
 submodule(scalar_1D_m) mimetic_matrix_1D_s
-  use julienne_m, only : call_julienne_assert_, string_t, operator(.equalsExpected.)
+  use julienne_m, only : call_julienne_assert_, string_t, operator(.equalsExpected.), operator(.csv.)
   implicit none
 
 contains
@@ -40,5 +40,25 @@ contains
 #else
 
 #endif
+
+  module procedure to_file_t
+    type(string_t), allocatable :: lines(:)
+    integer, parameter :: inner_rows = 1
+    integer row
+
+    associate(upper_rows => size(self%upper_,1), lower_rows => size(self%lower_,1))
+      allocate(lines(upper_rows + inner_rows + lower_rows))
+      do row = 1, upper_rows
+        lines(row) = .csv. string_t(self%upper_(row,:))
+      end do
+      lines(upper_rows + inner_rows) = .csv. string_t(self%inner_)
+      do row = 1, lower_rows
+        lines(upper_rows + inner_rows + row) = .csv. string_t(self%lower_(row,:))
+      end do
+    end associate
+
+    file = file_t(lines)
+
+  end procedure
 
 end submodule mimetic_matrix_1D_s
