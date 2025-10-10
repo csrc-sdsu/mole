@@ -6,7 +6,15 @@ submodule(scalar_1D_m) scalar_1D_s
 
 contains
 
-  module procedure construct_from_function
+  pure module function construct_from_function(initializer, order, cells, x_min, x_max) result(scalar_1D)
+    implicit none
+    procedure(scalar_1D_initializer_i), pointer :: initializer
+    integer, intent(in) :: order !! order of accuracy
+    integer, intent(in) :: cells !! number of grid cells spanning the domain
+    double precision, intent(in) :: x_min !! grid location minimum
+    double precision, intent(in) :: x_max !! grid location maximum
+    type(scalar_1D_t) scalar_1D
+
     call_julienne_assert(x_max .greaterThan. x_min)
     call_julienne_assert(cells .isAtLeast. 2*order)
 
@@ -15,7 +23,7 @@ contains
     scalar_1D%cells_ = cells
     scalar_1D%gradient_operator_1D_ = gradient_operator_1D_t(k=order, dx=(x_max - x_min)/cells, m=cells)
     scalar_1D%scalar_1D_ = initializer(grid_(x_min, x_max, cells))
-  end procedure
+  end function
 
   pure function grid_(x_min, x_max, cells) result(x)
     double precision, intent(in) :: x_min, x_max
