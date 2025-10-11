@@ -39,6 +39,29 @@ contains
 
 #else
 
+  module procedure matvec
+
+    integer row
+    double precision, allocatable :: product_inner(:)
+
+    associate(upper => size(self%upper_,1), lower => size(self%lower_,1))
+      associate(inner_rows => size(scalar_1D%scalar_1D_) - (upper + lower + 1))
+
+        allocate(product_inner(inner_rows))
+
+        do concurrent(row = 1 : inner_rows) default(none) shared(product_inner, self, scalar_1D)
+          product_inner(row) = dot_product(self%inner_, scalar_1D%scalar_1D_(row + 1 : row + size(self%inner_)))
+        end do
+
+        matvec_product = [ &
+           matmul(self%upper_, scalar_1D%scalar_1D_(1 : size(self%upper_,2))) &
+          ,product_inner &
+          ,matmul(self%lower_, scalar_1D%scalar_1D_(size(scalar_1D%scalar_1D_) - size(self%lower_,2) + 1 : )) &
+        ]
+      end associate
+    end associate
+  end procedure
+
 #endif
 
   module procedure to_file_t
