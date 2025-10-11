@@ -13,19 +13,22 @@ with initial condition $y(0) = 2.0$ over the time interval $[0,5]$.
 The RK2 method (also known as the midpoint method) uses two stages to compute each time step:
 
 1. First stage (slope at the beginning):
-   $$
-   k_1 = f(t_i, y_i)
-   $$
+
+$$
+k_1 = f(t_i, y_i)
+$$
 
 2. Second stage (slope at midpoint):
-   $$
-   k_2 = f(t_i + \frac{h}{2}, y_i + \frac{h}{2}k_1)
-   $$
+
+$$
+k_2 = f(t_i + \frac{h}{2}, y_i + \frac{h}{2}k_1)
+$$
 
 3. Solution update:
-   $$
-   y_{i+1} = y_i + h \cdot k_2
-   $$
+
+$$
+y_{i+1} = y_i + h \cdot k_2
+$$
 
 where:
 - $h$ is the step size (set to 0.1 in the examples)
