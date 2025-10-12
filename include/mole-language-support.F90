@@ -19,7 +19,7 @@
 #endif
 
 #ifndef HAVE_LOCALITY_SPECIFIER_SUPPORT
-#  if defined(NAGFOR) || defined(__flang__) || defined(__INTEL_COMPILER) || defined(_CRAYFTN)
+#  if defined(NAGFOR) || defined(__flang__) || defined(__INTEL_COMPILER) || defined(_CRAYFTN) || (GCC_VERSION >= 150100)
 #    define HAVE_LOCALITY_SPECIFIER_SUPPORT 1
 #  else
 #    define HAVE_LOCALITY_SPECIFIER_SUPPORT 0
