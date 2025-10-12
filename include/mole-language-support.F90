@@ -4,15 +4,10 @@
 #ifndef MOLE_LANGUAGE_SUPPORT
 #define MOLE_LANGUAGE_SUPPORT
 
-
 #ifdef __GNUC__
 #  define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
 #else
 #  define GCC_VERSION 0
-#endif
-
-#if __GNUC__ && ( __GNUC__ < 14 || (__GNUC__ == 14 && __GNUC_MINOR__ < 3) )
-#define GCC_GE_MINIMUM
 #endif
 
 #ifndef HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT
@@ -20,6 +15,14 @@
 #    define HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT 1
 #  else
 #    define HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT 0
+#  endif
+#endif
+
+#ifndef HAVE_LOCALITY_SPECIFIER_SUPPORT
+#  if defined(NAGFOR) || defined(__flang__) || defined(__INTEL_COMPILER) || defined(_CRAYFTN)
+#    define HAVE_LOCALITY_SPECIFIER_SUPPORT 1
+#  else
+#    define HAVE_LOCALITY_SPECIFIER_SUPPORT 0
 #  endif
 #endif
 
