@@ -13,7 +13,7 @@ contains
     mimetic_matrix_1D%lower_ = lower
   end procedure
 
-#if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT
+#if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
 
   module procedure matvec
 
@@ -49,7 +49,7 @@ contains
 
         allocate(product_inner(inner_rows))
 
-        do concurrent(row = 1 : inner_rows) default(none) shared(product_inner, self, scalar_1D)
+        do concurrent(row = 1 : inner_rows)
           product_inner(row) = dot_product(self%inner_, scalar_1D%scalar_1D_(row + 1 : row + size(self%inner_)))
         end do
 

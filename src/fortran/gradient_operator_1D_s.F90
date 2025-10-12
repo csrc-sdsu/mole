@@ -65,7 +65,7 @@ contains
 
   end function
 
-#if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT
+#if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
 
   pure function corbino_castillo_Ap(k, dx) result(matrix_block)
     integer, intent(in) :: k
@@ -96,11 +96,11 @@ contains
     associate(A => corbino_castillo_A(k, dx))
       allocate(matrix_block , mold=A)
       reverse_elements_within_rows_and_flip_sign: &
-      do concurrent(row = 1:size(matrix_block,1)) default(none) shared(matrix_block, A)
+      do concurrent(row = 1:size(matrix_block,1))
         matrix_block(row,:) = -A(row,size(A,2):1:-1)
       end do reverse_elements_within_rows_and_flip_sign
       reverse_elements_within_columns: &
-      do concurrent(column = 1 : size(matrix_block,2)) default(none) shared(matrix_block)
+      do concurrent(column = 1 : size(matrix_block,2))
         matrix_block(:,column) = matrix_block(size(matrix_block,1):1:-1,column)
       end do reverse_elements_within_columns
     end associate
