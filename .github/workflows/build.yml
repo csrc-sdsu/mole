@@ -1,6 +1,6 @@
 name: Build
 
-on: [push]
+on: [push, pull_request]
 
 
 jobs:
@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-13, macos-14, macos-15, ubuntu-22.04, ubuntu-24.04]
+        os: [macos-15, ubuntu-22.04, ubuntu-24.04]
         compiler: [ gfortran ]
         version: [ 13, 14 ]
         extra_flags: [ -g -O3 ]
@@ -51,35 +51,6 @@ jobs:
             version: 19
             extra_flags: -g -mmlir -allow-assumed-rank -O3
             container: phhargrove/llvm-flang:19.1.1-1
-
-          # --- Intel coverage ---
-
-# https://hub.docker.com/r/intel/fortran-essentials/tags
-          - os: ubuntu-24.04
-            compiler: ifx
-            version: 2025.2.0
-            error_stop_code: 128
-            container: intel/fortran-essentials:2025.2.0-0-devel-ubuntu24.04
-
-          - os: ubuntu-24.04
-            compiler: ifx
-            version: 2025.2.2
-            error_stop_code: 128
-            container: intel/fortran-essentials:2025.2.2-0-devel-ubuntu24.04
-
-          - os: ubuntu-24.04
-            compiler: ifx
-            version: latest
-            error_stop_code: 128
-            container: intel/fortran-essentials:latest
-
-          # --- LFortran coverage ---
-
-          # https://hub.docker.com/r/phhargrove/lfortran/tags
-          #- os: ubuntu-24.04
-          #  compiler: lfortran
-          #  version: 0.54.0
-          #  container: phhargrove/lfortran:0.54.0-1
 
     container:
       image: ${{ matrix.container }}
