@@ -124,6 +124,9 @@ int main()
     scriptFile.close();
 
     // Run GNUplot with the script
-    system("gnuplot -persistent gp_script");
+    if (system("gnuplot -persistent gp_script") != 0) {
+        cerr << "Error: Failed to execute GNUplot.\n";
+        return EXIT_FAILURE;
+    }
     return EXIT_SUCCESS;
 }
