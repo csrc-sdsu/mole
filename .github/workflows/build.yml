@@ -10,26 +10,25 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-15, ubuntu-22.04, ubuntu-24.04]
+        os: [ macos-14, macos-15, macos-15-intel, ubuntu-24.04]
         compiler: [ gfortran ]
-        version: [ 13, 14 ]
+        version: [ 13, 14, 15 ]
         extra_flags: [ -g -O3 ]
 
         exclude:
-          - os: ubuntu-22.04
-            version: 13 # no package available
-          - os: ubuntu-22.04
-            version: 14 # no package available
+          - os: ubuntu-24.04
+            version: 15 # no package available (yet?)
 
         include:
+
           # --- LLVM flang coverage ---
 
           - os: macos-14
             compiler: flang
-            version: 20
+            version: 21
           - os: macos-15
             compiler: flang
-            version: 20
+            version: 21
 
           # https://hub.docker.com/r/snowstep/llvm/tags
           - os: ubuntu-24.04
@@ -44,13 +43,18 @@ jobs:
           # https://hub.docker.com/r/phhargrove/llvm-flang/tags
           - os: ubuntu-24.04
             compiler: flang
+            version: 21
+            network: smp
+            container: phhargrove/llvm-flang:21.1.0-latest
+          - os: ubuntu-24.04
+            compiler: flang
             version: 20
-            container: phhargrove/llvm-flang:20.1.0-1
+            container: phhargrove/llvm-flang:20.1.0-latest
           - os: ubuntu-24.04
             compiler: flang
             version: 19
             extra_flags: -g -mmlir -allow-assumed-rank -O3
-            container: phhargrove/llvm-flang:19.1.1-1
+            container: phhargrove/llvm-flang:19.1.1-latest
 
     container:
       image: ${{ matrix.container }}
@@ -60,20 +64,19 @@ jobs:
       FC: ${{ matrix.compiler }}
       FFLAGS: ${{ matrix.extra_flags }}
       FPM_FLAGS:  --profile release --verbose
+      FPM_CXXFLAGS: -std=c++14 # needed for Armadillo on macos-14
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v5
 
-    - name: Install Dependencies Ubuntu
-      if: ${{ contains(matrix.os, 'ubuntu') && matrix.compiler == 'gfortran' && 0 }}
+    - name: Install Ubuntu Native Dependencies
+      if: ${{ 0 && contains(matrix.os, 'ubuntu') && matrix.container == '' && matrix.compiler == 'gfortran' }}
       run: |
+        set -x
         sudo apt-get update
         sudo apt list -a 'gfortran-*'
         sudo apt install -y gfortran-${COMPILER_VERSION} build-essential
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${COMPILER_VERSION} 100 \
-        --slave /usr/bin/gfortran gfortran /usr/bin/gfortran-${COMPILER_VERSION}
-
 
     - name: Install Ubuntu Container Dependencies
       if: ${{ contains(matrix.os, 'ubuntu') && matrix.container != '' && !contains(matrix.container, 'phhargrove') }}
@@ -118,14 +121,12 @@ jobs:
 
     - name: Setup FPM
       uses: fortran-lang/setup-fpm@main
-      if: ${{ !contains(matrix.os, 'macos') || matrix.os == 'macos-13' }}
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         fpm-version: latest
 
     - name: Build FPM
-      # no macos-arm64 fpm distro, build from source
-      if: ${{ contains(matrix.os, 'macos') && matrix.os != 'macos-13' }}
+      if: false
       run: |
         set -x
         curl --retry 5 -LOsS https://github.com/fortran-lang/fpm/releases/download/v0.11.0/fpm-0.11.0.F90
