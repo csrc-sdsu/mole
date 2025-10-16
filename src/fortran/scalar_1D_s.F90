@@ -1,6 +1,6 @@
 #include "julienne-assert-macros.h"
 
-submodule(scalar_1D_m) scalar_1D_s
+submodule(tensors_1D_m) scalar_1D_s
   use julienne_m, only : call_julienne_assert_, operator(.equalsExpected.), operator(.greaterThan.), operator(.isAtLeast.)
   implicit none
 

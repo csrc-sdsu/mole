@@ -1,13 +1,13 @@
 #include "mole-language-support.F90"
 #include "julienne-assert-macros.h"
 
-submodule(scalar_1D_m) mimetic_matrix_1D_s
+submodule(tensors_1D_m) mimetic_matrix_1D_s
   use julienne_m, only : call_julienne_assert_, string_t, operator(.equalsExpected.), operator(.csv.)
   implicit none
 
 contains
 
-  module procedure construct_from_components
+  module procedure construct_from_block_matrices
     mimetic_matrix_1D%upper_ = upper
     mimetic_matrix_1D%inner_ = inner
     mimetic_matrix_1D%lower_ = lower
