@@ -64,8 +64,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v5
-      with:
-        ref: gradient-operator
 
     - name: Install Dependencies Ubuntu
       if: ${{ contains(matrix.os, 'ubuntu') && matrix.compiler == 'gfortran' && 0 }}
@@ -137,12 +135,17 @@ jobs:
 
     - name: Version info
       run: |
-        set -x
-        echo == TOOL VERSIONS ==
+        ( type -p git > /dev/null && (echo == Commit Info == ; git log -n 1 ; echo ; echo ) ; exit 0 )
+        echo == Platform version info == 
         uname -a
-        if test -r /etc/os-release ; then cat /etc/os-release ; fi
-        ${FPM_FC} --version
-        fpm --version
+        if test -r /etc/os-release ; then grep -e NAME -e VERSION /etc/os-release  ; fi
+        if test -x /usr/bin/sw_vers ; then /usr/bin/sw_vers ; fi
+        echo
+        echo PATH="$PATH"
+        for tool in ${FPM_FC} fpm ; do
+          ( echo ; set -x ; w=$(which $tool) ; ls -al $w ; ls -alhL $w ; $tool --version )
+        done
+
 
     - name: Build and Test (Assertions OFF)
       run: |
