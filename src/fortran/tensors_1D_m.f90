@@ -1,15 +1,12 @@
 module tensors_1D_m
-  !! Define an abstraction for the collection of points used to compute gradidents:
-  !! cell centers plus oundaries.
-  !! Define an abstraction for the collection of points used to compute gradidents:
-  !! cell centers plus oundaries.
+  !! Define 1D scalar and vector abstractions and associated mimetic gradient
+  !! and divergence operators.
   use julienne_m, only : file_t
   implicit none
 
   private
   public :: gradient_1D_t
   public :: scalar_1D_t
-  public :: gradient_operator_1D_t
   public :: scalar_1D_initializer_i
 
   abstract interface
@@ -27,7 +24,7 @@ module tensors_1D_m
     private
     double precision, allocatable :: upper_(:,:), inner_(:), lower_(:,:)
   contains
-    procedure to_file_t
+    procedure, non_overridable :: to_file_t
   end type
 
   type gradient_operator_1D_t
@@ -46,12 +43,15 @@ module tensors_1D_m
     integer cells_
     type(gradient_operator_1D_t) gradient_operator_1D_
   contains
-    procedure grid
+    procedure, non_overridable :: grid
     generic :: operator(.grad.) => grad
     procedure, non_overridable, private :: grad
   end type
 
-  type gradient_1D_t
+  type, extends(scalar_1D_t) :: divergence_1D_t
+  end type
+
+  type vector_1D_t
     !! Encapsulate gradient_1D values produced only by .grad. (no other constructors)
     private
     double precision, allocatable :: vector_1D_(:) !! gradient_1D values at cell faces (nodes in 1D)
@@ -59,8 +59,11 @@ module tensors_1D_m
     double precision x_max_ !! domain upper boundary
     integer cells_ !! number of grid cells spanning the domain
   contains
-    procedure values
-    procedure faces
+    procedure, non_overridable :: values
+    procedure, non_overridable :: faces
+  end type
+
+  type, extends(vector_1D_t) :: gradient_1D_t
   end type
 
   interface
@@ -159,13 +162,13 @@ module tensors_1D_m
 
     pure module function faces(self) result(x)
       implicit none
-      class(gradient_1D_t), intent(in) :: self
+      class(vector_1D_t), intent(in) :: self
       double precision, allocatable :: x(:)
     end function
 
      pure module function values(self) result(gradients)
        implicit none
-       class(gradient_1D_t), intent(in) :: self
+       class(vector_1D_t), intent(in) :: self
        double precision, allocatable :: gradients(:)
      end function
 
