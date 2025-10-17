@@ -59,6 +59,32 @@ jobs:
             extra_flags: -g -mmlir -allow-assumed-rank -O3
             container: phhargrove/llvm-flang:19.1.1-latest
 
+          # --- Intel coverage ---
+
+          # Intel provides two docker packages with Intel Fortran.
+          # The first is very compact, but lacks Intel C++:
+          #   https://hub.docker.com/r/intel/fortran-essentials/tags
+          #   This can be used with GNU C/C++
+          # The second includes Intel C++ and tons of other stuff,
+          # hence is much larger and can lead to slower container load:
+          #   https://hub.docker.com/r/intel/oneapi-hpckit/tags
+
+          # Julienne requires 2025.2.0 or later
+          - os: ubuntu-24.04
+            compiler: ifx-gcc
+            version: latest
+            container: intel/fortran-essentials:latest
+
+          - os: ubuntu-24.04
+            compiler: ifx
+            version: 2025.2.2
+            container: intel/oneapi-hpckit:2025.2.2-0-devel-ubuntu24.04
+
+          - os: ubuntu-24.04
+            compiler: ifx-gcc
+            version: 2025.2.0
+            container: intel/fortran-essentials:2025.2.0-0-devel-ubuntu24.04
+
     container:
       image: ${{ matrix.container }}
 
@@ -104,10 +130,17 @@ jobs:
         set -x
         if test "$FC" = "flang" ; then \
           echo "FPM_FC=flang-new" >> "$GITHUB_ENV" ; \
-        elif test "$FC" = "ifx" ; then \
+        elif [[ "$FC" =~ "ifx" ]] ; then \
           echo "FPM_FC=ifx" >> "$GITHUB_ENV" ; \
-          echo "FFLAGS=-fpp $FFLAGS" >> "$GITHUB_ENV" ; \
-          echo "FFLAGS=-coarray $FFLAGS" >> "$GITHUB_ENV" ; \
+          echo "FFLAGS=-fpp -coarray $FFLAGS" >> "$GITHUB_ENV" ; \
+          : ls -al /opt/intel/oneapi/compiler/2025.*/bin/ ; \
+          if type -p icpx ; then \
+            echo "FPM_CC=icx" >> "$GITHUB_ENV" ; \
+            echo "FPM_CXX=icpx" >> "$GITHUB_ENV" ; \
+          else \
+            echo "FPM_CC=gcc" >> "$GITHUB_ENV" ; \
+            echo "FPM_CXX=g++" >> "$GITHUB_ENV" ; \
+          fi ; \
         elif test "$FC" = "lfortran" ; then \
           echo "FPM_FC=lfortran" >> "$GITHUB_ENV" ; \
           echo "FFLAGS=--cpp $FFLAGS" >> "$GITHUB_ENV" ; \
