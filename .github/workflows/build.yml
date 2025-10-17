@@ -2,6 +2,9 @@ name: Build
 
 on: [push, pull_request]
 
+defaults:
+  run:
+    shell: bash
 
 jobs:
   build:
@@ -12,7 +15,7 @@ jobs:
       matrix:
         os: [ macos-14, macos-15, macos-15-intel, ubuntu-24.04]
         compiler: [ gfortran ]
-        version: [ 13, 14, 15 ]
+        version: [ 13, 14, 15 ] # Julienne supports GFortran 13+
         extra_flags: [ -g -O3 ]
 
         exclude:
@@ -64,7 +67,6 @@ jobs:
       FC: ${{ matrix.compiler }}
       FFLAGS: ${{ matrix.extra_flags }}
       FPM_FLAGS:  --profile release --verbose
-      FPM_CXXFLAGS: -std=c++14 # needed for Armadillo on macos-14
 
     steps:
     - name: Checkout code
@@ -112,11 +114,7 @@ jobs:
         else \
           echo "FPM_FC=gfortran-${COMPILER_VERSION}" >> "$GITHUB_ENV" ; \
           echo "FFLAGS=-ffree-line-length-0 $FFLAGS" >> "$GITHUB_ENV" ; \
-        fi
-        if test -n "${{ matrix.error_stop_code }}" ; then \
-          echo "ERROR_STOP_CODE=${{ matrix.error_stop_code }}" >> "$GITHUB_ENV" ; \
-        else \
-          echo "ERROR_STOP_CODE=1" >> "$GITHUB_ENV" ; \
+          echo "FPM_CXXFLAGS=-std=c++14" >> "$GITHUB_ENV" ; : needed for Armadillo on macos-14 ; \
         fi
 
     - name: Setup FPM
@@ -136,19 +134,23 @@ jobs:
 
     - name: Version info
       run: |
-        ( type -p git > /dev/null && (echo == Commit Info == ; git log -n 1 ; echo ; echo ) ; exit 0 )
+        if test -d .git && type -p git > /dev/null ; then \
+          git config --global --add safe.directory `pwd` ; \
+          echo == Commit Info == ; \
+          git log -n 1 ; echo ; echo ; \
+        fi
         echo == Platform version info == 
         uname -a
         if test -r /etc/os-release ; then grep -e NAME -e VERSION /etc/os-release  ; fi
         if test -x /usr/bin/sw_vers ; then /usr/bin/sw_vers ; fi
         echo
         echo PATH="$PATH"
-        for tool in ${FPM_FC} fpm ; do
+        for tool in ${FPM_FC} ${FPM_CC} ${FPM_CXX} fpm ; do
           ( echo ; set -x ; w=$(which $tool) ; ls -al $w ; ls -alhL $w ; $tool --version )
         done
 
 
-    - name: Build and Test (Assertions OFF)
+    - name: Build and Test
       run: |
         set -x
         echo "FPM_FLAGS=${FPM_FLAGS}"
