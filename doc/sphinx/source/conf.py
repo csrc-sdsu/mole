@@ -393,16 +393,28 @@ def copy_images_to_build(app, env, docnames):
     source_img_dir = ROOT_DIR / 'doc' / 'assets' / 'img'
     build_img_dir = Path(app.builder.outdir) / '_images'
     
-    # Create destination directory if it doesn't exist
-    build_img_dir.mkdir(parents=True, exist_ok=True)
+    # Also copy to the expected location for included markdown files
+    expected_img_dir = Path(app.builder.outdir) / 'intros' / 'doc' / 'assets' / 'img'
     
-    # Copy all images from source to build directory
+    # Create destination directories if they don't exist
+    build_img_dir.mkdir(parents=True, exist_ok=True)
+    expected_img_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Copy all images from source to build directories
     if source_img_dir.exists():
         for img_file in source_img_dir.glob('*'):
             if img_file.is_file() and img_file.suffix.lower() in ['.png', '.jpg', '.jpeg', '.gif', '.svg']:
+                # Copy to _images directory
                 dest_file = build_img_dir / img_file.name
                 try:
                     shutil.copy2(img_file, dest_file)
+                except Exception as e:
+                    pass
+                
+                # Copy to expected location for included markdown files
+                expected_file = expected_img_dir / img_file.name
+                try:
+                    shutil.copy2(img_file, expected_file)
                 except Exception as e:
                     pass
 
