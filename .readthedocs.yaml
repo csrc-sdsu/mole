@@ -13,7 +13,7 @@ build:
     - texlive-latex-extra
 
 sphinx:
-  configuration: doc/sphinx/source/conf.py
+  configuration: conf.py
   fail_on_warning: false
 
 python:

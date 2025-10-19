@@ -403,9 +403,8 @@ def copy_images_to_build(app, env, docnames):
                 dest_file = build_img_dir / img_file.name
                 try:
                     shutil.copy2(img_file, dest_file)
-                    _log(f"Copied image: {img_file.name}")
                 except Exception as e:
-                    _log(f"Failed to copy {img_file.name}: {e}")
+                    pass
 
 def setup(app):
     """Setup function for Sphinx extension."""
