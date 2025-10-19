@@ -382,41 +382,70 @@ def _on_builder_inited(app):
         outdir = Path(getattr(app.builder, 'outdir', ''))
         _log(f"builder name={getattr(app, 'builder', None) and app.builder.name}")
         _log(f"outdir={outdir}")
+        _log(f"ROOT_DIR={ROOT_DIR}")
+        _log(f"ROOT_DIR.exists()={ROOT_DIR.exists()}")
+        source_img_dir = ROOT_DIR / 'doc' / 'assets' / 'img'
+        _log(f"source_img_dir={source_img_dir}")
+        _log(f"source_img_dir.exists()={source_img_dir.exists()}")
     except Exception as e:
         _log(f"builder_inited diagnostics error: {e}")
 
 def copy_images_to_build(app):
     """Copy images from doc/assets/img to build directory during Sphinx build."""
     import shutil
+    import os
     
-    # Source and destination directories
-    source_img_dir = ROOT_DIR / 'doc' / 'assets' / 'img'
+    _log("IMAGE COPYING FUNCTION CALLED")
+    
+    # Try multiple possible source directories
+    possible_source_dirs = [
+        ROOT_DIR / 'doc' / 'assets' / 'img',  # Original approach
+        Path.cwd() / 'doc' / 'assets' / 'img',  # From current working directory
+        Path(__file__).parent.parent.parent / 'assets' / 'img',  # Relative to conf.py
+    ]
+    
+    source_img_dir = None
+    for possible_dir in possible_source_dirs:
+        _log(f"Checking possible source dir: {possible_dir}")
+        if possible_dir.exists():
+            source_img_dir = possible_dir
+            _log(f"Found source directory: {source_img_dir}")
+            break
+    
+    if source_img_dir is None:
+        _log("No valid source image directory found!")
+        return
+    
+    # Destination directories
     build_img_dir = Path(app.builder.outdir) / '_images'
-    
-    # Also copy to the expected location for included markdown files
     expected_img_dir = Path(app.builder.outdir) / 'intros' / 'doc' / 'assets' / 'img'
+    
+    _log(f"build_img_dir: {build_img_dir}")
+    _log(f"expected_img_dir: {expected_img_dir}")
     
     # Create destination directories if they don't exist
     build_img_dir.mkdir(parents=True, exist_ok=True)
     expected_img_dir.mkdir(parents=True, exist_ok=True)
     
     # Copy all images from source to build directories
-    if source_img_dir.exists():
-        for img_file in source_img_dir.glob('*'):
-            if img_file.is_file() and img_file.suffix.lower() in ['.png', '.jpg', '.jpeg', '.gif', '.svg']:
-                # Copy to _images directory
-                dest_file = build_img_dir / img_file.name
-                try:
-                    shutil.copy2(img_file, dest_file)
-                except Exception as e:
-                    pass
-                
-                # Copy to expected location for included markdown files
-                expected_file = expected_img_dir / img_file.name
-                try:
-                    shutil.copy2(img_file, expected_file)
-                except Exception as e:
-                    pass
+    for img_file in source_img_dir.glob('*'):
+        if img_file.is_file() and img_file.suffix.lower() in ['.png', '.jpg', '.jpeg', '.gif', '.svg']:
+            _log(f"Found image: {img_file}")
+            # Copy to _images directory
+            dest_file = build_img_dir / img_file.name
+            try:
+                shutil.copy2(img_file, dest_file)
+                _log(f"Copied to _images: {dest_file}")
+            except Exception as e:
+                _log(f"Error copying to _images: {e}")
+            
+            # Copy to expected location for included markdown files
+            expected_file = expected_img_dir / img_file.name
+            try:
+                shutil.copy2(img_file, expected_file)
+                _log(f"Copied to expected location: {expected_file}")
+            except Exception as e:
+                _log(f"Error copying to expected location: {e}")
 
 def setup(app):
     """Setup function for Sphinx extension."""
