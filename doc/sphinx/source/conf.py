@@ -357,6 +357,12 @@ logging.getLogger('sphinx').setLevel(logging.WARNING)
 logging.getLogger('myst_parser').setLevel(logging.WARNING)
 logging.getLogger('sphinxcontrib.matlab').setLevel(logging.WARNING)
 
+def _log(msg):
+    try:
+        print(f"[docs-diagnostics] {msg}")
+    except Exception:
+        pass
+
 def fix_math_environments(app, docname, source):
     """Fix problematic math environments in markdown source."""
     src = source[0]
@@ -370,6 +376,14 @@ def fix_math_environments(app, docname, source):
     src = re.sub(r'\\end{split}\s*\\end{equation\*}', r'\\end{align}', src)
     
     source[0] = src
+
+def _on_builder_inited(app):
+    try:
+        outdir = Path(getattr(app.builder, 'outdir', ''))
+        _log(f"builder name={getattr(app, 'builder', None) and app.builder.name}")
+        _log(f"outdir={outdir}")
+    except Exception as e:
+        _log(f"builder_inited diagnostics error: {e}")
 
 def copy_images_to_build(app, env, docnames):
     """Copy images from doc/assets/img to build directory during Sphinx build."""
