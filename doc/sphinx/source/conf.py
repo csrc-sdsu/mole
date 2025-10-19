@@ -385,7 +385,7 @@ def _on_builder_inited(app):
     except Exception as e:
         _log(f"builder_inited diagnostics error: {e}")
 
-def copy_images_to_build(app, env, docnames):
+def copy_images_to_build(app):
     """Copy images from doc/assets/img to build directory during Sphinx build."""
     import shutil
     
@@ -439,7 +439,7 @@ def setup(app):
     graphviz.on_build_finished = patched_on_build_finished
     
     # Register image copying and diagnostics
-    app.connect('env-before-read-docs', copy_images_to_build)
+    app.connect('builder-inited', copy_images_to_build)
     app.connect('builder-inited', _on_builder_inited)
 
 #------------------------------------------------------------------------------
