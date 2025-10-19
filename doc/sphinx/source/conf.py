@@ -105,7 +105,7 @@ html_copy_source = True
 html_show_sourcelink = True
 
 # Image and static file configuration
-html_static_path = ['_static']
+html_static_path = ['_static', '_images']
 html_extra_path = [
     str(ROOT_DIR / 'doc/doxygen'),
     str(ROOT_DIR / 'doc/sphinx/README.md'),
@@ -371,6 +371,28 @@ def fix_math_environments(app, docname, source):
     
     source[0] = src
 
+def copy_images_to_build(app, env, docnames):
+    """Copy images from doc/assets/img to build directory during Sphinx build."""
+    import shutil
+    
+    # Source and destination directories
+    source_img_dir = ROOT_DIR / 'doc' / 'assets' / 'img'
+    build_img_dir = Path(app.builder.outdir) / '_images'
+    
+    # Create destination directory if it doesn't exist
+    build_img_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Copy all images from source to build directory
+    if source_img_dir.exists():
+        for img_file in source_img_dir.glob('*'):
+            if img_file.is_file() and img_file.suffix.lower() in ['.png', '.jpg', '.jpeg', '.gif', '.svg']:
+                dest_file = build_img_dir / img_file.name
+                try:
+                    shutil.copy2(img_file, dest_file)
+                    _log(f"Copied image: {img_file.name}")
+                except Exception as e:
+                    _log(f"Failed to copy {img_file.name}: {e}")
+
 def setup(app):
     """Setup function for Sphinx extension."""
     app.add_js_file('mathconf.js')
@@ -390,6 +412,10 @@ def setup(app):
             pass
     
     graphviz.on_build_finished = patched_on_build_finished
+    
+    # Register image copying and diagnostics
+    app.connect('env-before-read-docs', copy_images_to_build)
+    app.connect('builder-inited', _on_builder_inited)
 
 #------------------------------------------------------------------------------
 # LaTeX and PDF output configuration
