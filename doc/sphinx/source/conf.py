@@ -387,7 +387,7 @@ def _on_builder_inited(app):
         _log(f"Builder initialization error: {e}")
 
 def copy_images_to_build(app):
-    """Copy images from doc/assets/img to both source and build directories during Sphinx build."""
+    """Copy images from doc/assets/img to essential locations during Sphinx build."""
     import shutil
     import os
     
@@ -407,48 +407,28 @@ def copy_images_to_build(app):
     if source_img_dir is None:
         return
     
-    # Source directories (where Sphinx expects to find images)
+    # Essential directories only (optimized from 4 to 2 locations)
     source_images_dir = Path(__file__).parent / '_images'
-    source_intros_dir = Path(__file__).parent / 'intros' / 'doc' / 'assets' / 'img'
-    
-    # Build directories (where Sphinx outputs images)
     build_img_dir = Path(app.builder.outdir) / '_images'
-    expected_img_dir = Path(app.builder.outdir) / 'intros' / 'doc' / 'assets' / 'img'
     
-    # Create all destination directories if they don't exist
+    # Create destination directories if they don't exist
     source_images_dir.mkdir(parents=True, exist_ok=True)
-    source_intros_dir.mkdir(parents=True, exist_ok=True)
     build_img_dir.mkdir(parents=True, exist_ok=True)
-    expected_img_dir.mkdir(parents=True, exist_ok=True)
     
-    # Copy all images from source to all destination directories
+    # Copy all images from source to essential locations
     for img_file in source_img_dir.glob('*'):
         if img_file.is_file() and img_file.suffix.lower() in ['.png', '.jpg', '.jpeg', '.gif', '.svg']:
-            # Copy to source _images directory
+            # Copy to source _images directory (for Sphinx processing)
             source_dest_file = source_images_dir / img_file.name
             try:
                 shutil.copy2(img_file, source_dest_file)
             except Exception:
                 pass
             
-            # Copy to source intros directory
-            source_intros_file = source_intros_dir / img_file.name
-            try:
-                shutil.copy2(img_file, source_intros_file)
-            except Exception:
-                pass
-            
-            # Copy to build _images directory
+            # Copy to build _images directory (for final output)
             build_dest_file = build_img_dir / img_file.name
             try:
                 shutil.copy2(img_file, build_dest_file)
-            except Exception:
-                pass
-            
-            # Copy to build expected location
-            build_expected_file = expected_img_dir / img_file.name
-            try:
-                shutil.copy2(img_file, build_expected_file)
             except Exception:
                 pass
 
@@ -551,6 +531,23 @@ latex_elements.update({
 \makeatother
 ''',
 })
+
+# Suppress LaTeX compilation output for RTD builds
+import os
+if os.environ.get('READTHEDOCS') == 'True':
+    # RTD-specific LaTeX configuration to reduce verbose output
+    latex_elements.update({
+        'preamble': latex_elements['preamble'] + r'''
+% Additional RTD-specific suppressions
+\makeatletter
+\renewcommand{\@latex@warning}[2]{}
+\renewcommand{\@latex@warning@no@line}[3]{}
+\renewcommand{\@warning}[1]{}
+\renewcommand{\PackageWarning}[2]{}
+\renewcommand{\PackageWarningNoLine}[3]{}
+\makeatother
+''',
+    })
 
 latexauthorslist = r" \and ".join(authorlist)
 latex_documents = [
