@@ -105,7 +105,7 @@ html_copy_source = True
 html_show_sourcelink = True
 
 # Image and static file configuration
-html_static_path = ['_static']
+html_static_path = ['_static', '_images']
 html_extra_path = [
     str(ROOT_DIR / 'doc/doxygen'),
     str(ROOT_DIR / 'doc/sphinx/README.md'),
@@ -357,6 +357,12 @@ logging.getLogger('sphinx').setLevel(logging.WARNING)
 logging.getLogger('myst_parser').setLevel(logging.WARNING)
 logging.getLogger('sphinxcontrib.matlab').setLevel(logging.WARNING)
 
+def _log(msg):
+    try:
+        print(f"[docs-diagnostics] {msg}")
+    except Exception:
+        pass
+
 def fix_math_environments(app, docname, source):
     """Fix problematic math environments in markdown source."""
     src = source[0]
@@ -370,6 +376,79 @@ def fix_math_environments(app, docname, source):
     src = re.sub(r'\\end{split}\s*\\end{equation\*}', r'\\end{align}', src)
     
     source[0] = src
+
+def _on_builder_inited(app):
+    try:
+        outdir = Path(getattr(app.builder, 'outdir', ''))
+        # Only log if there are issues
+        if not outdir.exists():
+            _log(f"Warning: Builder output directory does not exist: {outdir}")
+    except Exception as e:
+        _log(f"Builder initialization error: {e}")
+
+def copy_images_to_build(app):
+    """Copy images from doc/assets/img to all necessary locations during Sphinx build."""
+    import shutil
+    import os
+    
+    # Try multiple possible source directories
+    possible_source_dirs = [
+        ROOT_DIR / 'doc' / 'assets' / 'img',  # Original approach
+        Path.cwd() / 'doc' / 'assets' / 'img',  # From current working directory
+        Path(__file__).parent.parent.parent / 'assets' / 'img',  # Relative to conf.py
+    ]
+    
+    source_img_dir = None
+    for possible_dir in possible_source_dirs:
+        if possible_dir.exists():
+            source_img_dir = possible_dir
+            break
+    
+    if source_img_dir is None:
+        return
+    
+    # All necessary directories (restored from working configuration)
+    source_images_dir = Path(__file__).parent / '_images'
+    source_intros_dir = Path(__file__).parent / 'intros' / 'doc' / 'assets' / 'img'
+    build_img_dir = Path(app.builder.outdir) / '_images'
+    build_intros_dir = Path(app.builder.outdir) / 'intros' / 'doc' / 'assets' / 'img'
+    
+    # Create all destination directories if they don't exist
+    source_images_dir.mkdir(parents=True, exist_ok=True)
+    source_intros_dir.mkdir(parents=True, exist_ok=True)
+    build_img_dir.mkdir(parents=True, exist_ok=True)
+    build_intros_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Copy all images from source to all necessary locations
+    for img_file in source_img_dir.glob('*'):
+        if img_file.is_file() and img_file.suffix.lower() in ['.png', '.jpg', '.jpeg', '.gif', '.svg']:
+            # Copy to source _images directory (for general image references)
+            source_dest_file = source_images_dir / img_file.name
+            try:
+                shutil.copy2(img_file, source_dest_file)
+            except Exception:
+                pass
+            
+            # Copy to source intros directory (for included markdown file paths)
+            source_intros_file = source_intros_dir / img_file.name
+            try:
+                shutil.copy2(img_file, source_intros_file)
+            except Exception:
+                pass
+            
+            # Copy to build _images directory (for general image references)
+            build_dest_file = build_img_dir / img_file.name
+            try:
+                shutil.copy2(img_file, build_dest_file)
+            except Exception:
+                pass
+            
+            # Copy to build intros directory (for included markdown file paths)
+            build_intros_file = build_intros_dir / img_file.name
+            try:
+                shutil.copy2(img_file, build_intros_file)
+            except Exception:
+                pass
 
 def setup(app):
     """Setup function for Sphinx extension."""
@@ -390,29 +469,103 @@ def setup(app):
             pass
     
     graphviz.on_build_finished = patched_on_build_finished
+    
+    # Register image copying and diagnostics
+    app.connect('builder-inited', copy_images_to_build)
+    app.connect('builder-inited', _on_builder_inited)
 
 #------------------------------------------------------------------------------
 # LaTeX and PDF output configuration
 #------------------------------------------------------------------------------
 # Use pdflatex for standard PDF generation
-latex_engine = 'pdflatex'
-
-# Configure LaTeX elements
+# Suppress verbose LaTeX warnings
 latex_elements = {
+    'papersize': 'letterpaper',
+    'pointsize': '10pt',
     'preamble': r'''
-    \usepackage{graphicx}
-    \DeclareGraphicsExtensions{.pdf,.png,.jpg}
-    
-    % Set up graphics paths
-    \graphicspath{
-      {_images/}
-      {figures/}
-      {./}
-    }
-    ''',
+\usepackage{upquote}
+\usepackage{lineno}
+\linenumbers
+''',
+    'figure_align': 'H',
+    'extraclassoptions': '-openany',
+    'printindex': '',
+    # Suppress LaTeX warnings
+    'maketitle': r'''
+\makeatletter
+\renewcommand{\@latex@warning}[2]{}
+\makeatother
+''',
 }
 
-# Main LaTeX/PDF document configuration
+# Suppress verbose warnings
+suppress_warnings = [
+    'ref.term',
+    'ref.ref',
+    'ref.numref',
+    'ref.any',
+    'image.nonlocal_uri',
+    'misc.highlighting_failure',
+    'toc.circular',
+    'toc.secnum',
+    'myst.header',  # Suppress header level warnings
+    'myst.duplicate',  # Suppress duplicate label warnings
+    'autosectionlabel.*',  # Suppress autosectionlabel warnings
+]
+
+# Suppress LaTeX warnings
+latex_warning_is_error = False
+latex_engine = 'pdflatex'
+
+# Additional LaTeX configuration to suppress warnings
+latex_elements.update({
+    'papersize': 'letterpaper',
+    'pointsize': '10pt',
+    'figure_align': 'H',
+    'extraclassoptions': '-openany',
+    'printindex': '',
+    'maketitle': r'''
+\makeatletter
+\renewcommand{\@latex@warning}[2]{}
+\renewcommand{\@latex@warning@no@line}[3]{}
+\renewcommand{\@warning}[1]{}
+\makeatother
+''',
+    'preamble': r'''
+\usepackage{upquote}
+\usepackage{lineno}
+\linenumbers
+\makeatletter
+\renewcommand{\@latex@warning}[2]{}
+\renewcommand{\@latex@warning@no@line}[3]{}
+\renewcommand{\@warning}[1]{}
+% Suppress overfull hbox warnings
+\hbadness=10000
+\hfuzz=10000pt
+% Suppress underfull hbox warnings  
+\vbadness=10000
+\vfuzz=10000pt
+% Suppress package warnings
+\makeatother
+''',
+})
+
+# Suppress LaTeX compilation output for RTD builds
+import os
+if os.environ.get('READTHEDOCS') == 'True':
+    # RTD-specific LaTeX configuration to reduce verbose output
+    latex_elements.update({
+        'preamble': latex_elements['preamble'] + r'''
+% Additional RTD-specific suppressions
+\makeatletter
+\renewcommand{\@latex@warning}[2]{}
+\renewcommand{\@latex@warning@no@line}[3]{}
+\renewcommand{\@warning}[1]{}
+\renewcommand{\PackageWarning}[2]{}
+\renewcommand{\PackageWarningNoLine}[3]{}
+\makeatother
+''',
+    })
 
 latexauthorslist = r" \and ".join(authorlist)
 latex_documents = [

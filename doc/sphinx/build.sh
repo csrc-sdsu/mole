@@ -158,9 +158,9 @@ sed -i.bak12 's/\\newcommand{\\capstart}{}/\\providecommand{\\capstart}{}/g' MOL
 
 # Compile PDF
 echo "Compiling LaTeX to PDF..."
-pdflatex -interaction=nonstopmode MOLE-docs.tex || true
-pdflatex -interaction=nonstopmode MOLE-docs.tex || true
-pdflatex -interaction=nonstopmode MOLE-docs.tex || true
+pdflatex -interaction=nonstopmode MOLE-docs.tex > /dev/null 2>&1 || true
+pdflatex -interaction=nonstopmode MOLE-docs.tex > /dev/null 2>&1 || true
+pdflatex -interaction=nonstopmode MOLE-docs.tex > /dev/null 2>&1 || true
 
 # Check if PDF was generated successfully
 if [ -f "MOLE-docs.pdf" ]; then
