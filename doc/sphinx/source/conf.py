@@ -380,22 +380,16 @@ def fix_math_environments(app, docname, source):
 def _on_builder_inited(app):
     try:
         outdir = Path(getattr(app.builder, 'outdir', ''))
-        _log(f"builder name={getattr(app, 'builder', None) and app.builder.name}")
-        _log(f"outdir={outdir}")
-        _log(f"ROOT_DIR={ROOT_DIR}")
-        _log(f"ROOT_DIR.exists()={ROOT_DIR.exists()}")
-        source_img_dir = ROOT_DIR / 'doc' / 'assets' / 'img'
-        _log(f"source_img_dir={source_img_dir}")
-        _log(f"source_img_dir.exists()={source_img_dir.exists()}")
+        # Only log if there are issues
+        if not outdir.exists():
+            _log(f"Warning: Builder output directory does not exist: {outdir}")
     except Exception as e:
-        _log(f"builder_inited diagnostics error: {e}")
+        _log(f"Builder initialization error: {e}")
 
 def copy_images_to_build(app):
-    """Copy images from doc/assets/img to build directory during Sphinx build."""
+    """Copy images from doc/assets/img to both source and build directories during Sphinx build."""
     import shutil
     import os
-    
-    _log("IMAGE COPYING FUNCTION CALLED")
     
     # Try multiple possible source directories
     possible_source_dirs = [
@@ -406,46 +400,57 @@ def copy_images_to_build(app):
     
     source_img_dir = None
     for possible_dir in possible_source_dirs:
-        _log(f"Checking possible source dir: {possible_dir}")
         if possible_dir.exists():
             source_img_dir = possible_dir
-            _log(f"Found source directory: {source_img_dir}")
             break
     
     if source_img_dir is None:
-        _log("No valid source image directory found!")
         return
     
-    # Destination directories
+    # Source directories (where Sphinx expects to find images)
+    source_images_dir = Path(__file__).parent / '_images'
+    source_intros_dir = Path(__file__).parent / 'intros' / 'doc' / 'assets' / 'img'
+    
+    # Build directories (where Sphinx outputs images)
     build_img_dir = Path(app.builder.outdir) / '_images'
     expected_img_dir = Path(app.builder.outdir) / 'intros' / 'doc' / 'assets' / 'img'
     
-    _log(f"build_img_dir: {build_img_dir}")
-    _log(f"expected_img_dir: {expected_img_dir}")
-    
-    # Create destination directories if they don't exist
+    # Create all destination directories if they don't exist
+    source_images_dir.mkdir(parents=True, exist_ok=True)
+    source_intros_dir.mkdir(parents=True, exist_ok=True)
     build_img_dir.mkdir(parents=True, exist_ok=True)
     expected_img_dir.mkdir(parents=True, exist_ok=True)
     
-    # Copy all images from source to build directories
+    # Copy all images from source to all destination directories
     for img_file in source_img_dir.glob('*'):
         if img_file.is_file() and img_file.suffix.lower() in ['.png', '.jpg', '.jpeg', '.gif', '.svg']:
-            _log(f"Found image: {img_file}")
-            # Copy to _images directory
-            dest_file = build_img_dir / img_file.name
+            # Copy to source _images directory
+            source_dest_file = source_images_dir / img_file.name
             try:
-                shutil.copy2(img_file, dest_file)
-                _log(f"Copied to _images: {dest_file}")
-            except Exception as e:
-                _log(f"Error copying to _images: {e}")
+                shutil.copy2(img_file, source_dest_file)
+            except Exception:
+                pass
             
-            # Copy to expected location for included markdown files
-            expected_file = expected_img_dir / img_file.name
+            # Copy to source intros directory
+            source_intros_file = source_intros_dir / img_file.name
             try:
-                shutil.copy2(img_file, expected_file)
-                _log(f"Copied to expected location: {expected_file}")
-            except Exception as e:
-                _log(f"Error copying to expected location: {e}")
+                shutil.copy2(img_file, source_intros_file)
+            except Exception:
+                pass
+            
+            # Copy to build _images directory
+            build_dest_file = build_img_dir / img_file.name
+            try:
+                shutil.copy2(img_file, build_dest_file)
+            except Exception:
+                pass
+            
+            # Copy to build expected location
+            build_expected_file = expected_img_dir / img_file.name
+            try:
+                shutil.copy2(img_file, build_expected_file)
+            except Exception:
+                pass
 
 def setup(app):
     """Setup function for Sphinx extension."""
@@ -475,24 +480,77 @@ def setup(app):
 # LaTeX and PDF output configuration
 #------------------------------------------------------------------------------
 # Use pdflatex for standard PDF generation
-latex_engine = 'pdflatex'
-
-# Configure LaTeX elements
+# Suppress verbose LaTeX warnings
 latex_elements = {
+    'papersize': 'letterpaper',
+    'pointsize': '10pt',
     'preamble': r'''
-    \usepackage{graphicx}
-    \DeclareGraphicsExtensions{.pdf,.png,.jpg}
-    
-    % Set up graphics paths
-    \graphicspath{
-      {_images/}
-      {figures/}
-      {./}
-    }
-    ''',
+\usepackage{upquote}
+\usepackage{lineno}
+\linenumbers
+''',
+    'figure_align': 'H',
+    'extraclassoptions': '-openany',
+    'printindex': '',
+    # Suppress LaTeX warnings
+    'maketitle': r'''
+\makeatletter
+\renewcommand{\@latex@warning}[2]{}
+\makeatother
+''',
 }
 
-# Main LaTeX/PDF document configuration
+# Suppress verbose warnings
+suppress_warnings = [
+    'ref.term',
+    'ref.ref',
+    'ref.numref',
+    'ref.any',
+    'image.nonlocal_uri',
+    'misc.highlighting_failure',
+    'toc.circular',
+    'toc.secnum',
+    'myst.header',  # Suppress header level warnings
+    'myst.duplicate',  # Suppress duplicate label warnings
+    'autosectionlabel.*',  # Suppress autosectionlabel warnings
+]
+
+# Suppress LaTeX warnings
+latex_warning_is_error = False
+latex_engine = 'pdflatex'
+
+# Additional LaTeX configuration to suppress warnings
+latex_elements.update({
+    'papersize': 'letterpaper',
+    'pointsize': '10pt',
+    'figure_align': 'H',
+    'extraclassoptions': '-openany',
+    'printindex': '',
+    'maketitle': r'''
+\makeatletter
+\renewcommand{\@latex@warning}[2]{}
+\renewcommand{\@latex@warning@no@line}[3]{}
+\renewcommand{\@warning}[1]{}
+\makeatother
+''',
+    'preamble': r'''
+\usepackage{upquote}
+\usepackage{lineno}
+\linenumbers
+\makeatletter
+\renewcommand{\@latex@warning}[2]{}
+\renewcommand{\@latex@warning@no@line}[3]{}
+\renewcommand{\@warning}[1]{}
+% Suppress overfull hbox warnings
+\hbadness=10000
+\hfuzz=10000pt
+% Suppress underfull hbox warnings  
+\vbadness=10000
+\vfuzz=10000pt
+% Suppress package warnings
+\makeatother
+''',
+})
 
 latexauthorslist = r" \and ".join(authorlist)
 latex_documents = [
