@@ -1,14 +1,14 @@
-# Tutorial: Comparing Finite Difference and Mimetic Difference Operators  
+# Mimetic Difference Operators Vs Finite Differences
 ### Solving the 1D Two-Way Wave Equation
 
 This tutorial demonstrates how to solve the **1D two-way wave equation** using both **standard finite differences (FD)** and **mimetic finite differences (MD)**.  
 We will use three main functions:
 
-1. [`finite_diff_two_way_wave_eq`](#finite_diff_two_way_wave_eq)
-2. [`mimetic_diff_two_way_wave_eq`](#mimetic_diff_two_way_wave_eq)
-3. [`comparison_two_way_wave_md_vs_fd`](#comparison_two_way_wave_md_vs_fd)
+1. [`finite_diff_two_way_wave_eq`](#finite-diff-two-way-wave-eq)
+2. [`mimetic_diff_two_way_wave_eq`](#mimetic-diff-two-way-wave-eq)
+3. [`comparison_two_way_wave_md_vs_fd`](#comparison-two-way-wave-md-vs-fd)
 
-The goal is to understand the **differences in accuracy, stability, and numerical properties** between traditional and mimetic operators. The two numerical functions have been created to be as similar as possible, so that only the changes necessary for mimetic difference operators are visible.
+The goal is to understand the **differences in accuracy, stability, and numerical properties** between traditional finite and mimetic difference operators. The two numerical functions have been created to be as similar as possible, so that only the changes necessary for mimetic difference operators are visible.
 
 While each code can be run independanlty, the easiest way to compare the two methods is with `comparison_two_way_wave_md_vs_fd`
 
@@ -27,13 +27,12 @@ Both solvers use a **centered-in-time, centered-in-space (CTCS)** scheme, which 
 We assume no boundary effects (large domain), allowing a clean comparison of the spatial discretization methods. Here is a little bit more information about the two seperate functions.
 
 ---
-
-## 1. `finite_diff_two_way_wave_eq`
+## `finite diff two way wave eq`
 
 **Purpose:** This function solves the the wave equation using **standard finite differences (FD)**.
 
 **Time-stepping scheme (CTCS):**
-If we discretize the equation with standard centered second order finite differences, Equation(1) turn into 
+If we discretize the equation with standard centered second order finite differences, Equation(1) turns into 
 
 $$
 \frac{U^{k-1}_i - 2U^{k}_i + U^{k+1}_i}{\Delta t^2} = c^2\frac{U_{i+1}^k - 2U_{i}^k + U_{i+1}^k}{\Delta x^2}
@@ -79,15 +78,14 @@ $$
 | `flops_fd` | Estimated floating-point operation count |
 
 ### Notes
-We are using an explicit two-step scheme (leapfrog). The CFL condition must be satisfied: $ c \Delta t^2 / \Delta x^2 \le 1 $. If you change the stepping, or increase the number of cells, be sure to change this value. No boundary conditions are applied, the domain is large enough to avoid reflection effects. This is to test just the spacial scheme without any boundary considerations.
+We are using an explicit two-step scheme (leapfrog). The CFL condition must be satisfied: $ c \Delta t^2 / \Delta x^2 \le 1 $. If you change the stepping, or increase the number of cells, be sure to change this value. No boundary conditions are applied, the domain is large enough to avoid reflection effects. This is to test just the spatial scheme without any boundary considerations.
 
 ---
-
-## 2. `mimetic_diff_two_way_wave_eq`
+## `mimetic diff two way wave eq`
 
 **Purpose:** Solve the wave equation using **mimetic difference operators (MD)**.
 
-The mimetic Laplacian operator `L` replaces the explicit finite-difference stencil, automatically enforcing discrete analogs of conservation and symmetry properties.
+The mimetic Laplacian operator `L` replaces the finite-difference stencil, automatically enforcing discrete analogs of conservation and symmetry properties.
 
 **Time-stepping scheme:**
 The mimetic operator directly takes the place fo the second derivative (Laplacian), therefore we only need to discretize the time derivative. Doing so to Equation (1) yields:
@@ -102,7 +100,35 @@ $$
 L = D \, G
 $$
 
-ensuring energy and flux consistency at the discrete level. The mimetic library Laplacian operator is just DG under the hood.
+where
+
+$$
+\mathbf{D} = \frac{1}{\Delta x}
+\begin{bmatrix}
+ -\tfrac{1}{2} & -\tfrac{1}{2} & 0 & \cdots & 0\\
+ 1 & -1 & 0 & \cdots & 0\\
+ 0 & 1 & -1 & \cdots & 0\\
+ \vdots & & \ddots & \ddots & \vdots\\
+ 0 & \cdots & 0 & \tfrac{1}{2} & -\tfrac{1}{2}
+\end{bmatrix}.
+$$
+
+and 
+
+$$
+\mathbf{G} = \frac{1}{\Delta x}
+\begin{bmatrix}
+ -\tfrac{1}{2} &  1            &  0            &  0            & \cdots &  0            &  0\\[4pt]
+ -\tfrac{1}{2} & -1            &  1            &  0            & \cdots &  0            &  0\\[4pt]
+  0            &  0            & -1            &  1            & \cdots &  0            &  0\\[4pt]
+  \vdots       &               & \ddots        & \ddots        & \ddots &               & \vdots\\[4pt]
+  0            & \cdots        &  0            & -1            &  1     &  0            &  0\\[4pt]
+  0            & \cdots        &  0            &  0            & -1     & -1            &  1\\[4pt]
+  0            & \cdots        &  0            &  0            &  0     & -\tfrac{1}{2} &  \tfrac{1}{2}
+\end{bmatrix}.
+$$
+
+ensuring energy and flux consistency at the discrete level. The mimetic library Laplacian operator is just the composition $DG$ under the hood.
 
 Rearranging our equation for the unknown value $U^{k+1}$ leads us to:
 
@@ -124,8 +150,7 @@ To save computations in the code, `L` is premultiplied by $C^2\Delta t^2$ before
 This uses the same CTCS time integration scheme as FD. The **order of accuracy** can be increased by adjusting the `k` parameter (e.g. `k=2`, `k=4`, etc.). Mimetic operators preserve **discrete conservation laws**, often improving numerical stability and physical fidelity. If you change the number of cells, be sure to change the time step, to conform to the CFL condition.
 
 ---
-
-## 3. `comparison_two_way_wave_md_vs_fd`
+## `comparison two way wave md vs fd`
 
 **Purpose:** Compare **mimetic** and **finite difference** results for the same PDE setup.
 
@@ -182,7 +207,6 @@ This staggered layout provides **better discrete analogs** of differential opera
 ## Convergence and Accuracy
 
 Both FD and MD methods use a **second-order accurate** CTCS scheme in time.  
-The mimetic method, however, allows **higher-order spatial accuracy** by increasing the mimetic operator order `k`.
 
 | Scheme | Spatial Order | Time Order | Conservation | Grid Type |
 |---------|----------------|-------------|---------------|------------|
