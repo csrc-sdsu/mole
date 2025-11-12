@@ -129,15 +129,24 @@ $(SPHINX_TARGETS):
 	
 .PHONY: copy-images
 copy-images:
+	@echo "[IMAGE_COPY_DEBUG] ===== Starting image copy process ====="
+	@echo "[IMAGE_COPY_DEBUG] Copying images from ../assets/img/ to source/_images/"
 	mkdir -p source/_images
+	@ls -la ../assets/img/*.png 2>/dev/null | grep -E "MOLE_pillars|MOLE_OSE_circles" || echo "[IMAGE_COPY_DEBUG] Source images not found"
 	cp -r ../assets/img/* source/_images/ || true
+	@echo "[IMAGE_COPY_DEBUG] Images copied to source/_images/:"
+	@ls -la source/_images/*.png 2>/dev/null | grep -E "MOLE_pillars|MOLE_OSE_circles" || echo "[IMAGE_COPY_DEBUG] Images not in source/_images/"
 	# Copy README images to the _images directory for proper reference
+	@echo "[IMAGE_COPY_DEBUG] Copying images to source/intros/doc/assets/img/"
 	mkdir -p source/intros/doc/assets/img
 	cp -r ../assets/img/* source/intros/doc/assets/img/ || true
+	@echo "[IMAGE_COPY_DEBUG] Images copied to source/intros/doc/assets/img/:"
+	@ls -la source/intros/doc/assets/img/*.png 2>/dev/null | grep -E "MOLE_pillars|MOLE_OSE_circles" || echo "[IMAGE_COPY_DEBUG] Images not in source/intros/doc/assets/img/"
 	# Create figure directories for SVG files
 	mkdir -p source/api/examples/md/figures
 	mkdir -p source/api/examples-m/md/figures
 	mkdir -p source/math_functions/figures
+	@echo "[IMAGE_COPY_DEBUG] ===== Image copy process complete ====="
 
 .PHONY: clean
 clean:
