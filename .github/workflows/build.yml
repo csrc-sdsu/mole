@@ -1,0 +1,192 @@
+name: Build
+
+on: [push, pull_request]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    name: ${{ matrix.compiler }}-${{ matrix.version }} (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ macos-14, macos-15, macos-15-intel, ubuntu-24.04]
+        compiler: [ gfortran ]
+        version: [ 13, 14, 15 ] # Julienne supports GFortran 13+
+        extra_flags: [ -g -O3 ]
+
+        exclude:
+          - os: ubuntu-24.04
+            version: 15 # no package available (yet?)
+
+        include:
+
+          # --- LLVM flang coverage ---
+
+          - os: macos-14
+            compiler: flang
+            version: 21
+          - os: macos-15
+            compiler: flang
+            version: 21
+
+          # https://hub.docker.com/r/snowstep/llvm/tags
+          - os: ubuntu-24.04
+            compiler: flang
+            version: latest
+            container: snowstep/llvm:noble
+          - os: ubuntu-22.04
+            compiler: flang
+            version: latest
+            container: snowstep/llvm:jammy
+
+          # https://hub.docker.com/r/phhargrove/llvm-flang/tags
+          - os: ubuntu-24.04
+            compiler: flang
+            version: 21
+            network: smp
+            container: phhargrove/llvm-flang:21.1.0-latest
+          - os: ubuntu-24.04
+            compiler: flang
+            version: 20
+            container: phhargrove/llvm-flang:20.1.0-latest
+          - os: ubuntu-24.04
+            compiler: flang
+            version: 19
+            extra_flags: -g -mmlir -allow-assumed-rank -O3
+            container: phhargrove/llvm-flang:19.1.1-latest
+
+          # --- Intel coverage ---
+
+          # Intel provides two docker packages with Intel Fortran.
+          # The first is very compact, but lacks Intel C++:
+          #   https://hub.docker.com/r/intel/fortran-essentials/tags
+          #   This can be used with GNU C/C++
+          # The second includes Intel C++ and tons of other stuff,
+          # hence is much larger and can lead to slower container load:
+          #   https://hub.docker.com/r/intel/oneapi-hpckit/tags
+
+          # Julienne requires 2025.2.0 or later
+          - os: ubuntu-24.04
+            compiler: ifx-gcc
+            version: latest
+            container: intel/fortran-essentials:latest
+
+          - os: ubuntu-24.04
+            compiler: ifx
+            version: 2025.2.2
+            container: intel/oneapi-hpckit:2025.2.2-0-devel-ubuntu24.04
+
+          - os: ubuntu-24.04
+            compiler: ifx-gcc
+            version: 2025.2.0
+            container: intel/fortran-essentials:2025.2.0-0-devel-ubuntu24.04
+
+    container:
+      image: ${{ matrix.container }}
+
+    env:
+      COMPILER_VERSION: ${{ matrix.version }}
+      FC: ${{ matrix.compiler }}
+      FFLAGS: ${{ matrix.extra_flags }}
+      FPM_FLAGS:  --profile release --verbose
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5
+
+    - name: Install Ubuntu Native Dependencies
+      if: ${{ 0 && contains(matrix.os, 'ubuntu') && matrix.container == '' && matrix.compiler == 'gfortran' }}
+      run: |
+        set -x
+        sudo apt-get update
+        sudo apt list -a 'gfortran-*'
+        sudo apt install -y gfortran-${COMPILER_VERSION} build-essential
+
+    - name: Install Ubuntu Container Dependencies
+      if: ${{ contains(matrix.os, 'ubuntu') && matrix.container != '' && !contains(matrix.container, 'phhargrove') }}
+      run: |
+        set -x
+        apt update
+        apt install -y build-essential pkg-config make git curl
+
+    - name: Install macOS Dependencies
+      if: contains(matrix.os, 'macos') && matrix.compiler == 'flang'
+      run: |
+        set -x
+        brew update
+        brew install llvm@${COMPILER_VERSION} flang
+        # workaround issue #228: clang cannot find homebrew flang's C header
+        for p in /opt/homebrew /usr/local $(brew --prefix) ; do find $p/Cellar/flang -name ISO_Fortran_binding.h 2>/dev/null || true ; done
+        echo "CFLAGS=-I$(dirname $(find $(brew --prefix)/Cellar/flang -name ISO_Fortran_binding.h | head -1)) ${CFLAGS}" >> "$GITHUB_ENV"
+        # Prepend homebrew clang to PATH:
+        echo "PATH=$(brew --prefix)/opt/llvm/bin:${PATH}" >> "$GITHUB_ENV"
+
+    - name: Setup Compilers
+      run: |
+        set -x
+        if test "$FC" = "flang" ; then \
+          echo "FPM_FC=flang-new" >> "$GITHUB_ENV" ; \
+        elif [[ "$FC" =~ "ifx" ]] ; then \
+          echo "FPM_FC=ifx" >> "$GITHUB_ENV" ; \
+          echo "FFLAGS=-fpp -coarray $FFLAGS" >> "$GITHUB_ENV" ; \
+          : ls -al /opt/intel/oneapi/compiler/2025.*/bin/ ; \
+          if type -p icpx ; then \
+            echo "FPM_CC=icx" >> "$GITHUB_ENV" ; \
+            echo "FPM_CXX=icpx" >> "$GITHUB_ENV" ; \
+          else \
+            echo "FPM_CC=gcc" >> "$GITHUB_ENV" ; \
+            echo "FPM_CXX=g++" >> "$GITHUB_ENV" ; \
+          fi ; \
+        elif test "$FC" = "lfortran" ; then \
+          echo "FPM_FC=lfortran" >> "$GITHUB_ENV" ; \
+          echo "FFLAGS=--cpp $FFLAGS" >> "$GITHUB_ENV" ; \
+        else \
+          echo "FPM_FC=gfortran-${COMPILER_VERSION}" >> "$GITHUB_ENV" ; \
+          echo "FFLAGS=-ffree-line-length-0 $FFLAGS" >> "$GITHUB_ENV" ; \
+          echo "FPM_CXXFLAGS=-std=c++14" >> "$GITHUB_ENV" ; : needed for Armadillo on macos-14 ; \
+        fi
+
+    - name: Setup FPM
+      uses: fortran-lang/setup-fpm@main
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        fpm-version: latest
+
+    - name: Build FPM
+      if: false
+      run: |
+        set -x
+        curl --retry 5 -LOsS https://github.com/fortran-lang/fpm/releases/download/v0.11.0/fpm-0.11.0.F90
+        mkdir fpm-temp
+        gfortran-14 -o fpm-temp/fpm fpm-0.11.0.F90
+        echo "PATH=`pwd`/fpm-temp:${PATH}" >> "$GITHUB_ENV"
+
+    - name: Version info
+      run: |
+        if test -d .git && type -p git > /dev/null ; then \
+          git config --global --add safe.directory `pwd` ; \
+          echo == Commit Info == ; \
+          git log -n 1 ; echo ; echo ; \
+        fi
+        echo == Platform version info == 
+        uname -a
+        if test -r /etc/os-release ; then grep -e NAME -e VERSION /etc/os-release  ; fi
+        if test -x /usr/bin/sw_vers ; then /usr/bin/sw_vers ; fi
+        echo
+        echo PATH="$PATH"
+        for tool in ${FPM_FC} ${FPM_CC} ${FPM_CXX} fpm ; do
+          ( echo ; set -x ; w=$(which $tool) ; ls -al $w ; ls -alhL $w ; $tool --version )
+        done
+
+
+    - name: Build and Test
+      run: |
+        set -x
+        echo "FPM_FLAGS=${FPM_FLAGS}"
+        echo "FFLAGS=$FFLAGS"
+        ls -lt
+        fpm test ${FPM_FLAGS} --flag "$FFLAGS"
