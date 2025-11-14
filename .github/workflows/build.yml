@@ -13,14 +13,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ macos-14, macos-15, macos-15-intel, ubuntu-24.04]
+        os: [ macos-14, macos-15, macos-15-intel, ubuntu-24.04 ]
         compiler: [ gfortran ]
         version: [ 13, 14, 15 ] # Julienne supports GFortran 13+
         extra_flags: [ -g -O3 ]
-
-        exclude:
-          - os: ubuntu-24.04
-            version: 15 # no package available (yet?)
 
         include:
 
@@ -99,12 +95,29 @@ jobs:
       uses: actions/checkout@v5
 
     - name: Install Ubuntu Native Dependencies
-      if: ${{ 0 && contains(matrix.os, 'ubuntu') && matrix.container == '' && matrix.compiler == 'gfortran' }}
+      if: ${{ contains(matrix.os, 'ubuntu') && matrix.container == '' && matrix.compiler == 'gfortran' }}
       run: |
         set -x
         sudo apt-get update
         sudo apt list -a 'gfortran-*'
-        sudo apt install -y gfortran-${COMPILER_VERSION} build-essential
+        sudo apt install -y build-essential
+        if [[ ${COMPILER_VERSION} < 15 ]] ; then \
+          sudo apt install -y gfortran-${COMPILER_VERSION} ; \
+        else \
+          curl -L https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh -o install-homebrew.sh ; \
+          chmod +x install-homebrew.sh ; \
+          env CI=1 ./install-homebrew.sh ; \
+          HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew" ; \
+          ${HOMEBREW_PREFIX}/bin/brew install -v gcc@${COMPILER_VERSION} binutils ; \
+          ls -al ${HOMEBREW_PREFIX}/bin ; \
+          echo "PATH=${HOMEBREW_PREFIX}/bin:${PATH}" >> "$GITHUB_ENV" ; \
+          : Homebrew GCC@15 needs binutils 2.44+ ; \
+          HOMEBREW_BINUTILS=$(ls -d ${HOMEBREW_PREFIX}/Cellar/binutils/2.*/bin ) ; \
+          ls -al ${HOMEBREW_BINUTILS} ; \
+          echo "FFLAGS=$FFLAGS -B ${HOMEBREW_BINUTILS}" >> "$GITHUB_ENV" ; \
+          echo "CFLAGS=$CFLAGS -B ${HOMEBREW_BINUTILS}" >> "$GITHUB_ENV" ; \
+          echo "CXXFLAGS=$CXXFLAGS -B ${HOMEBREW_BINUTILS}" >> "$GITHUB_ENV" ; \
+        fi
 
     - name: Install Ubuntu Container Dependencies
       if: ${{ contains(matrix.os, 'ubuntu') && matrix.container != '' && !contains(matrix.container, 'phhargrove') }}
