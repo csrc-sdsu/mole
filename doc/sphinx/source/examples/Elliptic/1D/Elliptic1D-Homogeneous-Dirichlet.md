@@ -41,6 +41,7 @@ $$
 
 This example is implemented in:
 - [MATLAB/ OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DHomogeneousDirichlet.m)
+- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/elliptic1DHomogeneousDirichlet.cpp)
 
 Additional MATLAB/ OCTAVE variants of this example with different boundary conditions:
 - [Non-Homogeneous Dirichlet](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DNonHomogeneousDirichlet.m)
