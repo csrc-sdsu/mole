@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ macos-14, macos-15, macos-15-intel, ubuntu-24.04 ]
+        os: [ macos-14, macos-15, macos-15-intel, macos-26, ubuntu-24.04 ]
         compiler: [ gfortran ]
         version: [ 13, 14, 15 ] # Julienne supports GFortran 13+
         extra_flags: [ -g -O3 ]
@@ -168,6 +168,9 @@ jobs:
           echo "FPM_FC=gfortran-${COMPILER_VERSION}" >> "$GITHUB_ENV" ; \
           echo "FFLAGS=-ffree-line-length-0 $FFLAGS" >> "$GITHUB_ENV" ; \
           echo "FPM_CXXFLAGS=-std=c++14" >> "$GITHUB_ENV" ; : needed for Armadillo on macos-14 ; \
+        fi
+        if [[ "${{ matrix.container }}" =~ "snowstep/llvm" ]] ; then \
+          echo "LD_LIBRARY_PATH=/usr/lib/llvm-22/lib:$LD_LIBRARY_PATH" >> "$GITHUB_ENV" ; \
         fi
 
     - name: Setup FPM
