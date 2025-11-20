@@ -15,7 +15,7 @@ L = lap(k,m,dx)
 
 # Impose Robin boundary condition on laplacian operator
 a = 1.0
-b = 1.0s
+b = 1.0
 L = L + robinBC(k,m,dx,a,b)
 
 # 1D staggered grid
@@ -29,6 +29,6 @@ U[end] = 2*exp(1)
 U = L\U
 
 # Plot result
-p = scatter(grid,U)
-plot!(p,grid,exp.(grid), label="test")
+p = scatter(grid,U,label="Approximated")
+plot!(p,grid,exp.(grid), label="Analytical")
 display(p)
