@@ -14,15 +14,18 @@ contains
 
     call_julienne_assert(m .isAtLeast. 2*k)
 
+    associate(A => corbino_castillo_A( k, dx), M => corbino_castillo_M( k, dx))
     gradient_operator_1D%mimetic_matrix_1D_ = mimetic_matrix_1D_t( &
-       corbino_castillo_A( k, dx) & 
-      ,corbino_castillo_M( k, dx) & 
-      ,corbino_castillo_Ap(k, dx) &
+       A & 
+      ,M & 
+      ,negate_and_flip(A) &
     )
     gradient_operator_1D%k_  = k
     gradient_operator_1D%dx_ = dx
-    gradient_operator_1D%m_ = m
-  end procedure
+    gradient_operator_1D%m_ = cells
+    end associate
+
+  contains
 
   pure function corbino_castillo_A(k, dx) result(matrix_block)
     integer, intent(in) :: k
@@ -64,48 +67,6 @@ contains
     end select order_of_accuracy
 
   end function
-
-#if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
-
-  pure function corbino_castillo_Ap(k, dx) result(matrix_block)
-    integer, intent(in) :: k
-    double precision, intent(in) :: dx
-    double precision, allocatable :: matrix_block(:,:)
-
-    associate(A => corbino_castillo_A(k, dx))
-      allocate(matrix_block , mold=A)
-      reverse_elements_within_rows_and_flip_sign: &
-      do concurrent(integer :: row = 1:size(matrix_block,1)) default(none) shared(matrix_block, A)
-        matrix_block(row,:) = -A(row,size(A,2):1:-1)
-      end do reverse_elements_within_rows_and_flip_sign
-      reverse_elements_within_columns: &
-      do concurrent(integer :: column = 1 : size(matrix_block,2)) default(none) shared(matrix_block)
-        matrix_block(:,column) = matrix_block(size(matrix_block,1):1:-1,column)
-      end do reverse_elements_within_columns
-    end associate
-  end function
- 
-#else
-
-  pure function corbino_castillo_Ap(k, dx) result(matrix_block)
-    integer, intent(in) :: k
-    double precision, intent(in) :: dx
-    double precision, allocatable :: matrix_block(:,:)
-    integer row, column
-
-    associate(A => corbino_castillo_A(k, dx))
-      allocate(matrix_block , mold=A)
-      reverse_elements_within_rows_and_flip_sign: &
-      do concurrent(row = 1:size(matrix_block,1))
-        matrix_block(row,:) = -A(row,size(A,2):1:-1)
-      end do reverse_elements_within_rows_and_flip_sign
-      reverse_elements_within_columns: &
-      do concurrent(column = 1 : size(matrix_block,2))
-        matrix_block(:,column) = matrix_block(size(matrix_block,1):1:-1,column)
-      end do reverse_elements_within_columns
-    end associate
-  end function
- 
-#endif
+  end procedure
 
 end submodule gradient_operator_1D_s

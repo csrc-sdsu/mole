@@ -112,12 +112,12 @@ module tensors_1D_m
 
   interface gradient_operator_1D_t
 
-    pure module function construct_1D_gradient_operator(k, dx, m) result(gradient_operator_1D)
+    pure module function construct_1D_gradient_operator(k, dx, cells) result(gradient_operator_1D)
       !! Construct a mimetic gradient operator
       implicit none
       integer, intent(in) :: k !! order of accuracy
       double precision, intent(in) :: dx !! step size
-      integer, intent(in) :: m !! number of grid cells
+      integer, intent(in) :: cells !! number of grid cells
       type(gradient_operator_1D_t) gradient_operator_1D
     end function
 
@@ -183,4 +183,42 @@ module tensors_1D_m
 
   end interface
 
+contains
+
+#if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
+
+  pure function negate_and_flip(A) result(Ap)
+    double precision, intent(in) :: A(:,:)
+    double precision, allocatable :: Ap(:,:)
+
+      allocate(Ap , mold=A)
+      reverse_elements_within_rows_and_flip_sign: &
+      do concurrent(integer :: row = 1:size(Ap,1)) default(none) shared(Ap, A)
+        Ap(row,:) = -A(row,size(A,2):1:-1)
+      end do reverse_elements_within_rows_and_flip_sign
+      reverse_elements_within_columns: &
+      do concurrent(integer :: column = 1 : size(Ap,2)) default(none) shared(Ap)
+        Ap(:,column) = Ap(size(Ap,1):1:-1,column)
+      end do reverse_elements_within_columns
+  end function
+ 
+#else
+
+  pure function negate_and_flip(A) result(Ap)
+    double precision, intent(in) :: A(:,:)
+    double precision, allocatable :: Ap(:,:)
+    integer row, column
+
+      allocate(Ap , mold=A)
+      reverse_elements_within_rows_and_flip_sign: &
+      do concurrent(row = 1:size(Ap,1))
+        Ap(row,:) = -A(row,size(A,2):1:-1)
+      end do reverse_elements_within_rows_and_flip_sign
+      reverse_elements_within_columns: &
+      do concurrent(column = 1 : size(Ap,2))
+        Ap(:,column) = Ap(size(Ap,1):1:-1,column)
+      end do reverse_elements_within_columns
+  end function
+ 
+#endif
 end module tensors_1D_m
