@@ -172,6 +172,13 @@ module tensors_1D_m
        double precision, allocatable :: gradients(:)
      end function
 
+    pure module function cell_centers_extended(x_min, x_max, cells) result(x)
+      implicit none
+      double precision, intent(in) :: x_min, x_max
+      integer, intent(in) :: cells
+      double precision, allocatable :: x(:)
+    end function
+
   end interface
 
 end module tensors_1D_m

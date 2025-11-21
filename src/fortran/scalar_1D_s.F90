@@ -22,22 +22,11 @@ contains
     scalar_1D%x_max_ = x_max
     scalar_1D%cells_ = cells
     scalar_1D%gradient_operator_1D_ = gradient_operator_1D_t(k=order, dx=(x_max - x_min)/cells, m=cells)
-    scalar_1D%scalar_1D_ = initializer(grid_(x_min, x_max, cells))
-  end function
-
-  pure function grid_(x_min, x_max, cells) result(x)
-    double precision, intent(in) :: x_min, x_max
-    integer, intent(in) :: cells
-    double precision, allocatable :: x(:)
-    integer cell
-
-    associate(dx => (x_max - x_min)/cells)
-      x = [x_min, x_min + dx/2. + [((cell-1)*dx, cell = 1, cells)], x_max]
-    end associate
+    scalar_1D%scalar_1D_ = initializer(cell_centers_extended(x_min, x_max, cells))
   end function
 
   module procedure grid
-      x = grid_(self%x_min_, self%x_max_, self%cells_)
+      x = cell_centers_extended(self%x_min_, self%x_max_, self%cells_)
   end procedure
 
   module procedure grad
