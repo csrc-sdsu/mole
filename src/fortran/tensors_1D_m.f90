@@ -78,7 +78,7 @@ module tensors_1D_m
 
   interface scalar_1D_t
 
-    pure module function construct_from_function(initializer, order, cells, x_min, x_max) result(scalar_1D)
+    pure module function construct_1D_scalar_from_function(initializer, order, cells, x_min, x_max) result(scalar_1D)
       !! Result is a collection of cell-centered-extended values with a corresponding mimetic gradient operator
       implicit none
       procedure(scalar_1D_initializer_i), pointer :: initializer 
@@ -112,11 +112,11 @@ module tensors_1D_m
 
   interface gradient_operator_1D_t
 
-    pure module function construct_from_parameters(k, dx, m) result(gradient_operator_1D)
+    pure module function construct_1D_gradient_operator(k, dx, m) result(gradient_operator_1D)
       !! Construct a mimetic gradient operator
       implicit none
       integer, intent(in) :: k !! order of accuracy
-      double precision, intent(in) :: dx !! step siz
+      double precision, intent(in) :: dx !! step size
       integer, intent(in) :: m !! number of grid cells
       type(gradient_operator_1D_t) gradient_operator_1D
     end function
@@ -125,10 +125,12 @@ module tensors_1D_m
 
   interface mimetic_matrix_1D_t
 
-    pure module function construct_from_block_matrices(upper, inner, lower) result(mimetic_matrix_1D)
-      !! Construct discrete operator from coefficient matrix
+    pure module function construct_matrix_operator(upper, inner, lower) result(mimetic_matrix_1D)
+      !! Construct discrete operator from matrix blocks
       implicit none
-      double precision, intent(in) :: upper(:,:), inner(:), lower(:,:)
+      double precision, intent(in) :: upper(:,:) !! A block matrix (cf. Corbino & Castillo, 2020)
+      double precision, intent(in) :: inner(:)   !! M matrix (cf. Corbino & Castillo, 2020) - stored as 1 row of a Toeplitz matrix
+      double precision, intent(in) :: lower(:,:) !! A' block matrix  (cf. Corbino & Castillo, 2020)
       type(mimetic_matrix_1D_t) mimetic_matrix_1D
     end function
 

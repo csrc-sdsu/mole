@@ -7,7 +7,7 @@ submodule(tensors_1D_m) mimetic_matrix_1D_s
 
 contains
 
-  module procedure construct_from_block_matrices
+  module procedure construct_matrix_operator
     mimetic_matrix_1D%upper_ = upper
     mimetic_matrix_1D%inner_ = inner
     mimetic_matrix_1D%lower_ = lower

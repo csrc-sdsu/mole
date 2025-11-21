@@ -10,7 +10,7 @@ submodule(tensors_1D_m) gradient_operator_1D_s
 
 contains
 
-  module procedure construct_from_parameters
+  module procedure construct_1D_gradient_operator
 
     call_julienne_assert(m .isAtLeast. 2*k)
 

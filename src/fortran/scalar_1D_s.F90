@@ -6,7 +6,7 @@ submodule(tensors_1D_m) scalar_1D_s
 
 contains
 
-  pure module function construct_from_function(initializer, order, cells, x_min, x_max) result(scalar_1D)
+  pure module function construct_1D_scalar_from_function(initializer, order, cells, x_min, x_max) result(scalar_1D)
     implicit none
     procedure(scalar_1D_initializer_i), pointer :: initializer
     integer, intent(in) :: order !! order of accuracy
