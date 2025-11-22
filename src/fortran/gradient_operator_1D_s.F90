@@ -12,7 +12,7 @@ contains
 
   module procedure construct_1D_gradient_operator
 
-    call_julienne_assert(m .isAtLeast. 2*k)
+    call_julienne_assert(cells .isAtLeast. 2*k)
 
     associate(A => corbino_castillo_A(k, dx), M => corbino_castillo_M(k, dx))
       gradient_operator_1D%mimetic_matrix_1D_ = mimetic_matrix_1D_t(A, M, negate_and_flip(A))

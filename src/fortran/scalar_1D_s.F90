@@ -25,12 +25,12 @@ contains
     scalar_1D%scalar_1D_ = initializer(cell_centers_extended(x_min, x_max, cells))
   end function
 
-  module procedure grid
-      x = cell_centers_extended(self%x_min_, self%x_max_, self%cells_)
+  module procedure grad
+    gradient_1D = gradient_1D_t(matvec(self%gradient_operator_1D_%mimetic_matrix_1D_, self), self%x_min_, self%x_max_, self%cells_)
   end procedure
 
-  module procedure grad
-    grad_f = gradient_1D_t(matvec(self%gradient_operator_1D_%mimetic_matrix_1D_, self), self%x_min_, self%x_max_, self%cells_)
+  module procedure scalar_1D_values
+    my_values = self%scalar_1D_
   end procedure
 
 end submodule scalar_1D_s
