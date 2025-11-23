@@ -12,7 +12,6 @@ module gradient_operator_1D_test_m
     ,operator(.all.) &
     ,operator(.also.) &
     ,operator(.approximates.) &
-    ,operator(.csv.) &
     ,operator(.within.)
   use mole_m, only : scalar_1D_t, gradient_1D_t, scalar_1D_initializer_i
 #if ! HAVE_PROCEDURE_ACTUAL_FOR_POINTER_DUMMY
