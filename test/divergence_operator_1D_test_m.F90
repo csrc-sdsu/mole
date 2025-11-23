@@ -38,19 +38,19 @@ contains
 
     test_results = divergence_operator_1D_test%run([ & 
        test_description_t( &
-          'computing 2nd- & 4th-order divergences of a constant vector field within tolerance ' // string_t(tight_tolerance) &
+          'computing 2nd- & 4th-order divergences of a constant vector field' // string_t(tight_tolerance) &
          ,usher(check_div_const)) &
       ,test_description_t( &
-          'computing 2nd- & 4th-order divergences of a vector field with linearly varying magnitude within tolerance ' // string_t(loose_tolerance) &
+          'computing 2nd- & 4th-order divergences of a vector field with linearly varying magnitude' // string_t(loose_tolerance) &
          ,usher(check_div_line)) &
+      ,test_description_t( &
+          'computing 2nd- & 4th-order divergences of a vector field with quadratically varying magnitude' // string_t(loose_tolerance) &
+         ,usher(check_div_parabola)) &
       !,test_description_t( &
-      !    'computing 2nd- & 4th-order divergences of a vector field with linearly varying magnitude within tolerance ' // string_t(loose_tolerance) &
-      !   ,usher(check_div_parabola)) &
-      !,test_description_t( &
-      !    'computing 2nd-order divergences of a vector field with quadratically varying magnitude sinusoid with a convergence rate of 2 within tolerance ' // string_t(crude_tolerance) &
+      !    'computing 2nd-order divergences of a vector field of sinusoidally varying magnitude at convergence rate 2' // string_t(crude_tolerance) &
       !   ,usher(check_2nd_order_div_sinusoid)) &
       !,test_description_t( &
-      !    'computing 4th-order divergences of a vector field with sinusoidally varying magnitude with a convergence rate of 4 within tolerance ' // string_t(crude_tolerance) &
+      !    'computing 4th-order divergences of a vector field of sinusoidally varying magnitude at convergence rate 4' // string_t(crude_tolerance) &
       !   ,usher(check_4th_order_div_sinusoid)) &
     ])
   end function
@@ -88,11 +88,11 @@ contains
     procedure(vector_1D_initializer_i), pointer :: vector_1D_initializer => line
 
     div_v = .div. vector_1D_t(vector_1D_initializer, order=2, cells=5, x_min=0D0, x_max=4D0)
-    print *,"div_v%values() = ", div_v%values()
+    print '(a,*(g0,:,", "))', "div_v%values() = ", div_v%values()
     test_diagnosis = .all. (div_v%values() .approximates. div_v_expected .within. loose_tolerance) // " (2nd-order .div. (linear magnitude))"
 
     div_v = .div. vector_1D_t(vector_1D_initializer, order=4, cells=9, x_min=0D0, x_max=8D0)
-    print *,"div_v%values() = ", div_v%values()
+    print '(a,*(g0,:,", "))', "div_v%values() = ", div_v%values()
     test_diagnosis = test_diagnosis .also. (.all. (div_v%values() .approximates. div_v_expected .within. loose_tolerance)) // " (4th-order .div. (linear magnitdue))"
 
   end function
@@ -111,6 +111,7 @@ contains
 
     quadratic = vector_1D_t(vector_1D_initializer , order=2, cells=5, x_min=0D0, x_max=4D0)
     div_v = .div. quadratic
+    print '(a,*(g0,:,", "))', "div_v%values() = ", div_v%values()
 
     associate(x => div_v%grid())
       associate(div_v_expected => 14*x + 3)
@@ -120,6 +121,7 @@ contains
 
     quadratic = vector_1D_t(vector_1D_initializer , order=4, cells=9, x_min=0D0, x_max=8D0)
     div_v = .div. quadratic
+    print '(a,*(g0,:,", "))', "div_v%values() = ", div_v%values()
 
     associate(x => div_v%grid())
       associate(div_v_expected => 14*x + 3)
