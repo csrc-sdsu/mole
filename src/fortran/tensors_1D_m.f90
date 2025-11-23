@@ -66,6 +66,8 @@ module tensors_1D_m
     procedure, non_overridable :: scalar_1D_values
     generic :: operator(.grad.) => grad
     procedure, non_overridable, private :: grad
+    generic :: grid => cell_centers_extended
+    procedure :: cell_centers_extended
   end type
 
   type, extends(scalar_1D_t) :: divergence_1D_t
@@ -82,6 +84,7 @@ module tensors_1D_m
   contains
     generic :: values => vector_1D_values
     procedure, non_overridable :: vector_1D_values
+    generic :: grid => faces
     procedure :: faces
     generic :: operator(.div.) => div
     procedure, non_overridable, private :: div
@@ -158,6 +161,12 @@ module tensors_1D_m
       implicit none
       class(scalar_1D_t), intent(in) :: self
       type(gradient_1D_t) gradient_1D !! discrete gradient
+    end function
+
+    pure module function cell_centers_extended(self) result(x)
+      implicit none
+      class(scalar_1D_t), intent(in) :: self
+      double precision, allocatable :: x(:)
     end function
 
     pure module function div(self) result(divergence_1D)
@@ -249,30 +258,6 @@ module tensors_1D_m
         integer, intent(in) :: cells
         type(divergence_1D_t) divergence_1D
       end function
-
-  end interface
-
-  interface
-
-    pure module function vector_grid(self) result(x)
-      implicit none
-      class(vector_1D_t), intent(in) :: self
-      double precision, allocatable :: x(:)
-    end function
-
-    pure module function cell_centers_extended(x_min, x_max, cells) result(x)
-      implicit none
-      double precision, intent(in) :: x_min, x_max
-      integer, intent(in) :: cells
-      double precision, allocatable :: x(:)
-    end function
-
-    pure module function internal_faces(x_min, x_max, cells) result(x)
-      implicit none
-      double precision, intent(in) :: x_min, x_max
-      integer, intent(in) :: cells
-      double precision, allocatable:: x(:)
-    end function
 
   end interface
 

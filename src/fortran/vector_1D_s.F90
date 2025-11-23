@@ -7,7 +7,6 @@ submodule(tensors_1D_m) vector_1D_s
 contains
 
   pure module function construct_1D_vector_from_function(initializer, order, cells, x_min, x_max) result(vector_1D)
-    implicit none
     procedure(vector_1D_initializer_i), pointer :: initializer
     integer, intent(in) :: order !! order of accuracy
     integer, intent(in) :: cells !! number of grid cells spanning the domain
@@ -22,7 +21,7 @@ contains
     vector_1D%x_max_ = x_max
     vector_1D%cells_ = cells
     vector_1D%divergence_operator_1D_ = divergence_operator_1D_t(k=order, dx=(x_max - x_min)/cells, cells=cells)
-    vector_1D%vector_1D_ = initializer(cell_centers_extended(x_min, x_max, cells))
+    vector_1D%vector_1D_ = initializer(vector_1D%faces())
   end function
 
   module procedure div
@@ -32,6 +31,17 @@ contains
   module procedure vector_1D_values
     my_values = self%vector_1D_
   end procedure
+
+  pure function internal_faces(x_min, x_max, cells) result(x)
+    double precision, intent(in) :: x_min, x_max
+    integer, intent(in) :: cells
+    double precision, allocatable:: x(:)
+    integer cell
+
+    associate(dx => (x_max - x_min)/cells)
+      x = x_min + [(cell*dx, cell = 1, cells-1)]
+    end associate
+  end function
 
   module procedure faces
     cell_faces  = [self%x_min_, internal_faces(self%x_min_, self%x_max_, self%cells_), self%x_max_]

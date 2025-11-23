@@ -40,9 +40,9 @@ contains
        test_description_t( &
           'computing 2nd- & 4th-order divergences of a constant vector field within tolerance ' // string_t(tight_tolerance) &
          ,usher(check_div_const)) &
-      !,test_description_t( &
-      !    'computing 2nd- & 4th-order divergences of a vector field with linearly varying magnitude within tolerance ' // string_t(loose_tolerance) &
-      !   ,usher(check_div_line)) &
+      ,test_description_t( &
+          'computing 2nd- & 4th-order divergences of a vector field with linearly varying magnitude within tolerance ' // string_t(loose_tolerance) &
+         ,usher(check_div_line)) &
       !,test_description_t( &
       !    'computing 2nd- & 4th-order divergences of a vector field with linearly varying magnitude within tolerance ' // string_t(loose_tolerance) &
       !   ,usher(check_div_parabola)) &
@@ -69,62 +69,64 @@ contains
     procedure(vector_1D_initializer_i), pointer :: vector_1D_initializer => const
 
     div_v = .div. vector_1D_t(vector_1D_initializer, order=2, cells=5, x_min=0D0, x_max=4D0)
-    test_diagnosis = .all. (div_v%values() .approximates. div_v_expected .within. loose_tolerance) // " (2nd-order d(line)/dx)"
+    test_diagnosis = .all. (div_v%values() .approximates. div_v_expected .within. loose_tolerance) // " (2nd-order .div. (const. v))"
 
     div_v = .div. vector_1D_t(vector_1D_initializer, order=4, cells=9, x_min=0D0, x_max=8D0)
-    test_diagnosis = test_diagnosis .also. (.all. (div_v%values() .approximates. div_v_expected .within. loose_tolerance)) // " (4th-order divergence of linear vector field)"
+    test_diagnosis = test_diagnosis .also. (.all. (div_v%values() .approximates. div_v_expected .within. loose_tolerance)) // " 4th-order .div.(const. v)"
   end function
 
-  !pure function line(x) result(y)
-  !  double precision, intent(in) :: x(:)
-  !  double precision, allocatable :: y(:)
-  !  y = 14*x + 3
-  !end function
+  pure function line(x) result(y)
+    double precision, intent(in) :: x(:)
+    double precision, allocatable :: y(:)
+    y = 14*x + 3
+  end function
 
-  !function check_div_line() result(test_diagnosis)
-  !  type(test_diagnosis_t) test_diagnosis
-  !  type(divergence_1D_t) div_v
-  !  double precision, parameter :: div_v_expected = 14D0
-  !  procedure(vector_1D_initializer_i), pointer :: vector_1D_initializer => line
+  function check_div_line() result(test_diagnosis)
+    type(test_diagnosis_t) test_diagnosis
+    type(divergence_1D_t) div_v
+    double precision, parameter :: div_v_expected = 14D0
+    procedure(vector_1D_initializer_i), pointer :: vector_1D_initializer => line
 
-  !  div_v = .div. vector_1D_t(vector_1D_initializer, order=2, cells=5, x_min=0D0, x_max=4D0)
-  !  test_diagnosis = .all. (div_v%values() .approximates. div_v_expected .within. loose_tolerance) // " (2nd-order divergence of linear vector field)"
+    div_v = .div. vector_1D_t(vector_1D_initializer, order=2, cells=5, x_min=0D0, x_max=4D0)
+    print *,"div_v%values() = ", div_v%values()
+    test_diagnosis = .all. (div_v%values() .approximates. div_v_expected .within. loose_tolerance) // " (2nd-order .div. (linear magnitude))"
 
-  !  div_v = .div. vector_1D_t(vector_1D_initializer, order=4, cells=9, x_min=0D0, x_max=8D0)
-  !  test_diagnosis = test_diagnosis .also. (.all. (div_v%values() .approximates. df_dx .within. loose_tolerance)) // " (4th-order d(line)/dx)"
+    div_v = .div. vector_1D_t(vector_1D_initializer, order=4, cells=9, x_min=0D0, x_max=8D0)
+    print *,"div_v%values() = ", div_v%values()
+    test_diagnosis = test_diagnosis .also. (.all. (div_v%values() .approximates. div_v_expected .within. loose_tolerance)) // " (4th-order .div. (linear magnitdue))"
 
-  !end function
+  end function
 
-  !pure function parabola(x) result(y)
-  !  double precision, intent(in) :: x(:)
-  !  double precision, allocatable :: y(:)
-  !  y = 7*x**2 + 3*x + 5
-  !end function
+  pure function parabola(x) result(y)
+    double precision, intent(in) :: x(:)
+    double precision, allocatable :: y(:)
+    y = 7*x**2 + 3*x + 5
+  end function
 
-  !function check_div_parabola() result(test_diagnosis)
-  !  type(test_diagnosis_t) test_diagnosis
-  !  type(vector_1D_t) quadratic
-  !  type(divergence_1D_t) div_v
-  !  procedure(vector_1D_initializer_i), pointer :: vector_1D_initializer => parabola
+  function check_div_parabola() result(test_diagnosis)
+    type(test_diagnosis_t) test_diagnosis
+    type(vector_1D_t) quadratic
+    type(divergence_1D_t) div_v
+    procedure(vector_1D_initializer_i), pointer :: vector_1D_initializer => parabola
 
-  !  quadratic = vector_1D_t(vector_1D_initializer , order=2, cells=5, x_min=0D0, x_max=4D0)
-  !  div_v = .div. quadratic
+    quadratic = vector_1D_t(vector_1D_initializer , order=2, cells=5, x_min=0D0, x_max=4D0)
+    div_v = .div. quadratic
 
-  !  associate(x => div_v%faces())
-  !    associate(df_dx => 14*x + 3)
-  !      test_diagnosis = .all. (div_v%values() .approximates. df_dx .within. loose_tolerance) // " (2nd-order d(parabola)/dx)"
-  !    end associate
-  !  end associate
+    associate(x => div_v%grid())
+      associate(div_v_expected => 14*x + 3)
+        test_diagnosis = .all. (div_v%values() .approximates. div_v_expected .within. loose_tolerance) // "2nd-order .div. (quadratic magnitude)"
+      end associate
+    end associate
 
-  !  quadratic = vector_1D_t(vector_1D_initializer , order=4, cells=9, x_min=0D0, x_max=8D0)
-  !  div_v = .div. quadratic
+    quadratic = vector_1D_t(vector_1D_initializer , order=4, cells=9, x_min=0D0, x_max=8D0)
+    div_v = .div. quadratic
 
-  !  associate(x => div_vf%faces())
-  !    associate(df_dx => 14*x + 3)
-  !      test_diagnosis = test_diagnosis .also. (.all. (div_vf%values() .approximates. df_dx .within. loose_tolerance)) // " (4th-order d(parabola)/dx)"
-  !    end associate
-  !  end associate
-  !end function
+    associate(x => div_v%grid())
+      associate(div_v_expected => 14*x + 3)
+        test_diagnosis = test_diagnosis .also. (.all. (div_v%values() .approximates. div_v_expected .within. loose_tolerance)) // "4th-order .div. (quadratic magnitude)"
+      end associate
+    end associate
+  end function
 
   !pure function sinusoid(x) result(y)
   !  double precision, intent(in) :: x(:)
@@ -146,7 +148,7 @@ contains
   !  div_coarse = .div. coarse
   !  div_fine   = .div. fine
 
-  !  associate(x_coarse => div_coarse%faces(), x_fine => div_fine%faces())
+  !  associate(x_coarse => div_coarse%grid(), x_fine => div_fine%grid())
   !    associate(df_dx_coarse => cos(x_coarse) - sin(x_coarse), df_dx_fine => cos(x_fine) - sin(x_fine), div_coarse_values => div_coarse%values(), div_fine_values => div_fine%values())
   !      test_diagnosis = .all. (div_coarse_values .approximates. df_dx_coarse .within. rough_tolerance) // " (2nd-order d(sinusoid)/dx point-wise errors)"
   !      test_diagnosis = test_diagnosis .also. (.all. (div_fine_values .approximates. df_dx_fine .within. rough_tolerance)) // " (2nd-order d(sinusoid)/dx point-wise)"
@@ -173,7 +175,7 @@ contains
   !  div_coarse = .div. coarse
   !  div_fine   = .div. fine
 
-  !  associate(x_coarse => div_coarse%faces(), x_fine => div_fine%faces())
+  !  associate(x_coarse => div_coarse%grid(), x_fine => div_fine%grid())
   !    associate(df_dx_coarse => cos(x_coarse) - sin(x_coarse), df_dx_fine => cos(x_fine) - sin(x_fine), div_coarse_values => div_coarse%values(), div_fine_values => div_fine%values())
   !      test_diagnosis = .all. (div_coarse_values .approximates. df_dx_coarse .within. rough_tolerance) // " (4th-order d(sinusoid)/dx point-wise errors)"
   !      test_diagnosis = test_diagnosis .also. (.all. (div_fine_values .approximates. df_dx_fine .within. rough_tolerance)) // " (4th-order d(sinusoid)/dx point-wise)"
