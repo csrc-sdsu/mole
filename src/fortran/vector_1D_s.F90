@@ -21,7 +21,7 @@ contains
     vector_1D%x_max_ = x_max
     vector_1D%cells_ = cells
     vector_1D%divergence_operator_1D_ = divergence_operator_1D_t(k=order, dx=(x_max - x_min)/cells, cells=cells)
-    vector_1D%vector_1D_ = initializer(vector_1D%faces())
+    vector_1D%values_ = initializer(vector_1D%faces())
   end function
 
   module procedure div
@@ -29,7 +29,7 @@ contains
   end procedure
 
   module procedure vector_1D_values
-    my_values = self%vector_1D_
+    my_values = self%values_
   end procedure
 
   pure function internal_faces(x_min, x_max, cells) result(x)

@@ -20,18 +20,18 @@ contains
     double precision, allocatable :: product_inner(:)
 
     associate(upper => size(self%upper_,1), lower => size(self%lower_,1))
-      associate(inner_rows => size(scalar_1D%scalar_1D_) - (upper + lower + 1))
+      associate(inner_rows => size(scalar_1D%values_) - (upper + lower + 1))
 
         allocate(product_inner(inner_rows))
 
         do concurrent(integer :: row = 1 : inner_rows) default(none) shared(product_inner, self, scalar_1D)
-          product_inner(row) = dot_product(self%inner_, scalar_1D%scalar_1D_(row + 1 : row + size(self%inner_)))
+          product_inner(row) = dot_product(self%inner_, scalar_1D%values_(row + 1 : row + size(self%inner_)))
         end do
 
         matvec_product = [ &
-           matmul(self%upper_, scalar_1D%scalar_1D_(1 : size(self%upper_,2))) &
+           matmul(self%upper_, scalar_1D%values_(1 : size(self%upper_,2))) &
           ,product_inner &
-          ,matmul(self%lower_, scalar_1D%scalar_1D_(size(scalar_1D%scalar_1D_) - size(self%lower_,2) + 1 : )) &
+          ,matmul(self%lower_, scalar_1D%values_(size(scalar_1D%values_) - size(self%lower_,2) + 1 : )) &
         ]
       end associate
     end associate
@@ -45,18 +45,18 @@ contains
     double precision, allocatable :: product_inner(:)
 
     associate(upper => size(self%upper_,1), lower => size(self%lower_,1))
-      associate(inner_rows => size(scalar_1D%scalar_1D_) - (upper + lower + 1))
+      associate(inner_rows => size(scalar_1D%values_) - (upper + lower + 1))
 
         allocate(product_inner(inner_rows))
 
         do concurrent(row = 1 : inner_rows)
-          product_inner(row) = dot_product(self%inner_, scalar_1D%scalar_1D_(row + 1 : row + size(self%inner_)))
+          product_inner(row) = dot_product(self%inner_, scalar_1D%values_(row + 1 : row + size(self%inner_)))
         end do
 
         matvec_product = [ &
-           matmul(self%upper_, scalar_1D%scalar_1D_(1 : size(self%upper_,2))) &
+           matmul(self%upper_, scalar_1D%values_(1 : size(self%upper_,2))) &
           ,product_inner &
-          ,matmul(self%lower_, scalar_1D%scalar_1D_(size(scalar_1D%scalar_1D_) - size(self%lower_,2) + 1 : )) &
+          ,matmul(self%lower_, scalar_1D%values_(size(scalar_1D%values_) - size(self%lower_,2) + 1 : )) &
         ]
       end associate
     end associate
@@ -71,18 +71,18 @@ contains
     double precision, allocatable :: product_inner(:)
 
     associate(upper_rows => size(self%upper_,1), lower_rows => size(self%lower_,1))
-      associate(inner_rows => size(vector_1D%vector_1D_) - (upper_rows + lower_rows + 1))
+      associate(inner_rows => size(vector_1D%values_) - (upper_rows + lower_rows + 1))
 
         allocate(product_inner(inner_rows))
 
         do concurrent(integer :: row = 1 : inner_rows) default(none) shared(product_inner, self, vector_1D)
-          product_inner(row) = dot_product(self%inner_, vector_1D%vector_1D_(row + 1 : row + size(self%inner_)))
+          product_inner(row) = dot_product(self%inner_, vector_1D%values_(row + 1 : row + size(self%inner_)))
         end do
 
         matvec_product = [ &
-           matmul(self%upper_, vector_1D%vector_1D_(1 : size(self%upper_,2))) &
+           matmul(self%upper_, vector_1D%values_(1 : size(self%upper_,2))) &
           ,product_inner &
-          ,matmul(self%lower_, vector_1D%vector_1D_(size(vector_1D%vector_1D_) - size(self%lower_,2) + 1 : )) &
+          ,matmul(self%lower_, vector_1D%values_(size(vector_1D%values_) - size(self%lower_,2) + 1 : )) &
         ]
       end associate
     end associate
@@ -96,18 +96,18 @@ contains
     double precision, allocatable :: product_inner(:)
 
     associate(upper_rows => size(self%upper_,1), lower_rows => size(self%lower_,1))
-      associate(inner_rows => size(vector_1D%vector_1D_) - (upper_rows + lower_rows + 1))
+      associate(inner_rows => size(vector_1D%values_) - (upper_rows + lower_rows + 1))
 
         allocate(product_inner(inner_rows))
 
         do concurrent(row = 1 : inner_rows)
-          product_inner(row) = dot_product(self%inner_, vector_1D%vector_1D_(row + 1 : row + size(self%inner_)))
+          product_inner(row) = dot_product(self%inner_, vector_1D%values_(row + 1 : row + size(self%inner_)))
         end do
 
         matvec_product = [ &
-           matmul(self%upper_, vector_1D%vector_1D_(1 : size(self%upper_,2))) &
+           matmul(self%upper_, vector_1D%values_(1 : size(self%upper_,2))) &
           ,product_inner &
-          ,matmul(self%lower_, vector_1D%vector_1D_(size(vector_1D%vector_1D_) - size(self%lower_,2) + 1 : )) &
+          ,matmul(self%lower_, vector_1D%values_(size(vector_1D%values_) - size(self%lower_,2) + 1 : )) &
         ]
       end associate
     end associate

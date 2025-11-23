@@ -22,7 +22,7 @@ contains
     scalar_1D%x_max_ = x_max
     scalar_1D%cells_ = cells
     scalar_1D%gradient_operator_1D_ = gradient_operator_1D_t(k=order, dx=(x_max - x_min)/cells, cells=cells)
-    scalar_1D%scalar_1D_ = initializer(scalar_1D%cell_centers_extended())
+    scalar_1D%values_ = initializer(scalar_1D%cell_centers_extended())
   end function
 
   module procedure grad
@@ -30,7 +30,7 @@ contains
   end procedure
 
   module procedure scalar_1D_values
-    my_values = self%scalar_1D_
+    my_values = self%values_
   end procedure
 
   pure function cell_centers(x_min, x_max, cells) result(x)

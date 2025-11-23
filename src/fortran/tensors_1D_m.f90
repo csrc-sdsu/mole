@@ -54,12 +54,17 @@ module tensors_1D_m
     type(mimetic_matrix_1D_t) mimetic_matrix_1D_
   end type
 
-  type scalar_1D_t
+  type, abstract :: tensor_1D_t
+    private
+    double precision x_min_ !! domain lower boundary
+    double precision x_max_ !! domain upper boundary
+    integer cells_          !! number of grid cells spanning the domain
+    double precision, allocatable :: values_(:) !! tensor components at spatial locations set by child types
+  end type
+
+  type, extends(tensor_1D_t) :: scalar_1D_t
     !! Encapsulate information at cell centers and boundaries
     private
-    double precision, allocatable :: scalar_1D_(:)
-    double precision x_min_, x_max_
-    integer cells_
     type(gradient_operator_1D_t) gradient_operator_1D_
   contains
     generic :: values => scalar_1D_values
@@ -73,13 +78,9 @@ module tensors_1D_m
   type, extends(scalar_1D_t) :: divergence_1D_t
   end type
 
-  type vector_1D_t
+  type, extends(tensor_1D_t) :: vector_1D_t
     !! Encapsulate 1D vector values at cell faces (nodes in 1D) and corresponding operators
     private
-    double precision, allocatable :: vector_1D_(:) !! 1D vector values at cell faces (nodes in 1D)
-    double precision x_min_ !! domain lower boundary
-    double precision x_max_ !! domain upper boundary
-    integer cells_          !! number of grid cells spanning the domain
     type(divergence_operator_1D_t) divergence_operator_1D_
   contains
     generic :: values => vector_1D_values
