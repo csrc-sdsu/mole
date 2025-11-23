@@ -70,8 +70,8 @@ contains
 
     double precision, allocatable :: product_inner(:)
 
-    associate(upper => size(self%upper_,1), lower => size(self%lower_,1))
-      associate(inner_rows => size(vector_1D%vector_1D_) - (upper + lower + 1))
+    associate(upper_rows => size(self%upper_,1), lower_rows => size(self%lower_,1))
+      associate(inner_rows => size(vector_1D%vector_1D_) - (upper_rows + lower_rows + 1))
 
         allocate(product_inner(inner_rows))
 
@@ -95,8 +95,8 @@ contains
     integer row
     double precision, allocatable :: product_inner(:)
 
-    associate(upper => size(self%upper_,1), lower => size(self%lower_,1))
-      associate(inner_rows => size(vector_1D%vector_1D_) - (upper + lower + 1))
+    associate(upper_rows => size(self%upper_,1), lower_rows => size(self%lower_,1))
+      associate(inner_rows => size(vector_1D%vector_1D_) - (upper_rows + lower_rows + 1))
 
         allocate(product_inner(inner_rows))
 

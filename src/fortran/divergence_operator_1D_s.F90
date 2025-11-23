@@ -31,12 +31,13 @@ contains
       order_of_accuracy: &
       select case(k)
       case(2)
-        matrix_block = reshape([0D0] , shape=[1,1]) / dx
+        matrix_block = reshape([ double precision :: &
+          ! zero row elements => zero-sized array
+        ], shape=[0,3])
       case(4)
         matrix_block = reshape([ &
-                  0D0,       0D0,     0D0,       0D0,       0D0 &
-          ,-11D0/12D0, 17D0/24D0, 3D0/8D0, -5D0/24D0,  1D0/24D0 &
-        ], shape=[2,5], order=[2,1]) / dx
+          -11/12D0, 17/24D0, 3/8D0, -5/24D0,  1/24D0 &
+        ], shape=[1,5], order=[2,1]) / dx
       case default
         associate(string_k => string_t(k))
           error stop "A (divergence_operator_1D_s): unsupported order of accuracy: " // string_k%string()
