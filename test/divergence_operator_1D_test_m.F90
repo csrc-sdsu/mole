@@ -54,31 +54,26 @@ contains
 
   function check_2nd_order_div_grad_parabola() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
-    type(scalar_1D_t) s
-    type(gradient_1D_t) g
-    type(divergence_1D_t) d
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => parabola
     double precision, parameter :: expected_divergence = 1D0
 
-    s = scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=5D0)
-    g = .grad. s
-    d = .div. g
-    test_diagnosis = .all. (d%values() .approximates. expected_divergence .within. tolerance) // " (2nd-order .div.(.grad. s))"
+    associate(div_grad_scalar => .div. (.grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=5D0)))
+      test_diagnosis = .all. (div_grad_scalar%values() .approximates. expected_divergence .within. tolerance) &
+                     // " (2nd-order .div. (.grad. scalar))"
+    end associate
 
   end function
 
   function check_4th_order_div_grad_parabola() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
-    type(scalar_1D_t) s
-    type(gradient_1D_t) g
-    type(divergence_1D_t) d
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => parabola
     double precision, parameter :: expected_divergence = 1D0
 
-    s = scalar_1D_t(scalar_1D_initializer, order=4, cells=9, x_min=0D0, x_max=9D0)
-    g = .grad. s
-    d = .div. g
-    test_diagnosis = .all. (d%values() .approximates. expected_divergence .within. tolerance) // " (4th-order .div.(.grad. s))"
+    associate(div_grad_scalar => .div. (.grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=9, x_min=0D0, x_max=9D0)))
+      test_diagnosis = .all. (div_grad_scalar%values() .approximates. expected_divergence .within. tolerance) &
+                     // " (2nd-order .div. (.grad. scalar))"
+    end associate
+
   end function
 
 end module
