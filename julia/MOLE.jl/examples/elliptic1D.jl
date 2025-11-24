@@ -1,3 +1,6 @@
+"""
+A Julia script that solves the 1D Poisson's equation with Robin boundary conditions using mimetic operators.
+"""
 using Plots
 using MOLE
 

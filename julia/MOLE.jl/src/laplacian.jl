@@ -1,5 +1,3 @@
-#include("divergence.jl")
-#include("gradient.jl")
 """
     lap(k, m, dx)
 
