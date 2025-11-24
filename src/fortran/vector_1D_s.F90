@@ -6,14 +6,24 @@ submodule(tensors_1D_m) vector_1D_s
 
 contains
 
-  pure module function construct_1D_vector_from_function(initializer, order, cells, x_min, x_max) result(vector_1D)
-    procedure(vector_1D_initializer_i), pointer :: initializer
-    integer, intent(in) :: order !! order of accuracy
-    integer, intent(in) :: cells !! number of grid cells spanning the domain
-    double precision, intent(in) :: x_min !! grid location minimum
-    double precision, intent(in) :: x_max !! grid location maximum
-    type(vector_1D_t) vector_1D
+  !pure module function construct_1D_vector_from_function(initializer, order, cells, x_min, x_max) result(vector_1D)
+  !  implicit none
+  !  procedure(vector_1D_initializer_i), pointer :: initializer
+  !  integer, intent(in) :: order !! order of accuracy
+  !  integer, intent(in) :: cells !! number of grid cells spanning the domain
+  !  double precision, intent(in) :: x_min !! grid location minimum
+  !  double precision, intent(in) :: x_max !! grid location maximum
+  !  type(vector_1D_t) vector_1D
 
+  !  call_julienne_assert(x_max .greaterThan. x_min)
+  !  call_julienne_assert(cells .isAtLeast. 2*order)
+
+  !  vector_1D%tensor_1D_t = tensor_1D_t(initializer(vector_1D%faces()), x_min, x_max, cells, order)
+  !  vector_1D%divergence_operator_1D_ = divergence_operator_1D_t(k=order, dx=(x_max - x_min)/cells, cells=cells)
+  !end function
+
+
+  module procedure construct_1D_vector_from_function
     call_julienne_assert(x_max .greaterThan. x_min)
     call_julienne_assert(cells .isAtLeast. 2*order)
 
@@ -22,7 +32,7 @@ contains
     vector_1D%cells_ = cells
     vector_1D%divergence_operator_1D_ = divergence_operator_1D_t(k=order, dx=(x_max - x_min)/cells, cells=cells)
     vector_1D%values_ = initializer(vector_1D%faces())
-  end function
+  end procedure
 
   module procedure div
     divergence_1D = divergence_1D_t(matvec(self%divergence_operator_1D_%mimetic_matrix_1D_, self), self%x_min_, self%x_max_, self%cells_)

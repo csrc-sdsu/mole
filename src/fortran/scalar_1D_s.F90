@@ -6,24 +6,13 @@ submodule(tensors_1D_m) scalar_1D_s
 
 contains
 
-  pure module function construct_1D_scalar_from_function(initializer, order, cells, x_min, x_max) result(scalar_1D)
-    implicit none
-    procedure(scalar_1D_initializer_i), pointer :: initializer
-    integer, intent(in) :: order !! order of accuracy
-    integer, intent(in) :: cells !! number of grid cells spanning the domain
-    double precision, intent(in) :: x_min !! grid location minimum
-    double precision, intent(in) :: x_max !! grid location maximum
-    type(scalar_1D_t) scalar_1D
-
+  module procedure construct_1D_scalar_from_function
     call_julienne_assert(x_max .greaterThan. x_min)
     call_julienne_assert(cells .isAtLeast. 2*order)
 
-    scalar_1D%x_min_ = x_min
-    scalar_1D%x_max_ = x_max
-    scalar_1D%cells_ = cells
+    scalar_1D%tensor_1D_t = tensor_1D_t(initializer(scalar_1D%cell_centers_extended()), x_min, x_max, cells, order)
     scalar_1D%gradient_operator_1D_ = gradient_operator_1D_t(k=order, dx=(x_max - x_min)/cells, cells=cells)
-    scalar_1D%values_ = initializer(scalar_1D%cell_centers_extended())
-  end function
+  end procedure
 
   module procedure grad
     gradient_1D = gradient_1D_t(matvec(self%gradient_operator_1D_%mimetic_matrix_1D_, self), self%x_min_, self%x_max_, self%cells_)
