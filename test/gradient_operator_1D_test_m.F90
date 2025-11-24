@@ -80,10 +80,10 @@ contains
     double precision, parameter :: df_dx = 0.
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => const
 
-    grad_f = .grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=4, x_min=0D0, x_max=4D0)
+    grad_f = .grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=4D0)
     test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) // " (2nd-order d(line)/dx)"
 
-    grad_f = .grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=8, x_min=0D0, x_max=8D0)
+    grad_f = .grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=9, x_min=0D0, x_max=8D0)
     test_diagnosis = test_diagnosis .also. (.all. (grad_f%values() .approximates. df_dx .within. loose_tolerance)) // " (4th-order d(line)/dx)"
   end function
 
@@ -99,10 +99,10 @@ contains
     double precision, parameter :: df_dx = 14D0
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => line
 
-    grad_f = .grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=4, x_min=0D0, x_max=4D0)
+    grad_f = .grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=4D0)
     test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) // " (2nd-order d(line)/dx)"
 
-    grad_f = .grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=8, x_min=0D0, x_max=8D0)
+    grad_f = .grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=9, x_min=0D0, x_max=8D0)
     test_diagnosis = test_diagnosis .also. (.all. (grad_f%values() .approximates. df_dx .within. loose_tolerance)) // " (4th-order d(line)/dx)"
 
   end function
@@ -119,7 +119,7 @@ contains
     type(gradient_1D_t) grad_f
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => parabola
 
-    quadratic = scalar_1D_t(scalar_1D_initializer , order=2, cells=4, x_min=0D0, x_max=4D0)
+    quadratic = scalar_1D_t(scalar_1D_initializer , order=2, cells=5, x_min=0D0, x_max=4D0)
     grad_f = .grad. quadratic
 
     associate(x => grad_f%grid())
@@ -128,7 +128,7 @@ contains
       end associate
     end associate
 
-    quadratic = scalar_1D_t(scalar_1D_initializer , order=4, cells=8, x_min=0D0, x_max=8D0)
+    quadratic = scalar_1D_t(scalar_1D_initializer , order=4, cells=9, x_min=0D0, x_max=8D0)
     grad_f = .grad. quadratic
 
     associate(x => grad_f%grid())

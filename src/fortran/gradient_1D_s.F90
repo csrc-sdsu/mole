@@ -10,11 +10,9 @@ submodule(tensors_1D_m) gradient_1D_s
 
 contains
 
-  module procedure construct_gradient_from_components
-    gradient_1D%values_ = face_centered_values
-    gradient_1D%x_min_ = x_min
-    gradient_1D%x_max_ = x_max
-    gradient_1D%cells_ = cells
+  module procedure construct_1D_gradient_from_components
+    gradient_1D%tensor_1D_t = tensor_1D
+    gradient_1D%divergence_operator_1D_ = divergence_operator_1D
   end procedure
 
   module procedure construct_1D_gradient_operator

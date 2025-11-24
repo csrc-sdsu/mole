@@ -8,19 +8,24 @@ submodule(tensors_1D_m) divergence_1D_s
   implicit none
 contains
 
-  module procedure construct_divergence_from_components
-    divergence_1D%values_ = cell_centered_values
-    divergence_1D%x_min_ = x_min
-    divergence_1D%x_max_ = x_max
-    divergence_1D%cells_ = cells
+  module procedure construct_1D_divergence_from_components
+    divergence_1D%tensor_1D_t = tensor_1D
+    divergence_1D%gradient_operator_1D_ = gradient_operator_1D
   end procedure
 
   module procedure construct_1D_divergence_operator
 
+    double precision, allocatable :: Ap(:,:)
+
     call_julienne_assert(cells .isAtLeast. 2*k+1)
 
     associate(A => A_block(k,dx))
-      divergence_operator_1D%mimetic_matrix_1D_ = mimetic_matrix_1D_t(A, M(k, dx), negate_and_flip(A))
+      if (size(A) /= 0) then
+        Ap = negate_and_flip(A)
+      else
+        allocate(Ap, mold = A)
+      end if
+      divergence_operator_1D%mimetic_matrix_1D_ = mimetic_matrix_1D_t(A, M(k, dx), Ap)
       divergence_operator_1D%k_  = k
       divergence_operator_1D%dx_ = dx
       divergence_operator_1D%m_  = cells

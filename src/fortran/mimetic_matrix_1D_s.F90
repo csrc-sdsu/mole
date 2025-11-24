@@ -2,7 +2,7 @@
 #include "julienne-assert-macros.h"
 
 submodule(tensors_1D_m) mimetic_matrix_1D_s
-  use julienne_m, only : call_julienne_assert_, string_t, operator(.equalsExpected.), operator(.csv.)
+  use julienne_m, only : call_julienne_assert_, string_t, operator(.csv.), operator(.expect.)
   implicit none
 
 contains
@@ -37,6 +37,28 @@ contains
     end associate
   end procedure
 
+  module procedure mimetic_matrix_vector_1D_product
+
+    double precision, allocatable :: product_inner(:)
+
+    associate(upper_rows => size(self%upper_,1), lower_rows => size(self%lower_,1))
+      associate(inner_rows => size(vector_1D%values_) - (upper_rows + lower_rows + 1))
+
+        allocate(product_inner(inner_rows))
+
+        do concurrent(integer :: row = 1 : inner_rows) default(none) shared(product_inner, self, vector_1D)
+          product_inner(row) = dot_product(self%inner_, vector_1D%values_(row : row + size(self%inner_) - 1)) 
+        end do
+
+        matvec_product = [ &
+           matmul(self%upper_, vector_1D%values_(1 : size(self%upper_,2))) &
+          ,product_inner &
+          ,matmul(self%lower_, vector_1D%values_(size(vector_1D%values_) - size(self%lower_,2) + 1 : )) &
+        ]
+      end associate
+    end associate
+  end procedure
+
 #else
 
   module procedure mimetic_matrix_scalar_1D_product
@@ -62,34 +84,6 @@ contains
     end associate
   end procedure
 
-#endif
-
-#if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
-
-  module procedure mimetic_matrix_vector_1D_product
-
-    double precision, allocatable :: product_inner(:)
-
-    associate(upper_rows => size(self%upper_,1), lower_rows => size(self%lower_,1))
-      associate(inner_rows => size(vector_1D%values_) - (upper_rows + lower_rows + 1))
-
-        allocate(product_inner(inner_rows))
-
-        do concurrent(integer :: row = 1 : inner_rows) default(none) shared(product_inner, self, vector_1D)
-          product_inner(row) = dot_product(self%inner_, vector_1D%values_(row + 1 : row + size(self%inner_)))
-        end do
-
-        matvec_product = [ &
-           matmul(self%upper_, vector_1D%values_(1 : size(self%upper_,2))) &
-          ,product_inner &
-          ,matmul(self%lower_, vector_1D%values_(size(vector_1D%values_) - size(self%lower_,2) + 1 : )) &
-        ]
-      end associate
-    end associate
-  end procedure
-
-#else
-
   module procedure mimetic_matrix_vector_1D_product
 
     integer row
@@ -101,7 +95,7 @@ contains
         allocate(product_inner(inner_rows))
 
         do concurrent(row = 1 : inner_rows)
-          product_inner(row) = dot_product(self%inner_, vector_1D%values_(row + 1 : row + size(self%inner_)))
+          product_inner(row) = dot_product(self%inner_, vector_1D%values_(row : row + size(self%inner_) - 1)) 
         end do
 
         matvec_product = [ &

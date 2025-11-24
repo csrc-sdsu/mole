@@ -1,3 +1,5 @@
+#include "mole-language-support.F90"
+
 module tensors_1D_m
   !! Define 1D scalar and vector abstractions and associated mimetic gradient
   !! and divergence operators.
@@ -30,30 +32,6 @@ module tensors_1D_m
 
   end interface
 
-  type mimetic_matrix_1D_t
-    !! Encapsulate a mimetic matrix with a corresponding matrix-vector product operator
-    private
-    double precision, allocatable :: upper_(:,:), inner_(:), lower_(:,:)
-  contains
-    procedure, non_overridable :: to_file_t
-  end type
-
-  type gradient_operator_1D_t
-    !! Encapsulate kth-order mimetic gradient operator on m_ cells of width dx
-    private
-    integer k_, m_
-    double precision dx_
-    type(mimetic_matrix_1D_t) mimetic_matrix_1D_
-  end type
-
-  type divergence_operator_1D_t
-    !! Encapsulate kth-order mimetic divergence operator on m_ cells of width dx
-    private
-    integer k_, m_
-    double precision dx_
-    type(mimetic_matrix_1D_t) mimetic_matrix_1D_
-  end type
-
   type tensor_1D_t
     private
     double precision x_min_ !! domain lower boundary
@@ -62,48 +40,6 @@ module tensors_1D_m
     integer order_          !! order of accuracy of mimetic discretization
     double precision, allocatable :: values_(:) !! tensor components at spatial locations
   end type
-
-  type, extends(tensor_1D_t) :: scalar_1D_t
-    !! Encapsulate information at cell centers and boundaries
-    private
-    type(gradient_operator_1D_t) gradient_operator_1D_
-  contains
-    generic :: values => scalar_1D_values
-    procedure, non_overridable :: scalar_1D_values
-    generic :: operator(.grad.) => grad
-    procedure, non_overridable, private :: grad
-    generic :: grid => cell_centers_extended
-    procedure :: cell_centers_extended
-  end type
-
-  type, extends(scalar_1D_t) :: divergence_1D_t
-  end type
-
-  type, extends(tensor_1D_t) :: vector_1D_t
-    !! Encapsulate 1D vector values at cell faces (nodes in 1D) and corresponding operators
-    private
-    type(divergence_operator_1D_t) divergence_operator_1D_
-  contains
-    generic :: values => vector_1D_values
-    procedure, non_overridable :: vector_1D_values
-    generic :: grid => faces
-    procedure :: faces
-    generic :: operator(.div.) => div
-    procedure, non_overridable, private :: div
-  end type
-
-  type, extends(vector_1D_t) :: gradient_1D_t
-  end type
-
-  interface
-
-     pure module function to_file_t(self) result(file)
-       implicit none
-       class(mimetic_matrix_1D_t), intent(in) :: self
-       type(file_t) file
-     end function
-
-  end interface
 
   interface tensor_1D_t
 
@@ -120,6 +56,84 @@ module tensors_1D_m
 
   end interface
 
+  type mimetic_matrix_1D_t
+    !! Encapsulate a mimetic matrix with a corresponding matrix-vector product operator
+    private
+    double precision, allocatable :: upper_(:,:), inner_(:), lower_(:,:)
+  contains
+    procedure, non_overridable :: to_file_t
+  end type
+
+  interface mimetic_matrix_1D_t
+
+    pure module function construct_matrix_operator(upper, inner, lower) result(mimetic_matrix_1D)
+      !! Construct discrete operator from matrix blocks
+      implicit none
+      double precision, intent(in) :: upper(:,:) !! A block matrix (cf. Corbino & Castillo, 2020)
+      double precision, intent(in) :: inner(:)   !! M matrix (cf. Corbino & Castillo, 2020) - stored as 1 row of a Toeplitz matrix
+      double precision, intent(in) :: lower(:,:) !! A' block matrix  (cf. Corbino & Castillo, 2020)
+      type(mimetic_matrix_1D_t) mimetic_matrix_1D
+    end function
+
+  end interface
+
+  type gradient_operator_1D_t
+    !! Encapsulate kth-order mimetic gradient operator on m_ cells of width dx
+    private
+    integer k_, m_
+    double precision dx_
+    type(mimetic_matrix_1D_t) mimetic_matrix_1D_
+  end type
+
+  interface gradient_operator_1D_t
+
+    pure module function construct_1D_gradient_operator(k, dx, cells) result(gradient_operator_1D)
+      !! Construct a mimetic gradient operator
+      implicit none
+      integer, intent(in) :: k !! order of accuracy
+      double precision, intent(in) :: dx !! step size
+      integer, intent(in) :: cells !! number of grid cells
+      type(gradient_operator_1D_t) gradient_operator_1D
+    end function
+
+  end interface
+
+  type divergence_operator_1D_t
+    !! Encapsulate kth-order mimetic divergence operator on m_ cells of width dx
+    private
+    integer k_, m_
+    double precision dx_
+    type(mimetic_matrix_1D_t) mimetic_matrix_1D_
+  end type
+
+  interface divergence_operator_1D_t
+
+    pure module function construct_1D_divergence_operator(k, dx, cells) result(divergence_operator_1D)
+      !! Construct a mimetic gradient operator
+      implicit none
+      integer, intent(in) :: k !! order of accuracy
+      double precision, intent(in) :: dx !! step size
+      integer, intent(in) :: cells !! number of grid cells
+      type(divergence_operator_1D_t) divergence_operator_1D
+    end function
+
+  end interface
+
+  type, extends(tensor_1D_t) :: scalar_1D_t
+    !! Encapsulate information at cell centers and boundaries
+    private
+    type(gradient_operator_1D_t) gradient_operator_1D_
+  contains
+    generic :: values => scalar_1D_values
+    generic :: operator(.grad.) => grad
+    procedure, non_overridable :: grad
+    procedure, non_overridable :: scalar_1D_values
+    procedure, non_overridable :: scalar_grid
+  end type
+
+  type, extends(scalar_1D_t) :: divergence_1D_t
+  end type
+
   interface scalar_1D_t
 
     pure module function construct_1D_scalar_from_function(initializer, order, cells, x_min, x_max) result(scalar_1D)
@@ -135,18 +149,51 @@ module tensors_1D_m
 
   end interface
 
-  interface vector_1D_t
+  interface divergence_1D_t
 
-    pure module function construct_1D_vector_from_function(initializer, order, cells, x_min, x_max) result(vector_1D)
-      !! Result is a collection of cell-centered-extended values with a corresponding mimetic gradient operator
+    pure module function construct_1D_divergence_from_components(tensor_1D, gradient_operator_1D) result(divergence_1D)
       implicit none
-      procedure(vector_1D_initializer_i), pointer :: initializer 
-      integer, intent(in) :: order !! order of accuracy
-      integer, intent(in) :: cells !! number of grid cells spanning the domain
-      double precision, intent(in) :: x_min !! grid location minimum
-      double precision, intent(in) :: x_max !! grid location maximum
-      type(vector_1D_t) vector_1D
+      type(tensor_1D_t), intent(in) :: tensor_1D
+      type(gradient_operator_1D_t), intent(in) :: gradient_operator_1D
+      type(divergence_1D_t) divergence_1D
     end function
+
+  end interface
+
+  type, extends(tensor_1D_t) :: vector_1D_t
+    !! Encapsulate 1D vector values at cell faces (nodes in 1D) and corresponding operators
+    private
+    type(divergence_operator_1D_t) divergence_operator_1D_
+  contains
+    generic :: grid => faces
+    generic :: values => vector_1D_values
+    generic :: operator(.div.) => div
+    procedure, non_overridable :: faces
+    procedure, non_overridable :: vector_1D_values
+    procedure, non_overridable, private :: div
+  end type
+
+  type, extends(vector_1D_t) :: gradient_1D_t
+  end type
+
+  interface gradient_1D_t
+
+    pure module function construct_1D_gradient_from_components(tensor_1D, divergence_operator_1D) result(gradient_1D)
+      implicit none
+      type(tensor_1D_t), intent(in) :: tensor_1D
+      type(divergence_operator_1D_t), intent(in) :: divergence_operator_1D
+      type(gradient_1D_t) gradient_1D
+    end function
+
+  end interface
+
+  interface
+
+     pure module function to_file_t(self) result(file)
+       implicit none
+       class(mimetic_matrix_1D_t), intent(in) :: self
+       type(file_t) file
+     end function
 
   end interface
 
@@ -180,7 +227,7 @@ module tensors_1D_m
       type(gradient_1D_t) gradient_1D !! discrete gradient
     end function
 
-    pure module function cell_centers_extended(self) result(x)
+    pure module function scalar_grid(self) result(x)
       implicit none
       class(scalar_1D_t), intent(in) :: self
       double precision, allocatable :: x(:)
@@ -191,45 +238,6 @@ module tensors_1D_m
       implicit none
       class(vector_1D_t), intent(in) :: self
       type(divergence_1D_t) divergence_1D !! discrete divergence
-    end function
-
-  end interface
-
-  interface gradient_operator_1D_t
-
-    pure module function construct_1D_gradient_operator(k, dx, cells) result(gradient_operator_1D)
-      !! Construct a mimetic gradient operator
-      implicit none
-      integer, intent(in) :: k !! order of accuracy
-      double precision, intent(in) :: dx !! step size
-      integer, intent(in) :: cells !! number of grid cells
-      type(gradient_operator_1D_t) gradient_operator_1D
-    end function
-
-  end interface
-
-  interface divergence_operator_1D_t
-
-    pure module function construct_1D_divergence_operator(k, dx, cells) result(divergence_operator_1D)
-      !! Construct a mimetic gradient operator
-      implicit none
-      integer, intent(in) :: k !! order of accuracy
-      double precision, intent(in) :: dx !! step size
-      integer, intent(in) :: cells !! number of grid cells
-      type(divergence_operator_1D_t) divergence_operator_1D
-    end function
-
-  end interface
-
-  interface mimetic_matrix_1D_t
-
-    pure module function construct_matrix_operator(upper, inner, lower) result(mimetic_matrix_1D)
-      !! Construct discrete operator from matrix blocks
-      implicit none
-      double precision, intent(in) :: upper(:,:) !! A block matrix (cf. Corbino & Castillo, 2020)
-      double precision, intent(in) :: inner(:)   !! M matrix (cf. Corbino & Castillo, 2020) - stored as 1 row of a Toeplitz matrix
-      double precision, intent(in) :: lower(:,:) !! A' block matrix  (cf. Corbino & Castillo, 2020)
-      type(mimetic_matrix_1D_t) mimetic_matrix_1D
     end function
 
   end interface
@@ -251,30 +259,6 @@ module tensors_1D_m
       type(vector_1D_t), intent(in) :: vector_1D
       double precision, allocatable :: matvec_product(:)
     end function
-
-  end interface
-
-  interface gradient_1D_t
-
-      pure module function construct_gradient_from_components(face_centered_values, x_min, x_max, cells) result(gradient_1D)
-        !! Result is an object storing gradient_1Ds at cell faces
-        implicit none
-        double precision, intent(in) :: face_centered_values(:), x_min, x_max
-        integer, intent(in) :: cells
-        type(gradient_1D_t) gradient_1D
-      end function
-
-  end interface
-
-  interface divergence_1D_t
-
-      pure module function construct_divergence_from_components(cell_centered_values, x_min, x_max, cells) result(divergence_1D)
-        !! Result is an object storing gradient_1Ds at cell faces
-        implicit none
-        double precision, intent(in) :: cell_centered_values(:), x_min, x_max
-        integer, intent(in) :: cells
-        type(divergence_1D_t) divergence_1D
-      end function
 
   end interface
 
