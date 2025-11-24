@@ -1,7 +1,5 @@
 using Plots
-
-include("../src/laplacian.jl")
-include("../src/robinBC.jl")
+using MOLE
 
 # Domain limits
 west = 0.0
