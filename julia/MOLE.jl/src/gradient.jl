@@ -1,3 +1,13 @@
+"""
+    grad(k, m, dx)
+
+Returns a m+1 by m+2 one-dimensional mimetic gradient operator.
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `m::Int`: Number of cells
+- `dx`: Step size
+"""
 function grad(k::Int,m::Int,dx)
     if k < 2
         throw(DomainError(k, "k must be >= 2"))

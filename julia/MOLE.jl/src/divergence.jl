@@ -1,3 +1,13 @@
+"""
+    div(k, m, dx)
+
+Returns a m+2 by m+1 one-dimensional mimetic divergence operator.
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `m::Int`: Number of cells
+- `dx`: Step size
+"""
 function div(k::Int,m::Int,dx)
     if k < 2
         throw(DomainError(k, "k must be >= 2"))
