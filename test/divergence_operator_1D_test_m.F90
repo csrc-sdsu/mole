@@ -44,8 +44,11 @@ contains
           'computing 4th-order .div.(.grad. s) for 1D scalar s with quadratic magnitude within ' // string_t(tight_tolerance) &
          ,usher(check_4th_order_div_grad_parabola)) &
       ,test_description_t( &
-          'computing convergence rate of 2 for 2ndh-order .div. for 1D vector with sinusoidal magnitude within ' // string_t(tight_tolerance) &
+          'computing convergence rate of 2 for 2nd-order .div. for 1D vector with sinusoidal magnitude within ' // string_t(tight_tolerance) &
          ,usher(check_2nd_order_div_sinusoid_convergence)) &
+      ,test_description_t( &
+          'computing convergence rate of 4 for 4th-order .div. for 1D vector with sinusoidal magnitude within ' // string_t(tight_tolerance) &
+         ,usher(check_4th_order_div_sinusoid_convergence)) &
     ])
   end function
 
@@ -125,4 +128,30 @@ contains
     end associate
   end function
 
+  function check_4th_order_div_sinusoid_convergence() result(test_diagnosis)
+    type(test_diagnosis_t) test_diagnosis
+    type(vector_1D_t) coarse, fine
+    type(divergence_1D_t) div_coarse, div_fine
+    procedure(vector_1D_initializer_i), pointer :: vector_1D_initializer => sinusoid
+    double precision, parameter :: pi = 3.141592653589793D0
+    integer, parameter :: order_desired = 4, coarse_cells=100, fine_cells=1000
+
+    coarse = vector_1D_t(vector_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi)
+    fine   = vector_1D_t(vector_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi)
+
+    div_coarse = .div. coarse
+    div_fine   = .div. fine
+
+    associate(x_coarse => div_coarse%grid(), x_fine => div_fine%grid())
+      associate(df_dx_coarse => cos(x_coarse) - sin(x_coarse), df_dx_fine => cos(x_fine) - sin(x_fine), div_coarse_values => div_coarse%values(), div_fine_values => div_fine%values())
+        test_diagnosis = .all. (div_coarse_values .approximates. df_dx_coarse .within. rough_tolerance) // " (4th-order d(sinusoid)/dx point-wise errors)"
+        test_diagnosis = test_diagnosis .also. (.all. (div_fine_values .approximates. df_dx_fine .within. rough_tolerance)) // " (4th-order d(sinusoid)/dx point-wise)"
+        associate(error_coarse_max => maxval(abs(div_coarse_values - df_dx_coarse)), error_fine_max => maxval(abs(div_fine_values - df_dx_fine)))
+          associate(order_actual => log(error_coarse_max/error_fine_max)/log(dble(fine_cells)/coarse_cells))
+            test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. crude_tolerance)  // " (4th-order d(sinusoid)/dx order of accuracy)"
+          end associate
+        end associate
+      end associate
+    end associate
+  end function
 end module
