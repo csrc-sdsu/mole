@@ -40,7 +40,7 @@ contains
     end associate
   end function
 
-  module procedure scalar_grid
+  module procedure scalar_1D_grid
     x = cell_centers_extended(self%x_min_, self%x_max_, self%cells_)
   end procedure
 
