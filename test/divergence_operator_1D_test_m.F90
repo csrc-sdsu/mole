@@ -15,7 +15,7 @@ module divergence_operator_1D_test_m
     ,test_diagnosis_t &
     ,test_result_t &
     ,usher
-  use mole_m, only : vector_1D_t, divergence_1D_t, vector_1D_initializer_i, scalar_1D_t, gradient_1D_t, scalar_1D_initializer_i
+  use mole_m, only : vector_1D_t, vector_1D_initializer_i, scalar_1D_t, scalar_1D_initializer_i
   implicit none
 
   type, extends(test_t) :: divergence_operator_1D_test_t
