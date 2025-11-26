@@ -26,7 +26,7 @@ module gradient_operator_1D_test_m
     procedure, nopass :: results
   end type
 
-  double precision, parameter :: tight_tolerance = 1D-14, loose_tolerance = 1D-12, rough_tolerance = 1D-02, crude_tolerance = 5D-02
+  double precision, parameter :: tight_tolerance = 1D-14, loose_tolerance = 1D-12, rough_tolerance = 1D-02
 
 contains
 
@@ -47,9 +47,9 @@ contains
       ,test_description_t('computing 2nd- & 4th-order .grad. (7*x**2 + 3*x + 5) within ' &
          // string_t(loose_tolerance), usher(check_grad_parabola)) &
       ,test_description_t('computing convergence rate of 2 for 2nd-order .grad. [sin(x) + cos(x)] within ' &
-         // string_t(crude_tolerance), usher(check_2nd_order_grad_sinusoid)) &
+         // string_t(rough_tolerance), usher(check_2nd_order_grad_convergence)) &
       ,test_description_t('computing convergence rate of 4 for 4th-order .grad. [sin(x) + cos(x)] within ' &
-         // string_t(crude_tolerance), usher(check_4th_order_grad_sinusoid)) &
+         // string_t(rough_tolerance), usher(check_4th_order_grad_convergence)) &
     ])
   end function
 
@@ -135,13 +135,13 @@ contains
     y = sin(x) + cos(x)
   end function
 
-  function check_2nd_order_grad_sinusoid() result(test_diagnosis)
+  function check_2nd_order_grad_convergence() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
     type(scalar_1D_t) coarse, fine
     type(gradient_1D_t) grad_coarse, grad_fine
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => sinusoid
     double precision, parameter :: pi = 3.141592653589793D0
-    integer, parameter :: order_desired = 2, coarse_cells=100, fine_cells=1000
+    integer, parameter :: order_desired = 2, coarse_cells=500, fine_cells=1500
 
     coarse = scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi)
     fine   = scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi)
@@ -160,9 +160,9 @@ contains
        ,grad_fine_values   => grad_fine%values() &
       )
         test_diagnosis = .all. (grad_coarse_values .approximates. df_dx_coarse .within. rough_tolerance) &
-          // " (2nd-order d(sinusoid)/dx point-wise errors)"
+          // " (coarse-grid 2nd-order .grad. [sin(x) + cos(x)])"
         test_diagnosis = test_diagnosis .also. (.all. (grad_fine_values .approximates. df_dx_fine .within. rough_tolerance)) &
-          // " (2nd-order d(sinusoid)/dx point-wise)"
+          // " (fine-grid 4th-order .grad. [sin(x) + cos(x)])"
         associate( &
            error_coarse_max => maxval(abs(grad_coarse_values - df_dx_coarse)) &
           ,error_fine_max   => maxval(abs(grad_fine_values - df_dx_fine)) &
@@ -170,21 +170,21 @@ contains
           associate( &
             order_actual => log(error_coarse_max/error_fine_max)/log(dble(fine_cells)/coarse_cells) &
           )
-            test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. crude_tolerance)  &
-              // " (2nd-order d(sinusoid)/dx order of accuracy)"
+            test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. rough_tolerance)  &
+              // " (2nd-order .grad. [sin(x) + cos(x)] order of accuracy)"
           end associate
         end associate
       end associate
     end associate
   end function
 
-  function check_4th_order_grad_sinusoid() result(test_diagnosis)
+  function check_4th_order_grad_convergence() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
     type(scalar_1D_t) coarse, fine
     type(gradient_1D_t) grad_coarse, grad_fine
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => sinusoid
     double precision, parameter :: pi = 3.141592653589793D0
-    integer, parameter :: order_desired = 4, coarse_cells=100, fine_cells=1000
+    integer, parameter :: order_desired = 4, coarse_cells=100, fine_cells=1600
 
     coarse = scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi)
     fine   = scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi)
@@ -211,7 +211,7 @@ contains
           ,error_fine_max => maxval(abs(grad_fine_values - df_dx_fine)) &
         )
           associate(order_actual => log(error_coarse_max/error_fine_max)/log(dble(fine_cells)/coarse_cells))
-            test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. crude_tolerance) &
+            test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. rough_tolerance) &
               // " (4th-order d(sinusoid)/dx order of accuracy)"
           end associate
         end associate
