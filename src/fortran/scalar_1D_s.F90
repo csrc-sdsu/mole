@@ -29,6 +29,17 @@ contains
     my_values = self%values_
   end procedure
 
+  pure function cell_centers(x_min, x_max, cells) result(x)
+    double precision, intent(in) :: x_min, x_max
+    integer, intent(in) :: cells
+    double precision, allocatable:: x(:)
+    integer cell
+
+    associate(dx => (x_max - x_min)/cells)
+      x = x_min + dx/2. + [((cell-1)*dx, cell = 1, cells)]
+    end associate
+  end function
+
   pure function cell_centers_extended(x_min, x_max, cells) result(x)
     double precision, intent(in) :: x_min, x_max
     integer, intent(in) :: cells
@@ -36,12 +47,12 @@ contains
     integer cell
 
     associate(dx => (x_max - x_min)/cells)
-      x = [x_min, x_min + dx/2. + [((cell-1)*dx, cell = 1, cells)], x_max]
+      x = [x_min, cell_centers(x_min, x_max, cells), x_max]
     end associate
   end function
 
   module procedure scalar_1D_grid
-    x = cell_centers_extended(self%x_min_, self%x_max_, self%cells_)
+    x = cell_centers(self%x_min_, self%x_max_, self%cells_)
   end procedure
 
 end submodule scalar_1D_s

@@ -13,6 +13,7 @@ module divergence_operator_1D_test_m
     ,operator(.all.) &
     ,operator(.also.) &
     ,operator(.approximates.) &
+    ,operator(.csv.) &
     ,operator(.within.)
   use mole_m, only : vector_1D_t, divergence_1D_t, vector_1D_initializer_i, scalar_1D_t, gradient_1D_t, scalar_1D_initializer_i
   implicit none
@@ -23,7 +24,7 @@ module divergence_operator_1D_test_m
     procedure, nopass :: results
   end type
 
-  double precision, parameter :: tight_tolerance = 1D-14, loose_tolerance = 1D-12, rough_tolerance = 1D-02, crude_tolerance = 5D-02
+  double precision, parameter :: tight_tolerance = 1D-14, loose_tolerance = 1D-08, rough_tolerance = 1D-02, crude_tolerance = 5D-02
 
 contains
 
@@ -38,16 +39,16 @@ contains
 
     test_results = divergence_operator_1D_test%run([ & 
        test_description_t( &
-          'computing 2nd-order .div.(.grad. s) for 1D scalar s with quadratic magnitude within ' // string_t(tight_tolerance) &
+          'computing 2nd-order .div.(.grad. (x**2)/2) within ' // string_t(tight_tolerance) &
          ,usher(check_2nd_order_div_grad_parabola)) &
       ,test_description_t( &
-          'computing 4th-order .div.(.grad. s) for 1D scalar s with quadratic magnitude within ' // string_t(tight_tolerance) &
+          'computing 4th-order .div.(.grad. (x**2)/2) within ' // string_t(tight_tolerance) &
          ,usher(check_4th_order_div_grad_parabola)) &
       ,test_description_t( &
-          'computing convergence rate of 2 for 2nd-order .div. for 1D vector with sinusoidal magnitude within ' // string_t(tight_tolerance) &
+          'computing convergence rate of 2 for 2nd-order .div. [sin(x) + cos(x)] within ' // string_t(rough_tolerance) &
          ,usher(check_2nd_order_div_sinusoid_convergence)) &
       ,test_description_t( &
-          'computing convergence rate of 4 for 4th-order .div. for 1D vector with sinusoidal magnitude within ' // string_t(tight_tolerance) &
+          'computing convergence rate of 4 for 4th-order .div. [sin(x) + cos(x)] within ' // string_t(rough_tolerance) &
          ,usher(check_4th_order_div_sinusoid_convergence)) &
     ])
   end function
@@ -65,7 +66,7 @@ contains
 
     associate(div_grad_scalar => .div. (.grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=5D0)))
       test_diagnosis = .all. (div_grad_scalar%values() .approximates. expected_divergence .within. tight_tolerance) &
-                     // " (2nd-order .div. (.grad. scalar))"
+                     // " (2nd-order .div. (.grad. (x**2)/2))"
     end associate
 
   end function
@@ -77,7 +78,7 @@ contains
 
     associate(div_grad_scalar => .div. (.grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=9, x_min=0D0, x_max=9D0)))
       test_diagnosis = .all. (div_grad_scalar%values() .approximates. expected_divergence .within. tight_tolerance) &
-                     // " (2nd-order .div. (.grad. scalar))"
+                     // " (4th-order .div. (.grad. (x**2)/2))"
     end associate
 
   end function
@@ -92,7 +93,7 @@ contains
     type(test_diagnosis_t) test_diagnosis
     procedure(vector_1D_initializer_i), pointer :: vector_1D_initializer => sinusoid
     double precision, parameter :: pi = 3.141592653589793D0
-    integer, parameter :: order_desired = 2, coarse_cells=1000, fine_cells=2000
+    integer, parameter :: order_desired = 2, coarse_cells=100, fine_cells=200
 
     associate( &
        div_coarse => .div. vector_1D_t(vector_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi) &
@@ -103,21 +104,21 @@ contains
         ,x_fine   => div_fine%grid())
         associate( &
            df_dx_coarse => cos(x_coarse) - sin(x_coarse) &
-          ,df_dx_fine => cos(x_fine) - sin(x_fine) &
+          ,df_dx_fine   => cos(x_fine) - sin(x_fine) &
           ,div_coarse_values => div_coarse%values() &
-          ,div_fine_values => div_fine%values() &
+          ,div_fine_values   => div_fine%values() &
         )
           test_diagnosis = .all. (div_coarse_values .approximates. df_dx_coarse .within. rough_tolerance) &
-            // " (coarse 2nd-order .div. [sin(x) + cos(x)] on coarse grid)"
+            // " (coarse-grid 2nd-order .div. [sin(x) + cos(x)])"
           test_diagnosis = test_diagnosis .also. (.all. (div_fine_values .approximates. df_dx_fine .within. rough_tolerance)) &
-            // " (fine 2nd-order .div. [sin(x) + cos(x)] on fine grid)"
+            // " (fine-grid 2nd-order .div. [sin(x) + cos(x)])"
           associate( &
              error_coarse_max => maxval(abs(div_coarse_values - df_dx_coarse)) &
             ,error_fine_max => maxval(abs(div_fine_values - df_dx_fine)) &
           )
             associate(order_actual => log(error_coarse_max/error_fine_max)/log(dble(fine_cells)/coarse_cells))
-              test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. crude_tolerance) &
-                // " (2nd-order .div. [sin(x) + cos(x)] convergence rate)"
+              test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. rough_tolerance) &
+                // " (convergence rate for 2nd-order .div. [sin(x) + cos(x)])"
             end associate
           end associate
         end associate
@@ -129,7 +130,7 @@ contains
     type(test_diagnosis_t) test_diagnosis
     procedure(vector_1D_initializer_i), pointer :: vector_1D_initializer => sinusoid
     double precision, parameter :: pi = 3.141592653589793D0
-    integer, parameter :: order_desired = 4, coarse_cells=100, fine_cells=1000
+    integer, parameter :: order_desired = 4, coarse_cells=300, fine_cells=1500
 
     associate( &
        div_coarse => .div. vector_1D_t(vector_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi) &
@@ -143,18 +144,18 @@ contains
            div_coarse_expected => cos(x_coarse) - sin(x_coarse) &
           ,div_fine_expected   => cos(x_fine) - sin(x_fine) &
           ,div_coarse_values => div_coarse%values() &
-          ,div_fine_values  => div_fine%values() &
+          ,div_fine_values   => div_fine%values() &
         )
-          test_diagnosis = .all. (div_coarse_values .approximates. div_coarse_expected .within. rough_tolerance) &
+          test_diagnosis = .all. (div_coarse_values .approximates. div_coarse_expected .within. loose_tolerance) &
             // " (coarse-grid 4th-order .div. [sin(x) + cos(x)])"
-          test_diagnosis = test_diagnosis .also. (.all. (div_fine_values .approximates. div_fine_expected .within. rough_tolerance)) &
+          test_diagnosis = test_diagnosis .also. (.all. (div_fine_values .approximates. div_fine_expected .within. loose_tolerance)) &
             // " (fine-grid 4th-order .div. [sin(x) + cos(x)])"
           associate( &
              error_coarse_max => maxval(abs(div_coarse_values - div_coarse_expected)) &
             ,error_fine_max => maxval(abs(div_fine_values - div_fine_expected)) &
           )
             associate(order_actual => log(error_coarse_max/error_fine_max)/log(dble(fine_cells)/coarse_cells))
-              test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. crude_tolerance) &
+              test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. rough_tolerance) &
                 // " (convergence rate for 4th-order .div. [sin(x) + cos(x)])"
             end associate
           end associate

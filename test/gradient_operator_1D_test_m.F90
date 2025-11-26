@@ -3,16 +3,17 @@
 
 module gradient_operator_1D_test_m
   use julienne_m, only : &
-     string_t &
+     operator(//) &
+    ,operator(.all.) &
+    ,operator(.also.) &
+    ,operator(.approximates.) &
+    ,operator(.within.) &
+    ,string_t &
     ,test_t &
     ,test_description_t &
     ,test_diagnosis_t &
     ,test_result_t &
-    ,operator(//) &
-    ,operator(.all.) &
-    ,operator(.also.) &
-    ,operator(.approximates.) &
-    ,operator(.within.)
+    ,usher
   use mole_m, only : scalar_1D_t, gradient_1D_t, scalar_1D_initializer_i
 #if ! HAVE_PROCEDURE_ACTUAL_FOR_POINTER_DUMMY
   use julienne_m, only : diagnosis_function_i
@@ -34,38 +35,23 @@ contains
     test_subject = 'A 1D mimetic gradient operator'
   end function
 
-#if HAVE_PROCEDURE_ACTUAL_FOR_POINTER_DUMMY
-
   function results() result(test_results)
     type(gradient_operator_1D_test_t) gradient_operator_1D_test
     type(test_result_t), allocatable :: test_results(:)
+
     test_results = gradient_operator_1D_test%run([ & 
-       test_description_t('computing 2nd- & 4th-order 1D gradients of a constant within tolerance ' // string_t(tight_tolerance), check_grad_const) &
-      ,test_description_t('computing 2nd- & 4th-order 1D gradients of a line within tolerance ' // string_t(loose_tolerance), check_grad_line) &
-      ,test_description_t('computing 2nd- & 4th-order 1D gradients of a parabola within tolerance ' // string_t(loose_tolerance), check_grad_parabola) &
-      ,test_description_t('computing 2nd-order 1D gradients of a sinusoid with a convergence rate of 2 within tolerance ' // string_t(crude_tolerance), check_2nd_order_grad_sinusoid) &
-      ,test_description_t('computing 4th-order 1D gradients of a sinusoid with a convergence rate of 4 within tolerance ' // string_t(crude_tolerance), check_4th_order_grad_sinusoid) &
+       test_description_t('computing 2nd- & 4th-order .grad. (5) within ' &
+         // string_t(tight_tolerance), usher(check_grad_const)) &
+      ,test_description_t('computing 2nd- & 4th-order .grad. (14*x + 3) within ' &
+         // string_t(loose_tolerance), usher(check_grad_line)) &
+      ,test_description_t('computing 2nd- & 4th-order .grad. (7*x**2 + 3*x + 5) within ' &
+         // string_t(loose_tolerance), usher(check_grad_parabola)) &
+      ,test_description_t('computing convergence rate of 2 for 2nd-order .grad. [sin(x) + cos(x)] within ' &
+         // string_t(crude_tolerance), usher(check_2nd_order_grad_sinusoid)) &
+      ,test_description_t('computing convergence rate of 4 for 4th-order .grad. [sin(x) + cos(x)] within ' &
+         // string_t(crude_tolerance), usher(check_4th_order_grad_sinusoid)) &
     ])
   end function
-
-#else
-
-  function results() result(test_results)
-    type(gradient_operator_1D_test_t) gradient_operator_1D_test
-    type(test_result_t), allocatable :: test_results(:)
-    procedure(diagnosis_function_i), pointer :: &
-       check_grad_const_ptr => check_grad_const &
-      ,check_grad_line_ptr => check_grad_line &
-      ,check_grad_parabola_ptr => check_grad_parabola
-
-    test_results = gradient_operator_1D_test%run([ &
-       test_description_t('computing 2nd & 4th-order 1D gradients of a constant within tolerance ' // string_t(tight_tolerance), check_grad_const_ptr) &
-      ,test_description_t('computing 2nd & 4th-order 1D gradients of a line within tolerance ' // string_t(loose_tolerance), check_grad_line_ptr) &
-      ,test_description_t('computing 2nd & 4th-order 1D gradients of a parabola within tolerance ' // string_t(loose_tolerance), check_grad_parabola_ptr) &
-    ])
-  end function
-
-#endif
 
   pure function const(x) result(y)
     double precision, intent(in) :: x(:)
