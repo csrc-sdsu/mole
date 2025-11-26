@@ -67,10 +67,12 @@ contains
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => const
 
     grad_f = .grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=4D0)
-    test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) // " (2nd-order d(line)/dx)"
+    test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) &
+      // " (2nd-order d(line)/dx)"
 
     grad_f = .grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=9, x_min=0D0, x_max=8D0)
-    test_diagnosis = test_diagnosis .also. (.all. (grad_f%values() .approximates. df_dx .within. loose_tolerance)) // " (4th-order d(line)/dx)"
+    test_diagnosis = test_diagnosis .also. (.all. (grad_f%values() .approximates. df_dx .within. loose_tolerance)) &
+      // " (4th-order d(line)/dx)"
   end function
 
   pure function line(x) result(y)
@@ -86,10 +88,11 @@ contains
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => line
 
     grad_f = .grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=4D0)
-    test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) // " (2nd-order d(line)/dx)"
-
+    test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) &
+      // " (2nd-order d(line)/dx)"
     grad_f = .grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=9, x_min=0D0, x_max=8D0)
-    test_diagnosis = test_diagnosis .also. (.all. (grad_f%values() .approximates. df_dx .within. loose_tolerance)) // " (4th-order d(line)/dx)"
+    test_diagnosis = test_diagnosis .also. (.all. (grad_f%values() .approximates. df_dx .within. loose_tolerance)) &
+      // " (4th-order d(line)/dx)"
 
   end function
 
@@ -110,7 +113,8 @@ contains
 
     associate(x => grad_f%grid())
       associate(df_dx => 14*x + 3)
-        test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) // " (2nd-order d(parabola)/dx)"
+        test_diagnosis = .all. (grad_f%values() .approximates. df_dx .within. loose_tolerance) &
+          // " (2nd-order d(parabola)/dx)"
       end associate
     end associate
 
@@ -119,7 +123,8 @@ contains
 
     associate(x => grad_f%grid())
       associate(df_dx => 14*x + 3)
-        test_diagnosis = test_diagnosis .also. (.all. (grad_f%values() .approximates. df_dx .within. loose_tolerance)) // " (4th-order d(parabola)/dx)"
+        test_diagnosis = test_diagnosis .also. (.all. (grad_f%values() .approximates. df_dx .within. loose_tolerance)) &
+          // " (4th-order d(parabola)/dx)"
       end associate
     end associate
   end function
@@ -144,13 +149,29 @@ contains
     grad_coarse = .grad. coarse
     grad_fine   = .grad. fine
 
-    associate(x_coarse => grad_coarse%grid(), x_fine => grad_fine%grid())
-      associate(df_dx_coarse => cos(x_coarse) - sin(x_coarse), df_dx_fine => cos(x_fine) - sin(x_fine), grad_coarse_values => grad_coarse%values(), grad_fine_values => grad_fine%values())
-        test_diagnosis = .all. (grad_coarse_values .approximates. df_dx_coarse .within. rough_tolerance) // " (2nd-order d(sinusoid)/dx point-wise errors)"
-        test_diagnosis = test_diagnosis .also. (.all. (grad_fine_values .approximates. df_dx_fine .within. rough_tolerance)) // " (2nd-order d(sinusoid)/dx point-wise)"
-        associate(error_coarse_max => maxval(abs(grad_coarse_values - df_dx_coarse)), error_fine_max => maxval(abs(grad_fine_values - df_dx_fine)))
-          associate(order_actual => log(error_coarse_max/error_fine_max)/log(dble(fine_cells)/coarse_cells))
-            test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. crude_tolerance)  // " (2nd-order d(sinusoid)/dx order of accuracy)"
+    associate( &
+       x_coarse => grad_coarse%grid() &
+      ,x_fine   => grad_fine%grid() &
+    )
+      associate( &
+        df_dx_coarse => cos(x_coarse) - sin(x_coarse) &
+       ,df_dx_fine   => cos(x_fine) - sin(x_fine) &
+       ,grad_coarse_values => grad_coarse%values() &
+       ,grad_fine_values   => grad_fine%values() &
+      )
+        test_diagnosis = .all. (grad_coarse_values .approximates. df_dx_coarse .within. rough_tolerance) &
+          // " (2nd-order d(sinusoid)/dx point-wise errors)"
+        test_diagnosis = test_diagnosis .also. (.all. (grad_fine_values .approximates. df_dx_fine .within. rough_tolerance)) &
+          // " (2nd-order d(sinusoid)/dx point-wise)"
+        associate( &
+           error_coarse_max => maxval(abs(grad_coarse_values - df_dx_coarse)) &
+          ,error_fine_max   => maxval(abs(grad_fine_values - df_dx_fine)) &
+        )
+          associate( &
+            order_actual => log(error_coarse_max/error_fine_max)/log(dble(fine_cells)/coarse_cells) &
+          )
+            test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. crude_tolerance)  &
+              // " (2nd-order d(sinusoid)/dx order of accuracy)"
           end associate
         end associate
       end associate
@@ -171,13 +192,27 @@ contains
     grad_coarse = .grad. coarse
     grad_fine   = .grad. fine
 
-    associate(x_coarse => grad_coarse%grid(), x_fine => grad_fine%grid())
-      associate(df_dx_coarse => cos(x_coarse) - sin(x_coarse), df_dx_fine => cos(x_fine) - sin(x_fine), grad_coarse_values => grad_coarse%values(), grad_fine_values => grad_fine%values())
-        test_diagnosis = .all. (grad_coarse_values .approximates. df_dx_coarse .within. rough_tolerance) // " (4th-order d(sinusoid)/dx point-wise errors)"
-        test_diagnosis = test_diagnosis .also. (.all. (grad_fine_values .approximates. df_dx_fine .within. rough_tolerance)) // " (4th-order d(sinusoid)/dx point-wise)"
-        associate(error_coarse_max => maxval(abs(grad_coarse_values - df_dx_coarse)), error_fine_max => maxval(abs(grad_fine_values - df_dx_fine)))
+    associate( &
+       x_coarse => grad_coarse%grid() &
+      ,x_fine   => grad_fine%grid() &
+    )
+      associate( &
+         df_dx_coarse => cos(x_coarse) - sin(x_coarse) &
+        ,df_dx_fine   => cos(x_fine) - sin(x_fine) &
+        ,grad_coarse_values => grad_coarse%values() &
+        ,grad_fine_values => grad_fine%values() &
+      )
+        test_diagnosis = .all. (grad_coarse_values .approximates. df_dx_coarse .within. rough_tolerance) &
+          // " (4th-order d(sinusoid)/dx point-wise errors)"
+        test_diagnosis = test_diagnosis .also. (.all. (grad_fine_values .approximates. df_dx_fine .within. rough_tolerance)) &
+          // " (4th-order d(sinusoid)/dx point-wise)"
+        associate( &
+           error_coarse_max => maxval(abs(grad_coarse_values - df_dx_coarse)) &
+          ,error_fine_max => maxval(abs(grad_fine_values - df_dx_fine)) &
+        )
           associate(order_actual => log(error_coarse_max/error_fine_max)/log(dble(fine_cells)/coarse_cells))
-            test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. crude_tolerance)  // " (4th-order d(sinusoid)/dx order of accuracy)"
+            test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. crude_tolerance) &
+              // " (4th-order d(sinusoid)/dx order of accuracy)"
           end associate
         end associate
       end associate
