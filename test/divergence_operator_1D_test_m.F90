@@ -3,18 +3,18 @@
 
 module divergence_operator_1D_test_m
   use julienne_m, only : &
-     string_t &
-    ,test_t &
-    ,test_description_t &
-    ,test_diagnosis_t &
-    ,test_result_t &
-    ,usher &
-    ,operator(//) &
+     operator(//) &
     ,operator(.all.) &
     ,operator(.also.) &
     ,operator(.approximates.) &
     ,operator(.csv.) &
-    ,operator(.within.)
+    ,operator(.within.) &
+    ,string_t &
+    ,test_t &
+    ,test_description_t &
+    ,test_diagnosis_t &
+    ,test_result_t &
+    ,usher
   use mole_m, only : vector_1D_t, divergence_1D_t, vector_1D_initializer_i, scalar_1D_t, gradient_1D_t, scalar_1D_initializer_i
   implicit none
 
@@ -103,18 +103,18 @@ contains
          x_coarse => div_coarse%grid() &
         ,x_fine   => div_fine%grid())
         associate( &
-           df_dx_coarse => cos(x_coarse) - sin(x_coarse) &
-          ,df_dx_fine   => cos(x_fine) - sin(x_fine) &
+           grad_coarse => cos(x_coarse) - sin(x_coarse) &
+          ,grad_fine   => cos(x_fine)   - sin(x_fine) &
           ,div_coarse_values => div_coarse%values() &
           ,div_fine_values   => div_fine%values() &
         )
-          test_diagnosis = .all. (div_coarse_values .approximates. df_dx_coarse .within. rough_tolerance) &
+          test_diagnosis = .all. (div_coarse_values .approximates. grad_coarse .within. rough_tolerance) &
             // " (coarse-grid 2nd-order .div. [sin(x) + cos(x)])"
-          test_diagnosis = test_diagnosis .also. (.all. (div_fine_values .approximates. df_dx_fine .within. rough_tolerance)) &
+          test_diagnosis = test_diagnosis .also. (.all. (div_fine_values .approximates. grad_fine .within. rough_tolerance)) &
             // " (fine-grid 2nd-order .div. [sin(x) + cos(x)])"
           associate( &
-             error_coarse_max => maxval(abs(div_coarse_values - df_dx_coarse)) &
-            ,error_fine_max => maxval(abs(div_fine_values - df_dx_fine)) &
+             error_coarse_max => maxval(abs(div_coarse_values - grad_coarse)) &
+            ,error_fine_max   => maxval(abs(div_fine_values   - grad_fine)) &
           )
             associate(order_actual => log(error_coarse_max/error_fine_max)/log(dble(fine_cells)/coarse_cells))
               test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. rough_tolerance) &
