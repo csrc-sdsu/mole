@@ -24,7 +24,7 @@ module divergence_operator_1D_test_m
     procedure, nopass :: results
   end type
 
-  double precision, parameter :: tight_tolerance = 1D-14, loose_tolerance = 1D-08, rough_tolerance = 1D-02, crude_tolerance = 5D-02
+  double precision, parameter :: tight_tolerance = 1D-14, loose_tolerance = 1D-08, rough_tolerance = 1D-02
 
 contains
 

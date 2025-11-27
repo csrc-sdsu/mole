@@ -1,8 +1,8 @@
 #include "mole-language-support.F90"
 
 module tensors_1D_m
-  !! Define 1D scalar and vector abstractions and associated mimetic gradient
-  !! and divergence operators.
+  !! Define 1D scalar and vector abstractions and associated mimetic gradient,
+  !! divergence, and Laplacian operators.
   use julienne_m, only : file_t
   implicit none
 
@@ -123,9 +123,11 @@ module tensors_1D_m
     type(gradient_operator_1D_t) gradient_operator_1D_
   contains
     generic :: operator(.grad.) => grad
+    generic :: operator(.laplacian.) => laplacian
     generic :: grid   => scalar_1D_grid
     generic :: values => scalar_1D_values
     procedure, non_overridable, private :: grad
+    procedure, non_overridable, private :: laplacian
     procedure, non_overridable, private :: scalar_1D_values
     procedure, non_overridable, private :: scalar_1D_grid
   end type
@@ -211,6 +213,13 @@ module tensors_1D_m
       implicit none
       class(scalar_1D_t), intent(in) :: self
       type(vector_1D_t) gradient_1D !! discrete gradient
+    end function
+
+    pure module function laplacian(self) result(laplacian_1D)
+      !! Result is mimetic Laplacian of the scalar_1D_t "self"
+      implicit none
+      class(scalar_1D_t), intent(in) :: self
+      type(scalar_1D_t) laplacian_1D !! discrete gradient
     end function
 
     pure module function scalar_1D_grid(self) result(x)

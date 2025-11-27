@@ -25,6 +25,10 @@ contains
     end associate
   end procedure
 
+  module procedure laplacian
+    laplacian_1D = .div. (.grad. self)
+  end procedure
+
   module procedure scalar_1D_values
     my_values = self%values_
   end procedure
