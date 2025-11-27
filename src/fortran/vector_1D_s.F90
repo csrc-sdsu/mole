@@ -22,7 +22,7 @@ contains
          tensor_1D => tensor_1D_t(divergence_values, self%x_min_, self%x_max_, self%cells_, self%order_) &
         ,gradient_operator_1D => gradient_operator_1D_t(k=self%order_, dx=(self%x_max_ - self%x_min_)/self%cells_, cells=self%cells_) &
       )
-        divergence_1D = divergence_1D_t(tensor_1D, gradient_operator_1D)
+        divergence_1D = scalar_1D_t(tensor_1D, gradient_operator_1D)
       end associate
     end associate
   end procedure

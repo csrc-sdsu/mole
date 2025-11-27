@@ -8,11 +8,6 @@ submodule(tensors_1D_m) divergence_1D_s
   implicit none
 contains
 
-  module procedure construct_1D_divergence_from_components
-    divergence_1D%tensor_1D_t = tensor_1D
-    divergence_1D%gradient_operator_1D_ = gradient_operator_1D
-  end procedure
-
   module procedure construct_1D_divergence_operator
 
     double precision, allocatable :: Ap(:,:)

@@ -9,7 +9,6 @@ module tensors_1D_m
   private
   public :: scalar_1D_t
   public :: vector_1D_t
-  public :: divergence_1D_t
   public :: scalar_1D_initializer_i
   public :: vector_1D_initializer_i
 
@@ -131,9 +130,6 @@ module tensors_1D_m
     procedure, non_overridable, private :: scalar_1D_grid
   end type
 
-  type, extends(scalar_1D_t) :: divergence_1D_t
-  end type
-
   interface scalar_1D_t
 
     pure module function construct_1D_scalar_from_function(initializer, order, cells, x_min, x_max) result(scalar_1D)
@@ -145,17 +141,6 @@ module tensors_1D_m
       double precision, intent(in) :: x_min !! grid location minimum
       double precision, intent(in) :: x_max !! grid location maximum
       type(scalar_1D_t) scalar_1D
-    end function
-
-  end interface
-
-  interface divergence_1D_t
-
-    pure module function construct_1D_divergence_from_components(tensor_1D, gradient_operator_1D) result(divergence_1D)
-      implicit none
-      type(tensor_1D_t), intent(in) :: tensor_1D
-      type(gradient_operator_1D_t), intent(in) :: gradient_operator_1D
-      type(divergence_1D_t) divergence_1D
     end function
 
   end interface
@@ -238,7 +223,7 @@ module tensors_1D_m
       !! Result is mimetic divergence of the vector_1D_t "self"
       implicit none
       class(vector_1D_t), intent(in) :: self
-      type(divergence_1D_t) divergence_1D !! discrete divergence
+      type(scalar_1D_t) divergence_1D !! discrete divergence
     end function
 
   end interface
