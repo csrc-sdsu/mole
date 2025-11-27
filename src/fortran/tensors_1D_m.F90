@@ -9,7 +9,6 @@ module tensors_1D_m
   private
   public :: scalar_1D_t
   public :: vector_1D_t
-  public :: gradient_1D_t
   public :: divergence_1D_t
   public :: scalar_1D_initializer_i
   public :: vector_1D_initializer_i
@@ -174,9 +173,6 @@ module tensors_1D_m
     procedure, non_overridable, private :: vector_1D_values
   end type
 
-  type, extends(vector_1D_t) :: gradient_1D_t
-  end type
-
   interface vector_1D_t
 
     pure module function construct_1D_vector_from_function(initializer, order, cells, x_min, x_max) result(vector_1D)
@@ -188,17 +184,6 @@ module tensors_1D_m
       double precision, intent(in) :: x_min !! grid location minimum
       double precision, intent(in) :: x_max !! grid location maximum
       type(vector_1D_t) vector_1D
-    end function
-
-  end interface
-
-  interface gradient_1D_t
-
-    pure module function construct_1D_gradient_from_components(tensor_1D, divergence_operator_1D) result(gradient_1D)
-      implicit none
-      type(tensor_1D_t), intent(in) :: tensor_1D
-      type(divergence_operator_1D_t), intent(in) :: divergence_operator_1D
-      type(gradient_1D_t) gradient_1D
     end function
 
   end interface
@@ -240,7 +225,7 @@ module tensors_1D_m
       !! Result is mimetic gradient of the scalar_1D_t "self"
       implicit none
       class(scalar_1D_t), intent(in) :: self
-      type(gradient_1D_t) gradient_1D !! discrete gradient
+      type(vector_1D_t) gradient_1D !! discrete gradient
     end function
 
     pure module function scalar_1D_grid(self) result(x)

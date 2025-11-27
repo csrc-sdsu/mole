@@ -10,11 +10,6 @@ submodule(tensors_1D_m) gradient_1D_s
 
 contains
 
-  module procedure construct_1D_gradient_from_components
-    gradient_1D%tensor_1D_t = tensor_1D
-    gradient_1D%divergence_operator_1D_ = divergence_operator_1D
-  end procedure
-
   module procedure construct_1D_gradient_operator
 
     call_julienne_assert(cells .isAtLeast. 2*k)

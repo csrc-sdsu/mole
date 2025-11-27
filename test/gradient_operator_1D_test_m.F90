@@ -14,7 +14,7 @@ module gradient_operator_1D_test_m
     ,test_diagnosis_t &
     ,test_result_t &
     ,usher
-  use mole_m, only : scalar_1D_t, gradient_1D_t, scalar_1D_initializer_i
+  use mole_m, only : scalar_1D_t, scalar_1D_initializer_i
 #if ! HAVE_PROCEDURE_ACTUAL_FOR_POINTER_DUMMY
   use julienne_m, only : diagnosis_function_i
 #endif
