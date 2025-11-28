@@ -3,10 +3,12 @@
 
 module laplacian_operator_1D_test_m
   use julienne_m, only : &
-     operator(//) &
+     file_t &
+    ,operator(//) &
     ,operator(.all.) &
     ,operator(.also.) &
     ,operator(.approximates.) &
+    ,operator(.separatedBy.) &
     ,operator(.within.) &
     ,string_t &
     ,test_t &
@@ -80,10 +82,16 @@ contains
     type(test_diagnosis_t) test_diagnosis
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => quartic
 
-    associate(laplacian_quartic => .laplacian. scalar_1D_t(scalar_1D_initializer, order=4, cells=9, x_min=0D0, x_max=9D0))
+    associate(laplacian_quartic => .laplacian. scalar_1D_t(scalar_1D_initializer, order=4, cells=10, x_min=0D0, x_max=20D0))
       associate(x => laplacian_quartic%grid())
-        associate(expected_laplacian => x**2)
-          test_diagnosis = .all. (laplacian_quartic%values() .approximates. expected_laplacian .within. loose_tolerance) &
+        associate(expected_laplacian => x**2, actual_laplacian => laplacian_quartic%values())
+
+#if WRITE_GNUPLOT_FILE
+          associate(plot=> gnuplot(string_t([character(len=10)::"x","expected","actual"]), x, expected_laplacian, actual_laplacian))
+            call plot%write_lines()
+          end associate
+#endif
+          test_diagnosis = .all. (actual_laplacian .approximates. expected_laplacian .within. loose_tolerance) &
             // " (4th-order .laplacian. [(x**4)/24]"
         end associate
       end associate
@@ -175,4 +183,16 @@ contains
       end associate
     end associate
   end function
+
+  pure function gnuplot(headings, abscissa, expected, actual) result(file)
+    double precision, intent(in), dimension(:) :: abscissa, expected, actual
+    type(string_t), intent(in) :: headings(:)
+    type(file_t) file
+    integer line
+    file = file_t([ &
+       headings .separatedBy. "       " &
+      ,[( string_t(abscissa(line)) // "   " // string_t(expected(line)) // "   " // string_t(actual(line)), line = 1, size(abscissa))] &
+    ])
+  end function
+  
 end module
