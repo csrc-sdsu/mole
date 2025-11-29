@@ -1,6 +1,6 @@
 #include "julienne-assert-macros.h"
 
-submodule(tensors_1D_m) divergence_1D_s
+submodule(mimetic_matrix_1D_m) divergence_operator_1D_s
   use julienne_m, only : call_julienne_assert_, string_t
 #if ASSERTIONS
   use julienne_m, only : operator(.isAtLeast.)
@@ -74,4 +74,4 @@ contains
 
   end procedure
 
-end submodule divergence_1D_s
+end submodule divergence_operator_1D_s
