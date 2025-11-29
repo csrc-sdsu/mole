@@ -7,28 +7,10 @@ module tensors_1D_m
   implicit none
 
   private
-  public :: scalar_1D_t
-  public :: vector_1D_t
-  public :: scalar_1D_initializer_i
-  public :: vector_1D_initializer_i
-
-  abstract interface
-
-    pure function scalar_1D_initializer_i(x) result(f)
-      !! Sampling function for initializing a scalar_1D_t object
-      implicit none
-      double precision, intent(in) :: x(:)
-      double precision, allocatable :: f(:)
-    end function
-
-    pure function vector_1D_initializer_i(x) result(v)
-      !! Sampling function for initializing a vector_1D_t object
-      implicit none
-      double precision, intent(in) :: x(:)
-      double precision, allocatable :: v(:)
-    end function
-
-  end interface
+  public :: tensor_1D_t
+  public :: mimetic_matrix_1D_t
+  public :: gradient_operator_1D_t
+  public :: divergence_operator_1D_t
 
   type tensor_1D_t
     private
@@ -117,64 +99,6 @@ module tensors_1D_m
 
   end interface
 
-  type, extends(tensor_1D_t) :: scalar_1D_t
-    !! Encapsulate information at cell centers and boundaries
-    private
-    type(gradient_operator_1D_t) gradient_operator_1D_
-  contains
-    generic :: operator(.grad.) => grad
-    generic :: operator(.laplacian.) => laplacian
-    generic :: grid   => scalar_1D_grid
-    generic :: values => scalar_1D_values
-    procedure, non_overridable, private :: grad
-    procedure, non_overridable, private :: laplacian
-    procedure, non_overridable, private :: scalar_1D_values
-    procedure, non_overridable, private :: scalar_1D_grid
-  end type
-
-  interface scalar_1D_t
-
-    pure module function construct_1D_scalar_from_function(initializer, order, cells, x_min, x_max) result(scalar_1D)
-      !! Result is a collection of cell-centered-extended values with a corresponding mimetic gradient operator
-      implicit none
-      procedure(scalar_1D_initializer_i), pointer :: initializer
-      integer, intent(in) :: order !! order of accuracy
-      integer, intent(in) :: cells !! number of grid cells spanning the domain
-      double precision, intent(in) :: x_min !! grid location minimum
-      double precision, intent(in) :: x_max !! grid location maximum
-      type(scalar_1D_t) scalar_1D
-    end function
-
-  end interface
-
-  type, extends(tensor_1D_t) :: vector_1D_t
-    !! Encapsulate 1D vector values at cell faces (nodes in 1D) and corresponding operators
-    private
-    type(divergence_operator_1D_t) divergence_operator_1D_
-  contains
-    generic :: operator(.div.) => div
-    generic :: grid   => vector_1D_grid
-    generic :: values => vector_1D_values
-    procedure, non_overridable, private :: div
-    procedure, non_overridable, private :: vector_1D_grid
-    procedure, non_overridable, private :: vector_1D_values
-  end type
-
-  interface vector_1D_t
-
-    pure module function construct_1D_vector_from_function(initializer, order, cells, x_min, x_max) result(vector_1D)
-      !! Result is a collection of face-centered values with a corresponding mimetic gradient operator
-      implicit none
-      procedure(vector_1D_initializer_i), pointer :: initializer
-      integer, intent(in) :: order !! order of accuracy
-      integer, intent(in) :: cells !! number of grid cells spanning the domain
-      double precision, intent(in) :: x_min !! grid location minimum
-      double precision, intent(in) :: x_max !! grid location maximum
-      type(vector_1D_t) vector_1D
-    end function
-
-  end interface
-
   interface
 
      pure module function to_file_t(self) result(file)
@@ -182,78 +106,6 @@ module tensors_1D_m
        class(mimetic_matrix_1D_t), intent(in) :: self
        type(file_t) file
      end function
-
-  end interface
-
-  interface
-
-    pure module function scalar_1D_values(self) result(my_values)
-      !! Result is self's array of the 1D scalar values at cell centers
-      implicit none
-      class(scalar_1D_t), intent(in) :: self
-      double precision, allocatable :: my_values(:)
-    end function
-
-    pure module function vector_1D_grid(self) result(cell_faces)
-      !! Result is the array of cell face locations (nodes in 1D) at which self's values are defined
-      implicit none
-      class(vector_1D_t), intent(in) :: self
-      double precision, allocatable :: cell_faces(:)
-    end function
-
-    pure module function vector_1D_values(self) result(my_values)
-      !! Result is self's array of the 1D scalar values at cell faces (nodes in 1D)
-      implicit none
-      class(vector_1D_t), intent(in) :: self
-      double precision, allocatable :: my_values(:)
-    end function
-
-    pure module function grad(self) result(gradient_1D)
-      !! Result is mimetic gradient of the scalar_1D_t "self"
-      implicit none
-      class(scalar_1D_t), intent(in) :: self
-      type(vector_1D_t) gradient_1D !! discrete gradient
-    end function
-
-    pure module function laplacian(self) result(laplacian_1D)
-      !! Result is mimetic Laplacian of the scalar_1D_t "self"
-      implicit none
-      class(scalar_1D_t), intent(in) :: self
-      type(scalar_1D_t) laplacian_1D !! discrete gradient
-    end function
-
-    pure module function scalar_1D_grid(self) result(x)
-      implicit none
-      class(scalar_1D_t), intent(in) :: self
-      double precision, allocatable :: x(:)
-    end function
-
-    pure module function div(self) result(divergence_1D)
-      !! Result is mimetic divergence of the vector_1D_t "self"
-      implicit none
-      class(vector_1D_t), intent(in) :: self
-      type(scalar_1D_t) divergence_1D !! discrete divergence
-    end function
-
-  end interface
-
-  interface matvec
-
-    pure module function mimetic_matrix_scalar_1D_product(self, scalar_1D) result(matvec_product)
-      !! Apply a mimetic matrix operator to a vector encapsulated in a scalar_1D_t object
-      implicit none
-      class(mimetic_matrix_1D_t), intent(in) :: self
-      type(scalar_1D_t), intent(in) :: scalar_1D
-      double precision, allocatable :: matvec_product(:)
-    end function
-
-    pure module function mimetic_matrix_vector_1D_product(self, vector_1D) result(matvec_product)
-      !! Apply a mimetic matrix operator to a vector encapsulated in a scalar_1D_t object
-      implicit none
-      class(mimetic_matrix_1D_t), intent(in) :: self
-      type(vector_1D_t), intent(in) :: vector_1D
-      double precision, allocatable :: matvec_product(:)
-    end function
 
   end interface
 

@@ -1,7 +1,7 @@
 #include "julienne-assert-macros.h"
 
-submodule(tensors_1D_m) scalar_1D_s
-  use julienne_m, only : call_julienne_assert_, operator(.equalsExpected.), operator(.greaterThan.), operator(.isAtLeast.)
+submodule(scalar_vector_1D_m) scalar_1D_s
+  use julienne_m, only : call_julienne_assert_, operator(.greaterThan.), operator(.isAtLeast.), string_t, operator(.csv.)
   implicit none
 
 contains
@@ -58,5 +58,56 @@ contains
   module procedure scalar_1D_grid
     x = cell_centers(self%x_min_, self%x_max_, self%cells_)
   end procedure
+
+#if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
+
+  module procedure mimetic_matrix_scalar_1D_product
+
+    double precision, allocatable :: product_inner(:)
+
+    associate(upper => size(self%upper_,1), lower => size(self%lower_,1))
+      associate(inner_rows => size(scalar_1D%values_) - (upper + lower + 1))
+
+        allocate(product_inner(inner_rows))
+
+        do concurrent(integer :: row = 1 : inner_rows) default(none) shared(product_inner, self, scalar_1D)
+          product_inner(row) = dot_product(self%inner_, scalar_1D%values_(row + 1 : row + size(self%inner_)))
+        end do
+
+        matvec_product = [ &
+           matmul(self%upper_, scalar_1D%values_(1 : size(self%upper_,2))) &
+          ,product_inner &
+          ,matmul(self%lower_, scalar_1D%values_(size(scalar_1D%values_) - size(self%lower_,2) + 1 : )) &
+        ]
+      end associate
+    end associate
+  end procedure
+
+#else
+
+  module procedure mimetic_matrix_scalar_1D_product
+
+    integer row
+    double precision, allocatable :: product_inner(:)
+
+    associate(upper => size(self%upper_,1), lower => size(self%lower_,1))
+      associate(inner_rows => size(scalar_1D%values_) - (upper + lower + 1))
+
+        allocate(product_inner(inner_rows))
+
+        do concurrent(row = 1 : inner_rows)
+          product_inner(row) = dot_product(self%inner_, scalar_1D%values_(row + 1 : row + size(self%inner_)))
+        end do
+
+        matvec_product = [ &
+           matmul(self%upper_, scalar_1D%values_(1 : size(self%upper_,2))) &
+          ,product_inner &
+          ,matmul(self%lower_, scalar_1D%values_(size(scalar_1D%values_) - size(self%lower_,2) + 1 : )) &
+        ]
+      end associate
+    end associate
+  end procedure
+
+#endif
 
 end submodule scalar_1D_s
