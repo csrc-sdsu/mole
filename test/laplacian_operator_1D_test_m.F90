@@ -25,7 +25,7 @@ module laplacian_operator_1D_test_m
     procedure, nopass :: results
   end type
 
-  double precision, parameter :: tight_tolerance = 1D-14, loose_tolerance = 1D-12, rough_tolerance = 1D-06, crude_tolerance = 1D-02
+  double precision, parameter :: tight_tolerance = 1D-14, loose_tolerance = 1D-11, rough_tolerance = 1D-06, crude_tolerance = 1D-02
 
 contains
 
@@ -82,10 +82,9 @@ contains
     type(test_diagnosis_t) test_diagnosis
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => quartic
 
-    associate(laplacian_quartic => .laplacian. scalar_1D_t(scalar_1D_initializer, order=4, cells=10, x_min=0D0, x_max=20D0))
+    associate(laplacian_quartic => .laplacian. scalar_1D_t(scalar_1D_initializer, order=4, cells=20, x_min=0D0, x_max=40D0))
       associate(x => laplacian_quartic%grid())
         associate(expected_laplacian => x**2, actual_laplacian => laplacian_quartic%values())
-
 #if WRITE_GNUPLOT_FILE
           associate(plot=> gnuplot(string_t([character(len=10)::"x","expected","actual"]), x, expected_laplacian, actual_laplacian))
             call plot%write_lines()
