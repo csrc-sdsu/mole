@@ -1,6 +1,6 @@
 #include "mole-language-support.F90"
 
-module mimetic_matrix_1D_m
+module mimetic_operators_1D_m
   
   !! Define 1D scalar and vector abstractions and associated mimetic gradient,
   !! divergence, and Laplacian operators.
@@ -8,14 +8,15 @@ module mimetic_matrix_1D_m
   implicit none
 
   private
-  public :: mimetic_matrix_1D_t
   public :: gradient_operator_1D_t
   public :: divergence_operator_1D_t
 
   type mimetic_matrix_1D_t
     !! Encapsulate a mimetic matrix with a corresponding matrix-vector product operator
     private
-    double precision, allocatable :: upper_(:,:), inner_(:), lower_(:,:)
+    double precision, allocatable :: upper_(:,:) !! A  submatrix block (cf. Corbino & Castillo, 2020)
+    double precision, allocatable :: inner_(:)   !! M  submatrix row   (cf. Corbino & Castillo, 2020)
+    double precision, allocatable :: lower_(:,:) !! A' submatrix block (cf. Corbino & Castillo, 2020)
   contains
     procedure, non_overridable :: to_file_t
   end type
@@ -25,9 +26,9 @@ module mimetic_matrix_1D_m
     pure module function construct_matrix_operator(upper, inner, lower) result(mimetic_matrix_1D)
       !! Construct discrete operator from matrix blocks
       implicit none
-      double precision, intent(in) :: upper(:,:) !! A block matrix (cf. Corbino & Castillo, 2020)
-      double precision, intent(in) :: inner(:)   !! M matrix (cf. Corbino & Castillo, 2020) - stored as 1 row of a Toeplitz matrix
-      double precision, intent(in) :: lower(:,:) !! A' block matrix  (cf. Corbino & Castillo, 2020)
+      double precision, intent(in) :: upper(:,:) !! A  submatrix block (cf. Corbino & Castillo, 2020)
+      double precision, intent(in) :: inner(:)   !! M  submatrix row   (cf. Corbino & Castillo, 2020)
+      double precision, intent(in) :: lower(:,:) !! A' submatrix block (cf. Corbino & Castillo, 2020)
       type(mimetic_matrix_1D_t) mimetic_matrix_1D
     end function
 
@@ -130,4 +131,4 @@ contains
  
 #endif
 
-end module mimetic_matrix_1D_m
+end module mimetic_operators_1D_m

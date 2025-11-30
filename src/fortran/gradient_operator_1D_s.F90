@@ -1,7 +1,7 @@
 #include "julienne-assert-macros.h"
 #include "mole-language-support.F90"
 
-submodule(mimetic_matrix_1D_m) gradient_operator_1D_s
+submodule(mimetic_operators_1D_m) gradient_operator_1D_s
   use julienne_m, only : call_julienne_assert_, string_t
 #if ASSERTIONS
   use julienne_m, only : operator(.isAtLeast.)
@@ -64,6 +64,6 @@ contains
 
     end function
 
-  end procedure
+  end procedure construct_1D_gradient_operator
 
 end submodule gradient_operator_1D_s

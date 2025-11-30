@@ -1,4 +1,4 @@
-submodule(mimetic_matrix_1D_m) mimetic_matrix_1D_s
+submodule(mimetic_operators_1D_m) mimetic_matrix_1D_s
   use julienne_m, only : string_t, operator(.csv.)
   implicit none
 

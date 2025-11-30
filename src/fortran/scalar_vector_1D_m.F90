@@ -5,7 +5,7 @@ module scalar_vector_1D_m
   !! divergence, and Laplacian operators.
   use julienne_m, only : file_t
   use tensor_1D_m, only : tensor_1D_t
-  use mimetic_matrix_1D_m, only : mimetic_matrix_1D_t, divergence_operator_1D_t, gradient_operator_1D_t
+  use mimetic_operators_1D_m, only : divergence_operator_1D_t, gradient_operator_1D_t
     
   implicit none
 
@@ -47,6 +47,7 @@ module scalar_vector_1D_m
     procedure, non_overridable, private :: laplacian
     procedure, non_overridable, private :: scalar_1D_values
     procedure, non_overridable, private :: scalar_1D_grid
+    procedure, non_overridable, private :: apply_gradient_1D
   end type
 
   interface scalar_1D_t
@@ -75,6 +76,7 @@ module scalar_vector_1D_m
     procedure, non_overridable, private :: div
     procedure, non_overridable, private :: vector_1D_grid
     procedure, non_overridable, private :: vector_1D_values
+    procedure, non_overridable, private :: apply_divergence_1D
   end type
 
   interface vector_1D_t
@@ -142,23 +144,17 @@ module scalar_vector_1D_m
       type(scalar_1D_t) divergence_1D !! discrete divergence
     end function
 
-  end interface
-
-  interface matvec
-
-    pure module function mimetic_gradient_1D(gradient_operator_1D, scalar_1D) result(matvec_product)
+    pure module function apply_gradient_1D(self) result(matvec_product)
       !! Apply a mimetic gradient operator to a 1D scalar
       implicit none
-      type(gradient_operator_1D_t), intent(in) :: gradient_operator_1D
-      type(scalar_1D_t), intent(in) :: scalar_1D
+      class(scalar_1D_t), intent(in) :: self
       double precision, allocatable :: matvec_product(:)
     end function
 
-    pure module function mimetic_divergence_1D(divergence_operator_1D, vector_1D) result(matvec_product)
+    pure module function apply_divergence_1D(self) result(matvec_product)
       !! Apply a mimetic divergence operator to a 1D vector
       implicit none
-      type(divergence_operator_1D_t), intent(in) :: divergence_operator_1D
-      type(vector_1D_t), intent(in) :: vector_1D
+      class(vector_1D_t), intent(in) :: self
       double precision, allocatable :: matvec_product(:)
     end function
 
