@@ -83,7 +83,7 @@ module mimetic_operators_1D_m
   interface
 
     pure module function gradient_matrix_multiply(self, vec) result(matvec_product)
-      !! Result is mimetic-gradient matrix-vector product
+      !! Result is mimetic gradient vector
       implicit none
       class(gradient_operator_1D_t), intent(in) :: self
       double precision, intent(in) :: vec(:)
@@ -91,7 +91,7 @@ module mimetic_operators_1D_m
     end function
 
     pure module function divergence_matrix_multiply(self, vec) result(matvec_product)
-      !! Result is mimetic-gradient matrix-vector product
+      !! Result is mimetic divergence defined at cell centers
       implicit none
       class(divergence_operator_1D_t), intent(in) :: self
       double precision, intent(in) :: vec(:)

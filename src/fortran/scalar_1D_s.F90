@@ -13,7 +13,7 @@ contains
     call_julienne_assert(x_max .greaterThan. x_min)
     call_julienne_assert(cells .isAtLeast. 2*order)
 
-    associate(values => initializer(cell_centers(x_min, x_max, cells)))
+    associate(values => initializer(scalar_1D_grid_locations(x_min, x_max, cells)))
       scalar_1D%tensor_1D_t = tensor_1D_t(values, x_min, x_max, cells, order)
     end associate
     scalar_1D%gradient_operator_1D_ = gradient_operator_1D_t(k=order, dx=(x_max - x_min)/cells, cells=cells)
@@ -32,7 +32,7 @@ contains
     call_julienne_assert(x_max .greaterThan. x_min)
     call_julienne_assert(cells .isAtLeast. 2*order)
 
-    associate(values => initializer(cell_centers(x_min, x_max, cells)))
+    associate(values => initializer(scalar_1D_grid_locations(x_min, x_max, cells)))
       scalar_1D%tensor_1D_t = tensor_1D_t(values, x_min, x_max, cells, order)
     end associate
     scalar_1D%gradient_operator_1D_ = gradient_operator_1D_t(k=order, dx=(x_max - x_min)/cells, cells=cells)
@@ -49,37 +49,26 @@ contains
   end procedure
 
   module procedure laplacian
-    laplacian_1D = .div. (.grad. self)
+    laplacian_1D%divergence_1D_t = .div. (.grad. self)
   end procedure
 
   module procedure scalar_1D_values
-    my_values = self%values_
+    cell_centers_extended_values = self%values_
   end procedure
 
-  pure function cell_centers(x_min, x_max, cells) result(x)
+  pure function scalar_1D_grid_locations(x_min, x_max, cells) result(x)
     double precision, intent(in) :: x_min, x_max
     integer, intent(in) :: cells
     double precision, allocatable:: x(:)
     integer cell
 
     associate(dx => (x_max - x_min)/cells)
-      x = x_min + dx/2. + [((cell-1)*dx, cell = 1, cells)]
-    end associate
-  end function
-
-  pure function cell_centers_extended(x_min, x_max, cells) result(x)
-    double precision, intent(in) :: x_min, x_max
-    integer, intent(in) :: cells
-    double precision, allocatable:: x(:)
-    integer cell
-
-    associate(dx => (x_max - x_min)/cells)
-      x = [x_min, cell_centers(x_min, x_max, cells), x_max]
+      x = [x_min, cell_center_locations(x_min, x_max, cells), x_max]
     end associate
   end function
 
   module procedure scalar_1D_grid
-    x = cell_centers(self%x_min_, self%x_max_, self%cells_)
+    cell_centers_extended  = scalar_1D_grid_locations(self%x_min_, self%x_max_, self%cells_)
   end procedure
 
 end submodule scalar_1D_s

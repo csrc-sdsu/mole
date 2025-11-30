@@ -12,6 +12,7 @@ module tensors_1D_m
 
   public :: scalar_1D_t
   public :: vector_1D_t
+  public :: divergence_1D_t
   public :: scalar_1D_initializer_i
   public :: vector_1D_initializer_i
 
@@ -61,7 +62,7 @@ module tensors_1D_m
   end interface
 
   type, extends(tensor_1D_t) :: scalar_1D_t
-    !! Encapsulate information at cell centers and boundaries
+    !! Encapsulate scalar values at cell centers and boundaries
     private
     type(gradient_operator_1D_t) gradient_operator_1D_
   contains
@@ -118,27 +119,60 @@ module tensors_1D_m
 
   end interface
 
+  type, extends(tensor_1D_t) :: divergence_1D_t
+    !! Encapsulate divergences at cell centers
+  contains
+    generic :: grid   => divergence_1D_grid
+    generic :: values => divergence_1D_values
+    procedure, non_overridable, private :: divergence_1D_values
+    procedure, non_overridable, private :: divergence_1D_grid
+  end type
+
+  type, extends(divergence_1D_t) :: laplacian_1D_t
+  end type
+
   interface
 
-    pure module function scalar_1D_values(self) result(my_values)
-      !! Result is self's array of the 1D scalar values at cell centers
+    pure module function scalar_1D_grid(self) result(cell_centers_extended)
+      !! Result is the array of locations at which 1D scalars are defined: cell centers agumented by spatial boundaries
       implicit none
       class(scalar_1D_t), intent(in) :: self
-      double precision, allocatable :: my_values(:)
+      double precision, allocatable :: cell_centers_extended(:)
     end function
 
     pure module function vector_1D_grid(self) result(cell_faces)
-      !! Result is the array of cell face locations (nodes in 1D) at which self's values are defined
+      !! Result is the array of cell face locations (nodes in 1D) at which 1D vectors are defined
       implicit none
       class(vector_1D_t), intent(in) :: self
       double precision, allocatable :: cell_faces(:)
     end function
 
-    pure module function vector_1D_values(self) result(my_values)
-      !! Result is self's array of the 1D scalar values at cell faces (nodes in 1D)
+    pure module function divergence_1D_grid(self) result(cell_centers)
+      !! Result is the array of cell centers at which 1D divergences are defined
+      implicit none
+      class(divergence_1D_t), intent(in) :: self
+      double precision, allocatable :: cell_centers(:)
+    end function
+
+    pure module function scalar_1D_values(self) result(cell_centers_extended_values)
+      !! Result is an array of 1D scalar values at boundaries and cell centers
+      implicit none
+      class(scalar_1D_t), intent(in) :: self
+      double precision, allocatable :: cell_centers_extended_values(:)
+    end function
+
+    pure module function vector_1D_values(self) result(face_centered_values)
+      !! Result is an array of the 1D vector values at cell faces (nodes in 1D)
       implicit none
       class(vector_1D_t), intent(in) :: self
-      double precision, allocatable :: my_values(:)
+      double precision, allocatable :: face_centered_values(:)
+    end function
+
+    pure module function divergence_1D_values(self) result(cell_centered_values)
+      !! Result is an array of 1D divergences at cell centers
+      implicit none
+      class(divergence_1D_t), intent(in) :: self
+      double precision, allocatable :: cell_centered_values(:)
     end function
 
     pure module function grad(self) result(gradient_1D)
@@ -152,22 +186,29 @@ module tensors_1D_m
       !! Result is mimetic Laplacian of the scalar_1D_t "self"
       implicit none
       class(scalar_1D_t), intent(in) :: self
-      type(scalar_1D_t) laplacian_1D !! discrete gradient
-    end function
-
-    pure module function scalar_1D_grid(self) result(x)
-      implicit none
-      class(scalar_1D_t), intent(in) :: self
-      double precision, allocatable :: x(:)
+      type(laplacian_1D_t) laplacian_1D !! discrete gradient
     end function
 
     pure module function div(self) result(divergence_1D)
       !! Result is mimetic divergence of the vector_1D_t "self"
       implicit none
       class(vector_1D_t), intent(in) :: self
-      type(scalar_1D_t) divergence_1D !! discrete divergence
+      type(divergence_1D_t) divergence_1D !! discrete divergence
     end function
 
   end interface
+
+contains
+
+  pure function cell_center_locations(x_min, x_max, cells) result(x)
+    double precision, intent(in) :: x_min, x_max
+    integer, intent(in) :: cells
+    double precision, allocatable:: x(:)
+    integer cell
+
+    associate(dx => (x_max - x_min)/cells)
+      x = x_min + dx/2. + [((cell-1)*dx, cell = 1, cells)]
+    end associate
+  end function
 
 end module tensors_1D_m
