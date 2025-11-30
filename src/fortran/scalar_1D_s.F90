@@ -17,12 +17,10 @@ contains
   end procedure
 
   module procedure grad
-    associate( &
-       gradient_values => matvec(self%gradient_operator_1D_%mimetic_matrix_1D_t, self) &
-      ,divergence_operator_1D => divergence_operator_1D_t(self%order_, (self%x_max_-self%x_min_)/self%cells_, self%cells_) &
+    gradient_1D = vector_1D_t( &
+       tensor_1D_t(matvec(self%gradient_operator_1D_, self), self%x_min_, self%x_max_, self%cells_, self%order_) &
+      ,divergence_operator_1D_t(self%order_, (self%x_max_-self%x_min_)/self%cells_, self%cells_) &
     )
-      gradient_1D = vector_1D_t(tensor_1D_t(gradient_values, self%x_min_, self%x_max_, self%cells_, self%order_), divergence_operator_1D)
-    end associate
   end procedure
 
   module procedure laplacian
@@ -61,23 +59,23 @@ contains
 
 #if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
 
-  module procedure mimetic_matrix_scalar_1D_product
+  module procedure mimetic_gradient_1D
 
     double precision, allocatable :: product_inner(:)
 
-    associate(upper => size(self%upper_,1), lower => size(self%lower_,1))
+    associate(upper => size(gradient_operator_1D%upper_,1), lower => size(gradient_operator_1D%lower_,1))
       associate(inner_rows => size(scalar_1D%values_) - (upper + lower + 1))
 
         allocate(product_inner(inner_rows))
 
-        do concurrent(integer :: row = 1 : inner_rows) default(none) shared(product_inner, self, scalar_1D)
-          product_inner(row) = dot_product(self%inner_, scalar_1D%values_(row + 1 : row + size(self%inner_)))
+        do concurrent(integer :: row = 1 : inner_rows) default(none) shared(product_inner, gradient_operator_1D, scalar_1D)
+          product_inner(row) = dot_product(gradient_operator_1D%inner_, scalar_1D%values_(row + 1 : row + size(gradient_operator_1D%inner_)))
         end do
 
         matvec_product = [ &
-           matmul(self%upper_, scalar_1D%values_(1 : size(self%upper_,2))) &
+           matmul(gradient_operator_1D%upper_, scalar_1D%values_(1 : size(gradient_operator_1D%upper_,2))) &
           ,product_inner &
-          ,matmul(self%lower_, scalar_1D%values_(size(scalar_1D%values_) - size(self%lower_,2) + 1 : )) &
+          ,matmul(gradient_operator_1D%lower_, scalar_1D%values_(size(scalar_1D%values_) - size(gradient_operator_1D%lower_,2) + 1 : )) &
         ]
       end associate
     end associate
@@ -85,24 +83,23 @@ contains
 
 #else
 
-  module procedure mimetic_matrix_scalar_1D_product
+  module procedure mimetic_gradient_1D
 
     integer row
     double precision, allocatable :: product_inner(:)
-
-    associate(upper => size(self%upper_,1), lower => size(self%lower_,1))
+    associate(upper => size(gradient_operator_1D%upper_,1), lower => size(gradient_operator_1D%lower_,1))
       associate(inner_rows => size(scalar_1D%values_) - (upper + lower + 1))
 
         allocate(product_inner(inner_rows))
 
         do concurrent(row = 1 : inner_rows)
-          product_inner(row) = dot_product(self%inner_, scalar_1D%values_(row + 1 : row + size(self%inner_)))
+          product_inner(row) = dot_product(gradient_operator_1D%inner_, scalar_1D%values_(row + 1 : row + size(gradient_operator_1D%inner_)))
         end do
 
         matvec_product = [ &
-           matmul(self%upper_, scalar_1D%values_(1 : size(self%upper_,2))) &
+           matmul(gradient_operator_1D%upper_, scalar_1D%values_(1 : size(gradient_operator_1D%upper_,2))) &
           ,product_inner &
-          ,matmul(self%lower_, scalar_1D%values_(size(scalar_1D%values_) - size(self%lower_,2) + 1 : )) &
+          ,matmul(gradient_operator_1D%lower_, scalar_1D%values_(size(scalar_1D%values_) - size(gradient_operator_1D%lower_,2) + 1 : )) &
         ]
       end associate
     end associate

@@ -17,14 +17,10 @@ contains
   end procedure
 
   module procedure div
-    associate(divergence_values => matvec(self%divergence_operator_1D_%mimetic_matrix_1D_t, self))
-      associate( &
-         tensor_1D => tensor_1D_t(divergence_values, self%x_min_, self%x_max_, self%cells_, self%order_) &
-        ,gradient_operator_1D => gradient_operator_1D_t(k=self%order_, dx=(self%x_max_ - self%x_min_)/self%cells_, cells=self%cells_) &
-      )
-        divergence_1D = scalar_1D_t(tensor_1D, gradient_operator_1D)
-      end associate
-    end associate
+    divergence_1D = scalar_1D_t( &
+       tensor_1D_t(matvec(self%divergence_operator_1D_, self), self%x_min_, self%x_max_, self%cells_, self%order_) &
+      ,gradient_operator_1D_t(k=self%order_, dx=(self%x_max_ - self%x_min_)/self%cells_, cells=self%cells_) &
+    )
   end procedure
 
   module procedure vector_1D_values
@@ -48,23 +44,23 @@ contains
 
 #if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
 
-  module procedure mimetic_matrix_vector_1D_product
+  module procedure mimetic_divergence_1D
 
     double precision, allocatable :: product_inner(:)
 
-    associate(upper_rows => size(self%upper_,1), lower_rows => size(self%lower_,1))
+    associate(upper_rows => size(divergence_operator_1D%upper_,1), lower_rows => size(divergence_operator_1D%lower_,1))
       associate(inner_rows => size(vector_1D%values_) - (upper_rows + lower_rows + 1))
 
         allocate(product_inner(inner_rows))
 
-        do concurrent(integer :: row = 1 : inner_rows) default(none) shared(product_inner, self, vector_1D)
-          product_inner(row) = dot_product(self%inner_, vector_1D%values_(row : row + size(self%inner_) - 1)) 
+        do concurrent(integer :: row = 1 : inner_rows) default(none) shared(product_inner, divergence_operator_1D, vector_1D)
+          product_inner(row) = dot_product(divergence_operator_1D%inner_, vector_1D%values_(row : row + size(divergence_operator_1D%inner_) - 1))
         end do
 
         matvec_product = [ &
-           matmul(self%upper_, vector_1D%values_(1 : size(self%upper_,2))) &
+           matmul(divergence_operator_1D%upper_, vector_1D%values_(1 : size(divergence_operator_1D%upper_,2))) &
           ,product_inner &
-          ,matmul(self%lower_, vector_1D%values_(size(vector_1D%values_) - size(self%lower_,2) + 1 : )) &
+          ,matmul(divergence_operator_1D%lower_, vector_1D%values_(size(vector_1D%values_) - size(divergence_operator_1D%lower_,2) + 1 : )) &
         ]
       end associate
     end associate
@@ -72,24 +68,24 @@ contains
 
 #else
 
-  module procedure mimetic_matrix_vector_1D_product
+  module procedure mimetic_divergence_1D
 
     integer row
     double precision, allocatable :: product_inner(:)
 
-    associate(upper_rows => size(self%upper_,1), lower_rows => size(self%lower_,1))
+    associate(upper_rows => size(divergence_operator_1D%upper_,1), lower_rows => size(divergence_operator_1D%lower_,1))
       associate(inner_rows => size(vector_1D%values_) - (upper_rows + lower_rows + 1))
 
         allocate(product_inner(inner_rows))
 
         do concurrent(row = 1 : inner_rows)
-          product_inner(row) = dot_product(self%inner_, vector_1D%values_(row : row + size(self%inner_) - 1)) 
+          product_inner(row) = dot_product(divergence_operator_1D%inner_, vector_1D%values_(row : row + size(divergence_operator_1D%inner_) - 1))
         end do
 
         matvec_product = [ &
-           matmul(self%upper_, vector_1D%values_(1 : size(self%upper_,2))) &
+           matmul(divergence_operator_1D%upper_, vector_1D%values_(1 : size(divergence_operator_1D%upper_,2))) &
           ,product_inner &
-          ,matmul(self%lower_, vector_1D%values_(size(vector_1D%values_) - size(self%lower_,2) + 1 : )) &
+          ,matmul(divergence_operator_1D%lower_, vector_1D%values_(size(vector_1D%values_) - size(divergence_operator_1D%lower_,2) + 1 : )) &
         ]
       end associate
     end associate

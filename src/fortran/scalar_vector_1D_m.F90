@@ -146,18 +146,18 @@ module scalar_vector_1D_m
 
   interface matvec
 
-    pure module function mimetic_matrix_scalar_1D_product(self, scalar_1D) result(matvec_product)
-      !! Apply a mimetic matrix operator to a vector encapsulated in a scalar_1D_t object
+    pure module function mimetic_gradient_1D(gradient_operator_1D, scalar_1D) result(matvec_product)
+      !! Apply a mimetic gradient operator to a 1D scalar
       implicit none
-      class(mimetic_matrix_1D_t), intent(in) :: self
+      type(gradient_operator_1D_t), intent(in) :: gradient_operator_1D
       type(scalar_1D_t), intent(in) :: scalar_1D
       double precision, allocatable :: matvec_product(:)
     end function
 
-    pure module function mimetic_matrix_vector_1D_product(self, vector_1D) result(matvec_product)
-      !! Apply a mimetic matrix operator to a vector encapsulated in a scalar_1D_t object
+    pure module function mimetic_divergence_1D(divergence_operator_1D, vector_1D) result(matvec_product)
+      !! Apply a mimetic divergence operator to a 1D vector
       implicit none
-      class(mimetic_matrix_1D_t), intent(in) :: self
+      type(divergence_operator_1D_t), intent(in) :: divergence_operator_1D
       type(vector_1D_t), intent(in) :: vector_1D
       double precision, allocatable :: matvec_product(:)
     end function
