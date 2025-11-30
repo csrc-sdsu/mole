@@ -6,6 +6,9 @@ submodule(tensors_1D_m) scalar_1D_s
 
 contains
 
+
+#ifndef __GFORTRAN__
+
   module procedure construct_1D_scalar_from_function
     call_julienne_assert(x_max .greaterThan. x_min)
     call_julienne_assert(cells .isAtLeast. 2*order)
@@ -15,6 +18,28 @@ contains
     end associate
     scalar_1D%gradient_operator_1D_ = gradient_operator_1D_t(k=order, dx=(x_max - x_min)/cells, cells=cells)
   end procedure
+
+#else
+
+  pure module function construct_1D_scalar_from_function(initializer, order, cells, x_min, x_max) result(scalar_1D)
+    procedure(scalar_1D_initializer_i), pointer :: initializer
+    integer, intent(in) :: order !! order of accuracy
+    integer, intent(in) :: cells !! number of grid cells spanning the domain
+    double precision, intent(in) :: x_min !! grid location minimum
+    double precision, intent(in) :: x_max !! grid location maximum
+    type(scalar_1D_t) scalar_1D
+
+    call_julienne_assert(x_max .greaterThan. x_min)
+    call_julienne_assert(cells .isAtLeast. 2*order)
+
+    associate(values => initializer(cell_centers_extended(x_min, x_max, cells)))
+      scalar_1D%tensor_1D_t = tensor_1D_t(values, x_min, x_max, cells, order)
+    end associate
+    scalar_1D%gradient_operator_1D_ = gradient_operator_1D_t(k=order, dx=(x_max - x_min)/cells, cells=cells)
+  end function
+
+#endif
+
 
   module procedure grad
     gradient_1D = vector_1D_t( &

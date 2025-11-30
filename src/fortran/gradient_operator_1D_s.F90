@@ -10,6 +10,30 @@ submodule(mimetic_operators_1D_m) gradient_operator_1D_s
 
 contains
 
+#ifdef __GFORTRAN__
+
+  pure function negate_and_flip(A) result(Ap)
+    !! Transform a mimetic matrix upper block into a lower block
+    double precision, intent(in) :: A(:,:)
+    double precision, allocatable :: Ap(:,:)
+    integer row, column
+
+    allocate(Ap, mold=A)
+
+    reverse_elements_within_rows_and_flip_sign: &
+    do concurrent(row = 1:size(Ap,1))
+      Ap(row,:) = -A(row,size(A,2):1:-1)
+    end do reverse_elements_within_rows_and_flip_sign
+
+    reverse_elements_within_columns: &
+    do concurrent(column = 1 : size(Ap,2))
+      Ap(:,column) = Ap(size(Ap,1):1:-1,column)
+    end do reverse_elements_within_columns
+
+  end function
+
+#endif
+ 
   module procedure construct_1D_gradient_operator
 
     call_julienne_assert(cells .isAtLeast. 2*k)
