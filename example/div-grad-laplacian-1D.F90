@@ -60,7 +60,7 @@ contains
           associate( plot => gnuplot(string_t([character(len=15)::"x", "f(x)"         , "f(x)"         ]), s_grid, f(s_grid), s%values()))
              call plot%write_lines()
           end associate
-          associate( plot => gnuplot(string_t([character(len=15)::"x", ".div. f"      , ".div. f"      ]), grad_s_grid, df_dx(grad_s_grid), grad_s%values()))
+          associate( plot => gnuplot(string_t([character(len=15)::"x", ".grad. f"     , ".grad. f"     ]), grad_s_grid, df_dx(grad_s_grid), grad_s%values()))
              call plot%write_lines()
           end associate
 
