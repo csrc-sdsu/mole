@@ -33,7 +33,7 @@ int main() {
 
     // RHS
     vec rhs(m+2); rhs.zeros();
-    for (int i=1; i<=m; ++i) {
+    for (int i = 1; i <= m; ++i) {
         rhs(i) = -1.0;
     }
     rhs(0) = 0.0;
@@ -46,6 +46,28 @@ int main() {
     #else
         vec sol = spsolve(L, rhs);
     #endif
+
+    // Create a GNUplot script file
+    std::ofstream plot_script("plot.gnu");
+    if (!plot_script) {
+        std::cerr << "Error: Failed to create GNUplot script.\n";
+        return 1;
+    }
+    plot_script << "set title '-u'' = 1, u(0) = 0, u(1) = 0'\n";
+    plot_script << "set xlabel 't'\n";
+    plot_script << "set ylabel 'y'\n";
+    plot_script << "plot '-' using 1:2 with lines\n";
+
+    for (int i = 0; i <= m + 1; ++i) {
+        plot_script << grid(i) << " " << sol(i) << "\n";
+    }
+    plot_script.close();
+
+    // Execute GNUplot using the script
+    if (system("gnuplot -persist plot.gnu") != 0) {
+        std::cerr << "Error: Failed to execute GNUplot.\n";
+        return 1;
+    }
 
     cout << sol;
 
