@@ -32,14 +32,14 @@ program div_grad_laplacian_1D
   procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => f
 
   print *,new_line('')
-  print *,"2nd-order approximations"
-  print *,"------------------------"
+  print *,"            2nd-order approximations"
+  print *,"            ========================"
 
    call output(order=2)
 
   print *,new_line('')
-  print *,"4th-order approximations"
-  print *,"------------------------"
+  print *,"            4th-order approximations"
+  print *,"            ========================"
 
    call output(order=4)
 

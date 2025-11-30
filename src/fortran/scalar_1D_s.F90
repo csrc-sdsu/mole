@@ -13,7 +13,7 @@ contains
     call_julienne_assert(x_max .greaterThan. x_min)
     call_julienne_assert(cells .isAtLeast. 2*order)
 
-    associate(values => initializer(cell_centers_extended(x_min, x_max, cells)))
+    associate(values => initializer(cell_centers(x_min, x_max, cells)))
       scalar_1D%tensor_1D_t = tensor_1D_t(values, x_min, x_max, cells, order)
     end associate
     scalar_1D%gradient_operator_1D_ = gradient_operator_1D_t(k=order, dx=(x_max - x_min)/cells, cells=cells)
@@ -32,7 +32,7 @@ contains
     call_julienne_assert(x_max .greaterThan. x_min)
     call_julienne_assert(cells .isAtLeast. 2*order)
 
-    associate(values => initializer(cell_centers_extended(x_min, x_max, cells)))
+    associate(values => initializer(cell_centers(x_min, x_max, cells)))
       scalar_1D%tensor_1D_t = tensor_1D_t(values, x_min, x_max, cells, order)
     end associate
     scalar_1D%gradient_operator_1D_ = gradient_operator_1D_t(k=order, dx=(x_max - x_min)/cells, cells=cells)
