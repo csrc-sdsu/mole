@@ -20,7 +20,7 @@ contains
       else
         allocate(Ap, mold = A)
       end if
-      divergence_operator_1D%mimetic_matrix_1D_ = mimetic_matrix_1D_t(A, M(k, dx), Ap)
+      divergence_operator_1D%mimetic_matrix_1D_t = mimetic_matrix_1D_t(A, M(k, dx), Ap)
       divergence_operator_1D%k_  = k
       divergence_operator_1D%dx_ = dx
       divergence_operator_1D%m_  = cells

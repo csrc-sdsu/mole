@@ -33,12 +33,11 @@ module mimetic_matrix_1D_m
 
   end interface
 
-  type gradient_operator_1D_t
+  type, extends(mimetic_matrix_1D_t) :: gradient_operator_1D_t
     !! Encapsulate kth-order mimetic gradient operator on m_ cells of width dx
     private
     integer k_, m_
     double precision dx_
-    type(mimetic_matrix_1D_t) mimetic_matrix_1D_
   end type
 
   interface gradient_operator_1D_t
@@ -54,12 +53,11 @@ module mimetic_matrix_1D_m
 
   end interface
 
-  type divergence_operator_1D_t
+  type, extends(mimetic_matrix_1D_t) :: divergence_operator_1D_t
     !! Encapsulate kth-order mimetic divergence operator on m_ cells of width dx
     private
     integer k_, m_
     double precision dx_
-    type(mimetic_matrix_1D_t) mimetic_matrix_1D_
   end type
 
   interface divergence_operator_1D_t

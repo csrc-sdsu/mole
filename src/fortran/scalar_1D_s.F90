@@ -18,7 +18,7 @@ contains
 
   module procedure grad
     associate( &
-       gradient_values => matvec(self%gradient_operator_1D_%mimetic_matrix_1D_, self) &
+       gradient_values => matvec(self%gradient_operator_1D_%mimetic_matrix_1D_t, self) &
       ,divergence_operator_1D => divergence_operator_1D_t(self%order_, (self%x_max_-self%x_min_)/self%cells_, self%cells_) &
     )
       gradient_1D = vector_1D_t(tensor_1D_t(gradient_values, self%x_min_, self%x_max_, self%cells_, self%order_), divergence_operator_1D)

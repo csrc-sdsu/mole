@@ -17,7 +17,7 @@ contains
   end procedure
 
   module procedure div
-    associate(divergence_values => matvec(self%divergence_operator_1D_%mimetic_matrix_1D_, self))
+    associate(divergence_values => matvec(self%divergence_operator_1D_%mimetic_matrix_1D_t, self))
       associate( &
          tensor_1D => tensor_1D_t(divergence_values, self%x_min_, self%x_max_, self%cells_, self%order_) &
         ,gradient_operator_1D => gradient_operator_1D_t(k=self%order_, dx=(self%x_max_ - self%x_min_)/self%cells_, cells=self%cells_) &

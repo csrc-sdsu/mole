@@ -15,7 +15,7 @@ contains
     call_julienne_assert(cells .isAtLeast. 2*k)
 
     associate(A => corbino_castillo_A(k, dx), M => corbino_castillo_M(k, dx))
-      gradient_operator_1D%mimetic_matrix_1D_ = mimetic_matrix_1D_t(A, M, negate_and_flip(A))
+      gradient_operator_1D%mimetic_matrix_1D_t = mimetic_matrix_1D_t(A, M, negate_and_flip(A))
       gradient_operator_1D%k_  = k
       gradient_operator_1D%dx_ = dx
       gradient_operator_1D%m_  = cells
