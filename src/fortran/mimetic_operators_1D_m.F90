@@ -41,7 +41,7 @@ module mimetic_operators_1D_m
     double precision dx_
   contains
     generic :: operator(.x.) => gradient_matrix_multiply
-    procedure, non_overridable :: gradient_matrix_multiply
+    procedure, non_overridable, private :: gradient_matrix_multiply
   end type
 
   interface gradient_operator_1D_t

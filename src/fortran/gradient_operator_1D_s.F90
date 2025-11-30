@@ -72,21 +72,32 @@ contains
 
     double precision, allocatable :: product_inner(:)
 
-    associate(upper => size(self%upper_,1), lower => size(self%lower_,1))
-      associate(inner_rows => size(vec) - (upper + lower + 1))
-
+    associate( &
+       upper_rows => size(self%upper_,1) &
+      ,lower_rows => size(self%lower_,1) &
+    )
+      associate( &
+         inner_rows    => size(vec) - (upper_rows + lower_rows + 1) &
+        ,inner_columns => size(self%inner_) &
+      )
         allocate(product_inner(inner_rows))
 
-        do concurrent(integer :: row = 1 : inner_rows) default(none) shared(product_inner, self, vec)
-          product_inner(row) = dot_product(self%inner_, vec(row + 1 : row + size(self%inner_)))
+        do concurrent(integer :: row = 1 : inner_rows) default(none) shared(product_inner, self, vec, inner_columns)
+          product_inner(row) = dot_product(self%inner_, vec(row + 1 : row + inner_columns))
         end do
 
-        matvec_product = [ &
-           matmul(self%upper_, vec(1 : size(self%upper_,2))) &
-          ,product_inner &
-          ,matmul(self%lower_, vec(size(vec) - size(self%lower_,2) + 1 : )) &
-        ]
       end associate
+    end associate
+
+    associate( &
+       upper_columns => size(self%upper_,2) &
+      ,lower_columns => size(self%lower_,2) &
+    )
+      matvec_product = [ &
+         matmul(self%upper_, vec(1 : upper_columns)) &
+        ,product_inner &
+        ,matmul(self%lower_, vec(size(vec) - lower_columns + 1 : )) &
+      ]
     end associate
   end procedure
 
@@ -97,21 +108,32 @@ contains
     integer row
     double precision, allocatable :: product_inner(:)
 
-    associate(upper => size(self%upper_,1), lower => size(self%lower_,1))
-      associate(inner_rows => size(vec) - (upper + lower + 1))
-
+    associate( &
+       upper_rows => size(self%upper_,1) &
+      ,lower_rows => size(self%lower_,1) &
+    )
+      associate( &
+         inner_rows    => size(vec) - (upper_rows + lower_rows + 1) &
+        ,inner_columns => size(self%inner_) &
+      )
         allocate(product_inner(inner_rows))
 
-        do concurrent(integer :: row = 1 : inner_rows)
-          product_inner(row) = dot_product(self%inner_, vec(row + 1 : row + size(self%inner_)))
+        do concurrent(row = 1 : inner_rows)
+          product_inner(row) = dot_product(self%inner_, vec(row + 1 : row + inner_columns))
         end do
 
-        matvec_product = [ &
-           matmul(self%upper_, vec(1 : size(self%upper_,2))) &
-          ,product_inner &
-          ,matmul(self%lower_, vec(size(vec) - size(self%lower_,2) + 1 : )) &
-        ]
       end associate
+    end associate
+
+    associate( &
+       upper_columns => size(self%upper_,2) &
+      ,lower_columns => size(self%lower_,2) &
+    )
+      matvec_product = [ &
+         matmul(self%upper_, vec(1 : upper_columns)) &
+        ,product_inner &
+        ,matmul(self%lower_, vec(size(vec) - lower_columns + 1 : )) &
+      ]
     end associate
   end procedure
 
