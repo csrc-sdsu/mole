@@ -1,4 +1,4 @@
-submodule(tensor_1D_m) tensor_1D_s
+submodule(tensors_1D_m) tensor_1D_s
   implicit none
 contains
 

@@ -1,10 +1,9 @@
 #include "mole-language-support.F90"
 
-module scalar_vector_1D_m 
-  !! Define 1D scalar and vector abstractions and associated mimetic gradient,
+module tensors_1D_m
+  !! Define public 1D scalar and vector abstractions and associated mimetic gradient,
   !! divergence, and Laplacian operators.
   use julienne_m, only : file_t
-  use tensor_1D_m, only : tensor_1D_t
   use mimetic_operators_1D_m, only : divergence_operator_1D_t, gradient_operator_1D_t
     
   implicit none
@@ -30,6 +29,33 @@ module scalar_vector_1D_m
       implicit none
       double precision, intent(in) :: x(:)
       double precision, allocatable :: v(:)
+    end function
+
+  end interface
+
+  type tensor_1D_t
+    !! Encapsulate the components that are common to all 1D tensors.
+    !! Child types define the operations supported by each child, including
+    !! gradient (.grad.) for scalars and divergence (.div.) for vectors.
+    private
+    double precision x_min_ !! domain lower boundary
+    double precision x_max_ !! domain upper boundary
+    integer cells_          !! number of grid cells spanning the domain
+    integer order_          !! order of accuracy of mimetic discretization
+    double precision, allocatable :: values_(:) !! tensor components at spatial locations
+  end type
+
+  interface tensor_1D_t
+
+    pure module function construct_1D_tensor_from_components(values, x_min, x_max, cells, order) result(tensor_1D)
+      !! User-defined constructor: result is a 1D tensor defined by assigning the dummy arguments to corresponding components
+      implicit none
+      double precision, intent(in) :: values(:) !! tensor components at grid locations define by child
+      double precision, intent(in) :: x_min     !! grid location minimum
+      double precision, intent(in) :: x_max     !! grid location maximum
+      integer,          intent(in) :: cells     !! number of grid cells spanning the domain
+      integer,          intent(in) :: order     !! order of accuracy
+      type(tensor_1D_t) tensor_1D
     end function
 
   end interface
@@ -160,4 +186,4 @@ module scalar_vector_1D_m
 
   end interface
 
-end module scalar_vector_1D_m 
+end module tensors_1D_m
