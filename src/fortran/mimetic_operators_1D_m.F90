@@ -39,6 +39,9 @@ module mimetic_operators_1D_m
     private
     integer k_, m_
     double precision dx_
+  contains
+    generic :: operator(.x.) => gradient_matrix_multiply
+    procedure, non_overridable :: gradient_matrix_multiply
   end type
 
   interface gradient_operator_1D_t
@@ -59,6 +62,9 @@ module mimetic_operators_1D_m
     private
     integer k_, m_
     double precision dx_
+  contains
+    generic :: operator(.x.) => divergence_matrix_multiply
+    procedure, non_overridable, private :: divergence_matrix_multiply
   end type
 
   interface divergence_operator_1D_t
@@ -75,6 +81,22 @@ module mimetic_operators_1D_m
   end interface
 
   interface
+
+    pure module function gradient_matrix_multiply(self, vec) result(matvec_product)
+      !! Result is mimetic-gradient matrix-vector product
+      implicit none
+      class(gradient_operator_1D_t), intent(in) :: self
+      double precision, intent(in) :: vec(:)
+      double precision, allocatable :: matvec_product(:)
+    end function
+
+    pure module function divergence_matrix_multiply(self, vec) result(matvec_product)
+      !! Result is mimetic-gradient matrix-vector product
+      implicit none
+      class(divergence_operator_1D_t), intent(in) :: self
+      double precision, intent(in) :: vec(:)
+      double precision, allocatable :: matvec_product(:)
+    end function
 
      pure module function to_file_t(self) result(file)
        implicit none

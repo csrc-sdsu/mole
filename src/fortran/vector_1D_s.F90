@@ -18,7 +18,7 @@ contains
 
   module procedure div
     divergence_1D = scalar_1D_t( &
-       tensor_1D_t(self%apply_divergence_1D(), self%x_min_, self%x_max_, self%cells_, self%order_) &
+       tensor_1D_t(self%divergence_operator_1D_ .x. self%values_, self%x_min_, self%x_max_, self%cells_, self%order_) &
       ,gradient_operator_1D_t(k=self%order_, dx=(self%x_max_ - self%x_min_)/self%cells_, cells=self%cells_) &
     )
   end procedure
@@ -41,56 +41,5 @@ contains
   module procedure vector_1D_grid
     cell_faces  = faces(self%x_min_, self%x_max_, self%cells_)
   end procedure
-
-#if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
-
-  module procedure apply_divergence_1D
-
-    double precision, allocatable :: product_inner(:)
-
-    associate(upper_rows => size(self%divergence_operator_1D_%upper_,1), lower_rows => size(self%divergence_operator_1D_%lower_,1))
-      associate(inner_rows => size(self%values_) - (upper_rows + lower_rows + 1))
-
-        allocate(product_inner(inner_rows))
-
-        do concurrent(integer :: row = 1 : inner_rows) default(none) shared(product_inner, self%divergence_operator_1D_, self)
-          product_inner(row) = dot_product(self%divergence_operator_1D_%inner_, self%values_(row : row + size(self%divergence_operator_1D_%inner_) - 1))
-        end do
-
-        matvec_product = [ &
-           matmul(self%divergence_operator_1D_%upper_, self%values_(1 : size(self%divergence_operator_1D_%upper_,2))) &
-          ,product_inner &
-          ,matmul(self%divergence_operator_1D_%lower_, self%values_(size(self%values_) - size(self%divergence_operator_1D_%lower_,2) + 1 : )) &
-        ]
-      end associate
-    end associate
-  end procedure
-
-#else
-
-  module procedure apply_divergence_1D
-
-    integer row
-    double precision, allocatable :: product_inner(:)
-
-    associate(upper_rows => size(self%divergence_operator_1D_%upper_,1), lower_rows => size(self%divergence_operator_1D_%lower_,1))
-      associate(inner_rows => size(self%values_) - (upper_rows + lower_rows + 1))
-
-        allocate(product_inner(inner_rows))
-
-        do concurrent(integer :: row = 1 : inner_rows)
-          product_inner(row) = dot_product(self%divergence_operator_1D_%inner_, self%values_(row : row + size(self%divergence_operator_1D_%inner_) - 1))
-        end do
-
-        matvec_product = [ &
-           matmul(self%divergence_operator_1D_%upper_, self%values_(1 : size(self%divergence_operator_1D_%upper_,2))) &
-          ,product_inner &
-          ,matmul(self%divergence_operator_1D_%lower_, self%values_(size(self%values_) - size(self%divergence_operator_1D_%lower_,2) + 1 : )) &
-        ]
-      end associate
-    end associate
-  end procedure
-
-#endif
 
 end submodule vector_1D_s

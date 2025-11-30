@@ -18,7 +18,7 @@ contains
 
   module procedure grad
     gradient_1D = vector_1D_t( &
-       tensor_1D_t(self%apply_gradient_1D(), self%x_min_, self%x_max_, self%cells_, self%order_) &
+       tensor_1D_t(self%gradient_operator_1D_ .x. self%values_, self%x_min_, self%x_max_, self%cells_, self%order_) &
       ,divergence_operator_1D_t(self%order_, (self%x_max_-self%x_min_)/self%cells_, self%cells_) &
     )
   end procedure
@@ -56,56 +56,5 @@ contains
   module procedure scalar_1D_grid
     x = cell_centers(self%x_min_, self%x_max_, self%cells_)
   end procedure
-
-#if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
-
-  module procedure apply_gradient_1D
-
-    double precision, allocatable :: product_inner(:)
-
-    associate(upper => size(self%gradient_operator_1D_%upper_,1), lower => size(self%gradient_operator_1D_%lower_,1))
-      associate(inner_rows => size(self%values_) - (upper + lower + 1))
-
-        allocate(product_inner(inner_rows))
-
-        do concurrent(integer :: row = 1 : inner_rows) default(none) shared(product_inner, self%gradient_operator_1D_, self)
-          product_inner(row) = dot_product(self%gradient_operator_1D_%inner_, self%values_(row + 1 : row + size(self%gradient_operator_1D_%inner_)))
-        end do
-
-        matvec_product = [ &
-           matmul(self%gradient_operator_1D_%upper_, self%values_(1 : size(self%gradient_operator_1D_%upper_,2))) &
-          ,product_inner &
-          ,matmul(self%gradient_operator_1D_%lower_, self%values_(size(self%values_) - size(self%gradient_operator_1D_%lower_,2) + 1 : )) &
-        ]
-      end associate
-    end associate
-  end procedure
-
-#else
-
-  module procedure apply_gradient_1D
-
-    integer row
-    double precision, allocatable :: product_inner(:)
-
-    associate(upper => size(self%gradient_operator_1D_%upper_,1), lower => size(self%gradient_operator_1D_%lower_,1))
-      associate(inner_rows => size(self%values_) - (upper + lower + 1))
-
-        allocate(product_inner(inner_rows))
-
-        do concurrent(row = 1 : inner_rows)
-          product_inner(row) = dot_product(self%gradient_operator_1D_%inner_, self%values_(row + 1 : row + size(self%gradient_operator_1D_%inner_)))
-        end do
-
-        matvec_product = [ &
-           matmul(self%gradient_operator_1D_%upper_, self%values_(1 : size(self%gradient_operator_1D_%upper_,2))) &
-          ,product_inner &
-          ,matmul(self%gradient_operator_1D_%lower_, self%values_(size(self%values_) - size(self%gradient_operator_1D_%lower_,2) + 1 : )) &
-        ]
-      end associate
-    end associate
-  end procedure
-
-#endif
 
 end submodule scalar_1D_s

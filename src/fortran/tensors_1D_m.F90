@@ -73,7 +73,6 @@ module tensors_1D_m
     procedure, non_overridable, private :: laplacian
     procedure, non_overridable, private :: scalar_1D_values
     procedure, non_overridable, private :: scalar_1D_grid
-    procedure, non_overridable, private :: apply_gradient_1D
   end type
 
   interface scalar_1D_t
@@ -102,7 +101,6 @@ module tensors_1D_m
     procedure, non_overridable, private :: div
     procedure, non_overridable, private :: vector_1D_grid
     procedure, non_overridable, private :: vector_1D_values
-    procedure, non_overridable, private :: apply_divergence_1D
   end type
 
   interface vector_1D_t
@@ -168,20 +166,6 @@ module tensors_1D_m
       implicit none
       class(vector_1D_t), intent(in) :: self
       type(scalar_1D_t) divergence_1D !! discrete divergence
-    end function
-
-    pure module function apply_gradient_1D(self) result(matvec_product)
-      !! Apply a mimetic gradient operator to a 1D scalar
-      implicit none
-      class(scalar_1D_t), intent(in) :: self
-      double precision, allocatable :: matvec_product(:)
-    end function
-
-    pure module function apply_divergence_1D(self) result(matvec_product)
-      !! Apply a mimetic divergence operator to a 1D vector
-      implicit none
-      class(vector_1D_t), intent(in) :: self
-      double precision, allocatable :: matvec_product(:)
     end function
 
   end interface
