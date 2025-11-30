@@ -4,7 +4,7 @@ module scalar_vector_1D_m
   !! Define 1D scalar and vector abstractions and associated mimetic gradient,
   !! divergence, and Laplacian operators.
   use julienne_m, only : file_t
-  use tensors_1D_m, only : tensor_1D_t
+  use tensor_1D_m, only : tensor_1D_t
   use mimetic_matrix_1D_m, only : mimetic_matrix_1D_t, divergence_operator_1D_t, gradient_operator_1D_t
     
   implicit none

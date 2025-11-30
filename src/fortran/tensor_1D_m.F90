@@ -1,6 +1,6 @@
 #include "mole-language-support.F90"
 
-module tensors_1D_m
+module tensor_1D_m
   !! Define 1D scalar and vector abstractions and associated mimetic gradient,
   !! divergence, and Laplacian operators.
   use julienne_m, only : file_t
@@ -10,6 +10,9 @@ module tensors_1D_m
   public :: tensor_1D_t
 
   type tensor_1D_t
+    !! Encapsulate the components that are common to all 1D tensors.
+    !! Child types define the operations supported by each child, including
+    !! gradient (.grad.) for scalars and divergence (.div.) for vectors.
     private
     double precision x_min_ !! domain lower boundary
     double precision x_max_ !! domain upper boundary
@@ -21,7 +24,7 @@ module tensors_1D_m
   interface tensor_1D_t
 
     pure module function construct_1D_tensor_from_components(values, x_min, x_max, cells, order) result(tensor_1D)
-      !! Result is a collection of cell-centered-extended values with a corresponding mimetic gradient operator
+      !! User-defined constructor: result is a 1D tensor defined by assigning the dummy arguments to corresponding components
       implicit none
       double precision, intent(in) :: values(:) !! tensor components at grid locations define by child
       double precision, intent(in) :: x_min     !! grid location minimum
@@ -33,4 +36,4 @@ module tensors_1D_m
 
   end interface
 
-end module tensors_1D_m
+end module tensor_1D_m
