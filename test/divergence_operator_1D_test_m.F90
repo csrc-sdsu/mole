@@ -16,6 +16,9 @@ module divergence_operator_1D_test_m
     ,test_result_t &
     ,usher
   use mole_m, only : vector_1D_t, vector_1D_initializer_i, scalar_1D_t, scalar_1D_initializer_i
+#ifdef __GFORTRAN__
+  use mole_m, only : divergence_1D_t
+#endif
   implicit none
 
   type, extends(test_t) :: divergence_operator_1D_test_t
@@ -77,7 +80,8 @@ contains
     type(test_diagnosis_t) test_diagnosis
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => parabola
     double precision, parameter :: expected_divergence = 1D0
-    type(scalar_1D_t) div_grad_scalar
+    type(divergence_1D_t) div_grad_scalar
+
     div_grad_scalar = .div. (.grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=5D0))
     test_diagnosis = .all. (div_grad_scalar%values() .approximates. expected_divergence .within. tight_tolerance) &
                    // " (2nd-order .div. (.grad. (x**2)/2))"
@@ -104,7 +108,8 @@ contains
     type(test_diagnosis_t) test_diagnosis
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => parabola
     double precision, parameter :: expected_divergence = 1D0
-    type(scalar_1D_t) div_grad_scalar
+    type(divergence_1D_t) div_grad_scalar
+
     div_grad_scalar = .div. (.grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=9, x_min=0D0, x_max=9D0))
       test_diagnosis = .all. (div_grad_scalar%values() .approximates. expected_divergence .within. tight_tolerance) &
                      // " (4th-order .div. (.grad. (x**2)/2))"
@@ -162,7 +167,7 @@ contains
     procedure(vector_1D_initializer_i), pointer :: vector_1D_initializer => sinusoid
     double precision, parameter :: pi = 3.141592653589793D0
     integer, parameter :: order_desired = 2, coarse_cells=100, fine_cells=200
-    type(scalar_1D_t) div_coarse, div_fine
+    type(divergence_1D_t) div_coarse, div_fine
 
     div_coarse = .div. vector_1D_t(vector_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi)
     div_fine   = .div. vector_1D_t(vector_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi)
@@ -240,7 +245,7 @@ contains
     procedure(vector_1D_initializer_i), pointer :: vector_1D_initializer => sinusoid
     double precision, parameter :: pi = 3.141592653589793D0
     integer, parameter :: order_desired = 4, coarse_cells=300, fine_cells=1500
-    type(scalar_1D_t) div_coarse, div_fine
+    type(divergence_1D_t) div_coarse, div_fine
 
     div_coarse = .div. vector_1D_t(vector_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi)
     div_fine   = .div. vector_1D_t(vector_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi)

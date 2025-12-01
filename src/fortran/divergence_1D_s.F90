@@ -3,6 +3,21 @@ submodule(tensors_1D_m) divergence_1D_s
 
 contains
 
+#ifdef __GFORTRAN__
+
+  pure function cell_center_locations(x_min, x_max, cells) result(x)
+    double precision, intent(in) :: x_min, x_max
+    integer, intent(in) :: cells
+    double precision, allocatable:: x(:)
+    integer cell
+
+    associate(dx => (x_max - x_min)/cells)
+      x = x_min + dx/2. + [((cell-1)*dx, cell = 1, cells)]
+    end associate
+  end function
+
+#endif
+
   module procedure divergence_1D_values
     cell_centered_values = self%values_
   end procedure

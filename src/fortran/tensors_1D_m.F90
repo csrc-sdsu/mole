@@ -199,6 +199,8 @@ module tensors_1D_m
 
   end interface
 
+#ifndef __GFORTRAN__
+
 contains
 
   pure function cell_center_locations(x_min, x_max, cells) result(x)
@@ -211,5 +213,7 @@ contains
       x = x_min + dx/2. + [((cell-1)*dx, cell = 1, cells)]
     end associate
   end function
+
+#endif
 
 end module tensors_1D_m
