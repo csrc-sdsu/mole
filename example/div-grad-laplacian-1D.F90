@@ -25,6 +25,9 @@ program div_grad_laplacian_1D
   use functions_m
   use julienne_m, only :  file_t, string_t, operator(.separatedBy.)
   use mole_m, only : scalar_1D_t, scalar_1D_initializer_i
+#ifdef __GFORTRAN__
+  use mole_m, only : vector_1D_t, laplacian_1D_t
+#endif
   implicit none
 
   procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => f
@@ -49,6 +52,7 @@ contains
     use iso_fortran_env, only : output_unit
     integer, intent(in) :: order
   
+#ifndef __GFORTRAN__
     associate(   s           => scalar_1D_t(scalar_1D_initializer, order=order, cells=20, x_min=0D0, x_max=40D0))
       associate( grad_s      => .grad. s      &
                 ,laplacian_s => .laplacian. s &
@@ -70,6 +74,31 @@ contains
         end associate
       end associate
     end associate
+#else
+    block
+      type(scalar_1D_t) s
+      type(vector_1D_t) grad_s
+      type(laplacian_1D_t) laplacian_s
+      type(file_t) plot
+
+      s           = scalar_1D_t(scalar_1D_initializer, order=order, cells=20, x_min=0D0, x_max=40D0)
+      grad_s      = .grad. s
+      laplacian_s = .laplacian. s
+       
+      associate( &
+         s_grid           => s%grid() &
+        ,grad_s_grid      => grad_s%grid() &
+        ,laplacian_s_grid => laplacian_s%grid() &
+      )
+        plot = gnuplot(string_t([character(len=15)::"x", "f(x)"         , "f(x)"         ]), s_grid, f(s_grid), s%values())
+        call plot%write_lines()
+        plot = gnuplot(string_t([character(len=15)::"x", ".grad. f"     , ".grad. f"     ]), grad_s_grid, df_dx(grad_s_grid), grad_s%values())
+        call plot%write_lines()
+        plot = gnuplot(string_t([character(len=15)::"x", ".laplacian. f", ".laplacian. f"]), laplacian_s_grid, d2f_dx2(laplacian_s_grid), laplacian_s%values())
+        call plot%write_lines()
+     end associate
+    end block
+#endif
 
   end subroutine
 
