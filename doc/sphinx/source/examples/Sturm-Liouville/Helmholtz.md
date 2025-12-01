@@ -47,9 +47,9 @@ Boundary conditions are applied using `RobinBC` or `MixedBC`.
 These examples are implemented in:
 
 - [MATLAB/OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/sturmLiouvilleHelmholtzDirichletDirichlet.m)
-- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cppe/sturmLiouvilleHelmholtzDirichletDirichlet.cpp)
+- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/sturmLiouvilleHelmholtzDirichletDirichlet.cpp)
 - [MATLAB/OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/sturmLiouvilleHelmholtzDirichletRobin.m)
-- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cppe/sturmLiouvilleHelmholtzDirichletRobin.cpp)
+- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/sturmLiouvilleHelmholtzDirichletRobin.cpp)
 
 ## Results
 
