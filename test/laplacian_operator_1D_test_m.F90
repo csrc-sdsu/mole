@@ -64,13 +64,11 @@ contains
     type(test_diagnosis_t) test_diagnosis
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => parabola
     double precision, parameter :: expected_laplacian = 1D0
-    type(scalar_1D_t) laplacian_scalar
 
-    !associate(laplacian_scalar => .laplacian. scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=5D0))
-    laplacian_scalar = .laplacian. scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=5D0)
+    associate(laplacian_scalar => .laplacian. scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=5D0))
       test_diagnosis = .all. (laplacian_scalar%values() .approximates. expected_laplacian .within. tight_tolerance) &
-                     // " (2nd-order .laplacian. [(x**2)/2]"
-    !end associate
+        // " (2nd-order .laplacian. [(x**2)/2]"
+    end associate
 
   end function
 
@@ -83,17 +81,15 @@ contains
   function check_4th_order_laplacian_of_quartic() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => quartic
-    type(scalar_1D_t) laplacian_quartic 
 
-    !associate(laplacian_quartic => .laplacian. scalar_1D_t(scalar_1D_initializer, order=4, cells=20, x_min=0D0, x_max=40D0))
-      laplacian_quartic = .laplacian. scalar_1D_t(scalar_1D_initializer, order=4, cells=20, x_min=0D0, x_max=40D0)
+    associate(laplacian_quartic => .laplacian. scalar_1D_t(scalar_1D_initializer, order=4, cells=20, x_min=0D0, x_max=40D0))
       associate(x => laplacian_quartic%grid())
         associate(expected_laplacian => x**2, actual_laplacian => laplacian_quartic%values())
           test_diagnosis = .all. (actual_laplacian .approximates. expected_laplacian .within. loose_tolerance) &
             // " (4th-order .laplacian. [(x**4)/24]"
         end associate
       end associate
-    !end associate
+    end associate
 
   end function
 
@@ -108,14 +104,11 @@ contains
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => sinusoid
     double precision, parameter :: pi = 3.141592653589793D0
     integer, parameter :: order_desired = 2, coarse_cells=1000, fine_cells=1800
-    type(scalar_1D_t) laplacian_coarse, laplacian_fine  
 
-    !associate( &
-    !   laplacian_coarse => .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi) &
-    !  ,laplacian_fine  => .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi) &
-    !)
-       laplacian_coarse = .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi)
-       laplacian_fine  = .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi)
+    associate( &
+       laplacian_coarse => .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi) &
+      ,laplacian_fine  => .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi) &
+    )
       associate( &
          x_coarse => laplacian_coarse%grid() &
         ,x_fine   => laplacian_fine%grid())
@@ -126,7 +119,7 @@ contains
           ,actual_fine   => laplacian_fine%values() &
         )
           test_diagnosis = &
-             .all. (actual_coarse .approximates. expected_coarse .within. crude_tolerance) &
+            .all. (actual_coarse .approximates. expected_coarse .within. crude_tolerance) &
             // " (coarse-grid 2nd-order .laplacian. [sin(x) + cos(x)])"
           test_diagnosis = test_diagnosis .also. &
             (.all. (actual_fine .approximates. expected_fine .within. crude_tolerance)) &
@@ -142,7 +135,7 @@ contains
           end associate
         end associate
       end associate
-    !end associate
+    end associate
   end function
 
   function check_4th_order_laplacian_convergence() result(test_diagnosis)
@@ -150,14 +143,11 @@ contains
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => sinusoid
     double precision, parameter :: pi = 3.141592653589793D0
     integer, parameter :: order_desired = 4, coarse_cells=300, fine_cells=1800
-    type(scalar_1D_t) laplacian_coarse, laplacian_fine   
 
-    !associate( &
-    !   laplacian_coarse => .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi) &
-    !  ,laplacian_fine   => .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi) &
-    !)
-      laplacian_coarse = .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi)
-      laplacian_fine   = .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi)
+    associate( &
+       laplacian_coarse => .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi) &
+      ,laplacian_fine   => .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi) &
+    )
       associate( &
          x_coarse => laplacian_coarse%grid() &
         ,x_fine   => laplacian_fine%grid()  &
@@ -185,7 +175,7 @@ contains
           end associate
         end associate
       end associate
-    !end associate
+    end associate
   end function
 
 end module

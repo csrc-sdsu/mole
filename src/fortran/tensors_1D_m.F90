@@ -12,6 +12,7 @@ module tensors_1D_m
 
   public :: scalar_1D_t
   public :: vector_1D_t
+  public :: laplacian_1D_t
   public :: divergence_1D_t
   public :: scalar_1D_initializer_i
   public :: vector_1D_initializer_i
