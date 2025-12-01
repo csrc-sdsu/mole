@@ -59,42 +59,35 @@ contains
     y = [(5D0, i=1,size(x))]
   end function
 
-#ifndef __GFORTRAN__
 
   function check_grad_const() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
     double precision, parameter :: grad_expected = 0.
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => const
-
-    associate(grad => .grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=4D0))
-      test_diagnosis = .all. (grad%values() .approximates. grad_expected .within. loose_tolerance) &
-        // " (2nd-order .grad.(5))"
-    end associate
-
-    associate(grad => .grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=9, x_min=0D0, x_max=8D0))
-      test_diagnosis = test_diagnosis .also. (.all. (grad%values() .approximates. grad_expected .within. loose_tolerance)) &
-        // " (4th-order .grad.(5))"
-    end associate
-  end function
-
-#else
-
-  function check_grad_const() result(test_diagnosis)
-    type(test_diagnosis_t) test_diagnosis
-    double precision, parameter :: grad_expected = 0.
-    procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => const
+#ifdef __GFORTRAN__
     type(vector_1D_t) grad
 
     grad = .grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=4D0)
-    test_diagnosis = .all. (grad%values() .approximates. grad_expected .within. loose_tolerance) &
-      // " (2nd-order .grad.(5))"
-
-    grad = .grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=9, x_min=0D0, x_max=8D0)
-    test_diagnosis = test_diagnosis .also. (.all. (grad%values() .approximates. grad_expected .within. loose_tolerance)) &
-      // " (4th-order .grad.(5))"
-  end function
-
+#else
+    associate(grad => .grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=4D0))
 #endif
+      test_diagnosis = .all. (grad%values() .approximates. grad_expected .within. loose_tolerance) &
+        // " (2nd-order .grad.(5))"
+#ifndef __GFORTRAN__
+    end associate
+#endif
+
+#ifdef __GFORTRAN__
+    grad = .grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=9, x_min=0D0, x_max=8D0)
+#else
+    associate(grad => .grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=9, x_min=0D0, x_max=8D0))
+#endif
+      test_diagnosis = test_diagnosis .also. (.all. (grad%values() .approximates. grad_expected .within. loose_tolerance)) &
+        // " (4th-order .grad.(5))"
+#ifndef __GFORTRAN__
+    end associate
+#endif
+  end function
 
   pure function line(x) result(y)
     double precision, intent(in) :: x(:)
@@ -102,44 +95,36 @@ contains
     y = 14*x + 3
   end function
 
-
-#ifndef __GFORTRAN__
-
   function check_grad_line() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
     double precision, parameter :: grad_expected = 14D0
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => line
-
-    associate(grad => .grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=4D0))
-      test_diagnosis = .all. (grad%values() .approximates. grad_expected .within. loose_tolerance) &
-        // " (2nd-order .grad.(14*x + 3))"
-    end associate
-
-    associate(grad => .grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=9, x_min=0D0, x_max=8D0))
-      test_diagnosis = test_diagnosis .also. (.all. (grad%values() .approximates. grad_expected .within. loose_tolerance)) &
-        // " (4th-order .grad.(14*x + 3))"
-    end associate
-
-  end function
-
-#else
-
-  function check_grad_line() result(test_diagnosis)
-    type(test_diagnosis_t) test_diagnosis
-    double precision, parameter :: grad_expected = 14D0
-    procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => line
+#ifdef __GFORTRAN__
     type(vector_1D_t) grad
 
     grad = .grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=4D0)
-    test_diagnosis = .all. (grad%values() .approximates. grad_expected .within. loose_tolerance) &
-      // " (2nd-order .grad.(14*x + 3))"
-
-    grad = .grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=9, x_min=0D0, x_max=8D0)
-    test_diagnosis = test_diagnosis .also. (.all. (grad%values() .approximates. grad_expected .within. loose_tolerance)) &
-      // " (4th-order .grad.(14*x + 3))"
-  end function
-
+#else
+    associate(grad => .grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=4D0))
 #endif
+
+      test_diagnosis = .all. (grad%values() .approximates. grad_expected .within. loose_tolerance) &
+        // " (2nd-order .grad.(14*x + 3))"
+#ifndef __GFORTRAN__
+    end associate
+#endif
+
+#ifdef __GFORTRAN__
+    grad = .grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=9, x_min=0D0, x_max=8D0)
+#else
+    associate(grad => .grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=9, x_min=0D0, x_max=8D0))
+#endif
+      test_diagnosis = test_diagnosis .also. (.all. (grad%values() .approximates. grad_expected .within. loose_tolerance)) &
+        // " (4th-order .grad.(14*x + 3))"
+#ifndef __GFORTRAN__
+    end associate
+#endif
+
+  end function
 
   pure function parabola(x) result(y)
     double precision, intent(in) :: x(:)
@@ -147,56 +132,42 @@ contains
     y = 7*x**2 + 3*x + 5
   end function
 
-#ifndef __GFORTRAN__
 
   function check_grad_parabola() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => parabola
+#ifdef __GFORTRAN__
+    type(vector_1D_t) grad
 
+    grad =  .grad. scalar_1D_t(scalar_1D_initializer , order=2, cells=5, x_min=0D0, x_max=4D0)
+#else
     associate(grad => .grad. scalar_1D_t(scalar_1D_initializer , order=2, cells=5, x_min=0D0, x_max=4D0))
+#endif
       associate(x => grad%grid())
         associate(grad_expected => 14*x + 3)
           test_diagnosis = .all. (grad%values() .approximates. grad_expected .within. loose_tolerance) &
             // " (2nd-order .grad.(7*x**2 + 3*x + 5))"
         end associate
       end associate
+#ifndef __GFORTRAN__
     end associate
+#endif
 
+#ifdef __GFORTRAN__
+    grad = .grad. scalar_1D_t(scalar_1D_initializer , order=4, cells=9, x_min=0D0, x_max=8D0)
+#else
     associate(grad => .grad. scalar_1D_t(scalar_1D_initializer , order=4, cells=9, x_min=0D0, x_max=8D0))
+#endif
       associate(x => grad%grid())
         associate(grad_expected => 14*x + 3)
           test_diagnosis = test_diagnosis .also. (.all. (grad%values() .approximates. grad_expected .within. loose_tolerance)) &
             // " (4th-order .grad.(7*x**2 + 3*x + 5))"
         end associate
       end associate
+#ifndef __GFORTRAN__
     end associate
-  end function
-
-#else
-
-  function check_grad_parabola() result(test_diagnosis)
-    type(test_diagnosis_t) test_diagnosis
-    procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => parabola
-    type(vector_1D_t) grad
-
-    grad = .grad. scalar_1D_t(scalar_1D_initializer , order=2, cells=5, x_min=0D0, x_max=4D0)
-    associate(x => grad%grid())
-      associate(grad_expected => 14*x + 3)
-        test_diagnosis = .all. (grad%values() .approximates. grad_expected .within. loose_tolerance) &
-          // " (2nd-order .grad.(7*x**2 + 3*x + 5))"
-      end associate
-    end associate
-
-    grad = .grad. scalar_1D_t(scalar_1D_initializer , order=4, cells=9, x_min=0D0, x_max=8D0)
-    associate(x => grad%grid())
-      associate(grad_expected => 14*x + 3)
-        test_diagnosis = test_diagnosis .also. (.all. (grad%values() .approximates. grad_expected .within. loose_tolerance)) &
-          // " (4th-order .grad.(7*x**2 + 3*x + 5))"
-      end associate
-    end associate
-  end function
-
 #endif
+  end function
 
   pure function sinusoid(x) result(y)
     double precision, intent(in) :: x(:)
@@ -204,18 +175,23 @@ contains
     y = sin(x) + cos(x)
   end function
 
-#ifndef __GFORTRAN__
 
   function check_2nd_order_grad_convergence() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => sinusoid
     double precision, parameter :: pi = 3.141592653589793D0
     integer, parameter :: order_desired = 2, coarse_cells=500, fine_cells=1500
+#ifdef __GFORTRAN__
+    type(vector_1D_t) grad_coarse, grad_fine
 
+    grad_coarse = .grad. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi)
+    grad_fine   = .grad. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi)
+#else
     associate( &
        grad_coarse => .grad. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi) &
       ,grad_fine   => .grad. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi) &
     )
+#endif
       associate( &
          x_coarse => grad_coarse%grid() &
         ,x_fine   => grad_fine%grid() &
@@ -241,61 +217,27 @@ contains
           end associate
         end associate
       end associate
-    end associate
-  end function
-
-#else
-
-  function check_2nd_order_grad_convergence() result(test_diagnosis)
-    type(test_diagnosis_t) test_diagnosis
-    procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => sinusoid
-    double precision, parameter :: pi = 3.141592653589793D0
-    integer, parameter :: order_desired = 2, coarse_cells=500, fine_cells=1500
-    type(vector_1D_t) grad_coarse, grad_fine
-
-    grad_coarse = .grad. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi)
-    grad_fine   = .grad. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi)
-    associate( &
-       x_coarse => grad_coarse%grid() &
-      ,x_fine   => grad_fine%grid() &
-    )
-      associate( &
-        grad_coarse_expected => cos(x_coarse) - sin(x_coarse) &
-       ,grad_fine_expected   => cos(x_fine) - sin(x_fine) &
-       ,grad_coarse_values   => grad_coarse%values() &
-       ,grad_fine_values     => grad_fine%values() &
-      )
-        test_diagnosis = .all. (grad_coarse_values .approximates. grad_coarse_expected .within. rough_tolerance) &
-          // " (coarse-grid 2nd-order .grad. [sin(x) + cos(x)])"
-        test_diagnosis = test_diagnosis .also. (.all. (grad_fine_values .approximates. grad_fine_expected .within. rough_tolerance)) &
-          // " (fine-grid 4th-order .grad. [sin(x) + cos(x)])"
-        associate( &
-           error_coarse_max => maxval(abs(grad_coarse_values - grad_coarse_expected)) &
-          ,error_fine_max   => maxval(abs(grad_fine_values - grad_fine_expected)) &
-        )
-          associate(order_actual => log(error_coarse_max/error_fine_max)/log(dble(fine_cells)/coarse_cells))
-            test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. rough_tolerance)  &
-              // " (2nd-order .grad. [sin(x) + cos(x)] order of accuracy)"
-          end associate
-        end associate
-      end associate
-    end associate
-  end function
-
-#endif
-
 #ifndef __GFORTRAN__
+    end associate
+#endif
+  end function
 
   function check_4th_order_grad_convergence() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => sinusoid
     double precision, parameter :: pi = 3.141592653589793D0
     integer, parameter :: order_desired = 4, coarse_cells=100, fine_cells=1600
+#ifdef __GFORTRAN__
+    type(vector_1D_t) grad_coarse, grad_fine
 
+    grad_coarse = .grad. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi)
+    grad_fine   = .grad. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi)
+#else
     associate( &
        grad_coarse => .grad. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi) &
       ,grad_fine   => .grad. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi) &
     )
+#endif
       associate( &
          x_coarse => grad_coarse%grid() &
         ,x_fine   => grad_fine%grid() &
@@ -321,47 +263,9 @@ contains
           end associate
         end associate
       end associate
+#ifndef __GFORTRAN__
     end associate
-  end function
-
-#else
-
-  function check_4th_order_grad_convergence() result(test_diagnosis)
-    type(test_diagnosis_t) test_diagnosis
-    procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => sinusoid
-    double precision, parameter :: pi = 3.141592653589793D0
-    integer, parameter :: order_desired = 4, coarse_cells=100, fine_cells=1600
-    type(vector_1D_t) grad_coarse, grad_fine
-
-    grad_coarse = .grad. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi)
-    grad_fine   = .grad. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi)
-    associate( &
-       x_coarse => grad_coarse%grid() &
-      ,x_fine   => grad_fine%grid() &
-    )
-      associate( &
-         grad_coarse_expected => cos(x_coarse) - sin(x_coarse) &
-        ,grad_fine_expected   => cos(x_fine) - sin(x_fine) &
-        ,grad_coarse_values   => grad_coarse%values() &
-        ,grad_fine_values     => grad_fine%values() &
-      )
-        test_diagnosis = .all. (grad_coarse_values .approximates. grad_coarse_expected .within. rough_tolerance) &
-          // " (4th-order d(sinusoid)/dx point-wise errors)"
-        test_diagnosis = test_diagnosis .also. (.all. (grad_fine_values .approximates. grad_fine_expected .within. rough_tolerance)) &
-          // " (4th-order d(sinusoid)/dx point-wise)"
-        associate( &
-           error_coarse_max => maxval(abs(grad_coarse_values - grad_coarse_expected)) &
-          ,error_fine_max   => maxval(abs(grad_fine_values - grad_fine_expected)) &
-        )
-          associate(order_actual => log(error_coarse_max/error_fine_max)/log(dble(fine_cells)/coarse_cells))
-            test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. rough_tolerance) &
-              // " (4th-order d(sinusoid)/dx order of accuracy)"
-          end associate
-        end associate
-      end associate
-    end associate
-  end function
-
 #endif
+  end function
 
 end module
