@@ -74,7 +74,7 @@ jobs:
           
       - name: Install dependencies
         run: |
-          brew install cmake openblas eigen libomp lapack
+          brew install cmake openblas eigen@3 libomp lapack
           sudo ln -sf /opt/homebrew/bin/gfortran-14 /opt/homebrew/bin/gfortran
         
       - name: Export Environment Variables
@@ -91,6 +91,9 @@ jobs:
           export CPPFLAGS+=" -I/opt/homebrew/opt/libomp/include"
           export LDFLAGS+=" -L/opt/homebrew/opt/lapack/lib"
           export CPPFLAGS+=" -I/opt/homebrew/opt/lapack/include"
+          export CPPFLAGS+=" -I/opt/homebrew/opt/eigen@3/include"
+          export EIGEN3_INCLUDE_DIR="/opt/homebrew/include/eigen3"
+          export EIGEN3_ROOT="/opt/homebrew"
           export PKG_CONFIG_PATH+=" /opt/homebrew/opt/lapack/lib/pkgconfig"
 
       - name: Create build directory
