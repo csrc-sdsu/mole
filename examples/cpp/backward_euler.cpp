@@ -1,6 +1,6 @@
 /**
  * @file backward_euler.cpp
- * @brief Solves a first-order ODE with backward euler method with an initial value condition.
+ * @brief Solves a first-order ODE with backward euler with an initial value condition.
  * Equation: $\frac{dy}{dt} = \sin^2(t) \cdot y$
  * Domain: N/A
  * Boundary Conditions: N/A
@@ -8,10 +8,6 @@
 
 #include "mole.h"
 #include <iostream>
-#include <iomanip>
-#include <cmath>
-
-using namespace arma;
 
 // Function declaration for f(t, y)
 double f(double t, double y);
@@ -21,17 +17,17 @@ int main() {
     constexpr double h = 0.01;  // Step-size h
     vec t = arma::regspace(0, h, 5);  // Calculates up to y(5) at step-size h
     arma::mat y = arma::mat(1, t.size(), arma::fill::zeros);
+    constexpr double tol = 1e-6;    // tolerance for fixed-point iteration
 
     // Initial conditions
     y(0) = 2.0;
     
-    // Backward Euler method
+    // Backward Euler
     for (int i = 0; i < t.size()-1; i++) {
         double y_old = y(i);
-        double tol = 1e-6;
         for (int k = 0; k < 100; k++) {     // fixed-point iteration for rootfinding
-            y(i+1) = y_old + h*f(t(i+1), y_old);    // Backward euler method
-            if (std::abs(y(i+1) - y_old) / y(i+1) < tol) {   // Stopping criteria for approximate relative error
+            y(i+1) = y_old + h*f(t(i+1), y_old);    // Backward euler
+            if (std::abs(y(i+1) - y_old) < tol) {   // Stopping criteria for approximate relative error
                 break;
             }
         }

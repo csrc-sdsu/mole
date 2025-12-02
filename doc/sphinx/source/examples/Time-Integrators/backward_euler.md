@@ -1,4 +1,4 @@
-### Backward Euler Method
+### Backward Euler
 
 This example solves the first-order ordinary differential equation using the backward euler method.
 
@@ -40,4 +40,4 @@ In the C++ example, we used the fixed-point iteration method for rootfinding due
 
 This example is implemented in:
 - [MATLAB/Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/backward_euler.m)
-- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/backward_euler.cpp) *(if available)*
+- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/backward_euler.cpp)
