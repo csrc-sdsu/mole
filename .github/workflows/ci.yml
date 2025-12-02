@@ -94,7 +94,7 @@ jobs:
           export CPPFLAGS+=" -I/opt/homebrew/opt/eigen@3/include"
           export EIGEN3_INCLUDE_DIR="/opt/homebrew/include/eigen3"
           export EIGEN3_ROOT="/opt/homebrew"
-          export Eigen3_DIR="/opt/homebrew/opt/eigen@3/share/eigen3/cmake"
+          export Eigen3_DIR="/opt/homebrew/Cellar/eigen@3/3.4.1/share/eigen3/cmake"
           export PKG_CONFIG_PATH+=" /opt/homebrew/opt/lapack/lib/pkgconfig"
 
       - name: Create build directory
