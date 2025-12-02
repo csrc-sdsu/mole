@@ -371,9 +371,57 @@ def fix_math_environments(app, docname, source):
     
     source[0] = src
 
+def copy_governance_images(app, config):
+    """
+    Copy governance and organization images before Sphinx build starts.
+    
+    This ensures images referenced in OSE_ORGANIZATION.md are available
+    when Sphinx processes the document, regardless of whether the build
+    is run via Makefile or directly via sphinx-build (e.g., on ReadTheDocs).
+    
+    The images are copied to two locations:
+    1. source/_images/ - Standard Sphinx image directory
+    2. source/intros/doc/assets/img/ - Where MyST resolves relative paths
+       from the including file (ose_organization_wrapper.md)
+    
+    See: GitHub Issue #222
+    """
+    import shutil
+    from pathlib import Path
+    
+    # Determine paths relative to conf.py location
+    conf_dir = Path(app.confdir)
+    
+    # Source: doc/assets/img/ (relative to repo root)
+    img_source = conf_dir.parent.parent.parent / "doc" / "assets" / "img"
+    
+    # Destinations
+    img_dest_1 = conf_dir / "_images"
+    img_dest_2 = conf_dir / "intros" / "doc" / "assets" / "img"
+    
+    if not img_source.exists():
+        print(f"Warning: Image source directory not found: {img_source}")
+        return
+    
+    # Copy to both locations
+    for dest in [img_dest_1, img_dest_2]:
+        dest.mkdir(parents=True, exist_ok=True)
+        
+        # Copy all image files
+        for pattern in ["*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg"]:
+            for img in img_source.glob(pattern):
+                dest_file = dest / img.name
+                try:
+                    shutil.copy2(img, dest_file)
+                except Exception as e:
+                    print(f"Warning: Could not copy {img.name}: {e}")
+
 def setup(app):
     """Setup function for Sphinx extension."""
     app.add_js_file('mathconf.js')
+    
+    # Copy governance images before build starts (Fix for Issue #222)
+    app.connect('config-inited', copy_governance_images)
     
     # Add capability to replace problematic math environments
     app.connect('source-read', fix_math_environments)
