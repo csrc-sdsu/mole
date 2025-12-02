@@ -101,7 +101,7 @@ jobs:
         run: mkdir -p build
 
       - name: Run CMake
-        run: cmake -DCMAKE_Fortran_COMPILER="/opt/homebrew/bin/gfortran-14" -S . -B build
+        run: cmake -DEigen3_DIR=/opt/homebrew/Cellar/eigen@3/3.4.1/share/eigen3/cmake -DCMAKE_Fortran_COMPILER="/opt/homebrew/bin/gfortran-14" -S . -B build
 
       - name: Build MOLE library
         run: cmake --build build
