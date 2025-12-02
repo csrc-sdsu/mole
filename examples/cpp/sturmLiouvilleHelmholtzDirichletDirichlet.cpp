@@ -45,11 +45,7 @@ int main()
     b(m+1) = sin(3.0);
 
     // Solve
-    #ifdef EIGEN
-        vec sol = Utils::spsolve_eigen(A, b);
-    #else
-        vec sol = spsolve(A, b);
-    #endif
+    vec sol = spsolve(A, b);
 
     vec diff = sol - ue;
     std::cout << norm(diff) << std::endl;
