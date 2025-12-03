@@ -1,9 +1,7 @@
 #include "mole-language-support.F90"
 
 module mimetic_operators_1D_m
-  
-  !! Define 1D scalar and vector abstractions and associated mimetic gradient,
-  !! divergence, and Laplacian operators.
+  !! Define 1D scalar and vector abstractions and associated mimetic gradient and divergence operators.
   use julienne_m, only : file_t
   implicit none
 
@@ -35,13 +33,16 @@ module mimetic_operators_1D_m
   end interface
 
   type, extends(mimetic_matrix_1D_t) :: gradient_operator_1D_t
-    !! Encapsulate kth-order mimetic gradient operator on m_ cells of width dx
+    !! Encapsulate a 1D mimetic gradient operator
     private
-    integer k_, m_
-    double precision dx_
+    integer k_ !! order of accuracy
+    integer m_ !! number of cells
+    double precision dx_ !! cell width
   contains
     generic :: operator(.x.) => gradient_matrix_multiply
     procedure, non_overridable, private :: gradient_matrix_multiply
+    generic :: assemble => assemble_gradient
+    procedure, non_overridable, private :: assemble_gradient
   end type
 
   interface gradient_operator_1D_t
@@ -65,6 +66,8 @@ module mimetic_operators_1D_m
   contains
     generic :: operator(.x.) => divergence_matrix_multiply
     procedure, non_overridable, private :: divergence_matrix_multiply
+    generic :: assemble => assemble_divergence
+    procedure, non_overridable, private :: assemble_divergence
   end type
 
   interface divergence_operator_1D_t
@@ -89,6 +92,20 @@ module mimetic_operators_1D_m
       double precision, intent(in) :: vec(:)
       double precision, allocatable :: matvec_product(:)
     end function
+
+    pure module function assemble_gradient(self) result(G)
+      !! Result is the assembled 1D mimetic gradient operator matrix
+       implicit none
+       class(gradient_operator_1D_t), intent(in) :: self
+       double precision, allocatable :: G(:,:)
+    end function
+
+    pure module function assemble_divergence(self) result(D)
+      !! Result is the assembled 1D mimetic divergence operator matrix
+       implicit none
+       class(divergence_operator_1D_t), intent(in) :: self
+       double precision, allocatable :: D(:,:)
+     end function
 
     pure module function divergence_matrix_multiply(self, vec) result(matvec_product)
       !! Result is mimetic divergence defined at cell centers

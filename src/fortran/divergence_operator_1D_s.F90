@@ -176,4 +176,28 @@ contains
 
 #endif
 
+  module procedure assemble_divergence
+
+    associate(rows => self%m_ + 2, cols => self%m_ + 1)
+
+      allocate(D(rows, cols))
+
+      do concurrent(integer :: col=1:cols) default(none) shared(D, self, cols)
+        D(:,col) = self .x. e(dir=col, len=cols)
+      end do
+    end associate
+
+  contains
+
+    pure function e(dir, len) result(unit_vector)
+      !! Result is the dir-th column of the len x len identity matrix
+      double precision :: unit_vector(len)
+      integer, intent(in) :: dir, len
+      unit_vector(1:dir-1) = 0D0
+      unit_vector(dir)     = 1D0
+      unit_vector(dir+1:)  = 0D0
+    end function
+
+  end procedure
+
 end submodule divergence_operator_1D_s
