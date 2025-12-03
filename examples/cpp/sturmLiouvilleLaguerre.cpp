@@ -29,7 +29,7 @@ int main()
     const int k = 2;         // Order of accuracy
     const int m = 30;        // Number of cells
     const Real dx = 2.0 / m; // Grid spacing
-    const int n = 4;
+    const Real n = 4.0;
 
     // Build gird of cell centers
     arma::vec xc(m+2);
