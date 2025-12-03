@@ -44,6 +44,7 @@ $$
 
 This example is implemented in:
 - [MATLAB/ OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DLeftDirichletRightNeumann.m)
+- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/elliptic1DLeftDirichletRightNeumann.cpp)
 
 Additional MATLAB/ OCTAVE variants of this example with different boundary conditions:
 - [Homogeneous Dirichlet](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DHomogeneousDirichlet.m)
