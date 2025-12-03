@@ -1,6 +1,6 @@
 ### Backward Euler
 
-This example solves the first-order ordinary differential equation using the backward euler method.
+This example solves the first-order ordinary differential equation using the backward Euler method.
 
 $$
 \frac{dy}{dt} = \sin^2(t) \cdot y
@@ -10,7 +10,7 @@ with initial condition $y(0) = 0$ over the time interval $[0,5]$.
 
 #### Mathematical Background
 
-The backward euler method is an implicit method for solving first-order differential equations where we are evaluating the function at the next point in time $y_{i+1}$.
+The backward Euler is an implicit method for solving first-order differential equations where we are evaluating the function at the next point in time $y_{i+1}$.
 
 $$
 y_{i+1} = y_i + h \cdot f(t_{i+1}, y_{i+1})
