@@ -24,7 +24,7 @@ For Hermite's equation, we have:
 
 ## Discretization
 
-The equation is discretized using mimetic finite difference operators. The spactial derivative operatores are constructed with a specified order of accuracy $k$.
+The equation is discretized using mimetic finite difference operators. The spatial derivative operatores are constructed with a specified order of accuracy $k$.
 
 The discrete system is:
 

@@ -24,7 +24,7 @@ For Bessel's equation, we have:
 
 ## Discretization
 
-The equation is discretized using mimetic finite difference operators. The spaical derivative operators are constructed with a specified order of accuracy $k$.
+The equation is discretized using mimetic finite difference operators. The spatial derivative operators are constructed with a specified order of accuracy $k$.
 
 The discrete system is:
 
