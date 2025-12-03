@@ -53,7 +53,7 @@ int main() {
         std::cerr << "Error: Failed to create GNUplot script.\n";
         return 1;
     }
-    plot_script << "set title '-u'' = 1, u(0) = 0, u(1) = 0'\n";
+    plot_script << "set title \"-u'' = 1, u(0) = 0, u(1) = 0\"\n";
     plot_script << "set xlabel 't'\n";
     plot_script << "set ylabel 'y'\n";
     plot_script << "plot '-' using 1:2 with lines\n";
