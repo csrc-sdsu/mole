@@ -33,8 +33,8 @@ int main()
 
     // Build gird of cell centers
     arma::vec xc(m+2);
-    xc(0) = 0;
-    xc(1) = xc(0) + dx / 2;
+    xc(0) = 0.0;
+    xc(1) = dx / 2.0;
     for (int i = 2; i <= m; i++)
     {
         xc(i) = xc(i - 1) + dx;
