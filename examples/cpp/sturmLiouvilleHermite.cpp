@@ -1,7 +1,22 @@
 /**
- * 1D Hermite's Sturm Liouvulle: Dirichlet BC
- * u'' - 2 * u' + 2 * m * u = 0, -1 < x < 1, u(-1) = Hermite(4, -1), u(1) = Hermite(4, 1)
- * exact solution: u(x) = H_4(x) (Hermite function of order 4)
+ * @file sturmLiouvilleHermite.cpp
+ * @brief Solves the 1D Hermite equation in Sturm-Liouvulle form
+ * 
+ * The equation being solved is:
+ *      $$ u'' - 2 * u' + 2 * m * u = 0 $$
+ * 
+ * ## Spatial Domain:
+ * - The spatial domain is $x \in [-1, 1]
+ * - The grid spacing is $dx = 2 / m$
+ * 
+ * ## Boundary Conditions:
+ * - $u(-1) = H_4(-1)$
+ * - $u(1) = H_4(1)$
+ * 
+ * The solution is computed using mimetic finite difference operators and is compared with the exact result:
+ *      $$ H_4(x) $$ (Hermite Polynomial of order 4)
+ * 
+ * The norms of each solution and the error are printed
  */
 
 
@@ -10,13 +25,14 @@
 
 int main()
 {
-    // Parametesr
-    int k = 2;
-    int m = 20;
-    Real dx = 2 / (Real) m;
+    // Parameters
+    const int k = 2;         // Order of accuracy
+    const int m = 20;        // Number of cells
+    const Real dx = 2.0 / m; // Grid spacing
+    const int Hm = 4;
 
-    // Build grid
-    vec xc(m+2);
+    // Build grid of cell centers
+    arma::vec xc(m+2);
     xc(0) = -1;
     xc(1) = -1 + dx / 2;
     for (int i = 2; i <= m; i++)
@@ -25,34 +41,36 @@ int main()
     }
     xc(m + 1) = 1.0;
 
-    // Exact solution -- hermiteH(4, xc)
-    vec ue("-20.0 -18.2879 -14.3279 -9.9375 -5.4239 -1.0559 2.9361 6.3601 9.0625 "
-           "10.9281 11.8801 11.8801 10.9281 9.0625 6.3601 2.9361 -1.0559 -5.4239 "
-           "-9.9375 -14.3279 -18.2879 -20.0");
+    // Exact solution -- H_4(xc)
+    arma::vec ue("-20.0 -18.2879 -14.3279 -9.9375 -5.4239 -1.0559 2.9361 6.3601 "
+                 "9.0625 10.9281 11.8801 11.8801 10.9281 9.0625 6.3601 2.9361 "
+                 "-1.0559 -5.4239 -9.9375 -14.3279 -18.2879 -20.0");
 
     // Mimetic Operators
-    Interpol I(false, m, 0.5);
+    Interpol I(false, m, 0.5); // Interpolates from faces to centers
     Gradient G(k, m, dx);
     Laplacian L(k, m, dx);
-    RobinBC robin(k, m, dx, 1, 0);
+    RobinBC robin(k, m, dx, 1, 0); // Dirichlet BC
 
     // Set up system of equations
-    sp_mat xc_mat = sp_mat( diagmat(xc) );
-    sp_mat A = (sp_mat)L - 2 * xc_mat * (sp_mat)I * (sp_mat)G + 8.0 * speye(m+2, m+2); // m = 4
+    arma::sp_mat xc_mat = arma::sp_mat( arma::diagmat(xc) );
+    arma::sp_mat A = (arma::sp_mat)L - 2 * xc_mat * (arma::sp_mat)I * (arma::sp_mat)G + 2.0 * Hm * arma::speye(m+2, m+2);
 
     // Apply BC
     A.row(0).zeros();
     A.row(A.n_rows - 1).zeros();
-    A = A + (sp_mat)robin;
+    A = A + (arma::sp_mat)robin;
 
-    vec b(m+2);
+    arma::vec b(m+2);
     b(0) = -20.0;
     b(m+1) = -20.0;
 
     // Solve
-    vec sol = spsolve(A, b);
+    arma::vec sol = arma::spsolve(A, b);
 
-    vec diff = sol - ue;
-    std::cout << norm(diff) << std::endl;
+    arma::vec diff = sol - ue;
+    std::cout << "norm(u_numerical) = " << arma::norm(sol) << std::endl;
+    std::cout << "norm(u_exact) = " << arma::norm(ue) << std::endl;
+    std::cout << "norm(u_numerical - u_exact) = " << arma::norm(diff) << std::endl;
 
 }

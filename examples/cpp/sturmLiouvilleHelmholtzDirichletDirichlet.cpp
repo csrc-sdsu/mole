@@ -1,7 +1,22 @@
 /**
- * 1D Helmholtz Sturm Liouville: Dirichlet BC
- * u'' + u = 0, 0 < x < 3, u(0) = 0, u(3) = sin(3)
- * exact solution: u(x) = sin(x)
+ * @file sturmLiouvilleHelmholtzDirichletDirichlet.cpp
+ * @brief Solves the 1D Helmholtz equation in Sturm-Liouville form
+ * 
+ * The equation being solved is:
+ *      $$ u'' + u = 0 $$ 
+ * 
+ * ## Spatial Domain:
+ * - The spatial domain is $x \in [0, 3]$
+ * - The grid spacing is $dx = 3 / m$
+ * 
+ * ## Boundary Conditions:
+ * - $u(0) = 0$
+ * - $u(3) = \sin(3)$
+ * 
+ * The solution is computed using mimetic finite difference operators and is compared with the exact result:
+ *      $$ u(x) = \sin(x) $$
+ * 
+ * The norms of each solution and the error are printed
  */
 
 
@@ -11,12 +26,12 @@
 int main()
 {
     // Parameters
-    int k = 2;
-    int m = 40;
-    Real dx = 3 / (Real) m;
+    const int k = 2;         // Order of accuracy
+    const int m = 40;        // Number of cells
+    const Real dx = 3.0 / m; // Grid spacing
 
-    // Build grid
-    vec xc(m+2);
+    // Build grid of cell centers
+    arma::vec xc(m+2);
     xc(0) = 0.0;
     xc(1) = dx / 2;
     for (int i = 2; i <= m; i++)
@@ -26,28 +41,30 @@ int main()
     xc(m + 1) = 3.0;
 
     // Exact solution -- sin(x)
-    vec ue = sin(xc);
+    arma::vec ue = sin(xc);
 
     // Mimetic Operators
     Laplacian L(k, m, dx);
-    RobinBC robin(k, m, dx, 1, 0);
+    RobinBC robin(k, m, dx, 1, 0); // Dirichlet BC
     
     // Set up system of equations
-    sp_mat A = (sp_mat)L + speye(m+2, m+2);
+    arma::sp_mat A = (arma::sp_mat)L + arma::speye(m+2, m+2);
 
     // Apply BC
     A.row(0).zeros();
     A.row(A.n_rows - 1).zeros();
-    A = A + (sp_mat)robin;
+    A = A + (arma::sp_mat)robin;
 
-    vec b(m+2);
+    arma::vec b(m+2);
     b(0) = 0.0;
     b(m+1) = sin(3.0);
 
     // Solve
-    vec sol = spsolve(A, b);
+    arma::vec sol = arma::spsolve(A, b);
 
-    vec diff = sol - ue;
-    std::cout << norm(diff) << std::endl;
+    arma::vec diff = sol - ue;
+    std::cout << "norm(u_numerical) = " << arma::norm(sol) << std::endl;
+    std::cout << "norm(u_exact) = " << arma::norm(ue) << std::endl;
+    std::cout << "norm(u_numerical - u_exact) = " << arma::norm(diff) << std::endl;
 
 }
