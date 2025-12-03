@@ -1,6 +1,6 @@
 /**
  * @file sturmLiouvilleBessel.cpp
- * @brief Solves the 1D Bessel equation of the first kind and third order in Sturm-Liouville form
+ * @brief Solves the 1D Bessel function of the first kind and third order in Sturm-Liouville form
  * 
  * The equation being solved is:
  *      x^2 * u'' + x u' + (x^2 - nu^2) * u = 0
@@ -55,7 +55,7 @@ int main()
     arma::sp_mat xc_mat_sq = arma::sp_mat( arma::diagmat( arma::pow(xc, 2) ) );
     arma::sp_mat xc_mat_sq_sub = arma::sp_mat( arma::diagmat( arma::pow(xc, 2) - nu*nu ) );
     
-    amra::sp_mat A = xc_mat_sq * (arma::sp_mat)L + xc_mat * (arma::sp_mat)I * (arma::sp_mat)G + xc_mat_sq_sub * arma::speye(m+2, m+2);
+    arma::sp_mat A = xc_mat_sq * (arma::sp_mat)L + xc_mat * (arma::sp_mat)I * (arma::sp_mat)G + xc_mat_sq_sub * arma::speye(m+2, m+2);
 
     // Apply BC
     A.row(0).zeros();
