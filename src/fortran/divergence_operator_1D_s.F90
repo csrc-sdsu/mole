@@ -4,7 +4,7 @@
 submodule(mimetic_operators_1D_m) divergence_operator_1D_s
   use julienne_m, only : call_julienne_assert_, string_t
 #if ASSERTIONS
-  use julienne_m, only : operator(.isAtLeast.)
+  use julienne_m, only : operator(.isAtLeast.), operator(.equalsExpected.)
 #endif
   implicit none
 contains
@@ -62,13 +62,14 @@ contains
       order_of_accuracy: &
       select case(k)
       case(2)
-        matrix_block = reshape([ double precision :: &
-          ! zero row elements => zero-sized array
-        ], shape=[0,3])
+        matrix_block = reshape([ &
+          0D0 &
+        ], shape=[1,1])
       case(4)
         matrix_block = reshape([ &
-          -11/12D0, 17/24D0, 3/8D0, -5/24D0,  1/24D0 &
-        ], shape=[1,5], order=[2,1]) / dx
+                0D0,     0D0,   0D0,     0D0,     0D0 &
+          ,-11/12D0, 17/24D0, 3/8D0, -5/24D0,  1/24D0 &
+        ], shape=[2,5], order=[2,1]) / dx
       case default
         associate(string_k => string_t(k))
           error stop "A (divergence_operator_1D_s): unsupported order of accuracy: " // string_k%string()
@@ -99,7 +100,6 @@ contains
 
   end procedure construct_1D_divergence_operator
 
-#if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
 
   module procedure divergence_matrix_multiply
 
@@ -110,53 +110,24 @@ contains
       ,lower_rows => size(self%lower_,1) &
     )
       associate( &
-         inner_rows    => size(vec) - (upper_rows + lower_rows + 1) &
+         inner_rows    => self%m_ + 2 - (upper_rows + lower_rows) & ! sum({upper,inner,lower}_rows) = m + 2 (Corbino & Castillo, 2020) 
         ,inner_columns => size(self%inner_) &
       )
-
+        call_julienne_assert((size(vec) .equalsExpected. upper_rows + inner_rows + lower_rows))
         allocate(product_inner(inner_rows))
 
+#if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
         do concurrent(integer :: row = 1 : inner_rows) default(none) shared(product_inner, self, vec, inner_columns)
           product_inner(row) = dot_product(self%inner_, vec(row : row + inner_columns  - 1))
         end do
-
-      end associate
-    end associate
-
-    associate( &
-       upper_columns => size(self%upper_,2) &
-      ,lower_columns => size(self%lower_,2) &
-    )
-      matvec_product = [ &
-         matmul(self%upper_, vec(1 : upper_columns )) &
-        ,product_inner &
-        ,matmul(self%lower_, vec(size(vec) - lower_columns + 1 : )) &
-      ]
-    end associate
-
-  end procedure
-
 #else
-
-  module procedure divergence_matrix_multiply
-
-    integer row
-    double precision, allocatable :: product_inner(:)
-
-    associate( &
-       upper_rows => size(self%upper_,1) &
-      ,lower_rows => size(self%lower_,1) &
-    )
-      associate( &
-         inner_rows    => size(vec) - (upper_rows + lower_rows + 1) &
-        ,inner_columns => size(self%inner_) &
-      )
-
-        allocate(product_inner(inner_rows))
-
-        do concurrent(row = 1 : inner_rows)
-          product_inner(row) = dot_product(self%inner_, vec(row : row + inner_columns  - 1))
-        end do
+        block
+          integer row
+          do concurrent(row = 1 : inner_rows)
+            product_inner(row) = dot_product(self%inner_, vec(row : row + inner_columns  - 1))
+          end do
+        end block
+#endif
 
       end associate
     end associate
@@ -168,13 +139,11 @@ contains
       matvec_product = [ &
          matmul(self%upper_, vec(1 : upper_columns )) &
         ,product_inner &
-        ,matmul(self%lower_, vec(size(vec) - lower_columns + 1 : )) &
+        ,matmul(self%lower_, vec(size(vec) - lower_columns : )) &
       ]
     end associate
 
   end procedure
-
-#endif
 
   module procedure assemble_divergence
 
@@ -182,8 +151,8 @@ contains
 
       allocate(D(rows, cols))
 
-      do concurrent(integer :: col=1:cols) default(none) shared(D, self, cols)
-        D(:,col) = self .x. e(dir=col, len=cols)
+      do concurrent(integer :: col=1:cols) default(none) shared(D, self, rows)
+        D(:,col) = self .x. e(dir=col, len=rows)
       end do
     end associate
 
