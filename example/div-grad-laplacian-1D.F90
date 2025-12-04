@@ -46,50 +46,75 @@ program div_grad_laplacian_1D
 
 contains
 
+#ifndef __GFORTRAN__
+
   subroutine output(order)
     integer, intent(in) :: order
   
-#ifdef __GFORTRAN__
-    type(scalar_1D_t) s
-    type(vector_1D_t) grad_s
-    type(laplacian_1D_t) laplacian_s
-    type(file_t) s_table, grad_s_table, laplacian_s_table
-
-    s           = scalar_1D_t(scalar_1D_initializer, order=order, cells=10, x_min=0D0, x_max=20D0)
-    grad_s      = .grad. s
-    laplacian_s = .laplacian. s
-#else
     associate(   s           => scalar_1D_t(scalar_1D_initializer, order=order, cells=10, x_min=0D0, x_max=20D0))
-      associate( grad_s      => .grad. s      &
-                ,laplacian_s => .laplacian. s &
-      )
-#endif
-        associate( s_grid           => s%grid() &
+      associate( grad_s      => .grad. s &
+                ,laplacian_s => .laplacian. s)
+        associate( s_grid           => s%grid()      &
                   ,grad_s_grid      => grad_s%grid() &
-                  ,laplacian_s_grid => laplacian_s%grid() &
-        )
-#ifndef __GFORTRAN__
-          associate( &
-             s_table => tabulate(string_t([character(len=18)::"x", "f(x) exp"         , "f(x) act"         ]), s_grid, f(s_grid), s%values()) &
-            ,grad_s_table => tabulate(string_t([character(len=18)::"x", ".grad. f exp"     , ".grad. f act"     ]), grad_s_grid, df_dx(grad_s_grid), grad_s%values()) &
-            ,laplacian_s_table => tabulate(string_t([character(len=18)::"x", ".laplacian. f exp", ".laplacian. f act"]), laplacian_s_grid, d2f_dx2(laplacian_s_grid), laplacian_s%values()) &
-          )
-#else
-             s_table = tabulate(string_t([character(len=18)::"x", "f(x) exp."         , "f(x) act."         ]), s_grid, f(s_grid), s%values())
-             grad_s_table = tabulate(string_t([character(len=18)::"x", ".grad. f exp."     , ".grad. f act."     ]), grad_s_grid, df_dx(grad_s_grid), grad_s%values())
-             laplacian_s_table = tabulate(string_t([character(len=18)::"x", ".laplacian. f exp.", ".laplacian. f act."]), laplacian_s_grid, d2f_dx2(laplacian_s_grid), laplacian_s%values())
-#endif
+                  ,laplacian_s_grid => laplacian_s%grid())
+          associate( s_table           => tabulate( &
+                        string_t([character(len=18)::"x", "f(x) exp"         , "f(x) act"         ]) &
+                       ,s_grid, f(s_grid), s%values() &
+                     ) &
+                    ,grad_s_table      => tabulate( &
+                       string_t([character(len=18)::"x", ".grad. f exp"     , ".grad. f act"     ])  &
+                      ,grad_s_grid, df_dx(grad_s_grid), grad_s%values() &
+                     ) &
+                    ,laplacian_s_table => tabulate( &
+                       string_t([character(len=18)::"x", ".laplacian. f exp", ".laplacian. f act"])  &
+                      ,laplacian_s_grid, d2f_dx2(laplacian_s_grid), laplacian_s%values()) &
+                     )
              call s_table%write_lines()
              call grad_s_table%write_lines()
              call laplacian_s_table%write_lines()
           end associate
-#ifndef __GFORTRAN__
         end associate
       end associate
     end associate
-#endif
   end subroutine
 
+#else
+
+  subroutine output(order)
+    integer, intent(in) :: order
+  
+    type(scalar_1D_t) s
+    type(vector_1D_t) grad_s
+    type(laplacian_1D_t) laplacian_s
+    type(file_t) s_table, grad_s_table, laplacian_s_table
+    double precision, allocatable,dimension(:) :: s_grid, grad_s_grid, laplacian_s_grid
+
+    s = scalar_1D_t(scalar_1D_initializer, order=order, cells=10, x_min=0D0, x_max=20D0)
+    grad_s = .grad. s
+    laplacian_s = .laplacian. s
+
+    s_grid = s%grid()
+    grad_s_grid = grad_s%grid()
+    laplacian_s_grid = laplacian_s%grid()
+
+    s_table           = tabulate( &
+       string_t([character(len=18)::"x", "f(x) exp."         , "f(x) act."         ]) &
+      ,s_grid, f(s_grid), s%values() &
+    )
+    grad_s_table      = tabulate( &
+       string_t([character(len=18)::"x", ".grad. f exp."     , ".grad. f act."     ]) &
+      ,grad_s_grid, df_dx(grad_s_grid), grad_s%values() &
+    )
+    laplacian_s_table = tabulate( &
+       string_t([character(len=18)::"x", ".laplacian. f exp.", ".laplacian. f act."]) &
+      ,laplacian_s_grid, d2f_dx2(laplacian_s_grid), laplacian_s%values() &
+    )
+    call s_table%write_lines()
+    call grad_s_table%write_lines()
+    call laplacian_s_table%write_lines()
+  end subroutine
+
+#endif
 
   pure function tabulate(headings, abscissa, expected, actual) result(file)
     double precision, intent(in), dimension(:) :: abscissa, expected, actual
