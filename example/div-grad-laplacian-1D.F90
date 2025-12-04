@@ -36,13 +36,13 @@ program div_grad_laplacian_1D
   print *,"            2nd-order approximations"
   print *,"            ========================"
 
-   call output(order=2)
+  call output(order=2)
 
   print *,new_line('')
   print *,"            4th-order approximations"
   print *,"            ========================"
 
-   call output(order=4)
+  call output(order=4)
 
 contains
 
@@ -55,11 +55,11 @@ contains
     type(laplacian_1D_t) laplacian_s
     type(file_t) s_table, grad_s_table, laplacian_s_table
 
-    s           = scalar_1D_t(scalar_1D_initializer, order=order, cells=20, x_min=0D0, x_max=40D0)
+    s           = scalar_1D_t(scalar_1D_initializer, order=order, cells=10, x_min=0D0, x_max=20D0)
     grad_s      = .grad. s
     laplacian_s = .laplacian. s
 #else
-    associate(   s           => scalar_1D_t(scalar_1D_initializer, order=order, cells=20, x_min=0D0, x_max=40D0))
+    associate(   s           => scalar_1D_t(scalar_1D_initializer, order=order, cells=10, x_min=0D0, x_max=20D0))
       associate( grad_s      => .grad. s      &
                 ,laplacian_s => .laplacian. s &
       )

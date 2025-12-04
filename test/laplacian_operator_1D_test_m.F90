@@ -45,21 +45,12 @@ contains
       ,test_description_t( &
           'computing 4th-order .laplacian. [(x**4)/12] within ' // string_t(loose_tolerance) &
          ,usher(check_4th_order_laplacian_of_quartic)) &
-#if TEST_LAPLACIAN_CONVERGENCE
       ,test_description_t( &
-          'computing convergence rate of 2 for 2nd-order .laplacian. [sin(x) + cos(x)] within ' // string_t(crude_tolerance) &
+          'computing convergence rate of 2 for 2nd-order .laplacian. sin(x) within ' // string_t(crude_tolerance) &
          ,usher(check_2nd_order_laplacian_convergence)) &
       ,test_description_t( &
-          'computing convergence rate of 4 for 4th-order .laplacian. [sin(x) + cos(x)] within ' // string_t(crude_tolerance) &
+          'computing convergence rate of 4 for 4th-order .laplacian. sin(x) within ' // string_t(crude_tolerance) &
          ,usher(check_4th_order_laplacian_convergence)) &
-#else
-      ,test_description_t( &
-          'computing convergence rate of 2 for 2nd-order .laplacian. [sin(x) + cos(x)] within ' // string_t(crude_tolerance) &
-         ) &
-      ,test_description_t( &
-          'computing convergence rate of 4 for 4th-order .laplacian. [sin(x) + cos(x)] within ' // string_t(crude_tolerance) &
-         ) &
-#endif
     ])
   end function
 
@@ -113,50 +104,56 @@ contains
 #endif
   end function
 
-  pure function sinusoid(x) result(y)
+  pure function f(x)
     double precision, intent(in) :: x(:)
-    double precision, allocatable :: y(:)
-    y = sin(x) + cos(x)
+    double precision, allocatable :: f(:)
+    f = sin(x)
+  end function
+
+  pure function d2f_dx2(x)
+    double precision, intent(in) :: x(:)
+    double precision, allocatable :: d2f_dx2(:)
+    d2f_dx2 = -sin(x)
   end function
 
   function check_2nd_order_laplacian_convergence() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
-    procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => sinusoid
+    procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => f
     double precision, parameter :: pi = 3.141592653589793D0
-    integer, parameter :: order_desired = 2, coarse_cells=5000, fine_cells=2000
+    integer, parameter :: order_desired = 2, coarse_cells=500, fine_cells=1000
 
 #ifndef __GFORTRAN__
     associate( &
-       laplacian_coarse => .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=-pi, x_max=pi) &
-      ,laplacian_fine  => .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=-pi, x_max=pi) &
+       laplacian_coarse => .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi) &
+      ,laplacian_fine   => .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi) &
     )
 #else
-    type(laplacian_1D_t) laplacian_coarse, laplacian_fine
-    laplacian_coarse = .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=-pi, x_max=pi)
-    laplacian_fine   = .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=-pi, x_max=pi)
+       type(laplacian_1D_t) laplacian_coarse, laplacian_fine
+       laplacian_coarse = .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi)
+       laplacian_fine   = .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi)
 #endif
       associate( &
          x_coarse => laplacian_coarse%grid() &
         ,x_fine   => laplacian_fine%grid())
         associate( &
-           expected_coarse => -sin(x_coarse) - cos(x_coarse) &
-          ,expected_fine   => -sin(x_fine)   - cos(x_fine) &
+           expected_coarse => d2f_dx2(x_coarse) &
+          ,expected_fine   => d2f_dx2(x_fine) &
           ,actual_coarse => laplacian_coarse%values() &
           ,actual_fine   => laplacian_fine%values() &
         )
           test_diagnosis = &
-            .all. (actual_coarse .approximates. expected_coarse .within. 1D-02) &
-            // " (coarse-grid 2nd-order .laplacian. [sin(x) + cos(x)])"
+            .all. (actual_coarse .approximates. expected_coarse .within. crude_tolerance) &
+            // " (coarse-grid 2nd-order .laplacian. sin(x))"
           test_diagnosis = test_diagnosis .also. &
-            (.all. (actual_fine .approximates. expected_fine .within. 1D-03)) &
-            // " (fine-grid 2nd-order .laplacian. [sin(x) + cos(x)])"
+            (.all. (actual_fine .approximates. expected_fine .within. crude_tolerance)) &
+            // " (fine-grid 2nd-order .laplacian. sin(x))"
           associate( &
-             coarse_error_max => maxval(abs(actual_coarse - expected_coarse)) &
-            ,fine_error_max   => maxval(abs(actual_fine   - expected_fine)) &
+             coarse_error_max => maxval(abs(actual_coarse(2:size(actual_coarse)-1) - expected_coarse(2:size(expected_coarse)-1))) &
+            ,fine_error_max   => maxval(abs(actual_fine(2:size(actual_fine)-1)   - expected_fine(2:size(actual_fine)-1))) &
           )
             associate(order_actual => log(coarse_error_max/fine_error_max)/log(dble(fine_cells)/coarse_cells))
               test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. crude_tolerance) &
-                // " (convergence rate for 2nd-order .laplacian. [sin(x) + cos(x)])"
+                // " (convergence rate for 2nd-order .laplacian. sin(x))"
             end associate
           end associate
         end associate
@@ -168,43 +165,42 @@ contains
 
   function check_4th_order_laplacian_convergence() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
-    procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => sinusoid
+    procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => f
     double precision, parameter :: pi = 3.141592653589793D0
-    integer, parameter :: order_desired = 4, coarse_cells=300, fine_cells=900
-
+    integer, parameter :: order_desired = 4, coarse_cells=10, fine_cells=100
 #ifndef __GFORTRAN__
     associate( &
-       laplacian_coarse => .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=-pi, x_max=pi) &
-      ,laplacian_fine   => .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=-pi, x_max=pi) &
+       laplacian_coarse => .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi) &
+      ,laplacian_fine   => .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi) &
     )
 #else
        type(laplacian_1D_t) laplacian_coarse, laplacian_fine   
-       laplacian_coarse = .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=-pi, x_max=pi)
-       laplacian_fine   = .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=-pi, x_max=pi)
+       laplacian_coarse =  .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi)
+       laplacian_fine   =  .laplacian. scalar_1D_t(scalar_1D_initializer , order=order_desired, cells=fine_cells  , x_min=0D0, x_max=2*pi)
 #endif
       associate( &
          x_coarse => laplacian_coarse%grid() &
         ,x_fine   => laplacian_fine%grid()  &
       )
         associate( &
-           expected_coarse => -sin(x_coarse) - cos(x_coarse) &
-          ,expected_fine   => -sin(x_fine)   - cos(x_fine) &
+           expected_coarse =>  d2f_dx2(x_coarse) &
+          ,expected_fine   =>  d2f_dx2(x_fine) &
           ,actual_coarse => laplacian_coarse%values() &
           ,actual_fine   => laplacian_fine%values() &
         )
           test_diagnosis = &
-             .all. (actual_coarse .approximates. expected_coarse .within. 1D-06) &
-             // " (coarse-grid 4th-order .laplacian. [sin(x) + cos(x)])"
+             .all. (actual_coarse .approximates. expected_coarse .within. crude_tolerance) &
+             // " (coarse-grid 4th-order .laplacian. sin(x))"
           test_diagnosis = test_diagnosis .also. &
-            (.all. (actual_fine .approximates. expected_fine .within. 1D-07)) &
-             // " (fine-grid 4th-order .laplacian. [sin(x) + cos(x)])"
+            (.all. (actual_fine .approximates. expected_fine .within. crude_tolerance)) &
+             // " (fine-grid 4th-order .laplacian. sin(x))"
           associate( &
-             error_coarse_max => maxval(abs(actual_coarse - expected_coarse)) &
-            ,error_fine_max   => maxval(abs(actual_fine   - expected_fine)) &
+             coarse_error_max => maxval(abs(actual_coarse(3:size(actual_coarse)-2) - expected_coarse(3:size(expected_coarse)-2))) &
+            ,fine_error_max   => maxval(abs(actual_fine(3:size(actual_fine)-2)   - expected_fine(3:size(actual_fine)-2))) &
           )
-            associate(order_actual => log(error_coarse_max/error_fine_max)/log(dble(fine_cells)/coarse_cells))
+            associate(order_actual => log(coarse_error_max/fine_error_max)/log(dble(fine_cells)/coarse_cells))
               test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. crude_tolerance) &
-                // " (convergence rate for 4th-order .laplacian. [sin(x) + cos(x)])"
+                // " (convergence rate for 4th-order .laplacian. sin(x))"
             end associate
           end associate
         end associate

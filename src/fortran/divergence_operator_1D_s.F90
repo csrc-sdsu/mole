@@ -113,7 +113,7 @@ contains
          inner_rows    => self%m_ + 2 - (upper_rows + lower_rows) & ! sum({upper,inner,lower}_rows) = m + 2 (Corbino & Castillo, 2020) 
         ,inner_columns => size(self%inner_) &
       )
-        call_julienne_assert((size(vec) .equalsExpected. upper_rows + inner_rows + lower_rows))
+        call_julienne_assert((size(vec) .equalsExpected. upper_rows + inner_rows + lower_rows - 1))
         allocate(product_inner(inner_rows))
 
 #if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
@@ -136,11 +136,13 @@ contains
        upper_columns => size(self%upper_,2) &
       ,lower_columns => size(self%lower_,2) &
     )
-      matvec_product = [ &
+      associate(matvec_product => [ &
          matmul(self%upper_, vec(1 : upper_columns )) &
         ,product_inner &
-        ,matmul(self%lower_, vec(size(vec) - lower_columns : )) &
-      ]
+        ,matmul(self%lower_, vec(size(vec) - lower_columns + 1 : )) &
+      ])
+        internal_faces = matvec_product(2:size(matvec_product)-1)
+      end associate
     end associate
 
   end procedure
@@ -151,9 +153,18 @@ contains
 
       allocate(D(rows, cols))
 
+#if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
       do concurrent(integer :: col=1:cols) default(none) shared(D, self, rows)
         D(:,col) = self .x. e(dir=col, len=rows)
       end do
+#else
+      block
+        integer col
+        do concurrent(col=1:cols)
+          D(:,col) = self .x. e(dir=col, len=rows)
+        end do
+      end block
+#endif
     end associate
 
   contains

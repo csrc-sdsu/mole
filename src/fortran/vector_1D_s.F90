@@ -41,7 +41,7 @@ contains
 
   module procedure div
     divergence_1D = divergence_1D_t( &
-       tensor_1D_t(self%divergence_operator_1D_ .x. self%values_, self%x_min_, self%x_max_, self%cells_, self%order_) &
+      tensor_1D_t(self%divergence_operator_1D_ .x. self%values_, self%x_min_, self%x_max_, self%cells_, self%order_) &
     )
   end procedure
 

@@ -90,8 +90,6 @@ contains
 
   end procedure construct_1D_gradient_operator
 
-#if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
-
   module procedure gradient_matrix_multiply
 
     double precision, allocatable :: product_inner(:)
@@ -106,45 +104,18 @@ contains
       )
         allocate(product_inner(inner_rows))
 
+#if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
         do concurrent(integer :: row = 1 : inner_rows) default(none) shared(product_inner, self, vec, inner_columns)
           product_inner(row) = dot_product(self%inner_, vec(row + 1 : row + inner_columns))
         end do
-
-      end associate
-    end associate
-
-    associate( &
-       upper_columns => size(self%upper_,2) &
-      ,lower_columns => size(self%lower_,2) &
-    )
-      matvec_product = [ &
-         matmul(self%upper_, vec(1 : upper_columns)) &
-        ,product_inner &
-        ,matmul(self%lower_, vec(size(vec) - lower_columns + 1 : )) &
-      ]
-    end associate
-  end procedure
-
 #else
-
-  module procedure gradient_matrix_multiply
-
-    integer row
-    double precision, allocatable :: product_inner(:)
-
-    associate( &
-       upper_rows => size(self%upper_,1) &
-      ,lower_rows => size(self%lower_,1) &
-    )
-      associate( &
-         inner_rows    => size(vec) - (upper_rows + lower_rows + 1) &
-        ,inner_columns => size(self%inner_) &
-      )
-        allocate(product_inner(inner_rows))
-
-        do concurrent(row = 1 : inner_rows)
-          product_inner(row) = dot_product(self%inner_, vec(row + 1 : row + inner_columns))
-        end do
+        block
+          integer row
+          do concurrent(row = 1 : inner_rows)
+            product_inner(row) = dot_product(self%inner_, vec(row + 1 : row + inner_columns))
+          end do
+        end block
+#endif
 
       end associate
     end associate
@@ -160,8 +131,6 @@ contains
       ]
     end associate
   end procedure
-
-#endif
 
   module procedure assemble_gradient
 
@@ -169,9 +138,18 @@ contains
 
       allocate(G(rows, cols), source = 0D0)
 
+#if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
       do concurrent(integer :: col=1:cols) default(none) shared(G, self, cols)
         G(:,col) = self .x. e(dir=col, len=cols)
       end do
+#else
+      block
+        integer col
+        do concurrent(col=1:cols)
+          G(:,col) = self .x. e(dir=col, len=cols)
+        end do
+      end block
+#endif
     end associate
 
   contains
