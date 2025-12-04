@@ -1,9 +1,19 @@
-
-/**
- * This example uses MOLE to solve the 1D BVP -u''= 1
- * with nonhomogeneous Dirichlet conditions u(0) = 1/2, u(1) = 1/2
- * exact solution: u(x) = (-x^2 + x + 1)/2
- */
+ /**
+ * @file elliptic1DNonHomogeneousDirichlet.cpp
+ * @brief Solves the 1D linear equation -u'' = 1
+ *
+ * ## Spatial Domains:
+ * - The spatial domain is [0, 1]
+ * - Interior points are spaced by dx = (b - a) / m.
+ *
+ * ## Boundary Conditions:
+ *      u(0) = 1/2, u(1) = 1/2
+ *
+ * The solution is computed numerically, and the result is compared with the exact solution:
+ *      u_exact(x) = (-x^2 + x + 1)/2
+ *
+ * The results are saved to a file "plot.gnu" and visualized using GNUplot.
+*/
 
 #include "mole.h"
 #include <iostream>
@@ -26,7 +36,7 @@ int main() {
     L += BC;
 
     // 1D grid
-    vec grid(m + 2);
+    arma::vec grid(m + 2);
     grid(0) = a;
     grid(1) = grid(0) + dx / 2.0;
     for (int i = 2; i <= m; i++) {
@@ -35,19 +45,17 @@ int main() {
     grid(m + 1) = b;
 
     // RHS
-    vec rhs(m+2); rhs.zeros();
-    for (int i=1; i<=m; ++i) {
-        rhs(i) = -1;
-    }
+    arma::vec rhs(m+2);
+    rhs.fill(-1.0);
     rhs(0) = left_dirichlet;
     rhs(m+1) = right_dirichlet;
 
     // Solve the system
     #ifdef EIGEN
         // Use eigen if available
-        vec sol = Utils:: spsolve_eigen(L, rhs);
+        arma::vec sol = Utils:: spsolve_eigen(L, rhs);
     #else
-        vec sol = spsolve(L, rhs);
+        arma::vec sol = spsolve(L, rhs);
     #endif
 
         // Create a GNUplot script file
@@ -59,7 +67,8 @@ int main() {
     plot_script << "set title \"-u'' = 1, u(0) = 1/2, u(1) = 1/2\"\n";
     plot_script << "set xlabel 't'\n";
     plot_script << "set ylabel 'y'\n";
-    plot_script << "plot '-' using 1:2 with lines\n";
+    plot_script << "plot '-' using 1:2 with lines title \"Estimated Solution\", "
+                << "(-x**2 + x + 1)/2 with lines title \"Exact Solution\"\n";
 
     for (int i = 0; i <= m + 1; ++i) {
         plot_script << grid(i) << " " << sol(i) << "\n";
