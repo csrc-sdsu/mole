@@ -149,7 +149,7 @@ contains
             // " (fine-grid 2nd-order .laplacian. sin(x))"
           associate( &
              coarse_error_max => maxval(abs(actual_coarse(2:size(actual_coarse)-1) - expected_coarse(2:size(expected_coarse)-1))) &
-            ,fine_error_max   => maxval(abs(actual_fine(2:size(actual_fine)-1)   - expected_fine(2:size(actual_fine)-1))) &
+            ,fine_error_max   => maxval(abs(actual_fine(2:size(actual_fine)-1)   - expected_fine(2:size(expected_fine)-1))) &
           )
             associate(order_actual => log(coarse_error_max/fine_error_max)/log(dble(fine_cells)/coarse_cells))
               test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. crude_tolerance) &
@@ -196,7 +196,7 @@ contains
              // " (fine-grid 4th-order .laplacian. sin(x))"
           associate( &
              coarse_error_max => maxval(abs(actual_coarse(3:size(actual_coarse)-2) - expected_coarse(3:size(expected_coarse)-2))) &
-            ,fine_error_max   => maxval(abs(actual_fine(3:size(actual_fine)-2)   - expected_fine(3:size(actual_fine)-2))) &
+            ,fine_error_max   => maxval(abs(actual_fine(3:size(actual_fine)-2)   - expected_fine(3:size(expected_fine)-2))) &
           )
             associate(order_actual => log(coarse_error_max/fine_error_max)/log(dble(fine_cells)/coarse_cells))
               test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. crude_tolerance) &
