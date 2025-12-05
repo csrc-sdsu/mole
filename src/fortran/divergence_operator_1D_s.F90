@@ -62,14 +62,12 @@ contains
       order_of_accuracy: &
       select case(k)
       case(2)
-        matrix_block = reshape([ &
-          0D0 &
-        ], shape=[1,1])
+        matrix_block = reshape([ double precision :: &
+        ], shape=[0,0])
       case(4)
         matrix_block = reshape([ &
-                0D0,     0D0,   0D0,     0D0,     0D0 &
-          ,-11/12D0, 17/24D0, 3/8D0, -5/24D0,  1/24D0 &
-        ], shape=[2,5], order=[2,1]) / dx
+          -11/12D0, 17/24D0, 3/8D0, -5/24D0,  1/24D0 &
+        ], shape=[1,5], order=[2,1]) / dx
       case default
         associate(string_k => string_t(k))
           error stop "A (divergence_operator_1D_s): unsupported order of accuracy: " // string_k%string()
@@ -110,7 +108,7 @@ contains
       ,lower_rows => size(self%lower_,1) &
     )
       associate( &
-         inner_rows    => self%m_ + 2 - (upper_rows + lower_rows) & ! sum({upper,inner,lower}_rows) = m + 2 (Corbino & Castillo, 2020) 
+         inner_rows    => self%m_ - (upper_rows + lower_rows) & ! rows(A) + rows(M) + rows(A') + 2 rows of zeros == m + 2 (Corbino & Castillo, 2020)
         ,inner_columns => size(self%inner_) &
       )
         call_julienne_assert((size(vec) .equalsExpected. self%m_ + 1))
@@ -137,10 +135,13 @@ contains
       ,lower_columns => size(self%lower_,2) &
     )
       matvec_product = [ &
-         matmul(self%upper_, vec(1 : upper_columns )) &
+         0D0 &
+        ,matmul(self%upper_, vec(1 : upper_columns )) &
         ,product_inner &
         ,matmul(self%lower_, vec(size(vec) - lower_columns + 1 : )) &
+        ,0D0 &
       ]
+      call_julienne_assert(size(matvec_product) .equalsExpected. self%m_ + 2)
     end associate
 
   end procedure
