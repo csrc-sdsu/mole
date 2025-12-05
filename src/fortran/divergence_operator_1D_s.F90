@@ -1,13 +1,12 @@
-#include "julienne-assert-macros.h"
 #include "mole-language-support.F90"
+#include "julienne-assert-macros.h"
 
-submodule(mimetic_operators_1D_m) gradient_operator_1D_s
+submodule(mimetic_operators_1D_m) divergence_operator_1D_s
   use julienne_m, only : call_julienne_assert_, string_t
 #if ASSERTIONS
-  use julienne_m, only : operator(.isAtLeast.)
+  use julienne_m, only : operator(.isAtLeast.), operator(.equalsExpected.)
 #endif
   implicit none
-
 contains
 
 #ifdef __GFORTRAN__
@@ -34,20 +33,28 @@ contains
 
 #endif
  
-  module procedure construct_1D_gradient_operator
+  module procedure construct_1D_divergence_operator
 
-    call_julienne_assert(cells .isAtLeast. 2*k)
+    double precision, allocatable :: Ap(:,:)
 
-    associate(A => corbino_castillo_A(k, dx), M => corbino_castillo_M(k, dx))
-      gradient_operator_1D%mimetic_matrix_1D_t = mimetic_matrix_1D_t(A, M, negate_and_flip(A))
-      gradient_operator_1D%k_  = k
-      gradient_operator_1D%dx_ = dx
-      gradient_operator_1D%m_  = cells
+    call_julienne_assert(cells .isAtLeast. 2*k+1)
+
+    associate(A => A_block(k,dx))
+      if (size(A) /= 0) then
+        Ap = negate_and_flip(A)
+      else
+        allocate(Ap, mold = A)
+      end if
+      divergence_operator_1D%mimetic_matrix_1D_t = mimetic_matrix_1D_t(A, M(k, dx), Ap)
+      divergence_operator_1D%k_  = k
+      divergence_operator_1D%dx_ = dx
+      divergence_operator_1D%m_  = cells
     end associate
 
   contains
 
-    pure function corbino_castillo_A(k, dx) result(matrix_block)
+    pure function A_block(k, dx) result(matrix_block)
+      !! Compute the upper block submatrix "A" of the Corbino & Castillo (2020) mimetic divergence operator
       integer, intent(in) :: k
       double precision, intent(in) :: dx
       double precision, allocatable :: matrix_block(:,:)
@@ -55,21 +62,24 @@ contains
       order_of_accuracy: &
       select case(k)
       case(2)
-        matrix_block = reshape([-8D0/3D0, 3D0, -1D0/3D0] , shape=[1,3]) / dx
+        matrix_block = reshape([ &
+          0D0 &
+        ], shape=[1,1])
       case(4)
         matrix_block = reshape([ &
-           -352D0/105D0,  35D0/ 8D0, -35D0/24D0, 21D0/40D0, -5D0/ 56D0 &
-          ,  16D0/105D0, -31D0/24D0,  29D0/24D0, -3D0/40D0,  1D0/168D0 &
+                0D0,     0D0,   0D0,     0D0,     0D0 &
+          ,-11/12D0, 17/24D0, 3/8D0, -5/24D0,  1/24D0 &
         ], shape=[2,5], order=[2,1]) / dx
       case default
         associate(string_k => string_t(k))
-          error stop "corbino_castillo_A: unsupported order of accuracy: " // string_k%string()
+          error stop "A (divergence_operator_1D_s): unsupported order of accuracy: " // string_k%string()
         end associate
       end select order_of_accuracy
 
     end function
 
-    pure function corbino_castillo_M(k, dx) result(row)
+    pure function M(k, dx) result(row)
+      !! Compute the middle block submatrix "M" of the Corbino & Castillo (2020) mimetic divergence operator
       integer, intent(in) :: k
       double precision, intent(in) :: dx
       double precision, allocatable :: row(:)
@@ -82,15 +92,16 @@ contains
         row = [1D0/24D0, -9D0/8D0, 9D0/8D0, -1D0/24D0] / dx        
       case default
         associate(string_k => string_t(k))
-          error stop "corbino_castillo_A: unsupported order of accuracy: " // string_k%string()
+          error stop "M (divergence_operator_1D_s): unsupported order of accuracy: " // string_k%string()
         end associate
       end select order_of_accuracy
 
     end function
 
-  end procedure construct_1D_gradient_operator
+  end procedure construct_1D_divergence_operator
 
-  module procedure gradient_matrix_multiply
+
+  module procedure divergence_matrix_multiply
 
     double precision, allocatable :: product_inner(:)
 
@@ -99,20 +110,21 @@ contains
       ,lower_rows => size(self%lower_,1) &
     )
       associate( &
-         inner_rows    => size(vec) - (upper_rows + lower_rows + 1) &
+         inner_rows    => self%m_ + 2 - (upper_rows + lower_rows) & ! sum({upper,inner,lower}_rows) = m + 2 (Corbino & Castillo, 2020) 
         ,inner_columns => size(self%inner_) &
       )
+        call_julienne_assert((size(vec) .equalsExpected. upper_rows + inner_rows + lower_rows - 1))
         allocate(product_inner(inner_rows))
 
 #if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
         do concurrent(integer :: row = 1 : inner_rows) default(none) shared(product_inner, self, vec, inner_columns)
-          product_inner(row) = dot_product(self%inner_, vec(row + 1 : row + inner_columns))
+          product_inner(row) = dot_product(self%inner_, vec(row : row + inner_columns  - 1))
         end do
 #else
         block
           integer row
           do concurrent(row = 1 : inner_rows)
-            product_inner(row) = dot_product(self%inner_, vec(row + 1 : row + inner_columns))
+            product_inner(row) = dot_product(self%inner_, vec(row : row + inner_columns  - 1))
           end do
         end block
 #endif
@@ -124,29 +136,32 @@ contains
        upper_columns => size(self%upper_,2) &
       ,lower_columns => size(self%lower_,2) &
     )
-      matvec_product = [ &
-         matmul(self%upper_, vec(1 : upper_columns)) &
+      associate(matvec_product => [ &
+         matmul(self%upper_, vec(1 : upper_columns )) &
         ,product_inner &
         ,matmul(self%lower_, vec(size(vec) - lower_columns + 1 : )) &
-      ]
+      ])
+        internal_faces = matvec_product(2:size(matvec_product)-1)
+      end associate
     end associate
+
   end procedure
 
-  module procedure assemble_gradient
+  module procedure assemble_divergence
 
-    associate(rows => self%m_ + 1, cols => self%m_ + 2)
+    associate(rows => self%m_ + 2, cols => self%m_ + 1)
 
-      allocate(G(rows, cols), source = 0D0)
+      allocate(D(rows, cols))
 
 #if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
-      do concurrent(integer :: col=1:cols) default(none) shared(G, self, cols)
-        G(:,col) = self .x. e(dir=col, len=cols)
+      do concurrent(integer :: col=1:cols) default(none) shared(D, self, rows)
+        D(:,col) = self .x. e(dir=col, len=rows)
       end do
 #else
       block
         integer col
         do concurrent(col=1:cols)
-          G(:,col) = self .x. e(dir=col, len=cols)
+          D(:,col) = self .x. e(dir=col, len=rows)
         end do
       end block
 #endif
@@ -165,4 +180,4 @@ contains
 
   end procedure
 
-end submodule gradient_operator_1D_s
+end submodule divergence_operator_1D_s
