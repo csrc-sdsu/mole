@@ -113,7 +113,7 @@ contains
          inner_rows    => self%m_ + 2 - (upper_rows + lower_rows) & ! sum({upper,inner,lower}_rows) = m + 2 (Corbino & Castillo, 2020) 
         ,inner_columns => size(self%inner_) &
       )
-        call_julienne_assert((size(vec) .equalsExpected. upper_rows + inner_rows + lower_rows - 1))
+        call_julienne_assert((size(vec) .equalsExpected. self%m_ + 1))
         allocate(product_inner(inner_rows))
 
 #if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
@@ -154,8 +154,8 @@ contains
       allocate(D(rows, cols))
 
 #if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
-      do concurrent(integer :: col=1:cols) default(none) shared(D, self, rows)
-        D(:,col) = self .x. e(dir=col, len=rows)
+      do concurrent(integer :: col=1:cols) default(none) shared(D, self, cols)
+        D(:,col) = self .x. e(dir=col, len=cols)
       end do
 #else
       block
