@@ -40,9 +40,11 @@ contains
 #endif
 
   module procedure div
-    divergence_1D = divergence_1D_t( &
-      tensor_1D_t(self%divergence_operator_1D_ .x. self%values_, self%x_min_, self%x_max_, self%cells_, self%order_) &
-    )
+    associate(Dv => self%divergence_operator_1D_ .x. self%values_)
+      divergence_1D = divergence_1D_t( &
+        tensor_1D_t(Dv(2:size(Dv)-1), self%x_min_, self%x_max_, self%cells_, self%order_) &
+      )
+    end associate
   end procedure
 
   module procedure vector_1D_values
