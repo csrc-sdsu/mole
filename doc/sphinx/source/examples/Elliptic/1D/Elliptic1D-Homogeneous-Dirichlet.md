@@ -45,7 +45,7 @@ This example is implemented in:
 
 Additional MATLAB/ OCTAVE variants of this example with different boundary conditions:
 - [Non-Homogeneous Dirichlet](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DNonHomogeneousDirichlet.m)
-- [Left Dirichlet, Right Neumann](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DLeftDirichletRightNeumann.m)
+- [Left Neumann, Right Dirichlet](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DLeftNeumannRightDirichlet.m)
 - [Left Dirichlet, Right Robin](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DLeftDirichletRightRobin.m)
 - [Left Neumann, Right Neumann](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DLeftNeumannRightNeumann.m)
 - [Left Neumann, Right Robin](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DLeftNeumannRightRobin.m)
