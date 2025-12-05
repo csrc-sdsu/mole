@@ -1,5 +1,5 @@
 /**
- * @file elliptic1DLeftDirichletRightNeumann.cpp
+ * @file elliptic1DLeftNeumannRightDirichlet.cpp
  * @brief Solves the 1D linear equation -u'' = 1
  *
  * ## Spatial Domains:
