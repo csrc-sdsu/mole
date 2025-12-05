@@ -1,11 +1,28 @@
 program print_assembled_1D_operators
   !! Print fully assembled memetic 1D gradient, divergence, and Laplacian matrices,
   !! including the zero elements.
-  use julienne_m, only : operator(.csv.), string_t
+  use julienne_m, only : operator(.csv.), string_t, command_line_t
   use mimetic_operators_1D_m, only : gradient_operator_1D_t, divergence_operator_1D_t
   implicit none
 
+  type(command_line_t) command_line
   integer row
+
+  command_line_settings: &
+  associate( &
+     gradient   => command_line%argument_present(["--grad" ]) &
+    ,divergence => command_line%argument_present(["--div"  ]) &
+    ,order      => command_line%argument_present(["--order"]) &
+  )
+
+  if (command_line%argument_present([character(len=len("--help")) :: ("--help"), "-h"])) then
+    stop                                 new_line('') // new_line('') &
+      // 'Usage:'                                     // new_line('') &
+      // '  fpm run \'                                // new_line('') &
+      // '  --example print-assembled-1D-operators \' // new_line('') &
+      // '  --compiler flang-new \'                   // new_line('') &
+      // '  --flag "-O3" \'                           // new_line('')
+  end if
 
   print *, new_line(""), "Gradient operator (2nd order, dx=1, 5 cells)"
 
@@ -54,5 +71,6 @@ program print_assembled_1D_operators
       end do
     end associate
   end associate
+  end associate command_line_settings
 
 end program
