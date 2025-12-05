@@ -107,12 +107,12 @@ module mimetic_operators_1D_m
        double precision, allocatable :: D(:,:)
      end function
 
-    pure module function divergence_matrix_multiply(self, vec) result(internal_faces)
+    pure module function divergence_matrix_multiply(self, vec) result(matvec_product)
       !! Result is mimetic divergence defined at cell centers
       implicit none
       class(divergence_operator_1D_t), intent(in) :: self
       double precision, intent(in) :: vec(:)
-      double precision, allocatable :: internal_faces(:)
+      double precision, allocatable :: matvec_product(:)
     end function
 
      pure module function to_file_t(self) result(file)

@@ -136,13 +136,11 @@ contains
        upper_columns => size(self%upper_,2) &
       ,lower_columns => size(self%lower_,2) &
     )
-      associate(matvec_product => [ &
+      matvec_product = [ &
          matmul(self%upper_, vec(1 : upper_columns )) &
         ,product_inner &
         ,matmul(self%lower_, vec(size(vec) - lower_columns + 1 : )) &
-      ])
-        internal_faces = matvec_product(2:size(matvec_product)-1)
-      end associate
+      ]
     end associate
 
   end procedure
