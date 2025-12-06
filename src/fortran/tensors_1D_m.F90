@@ -108,13 +108,21 @@ module tensors_1D_m
   interface vector_1D_t
 
     pure module function construct_1D_vector_from_function(initializer, order, cells, x_min, x_max) result(vector_1D)
-      !! Result is a collection of face-centered values with a corresponding mimetic gradient operator
+      !! Result is a 1D vector with values initialized by the provided procedure pointer sampled on the specified
+      !! number of evenly spaced cells covering [x_min, x_max]
       implicit none
       procedure(vector_1D_initializer_i), pointer :: initializer
       integer, intent(in) :: order !! order of accuracy
       integer, intent(in) :: cells !! number of grid cells spanning the domain
       double precision, intent(in) :: x_min !! grid location minimum
       double precision, intent(in) :: x_max !! grid location maximum
+      type(vector_1D_t) vector_1D
+    end function
+
+    pure module function construct_from_components(tensor_1D, divergence_operator_1D) result(vector_1D)
+      !! Result is a 1D vector with the provided parent component tensor_1D and the provided divergence operatror
+      type(tensor_1D_t), intent(in) :: tensor_1D
+      type(divergence_operator_1D_t), intent(in) :: divergence_operator_1D
       type(vector_1D_t) vector_1D
     end function
 
@@ -128,6 +136,17 @@ module tensors_1D_m
     procedure, non_overridable, private :: divergence_1D_values
     procedure, non_overridable, private :: divergence_1D_grid
   end type
+
+  interface divergence_1D_t
+
+    pure module function construct_from_tensor(tensor_1D) result(divergence_1D)
+      !! Result is a 1D divergence with the provided parent component
+      implicit none
+      type(tensor_1D_t), intent(in) :: tensor_1D
+      type(divergence_1D_t) divergence_1D
+    end function
+
+  end interface
 
   type, extends(divergence_1D_t) :: laplacian_1D_t
     private

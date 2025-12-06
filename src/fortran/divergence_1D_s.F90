@@ -18,6 +18,10 @@ contains
 
 #endif
 
+  module procedure construct_from_tensor
+    divergence_1D%tensor_1D_t = tensor_1D
+  end procedure
+
   module procedure divergence_1D_values
     cell_centered_values = self%values_
   end procedure
