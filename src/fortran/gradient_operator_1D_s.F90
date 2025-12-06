@@ -140,13 +140,13 @@ contains
 
 #if HAVE_DO_CONCURRENT_TYPE_SPEC_SUPPORT && HAVE_LOCALITY_SPECIFIER_SUPPORT
       do concurrent(integer :: col=1:cols) default(none) shared(G, self, cols)
-        G(:,col) = self .x. e(dir=col, len=cols)
+        G(:,col) = self .x. e(dir=col, length=cols)
       end do
 #else
       block
         integer col
         do concurrent(col=1:cols)
-          G(:,col) = self .x. e(dir=col, len=cols)
+          G(:,col) = self .x. e(dir=col, length=cols)
         end do
       end block
 #endif
@@ -154,10 +154,10 @@ contains
 
   contains
 
-    pure function e(dir, len) result(unit_vector)
+    pure function e(dir, length) result(unit_vector)
       !! Result is the dir-th column of the len x len identity matrix
-      double precision :: unit_vector(len)
-      integer, intent(in) :: dir, len
+      integer, intent(in) :: dir, length
+      double precision :: unit_vector(length)
       unit_vector(1:dir-1) = 0D0
       unit_vector(dir)     = 1D0
       unit_vector(dir+1:)  = 0D0
