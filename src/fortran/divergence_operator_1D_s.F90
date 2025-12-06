@@ -164,7 +164,7 @@ contains
       block
         integer col
         do concurrent(col=1:cols)
-          D(:,col) = self .x. e(dir=col, len=rows)
+          D(:,col) = self .x. e(dir=col, length=rows)
         end do
       end block
 #endif

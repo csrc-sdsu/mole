@@ -18,11 +18,6 @@ contains
     vector_1D%divergence_operator_1D_ = divergence_operator_1D_t(k=order, dx=(x_max - x_min)/cells, cells=cells)
   end procedure
 
-  module procedure construct_from_components
-    vector_1D%tensor_1D_t = tensor_1D
-    vector_1D%divergence_operator_1D_ = divergence_operator_1D
-  end procedure
-
 #else
 
   pure module function construct_1D_vector_from_function(initializer, order, cells, x_min, x_max) result(vector_1D)
@@ -43,6 +38,11 @@ contains
   end function
 
 #endif
+
+  module procedure construct_from_components
+    vector_1D%tensor_1D_t = tensor_1D
+    vector_1D%divergence_operator_1D_ = divergence_operator_1D
+  end procedure
 
   module procedure div
     associate(Dv => self%divergence_operator_1D_ .x. self%values_)
