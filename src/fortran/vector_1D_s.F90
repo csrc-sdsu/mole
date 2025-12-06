@@ -1,7 +1,7 @@
 #include "julienne-assert-macros.h"
 
 submodule(tensors_1D_m) vector_1D_s
-  use julienne_m, only : call_julienne_assert_, operator(.greaterThan.), operator(.isAtLeast.)
+  use julienne_m, only : call_julienne_assert_, operator(.greaterThan.), operator(.isAtLeast.), operator(.equalsExpected.)
   implicit none
 
 contains
@@ -41,9 +41,8 @@ contains
 
   module procedure div
     associate(Dv => self%divergence_operator_1D_ .x. self%values_)
-      divergence_1D = divergence_1D_t( &
-        tensor_1D_t(Dv(2:size(Dv)-1), self%x_min_, self%x_max_, self%cells_, self%order_) &
-      )
+      call_julienne_assert(size(Dv) .equalsExpected. self%cells_ + 2)
+      divergence_1D = divergence_1D_t( tensor_1D_t(Dv(2:size(Dv)-1), self%x_min_, self%x_max_, self%cells_, self%order_) )
     end associate
   end procedure
 
