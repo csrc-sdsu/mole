@@ -68,6 +68,7 @@ module mimetic_operators_1D_m
     procedure, non_overridable, private :: divergence_matrix_multiply
     generic :: assemble => assemble_divergence
     procedure, non_overridable, private :: assemble_divergence
+    procedure, non_overridable :: submatrix_A_rows
   end type
 
   interface divergence_operator_1D_t
@@ -84,6 +85,13 @@ module mimetic_operators_1D_m
   end interface
 
   interface
+
+    pure module function submatrix_A_rows(self) result(rows)
+      !! Result is number of rows in the A block of the mimetic divergence matrix operator
+      implicit none
+      class(divergence_operator_1D_t), intent(in) :: self
+      integer rows
+    end function
 
     pure module function gradient_matrix_multiply(self, vec) result(matvec_product)
       !! Result is mimetic gradient vector

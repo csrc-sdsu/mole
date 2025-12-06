@@ -130,6 +130,10 @@ module tensors_1D_m
   end type
 
   type, extends(divergence_1D_t) :: laplacian_1D_t
+    private
+    integer boundary_depth_
+  contains
+    procedure reduced_order_boundary_depth
   end type
 
   interface
@@ -188,6 +192,13 @@ module tensors_1D_m
       implicit none
       class(scalar_1D_t), intent(in) :: self
       type(laplacian_1D_t) laplacian_1D !! discrete gradient
+    end function
+
+    pure module function reduced_order_boundary_depth(self) result(num_nodes)
+      !! Result is number of nodes away from the boundary for which convergence rate is one degree lower
+      implicit none
+      class(laplacian_1D_t), intent(in) :: self
+      integer num_nodes
     end function
 
     pure module function div(self) result(divergence_1D)

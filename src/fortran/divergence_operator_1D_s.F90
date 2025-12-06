@@ -98,6 +98,10 @@ contains
 
   end procedure construct_1D_divergence_operator
 
+  module procedure submatrix_A_rows
+    call_julienne_assert(allocated(self%upper_))
+    rows = size(self%upper_,1)
+  end procedure
 
   module procedure divergence_matrix_multiply
 
