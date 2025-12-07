@@ -146,7 +146,8 @@ contains
       block
         integer col
         do concurrent(col=1:cols)
-          G(:,col) = self .x. e(dir=col, length=cols)
+          G(:,col) = gradient_matrix_multiply(self, e(dir=col, length=cols))
+            !! Work around gfortran 13-14 issue: https://github.com/rouson/mole/actions/runs/19996724722/job/57345438334
         end do
       end block
 #endif
