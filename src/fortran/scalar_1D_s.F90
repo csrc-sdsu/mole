@@ -61,7 +61,11 @@ contains
 
   module procedure laplacian
 
+#ifndef __GFORTRAN__
     laplacian_1D%divergence_1D_t = .div. (.grad. self)
+#else
+    laplacian_1D%divergence_1D_t = div(grad(self))
+#endif
 
     associate(divergence_operator_1D => divergence_operator_1D_t(self%order_, (self%x_max_ - self%x_min_)/self%cells_, self%cells_))
       laplacian_1D%boundary_depth_ = divergence_operator_1D%submatrix_A_rows() + 1
