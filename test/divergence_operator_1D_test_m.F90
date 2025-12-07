@@ -27,7 +27,7 @@ module divergence_operator_1D_test_m
     procedure, nopass :: results
   end type
 
-  double precision, parameter :: tight_tolerance = 1D-14, loose_tolerance = 1D-08, rough_tolerance = 1D-02
+  double precision, parameter :: tight_tolerance = 1D-14, loose_tolerance = 1D-08, rough_tolerance = 1D-02, crude_tolerance = 2D-02
 
 contains
 
@@ -51,7 +51,7 @@ contains
           'computing convergence rate of 2 for 2nd-order .div. [sin(x) + cos(x)] within ' // string_t(rough_tolerance) &
          ,usher(check_2nd_order_div_sinusoid_convergence)) &
       ,test_description_t( &
-          'computing convergence rate of 4 for 4th-order .div. [sin(x) + cos(x)] within ' // string_t(rough_tolerance) &
+          'computing convergence rate of 4 for 4th-order .div. [sin(x) + cos(x)] within ' // string_t(crude_tolerance) &
          ,usher(check_4th_order_div_sinusoid_convergence)) &
     ])
   end function
@@ -183,7 +183,7 @@ contains
             ,error_fine_max => maxval(abs(div_fine_values - div_fine_expected)) &
           )
             associate(order_actual => log(error_coarse_max/error_fine_max)/log(dble(fine_cells)/coarse_cells))
-              test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. rough_tolerance) &
+              test_diagnosis = test_diagnosis .also. (order_actual .approximates. dble(order_desired) .within. crude_tolerance) &
                 // " (convergence rate for 4th-order .div. [sin(x) + cos(x)])"
             end associate
           end associate

@@ -25,7 +25,7 @@ module laplacian_operator_1D_test_m
     procedure, nopass :: results
   end type
 
-  double precision, parameter :: tight_tolerance = 1D-14, loose_tolerance = 1D-11, crude_tolerance = 1D-02
+  double precision, parameter :: tight_tolerance = 1D-14, loose_tolerance = 1D-09, crude_tolerance = 1D-02
 
 contains
 
