@@ -8,7 +8,7 @@ These examples demonstrate the solution of elliptic equations in one dimension, 
 Elliptic1D
 Elliptic1D-add-Scalar-BC
 Elliptic1D-Homogeneous-Dirichlet
-Elliptic1D-Left-Dirichlet-Right-Neumann
+Elliptic1D-Left-Neumann-Right-Dirichlet
 Elliptic1D-Left-Dirichlet-Right-Robin
 Elliptic1D-Left-Neumann-Right-Neumann
 Elliptic1D-Left-Neumann-Right-Robin

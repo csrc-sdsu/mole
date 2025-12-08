@@ -1,6 +1,6 @@
-### Elliptic1D Left Dirichlet and Right Neumann Boundary Conditions
+### Elliptic1D Left Neumann and Right Dirichlet Boundary Conditions
 
-Solves the 1D Poisson equation with left Dirichlet and right Neumann boundary conditions.
+Solves the 1D Poisson equation with left Neumann and right Dirichlet boundary conditions.
 
 $$
 -\nabla^2 u(x) = 1
@@ -43,8 +43,8 @@ $$
 ---
 
 This example is implemented in:
-- [MATLAB/ OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DLeftDirichletRightNeumann.m)
-- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/elliptic1DLeftDirichletRightNeumann.cpp)
+- [MATLAB/ OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DLeftNeumannRightDirichlet.m)
+- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/elliptic1DLeftNeumannRightDirichlet.cpp)
 
 Additional MATLAB/ OCTAVE variants of this example with different boundary conditions:
 - [Homogeneous Dirichlet](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DHomogeneousDirichlet.m)
