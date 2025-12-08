@@ -26,7 +26,7 @@ int main() {
     for (int i = 0; i < t.size()-1; i++) {
         double y_old = y(i);
         double xn = y_old;  // Initial input for fixed-point iteration
-        double xnp1;    // x at iternation n+1
+        double xnp1;    // x at iteration n+1
         for (int n = 0; n < 100; n++) {     // fixed-point iteration for rootfinding
             xnp1 = y_old + h*f(t(i+1), xn); // Backward Euler
             if (std::abs(xnp1 - xn) < tol) {   // Stopping criteria for approximate relative error

@@ -26,9 +26,7 @@ where:
 #### Implementation Details
 
 Note that $f(t_{i+1}, y_{i+1})$ is not known due to $y_{i+1}$ being on both the left and right hand side. Therefore, we can solve for $y_{i+1}$ by finding the root:
-$$
-y_{i+1} - y_i - h \cdot f(t_{i+1}, y_{i+1}) = 0
-$$
+$$y_{i+1} - y_i - h \cdot f(t_{i+1}, y_{i+1}) = 0$$
 
 In the C++ example, we used the fixed-point iteration method for rootfinding due to it's simpler nature.
 
