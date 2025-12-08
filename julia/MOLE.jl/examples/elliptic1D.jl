@@ -1,6 +1,7 @@
 """
 A Julia script that solves the 1D Poisson's equation with Robin boundary conditions using mimetic operators.
 """
+
 using Plots
 using MOLE
 
@@ -30,6 +31,9 @@ U[end] = 2*exp(1)
 U = L\U
 
 # Plot result
-p = scatter(grid,U,label="Approximated")
-plot!(p,grid,exp.(grid), label="Analytical")
+p = scatter(grid, U, label="Approximated")
+plot!(p, grid, exp.(grid), label="Analytical")
+plot!(p, xlabel="x", ylabel="u(x)", title="Poisson's equation with Robin BC")
 display(p)
+println("Press Enter to close the plot and exit.")
+readline()
