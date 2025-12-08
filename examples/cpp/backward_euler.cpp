@@ -18,19 +18,24 @@ int main() {
     arma::vec t = arma::regspace(0, h, 5);  // Calculates up to y(5) at step-size h
     arma::mat y = arma::mat(1, t.size(), arma::fill::zeros);
     constexpr double tol = 1e-6;    // tolerance for fixed-point iteration
-
+    
     // Initial conditions
     y(0) = 2.0;
     
     // Backward Euler
     for (int i = 0; i < t.size()-1; i++) {
         double y_old = y(i);
-        for (int k = 0; k < 100; k++) {     // fixed-point iteration for rootfinding
-            y(i+1) = y_old + h*f(t(i+1), y_old);    // Backward Euler
-            if (std::abs(y(i+1) - y_old) < tol) {   // Stopping criteria for approximate relative error
+        double xn = y_old;  // Initial input for fixed-point iteration
+        double xnp1;    // x at iternation n+1
+        for (int n = 0; n < 100; n++) {     // fixed-point iteration for rootfinding
+            xnp1 = y_old + h*f(t(i+1), xn); // Backward Euler
+            if (std::abs(xnp1 - xn) < tol) {   // Stopping criteria for approximate relative error
                 break;
             }
+            xn = xnp1;
+            // std::cout << k <<std::endl;  // Print number of iterations until convergence
         }
+        y(i+1) = xnp1;  // root found
     }
 
     //  Create a GNUplot script file
