@@ -1,9 +1,9 @@
 module MOLE
 
-include("Divergence.jl")
-include("Gradient.jl")
-include("Laplacian.jl")
-include("RobinBC.jl")
+include("divergence.jl")
+include("gradient.jl")
+include("laplacian.jl")
+include("robinBC.jl")
 
 export div, grad, lap, robinBC
 
