@@ -32,8 +32,13 @@ In the C++ example, we used the fixed-point iteration method for rootfinding due
 
 #### Results
 
-![Backward Euler gnuplot](../../_images/backward_euler.png)
 
+<div style="text-align: center">
+
+![Staggered grid representation in 1D](figures/backward_euler.png){width=80%}
+
+*Backward Euler solutions y(t) per time-step t.*
+</div>
 ---
 
 This example is implemented in:

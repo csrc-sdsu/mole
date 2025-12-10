@@ -6,6 +6,7 @@ Time integration methods are essential for solving time-dependent PDEs, converti
 :maxdepth: 1
 :caption: Contents
 
+backward_euler
 RK2
 RK4
 ``` 
