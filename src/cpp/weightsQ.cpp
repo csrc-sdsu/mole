@@ -14,13 +14,29 @@
  */
 
 #include "utils.h"
+#include "divergence.h"
 #include "weightsQ.h"
 
 WeightsQ::WeightsQ(u16 k, u32 m, Real dx)
 {
-  at(0) = 1.0;
-  at(1) = 1.0;
-  at(2) = 1.0;
-  at(3) = 1.0;
-  at(4) = 1.0;
+  Divergence D(k, m, dx);
+  std::cout << "D initially" << std::endl;
+  D.print_dense();
+  D.shed_row(0);
+  D.shed_row(m);
+  std::cout << "D after sheding rows" << std::endl;
+  D.print_dense();
+
+  vec b(m+1);
+  b.at(0) = -1.0;
+  b.at(m) = 1.0;
+  std::cout << "b" << std::endl;
+  b.print();
+   
+  sp_mat Dtranspose = D.t();
+  std::cout << "D after shedding transpose" << std::endl;
+  Dtranspose.print_dense();
+  sp_vec Q = Utils::spsolve_eigen(Dtranspose,b);
+  std::cout << "Q" << std::endl;
+  Q.print_dense();
 }

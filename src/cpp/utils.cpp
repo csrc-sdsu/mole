@@ -18,7 +18,7 @@
 #include "utils.h"
 #include <cassert>
 
-#ifdef EIGEN
+//#ifdef EIGEN
 #include <eigen3/Eigen/SparseLU>
 
 vec Utils::spsolve_eigen(const sp_mat &A, const vec &b) {
@@ -47,7 +47,7 @@ vec Utils::spsolve_eigen(const sp_mat &A, const vec &b) {
 
   return vec(eigen_x.data(), eigen_x.size());
 }
-#endif
+//#endif
 
 // Basic implementation of Kronecker product
 /*
