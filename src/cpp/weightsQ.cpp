@@ -20,11 +20,11 @@
 WeightsQ::WeightsQ(u16 k, u32 m, Real dx)
 {
   Divergence D(k, m, dx);
-  std::cout << "D initially" << std::endl;
+  std::cout << "D initially:" << std::endl;
   D.print_dense();
   D.shed_row(0);
   D.shed_row(m);
-  std::cout << "D after sheding rows" << std::endl;
+  std::cout << "D after sheding rows:" << std::endl;
   D.print_dense();
 
   vec b(m+1);
@@ -34,7 +34,7 @@ WeightsQ::WeightsQ(u16 k, u32 m, Real dx)
   b.print();
    
   sp_mat Dtranspose = D.t();
-  std::cout << "D after shedding transpose" << std::endl;
+  std::cout << "D after shedding transpose:" << std::endl;
   Dtranspose.print_dense();
   sp_vec Q = Utils::spsolve_eigen(Dtranspose,b);
   std::cout << "Q" << std::endl;
