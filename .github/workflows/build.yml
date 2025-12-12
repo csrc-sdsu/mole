@@ -152,7 +152,7 @@ jobs:
           echo "FPM_FC=flang-new" >> "$GITHUB_ENV" ; \
         elif [[ "$FC" =~ "ifx" ]] ; then \
           echo "FPM_FC=ifx" >> "$GITHUB_ENV" ; \
-          echo "FFLAGS=-fpp -coarray $FFLAGS" >> "$GITHUB_ENV" ; \
+          echo "FFLAGS=-fpp -coarray -coarray-num-images=1 $FFLAGS" >> "$GITHUB_ENV" ; \
           : ls -al /opt/intel/oneapi/compiler/2025.*/bin/ ; \
           if type -p icpx ; then \
             echo "FPM_CC=icx" >> "$GITHUB_ENV" ; \

@@ -4,7 +4,7 @@ name = "MOLE"
 armadillo-code = {git = "https://gitlab.com/rouson/armadillo-code.git", tag = "fpm"}
 
 [dev-dependencies]
-julienne = {git = "https://github.com/berkeleylab/julienne.git", tag = "3.1.5"}
+julienne = {git = "https://github.com/berkeleylab/julienne.git", tag = "3.3.0"}
 
 [install]
 library = true
