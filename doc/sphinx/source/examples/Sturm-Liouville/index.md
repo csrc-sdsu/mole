@@ -6,5 +6,10 @@ Sturm-Liouville theory deals with a class of second-order linear differential eq
 :maxdepth: 1
 :caption: Contents
 
+Bessel
 Chebyshev
-``` 
+Helmholtz
+Hermite
+Laguerre
+Legendre
+```

@@ -75,7 +75,7 @@ jobs:
       - name: Install dependencies
         run: |
           brew update && (brew list cmake || brew install cmake)
-          brew install openblas eigen libomp lapack
+          brew install openblas eigen@3 libomp lapack
           sudo ln -sf /opt/homebrew/bin/gfortran-14 /opt/homebrew/bin/gfortran
         
       - name: Export Environment Variables
@@ -92,13 +92,14 @@ jobs:
           export CPPFLAGS+=" -I/opt/homebrew/opt/libomp/include"
           export LDFLAGS+=" -L/opt/homebrew/opt/lapack/lib"
           export CPPFLAGS+=" -I/opt/homebrew/opt/lapack/include"
+          export CPPFLAGS+=" -I/opt/homebrew/opt/eigen@3/include"
           export PKG_CONFIG_PATH+=" /opt/homebrew/opt/lapack/lib/pkgconfig"
 
       - name: Create build directory
         run: mkdir -p build
 
       - name: Run CMake
-        run: cmake -DCMAKE_Fortran_COMPILER="/opt/homebrew/bin/gfortran-14" -S . -B build
+        run: cmake -DEigen3_DIR=/opt/homebrew/Cellar/eigen@3/3.4.1/share/eigen3/cmake -DCMAKE_Fortran_COMPILER="/opt/homebrew/bin/gfortran-14" -S . -B build
 
       - name: Build MOLE library
         run: cmake --build build

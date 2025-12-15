@@ -17,6 +17,7 @@ Navier-Stokes/index
 Mixed/index
 Integration/index
 Time-Integrators/index
+Tutorials/index
 ```
 
 More examples will be added in the future. 

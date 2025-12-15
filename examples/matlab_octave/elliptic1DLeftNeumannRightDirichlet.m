@@ -1,5 +1,5 @@
 % ====================== Test 3 =====================
-% 1D Poisson BVP: Dirichlet, Neumann Homogeneous BC
+% 1D Poisson BVP: Neumann, Dirichlet Homogeneous BC
 % - u'' = 1, 0 < x < 1, u'(0) = 0, u(1) = 0
 % exact solution: u(x) = (1 - x^2)/2
 % ===================================================
