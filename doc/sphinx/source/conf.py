@@ -75,6 +75,7 @@ extensions = [
     'matlab_args_fix',        # Fix MATLAB function argument warnings
     'generate_sitemap',       # Generate sitemap.xml for SEO
     'github_contributors',    # Display GitHub contributors
+    'image_path_logger',      # Debug image path resolution for included markdown files
 ]
 
 #------------------------------------------------------------------------------
