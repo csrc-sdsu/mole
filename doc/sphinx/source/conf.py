@@ -388,33 +388,83 @@ def copy_governance_images(app, config):
     """
     import shutil
     from pathlib import Path
+    from sphinx.util import logging
+    
+    logger = logging.getLogger(__name__)
     
     # Determine paths relative to conf.py location
     conf_dir = Path(app.confdir)
     
     # Source: doc/assets/img/ (relative to repo root)
-    img_source = conf_dir.parent.parent.parent / "doc" / "assets" / "img"
+    # Try multiple possible paths to handle different build environments
+    possible_sources = [
+        conf_dir.parent.parent.parent / "doc" / "assets" / "img",  # Standard structure
+        conf_dir.parent.parent / "assets" / "img",  # Alternative structure
+        Path("doc/assets/img").resolve(),  # Absolute from current working directory
+    ]
+    
+    img_source = None
+    for source in possible_sources:
+        if source.exists():
+            img_source = source
+            break
+    
+    if img_source is None:
+        logger.warning(
+            f"Image source directory not found. Tried: {[str(s) for s in possible_sources]}. "
+            f"Images may not display correctly. Current confdir: {conf_dir}"
+        )
+        return
+    
+    logger.info(f"Copying governance images from: {img_source}")
     
     # Destinations
     img_dest_1 = conf_dir / "_images"
     img_dest_2 = conf_dir / "intros" / "doc" / "assets" / "img"
     
-    if not img_source.exists():
-        print(f"Warning: Image source directory not found: {img_source}")
-        return
+    destinations = [
+        (img_dest_1, "source/_images/"),
+        (img_dest_2, "source/intros/doc/assets/img/"),
+    ]
+    
+    copied_files = []
+    failed_files = []
     
     # Copy to both locations
-    for dest in [img_dest_1, img_dest_2]:
-        dest.mkdir(parents=True, exist_ok=True)
-        
-        # Copy all image files
-        for pattern in ["*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg"]:
-            for img in img_source.glob(pattern):
-                dest_file = dest / img.name
-                try:
-                    shutil.copy2(img, dest_file)
-                except Exception as e:
-                    print(f"Warning: Could not copy {img.name}: {e}")
+    for dest_path, dest_name in destinations:
+        try:
+            dest_path.mkdir(parents=True, exist_ok=True)
+            
+            # Copy all image files
+            for pattern in ["*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg"]:
+                for img in img_source.glob(pattern):
+                    dest_file = dest_path / img.name
+                    try:
+                        shutil.copy2(img, dest_file)
+                        copied_files.append((img.name, dest_name))
+                    except Exception as e:
+                        failed_files.append((img.name, dest_name, str(e)))
+                        logger.warning(f"Could not copy {img.name} to {dest_name}: {e}")
+        except Exception as e:
+            logger.error(f"Failed to create destination directory {dest_name}: {e}")
+    
+    # Log summary
+    if copied_files:
+        logger.info(f"Successfully copied {len(set(f[0] for f in copied_files))} image(s) to required locations")
+    if failed_files:
+        logger.warning(f"Failed to copy {len(failed_files)} image(s). Check warnings above for details.")
+    
+    # Verify critical images were copied (for debugging)
+    critical_images = ["MOLE_pillars.png", "MOLE_OSE_circles.png"]
+    for img_name in critical_images:
+        found_in_dest1 = (img_dest_1 / img_name).exists()
+        found_in_dest2 = (img_dest_2 / img_name).exists()
+        if not (found_in_dest1 and found_in_dest2):
+            logger.warning(
+                f"Critical image {img_name} may be missing. "
+                f"Found in _images/: {found_in_dest1}, "
+                f"Found in intros/doc/assets/img/: {found_in_dest2}"
+            )
 
 def setup(app):
     """Setup function for Sphinx extension."""
