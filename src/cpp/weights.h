@@ -7,20 +7,20 @@
  /*
  * @file weights.h
  * 
- * @brief Mimetic Differences Q Weights
+ * @brief Mimetic Differences Weights
  * 
  * @date 2025/10/14
  * 
  */
 
-#ifndef WEIGHTSQ_H
-#define WEIGHTSQ_H
+#ifndef WEIGHTS_H
+#define WEIGHTS_H
 
 #include "utils.h"
 #include <cassert>
 
 /**
- * @brief Mimetic Divergence operator
+ * @brief Generate Q Weights
  *
  */
 class WeightsQ : public sp_vec {
@@ -39,4 +39,24 @@ public:
 
 };
 
-#endif // WEIGHTSQ_H
+/**
+ * @brief Generate P Weights
+ *
+ */
+class WeightsP : public sp_vec {
+
+public:
+  using sp_vec::operator=;
+
+  /**
+   * @brief P Weights Constructor
+   *
+   * @param k Order of accuracy
+   * @param m Number of cells
+   * @param dx Spacing between cells
+   */  
+  WeightsP(u16 k, u32 m, Real dx);
+
+};
+
+#endif // WEIGHTS_H

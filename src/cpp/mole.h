@@ -24,6 +24,6 @@
 #include "operators.h"
 #include "robinbc.h"
 #include "utils.h"
-#include "weightsQ.h"
+#include "weights.h"
 
 #endif // MOLE_H

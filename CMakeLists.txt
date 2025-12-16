@@ -59,8 +59,8 @@ if(POLICY CMP0135)
 endif()
 
 # Paths for downloading and building libraries
-set(ARMADILLO_VERSION "14.2.2")
-set(SUPERLU_VERSION "5.3.0")
+set(ARMADILLO_VERSION "15.5.5")
+set(SUPERLU_VERSION "7.0.1")
 set(BUILD_DIR "${CMAKE_BINARY_DIR}/third_party_build")
 set(INSTALL_DIR "${CMAKE_BINARY_DIR}/third_party_install")
 
