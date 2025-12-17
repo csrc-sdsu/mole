@@ -13,8 +13,8 @@
  * 
  */
 
-#ifndef WEIGHTS_H
-#define WEIGHTS_H
+#ifndef WEIGHTSQ_H
+#define WEIGHTSQ_H
 
 #include "utils.h"
 #include <cassert>
@@ -39,24 +39,5 @@ public:
 
 };
 
-/**
- * @brief Generate P Weights
- *
- */
-class WeightsP : public sp_vec {
 
-public:
-  using sp_vec::operator=;
-
-  /**
-   * @brief P Weights Constructor
-   *
-   * @param k Order of accuracy
-   * @param m Number of cells
-   * @param dx Spacing between cells
-   */  
-  WeightsP(u16 k, u32 m, Real dx);
-
-};
-
-#endif // WEIGHTS_H
+#endif // WEIGHTSQ_H
