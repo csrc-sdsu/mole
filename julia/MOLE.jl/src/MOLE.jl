@@ -7,4 +7,4 @@ include("robinBC.jl")
 
 export div, grad, lap, robinBC
 
-end # module
+end # module MOLE
