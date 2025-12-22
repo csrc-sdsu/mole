@@ -57,7 +57,7 @@ int main()
     // Set up system of equations
     arma::sp_mat xc_mat = arma::sp_mat( arma::diagmat(xc) ); // x
     arma::sp_mat xc_mat_sq = arma::sp_mat( arma::diagmat(1 - arma::pow(xc, 2)) ); // 1 - x^2
-    arma::sp_mat A = xc_mat_sq * (arma::sp_mat)L - 2 * xc_mat * (arma::sp_mat)I * (arma::sp_mat)G + n * (n-1) * arma::speye(m+2, m+2);
+    arma::sp_mat A = xc_mat_sq * (arma::sp_mat)L - 2.0 * xc_mat * (arma::sp_mat)I * (arma::sp_mat)G + (12.0 * arma::speye(m+2, m+2));
 
     // Apply BC
     A.row(0).zeros();
