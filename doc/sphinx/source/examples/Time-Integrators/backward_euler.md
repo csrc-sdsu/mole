@@ -6,7 +6,7 @@ $$
 \frac{dy}{dt} = \sin^2(t) \cdot y
 $$
 
-with initial condition $y(0) = 0$ over the time interval $[0,5]$.
+with initial condition $y(0) = 2$ over the time interval $[0,5]$.
 
 #### Mathematical Background
 
@@ -26,16 +26,18 @@ where:
 #### Implementation Details
 
 Note that $f(t_{i+1}, y_{i+1})$ is not known due to $y_{i+1}$ being on both the left and right hand side. Therefore, we can solve for $y_{i+1}$ by finding the root:
-$$
-y_{i+1} - y_i + h \cdot f(t_{i+1}, y_{i+1}) = 0
-$$
+$$y_{i+1} - y_i - h \cdot f(t_{i+1}, y_{i+1}) = 0$$
 
 In the C++ example, we used the fixed-point iteration method for rootfinding due to it's simpler nature.
 
 #### Results
 
-![Backward Euler gnuplot](../../_images/backward_euler.png)
 
+<div style="text-align: center">
+<img src="figures/backward_euler.png" width="80%">
+<br>
+<em>Backward Euler solutions y(t) per time-step t.</em>
+</div>
 ---
 
 This example is implemented in:
