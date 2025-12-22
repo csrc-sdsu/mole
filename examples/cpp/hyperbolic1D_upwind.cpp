@@ -124,6 +124,13 @@ int main()
     scriptFile.close();
 
     // Run GNUplot with the script
-    system("gnuplot -persistent gp_script");
+    int status = std::system("gnuplot -persistent gp_script");
+
+    if ( status != 0 ) {
+        std::cerr << "Error executing GNUplot.\n";
+        return EXIT_FAILURE;
+    }
+ 
+
     return EXIT_SUCCESS;
 }

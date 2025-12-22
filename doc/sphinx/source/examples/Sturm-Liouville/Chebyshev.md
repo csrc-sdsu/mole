@@ -16,6 +16,7 @@ Chebyshev's differential equation is a special case of the Sturm-Liouville probl
 $$\frac{d}{dx}\left(p(x)\frac{du}{dx}\right) + q(x)u + \lambda r(x)u = 0$$
 
 For Chebyshev's equation, we have:
+
 - $p(x) = 1-x^2$
 - $q(x) = 0$
 - $r(x) = 1$
@@ -30,23 +31,28 @@ The discrete system is:
 $$A u = b$$
 
 where:
-- $A = (1-x^2) L - x I G + n^2 I$
+
+- $A = (1-x^2) L - x I_{FC} G + n^2 I$
 - $L$ is the mimetic Laplacian
 - $G$ is the mimetic gradient
-- $I$ is the interpolation operator from faces to centers
+- $I_{FC}$ is the interpolation operator from faces to centers
+- $I$ is the identity matrix
 
 Boundary conditions are applied using the `addScalarBC1D` function.
 
 ---
 
 This example is implemented in:
+
 - [MATLAB/OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/sturmLiouvilleChebyshev.m)
+- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/sturmLiouvilleChebyshev.cpp)
 
 ## Results
 
-The numerical solution closely matches the exact solution, which is the Chebyshev polynomial $T_2(x) = 2x^2 - 1$. 
+The numerical solution closely matches the exact solution, which is the Chebyshev polynomial $T_2(x) = 2x^2 - 1$.
 
 Chebyshev polynomials are important in numerical analysis and approximation theory because they:
+
 1. Minimize the maximum error in polynomial approximation
 2. Have roots that are optimal interpolation points (Chebyshev nodes)
-3. Are closely related to the Fourier cosine series 
+3. Are closely related to the Fourier cosine series
