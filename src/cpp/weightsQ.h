@@ -39,5 +39,4 @@ public:
 
 };
 
-
 #endif // WEIGHTSQ_H

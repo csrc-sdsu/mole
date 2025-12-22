@@ -18,12 +18,11 @@
 #include "gradient.h"
 #include "weightsP.h"
 
-
 WeightsP::WeightsP(u16 k, u32 m, Real dx)
 {
   Gradient G(k, m, dx);
 
-  vec b(m+2);
+  arma::vec b(m+2);
   b.at(0) = -1.0;
   b.at(m+1) = 1.0;
 
