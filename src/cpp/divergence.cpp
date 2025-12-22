@@ -27,8 +27,6 @@ Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
       at(i, i - 1) = -1.0;
       at(i, i) = 1.0;
     }
-    // Weights
-    Q = { 1.0, 1.0, 1.0, 1.0, 1.0 };
     break;
   case 4:
     // A
@@ -50,9 +48,6 @@ Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
       at(i, i) = 9.0 / 8.0;
       at(i, i + 1) = -1.0 / 24.0;
     }
-    Q  = { 2186.0 / 1943.0 , 2125.0 / 2828.0 , 1441.0 / 1240.0 , 648.0 / 673.0
-      , 349.0 / 350.0 , 648.0 / 673.0 , 1441.0 / 1240.0 , 2125.0 / 2828.0
-      , 2186.0 / 1943.0 };
     break;
   case 6:
     // A
@@ -94,11 +89,6 @@ Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
       at(i, i + 1) = -25.0 / 384.0;
       at(i, i + 2) = 3.0 / 640.0;
     }
-    // Weights
-    Q  = { 2383.0 / 2005.0 , 929.0 / 2002.0 , 887.0 / 531.0 , 3124.0 / 5901.0
-      , 1706.0 / 1457.0 , 457.0 / 467.0 , 1057.0 / 1061.0 , 457.0 / 467.0
-      , 1706.0 / 1457.0 , 3124.0 / 5901.0 , 887.0 / 531.0 , 929.0 / 2002.0
-      , 2383.0 / 2005.0 };
     break;
   }
 
@@ -166,6 +156,3 @@ Divergence::Divergence(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz) {
         Utils::spkron(A1, D1) + Utils::spkron(A2, D2) + Utils::spkron(A3, D3);
   }
 }
-
-// Returns weights
-vec Divergence::getQ() { return Q; }
