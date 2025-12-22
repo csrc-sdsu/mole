@@ -68,6 +68,8 @@ public:
   */
   static vec spsolve_eigen(const sp_mat &A, const vec &b);
 
+  static vec spsolve_eigenQR(const sp_mat &A, const vec &b);
+
   /**
   * @brief An analog to the MATLAB/Octave 2D meshgrid operation
   *
