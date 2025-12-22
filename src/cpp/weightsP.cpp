@@ -26,7 +26,6 @@ WeightsP::WeightsP(u16 k, u32 m, Real dx)
   vec b(m+2);
   b.at(0) = -1.0;
   b.at(m+1) = 1.0;
-   
 
   sp_mat Gtranspose = G.t();
   *this = Utils::spsolve_eigenQR(Gtranspose,b);
