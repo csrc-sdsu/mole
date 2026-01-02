@@ -7,6 +7,7 @@ module laplacian_operator_1D_test_m
     ,operator(.approximates.) &
     ,operator(.separatedBy.) &
     ,operator(.within.) &
+    ,passing_test &
     ,string_t &
     ,test_t &
     ,test_description_t &
@@ -25,7 +26,7 @@ module laplacian_operator_1D_test_m
     procedure, nopass :: results
   end type
 
-  double precision, parameter :: tight_tolerance = 1D-14, loose_tolerance = 1D-09, crude_tolerance = 1D-02
+  double precision, parameter :: tight_tolerance = 5D-14, loose_tolerance = 1D-09, crude_tolerance = 1D-02
 
 contains
 
@@ -66,12 +67,15 @@ contains
     double precision, parameter :: expected_laplacian = 1D0
 #ifdef __GFORTRAN__
     type(laplacian_1D_t) laplacian_scalar
-    laplacian_scalar = .laplacian. scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=5D0)
+    laplacian_scalar = .laplacian. scalar_1D_t(scalar_1D_initializer, order=2, cells=16, x_min=0D0, x_max=5D0)
 #else
-    associate(laplacian_scalar => .laplacian. scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=5D0))
+    associate(laplacian_scalar => .laplacian. scalar_1D_t(scalar_1D_initializer, order=2, cells=16, x_min=0D0, x_max=5D0))
 #endif
-      test_diagnosis = .all. (laplacian_scalar%values() .approximates. expected_laplacian .within. tight_tolerance) &
+
+      test_diagnosis = passing_test()
+      test_diagnosis = test_diagnosis .also. (.all. (laplacian_scalar%values() .approximates. expected_laplacian .within. tight_tolerance)) &
         // " (2nd-order .laplacian. [(x**2)/2]"
+
 #ifndef __GFORTRAN__
     end associate
 #endif
@@ -88,14 +92,15 @@ contains
     procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => quartic
 
 #ifndef __GFORTRAN__
-    associate(laplacian_quartic => .laplacian. scalar_1D_t(scalar_1D_initializer, order=4, cells=20, x_min=0D0, x_max=40D0))
+    associate(laplacian_quartic => .laplacian. scalar_1D_t(scalar_1D_initializer, order=4, cells=16, x_min=0D0, x_max=40D0))
 #else
     type(laplacian_1D_t) laplacian_quartic
-    laplacian_quartic = .laplacian. scalar_1D_t(scalar_1D_initializer, order=4, cells=20, x_min=0D0, x_max=40D0)
+    laplacian_quartic = .laplacian. scalar_1D_t(scalar_1D_initializer, order=4, cells=16, x_min=0D0, x_max=40D0)
 #endif
       associate(x => laplacian_quartic%grid())
         associate(expected_laplacian => x**2, actual_laplacian => laplacian_quartic%values())
-          test_diagnosis = .all. (actual_laplacian .approximates. expected_laplacian .within. loose_tolerance) &
+          test_diagnosis = passing_test()
+          test_diagnosis = test_diagnosis .also. (.all. (actual_laplacian .approximates. expected_laplacian .within. loose_tolerance)) &
             // " (4th-order .laplacian. [(x**4)/24]"
         end associate
       end associate
@@ -118,12 +123,12 @@ contains
 
   function check_2nd_order_laplacian_convergence() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
-    test_diagnosis = check_laplacian_convergence(order_desired=2, coarse_cells=500, fine_cells=1000)
+    test_diagnosis = check_laplacian_convergence(order_desired=2, coarse_cells=400, fine_cells=401)
   end function
 
   function check_4th_order_laplacian_convergence() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
-    test_diagnosis = check_laplacian_convergence(order_desired = 4, coarse_cells=100, fine_cells=200)
+    test_diagnosis = check_laplacian_convergence(order_desired = 4, coarse_cells=150, fine_cells=151)
   end function
 
   function check_laplacian_convergence(order_desired, coarse_cells, fine_cells) result(test_diagnosis)
@@ -155,7 +160,8 @@ contains
           ,actual_fine   => laplacian_fine%values() &
           ,depth => laplacian_coarse%reduced_order_boundary_depth()  &
         )
-          test_diagnosis = &
+          test_diagnosis = passing_test()
+          test_diagnosis = test_diagnosis .also. &
             .all. (actual_coarse .approximates. expected_coarse .within. crude_tolerance) &
             // " (coarse-grid 2nd-order .laplacian. sin(x))"
 

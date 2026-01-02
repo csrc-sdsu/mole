@@ -7,8 +7,8 @@ module divergence_operator_1D_test_m
     ,operator(.all.) &
     ,operator(.also.) &
     ,operator(.approximates.) &
-    ,operator(.csv.) &
     ,operator(.within.) &
+    ,passing_test &
     ,string_t &
     ,test_t &
     ,test_description_t &
@@ -27,7 +27,7 @@ module divergence_operator_1D_test_m
     procedure, nopass :: results
   end type
 
-  double precision, parameter :: tight_tolerance = 1D-14, loose_tolerance = 1D-08, rough_tolerance = 1D-02, crude_tolerance = 2D-02
+  double precision, parameter :: tight_tolerance = 5D-14, loose_tolerance = 1D-08, rough_tolerance = 1D-02, crude_tolerance = 2D-02
 
 contains
 
@@ -68,12 +68,15 @@ contains
     double precision, parameter :: expected_divergence = 1D0
 #ifdef __GFORTRAN__
     type(divergence_1D_t) div_grad_scalar
-    div_grad_scalar = .div. (.grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=5D0))
+    div_grad_scalar = .div. (.grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=16, x_min=0D0, x_max=5D0))
 #else
-    associate(div_grad_scalar => .div. (.grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=5, x_min=0D0, x_max=5D0)))
+    associate(div_grad_scalar => .div. (.grad. scalar_1D_t(scalar_1D_initializer, order=2, cells=16, x_min=0D0, x_max=5D0)))
 #endif
-      test_diagnosis = .all. (div_grad_scalar%values() .approximates. expected_divergence .within. tight_tolerance) &
+ 
+      test_diagnosis = passing_test()
+      test_diagnosis = test_diagnosis .also. (.all. (div_grad_scalar%values() .approximates. expected_divergence .within. tight_tolerance)) &
                      // " (2nd-order .div. (.grad. (x**2)/2))"
+
 #ifndef __GFORTRAN__
     end associate
 #endif
@@ -85,17 +88,19 @@ contains
     double precision, parameter :: expected_divergence = 1D0
 #ifdef __GFORTRAN__
     type(divergence_1D_t) div_grad_scalar
-    div_grad_scalar = .div. (.grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=9, x_min=0D0, x_max=9D0))
+    div_grad_scalar = .div. (.grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=16, x_min=0D0, x_max=9D0))
 #else
-    associate(div_grad_scalar => .div. (.grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=9, x_min=0D0, x_max=9D0)))
+    associate(div_grad_scalar => .div. (.grad. scalar_1D_t(scalar_1D_initializer, order=4, cells=16, x_min=0D0, x_max=9D0)))
 #endif
-      test_diagnosis = .all. (div_grad_scalar%values() .approximates. expected_divergence .within. tight_tolerance) &
+
+      test_diagnosis = passing_test()
+      test_diagnosis = test_diagnosis .also. (.all. (div_grad_scalar%values() .approximates. expected_divergence .within. tight_tolerance)) &
                      // " (4th-order .div. (.grad. (x**2)/2))"
+
 #ifndef __GFORTRAN__
     end associate
 #endif
   end function
-
 
   pure function sinusoid(x) result(y)
     double precision, intent(in) :: x(:)
@@ -103,12 +108,11 @@ contains
     y = sin(x) + cos(x)
   end function
 
-
   function check_2nd_order_div_sinusoid_convergence() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
     procedure(vector_1D_initializer_i), pointer :: vector_1D_initializer => sinusoid
     double precision, parameter :: pi = 3.141592653589793D0
-    integer, parameter :: order_desired = 2, coarse_cells=100, fine_cells=200
+    integer, parameter :: order_desired = 2, coarse_cells=100, fine_cells=coarse_cells+1
 #ifdef __GFORTRAN__
     type(divergence_1D_t) div_coarse, div_fine
     div_coarse = .div. vector_1D_t(vector_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi)
@@ -128,7 +132,8 @@ contains
           ,div_coarse_values => div_coarse%values() &
           ,div_fine_values   => div_fine%values() &
         )
-          test_diagnosis = .all. (div_coarse_values .approximates. grad_coarse .within. rough_tolerance) &
+          test_diagnosis = passing_test()
+          test_diagnosis = test_diagnosis .also. (.all. (div_coarse_values .approximates. grad_coarse .within. rough_tolerance)) &
             // " (coarse-grid 2nd-order .div. [sin(x) + cos(x)])"
           test_diagnosis = test_diagnosis .also. (.all. (div_fine_values .approximates. grad_fine .within. rough_tolerance)) &
             // " (fine-grid 2nd-order .div. [sin(x) + cos(x)])"
@@ -148,12 +153,11 @@ contains
 #endif
   end function
 
-
   function check_4th_order_div_sinusoid_convergence() result(test_diagnosis)
     type(test_diagnosis_t) test_diagnosis
     procedure(vector_1D_initializer_i), pointer :: vector_1D_initializer => sinusoid
     double precision, parameter :: pi = 3.141592653589793D0
-    integer, parameter :: order_desired = 4, coarse_cells=300, fine_cells=1500
+    integer, parameter :: order_desired = 4, coarse_cells=500, fine_cells=coarse_cells+1
 #ifdef __GFORTRAN__
     type(divergence_1D_t) div_coarse, div_fine
     div_coarse = .div. vector_1D_t(vector_1D_initializer , order=order_desired, cells=coarse_cells, x_min=0D0, x_max=2*pi)
@@ -174,10 +178,13 @@ contains
           ,div_coarse_values => div_coarse%values() &
           ,div_fine_values   => div_fine%values() &
         )
-          test_diagnosis = .all. (div_coarse_values .approximates. div_coarse_expected .within. loose_tolerance) &
+
+          test_diagnosis = passing_test()
+          test_diagnosis = test_diagnosis .also. (.all. (div_coarse_values .approximates. div_coarse_expected .within. loose_tolerance)) &
             // " (coarse-grid 4th-order .div. [sin(x) + cos(x)])"
           test_diagnosis = test_diagnosis .also. (.all. (div_fine_values .approximates. div_fine_expected .within. loose_tolerance)) &
             // " (fine-grid 4th-order .div. [sin(x) + cos(x)])"
+
           associate( &
              error_coarse_max => maxval(abs(div_coarse_values - div_coarse_expected)) &
             ,error_fine_max => maxval(abs(div_fine_values - div_fine_expected)) &

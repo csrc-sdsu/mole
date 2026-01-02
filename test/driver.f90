@@ -3,12 +3,14 @@ program test_suite_driver
   use gradient_operator_1D_test_m, only : gradient_operator_1D_test_t
   use divergence_operator_1D_test_m, only : divergence_operator_1D_test_t
   use laplacian_operator_1D_test_m, only : laplacian_operator_1D_test_t
+  use integration_operators_1D_test_m, only : integration_operators_1D_test_t
   implicit none
 
   associate(test_harness => test_harness_t([ &
      test_fixture_t(gradient_operator_1D_test_t()) &
     ,test_fixture_t(divergence_operator_1D_test_t()) &
     ,test_fixture_t(laplacian_operator_1D_test_t()) &
+    ,test_fixture_t(integration_operators_1D_test_t()) &
   ]))
     call test_harness%report_results
   end associate
