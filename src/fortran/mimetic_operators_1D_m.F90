@@ -1,7 +1,8 @@
 #include "mole-language-support.F90"
 
 module mimetic_operators_1D_m
-  !! Define 1D scalar and vector abstractions and associated mimetic gradient and divergence operators.
+  !! Define sparse matrix storage formats and operators tailored to the one-dimensional (1D) mimetic discretizations
+  !! detaild by Corbino & Castillo (2020) https://doi.org/10.1016/j.cam.2019.06.042.
   use julienne_m, only : file_t
   implicit none
 

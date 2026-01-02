@@ -164,7 +164,7 @@ contains
       block
         integer col
         do concurrent(col=1:cols)
-          D(:,col) = divergence_matrix_multiply(self, e(dir=col, length=rows)) 
+          D(:,col) = divergence_matrix_multiply(self, e(dir=col, length=cols)) 
             ! work around gfortran 13-14 on Ubuntu (https://github.com/rouson/mole/actions/runs/19996603010/job/57345130923)
         end do
       end block

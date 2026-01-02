@@ -10,4 +10,9 @@ contains
     tensor_1D%order_  = order
   end procedure
 
+  module procedure dx
+    dx = (self%x_max_ - self%x_min_)/self%cells_
+  end procedure
+
+
 end submodule tensor_1D_s
