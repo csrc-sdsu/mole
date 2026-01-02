@@ -22,25 +22,34 @@ contains
 end module functions_m
 
 program div_grad_laplacian_1D
+  !! Compute the 2nd- and 4th-order mimetic approximations to the gradient and Laplacian of the
+  !! above function f(x) on a 1D uniform, staggered grid.
   use functions_m
   use julienne_m, only :  file_t, string_t, operator(.separatedBy.)
   use mole_m, only : scalar_1D_t, scalar_1D_initializer_i
 #ifdef __GFORTRAN__
-  use mole_m, only : vector_1D_t, laplacian_1D_t
+  use mole_m, only : vector_1D_t, laplacian_1D_t, gradient_1D_t
 #endif
   implicit none
 
   procedure(scalar_1D_initializer_i), pointer :: scalar_1D_initializer => f
 
   print *,new_line('')
-  print *,"            2nd-order approximations"
-  print *,"            ========================"
+  print *,"   Functions"
+  print *,"   ========================"
+  call execute_command_line("grep 'f =' example/div-grad-laplacian-1D.F90 | grep -v execute_command", wait=.true.)
+  call execute_command_line("grep 'df_dx =' example/div-grad-laplacian-1D.F90 | grep -v execute_command", wait=.true.)
+  call execute_command_line("grep 'd2f_dx2 =' example/div-grad-laplacian-1D.F90 | grep -v execute_command", wait=.true.)
+
+  print *,new_line('')
+  print *,"   2nd-order approximations"
+  print *,"   ========================"
 
   call output(order=2)
 
   print *,new_line('')
-  print *,"            4th-order approximations"
-  print *,"            ========================"
+  print *,"   4th-order approximations"
+  print *,"   ========================"
 
   call output(order=4)
 
@@ -51,22 +60,22 @@ contains
   subroutine output(order)
     integer, intent(in) :: order
   
-    associate(   s           => scalar_1D_t(scalar_1D_initializer, order=order, cells=10, x_min=0D0, x_max=20D0))
+    associate(   s           => scalar_1D_t(scalar_1D_initializer, order=order, cells=20, x_min=0D0, x_max=20D0))
       associate( grad_s      => .grad. s &
                 ,laplacian_s => .laplacian. s)
         associate( s_grid           => s%grid()      &
                   ,grad_s_grid      => grad_s%grid() &
                   ,laplacian_s_grid => laplacian_s%grid())
           associate( s_table           => tabulate( &
-                        string_t([character(len=18)::"x", "f(x) exp"         , "f(x) act"         ]) &
+                        string_t([character(len=22)::"x", "f(x) expected"         , "f(x) actual"         ]) &
                        ,s_grid, f(s_grid), s%values() &
                      ) &
                     ,grad_s_table      => tabulate( &
-                       string_t([character(len=18)::"x", ".grad. f exp"     , ".grad. f act"     ])  &
+                       string_t([character(len=22)::"x", ".grad. f expected"     , ".grad. f actual"     ])  &
                       ,grad_s_grid, df_dx(grad_s_grid), grad_s%values() &
                      ) &
                     ,laplacian_s_table => tabulate( &
-                       string_t([character(len=18)::"x", ".laplacian. f exp", ".laplacian. f act"])  &
+                       string_t([character(len=22)::"x", ".laplacian. f expected", ".laplacian. f actual"])  &
                       ,laplacian_s_grid, d2f_dx2(laplacian_s_grid), laplacian_s%values()) &
                      )
              call s_table%write_lines()
@@ -84,12 +93,12 @@ contains
     integer, intent(in) :: order
   
     type(scalar_1D_t) s
-    type(vector_1D_t) grad_s
+    type(gradient_1D_t) grad_s
     type(laplacian_1D_t) laplacian_s
     type(file_t) s_table, grad_s_table, laplacian_s_table
     double precision, allocatable,dimension(:) :: s_grid, grad_s_grid, laplacian_s_grid
 
-    s = scalar_1D_t(scalar_1D_initializer, order=order, cells=10, x_min=0D0, x_max=20D0)
+    s = scalar_1D_t(scalar_1D_initializer, order=order, cells=20, x_min=0D0, x_max=20D0)
     grad_s = .grad. s
     laplacian_s = .laplacian. s
 
@@ -98,15 +107,15 @@ contains
     laplacian_s_grid = laplacian_s%grid()
 
     s_table           = tabulate( &
-       string_t([character(len=18)::"x", "f(x) exp."         , "f(x) act."         ]) &
+       string_t([character(len=22)::"x", "f(x) expected"         , "f(x) actual"         ]) &
       ,s_grid, f(s_grid), s%values() &
     )
     grad_s_table      = tabulate( &
-       string_t([character(len=18)::"x", ".grad. f exp."     , ".grad. f act."     ]) &
+       string_t([character(len=22)::"x", ".grad. f expected"     , ".grad. f actual"     ]) &
       ,grad_s_grid, df_dx(grad_s_grid), grad_s%values() &
     )
     laplacian_s_table = tabulate( &
-       string_t([character(len=18)::"x", ".laplacian. f exp.", ".laplacian. f act."]) &
+       string_t([character(len=22)::"x", ".laplacian. f expected", ".laplacian. f actual"]) &
       ,laplacian_s_grid, d2f_dx2(laplacian_s_grid), laplacian_s%values() &
     )
     call s_table%write_lines()
@@ -125,8 +134,8 @@ contains
     file = file_t([ &
        string_t("") &
       ,headings .separatedBy. "  " &
-      ,string_t("----------------------------------------------------------") &
-      ,[( string_t(abscissa(line)) // "      " // string_t(expected(line)) // "        " // string_t(actual(line)), line = 1, size(abscissa))] &
+      ,string_t("------------------------------------------------------------------") &
+      ,[( string_t(abscissa(line)) // "          " // string_t(expected(line)) // "          " // string_t(actual(line)), line = 1, size(abscissa))] &
     ])
   end function
 
