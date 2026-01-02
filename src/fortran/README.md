@@ -15,7 +15,7 @@ and placing the resulting executable program in your `PATH` suffices.
 | Vendor | Compiler    | Version  | Build/Test Command                                    |
 |--------|-------------|----------|-------------------------------------------------------|
 | GCC    | `gfortran`  | 13       | fpm test --compiler gfortran --profile release        |
-| Intel  | `ifx`       | 2025.1.2 | fpm test --compiler ifx --profile release --flag -fpp |
+| Intel  | `ifx`       | 2025.1.2 | FOR_COARRAY_NUM_IMAGES=1 fpm test --compiler ifx --flag "-fpp -O3 -coarray" --profile release |
 | LLVM   | `flang-new` | 19       | fpm test --compiler flang-new --flag "-O3"            |
 | NAG    | `nagfor`    | 7.2      | fpm test --compiler nagfor --flag "-O3 -fpp"          |
 
