@@ -1,0 +1,11 @@
+url_path,views_total,views_unique
+/csrc-sdsu/mole,73,31
+/csrc-sdsu/mole/pulls,35,6
+/csrc-sdsu/mole/pull/268,15,3
+/csrc-sdsu/mole/pull/264,14,7
+/csrc-sdsu/mole/pull/265,14,2
+/csrc-sdsu/mole/blob/main/CONTRIBUTING.md,11,10
+/csrc-sdsu/mole/blob/main/CODE_OF_CONDUCT.md,11,8
+/csrc-sdsu/mole/pull/260,11,6
+/csrc-sdsu/mole/tree/main/src/cpp,9,8
+/csrc-sdsu/mole/blob/main/examples/matlab_octave/integration1D.m,8,5
