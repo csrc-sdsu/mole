@@ -472,7 +472,6 @@ def fix_included_image_paths_source(app, docname, source):
     """
     import re
     from pathlib import Path
-    import os
     
     src = source[0]
     
@@ -538,7 +537,6 @@ def fix_included_image_paths_doctree(app, doctree):
     """
     from docutils import nodes
     from pathlib import Path
-    import os
     
     # Get docname from app environment
     docname = app.env.docname
@@ -602,7 +600,6 @@ def copy_images_to_build_output(app, exception):
     
     import shutil
     from pathlib import Path
-    import os
     
     # Only copy for HTML builds
     if app.builder.name != 'html':
