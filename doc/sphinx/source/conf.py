@@ -428,10 +428,11 @@ def copy_all_images_to_sphinx(app):
                 try:
                     shutil.copy2(img, dest_file)
                     copied_count += 1
-                except Exception as e:
-                    # Don't warn on overwrites (same file)
-                    if "already exists" not in str(e).lower():
-                        print(f"Warning: Could not copy {img.name}: {e}")
+                except shutil.SameFileError:
+                    # Source and destination are the same file, skip silently
+                    pass
+                except (PermissionError, FileNotFoundError) as e:
+                    print(f"Warning: Could not copy {img.name}: {e}")
     
     # Also copy images from figures directories relative to markdown files
     # This handles cases where included files (or including files) reference
@@ -450,8 +451,11 @@ def copy_all_images_to_sphinx(app):
                         try:
                             shutil.copy2(img, dest_file)
                             copied_count += 1
-                        except Exception:
-                            pass  # Ignore overwrites
+                        except shutil.SameFileError:
+                            # Source and destination are the same file, skip silently
+                            pass
+                        except (PermissionError, FileNotFoundError) as e:
+                            print(f"Warning: Could not copy {img.name}: {e}")
 
 
 def fix_included_image_paths_source(app, docname, source):
@@ -625,10 +629,11 @@ def copy_images_to_build_output(app, exception):
             try:
                 shutil.copy2(img, dest_file)
                 copied_count += 1
-            except Exception as e:
-                # Don't warn on overwrites (same file copied multiple times)
-                if "already exists" not in str(e).lower():
-                    print(f"Warning: Could not copy {img.name} to build output: {e}")
+            except shutil.SameFileError:
+                # Source and destination are the same file, skip silently
+                pass
+            except (PermissionError, FileNotFoundError) as e:
+                print(f"Warning: Could not copy {img.name} to build output: {e}")
 
 
 def fix_html_image_paths(app, exception):
