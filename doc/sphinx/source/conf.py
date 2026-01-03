@@ -458,7 +458,7 @@ def copy_all_images_to_sphinx(app):
                             print(f"Warning: Could not copy {img.name}: {e}")
 
 
-def fix_included_image_paths_source(app, docname, source):
+def fix_included_image_paths_source(_app, _docname, source):
     """
     Fix image paths in source before MyST processes includes.
     
@@ -473,6 +473,11 @@ def fix_included_image_paths_source(app, docname, source):
     1. Included files need their paths fixed (main use case)
     2. Standalone files with relative paths also benefit from the fix
     3. The logic is safe - it only changes relative paths and skips absolute paths/URLs
+    
+    Args:
+        _app: Sphinx application object (unused, required by event signature)
+        _docname: Document name (unused, required by event signature)
+        source: List containing source content (modified in-place)
     """
     import re
     from pathlib import Path
