@@ -14,7 +14,7 @@ In order to use the MOLE.jl library, first navigate to the location where the re
 
 ### From the REPL
 
-In ```mole/julia/MOLE.jl```, start Julia using the command ```julia --project=.```. Next, the package lubrary needs to be instantiated and pre-compiled. Enter the ```pkg``` mode by pressing ```]```, then type the commands ```instantiate``` and ```precompile``` (one at a time). This should activate the MOLE.jl package and install the necessary dependencies.
+In ```mole/julia/MOLE.jl```, start Julia using the command ```julia --project=.```. Next, the package library needs to be instantiated and pre-compiled. Enter the ```pkg``` mode by pressing ```]```, then type the commands ```instantiate``` and ```precompile``` (one at a time). This should activate the MOLE.jl package and install the necessary dependencies.
 
 Then, to run a script such as myScript.jl, you can use the following command in the REPL:
 > ```include("path/to/myScript.jl")```
