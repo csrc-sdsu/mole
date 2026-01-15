@@ -31,6 +31,10 @@ Then, to run a script such as myScript.jl, use the command
 
 > ```julia --project=. path/to/myScript.jl```
 
+## Running the test suite
+
+To run the unit tests, first enter the Julia REPL as in the above section (that is, by running the command ```julia --project=.``` from the directory ```mole/julia/MOLE.jl```). Next, enter the ```pkg``` mode by pressing ```]```, then type the command ```test```. The results of the unit tests should be displayed to your console.
+
 ## Functions
 
 ### Operators
