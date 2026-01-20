@@ -1,0 +1,3 @@
+[submodule "src/fortran"]
+	path = src/fortran
+	url = https://github.com/berkeleylab/formal
