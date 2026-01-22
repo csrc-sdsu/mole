@@ -1,0 +1,11 @@
+url_path,views_total,views_unique
+/csrc-sdsu/mole,85,47
+/csrc-sdsu/mole/pulls,19,8
+/csrc-sdsu/mole/pull/237,14,5
+/csrc-sdsu/mole/issues,10,9
+/csrc-sdsu/mole/tree/main/src,10,9
+/csrc-sdsu/mole/actions,7,3
+/csrc-sdsu/mole/pull/260,7,3
+/csrc-sdsu/mole/tree/dev/fortran,6,2
+/csrc-sdsu/mole/tree/main/examples,5,4
+/csrc-sdsu/mole/tree/main/src/matlab_octave,5,4
