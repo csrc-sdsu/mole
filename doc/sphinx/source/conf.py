@@ -484,16 +484,18 @@ def fix_included_image_paths_source(_app, _docname, source):
     
     src = source[0]
     
-    # Pattern to match markdown image syntax: ![alt](path)
+    # Pattern to match markdown image syntax: ![alt](path) or ![alt](path "Title")
     # Match images with various path patterns:
     # - doc/assets/img/file.png (from repo root)
     # - figures/file.png (relative to included file)
     # - path/to/file.png (any relative path)
     # - Already broken paths like intros/doc/assets/img/file.png
+    # - Images with titles: ![alt](path "Title")
     
     def fix_image_path(match):
         alt_text = match.group(1)
         img_path = match.group(2)
+        img_title = match.group(3) if len(match.groups()) >= 3 and match.group(3) else None
         
         # Extract filename from path (handles paths like ../../_images/file.png)
         # Normalize the path to handle ../ and ./ correctly
@@ -505,10 +507,13 @@ def fix_included_image_paths_source(_app, _docname, source):
             # Fallback: just extract filename from string
             img_filename = img_path.split('/')[-1].split('\\')[-1]
         
+        # Build the fixed path with optional title preserved
+        title_suffix = f' "{img_title}"' if img_title else ''
+        
         # If path already points to _images (at any level), normalize it to absolute path
         if '/_images/' in img_path or img_path.startswith('_images/'):
             # Use absolute path from source root to avoid document-relative resolution
-            fixed_path = f'![{alt_text}](/_images/{img_filename})'
+            fixed_path = f'![{alt_text}](/_images/{img_filename}{title_suffix})'
             return fixed_path
         
         # If it's an absolute path or URL, keep it (but normalize _images paths)
@@ -517,16 +522,22 @@ def fix_included_image_paths_source(_app, _docname, source):
         if img_path.startswith('/'):
             # Already absolute, but check if it's an _images path that needs normalization
             if '/_images/' in img_path:
-                fixed_path = f'![{alt_text}](/_images/{img_filename})'
+                fixed_path = f'![{alt_text}](/_images/{img_filename}{title_suffix})'
                 return fixed_path
             return match.group(0)
         
         # Rewrite to use Sphinx's standard _images directory with absolute path
-        fixed_path = f'![{alt_text}](/_images/{img_filename})'
+        fixed_path = f'![{alt_text}](/_images/{img_filename}{title_suffix})'
         return fixed_path
     
-    # Match markdown image syntax: ![alt](path)
-    image_pattern = r'!\[([^\]]*)\]\(([^)]+)\)'
+    # Match markdown image syntax: ![alt](path) or ![alt](path "Title")
+    # Group 1: alt text
+    # Group 2: path (captures everything up to optional title)
+    # Group 3: title (optional, in quotes)
+    # The pattern uses a lookahead to distinguish between path and title:
+    # - If followed by space+quote, treat as path with title
+    # - Otherwise, treat as path only
+    image_pattern = r'!\[([^\]]*)\]\(([^)]+?)(?:\s+"([^"]+)")?\)'
     
     # Replace all matching image paths
     new_src = re.sub(image_pattern, fix_image_path, src)
