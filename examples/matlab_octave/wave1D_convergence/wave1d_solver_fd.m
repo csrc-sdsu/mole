@@ -1,4 +1,4 @@
-function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver_fd(m)
+function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver_fd(m,dt)
 % WAVE1D_SOLVER_FD Solves the 1D Wave Equation using Standard Finite Differences.
 %
 %   formulation: d2u/dt2 = c^2 * d2u/dx2
@@ -12,8 +12,8 @@ function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver_fd(m)
 %   Outputs:
 %       L2_error      : Discrete L2 norm error against exact solution.
 %       dx            : Grid spacing.
-%       u_num_centers : Numerical solution vector (interior points).
-%       x_centers     : Coordinate vector of cell centers.
+%       u_num : Numerical solution vector
+%
 
     % =========================================================================
     % 1. Physical Parameters and Grid Configuration
@@ -22,31 +22,23 @@ function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver_fd(m)
     dx = (b-a)/m;       % Grid spacing
     c = 2;              % Wave speed
     T_final = 0.5;      % Simulation duration
-
-    % Time step setup
-    % We use exactly the same dt as the Mimetic solver to ensure a
-    % "fair comparison", isolating spatial discretization errors.
-    dt = dx / (4*c);
     Nt = ceil(T_final/dt);
-    dt = T_final / Nt;
-
-    % Coordinate system: Cell centers
-    x_centers = (a + dx/2 : dx : b - dx/2)';
+    % Comparison: Mimetic uses m cells. FD uses m+2 nodes to cover same domain.
+    N = m + 2;
+    x_nodes = linspace(a, b, N)';
+    dx = x_nodes(2) - x_nodes(1); % Exact nodal spacing
 
     % =========================================================================
     % 2. Standard Finite Difference Operator (Tridiagonal Matrix)
     % =========================================================================
-    % Stencil: 2nd order Central Difference approximation
-    % d2u/dx2 approx (u_{i+1} - 2u_i + u_{i-1}) / dx^2
 
-    n = m + 2;      % Augmented size to include boundary points
-    e = ones(n, 1);
+    e = ones(N, 1);
 
     % Construct sparse tridiagonal matrix with diagonals [1, -2, 1]
     % -1: Lower diagonal
     %  0: Main diagonal
     % +1: Upper diagonal
-    L = spdiags([e -2*e e], -1:1, n, n);
+    L = spdiags([e -2*e e], -1:1, N, N);
     L = L / dx^2;
 
     % Boundary Conditions (Explicit Dirichlet u=0)
@@ -61,14 +53,14 @@ function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver_fd(m)
     % =========================================================================
     % 3. Initial Conditions
     % =========================================================================
-    u = zeros(n, 1);
+    u = zeros(N, 1);
 
     % Initialize interior points
     ICU = @(x) sin(pi*x) + sin(2*pi*x);
-    u(2:end-1) = ICU(x_centers);
+    u = ICU(x_nodes);
 
     % Initialize velocity (du/dt = 0)
-    v = zeros(n, 1);
+    v = zeros(N, 1);
 
     % =========================================================================
     % 4. Time Integration (Velocity Verlet)
@@ -92,14 +84,12 @@ function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver_fd(m)
     % =========================================================================
     % 5. Error Analysis
     % =========================================================================
-    % Analytical solution evaluated at cell centers
-    u_exact_centers = sin(pi*x_centers)*cos(pi*c*T_final) + ...
-                      sin(2*pi*x_centers)*cos(2*pi*c*T_final);
+    % Analytical solution evaluated at nodes
+    u_exact_all = sin(pi*x_nodes)*cos(pi*c*T_final) + sin(2*pi*x_nodes)*cos(2*pi*c*T_final);
 
-    % Extract interior numerical solution
-    u_num_centers = u(2:end-1);
+    u_num_internal = u(2:end-1);
+    u_exact_internal = u_exact_all(2:end-1);
 
-    % Compute discrete L2 Error Norm
-    diff = u_num_centers - u_exact_centers;
+    diff = u_num_internal - u_exact_internal;
     L2_error = sqrt(sum(diff.^2) * dx);
 end

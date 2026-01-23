@@ -1,4 +1,4 @@
-function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver(m)
+function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver(m,dt)
 % WAVE1D_SOLVER Solves the 1D Wave Equation using Mimetic Finite Differences.
 %
 %   formulation: d2u/dt2 = c^2 * div(grad(u))
@@ -22,11 +22,7 @@ function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver(m)
     dx = (b-a)/m;       % Grid spacing
     c = 2;              % Wave speed
     T_final = 0.5;      % Simulation duration
-
-    % Time step setup (CFL condition for stability)
-    dt = dx / (4*c);
     Nt = ceil(T_final/dt);
-    dt = T_final / Nt;
 
     % Coordinate system: Cell centers (staggered grid)
     % Used for evaluating initial functions on the interior nodes.

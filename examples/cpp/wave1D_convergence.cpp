@@ -55,77 +55,62 @@
 #include <cmath>
 #include <iomanip>
 
+// Use Armadillo namespace
 using namespace arma;
 using namespace std;
 
-// --- Physical Parameters ---
 const double PI = 3.14159265358979323846;
 const double WAVE_SPEED_C = 2.0;
 const double T_FINAL = 0.5;
 
-// --- Analytical Solution for Validation ---
+// Analytical Solution
 double exact_sol(double x, double t) {
     return sin(PI*x)*cos(PI*WAVE_SPEED_C*t) + sin(2*PI*x)*cos(2*PI*WAVE_SPEED_C*t);
 }
 
-// --- Simulation Runner ---
-// Returns the discrete L2 error for a given number of cells (m)
-double run_simulation(int m) {
-    int k = 2;              // Spatial order of accuracy
+// Simulation Runner (Accepts fixed dt)
+double run_simulation(int m, double dt) {
+    int k = 2;              // Spatial order
     double a = 0.0;         // Left boundary
     double b = 1.0;         // Right boundary
     double dx = (b - a) / m;
 
-    // Time step based on CFL condition for stability
-    // dt <= dx / c. We use dx / 4c for safety and precision.
-    double dt_approx = dx / (4.0 * WAVE_SPEED_C);
-    int Nt = (int)ceil(T_FINAL / dt_approx);
-    double dt = T_FINAL / Nt;
+    // Nt calculated from fixed dt
+    int Nt = (int)ceil(T_FINAL / dt);
 
-    // 1. Initialize Mimetic Laplacian Operator
+    // 1. Initialize Mimetic Operator
     Laplacian L(k, m, dx);
 
-    // 2. Initialize State Vectors (Size m+2 to include boundary ghost points)
+    // 2. State Vectors
     vec u(m + 2, fill::zeros);
     vec v(m + 2, fill::zeros);
     vec acc(m + 2, fill::zeros);
-
-    // Coordinate auxiliary vector for error calculation
-    // Armadillo indices: 0 (Left BC), 1..m (Interior), m+1 (Right BC)
     vector<double> x_centers(m + 2);
 
-    // Set Initial Conditions
+    // 3. Initial Conditions
     for (int i = 1; i <= m; i++) {
         double x = a + (i - 0.5) * dx;
         x_centers[i] = x;
         u(i) = exact_sol(x, 0.0);
     }
-
-    // Enforce Boundary Conditions
+    // Dirichlet BC
     u(0) = 0.0;
     u(m+1) = 0.0;
 
-    // 3. Time Integration Loop (Velocity Verlet)
-    // Step 0: Initial acceleration
+    // 4. Time Integration (Velocity Verlet)
+    // Initial Acc
     acc = (WAVE_SPEED_C*WAVE_SPEED_C) * (L * u);
-    acc(0) = 0.0; acc(m+1) = 0.0; // Enforce Dirichlet on acceleration
+    acc(0) = 0.0; acc(m+1) = 0.0; // BC
 
     for (int t = 0; t < Nt; t++) {
-        // v(t+0.5) = v(t) + 0.5*dt*a(t)
         v = v + 0.5 * dt * acc;
-
-        // u(t+1) = u(t) + dt*v(t+0.5)
         u = u + dt * v;
-
-        // a(t+1) = Force(u(t+1))
         acc = (WAVE_SPEED_C*WAVE_SPEED_C) * (L * u);
-        acc(0) = 0.0; acc(m+1) = 0.0; // Enforce Dirichlet
-
-        // v(t+1) = v(t+0.5) + 0.5*dt*a(t+1)
+        acc(0) = 0.0; acc(m+1) = 0.0; // BC
         v = v + 0.5 * dt * acc;
     }
 
-    // 4. Compute L2 Error
+    // 5. L2 Error
     double sum_sq_error = 0.0;
     for (int i = 1; i <= m; i++) {
         double diff = u(i) - exact_sol(x_centers[i], T_FINAL);
@@ -137,23 +122,31 @@ double run_simulation(int m) {
 
 int main() {
     vector<int> mesh_sizes = {20, 40, 80, 160, 320};
-    vector<double> errors;
-    vector<double> dx_vals;
 
-    cout << "===========================================" << endl;
-    cout << " MOLE Example: 1D Wave Equation Convergence" << endl;
-    cout << "===========================================" << endl;
+    // --- CALC FIXED DT ---
+    // Match MATLAB logic: based on finest mesh (m=320)
+    int m_finest = 320;
+    double dx_min = 1.0 / m_finest;
+    // CFL Safety factor 0.25
+    double dt_fixed = 0.25 * dx_min / WAVE_SPEED_C;
 
-    cout << endl << "### Convergence Rate Table - MIMETIC Scheme" << endl;
+    cout << "Running C++ Convergence Test (Fixed dt)" << endl; // Changed title to verify update
+    cout << "---------------------------------------" << endl;
+    cout << "Configuration: Fixed dt = " << scientific << dt_fixed << endl << endl;
+
+    cout << "### Convergence Rate Table (C++)" << endl;
     cout << "| Cells (m) | dx         | L2 Error   | Rate (p) |" << endl;
     cout << "| :---      | :---       | :---       | :---     |" << endl;
+
+    vector<double> errors;
+    vector<double> dx_vals;
 
     for (size_t i = 0; i < mesh_sizes.size(); i++) {
         int m = mesh_sizes[i];
         double dx = 1.0 / m;
 
         try {
-            double error = run_simulation(m);
+            double error = run_simulation(m, dt_fixed);
             errors.push_back(error);
             dx_vals.push_back(dx);
 
