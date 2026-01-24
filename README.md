@@ -166,6 +166,15 @@ brew install gnuplot
 ```
 and on Windows downlaoding and running the file from [here](https://sourceforge.net/projects/gnuplot/files/gnuplot/6.0.2/gp602-win64-mingw.exe/download)
 
+### Fortran
+With your present working directory set to anywhere inside the `src/fortran` directory, run
+```
+fpm run --example [<base-name>]
+```
+where square brackets desginate an optional argument, angular brackets indicate user input,
+and `<base-name>` is the string preceding the `.F90` extension in the name of any file in
+the `src/fortran/example` directory.
+
 ### C++
 
 Four self-contained, well-documented examples demonstrating typical PDE solutions. These are automatically built with `make` and serve as an excellent starting point for C++ users.
