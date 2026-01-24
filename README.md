@@ -153,7 +153,7 @@ MATLAB/Octave equivalent of the C++ test suite. We recommend running these tests
 make run_matlab_octave_tests
 
 ### Fortran
-Run from the `src/fortran` directory:
+Run from anywhwere in the MOLE source tree:
 ```
 fpm test
 ```

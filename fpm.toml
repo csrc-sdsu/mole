@@ -10,3 +10,8 @@ library = true
 [library]
 source-dir = "src/fortran"
 include-dir = "src/fortran/include"
+
+[[test]]
+name = "test_suite_driver"
+source-dir = "src/fortran/test"
+main = "driver.f90"
