@@ -59,12 +59,12 @@ On macOS, Linux, or Windows with `git` and `fpm` installed,
 git clone https://github.com/csrc-sdsu/mole
 cd mole
 git submodule update --init --recursive
-fpm install --profile release --flag "-I./src/fortran/include"
+fpm install
 ```
 which builds with the compiler specified by the `FPM_FC` environment variable
-of with `gfortran` if `FPM_FC` is empty.  For `fpm` commands to use with other
+or with `gfortran` if `FPM_FC` is empty.  For `fpm` commands to use with other
 supported compilers, please consult `src/fortran/README.md` _after_ running
-the above `git submodule` command to ensure `src/fortran` exists.
+the above `git submodule` command to populate the contents of `src/fortran`.
 
 #### C++
 
