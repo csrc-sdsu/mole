@@ -42,7 +42,7 @@ jobs:
       - name: Configure with CMake (generate compile_commands.json)
         run: |
           mkdir -p build
-          cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+          cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DEigen3_DIR=/usr/lib/cmake/eigen3
           ls -la build/compile_commands.json    
 
       - name: clang-format check (fail if formatting differs)
