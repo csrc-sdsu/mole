@@ -43,7 +43,7 @@ jobs:
         run: |
           mkdir -p build
           ls -al /usr/lib/cmake/eigen3
-          cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DEigen3_DIR=/usr/lib/cmake/eigen3
+          cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DEigen3_DIR=/usr/share/eigen3/cmake
           ls -la build/compile_commands.json    
 
       - name: clang-format check (fail if formatting differs)
