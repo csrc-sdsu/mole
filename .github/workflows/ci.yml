@@ -26,6 +26,64 @@ jobs:
           # list of changed files within `super-linter`
           fetch-depth: 0
 
+      - name: Install system deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake clang clang-tidy clang-format
+          python3 -m pip install --upgrade pip
+          pip3 install cpplint
+
+      - name: Gather source files
+        id: files
+        run: |
+          # list C/C++ source files tracked by git
+          echo "::set-output name=sources::$(git ls-files '*.c' '*.cc' '*.cpp' '*.cxx' '*.h' '*.hpp' '*.hh' | tr '\n' ' ')"
+          
+      - name: Configure with CMake (generate compile_commands.json)
+        run: |
+          mkdir -p build
+          cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+          ls -la build/compile_commands.json    
+
+      - name: clang-format check (fail if formatting differs)
+        run: |
+          if [ -z "${{ steps.files.outputs.sources }}" ]; then
+            echo "No C/C++ sources found — skipping clang-format check."
+          else
+            # run clang-format in dry-run + Werror mode so it exits non-zero for unformatted files
+            # Expand filenames safely:
+            printf '%s\n' ${{ steps.files.outputs.sources }} | xargs -r -n1 clang-format --dry-run --Werror -style=file
+          fi
+
+      - name: cpplint
+        run: |
+          if [ -z "${{ steps.files.outputs.sources }}" ]; then
+            echo "No C/C++ sources found — skipping cpplint."
+          else
+            # cpplint takes file list; exit non-zero on errors
+            printf '%s\n' ${{ steps.files.outputs.sources }} | xargs -r cpplint || (echo "cpplint found issues" && exit 1)
+          fi
+
+      - name: clang-tidy (fail on warnings/errors)
+        run: |
+          if [ -z "${{ steps.files.outputs.sources }}" ]; then
+            echo "No C/C++ sources found — skipping clang-tidy."
+          else
+            # Run clang-tidy using compile_commands.json. Collect output and fail if diagnostics are present.
+            # Note: clang-tidy often prints diagnostics to stdout/stderr; we capture and grep for "warning:" or "error:".
+            printf '%s\n' ${{ steps.files.outputs.sources }} > /tmp/clang_tidy_files.txt
+            set -o pipefail
+            clang-tidy -p build $(cat /tmp/clang_tidy_files.txt) 2>&1 | tee clang-tidy.out || true
+            if grep -E "warning:|error:" clang-tidy.out >/dev/null; then
+              echo "clang-tidy reported warnings/errors — failing the job."
+              echo ""
+              tail -n +1 clang-tidy.out
+              exit 1
+            else
+              echo "clang-tidy: no warnings/errors detected."
+            fi
+          fi
+
       - name: Run super-linter
         uses: super-linter/super-linter/slim@v5
         env:
