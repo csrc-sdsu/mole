@@ -42,7 +42,7 @@ jobs:
       - name: Configure with CMake (generate compile_commands.json)
         run: |
           mkdir -p build
-          ls -al /usr/lib/cmake/eigen3
+          ls -al /usr/share/eigen3/cmake
           cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DEigen3_DIR=/usr/share/eigen3/cmake
           ls -la build/compile_commands.json    
 
