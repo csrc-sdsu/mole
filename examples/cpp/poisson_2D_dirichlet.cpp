@@ -39,7 +39,7 @@ int main() {
     // Create 2D Laplacian operator
     cout << "Constructing 2D Laplacian operator..." << endl;
     Laplacian L(k, m, n, dx, dy);
-    sp_mat A = sp_mat(L);
+    sp_mat A = -sp_mat(L);  // Negate to solve -∇²u = f
     cout << "  Operator size: " << A.n_rows << " x " << A.n_cols << endl;
     cout << "  Non-zero elements: " << A.n_nonzero << endl;
     cout << endl;
@@ -49,7 +49,7 @@ int main() {
     vec y = linspace<vec>(0, 1, n+2);
 
     // Manufactured solution: u(x,y) = sin(πx)sin(πy)
-    // Right-hand side: f = -∇²u = 2π²sin(πx)sin(πy)
+    // ∇²u = -2π²sin(πx)sin(πy), so for -∇²u = f, we have f = 2π²sin(πx)sin(πy)
     vec f((m+2)*(n+2));
     for (u32 j = 0; j < n+2; j++) {
         for (u32 i = 0; i < m+2; i++) {
