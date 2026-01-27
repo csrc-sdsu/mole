@@ -108,12 +108,12 @@ void addScalarBC1D(sp_mat &A, vec &b, u16 k, u32 m, Real dx, const BC1D &bc) {
 
 void addScalarBC2Dlhs(u16 k, u32 m, Real dx, u32 n, Real dy,
                       const vec &dc, const vec &nc,
-                      sp_mat &Abcl, sp_mat &Abcr, sp_mat &Abcb, sp_mat &Abct) {
+                      sp_mat &Al, sp_mat &Ar, sp_mat &Ab, sp_mat &At) {
     // Initialize to zero (periodic case)
-    Abcl.set_size(0, 0);
-    Abcr.set_size(0, 0);
-    Abcb.set_size(0, 0);
-    Abct.set_size(0, 0);
+    Al.set_size(0, 0);
+    Ar.set_size(0, 0);
+    Ab.set_size(0, 0);
+    At.set_size(0, 0);
 
     // Check if left/right boundaries are non-periodic
     Real qrl = dc(0)*dc(0) + dc(1)*dc(1) + nc(0)*nc(0) + nc(1)*nc(1);
@@ -125,8 +125,8 @@ void addScalarBC2Dlhs(u16 k, u32 m, Real dx, u32 n, Real dy,
     if (qrl > 0) {
         vec dc_lr = {dc(0), dc(1)};
         vec nc_lr = {nc(0), nc(1)};
-        sp_mat Abcl0, Abcr0;
-        addScalarBC1Dlhs(k, m, dx, dc_lr, nc_lr, Abcl0, Abcr0);
+        sp_mat Al0, Ar0;
+        addScalarBC1Dlhs(k, m, dx, dc_lr, nc_lr, Al0, Ar0);
 
         sp_mat In;
         if (qbt == 0) {
@@ -140,16 +140,16 @@ void addScalarBC2Dlhs(u16 k, u32 m, Real dx, u32 n, Real dy,
         }
 
         // Kronecker product for 2D
-        Abcl = kron(In, Abcl0);
-        Abcr = kron(In, Abcr0);
+        Al = kron(In, Al0);
+        Ar = kron(In, Ar0);
     }
 
     // Process bottom and top edges
     if (qbt > 0) {
         vec dc_bt = {dc(2), dc(3)};
         vec nc_bt = {nc(2), nc(3)};
-        sp_mat Abcb0, Abct0;
-        addScalarBC1Dlhs(k, n, dy, dc_bt, nc_bt, Abcb0, Abct0);
+        sp_mat Ab0, At0;
+        addScalarBC1Dlhs(k, n, dy, dc_bt, nc_bt, Ab0, At0);
 
         sp_mat Im;
         if (qrl == 0) {
@@ -161,8 +161,8 @@ void addScalarBC2Dlhs(u16 k, u32 m, Real dx, u32 n, Real dy,
         }
 
         // Kronecker product for 2D
-        Abcb = kron(Abcb0, Im);
-        Abct = kron(Abct0, Im);
+        Ab = kron(Ab0, Im);
+        At = kron(At0, Im);
     }
 }
 
@@ -225,14 +225,14 @@ void addScalarBC2D(sp_mat &A, vec &b, u16 k, u32 m, Real dx,
     uvec rl, rr, rb, rt;  // Indices for boundaries
 
     // Get modifications for left, right, bottom, top edges
-    sp_mat Abcl, Abcr, Abcb, Abct;
-    addScalarBC2Dlhs(k, m, dx, n, dy, bc.dc, bc.nc, Abcl, Abcr, Abcb, Abct);
+    sp_mat Al, Ar, Ab, At;
+    addScalarBC2Dlhs(k, m, dx, n, dy, bc.dc, bc.nc, Al, Ar, Ab, At);
 
     // Process left/right boundaries
     if (qrl > 0) {
         // Get unique row indices from boundary matrices
         uvec rl_temp, rr_temp;
-        sp_mat Abc1 = Abcl + Abcr;
+        sp_mat Abc1 = Al + Ar;
 
         for (sp_mat::const_iterator it = Abc1.begin(); it != Abc1.end(); ++it) {
             rl_temp.resize(rl_temp.n_elem + 1);
@@ -240,12 +240,12 @@ void addScalarBC2D(sp_mat &A, vec &b, u16 k, u32 m, Real dx,
         }
         uvec rowsbc1 = unique(rl_temp);
 
-        // Find rows from Abcl and Abcr
-        for (sp_mat::const_iterator it = Abcl.begin(); it != Abcl.end(); ++it) {
+        // Find rows from Al and Ar
+        for (sp_mat::const_iterator it = Al.begin(); it != Al.end(); ++it) {
             rl.resize(rl.n_elem + 1);
             rl(rl.n_elem - 1) = it.row();
         }
-        for (sp_mat::const_iterator it = Abcr.begin(); it != Abcr.end(); ++it) {
+        for (sp_mat::const_iterator it = Ar.begin(); it != Ar.end(); ++it) {
             rr.resize(rr.n_elem + 1);
             rr(rr.n_elem - 1) = it.row();
         }
@@ -271,7 +271,7 @@ void addScalarBC2D(sp_mat &A, vec &b, u16 k, u32 m, Real dx,
     // Process bottom/top boundaries
     if (qbt > 0) {
         uvec rb_temp, rt_temp;
-        sp_mat Abc2 = Abcb + Abct;
+        sp_mat Abc2 = Ab + At;
 
         for (sp_mat::const_iterator it = Abc2.begin(); it != Abc2.end(); ++it) {
             rb_temp.resize(rb_temp.n_elem + 1);
@@ -279,12 +279,12 @@ void addScalarBC2D(sp_mat &A, vec &b, u16 k, u32 m, Real dx,
         }
         uvec rowsbc2 = unique(rb_temp);
 
-        // Find rows from Abcb and Abct
-        for (sp_mat::const_iterator it = Abcb.begin(); it != Abcb.end(); ++it) {
+        // Find rows from Ab and At
+        for (sp_mat::const_iterator it = Ab.begin(); it != Ab.end(); ++it) {
             rb.resize(rb.n_elem + 1);
             rb(rb.n_elem - 1) = it.row();
         }
-        for (sp_mat::const_iterator it = Abct.begin(); it != Abct.end(); ++it) {
+        for (sp_mat::const_iterator it = At.begin(); it != At.end(); ++it) {
             rt.resize(rt.n_elem + 1);
             rt(rt.n_elem - 1) = it.row();
         }
@@ -319,16 +319,16 @@ void addScalarBC2D(sp_mat &A, vec &b, u16 k, u32 m, Real dx,
 
 void addScalarBC3Dlhs(u16 k, u32 m, Real dx, u32 n, Real dy, u32 o, Real dz,
                       const vec &dc, const vec &nc,
-                      sp_mat &Abcl, sp_mat &Abcr, sp_mat &Abcb,
-                      sp_mat &Abct, sp_mat &Abcf, sp_mat &Abck) {
+                      sp_mat &Al, sp_mat &Ar, sp_mat &Ab,
+                      sp_mat &At, sp_mat &Af, sp_mat &Ak) {
     // Implementation follows the same pattern as 2D but extended to 3D
     // Initialize to zero (periodic case)
-    Abcl.set_size(0, 0);
-    Abcr.set_size(0, 0);
-    Abcb.set_size(0, 0);
-    Abct.set_size(0, 0);
-    Abcf.set_size(0, 0);
-    Abck.set_size(0, 0);
+    Al.set_size(0, 0);
+    Ar.set_size(0, 0);
+    Ab.set_size(0, 0);
+    At.set_size(0, 0);
+    Af.set_size(0, 0);
+    Ak.set_size(0, 0);
 
     // Check which boundaries are non-periodic
     Real qrl = dc(0)*dc(0) + dc(1)*dc(1) + nc(0)*nc(0) + nc(1)*nc(1);
@@ -344,8 +344,8 @@ void addScalarBC3Dlhs(u16 k, u32 m, Real dx, u32 n, Real dy, u32 o, Real dz,
     if (qrl > 0) {
         vec dc_lr = {dc(0), dc(1)};
         vec nc_lr = {nc(0), nc(1)};
-        sp_mat Abcl0, Abcr0;
-        addScalarBC1Dlhs(k, m, dx, dc_lr, nc_lr, Abcl0, Abcr0);
+        sp_mat Al0, Ar0;
+        addScalarBC1Dlhs(k, m, dx, dc_lr, nc_lr, Al0, Ar0);
 
         // Create identity matrices for y and z directions
         sp_mat In, Io;
@@ -365,16 +365,16 @@ void addScalarBC3Dlhs(u16 k, u32 m, Real dx, u32 n, Real dy, u32 o, Real dz,
         }
 
         // Left and right faces
-        Abcl = kron(kron(Io, In), Abcl0);
-        Abcr = kron(kron(Io, In), Abcr0);
+        Al = kron(kron(Io, In), Al0);
+        Ar = kron(kron(Io, In), Ar0);
     }
 
     // Process bottom/top faces (y-direction)
     if (qbt > 0) {
         vec dc_bt = {dc(2), dc(3)};
         vec nc_bt = {nc(2), nc(3)};
-        sp_mat Abcb0, Abct0;
-        addScalarBC1Dlhs(k, n, dy, dc_bt, nc_bt, Abcb0, Abct0);
+        sp_mat Ab0, At0;
+        addScalarBC1Dlhs(k, n, dy, dc_bt, nc_bt, Ab0, At0);
 
         // Create identity matrices for x and z directions
         sp_mat Im, Io;
@@ -392,16 +392,16 @@ void addScalarBC3Dlhs(u16 k, u32 m, Real dx, u32 n, Real dy, u32 o, Real dz,
         }
 
         // Bottom and top faces
-        Abcb = kron(kron(Io, Abcb0), Im);
-        Abct = kron(kron(Io, Abct0), Im);
+        Ab = kron(kron(Io, Ab0), Im);
+        At = kron(kron(Io, At0), Im);
     }
 
     // Process front/back faces (z-direction)
     if (qfk > 0) {
         vec dc_fk = {dc(4), dc(5)};
         vec nc_fk = {nc(4), nc(5)};
-        sp_mat Abcf0, Abck0;
-        addScalarBC1Dlhs(k, o, dz, dc_fk, nc_fk, Abcf0, Abck0);
+        sp_mat Af0, Ak0;
+        addScalarBC1Dlhs(k, o, dz, dc_fk, nc_fk, Af0, Ak0);
 
         // Create identity matrices for x and y directions
         sp_mat Im, In;
@@ -417,8 +417,8 @@ void addScalarBC3Dlhs(u16 k, u32 m, Real dx, u32 n, Real dy, u32 o, Real dz,
         }
 
         // Front and back faces
-        Abcf = kron(kron(Abcf0, In), Im);
-        Abck = kron(kron(Abck0, In), Im);
+        Af = kron(kron(Af0, In), Im);
+        Ak = kron(kron(Ak0, In), Im);
     }
 }
 
@@ -491,14 +491,14 @@ void addScalarBC3D(sp_mat &A, vec &b, u16 k, u32 m, Real dx,
     uvec rl, rr, rb, rt, rf, rk;
 
     // Get boundary modifications
-    sp_mat Abcl, Abcr, Abcb, Abct, Abcf, Abck;
+    sp_mat Al, Ar, Ab, At, Af, Ak;
     addScalarBC3Dlhs(k, m, dx, n, dy, o, dz, bc.dc, bc.nc,
-                     Abcl, Abcr, Abcb, Abct, Abcf, Abck);
+                     Al, Ar, Ab, At, Af, Ak);
 
     // Process each boundary pair similarly to 2D
     // Left/right boundaries
     if (qrl > 0) {
-        sp_mat Abc1 = Abcl + Abcr;
+        sp_mat Abc1 = Al + Ar;
         uvec temp;
         for (sp_mat::const_iterator it = Abc1.begin(); it != Abc1.end(); ++it) {
             temp.resize(temp.n_elem + 1);
@@ -506,11 +506,11 @@ void addScalarBC3D(sp_mat &A, vec &b, u16 k, u32 m, Real dx,
         }
         uvec rowsbc1 = unique(temp);
 
-        for (sp_mat::const_iterator it = Abcl.begin(); it != Abcl.end(); ++it) {
+        for (sp_mat::const_iterator it = Al.begin(); it != Al.end(); ++it) {
             rl.resize(rl.n_elem + 1);
             rl(rl.n_elem - 1) = it.row();
         }
-        for (sp_mat::const_iterator it = Abcr.begin(); it != Abcr.end(); ++it) {
+        for (sp_mat::const_iterator it = Ar.begin(); it != Ar.end(); ++it) {
             rr.resize(rr.n_elem + 1);
             rr(rr.n_elem - 1) = it.row();
         }
@@ -529,7 +529,7 @@ void addScalarBC3D(sp_mat &A, vec &b, u16 k, u32 m, Real dx,
 
     // Bottom/top boundaries
     if (qbt > 0) {
-        sp_mat Abc2 = Abcb + Abct;
+        sp_mat Abc2 = Ab + At;
         uvec temp;
         for (sp_mat::const_iterator it = Abc2.begin(); it != Abc2.end(); ++it) {
             temp.resize(temp.n_elem + 1);
@@ -537,11 +537,11 @@ void addScalarBC3D(sp_mat &A, vec &b, u16 k, u32 m, Real dx,
         }
         uvec rowsbc2 = unique(temp);
 
-        for (sp_mat::const_iterator it = Abcb.begin(); it != Abcb.end(); ++it) {
+        for (sp_mat::const_iterator it = Ab.begin(); it != Ab.end(); ++it) {
             rb.resize(rb.n_elem + 1);
             rb(rb.n_elem - 1) = it.row();
         }
-        for (sp_mat::const_iterator it = Abct.begin(); it != Abct.end(); ++it) {
+        for (sp_mat::const_iterator it = At.begin(); it != At.end(); ++it) {
             rt.resize(rt.n_elem + 1);
             rt(rt.n_elem - 1) = it.row();
         }
@@ -560,7 +560,7 @@ void addScalarBC3D(sp_mat &A, vec &b, u16 k, u32 m, Real dx,
 
     // Front/back boundaries
     if (qfk > 0) {
-        sp_mat Abc3 = Abcf + Abck;
+        sp_mat Abc3 = Af + Ak;
         uvec temp;
         for (sp_mat::const_iterator it = Abc3.begin(); it != Abc3.end(); ++it) {
             temp.resize(temp.n_elem + 1);
@@ -568,11 +568,11 @@ void addScalarBC3D(sp_mat &A, vec &b, u16 k, u32 m, Real dx,
         }
         uvec rowsbc3 = unique(temp);
 
-        for (sp_mat::const_iterator it = Abcf.begin(); it != Abcf.end(); ++it) {
+        for (sp_mat::const_iterator it = Af.begin(); it != Af.end(); ++it) {
             rf.resize(rf.n_elem + 1);
             rf(rf.n_elem - 1) = it.row();
         }
-        for (sp_mat::const_iterator it = Abck.begin(); it != Abck.end(); ++it) {
+        for (sp_mat::const_iterator it = Ak.begin(); it != Ak.end(); ++it) {
             rk.resize(rk.n_elem + 1);
             rk(rk.n_elem - 1) = it.row();
         }

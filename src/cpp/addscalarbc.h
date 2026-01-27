@@ -127,14 +127,14 @@ void addScalarBC1D(sp_mat &A, vec &b, u16 k, u32 m, Real dx, const BC1D &bc);
  * @param dy Cell spacing in y-direction
  * @param dc Dirichlet coefficients (4x1 vector)
  * @param nc Neumann coefficients (4x1 vector)
- * @param Abcl Output: Left edge modification
- * @param Abcr Output: Right edge modification
- * @param Abcb Output: Bottom edge modification
- * @param Abct Output: Top edge modification
+ * @param Al Output: Left edge modification
+ * @param Ar Output: Right edge modification
+ * @param Ab Output: Bottom edge modification
+ * @param At Output: Top edge modification
  */
 void addScalarBC2Dlhs(u16 k, u32 m, Real dx, u32 n, Real dy,
                       const vec &dc, const vec &nc,
-                      sp_mat &Abcl, sp_mat &Abcr, sp_mat &Abcb, sp_mat &Abct);
+                      sp_mat &Al, sp_mat &Ar, sp_mat &Ab, sp_mat &At);
 
 /**
  * @brief Helper: Modify RHS vector for 2D boundary conditions
@@ -186,17 +186,17 @@ void addScalarBC2D(sp_mat &A, vec &b, u16 k, u32 m, Real dx,
  * @param dz Cell spacing in z-direction
  * @param dc Dirichlet coefficients (6x1 vector)
  * @param nc Neumann coefficients (6x1 vector)
- * @param Abcl Output: Left face modification
- * @param Abcr Output: Right face modification
- * @param Abcb Output: Bottom face modification
- * @param Abct Output: Top face modification
- * @param Abcf Output: Front face modification
- * @param Abck Output: Back face modification
+ * @param Al Output: Left face modification
+ * @param Ar Output: Right face modification
+ * @param Ab Output: Bottom face modification
+ * @param At Output: Top face modification
+ * @param Af Output: Front face modification
+ * @param Ak Output: Back face modification
  */
 void addScalarBC3Dlhs(u16 k, u32 m, Real dx, u32 n, Real dy, u32 o, Real dz,
                       const vec &dc, const vec &nc,
-                      sp_mat &Abcl, sp_mat &Abcr, sp_mat &Abcb,
-                      sp_mat &Abct, sp_mat &Abcf, sp_mat &Abck);
+                      sp_mat &Al, sp_mat &Ar, sp_mat &Ab,
+                      sp_mat &At, sp_mat &Af, sp_mat &Ak);
 
 /**
  * @brief Helper: Modify RHS vector for 3D boundary conditions
