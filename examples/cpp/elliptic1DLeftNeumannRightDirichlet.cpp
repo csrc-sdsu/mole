@@ -1,86 +1,166 @@
 /**
- * @file elliptic1DLeftNeumannRightDirichlet.cpp
- * @brief Solves the 1D linear equation -u'' = 1
+ * 1D Elliptic Problem with Left Neumann and Right Dirichlet BCs
  *
- * ## Spatial Domains:
- * - The spatial domain is [0, 1]
- * - Interior points are spaced by dx = (b - a) / m.
+ * Solves the 1D elliptic equation:
+ *     -u'' = 1  on  (0, 1)
  *
- * ## Boundary Conditions:
- *      u'(0) = 0, u(1) = 0
+ * With boundary conditions:
+ *     u'(0) = 0  (left Neumann BC)
+ *     u(1) = 0   (right Dirichlet BC)
  *
- * The solution is computed numerically, and the result is compared with the exact solution:
- *      u_exact(x) = (1 - x^2)/2
+ * Exact solution: u(x) = (1 - x²)/2
  *
- * The results are saved to a file "plot.gnu" and visualized using GNUplot.
-*/
+ * This example demonstrates:
+ * - Setting up a 1D Laplacian operator
+ * - Applying mixed Neumann/Dirichlet boundary conditions
+ * - Solving the resulting linear system
+ * - Computing solution error
+ *
+ * Based on MATLAB example: elliptic1DLeftNeumannRightDirichlet.m
+ */
 
 #include "mole.h"
 #include <iostream>
+#include <cmath>
+#include <iomanip>
+
+using namespace std;
+using namespace AddScalarBC;
 
 int main() {
+    cout << "\n=== 1D Elliptic Equation: Left Neumann, Right Dirichlet ===\n" << endl;
 
-    const int k = 2;
-    const int m = 2 * k + 1;
-    const Real dx = 1.0 / m;
-    const Real a = 0;   // left boundary
-    const Real b = 1;   // right boundary
+    // Parameters
+    const u16 k = 2;              // Order of accuracy
+    const u32 m = 2 * k + 1;      // Number of cells (must be > 2*k)
+    const Real dx = 1.0 / m;      // Cell spacing
+    const Real a = 0.0;           // Left boundary
+    const Real b = 1.0;           // Right boundary
 
-    // Mimetic operators
+    cout << "Problem setup:" << endl;
+    cout << "  Domain: [" << a << ", " << b << "]" << endl;
+    cout << "  Equation: -u'' = 1" << endl;
+    cout << "  BC: u'(0) = 0 (Neumann), u(1) = 0 (Dirichlet)" << endl;
+    cout << "  Order of accuracy (k): " << k << endl;
+    cout << "  Number of cells (m): " << m << endl;
+    cout << "  Cell spacing (dx): " << dx << endl;
+    cout << "  Total unknowns: " << m + 2 << endl;
+    cout << endl;
+
+    // Create 1D Laplacian operator
+    cout << "Constructing 1D Laplacian operator..." << endl;
     Laplacian L(k, m, dx);
-    MixedBC BC(k, m, dx,
-           "Neumann", std::vector<Real>{1.0},
-           "Dirichlet",  std::vector<Real>{1.0});
-    L += BC;
+    sp_mat A = -sp_mat(L);  // Negate to solve -u'' = f
 
-    // 1D grid
-    arma::vec grid(m + 2);
-    grid(0) = a;
-    grid(1) = grid(0) + dx / 2.0;
-    for (int i = 2; i <= m; i++) {
-        grid(i) = grid(i - 1) + dx;
+    cout << "  Operator size: " << A.n_rows << " × " << A.n_cols << endl;
+    cout << "  Non-zero elements: " << A.n_nonzero << endl;
+    cout << endl;
+
+    // Create grid points (centers and boundaries)
+    vec x(m + 2);
+    x(0) = a;
+    x(1) = a + dx / 2.0;
+    for (u32 i = 2; i <= m; i++) {
+        x(i) = x(i - 1) + dx;
     }
-    grid(m + 1) = b;
+    x(m + 1) = b;
 
-    // RHS
-    arma::vec rhs(m+2);
-    rhs.fill(-1.0);
-    rhs(0) = 0.0;
-    rhs(m+1) = 0.0;
+    // Right-hand side: f = 1
+    vec f(m + 2, fill::ones);
 
-    // Solve the system
-    #ifdef EIGEN
-        // Use eigen if available
-        arma::vec sol = Utils:: spsolve_eigen(L, rhs);
-    #else
-        arma::vec sol = spsolve(L, rhs);
-    #endif
+    // Set up boundary conditions
+    cout << "Setting up boundary conditions..." << endl;
+    BC1D bc;
+    bc.dc = {0.0, 1.0};  // Left: Neumann (dc=0), Right: Dirichlet (dc=1)
+    bc.nc = {1.0, 0.0};  // Left: Neumann (nc=1), Right: no Neumann (nc=0)
+    bc.v = {0.0, 0.0};   // Left: u'(0) = 0, Right: u(1) = 0
 
-    // Create a GNUplot script file
-    std::ofstream plot_script("plot.gnu");
-    if (!plot_script) {
-        std::cerr << "Error: Failed to create GNUplot script.\n";
-        return 1;
-    }
-    plot_script << "set title \"-u'' = 1, u(0) = 0, u'(1) = 0\"\n";
-    plot_script << "set xlabel 't'\n";
-    plot_script << "set ylabel 'y'\n";
-    plot_script << "plot '-' using 1:2 with lines title \"Estimated Solution\", "
-                << "(1 - x**2)/2 with lines title \"Exact Solution\"\n";
+    cout << "  Left boundary (x=0): u' = 0 (Neumann)" << endl;
+    cout << "  Right boundary (x=1): u = 0 (Dirichlet)" << endl;
+    cout << endl;
 
-    for (int i = 0; i <= m + 1; ++i) {
-        plot_script << grid(i) << " " << sol(i) << "\n";
-    }
-    plot_script.close();
+    // Apply boundary conditions
+    cout << "Applying boundary conditions to operator and RHS..." << endl;
+    addScalarBC1D(A, f, k, m, dx, bc);
+    cout << "  Boundary conditions applied" << endl;
+    cout << endl;
 
-    // Execute GNUplot using the script
-    if (system("gnuplot -persist plot.gnu") != 0) {
-        std::cerr << "Error: Failed to execute GNUplot.\n";
+    // Solve the linear system A*u = f
+    cout << "Solving linear system A*u = f..." << endl;
+    vec u = spsolve(A, f);
+
+    if (u.n_elem == 0) {
+        cout << "\033[1;31mError: Failed to solve linear system!\033[0m" << endl;
         return 1;
     }
 
+    cout << "  Solution obtained successfully" << endl;
+    cout << endl;
 
-    cout << sol;
+    // Compute exact solution: u(x) = (1 - x²)/2
+    vec u_exact(m + 2);
+    for (u32 i = 0; i < m + 2; i++) {
+        u_exact(i) = 0.5 * (1.0 - x(i) * x(i));
+    }
+
+    // Compute error
+    vec error = u - u_exact;
+    Real max_error = max(abs(error));
+    Real l2_error = norm(error) / sqrt(u.n_elem);
+    Real rel_error = norm(error) / norm(u_exact);
+
+    cout << "Error analysis:" << endl;
+    cout << "  Maximum error:  " << scientific << setprecision(6) << max_error << endl;
+    cout << "  L2 norm error:  " << l2_error << endl;
+    cout << "  Relative error: " << rel_error << endl;
+    cout << endl;
+
+    // Verify solution quality
+    if (max_error < 1e-3) {
+        cout << "\033[1;32mSolution verified: Error within acceptable tolerance!\033[0m" << endl;
+    } else {
+        cout << "\033[1;33mWarning: Error exceeds expected tolerance\033[0m" << endl;
+    }
+    cout << endl;
+
+    // Display sample solution values
+    cout << "Sample solution values:" << endl;
+    cout << fixed << setprecision(6);
+
+    // Left boundary (x=0)
+    cout << "  u(0.0):  computed = " << u(0)
+         << ", exact = " << u_exact(0)
+         << ", error = " << abs(u(0) - u_exact(0)) << endl;
+
+    // Mid-point (x≈0.5)
+    u32 idx_mid = (m + 2) / 2;
+    cout << "  u(" << x(idx_mid) << "): computed = " << u(idx_mid)
+         << ", exact = " << u_exact(idx_mid)
+         << ", error = " << abs(u(idx_mid) - u_exact(idx_mid)) << endl;
+
+    // Right boundary (x=1)
+    cout << "  u(1.0):  computed = " << u(m + 1)
+         << ", exact = " << u_exact(m + 1)
+         << ", error = " << abs(u(m + 1) - u_exact(m + 1)) << endl;
+    cout << endl;
+
+    // Solution statistics
+    cout << "Solution statistics:" << endl;
+    cout << "  Minimum value: " << u.min() << endl;
+    cout << "  Maximum value: " << u.max() << endl;
+    cout << "  Mean value:    " << mean(u) << endl;
+    cout << endl;
+
+    // Verify boundary conditions
+    cout << "Boundary condition verification:" << endl;
+
+    // Check right Dirichlet BC: u(1) = 0
+    cout << "  Right BC: u(1) = " << u(m + 1) << " (should be ≈ 0)" << endl;
+
+    // Check left Neumann BC: u'(0) ≈ 0 (approximate derivative)
+    Real left_derivative = (u(1) - u(0)) / (dx / 2.0);
+    cout << "  Left BC: u'(0) ≈ " << left_derivative << " (should be ≈ 0)" << endl;
+    cout << endl;
 
     return 0;
 }
