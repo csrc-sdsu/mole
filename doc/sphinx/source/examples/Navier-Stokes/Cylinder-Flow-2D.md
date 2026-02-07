@@ -6,9 +6,14 @@ This example simulates a 2D incompressible channel flow past a cylinder-like obs
 
 We solve the incompressible Navier–Stokes equations in two dimensions:
 
-$$\frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u}\cdot\nabla)\mathbf{u}&= -\frac{1}{\rho}\nabla p+ \nu\nabla^{2}\mathbf{u}$$ \\
+$$
+\frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u}\cdot\nabla)\mathbf{u}
+= -\frac{1}{\rho}\nabla p + \nu\nabla^{2}\mathbf{u}
+$$
 
-$$\nabla\cdot\mathbf{u} &= 0$$
+$$
+\nabla\cdot\mathbf{u} = 0
+$$
 
 where:
 - $$\mathbf{u}=(u,v)$$ is the velocity field
@@ -26,7 +31,13 @@ The computational domain is a 2D channel:
 - $$y \in [-1,1]$$
 - $$t \in [0, t_{\text{final}}]$$ with $$t_{\text{final}} = \texttt{tspan}$$ (default in code: `tspan = 32.0`)
 
-A “cylinder” is represented by a masked block of cells located near $$x/L_x = \texttt{cylin\_pos}$$ (default `1/8`) with a size controlled by `cylin_size` (default `1/10`). Inside this mask, velocity is forced to zero (no-slip).
+A “cylinder” is represented by a masked block of cells located near:
+
+$$
+x/L_x = \texttt{cylin\_pos}
+$$
+
+with a size controlled by `cylin_size` (default `1/10`). Inside this mask, velocity is forced to zero (no-slip).
 
 ### Initial Conditions (time-dependent)
 
@@ -59,7 +70,17 @@ $$
 \mathrm{Re} = \frac{U_0 D}{\nu}
 $$
 
-In the implementation, $$D = 2\texttt{cylin\_size}$$ and $$\nu = U_0 D/\mathrm{Re}$$ (default $$\mathrm{Re}=200$$).
+In the implementation:
+
+$$
+D = 2\,\texttt{cylin\_size}
+$$
+
+$$
+\nu = \frac{U_0 D}{\mathrm{Re}}
+$$
+
+(Default $$\mathrm{Re}=200$$.)
 
 ## Implementation Details
 
@@ -68,7 +89,7 @@ In the implementation, $$D = 2\texttt{cylin\_size}$$ and $$\nu = U_0 D/\mathrm{R
 Each time step advances the momentum equation and enforces incompressibility:
 
 1. **Advection evaluation**
-   - Nonlinear convection is advanced with AB2 (Adams–Bashforth 2), with AB1 used on the first step
+   - Nonlinear convection is advanced with AB2 (Adams–Bashforth 2) with AB1 used on the first step
 
 2. **Diffusion (Helmholtz solve)**
    - Viscous diffusion is treated with Crank–Nicolson, resulting in two Helmholtz-type sparse linear systems for intermediate velocities $$u^*$$ and $$v^*$$
@@ -117,11 +138,13 @@ cmake --build . -j
 
 The final speed magnitude typically shows an acceleration around the obstacle and a wake downstream. At $$\mathrm{Re}=200$$, unsteady vortex shedding can appear depending on grid/time-step choices and the obstacle mask representation.
 
+![Final speed magnitude field for the 2D channel flow with a masked cylinder obstacle](cylinder_flow_2D_output1.png)
+
 ```{figure} cylinder_flow_2D_output1.png
-:alt: Final speed magnitude for 2D channel flow past a masked cylinder obstacle.
+:alt: Final speed magnitude field for the 2D channel flow with a masked cylinder obstacle
 :width: 85%
 
-Final speed magnitude field for the 2D channel flow with a masked “cylinder” obstacle.
+Final speed magnitude field for the 2D channel flow with a masked cylinder obstacle
 ```
 
 ### Validation / Analytical Solution
@@ -129,7 +152,7 @@ Final speed magnitude field for the 2D channel flow with a masked “cylinder”
 No closed-form analytical solution is available for this configuration. Practical validation options include:
 - verifying that $$\|\nabla\cdot\mathbf{u}\|$$ remains small after the projection step
 - comparing qualitative wake structure and shedding behavior with known channel-cylinder benchmarks
-- performing grid/time-step refinement studies
+- performing grid and time-step refinement studies
 
 ---
 
