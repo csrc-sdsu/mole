@@ -31,10 +31,10 @@ The computational domain is a 2D channel:
 - $$y \in [-1,1]$$
 - $$t \in [0, t_{\text{final}}]$$ with $$t_{\text{final}} = \texttt{tspan}$$ (default in code: `tspan = 32.0`)
 
-A “cylinder” is represented by a masked block of cells located near:
+A “cylinder” is represented by a masked block of cells located near
 
 $$
-x/L_x = \texttt{cylin\_pos}
+x/L_x = \mathtt{cylin}\_\mathtt{pos}
 $$
 
 with a size controlled by `cylin_size` (default `1/10`). Inside this mask, velocity is forced to zero (no-slip).
@@ -73,7 +73,7 @@ $$
 In the implementation:
 
 $$
-D = 2\,\texttt{cylin\_size}
+D = 2\,\mathtt{cylin}\_\mathtt{size}
 $$
 
 $$
@@ -123,7 +123,7 @@ along with interpolation operators to map between cell-centered and face-based q
 
 The example writes:
 - `U_final.csv`, `V_final.csv`, `p_final.csv` (cell-centered fields)
-- an image of the final speed field named `cylinder_flow_2D_output1.png` (this page embeds it as a figure)
+- an image of the final speed field named `cylinder_flow_2D_output1.png`
 
 ## Running the Example
 
@@ -136,16 +136,9 @@ cmake --build . -j
 
 ## Results
 
-The final speed magnitude typically shows an acceleration around the obstacle and a wake downstream. At $$\mathrm{Re}=200$$, unsteady vortex shedding can appear depending on grid/time-step choices and the obstacle mask representation.
+The final speed magnitude typically shows an acceleration around the obstacle and a wake downstream. At $$\mathrm{Re}=200$$, unsteady vortex shedding can appear depending on grid and time-step choices and the obstacle mask representation.
 
 ![Final speed magnitude field for the 2D channel flow with a masked cylinder obstacle](cylinder_flow_2D_output1.png)
-
-```{figure} cylinder_flow_2D_output1.png
-:alt: Final speed magnitude field for the 2D channel flow with a masked cylinder obstacle
-:width: 85%
-
-Final speed magnitude field for the 2D channel flow with a masked cylinder obstacle
-```
 
 ### Validation / Analytical Solution
 
