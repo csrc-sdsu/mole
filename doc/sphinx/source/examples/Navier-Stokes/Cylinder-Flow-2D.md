@@ -6,13 +6,9 @@ This example simulates a 2D incompressible channel flow past a cylinder-like obs
 
 We solve the incompressible Navier–Stokes equations in two dimensions:
 
-$$
-\begin{aligned}
-\frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u}\cdot\nabla)\mathbf{u}
-&= -\frac{1}{\rho}\nabla p + \nu\nabla^{2}\mathbf{u} \\
-\nabla\cdot\mathbf{u} &= 0
-\end{aligned}
-$$
+$$ \frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u}\cdot\nabla)\mathbf{u}&= -\frac{1}{\rho}\nabla p+ \nu\nabla^{2}\mathbf{u} $$ \\
+
+$$ \nabla\cdot\mathbf{u} &= 0 $$
 
 where:
 - $$\mathbf{u}=(u,v)$$ is the velocity field
