@@ -60,27 +60,6 @@ Pressure boundary conditions (pressure Poisson step):
 - **Outlet (right)**: Dirichlet reference pressure with $$p = 0$$
 - **Other boundaries**: homogeneous Neumann with $$\partial p/\partial n = 0$$
 
-## Mathematical Background
-
-“Flow past a cylinder in a channel” is a classic benchmark. In this example, the cylinder is approximated by an axis-aligned mask region (immersed-boundary-style enforcement by zeroing velocity in the masked cells). This provides a simple obstacle treatment while demonstrating how MOLE operators can be used to build a full incompressible flow solver.
-
-The Reynolds number is defined using a characteristic diameter $$D$$ and inlet speed $$U_0$$:
-
-$$
-\mathrm{Re} = \frac{U_0 D}{\nu}
-$$
-
-In the implementation:
-
-$$
-D = 2\,\mathtt{cylin}\_\mathtt{size}
-$$
-
-$$
-\nu = \frac{U_0 D}{\mathrm{Re}}
-$$
-
-(Default $$\mathrm{Re}=200$$.)
 
 ## Implementation Details
 
@@ -139,13 +118,6 @@ cmake --build . -j
 The final speed magnitude typically shows an acceleration around the obstacle and a wake downstream. At $$\mathrm{Re}=200$$, unsteady vortex shedding can appear depending on grid and time-step choices and the obstacle mask representation.
 
 ![Final speed magnitude field for the 2D channel flow with a masked cylinder obstacle](cylinder_flow_2D_output1.png)
-
-### Validation / Analytical Solution
-
-No closed-form analytical solution is available for this configuration. Practical validation options include:
-- verifying that $$\|\nabla\cdot\mathbf{u}\|$$ remains small after the projection step
-- comparing qualitative wake structure and shedding behavior with known channel-cylinder benchmarks
-- performing grid and time-step refinement studies
 
 ---
 
