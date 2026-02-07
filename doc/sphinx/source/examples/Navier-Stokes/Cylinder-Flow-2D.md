@@ -5,12 +5,8 @@ This example simulates a 2D incompressible channel flow past a cylinder-like obs
 ## Governing Equations
 
 We solve the incompressible Navier–Stokes equations in two dimensions:
-$$
-\frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u}\cdot\nabla)\mathbf{u}
-= -\frac{1}{\rho}\nabla p + \nu \nabla^{2}\mathbf{u},
-\qquad
-\nabla\cdot\mathbf{u} = 0,
-$$
+
+$$\frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u}\cdot\nabla)\mathbf{u}= -\frac{1}{\rho}\nabla p + \nu \nabla^{2}\mathbf{u},\qquad\nabla\cdot\mathbf{u} = 0$$
 
 where:
 - $\mathbf{u}=(u,v)$ is the velocity field,
@@ -42,41 +38,23 @@ At $t=0$:
 ### Boundary Conditions
 
 Velocity boundary conditions:
-- **Inlet (left)**: Dirichlet inflow  
-  $$
-u = U_0, \qquad v=0.
-$$
-
-- **Outlet (right)**: zero streamwise gradient (Neumann outflow)  
-  $$
-\frac{\partial u}{\partial x}=0, \qquad \frac{\partial v}{\partial x}=0.
-$$
-
-- **Top and bottom walls**: no-slip  
-  $$
-u=0,\qquad v=0.
-$$
-
-- **Obstacle mask**: no-slip enforced by projection back to $u=v=0$ in the masked region after each time step.
+- **Inlet (left)**: Dirichlet inflow, $u = U_0$ and $v = 0$.
+- **Outlet (right)**: zero streamwise gradient (Neumann outflow), $\partial u/\partial x = 0$ and $\partial v/\partial x = 0$.
+- **Top and bottom walls**: no-slip, $u=0$ and $v=0$.
+- **Obstacle mask**: no-slip enforced by setting $u=v=0$ inside the mask region after each time step.
 
 Pressure boundary conditions (pressure Poisson step):
-- **Outlet (right)**: Dirichlet reference pressure  
-  $$
-p = 0.
-$$
-
-- **Other boundaries**: homogeneous Neumann  
-  $$
-\frac{\partial p}{\partial n}=0.
-$$
+- **Outlet (right)**: Dirichlet reference pressure, $p = 0$.
+- **Other boundaries**: homogeneous Neumann, $\partial p/\partial n = 0$.
 
 ## Mathematical Background
 
 “Flow past a cylinder in a channel” is a classic benchmark. In this example, the cylinder is approximated by an axis-aligned mask region (immersed-boundary-style enforcement by zeroing velocity in the masked cells). This provides a simple obstacle treatment while demonstrating how MOLE operators can be used to build a full incompressible flow solver.
 
 The Reynolds number is defined using a characteristic diameter $D$ and inlet speed $U_0$:
+
 $$
-\mathrm{Re} = \frac{U_0 D}{\nu}.
+\mathrm{Re} = \frac{U_0 D}{\nu}
 $$
 
 In the implementation, $D = 2\,\texttt{cylin\_size}$ and $\nu = U_0 D/\mathrm{Re}$ (default: $\mathrm{Re}=200$).
@@ -94,14 +72,16 @@ Each time step advances the momentum equation and enforces incompressibility:
    - Viscous diffusion is treated with Crank–Nicolson, resulting in two Helmholtz-type sparse linear systems for intermediate velocities $u^*, v^*$.
 
 3. **Pressure Poisson solve**
-   - Pressure is obtained from the Poisson equation derived from $\nabla\cdot\mathbf{u}^{n+1}=0$:  
-     $$
-\nabla^2 p^{n+1} = \frac{\rho}{\Delta t}\nabla\cdot \mathbf{u}^*.
+   - Pressure is obtained from the Poisson equation derived from $\nabla\cdot\mathbf{u}^{n+1}=0$:
+
+$$
+\nabla^2 p^{n+1} = \frac{\rho}{\Delta t}\nabla\cdot \mathbf{u}^*
 $$
 
 4. **Velocity correction**
-   $$
-\mathbf{u}^{n+1} = \mathbf{u}^* - \frac{\Delta t}{\rho}\nabla p^{n+1}.
+
+$$
+\mathbf{u}^{n+1} = \mathbf{u}^* - \frac{\Delta t}{\rho}\nabla p^{n+1}
 $$
 
 5. **Re-apply boundary conditions + obstacle mask**
