@@ -65,29 +65,29 @@ Pressure boundary conditions (pressure Poisson step):
 
 ### Projection (Fractional-Step) Method
 
-Each time step advances the momentum equation and enforces incompressibility:
+Each time step advances a predictor–corrector scheme to enforce incompressibility:
 
-1. **Advection evaluation**
-   - Nonlinear convection is advanced with AB2 (Adams–Bashforth 2) with AB1 used on the first step
+1. **Prediction (intermediate velocity)**
+   - Compute the intermediate velocity $$\mathbf{u}^*$$ by advancing the momentum equation
+   - Nonlinear convection is advanced with AB2 (AB1 for the first step)
+   - Viscous diffusion is treated with Crank–Nicolson, leading to Helmholtz-type solves for $$u^*$$ and $$v^*$$
 
-2. **Diffusion (Helmholtz solve)**
-   - Viscous diffusion is treated with Crank–Nicolson, resulting in two Helmholtz-type sparse linear systems for intermediate velocities $$u^*$$ and $$v^*$$
-
-3. **Pressure Poisson solve**
+2. **Pressure Poisson solve**
    - Pressure is obtained from the Poisson equation derived from $$\nabla\cdot\mathbf{u}^{n+1}=0$$
 
 $$
 \nabla^2 p^{n+1} = \frac{\rho}{\Delta t}\nabla\cdot \mathbf{u}^*
 $$
 
-4. **Velocity correction**
+3. **Velocity correction**
 
 $$
 \mathbf{u}^{n+1} = \mathbf{u}^* - \frac{\Delta t}{\rho}\nabla p^{n+1}
 $$
 
-5. **Re-apply boundary conditions + obstacle mask**
-   - The solver re-enforces all velocity BCs and sets the masked region to $$u=v=0$$
+4. **Re-apply boundary conditions + obstacle mask**
+   - Re-enforce all velocity boundary conditions
+   - Set the masked obstacle region to $$u=0$$ and $$v=0$$.
 
 ### Mimetic Spatial Operators (MOLE)
 
