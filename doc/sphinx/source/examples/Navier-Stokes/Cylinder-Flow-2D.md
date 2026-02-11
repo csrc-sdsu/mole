@@ -31,7 +31,7 @@ The computational domain is a 2D channel:
 - $$y \in [-1,1]$$
 - $$t \in [0, t_{\text{final}}]$$ with $$t_{\text{final}} = \texttt{tspan}$$ (default in code: `tspan = 32.0`)
 
-A “cylinder” is represented by a masked block of cells located near
+A “square cylinder” is represented by a masked block of cells located near
 
 $$
 x/L_x = \mathtt{cylin}\_\mathtt{pos}
