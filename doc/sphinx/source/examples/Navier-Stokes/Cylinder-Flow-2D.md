@@ -105,7 +105,7 @@ The solver writes the final cell-centered fields:
 - `U_final.csv`, `V_final.csv`, `p_final.csv`
 
 A plotting script is provided to visualize these CSV outputs using gnuplot:
-- `cylinder_flow_2D_plot.gnu` → produces `cylinder_flow_2D_plot.png`
+- `cylinder_flow_2D_plot.gnu` → produces `cylinder_flow_2D_plot_cpp.png`
 
 ## Running the Example
 
