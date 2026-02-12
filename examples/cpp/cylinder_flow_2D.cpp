@@ -43,6 +43,7 @@
  *
  * Outputs:
  *   - U_final.csv, V_final.csv, p_final.csv
+ *   - cylinder_flow_2D_plot.gnu, cylinder_flow_2D_plot.png (if gnuplot is available)
  */
 
 #include <armadillo>
@@ -71,6 +72,7 @@
 #include <cmath>
 #include <fstream>
 #include <stdexcept>
+#include <cstdlib>  
 
 using arma::sp_mat;
 using arma::vec;
@@ -293,6 +295,58 @@ static void applyVelocityBCAndMask(
   V.submat(i1, j1, i2, j2).zeros();
 }
 
+static void write_gnuplot_script_cylinder_flow(const std::string& filename) {
+  const char* script = R"GNUPLOT(
+set datafile separator ","
+set term pngcairo size 1200,1500
+set output "cylinder_flow_2D_plot.png"
+
+unset key
+set view map
+set pm3d map
+set tics out
+set border lw 1
+set size ratio -1
+
+set multiplot layout 3,1 rowsfirst
+
+set lmargin 8
+set rmargin 8
+set tmargin 1
+set bmargin 1
+
+tcmd(f) = sprintf("awk -F',' '{line=$0; sub(/,+$/,\"\",line); nf=split(line,a,\",\"); for(i=1;i<=nf;i++) A[NR,i]=a[i]; if(nf>max) max=nf} END{for(i=1;i<=max;i++){for(j=1;j<=NR;j++){printf \"%%s%%s\", A[j,i], (j<NR?\",\":\"\")} printf \"\\n\"}}' %s", f)
+
+set xrange [0:482]
+set yrange [0:122]
+
+set title "U"
+plot "< ".tcmd("U_final.csv") matrix with image
+
+set title "V"
+plot "< ".tcmd("V_final.csv") matrix with image
+
+set title "p"
+plot "< ".tcmd("p_final.csv") matrix with image
+
+unset multiplot
+set output
+)GNUPLOT";
+
+  std::ofstream os(filename);
+  if (!os) throw std::runtime_error("Failed to write gnuplot script: " + filename);
+  os << script;
+}
+
+static void run_gnuplot_script(const std::string& script_filename) {
+  const std::string cmd = "gnuplot " + script_filename;
+  int rc = std::system(cmd.c_str());
+  if (rc != 0) {
+    std::cerr << "[warn] gnuplot failed (exit code " << rc
+              << "). Is gnuplot installed and on PATH?\n";
+  }
+}
+
 int main() {
   // Problem parameters (numerical settings)
   const double Re = 200.0;
@@ -505,7 +559,6 @@ int main() {
 
     applyVelocityBCAndMask(U_new, V_new, U_init, i1, i2, j1, j2);
 
-
     U_flat = arma::vectorise(U_new);
     V_flat = arma::vectorise(V_new);
     AdvU_prev = AdvU_n;
@@ -527,7 +580,7 @@ int main() {
     }
   }
 
-  // Output: save fields
+  // Output: save fields + plot via gnuplot (if available)
   {
     mat U_final = arma::reshape(U_flat, nx, ny);
     mat V_final = arma::reshape(V_flat, nx, ny);
@@ -538,6 +591,15 @@ int main() {
     p_final.save("p_final.csv", arma::csv_ascii);
 
     std::cout << "Wrote U_final.csv, V_final.csv, p_final.csv\n";
+
+    try {
+      const std::string gnuFile = "cylinder_flow_2D_plot.gnu";
+      write_gnuplot_script_cylinder_flow(gnuFile);
+      run_gnuplot_script(gnuFile);
+      std::cout << "Wrote cylinder_flow_2D_plot.png\n";
+    } catch (const std::exception& e) {
+      std::cerr << "[warn] Plotting skipped: " << e.what() << "\n";
+    }
   }
 
   return 0;
