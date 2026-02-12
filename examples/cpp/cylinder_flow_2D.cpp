@@ -35,16 +35,14 @@
  *     - Outlet (right): Dirichlet, \f$ p = 0 \f$ (reference).
  *     - Elsewhere: Neumann (zero normal gradient).
  *
- * Build/Run:
+ * Run:
  * @code
- *   cd <mole-repo>/build
- *   cmake --build . -j
- *   ./examples/cpp/cylinder_flow_2D
+ *   cd examples/cpp
+ *   ../../build/examples/cpp/cylinder_flow_2D
  * @endcode
  *
  * Outputs:
  *   - U_final.csv, V_final.csv, p_final.csv
- *   - speed_final.png (macOS only; generated via 'sips'. Otherwise a PPM is kept.)
  */
 
 #include <armadillo>
@@ -73,8 +71,6 @@
 #include <cmath>
 #include <fstream>
 #include <stdexcept>
-#include <cstdlib> // std::system
-#include <cstdio>  // std::remove
 
 using arma::sp_mat;
 using arma::vec;
@@ -268,33 +264,6 @@ static BCSystem build_scalar_bc_system(
 
   out.rowsbc = rowsbc;
   return out;
-}
-
-// quick grayscale PPM
-static void write_ppm_grayscale(const std::string& filename, const mat& field) {
-  const arma::uword nx = field.n_rows;
-  const arma::uword ny = field.n_cols;
-
-  double fmin = field.min();
-  double fmax = field.max();
-  if (!std::isfinite(fmin) || !std::isfinite(fmax) || fmax <= fmin) {
-    throw std::runtime_error("write_ppm_grayscale: invalid range");
-  }
-
-  std::ofstream os(filename, std::ios::binary);
-  if (!os) throw std::runtime_error("Failed to open output image: " + filename);
-
-  os << "P6\n" << nx << " " << ny << "\n255\n";
-
-  for (arma::sword j = static_cast<arma::sword>(ny) - 1; j >= 0; --j) {
-    for (arma::uword i = 0; i < nx; ++i) {
-      double t = (field(i, static_cast<arma::uword>(j)) - fmin) / (fmax - fmin);
-      t = std::min(1.0, std::max(0.0, t));
-      unsigned char g = static_cast<unsigned char>(std::lround(255.0 * t));
-      unsigned char rgb[3] = {g, g, g};
-      os.write(reinterpret_cast<const char*>(rgb), 3);
-    }
-  }
 }
 
 // enforce inlet/outlet/walls + cylinder
@@ -536,6 +505,7 @@ int main() {
 
     applyVelocityBCAndMask(U_new, V_new, U_init, i1, i2, j1, j2);
 
+
     U_flat = arma::vectorise(U_new);
     V_flat = arma::vectorise(V_new);
     AdvU_prev = AdvU_n;
@@ -544,9 +514,7 @@ int main() {
     if ((step % plotEvery) == 0 || step == 1 || step == nSteps) {
       const double maxU = arma::abs(U_new).max();
       const double maxV = arma::abs(V_new).max();
-      const double umax = maxU;
-      const double vmax = maxV;
-      const double CFL  = dt * (umax / dx + vmax / dy);
+      const double CFL  = dt * (maxU / dx + maxV / dy);
       const double inletMean = arma::mean(U_new.row(0));
 
       std::cout << "step " << std::setw(6) << step << "/" << std::setw(6) << nSteps
@@ -559,7 +527,7 @@ int main() {
     }
   }
 
-  // Output: save fields and a quick visualization image
+  // Output: save fields
   {
     mat U_final = arma::reshape(U_flat, nx, ny);
     mat V_final = arma::reshape(V_flat, nx, ny);
@@ -569,27 +537,7 @@ int main() {
     V_final.save("V_final.csv", arma::csv_ascii);
     p_final.save("p_final.csv", arma::csv_ascii);
 
-    mat speed = arma::sqrt(arma::square(U_final) + arma::square(V_final));
-
-    const std::string ppmFile = "speed_final.ppm";
-    const std::string pngFile = "speed_final.png";
-    write_ppm_grayscale(ppmFile, speed);
-
-#ifdef __APPLE__
-    {
-      std::string cmd = "sips -s format png " + ppmFile + " --out " + pngFile + " >/dev/null 2>&1";
-      int rc = std::system(cmd.c_str());
-      if (rc == 0) {
-        std::remove(ppmFile.c_str());
-      } else {
-        std::cerr << "[warn] PNG conversion failed (sips). Kept " << ppmFile << "\n";
-      }
-    }
-#else
-    std::cerr << "[warn] PNG conversion uses macOS 'sips'. Kept " << ppmFile << "\n";
-#endif
-
-    std::cout << "Wrote U_final.csv, V_final.csv, p_final.csv, speed_final.png\n";
+    std::cout << "Wrote U_final.csv, V_final.csv, p_final.csv\n";
   }
 
   return 0;

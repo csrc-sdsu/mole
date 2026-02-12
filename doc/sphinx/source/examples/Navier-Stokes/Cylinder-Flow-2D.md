@@ -1,6 +1,6 @@
-# 2D Channel Flow with a Cylinder
+# 2D Channel Flow with a Cylinder-Like Obstacle (Masked Region)
 
-This example simulates a 2D incompressible channel flow past a cylinder-like obstacle (implemented as a masked no-slip region) using MOLE mimetic operators and a fractional-step (projection / pressure-correction) method. At moderate Reynolds number, the solution exhibits a wake and may show vortex shedding depending on grid resolution and time step.
+This example simulates a 2D incompressible channel flow past a cylinder-like obstacle (implemented as an axis-aligned masked no-slip region) using MOLE mimetic operators and a fractional-step (projection / pressure-correction) method. At moderate Reynolds number, the solution exhibits a wake and may show vortex shedding depending on grid resolution, time step, and the obstacle mask representation.
 
 ## Governing Equations
 
@@ -17,9 +17,12 @@ $$
 
 where:
 - $$\mathbf{u}=(u,v)$$ is the velocity field
-- $$p$$ is the kinematic pressure
+- $$p$$ is the (dynamic) pressure
 - $$\rho$$ is the density
 - $$\nu$$ is the kinematic viscosity
+
+> Note: If you prefer using kinematic pressure $$\pi=p/\rho$$, the momentum equation becomes
+> $$\partial_t\mathbf{u}+(\mathbf{u}\cdot\nabla)\mathbf{u}=-\nabla \pi + \nu\nabla^2\mathbf{u}.$$
 
 ## Domain and Initial/Boundary Conditions
 
@@ -37,9 +40,9 @@ $$
 x/L_x = \mathtt{cylin}\_\mathtt{pos}
 $$
 
-with a size controlled by `cylin_size` (default `1/10`). Inside this mask, velocity is forced to zero (no-slip).
+with a size controlled by `cylin_size` (default `1/10`). Inside this mask, velocity is forced to zero (no-slip). The mask is applied as an axis-aligned cell region (not a geometric immersed boundary).
 
-### Initial Conditions (time-dependent)
+### Initial Conditions (t = 0)
 
 At $$t=0$$:
 - $$u(x,y,0)=U_0$$ everywhere in the fluid region
@@ -60,7 +63,6 @@ Pressure boundary conditions (pressure Poisson step):
 - **Outlet (right)**: Dirichlet reference pressure with $$p = 0$$
 - **Other boundaries**: homogeneous Neumann with $$\partial p/\partial n = 0$$
 
-
 ## Implementation Details
 
 ### Projection (Fractional-Step) Method
@@ -73,7 +75,6 @@ Each time step advances a predictor–corrector scheme to enforce incompressibil
    - Viscous diffusion is treated with Crank–Nicolson, leading to Helmholtz-type solves for $$u^*$$ and $$v^*$$
 
 2. **Pressure Poisson solve**
-   - Pressure is obtained from the Poisson equation derived from $$\nabla\cdot\mathbf{u}^{n+1}=0$$
 
 $$
 \nabla^2 p^{n+1} = \frac{\rho}{\Delta t}\nabla\cdot \mathbf{u}^*
@@ -98,35 +99,19 @@ The spatial discretization uses MOLE operators:
 
 along with interpolation operators to map between cell-centered and face-based quantities used in flux evaluations and in the projection step.
 
-### Output Products
+## Output Products
 
-The example writes:
-- `U_final.csv`, `V_final.csv`, `p_final.csv` (cell-centered fields)
-- an image of the final speed field named `cylinder_flow_2D_output1.png`
+The solver writes the final cell-centered fields:
+- `U_final.csv`, `V_final.csv`, `p_final.csv`
+
+A plotting script is provided to visualize these CSV outputs using gnuplot:
+- `cylinder_flow_2D_plot.gnu` → produces `cylinder_flow_2D_plot.png`
 
 ## Running the Example
 
-From the build directory:
+Assuming you already configured and built MOLE following the tutorial, run the example from the `examples/cpp` directory so that all outputs (CSV + plots) are written next to the source and plotting scripts:
 
 ```bash
-cmake --build . -j
-./examples/cpp/cylinder_flow_2D
-```
-
-## Results
-
-The final speed magnitude typically shows an acceleration around the obstacle and a wake downstream. At $$\mathrm{Re}=200$$, unsteady vortex shedding can appear depending on grid and time-step choices and the obstacle mask representation.
-
-![Final speed magnitude field for the 2D channel flow with a masked cylinder obstacle](cylinder_flow_2D_output1.png)
-
----
-
-This example is implemented in:
-- `examples/cpp/cylinder_flow_2D.cpp`
-
-#### Variants
-
-Possible variants (not included by default) that are useful for exploration:
-- different Reynolds numbers such as $$50 \le \mathrm{Re} \le 500$$
-- refining $$m \times n$$ resolution to reduce numerical diffusion
-- replacing the rectangular mask by a more geometric obstacle treatment (if desired)
+cd <mole-repo>/examples/cpp
+../../build/examples/cpp/cylinder_flow_2D
+gnuplot cylinder_flow_2D_plot.gnu
