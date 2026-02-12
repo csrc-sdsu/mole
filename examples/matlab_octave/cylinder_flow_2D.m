@@ -1,4 +1,4 @@
-%% 2D incompressible flow over a square cylinder (masked region)
+%% 2D incompressible flow over a square cylinder
 % Projection method: AB2 (advection) + CN (diffusion)
 % MATLAB version aligned with the C++ example settings/output plotting.
 
@@ -55,7 +55,7 @@ Mp = (Icell + 0.5*dt*nu*L);
 U = 0.*X + U_init;
 V = 0.*X;
 
-% cylinder mask indices (same logic as your original)
+% cylinder mask indices 
 m_unit = floor(cylin_pos*m);
 halfN1 = 0.5*(n+3);  % n odd => integer
 rad    = floor(cylin_size*m_unit);
@@ -110,7 +110,7 @@ plotEvery = 100;
 
 for t_step = 1:nSteps
 
-    % Interpolate cell-centered U/V to faces (same intent as C++)
+    % Interpolate cell-centered U/V to faces
     U_stag = I * [U_flat; U_flat];
     U_on_u = U_stag(1:(m+1)*n);
     U_on_v = U_stag((m+1)*n+1:end);
@@ -154,7 +154,7 @@ for t_step = 1:nSteps
     U_star = reshape(U_star_flat, m+2, n+2);
     V_star = reshape(V_star_flat, m+2, n+2);
 
-    % Mask + corner consistency (same as your "fixes")
+    % Mask + corner consistency 
     U_star(i1:i2, j1:j2) = 0;
     V_star(i1:i2, j1:j2) = 0;
 
@@ -183,7 +183,7 @@ for t_step = 1:nSteps
     U_new = reshape(U_V_flat(1:Ncell), m+2, n+2);
     V_new = reshape(U_V_flat(Ncell+1:end), m+2, n+2);
 
-    % CRITICAL: re-apply velocity BCs AFTER projection (aligns with C++ behavior)
+    % CRITICAL: re-apply velocity BCs AFTER projection
     [U_new, V_new] = applyVelocityBCAndMask(U_new, V_new, U_init, i1,i2,j1,j2);
 
     % Update
