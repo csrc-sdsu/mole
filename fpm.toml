@@ -1,0 +1,17 @@
+name = "mole"
+
+[dependencies]
+armadillo-code = {git = "https://gitlab.com/rouson/armadillo-code.git", tag = "fpm"}
+julienne = {git = "https://github.com/berkeleylab/julienne.git", tag = "3.6.0"}
+
+[install]
+library = true
+
+[library]
+source-dir = "src/fortran"
+include-dir = "src/fortran/include"
+
+[[test]]
+name = "test_suite_driver"
+source-dir = "src/fortran/test"
+main = "driver.f90"

@@ -8,12 +8,13 @@
 
 ## Description
 
-MOLE is a high-quality (C++ & MATLAB/Octave) library that implements
+MOLE is a high-quality (C++, MATLAB/Octave, or Fortran) library that implements
 high-order mimetic operators to solve partial differential equations.
 It provides discrete analogs of the most common vector calculus operators:
 Gradient, Divergence, Laplacian, Bilaplacian, and Curl. These operators (highly sparse matrices) act
 on staggered grids (uniform, non-uniform, curvilinear) and satisfy local and
-global conservation laws.
+global conservation laws.  Fortran programs invoke mimetic operators via
+defined operations: `.div. v`, `.grad. f`, and `.laplacian. f`, for exmaple.
 
 Mathematics is based on the work of [Corbino and Castillo](https://doi.org/10.1016/j.cam.2019.06.042).
 However, the user may find helpful previous publications, such as [Castillo and Grone](https://doi.org/10.1137/S0895479801398025),
@@ -22,6 +23,7 @@ in which similar operators were derived using a matrix analysis approach.
 ## Installation
 
 ### Platform and Compiler Compatibility
+#### C++
 Refer to the table below for compiler support across different operating systems when building MOLE.
 
 | OS / Compiler | GCC 13.2.0 | AppleClang | IntelLLVM (icpx) |
@@ -29,9 +31,13 @@ Refer to the table below for compiler support across different operating systems
 | Linux         | Yes        | No         | Yes              |
 | macOS         | No         | Yes        | Yes              |
 
-### Prerequisites
+#### Fortran
+The Fortran implementation supports recent versions of the GCC (`gfortran`), Intel (`ifx`),
+LLVM (`flang`), and NAG (`nagfor`) compilers on macOS and Ubuntu Linux.
 
-To install the MOLE library, you'll need the following packages:
+### Prerequisites
+#### C++
+To install MOLE's C++ library, you'll need the following packages:
 
 - CMake (Minimum version 3.10)
 - OpenBLAS (Minimum version 0.3.10)
@@ -41,7 +47,26 @@ To install the MOLE library, you'll need the following packages:
 
 For documentation build requirements, please refer to the [Documentation Guide](https://github.com/csrc-sdsu/mole/blob/main/doc/sphinx/README.md).
 
+#### Fortran
+To install MOLE's Fortran library, you'll need the Fortran Package Manager ([`fpm`](https://github.com/fortran-lang/fpm)),
+which will automatically download and build all prerequisites.
+
 ### Package Installation by OS
+
+#### Fortran
+On macOS, Linux, or Windows with `git` and `fpm` installed,
+```
+git clone https://github.com/csrc-sdsu/mole
+cd mole
+git submodule update --init --recursive
+fpm install
+```
+which builds with the compiler specified by the `FPM_FC` environment variable
+or with `gfortran` if `FPM_FC` is empty.  For `fpm` commands to use with other
+supported compilers, please consult `src/fortran/README.md` _after_ running
+the above `git submodule` command to populate the contents of `src/fortran`.
+
+#### C++
 
 #### Ubuntu/Debian Systems
 
@@ -110,9 +135,8 @@ sudo yum install cmake openblas-devel eigen3-devel lapack
 
 ## Testing
 
-Run from the `build` directory:
-
 ### C++
+Run from the `build` directory:
 
 A suite of four automatic tests that verify MOLE's installation and dependencies. These tests run automatically during the C++ library construction.
 
@@ -121,11 +145,17 @@ make run_tests
 ```
 
 ### MATLAB/Octave
+Run from the `build` directory:
 
 MATLAB/Octave equivalent of the C++ test suite. We recommend running these tests before using MOLE to ensure proper setup.
 
 ```matlab
 make run_matlab_octave_tests
+
+### Fortran
+Run from anywhwere in the MOLE source tree:
+```
+fpm test
 ```
 
 ## Examples
@@ -135,6 +165,15 @@ Many of the examples require 'gnuplot' to visualize the results. You can get gnu
 brew install gnuplot
 ```
 and on Windows downlaoding and running the file from [here](https://sourceforge.net/projects/gnuplot/files/gnuplot/6.0.2/gp602-win64-mingw.exe/download)
+
+### Fortran
+With your present working directory set to anywhere inside the `src/fortran` directory, run
+```
+fpm run --example [<base-name>]
+```
+where square brackets desginate an optional argument, angular brackets indicate user input,
+and `<base-name>` is the string preceding the `.F90` extension in the name of any file in
+the `src/fortran/example` directory.
 
 ### C++
 
