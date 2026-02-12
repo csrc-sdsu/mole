@@ -16,12 +16,12 @@ $$
 $$
 
 where:
-- $$\mathbf{u}=(u,v)$$ is the velocity field
-- $$p$$ is the (dynamic) pressure
-- $$\rho$$ is the density
-- $$\nu$$ is the kinematic viscosity
+- $$\mathbf{u}=(u,v)$$ is the velocity field  
+- $$p$$ is the (dynamic) pressure  
+- $$\rho$$ is the density  
+- $$\nu$$ is the kinematic viscosity  
 
-> Note: If you prefer using kinematic pressure $$\pi=p/\rho$$, the momentum equation becomes
+> Note: If you prefer using kinematic pressure $$\pi=p/\rho$$, the momentum equation becomes  
 > $$\partial_t\mathbf{u}+(\mathbf{u}\cdot\nabla)\mathbf{u}=-\nabla \pi + \nu\nabla^2\mathbf{u}.$$
 
 ## Domain and Initial/Boundary Conditions
@@ -30,8 +30,8 @@ where:
 
 The computational domain is a 2D channel:
 
-- $$x \in [0,8]$$
-- $$y \in [-1,1]$$
+- $$x \in [0,8]$$  
+- $$y \in [-1,1]$$  
 - $$t \in [0, t_{\text{final}}]$$ with $$t_{\text{final}} = \texttt{tspan}$$ (default in code: `tspan = 32.0`)
 
 A “square cylinder” is represented by a masked block of cells located near
@@ -45,9 +45,9 @@ with a size controlled by `cylin_size` (default `1/10`). Inside this mask, veloc
 ### Initial Conditions (t = 0)
 
 At $$t=0$$:
-- $$u(x,y,0)=U_0$$ everywhere in the fluid region
-- $$v(x,y,0)=0$$
-- the obstacle mask region is set to $$u=v=0$$
+- $$u(x,y,0)=U_0$$ everywhere in the fluid region  
+- $$v(x,y,0)=0$$  
+- the obstacle mask region is set to $$u=v=0$$  
 
 (Default in code: `U_init = 1.0`.)
 
@@ -115,3 +115,18 @@ Assuming you already configured and built MOLE following the tutorial, run the e
 cd <mole-repo>/examples/cpp
 ../../build/examples/cpp/cylinder_flow_2D
 gnuplot cylinder_flow_2D_plot.gnu
+```
+
+## MATLAB/Octave Version
+
+A MATLAB/Octave implementation of the same channel-flow-with-masked-obstacle setup is also provided. It is configured with the same domain, grid resolution, time step, final time, Reynolds number, and boundary conditions as the C++ example, so the final fields are directly comparable.
+
+The corresponding output figures (generated in this same directory) are:
+- `cylinder_flow_2D_plot_cpp.png`
+- `cylinder_flow_2D_plot_matlab.png`
+
+### C++ result
+![C++: final U/V/p fields](cylinder_flow_2D_plot_cpp.png)
+
+### MATLAB result
+![MATLAB: final U/V/p fields](cylinder_flow_2D_plot_matlab.png)
