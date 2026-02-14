@@ -1,0 +1,11 @@
+url_path,views_total,views_unique
+/csrc-sdsu/mole,167,55
+/csrc-sdsu/mole/pulls,36,9
+/csrc-sdsu/mole/pull/274,36,5
+/csrc-sdsu/mole/tree/main/examples,31,20
+/csrc-sdsu/mole/tree/main/examples/matlab_octave,24,13
+/csrc-sdsu/mole/tree/main/src,16,7
+/csrc-sdsu/mole/fork,15,12
+/csrc-sdsu/mole/blob/feat/CPPaddScalarBC/src/cpp/addscalarbc.cpp,15,4
+/csrc-sdsu/mole/pull/274/changes,14,4
+/csrc-sdsu/mole/tree/feat/CPPaddScalarBC/src,13,4
