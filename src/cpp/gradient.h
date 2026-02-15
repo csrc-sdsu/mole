@@ -62,16 +62,6 @@ public:
    */  
   Gradient(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz);
 
-
-  /**
-   * @brief Returns the weights used in the Mimeitc Gradient Operators.
-   *
-   * @note for informational purposes only, can be used in constructing new operators.
-   */  
-  vec getP();
-
-private:
-  vec P;
 };
 
 #endif // GRADIENT_H
