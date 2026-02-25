@@ -147,19 +147,18 @@ This process is handled by the `build.sh` script, which is called by the `doc-la
 
 ### Image Handling
 
-Images are automatically handled when building the documentation using the Makefile targets:
+Images are automatically handled during the build process. The system automatically:
 
-The image handling process:
-- Copies images from `doc/assets/img/` to `doc/sphinx/build/html/_static/img/`
-- Fixes image paths in the HTML output
-- For PDF output, converts SVG files to high-quality PDFs (using Inkscape)
+- **Collects images** from multiple locations:
+  - `doc/assets/img/` (main image directory)
+  - `source/math_functions/figures/` (math function figures)
+  - `source/api/examples/md/figures/` (example figures)
+  - Any `figures/` directory next to markdown files
+- **Copies images** to `source/_images/` (standard Sphinx location)
+- **Fixes image paths** in included markdown files automatically
+- **For PDF output**: Converts SVG files to high-quality PDFs using Inkscape
 
-If you're running Sphinx directly without the Makefile, you'll need to run the image copy script separately:
-
-```bash
-# Run after building documentation manually
-./copy_images.sh
-```
+**For contributors**: Simply place images in `doc/assets/img/` or a `figures/` directory next to your markdown file, and reference them using standard markdown syntax: `![Alt text](doc/assets/img/image.png)` or `![Alt text](figures/image.png)`. The build system handles everything else automatically.
 
 ## Development Workflow
 
