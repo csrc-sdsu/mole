@@ -52,9 +52,8 @@
 clear; clc; close all;
 
 % --- 1. Path Configuration ---
-current_file = mfilename('fullpath');
-[current_folder, ~, ~] = fileparts(current_file);
-addpath(current_folder);
+
+addpath('../../../src/matlab_octave');
 mole_lib_path = fullfile(current_folder, '..', '..', '..', 'src', 'matlab_octave');
 if exist(mole_lib_path, 'dir'), addpath(mole_lib_path); end
 
