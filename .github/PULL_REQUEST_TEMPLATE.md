@@ -1,7 +1,7 @@
 <!--
      Before submitting a Pull Request, please ensure you've done the following:
      - 📖 Read the MOLE Contributing Guide: https://github.com/csrc-sdsu/mole/blob/main/CONTRIBUTING.md
-- 📖 Read the MOLE Code of Conduct: https://github.com/csrc-sdsu/mole/blob/main/CODE_OF_CONDUCT.md
+     - 📖 Read the MOLE Code of Conduct: https://github.com/csrc-sdsu/mole/blob/main/CODE_OF_CONDUCT.md
      - 👷‍♀️ Create small PRs. In most cases this will be possible.
      - ✅ Provide tests for your changes.
      - 📝 Use descriptive commit messages.
@@ -40,6 +40,7 @@ For example having the text: "closes #1234" would connect the current pull
 request to issue 1234.  And when we merge the pull request, Github will
 automatically close the issue.
 -->
+- [ ] I have created an Issue that is paired with this PR
 - Closes #
 
 ## QA Instructions, Screenshots, Recordings
@@ -58,7 +59,8 @@ _We encourage you to test all code included with MOLE, including examples.
 
 ## Read Contributing Guide and Code of Conduct
 
-- [ ] I have read and followed the [Contributing Guide](https://github.com/csrc-sdsu/mole/blob/main/CONTRIBUTING.md) and the [Code of Conduct](https://github.com/csrc-sdsu/mole/blob/main/CODE_OF_CONDUCT.md)
+- [ ] 📖 I have read the MOLE Contributing Guide: https://github.com/csrc-sdsu/mole/blob/main/CONTRIBUTING.md
+- [ ] 📖 I have read the MOLE Code of Conduct: https://github.com/csrc-sdsu/mole/blob/main/CODE_OF_CONDUCT.md
 
 ## [optional] Are there any post deployment tasks we need to perform?
 
