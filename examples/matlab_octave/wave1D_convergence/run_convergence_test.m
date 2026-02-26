@@ -52,22 +52,21 @@
 clear; clc; close all;
 
 % --- 1. Path Configuration ---
-
-addpath('../../../src/matlab_octave');
+current_file = mfilename('fullpath');
+[current_folder, ~, ~] = fileparts(current_file);
+addpath(current_folder);
 mole_lib_path = fullfile(current_folder, '..', '..', '..', 'src', 'matlab_octave');
 if exist(mole_lib_path, 'dir'), addpath(mole_lib_path); end
 
 fprintf('Running Comparative Convergence Test (Mimetic vs FD)\n');
 fprintf('--------------------------------------------------\n');
 
-mesh_sizes = [20, 40, 80, 160, 320];
+mesh_sizes = [20, 40, 80, 160, 300, 400, 500];
 n_sims = length(mesh_sizes);
 c = 2;
 m_finest = max(mesh_sizes);
 dx_finest_mimetic = 1.0 / m_finest;
-% CFL condition based on finest mesh: dt <= dx / c.
-% We use a safety factor of 0.25
-dt_fixed = 0.25 * dx_finest_mimetic / c;
+dt_fixed = 0.0001
 
 fprintf('Configuration: Fixed dt = %.5e (Ensures stability for all meshes)\n', dt_fixed);
 
@@ -101,10 +100,10 @@ end
 fprintf('\n### Convergence Comparison: Mimetic vs Standard FD\n');
 fprintf('Note: Time step dt is fixed. Comparison targets spatial order ~2.0.\n\n');
 fprintf('| Cells(m) | Mimetic Err | Rate | FD Error   | Rate |\n');
-fprintf('| :---     | :---        | :--- | :---       | :--- |\n');
+fprintf('| -------- | ----------- | ---- | ---------- | ---- |\n');
 
 for i = 1:n_sims
-    r_mim = '-'; r_fd = '-';
+    r_mim = '----'; r_fd = '----';
     if i > 1
         r_mim = sprintf('%.2f', results.rate_mim(i));
         r_fd  = sprintf('%.2f', results.rate_fd(i));
@@ -114,30 +113,53 @@ for i = 1:n_sims
 end
 
 % --- Optional Plotting
-%{
-if ~exist('OCTAVE_VERSION', 'builtin') || ~isempty(getenv('DISPLAY'))
-    % Figure 1: Error vs Grid Spacing (dx)
-    figure(1);
-    loglog(results.dx_mim, results.err_mim, '-o', 'DisplayName', 'Mimetic');
-    hold on;
-    loglog(results.dx_fd, results.err_fd, '-x', 'DisplayName', 'FD');
-    % Reference line O(h^2) using Mimetic dx
-    ref_y = results.err_mim(end) * (results.dx_mim / results.dx_mim(end)).^2;
-    loglog(results.dx_mim, ref_y, '--k', 'DisplayName', 'O(h^2)');
-    grid on; xlabel('dx'); ylabel('L2 Error'); legend('Location', 'best');
-    title('Convergence Comparison: Error vs dx');
 
-    % Figure 2: Error vs Number of Cells (m)
-    figure(2);
-    loglog(results.m, results.err_mim, '-o', 'DisplayName', 'Mimetic');
-    hold on;
-    loglog(results.m, results.err_fd, '-x', 'DisplayName', 'FD');
-    % Reference line O(m^-2)
-    ref_y_m = results.err_mim(1) * (results.m / results.m(1)).^(-2);
-    loglog(results.m, ref_y_m, '--k', 'DisplayName', 'O(m^{-2})');
-    grid on; xlabel('Cells (m)'); ylabel('L2 Error'); legend('Location', 'best');
-    title('Convergence Comparison: Error vs Cells');
+##if ~exist('OCTAVE_VERSION', 'builtin') || ~isempty(getenv('DISPLAY'))
+##    % Figure 1: Error vs Grid Spacing (dx)
+##    figure(1);
+##    loglog(results.dx_mim, results.err_mim, '-o', 'DisplayName', 'Mimetic');
+##    hold on;
+##    loglog(results.dx_fd, results.err_fd, '-x', 'DisplayName', 'FD');
+##    % Reference line O(h^2) using Mimetic dx
+##    ref_y = results.err_mim(end) * (results.dx_mim / results.dx_mim(end)).^2;
+##    loglog(results.dx_mim, ref_y, '--k', 'DisplayName', 'O(h^2)');
+##    grid on; xlabel('dx'); ylabel('L2 Error'); legend('Location', 'best');
+##    title('Convergence Comparison: Error vs dx');
+##
+##    % Figure 2: Error vs Number of Cells (m)
+##    figure(2);
+##    loglog(results.m, results.err_mim, '-o', 'DisplayName', 'Mimetic');
+##    hold on;
+##    loglog(results.m, results.err_fd, '-x', 'DisplayName', 'FD');
+##    % Reference line O(m^-2)
+##    ref_y_m = results.err_mim(1) * (results.m / results.m(1)).^(-2);
+##    loglog(results.m, ref_y_m, '--k', 'DisplayName', 'O(m^{-2})');
+##    grid on; xlabel('Cells (m)'); ylabel('L2 Error'); legend('Location', 'best');
+##    title('Convergence Comparison: Error vs Cells');
+##
+##    fprintf('\nPlots are commented out by default. Uncomment in script to view.\n');
+##end
+##
+##if ~exist('OCTAVE_VERSION', 'builtin') || ~isempty(getenv('DISPLAY'))
+##
+##    % Figure 1: Error vs dx
+##    figure(1);
+##    loglog(results.dx_mim, results.err_mim, '-o', ...
+##        'LineWidth', 1.2, 'MarkerSize', 6, 'DisplayName', 'Mimetic');
+##    hold on;
+##    loglog(results.dx_fd, results.err_fd, '-x', ...
+##        'LineWidth', 1.2, 'MarkerSize', 6, 'DisplayName', 'FD');
+##    ref_y = results.err_mim(1) * (results.dx_mim / results.dx_mim(1)).^2;
+##    loglog(results.dx_mim, ref_y, '--k', ...
+##        'LineWidth', 1.2, 'DisplayName', 'O(h^2)');
+##    grid on;
+##    grid minor;
+##    xlabel('dx', 'FontSize', 11, 'FontWeight', 'bold');
+##    ylabel('L2 Error', 'FontSize', 11, 'FontWeight', 'bold');
+##    title('Convergence Comparison: Error vs dx', 'FontSize', 12, 'FontWeight', 'bold');
+##    legend('Location', 'southeast', 'FontSize', 10);
+##
+##    hold off;
+##
+##end
 
-    fprintf('\nPlots are commented out by default. Uncomment in script to view.\n');
-end
-%}

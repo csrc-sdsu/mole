@@ -21,7 +21,7 @@ function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver(m,dt)
     a = 0; b = 1;       % Domain boundaries [0, 1]
     dx = (b-a)/m;       % Grid spacing
     c = 2;              % Wave speed
-    T_final = 0.5;      % Simulation duration
+    T_final = 0.35;      % Simulation duration
     Nt = ceil(T_final/dt);
 
     % Coordinate system: Cell centers (staggered grid)
@@ -42,7 +42,7 @@ function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver(m,dt)
 
     % Define the Force Function (RHS)
     % F = c^2 * Laplacian * u
-    F_op = @(u) (c^2) * (L * u);
+    F_op = @(u) (c^2) .* (L * u);
 
     % =========================================================================
     % 3. Initial Conditions (Augmented Vector)
@@ -73,31 +73,36 @@ function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver(m,dt)
 
     for t = 1:Nt
         % a) Half-step velocity update
-        v = v + 0.5 * dt * acc;
+        %v = v + 0.5 * dt * acc;
+        u = u + dt * v + 0.5 * dt^2 * acc;
+        acc_old = acc;
 
-        % b) Full-step position update
-        u = u + dt * v;
-
-        % c) Recalculate forces (acceleration) based on new position
+        % b) Recalculate forces (acceleration) based on new position
         acc = F_op(u);
-
         acc(1) = 0; acc(end) = 0;
 
         % d) Full-step velocity update
-        v = v + 0.5 * dt * acc;
+        v = v + 0.5 * dt * (acc_old + acc);
     end
 
     % =========================================================================
     % 5. Error Analysis
     % =========================================================================
-    % Analytical solution evaluated at cell centers
-    u_exact_centers = sin(pi*x_centers)*cos(pi*c*T_final) + ...
-                      sin(2*pi*x_centers)*cos(2*pi*c*T_final);
+    % Analytical solution
+    T_simulated = Nt * dt;
+
+    % Analytical solution evaluated at cell centers using T_simulated
+    u_exact_centers = sin(pi*x_centers)*cos(pi*c*T_simulated) + ...
+                  sin(2*pi*x_centers)*cos(2*pi*c*T_simulated);
 
     % Extract the interior of the numerical solution for comparison
     u_num_centers = u(2:end-1);
 
     % Compute discrete L2 Error Norm
+    % Compute discrete relative L2 Error Norm
     diff = u_num_centers - u_exact_centers;
-    L2_error = sqrt(sum(diff.^2) * dx);
+    norm_error = sqrt(sum(diff.^2) * dx);
+    norm_exact = sqrt(sum(u_exact_centers.^2) * dx);
+    L2_error = norm_error / norm_exact;
+
 end

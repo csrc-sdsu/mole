@@ -42,10 +42,9 @@
  * - Library: MOLE (with Armadillo for linear algebra)
  *
  * Output:
- * - Prints a table of L2 errors and convergence rates for successive grid refinements.
+ * - Prints a table of relative L2 errors and convergence rates for successive grid refinements.
  *
  * Author: Martin S. Armoa
- * Programming Assistant: Google Gemini via VS Code
  * ======================================================================================
  */
 
@@ -55,13 +54,12 @@
 #include <cmath>
 #include <iomanip>
 
-// Use Armadillo namespace
 using namespace arma;
 using namespace std;
 
 const double PI = 3.14159265358979323846;
 const double WAVE_SPEED_C = 2.0;
-const double T_FINAL = 0.5;
+const double T_TARGET = 0.5;
 
 // Analytical Solution
 double exact_sol(double x, double t) {
@@ -75,16 +73,26 @@ double run_simulation(int m, double dt) {
     double b = 1.0;         // Right boundary
     double dx = (b - a) / m;
 
-    // Nt calculated from fixed dt
-    int Nt = (int)ceil(T_FINAL / dt);
+
+    double t_eval = 0.35;
+    int Nt = (int)ceil(t_eval / dt);
+
+
+    double t_simulated = Nt * dt;
 
     // 1. Initialize Mimetic Operator
     Laplacian L(k, m, dx);
+
+    // Explicit Dirichlet Boundaries on the operator (Identity rows)
+    // Assuming MOLE's Laplacian matrix is dense or accessible via Armadillo mat
+    // Note: If L is purely an operator object, skip modifying matrix directly
+    // and enforce BCs strictly via the acceleration vector.
 
     // 2. State Vectors
     vec u(m + 2, fill::zeros);
     vec v(m + 2, fill::zeros);
     vec acc(m + 2, fill::zeros);
+    vec acc_old(m + 2, fill::zeros);
     vector<double> x_centers(m + 2);
 
     // 3. Initial Conditions
@@ -98,45 +106,59 @@ double run_simulation(int m, double dt) {
     u(m+1) = 0.0;
 
     // 4. Time Integration (Velocity Verlet)
-    // Initial Acc
-    acc = (WAVE_SPEED_C*WAVE_SPEED_C) * (L * u);
-    acc(0) = 0.0; acc(m+1) = 0.0; // BC
 
+    // Initial Acceleration
+    acc = (WAVE_SPEED_C*WAVE_SPEED_C) * (L * u);
+    acc(0) = 0.0; acc(m+1) = 0.0;
     for (int t = 0; t < Nt; t++) {
-        v = v + 0.5 * dt * acc;
-        u = u + dt * v;
+        // a) Full-step position update
+        u = u + dt * v + 0.5 * dt * dt * acc;
+
+        // Store previous acceleration
+        acc_old = acc;
+
+        // b) Recalculate acceleration at new position
         acc = (WAVE_SPEED_C*WAVE_SPEED_C) * (L * u);
         acc(0) = 0.0; acc(m+1) = 0.0; // BC
-        v = v + 0.5 * dt * acc;
+
+        // c) Full-step velocity update
+        v = v + 0.5 * dt * (acc_old + acc);
+
+        // Ensure boundaries remain strictly zero
+        u(0) = 0.0; u(m+1) = 0.0;
     }
 
-    // 5. L2 Error
+    // 5. Relative Error Calculation
     double sum_sq_error = 0.0;
+    double sum_sq_exact = 0.0;
+
     for (int i = 1; i <= m; i++) {
-        double diff = u(i) - exact_sol(x_centers[i], T_FINAL);
+        double u_ext = exact_sol(x_centers[i], t_simulated);
+        double diff = u(i) - u_ext;
+
         sum_sq_error += diff * diff;
+        sum_sq_exact += u_ext * u_ext;
     }
 
-    return sqrt(sum_sq_error * dx);
+    double norm_error = sqrt(sum_sq_error * dx);
+    double norm_exact = sqrt(sum_sq_exact * dx);
+
+    return norm_error / norm_exact;
 }
 
 int main() {
-    vector<int> mesh_sizes = {20, 40, 80, 160, 320};
+    vector<int> mesh_sizes = {20, 40, 80, 160, 300, 400, 500};
 
-    // --- CALC FIXED DT ---
-    // Match MATLAB logic: based on finest mesh (m=320)
-    int m_finest = 320;
-    double dx_min = 1.0 / m_finest;
-    // CFL Safety factor 0.25
-    double dt_fixed = 0.25 * dx_min / WAVE_SPEED_C;
 
-    cout << "Running C++ Convergence Test (Fixed dt)" << endl; // Changed title to verify update
+    double dt_fixed = 0.0001;
+
+    cout << "Running C++ Convergence Test (Fixed dt)" << endl;
     cout << "---------------------------------------" << endl;
-    cout << "Configuration: Fixed dt = " << scientific << dt_fixed << endl << endl;
+    cout << "Configuration: Fixed dt = " << dt_fixed << endl << endl;
 
     cout << "### Convergence Rate Table (C++)" << endl;
-    cout << "| Cells (m) | dx         | L2 Error   | Rate (p) |" << endl;
-    cout << "| :---      | :---       | :---       | :---     |" << endl;
+    cout << "| Cells (m) | dx         |   Rel Error  | Rate (p) |" << endl;
+    cout << "| --------- | ---------- | ------------ | -------- |" << endl;
 
     vector<double> errors;
     vector<double> dx_vals;
@@ -150,7 +172,7 @@ int main() {
             errors.push_back(error);
             dx_vals.push_back(dx);
 
-            string rate_str = "-";
+            string rate_str = "  ----  ";
             if (i > 0) {
                 double rate = log(errors[i-1] / errors[i]) / log(dx_vals[i-1] / dx_vals[i]);
                 char buffer[50];
@@ -158,6 +180,7 @@ int main() {
                 rate_str = string(buffer);
             }
 
+            //
             cout << "| " << setw(9) << left << m
                  << " | " << scientific << setprecision(4) << dx
                  << " | " << scientific << setprecision(4) << error

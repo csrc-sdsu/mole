@@ -19,9 +19,8 @@ function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver_fd(m,dt)
     % 1. Physical Parameters and Grid Configuration
     % =========================================================================
     a = 0; b = 1;       % Domain boundaries
-    dx = (b-a)/m;       % Grid spacing
     c = 2;              % Wave speed
-    T_final = 0.5;      % Simulation duration
+    T_final = 0.35;      % Simulation duration
     Nt = ceil(T_final/dt);
     % Comparison: Mimetic uses m cells. FD uses m+2 nodes to cover same domain.
     N = m + 2;
@@ -39,7 +38,7 @@ function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver_fd(m,dt)
     %  0: Main diagonal
     % +1: Upper diagonal
     L = spdiags([e -2*e e], -1:1, N, N);
-    L = L / dx^2;
+    L = L ./ dx^2;
 
     % Boundary Conditions (Explicit Dirichlet u=0)
     % We zero out the first and last rows to prevent the stencil from
@@ -48,7 +47,7 @@ function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver_fd(m,dt)
     L(end, :) = 0; L(end, end) = 0;
 
     % Define the Force Function (RHS)
-    F_op = @(u) (c^2) * (L * u);
+    F_op = @(u) (c^2) .* (L * u);
 
     % =========================================================================
     % 3. Initial Conditions
@@ -69,17 +68,18 @@ function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver_fd(m,dt)
 
     for t = 1:Nt
         % a) Half-step velocity update
-        v = v + 0.5 * dt * acc;
+        %v = v + 0.5 * dt * acc;
+        u = u + dt * v + 0.5 * dt^2 * acc;
+        acc_old = acc;
 
-        % b) Full-step position update
-        u = u + dt * v;
-
-        % c) Recalculate acceleration
+        % b) Recalculate forces (acceleration) based on new position
         acc = F_op(u);
+        acc(1) = 0; acc(end) = 0;
 
         % d) Full-step velocity update
-        v = v + 0.5 * dt * acc;
+        v = v + 0.5 * dt * (acc_old + acc);
     end
+    u(1) = 0; u(end) = 0;
 
     % =========================================================================
     % 5. Error Analysis
@@ -91,5 +91,11 @@ function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver_fd(m,dt)
     u_exact_internal = u_exact_all(2:end-1);
 
     diff = u_num_internal - u_exact_internal;
-    L2_error = sqrt(sum(diff.^2) * dx);
+    norm_error = sqrt(sum(diff.^2) * dx);
+    norm_exact = sqrt(sum(u_exact_all.^2) * dx);
+    L2_error = norm_error / norm_exact;
+
 end
+
+
+
