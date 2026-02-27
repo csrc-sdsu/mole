@@ -53,13 +53,14 @@
 #include <vector>
 #include <cmath>
 #include <iomanip>
+#include <sstream>
 
 using namespace arma;
 using namespace std;
 
 const double PI = 3.14159265358979323846;
 const double WAVE_SPEED_C = 2.0;
-const double T_TARGET = 0.5;
+const double T_TARGET = 0.35;
 
 // Analytical Solution
 double exact_sol(double x, double t) {
@@ -72,21 +73,12 @@ double run_simulation(int m, double dt) {
     double a = 0.0;         // Left boundary
     double b = 1.0;         // Right boundary
     double dx = (b - a) / m;
-
-
-    double t_eval = 0.35;
+    double t_eval = T_TARGET;
     int Nt = (int)ceil(t_eval / dt);
-
-
     double t_simulated = Nt * dt;
 
     // 1. Initialize Mimetic Operator
     Laplacian L(k, m, dx);
-
-    // Explicit Dirichlet Boundaries on the operator (Identity rows)
-    // Assuming MOLE's Laplacian matrix is dense or accessible via Armadillo mat
-    // Note: If L is purely an operator object, skip modifying matrix directly
-    // and enforce BCs strictly via the acceleration vector.
 
     // 2. State Vectors
     vec u(m + 2, fill::zeros);
@@ -109,7 +101,8 @@ double run_simulation(int m, double dt) {
 
     // Initial Acceleration
     acc = (WAVE_SPEED_C*WAVE_SPEED_C) * (L * u);
-    acc(0) = 0.0; acc(m+1) = 0.0;
+    acc(0) = 0.0;
+    acc(m+1) = 0.0;
     for (int t = 0; t < Nt; t++) {
         // a) Full-step position update
         u = u + dt * v + 0.5 * dt * dt * acc;
@@ -119,15 +112,16 @@ double run_simulation(int m, double dt) {
 
         // b) Recalculate acceleration at new position
         acc = (WAVE_SPEED_C*WAVE_SPEED_C) * (L * u);
-        acc(0) = 0.0; acc(m+1) = 0.0; // BC
+        acc(0) = 0.0;
+        acc(m+1) = 0.0; // BC
 
         // c) Full-step velocity update
         v = v + 0.5 * dt * (acc_old + acc);
 
         // Ensure boundaries remain strictly zero
-        u(0) = 0.0; u(m+1) = 0.0;
+        u(0) = 0.0;
+        u(m+1) = 0.0;
     }
-
     // 5. Relative Error Calculation
     double sum_sq_error = 0.0;
     double sum_sq_exact = 0.0;
@@ -145,11 +139,8 @@ double run_simulation(int m, double dt) {
 
     return norm_error / norm_exact;
 }
-
 int main() {
     vector<int> mesh_sizes = {20, 40, 80, 160, 300, 400, 500};
-
-
     double dt_fixed = 0.0001;
 
     cout << "Running C++ Convergence Test (Fixed dt)" << endl;
@@ -157,7 +148,7 @@ int main() {
     cout << "Configuration: Fixed dt = " << dt_fixed << endl << endl;
 
     cout << "### Convergence Rate Table (C++)" << endl;
-    cout << "| Cells (m) | dx         |   Rel Error  | Rate (p) |" << endl;
+    cout << "| Cells (m) | dx         | Rel Error    | Rate (p) |" << endl;
     cout << "| --------- | ---------- | ------------ | -------- |" << endl;
 
     vector<double> errors;
@@ -172,19 +163,26 @@ int main() {
             errors.push_back(error);
             dx_vals.push_back(dx);
 
-            string rate_str = "  ----  ";
+            ostringstream dx_stream;
+            dx_stream << scientific << setprecision(4) << dx;
+            string dx_str = dx_stream.str();
+
+            ostringstream err_stream;
+            err_stream << scientific << setprecision(4) << error;
+            string err_str = err_stream.str();
+
+            string rate_str = "----";
             if (i > 0) {
                 double rate = log(errors[i-1] / errors[i]) / log(dx_vals[i-1] / dx_vals[i]);
-                char buffer[50];
-                sprintf(buffer, "%.2f", rate);
-                rate_str = string(buffer);
+                ostringstream rate_stream;
+                rate_stream << fixed << setprecision(2) << rate;
+                rate_str = rate_stream.str();
             }
 
-            //
-            cout << "| " << setw(9) << left << m
-                 << " | " << scientific << setprecision(4) << dx
-                 << " | " << scientific << setprecision(4) << error
-                 << " | " << setw(8) << rate_str << " |" << endl;
+            cout << "| " << setw(9) << right << m
+                 << " | " << setw(10) << right << dx_str
+                 << " | " << setw(12) << right << err_str
+                 << " | " << setw(8) << right << rate_str << " |" << endl;
 
         } catch (const std::exception& e) {
             cout << "Error simulation m=" << m << ": " << e.what() << endl;

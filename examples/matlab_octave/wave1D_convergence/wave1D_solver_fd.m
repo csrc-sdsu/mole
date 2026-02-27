@@ -1,4 +1,4 @@
-function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver_fd(m,dt)
+function [R_error, dx, u_num_centers, x_centers] = wave1D_solver_fd(m,dt)
 % WAVE1D_SOLVER_FD Solves the 1D Wave Equation using Standard Finite Differences.
 %
 %   formulation: d2u/dt2 = c^2 * d2u/dx2
@@ -10,7 +10,7 @@ function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver_fd(m,dt)
 %       m : Number of cells in the spatial grid.
 %
 %   Outputs:
-%       L2_error      : Discrete L2 norm error against exact solution.
+%       R_error       : Discrete relative L2 norm error against exact solution.
 %       dx            : Grid spacing.
 %       u_num : Numerical solution vector
 %
@@ -93,7 +93,7 @@ function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver_fd(m,dt)
     diff = u_num_internal - u_exact_internal;
     norm_error = sqrt(sum(diff.^2) * dx);
     norm_exact = sqrt(sum(u_exact_all.^2) * dx);
-    L2_error = norm_error / norm_exact;
+    R_error = norm_error / norm_exact;
 
 end
 

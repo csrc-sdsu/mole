@@ -1,4 +1,4 @@
-function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver(m,dt)
+function [R_error, dx, u_num_centers, x_centers] = wave1D_solver(m,dt)
 % WAVE1D_SOLVER Solves the 1D Wave Equation using Mimetic Finite Differences.
 %
 %   formulation: d2u/dt2 = c^2 * div(grad(u))
@@ -9,7 +9,7 @@ function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver(m,dt)
 %       m : Number of cells in the spatial grid.
 %
 %   Outputs:
-%       L2_error      : Discrete L2 norm error against exact solution.
+%       R _error      : Discrete Relative L2 norm error against exact solution.
 %       dx            : Grid spacing.
 %       u_num_centers : Numerical solution vector (interior points).
 %       x_centers     : Coordinate vector of cell centers.
@@ -37,15 +37,17 @@ function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver(m,dt)
 
     % Impose Boundary Conditions on the operator matrix (Dirichlet u=0)
     % This ensures the operator behaves correctly at the edges.
-    L(1, :) = 0; L(1, 1) = 1;       % Left boundary (Identity row)
-    L(end, :) = 0; L(end, end) = 1; % Right boundary (Identity row)
+    L(1, :) = 0;
+    L(1, 1) = 1;       % Left boundary
+    L(end, :) = 0;
+    L(end, end) = 1;  % Right boundary
 
     % Define the Force Function (RHS)
     % F = c^2 * Laplacian * u
     F_op = @(u) (c^2) .* (L * u);
 
     % =========================================================================
-    % 3. Initial Conditions (Augmented Vector)
+    % 3. Initial Conditions
     % =========================================================================
     % Initialize state vector 'u' with size m+2 (includes boundaries)
     u = zeros(m+2, 1);
@@ -94,15 +96,11 @@ function [L2_error, dx, u_num_centers, x_centers] = wave1d_solver(m,dt)
     % Analytical solution evaluated at cell centers using T_simulated
     u_exact_centers = sin(pi*x_centers)*cos(pi*c*T_simulated) + ...
                   sin(2*pi*x_centers)*cos(2*pi*c*T_simulated);
-
-    % Extract the interior of the numerical solution for comparison
     u_num_centers = u(2:end-1);
-
-    % Compute discrete L2 Error Norm
-    % Compute discrete relative L2 Error Norm
+    % Compute discrete relative Error Norm
     diff = u_num_centers - u_exact_centers;
     norm_error = sqrt(sum(diff.^2) * dx);
     norm_exact = sqrt(sum(u_exact_centers.^2) * dx);
-    L2_error = norm_error / norm_exact;
+    R_error = norm_error / norm_exact;
 
 end
