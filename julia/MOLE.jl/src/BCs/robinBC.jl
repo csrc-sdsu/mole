@@ -4,6 +4,8 @@
     See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 =#
 
+import ..Operators: Operators, grad
+
 """
     robinBC(k, m, dx, a, b)
 
@@ -25,7 +27,7 @@ function robinBC(k::Int, m::Int, dx, a, b)
     B[1,1] = -b
     B[m+2,m+1] = b
 
-    G = grad(k,m,dx)
+    G = Operators.grad(k,m,dx)
 
     BC = A + B*G;
 end

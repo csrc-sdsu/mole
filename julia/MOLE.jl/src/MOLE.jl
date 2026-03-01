@@ -6,9 +6,7 @@
 
 module MOLE
 
-include("Operators/divergence.jl")
-include("Operators/gradient.jl")
-include("Operators/laplacian.jl")
-include("BCs/robinBC.jl")
+include("Operators/Operators.jl")
+include("BCs/BCs.jl")
 
 end # module MOLE

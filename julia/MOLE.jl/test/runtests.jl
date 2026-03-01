@@ -1,5 +1,6 @@
 using MOLE
 using Test, LinearAlgebra
+import MOLE: Operators
 
 @testset "Testing MOLE operators" begin
     @testset "Testing 1D divergence" begin
