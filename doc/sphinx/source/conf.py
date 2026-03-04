@@ -11,7 +11,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import importlib.util
-import pkg_resources
+# import pkg_resources
 import glob
 from PIL import Image, ImageOps
 import errno
