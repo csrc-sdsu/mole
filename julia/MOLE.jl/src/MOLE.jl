@@ -6,11 +6,7 @@
 
 module MOLE
 
-include("divergence.jl")
-include("gradient.jl")
-include("laplacian.jl")
-include("robinBC.jl")
-
-export div, grad, lap, robinBC
+include("Operators/Operators.jl")
+include("BCs/BCs.jl")
 
 end # module MOLE
