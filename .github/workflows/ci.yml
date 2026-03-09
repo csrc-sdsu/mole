@@ -98,7 +98,7 @@ jobs:
         run: mkdir -p build
 
       - name: Run CMake
-        run: cmake -DEigen3_DIR=/opt/homebrew/Cellar/eigen@3/3.4.1/share/eigen3/cmake -DCMAKE_Fortran_COMPILER="/opt/homebrew/bin/gfortran-14" -S . -B build
+        run: cmake -DEigen3_DIR="/opt/homebrew/Cellar/eigen@3/3.4.1/share/eigen3/cmake" -DCMAKE_Fortran_COMPILER="/opt/homebrew/bin/gfortran-14" -S . -B build
 
       - name: Build MOLE library
         run: cmake --build build
@@ -118,7 +118,7 @@ jobs:
         id: changes
         run: |
           git fetch origin "${{ github.event.pull_request.base.ref }}" --depth=1
-          CHANGED=$(git diff --name-only FETCH_HEAD HEAD | grep '^doc/papers/' || true)
+          CHANGED="$(git diff --name-only FETCH_HEAD HEAD | grep '^doc/papers/' || true)"
     
           # git fetch origin ${{ github.base_ref }}
           # CHANGED=$(git diff --name-only origin/${{ github.base_ref }} HEAD | grep '^doc/papers/' || true)
@@ -157,12 +157,12 @@ jobs:
       - name: Check if documentation sources changed
         id: changes
         run: |
-          git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
-          CHANGED=$(git diff --name-only FETCH_HEAD HEAD | grep -E '^(doc/sphinx/|doc/doxygen/|.*\.md$|.*\.rst$|\.github/workflows/build_and_gtest\.yml$)' || true)
+          git fetch origin "${{ github.event.pull_request.base.ref }}" --depth=1
+          CHANGED="$(git diff --name-only FETCH_HEAD HEAD | grep -E '^(doc/sphinx/|doc/doxygen/|.*\.md$|.*\.rst$|\.github/workflows/build_and_gtest\.yml$)' || true)"
     
           # For push events, check against previous commit
           if [ "${{ github.event_name }}" = "push" ]; then
-            CHANGED=$(git diff --name-only HEAD~1 HEAD | grep -E '^(doc/sphinx/|doc/doxygen/|.*\.md$|.*\.rst$|\.github/workflows/build_and_gtest\.yml$)' || true)
+            CHANGED="$(git diff --name-only HEAD~1 HEAD | grep -E '^(doc/sphinx/|doc/doxygen/|.*\.md$|.*\.rst$|\.github/workflows/build_and_gtest\.yml$)' || true)"
           fi
           
           if [ -n "$CHANGED" ]; then
