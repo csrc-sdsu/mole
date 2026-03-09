@@ -3,9 +3,9 @@
  * @brief Regression tests for AddScalarBC boundary-condition assembly helpers.
  *
  * These tests exercise the *algebraic modifications* performed by:
- *   - addScalarBC1D()
- *   - addScalarBC2D()
- *   - addScalarBC3D()
+ *   - addScalarBC(): for 1D
+ *   - addScalarBC() : for 2D
+ *   - addScalarBC3D() : for 3D
  *
  * What we validate (high level):
  *  - The system matrix A is modified at boundary rows when BCs are active.
@@ -21,7 +21,7 @@
  *      * "A changes" when BCs are active,
  *      * "b boundary entries reflect v",
  *      * Dirichlet rows behave like explicit constraints.
- * Last Modified: 2026/03/02
+ * Last Modified: 2026/03/09
  */
 
 #include "mole.h"
@@ -134,7 +134,7 @@ void test_1D_dirichlet() {
   bc.nc = {0.0, 0.0};    // Neumann weights (left, right)
   bc.v  = {1.0, 0.0};    // prescribed boundary values: u_left=1, u_right=0
 
-  addScalarBC1D(A, b, k, m, dx, bc);
+  addScalarBC(A, b, k, m, dx, bc);
 
   // RHS must reflect prescribed boundary data.
   require_true(std::abs(b(0) - 1.0) < TOL, "1D Dirichlet: b(0) not set to left value");
@@ -176,7 +176,7 @@ void test_1D_neumann() {
   bc.nc = {1.0, 1.0};    // Neumann component active on both ends
   bc.v  = {0.0, 0.0};    // prescribed flux/derivative values (both zero here)
 
-  addScalarBC1D(A, b, k, m, dx, bc);
+  addScalarBC(A, b, k, m, dx, bc);
 
   // Boundary-condition application must alter the operator.
   require_true(frob_diff(A, A_orig) > 0.0, "1D Neumann: A did not change");
@@ -217,7 +217,7 @@ void test_1D_mixed_dirichlet_neumann() {
   bc.nc = {0.0, 1.0};   // Neumann on right only
   bc.v  = {2.0, 0.5};   // u(0)=2, du/dn(right)=0.5 (conceptually)
 
-  addScalarBC1D(A, b, k, m, dx, bc);
+  addScalarBC(A, b, k, m, dx, bc);
 
   require_true(frob_diff(A, A_orig) > 0.0, "1D mixed D/N: A did not change");
 
@@ -257,7 +257,7 @@ void test_1D_mixed_neumann_dirichlet() {
   bc.nc = {1.0, 0.0};   // Neumann on left only
   bc.v  = {0.0, -1.0};  // du/dn(left)=0, u(end)=-1
 
-  addScalarBC1D(A, b, k, m, dx, bc);
+  addScalarBC(A, b, k, m, dx, bc);
 
   require_true(frob_diff(A, A_orig) > 0.0, "1D mixed N/D: A did not change");
 
@@ -303,7 +303,7 @@ void test_1D_robin() {
   bc.nc = {1.0, 4.0};     // derivative term weights
   bc.v  = {1.5, -0.25};   // right-hand-side values for each boundary equation
 
-  addScalarBC1D(A, b, k, m, dx, bc);
+  addScalarBC(A, b, k, m, dx, bc);
 
   require_true(frob_diff(A, A_orig) > 0.0, "1D Robin: A did not change");
   require_true(std::abs(b(0) - 1.5) < TOL, "1D Robin: b(0) wrong");
@@ -354,7 +354,7 @@ void test_2D_dirichlet_all() {
   bc.v[2] = vec(m + 2, fill::value(3.0));  // bottom edge
   bc.v[3] = vec(m + 2, fill::value(4.0));  // top edge
 
-  addScalarBC2D(A, b, k, m, dx, n, dy, bc);
+  addScalarBC(A, b, k, m, dx, n, dy, bc);
 
   require_true(frob_diff(A, A_orig) > 0.0, "2D Dirichlet all: A did not change");
   require_true(vec_diff(b, vec((m + 2) * (n + 2), fill::ones)) > 0.0, "2D Dirichlet all: b did not change");
@@ -395,7 +395,7 @@ void test_2D_neumann_all() {
   bc.v[2] = vec(m + 2, fill::zeros);
   bc.v[3] = vec(m + 2, fill::zeros);
 
-  addScalarBC2D(A, b, k, m, dx, n, dy, bc);
+  addScalarBC(A, b, k, m, dx, n, dy, bc);
 
   require_true(frob_diff(A, A_orig) > 0.0, "2D Neumann all: A did not change");
   require_true(vec_diff(b, vec((m + 2) * (n + 2), fill::ones)) > 0.0, "2D Neumann all: b did not change");
@@ -436,7 +436,7 @@ void test_2D_mixed() {
   bc.v[2] = vec(m + 2, fill::zeros);      // Bottom: du/dn = 0
   bc.v[3] = vec(m + 2, fill::zeros);      // Top: du/dn = 0
 
-  addScalarBC2D(A, b, k, m, dx, n, dy, bc);
+  addScalarBC(A, b, k, m, dx, n, dy, bc);
 
   require_true(frob_diff(A, A_orig) > 0.0, "2D mixed: A did not change");
   require_true(vec_diff(b, vec((m + 2) * (n + 2), fill::ones)) > 0.0, "2D mixed: b did not change");
@@ -485,7 +485,7 @@ void test_3D_dirichlet_all() {
   bc.v[4] = vec((m + 2) * (n + 2), fill::zeros);      // Front
   bc.v[5] = vec((m + 2) * (n + 2), fill::zeros);      // Back
 
-  addScalarBC3D(A, b, k, m, dx, n, dy, o, dz, bc);
+  addScalarBC(A, b, k, m, dx, n, dy, o, dz, bc);
 
   require_true(frob_diff(A, A_orig) > 0.0, "3D Dirichlet all: A did not change");
   require_true(vec_diff(b, vec((m + 2) * (n + 2) * (o + 2), fill::ones)) > 0.0,
@@ -527,7 +527,7 @@ void test_3D_neumann_all() {
   bc.v[4] = vec((m + 2) * (n + 2), fill::zeros);
   bc.v[5] = vec((m + 2) * (n + 2), fill::zeros);
 
-  addScalarBC3D(A, b, k, m, dx, n, dy, o, dz, bc);
+  addScalarBC(A, b, k, m, dx, n, dy, o, dz, bc);
 
   require_true(frob_diff(A, A_orig) > 0.0, "3D Neumann all: A did not change");
   require_true(vec_diff(b, vec((m + 2) * (n + 2) * (o + 2), fill::ones)) > 0.0,
@@ -568,7 +568,7 @@ void test_3D_mixed() {
   bc.v[4] = vec((m + 2) * (n + 2), fill::zeros);      // Front (Neumann)
   bc.v[5] = vec((m + 2) * (n + 2), fill::zeros);      // Back (Neumann)
 
-  addScalarBC3D(A, b, k, m, dx, n, dy, o, dz, bc);
+  addScalarBC(A, b, k, m, dx, n, dy, o, dz, bc);
 
   require_true(frob_diff(A, A_orig) > 0.0, "3D mixed: A did not change");
   require_true(vec_diff(b, vec((m + 2) * (n + 2) * (o + 2), fill::ones)) > 0.0,
@@ -608,7 +608,7 @@ void test_periodic_1D_do_nothing() {
   bc.nc = {0.0, 0.0};
   bc.v  = {0.0, 0.0};
 
-  addScalarBC1D(A, b, k, m, dx, bc);
+  addScalarBC(A, b, k, m, dx, bc);
 
   const Real diff_A = frob_diff(A, A_orig);
   const Real diff_b = vec_diff(b, b_orig);

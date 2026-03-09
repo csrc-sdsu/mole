@@ -81,7 +81,7 @@ int main() {
 
     // Apply boundary conditions
     cout << "Applying boundary conditions to operator and RHS..." << endl;
-    addScalarBC1D(A, f, k, m, dx, bc);
+    addScalarBC(A, f, k, m, dx, bc);
     cout << "  Boundary conditions applied" << endl;
     cout << endl;
 

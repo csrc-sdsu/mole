@@ -71,7 +71,7 @@ int main() {
     bc.v[3] = vec(m+2, fill::zeros);    // Top: y = 1
 
     // Apply boundary conditions
-    addScalarBC2D(A, f, k, m, dx, n, dy, bc);
+    addScalarBC(A, f, k, m, dx, n, dy, bc);
     cout << "  Boundary conditions applied" << endl;
     cout << "  Modified operator size: " << A.n_rows << " x " << A.n_cols << endl;
     cout << endl;
