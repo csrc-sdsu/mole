@@ -117,7 +117,7 @@ jobs:
       - name: Check if subfolder changed
         id: changes
         run: |
-          git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
+          git fetch origin "${{ github.event.pull_request.base.ref }}" --depth=1
           CHANGED=$(git diff --name-only FETCH_HEAD HEAD | grep '^doc/papers/' || true)
     
           # git fetch origin ${{ github.base_ref }}
