@@ -84,16 +84,15 @@ jobs:
           # brew link gcc
           export FC="/opt/homebrew/bin/gfortran-14"
           export CMAKE_Fortran_COMPILER="/opt/homebrew/bin/gfortran-14"
-          export LDFLAGS+=" -L/opt/homebrew/opt/openblas/lib"
-          export CPPFLAGS+=" -I/opt/homebrew/opt/openblas/include"
-          export PKG_CONFIG_PATH+=" /opt/homebrew/opt/openblas/lib/pkgconfig"
-
-          export LDFLAGS+=" -L/opt/homebrew/opt/libomp/lib"
-          export CPPFLAGS+=" -I/opt/homebrew/opt/libomp/include"
-          export LDFLAGS+=" -L/opt/homebrew/opt/lapack/lib"
-          export CPPFLAGS+=" -I/opt/homebrew/opt/lapack/include"
-          export CPPFLAGS+=" -I/opt/homebrew/opt/eigen@3/include"
-          export PKG_CONFIG_PATH+=" /opt/homebrew/opt/lapack/lib/pkgconfig"
+          export LDFLAGS="${LDFLAGS} -L/opt/homebrew/opt/openblas/lib"
+          export CPPFLAGS="${CPPFLAGS} -I/opt/homebrew/opt/openblas/include"
+          export PKG_CONFIG_PATH="${PKG_CONFIG_PATH} /opt/homebrew/opt/openblas/lib/pkgconfig"
+          export LDFLAGS="${LDFLAGS} -L/opt/homebrew/opt/libomp/lib"
+          export CPPFLAGS="${CPPFLAGS} -I/opt/homebrew/opt/libomp/include"
+          export LDFLAGS+="${LDFLAGS} -L/opt/homebrew/opt/lapack/lib"
+          export CPPFLAGS="${CPPFLAGS} -I/opt/homebrew/opt/lapack/include"
+          export CPPFLAGS="${CPPFLAGS} -I/opt/homebrew/opt/eigen@3/include"
+          export PKG_CONFIG_PATH="${PKG_CONFIG_PATH} /opt/homebrew/opt/lapack/lib/pkgconfig"
 
       - name: Create build directory
         run: mkdir -p build
