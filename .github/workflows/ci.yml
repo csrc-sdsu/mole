@@ -89,7 +89,7 @@ jobs:
           export PKG_CONFIG_PATH="${PKG_CONFIG_PATH} /opt/homebrew/opt/openblas/lib/pkgconfig"
           export LDFLAGS="${LDFLAGS} -L/opt/homebrew/opt/libomp/lib"
           export CPPFLAGS="${CPPFLAGS} -I/opt/homebrew/opt/libomp/include"
-          export LDFLAGS+="${LDFLAGS} -L/opt/homebrew/opt/lapack/lib"
+          export LDFLAGS="${LDFLAGS} -L/opt/homebrew/opt/lapack/lib"
           export CPPFLAGS="${CPPFLAGS} -I/opt/homebrew/opt/lapack/include"
           export CPPFLAGS="${CPPFLAGS} -I/opt/homebrew/opt/eigen@3/include"
           export PKG_CONFIG_PATH="${PKG_CONFIG_PATH} /opt/homebrew/opt/lapack/lib/pkgconfig"
@@ -123,9 +123,9 @@ jobs:
           # git fetch origin ${{ github.base_ref }}
           # CHANGED=$(git diff --name-only origin/${{ github.base_ref }} HEAD | grep '^doc/papers/' || true)
           if [ -n "$CHANGED" ]; then
-            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           else
-            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "changed=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Run build if subfolder changed
@@ -166,11 +166,11 @@ jobs:
           fi
           
           if [ -n "$CHANGED" ]; then
-            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "changed=true" >> "$GITHUB_OUTPUT"
             echo "Documentation sources have changed:"
             echo "$CHANGED"
           else
-            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "No documentation sources changed"
           fi
 
