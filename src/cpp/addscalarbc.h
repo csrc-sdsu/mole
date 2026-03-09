@@ -238,70 +238,7 @@ void addScalarBC(sp_mat &A, vec &b, u16 k, u32 m, Real dx,
 void addScalarBC(sp_mat &A, vec &b, u16 k, u32 m, Real dx,
                  u32 n, Real dy, u32 o, Real dz, const BC3D &bc);
 
-// ============================================================================
-// These handlers are provided for users who may want to differentiate between
-// call to 1D, 2D, and 3D. Internally, they simply call the addScalarBC 
-// function with the appropriate parameters.
-// ============================================================================
 
-/**
- * @brief Apply boundary conditions to a 1D discrete operator and RHS
- *
- * Modifies the linear system A*u = b to enforce boundary conditions.
- *
- * @param A    Linear operator (modified in place)
- * @param b    Right-hand side vector (modified in place)
- * @param k    Order of accuracy
- * @param m    Number of cells
- * @param dx   Cell spacing
- * @param bc   Boundary condition data
- */
- 
-inline void addScalarBC1D(sp_mat &A, vec &b, u16 k, u32 m, Real dx,
-                          const BC1D &bc) {
-    addScalarBC(A, b, k, m, dx, bc);
-}
-
-/**
- * @brief Apply boundary conditions to a 2D discrete operator and RHS
- *
- * Modifies the linear system A*u = b to enforce boundary conditions.
- *
- * @param A    Linear operator (modified in place)
- * @param b    Right-hand side vector (modified in place)
- * @param k    Order of accuracy
- * @param m    Number of cells in x-direction
- * @param dx   Cell spacing in x-direction
- * @param n    Number of cells in y-direction
- * @param dy   Cell spacing in y-direction
- * @param bc   Boundary condition data
- */
-
-inline void addScalarBC2D(sp_mat &A, vec &b, u16 k, u32 m, Real dx,
-                          u32 n, Real dy, const BC2D &bc) {
-    addScalarBC(A, b, k, m, dx, n, dy, bc);
-}
-
-/**
- * @brief Apply boundary conditions to a 3D discrete operator and RHS
- *
- * Modifies the linear system A*u = b to enforce boundary conditions.
- *
- * @param A    Linear operator (modified in place)
- * @param b    Right-hand side vector (modified in place)
- * @param k    Order of accuracy
- * @param m    Number of cells in x-direction
- * @param dx   Cell spacing in x-direction
- * @param n    Number of cells in y-direction
- * @param dy   Cell spacing in y-direction
- * @param o    Number of cells in z-direction
- * @param dz   Cell spacing in z-direction
- * @param bc   Boundary condition data
- */
-inline void addScalarBC3D(sp_mat &A, vec &b, u16 k, u32 m, Real dx,
-                          u32 n, Real dy, u32 o, Real dz, const BC3D &bc) {
-    addScalarBC(A, b, k, m, dx, n, dy, o, dz, bc);
-}
 
 } // namespace AddScalarBC
 
