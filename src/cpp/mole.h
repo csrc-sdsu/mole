@@ -16,6 +16,7 @@
 #ifndef MOLE_H
 #define MOLE_H
 
+#include "addscalarbc.h"
 #include "divergence.h"
 #include "gradient.h"
 #include "interpol.h"
