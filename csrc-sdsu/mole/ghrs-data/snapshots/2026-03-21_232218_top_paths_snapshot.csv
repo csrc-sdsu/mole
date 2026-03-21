@@ -1,0 +1,11 @@
+url_path,views_total,views_unique
+/csrc-sdsu/mole,370,65
+/csrc-sdsu/mole/issues,271,26
+/csrc-sdsu/mole/pulls,83,19
+/csrc-sdsu/mole/tree/main/examples,71,19
+/csrc-sdsu/mole/tree/main/examples/matlab_octave,71,14
+/csrc-sdsu/mole/tree/main/src,61,14
+/csrc-sdsu/mole/tree/main/src/matlab_octave,52,10
+/csrc-sdsu/mole/commits/main,49,5
+/csrc-sdsu/mole/issues/304,47,9
+/csrc-sdsu/mole/tree/main,45,17
