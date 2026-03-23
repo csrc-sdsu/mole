@@ -18,4 +18,4 @@ The wave is allowed to propagate across the domain while the area under the curv
 
 This example is implemented in:
 - [MATLAB/ OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/burgers1D.m)
-- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/Burgers1D.cpp) 
+- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/burgers1D.cpp) 
