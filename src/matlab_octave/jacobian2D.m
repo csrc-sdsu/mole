@@ -1,13 +1,19 @@
-function [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y)
+function [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y, m, dx, n, dy, dc, nc)
 % PURPOSE
-%
+% 2D Jacobian Metrics for Curvilinear Operators
+% 
 % DESCRIPTION
 % Returns:
-%                J : Determinant of the Jacobian (XeYn - XnYe)
-%               Xe : dx/de metric
-%               Xn : dx/dn metric
-%               Ye : dy/de metric
-%               Yn : dy/dn metric
+%                J : Determinant of the Jacobian (XeYn - XnYe) on the
+%                    centers if optional arguments are specified, else nodes
+%               Xe : dx/de metric on the centers if optional arguments are
+%                    specified, else nodes
+%               Xn : dx/dn metric on the centers if optional arguments are
+%                    specified, else nodes
+%               Ye : dy/de metric on the centers if optional arguments are
+%                    specified, else nodes
+%               Yn : dy/dn metric on the centers if optional arguments are
+%                    specified, else nodes
 %
 % Parameters:
 %                k : Order of accuracy
