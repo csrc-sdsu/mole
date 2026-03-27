@@ -42,14 +42,13 @@
 % x = R cos(θ)
 % y = R sin(θ)
 % 
-% Boundary Conditions
-% u(1,θ)  = 1
-% u(2,θ)  = 8
-% u(R,0)  = R^2
-% u(R,pi) = R^2
+% Dirichlet Boundary Conditions
 % 
-% Exact Solution:
+% Exact Solution: (many options)
 %   u(x,y) = sin(x) sinh(y)
+%   u(x,y) = x^2 - y^2
+%   u(x,y) = ln(x^2 + y^2)
+%   u(x,y) = x^3 - 3 x y^2
 % 
 close all; clear; clc;
 
@@ -63,7 +62,10 @@ numCenters = (m+2) * (n+2);
 dx = pi / m;
 dy = 1  / n;
 
-ue = @(X,Y) sin(X) .* sinh(Y);
+% ue = @(X,Y) sin(X) .* sinh(Y);
+% ue = @(X,Y) X.^2 - Y.^2;
+% ue = @(X,Y) log(X.^2 + Y.^2);
+ue = @(X,Y) X.^3 - 3 * X .* Y.^2;
 
 errorCur = zeros(size(k));
 errorNew = zeros(size(k));
