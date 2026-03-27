@@ -1,7 +1,8 @@
 function G = grad2DCurv(k, X, Y, m, dx, n, dy, dc, nc)
 % Returns:
-%                G : 2D curvilinear mimetic gradient operator. It outpus
-%                    to the extended faces (normal faces plus boundaries)
+%                G : 2D curvilinear mimetic gradient operator. If optional
+%                    arguments are specified, it outputs to the extended
+%                    faces (normal faces plus boundaries)
 %
 % Parameters:
 %                k : Order of accuracy
@@ -30,6 +31,9 @@ function G = grad2DCurv(k, X, Y, m, dx, n, dy, dc, nc)
         G = grad2DCurvLegacy(k,X,Y);
         return;
     end
+
+    assert(all(size(dc) == [4 1]), "dc is a 4x1 vector")
+    assert(all(size(nc) == [4 1]), "nc is a 4x1 vector")
 
     % Periodic Handling
     if isempty(find(dc(1:2).^2 + nc(1:2).^2, 1))
