@@ -32,7 +32,8 @@ function [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y, m, dx, n, dy, dc, nc)
 % ----------------------------------------------------------------------------
     
     if nargin ~= 3 && nargin ~= 9
-        error("jacobian2D:InvalidNumArgs", "jacobian2D expects 3 or 9 arguments")
+        error("jacobian2D:InvalidNumArgs", ...
+              "jacobian2D expects 3 or 9 arguments")
     elseif nargin == 3
         [J,Xe,Xn,Ye,Yn] = jacobian2DLegacy(k,X,Y);
         return;

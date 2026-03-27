@@ -1,58 +1,75 @@
-function G = grad2DCurv(k, X, Y)
-% Returns a 2D curvilinear mimetic gradient
+function G = grad2DCurv(k, X, Y, m, dx, n, dy, dc, nc)
+% Returns:
+%                G : 2D curvilinear mimetic gradient operator. It outpus
+%                    to the extended faces (normal faces plus boundaries)
+%
+% Parameters:
+%                k : Order of accuracy
+%                X : x-coordinates (physical) of meshgrid centers if
+%                    optional arguments are specified, else nodes
+%                Y : y-coordinates (physical) of meshgrid centers if
+%                    optional arguments are specified, else nodes
+%    (optional)  m : Number of cells in xi direction
+%    (optional) dx : Step size in xi direction
+%    (optional)  n : Number of cells in eta direction
+%    (optional) dy : Step size in eta direction
+%    (optional) dc : a0 (4x1 vector for left, right, bottom, top
+%                    boundaries, resp.)
+%    (optional) nc : b0 (4x1 vector for left, right, bottom, top
+%                    boundaries, resp.)
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
-    % Get the determinant of the jacobian and the metrics
-    [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y);
-    
-    % Dimensions of nodal grid
-    [n, m] = size(X);
-    
-    % Make them surfaces so they can be interpolated
-    J = reshape(J, m, n)';
-    Xe = reshape(Xe, m, n)';
-    Xn = reshape(Xn, m, n)';
-    Ye = reshape(Ye, m, n)';
-    Yn = reshape(Yn, m, n)';
-    
-    % Logical grids
-    [Xl, Yl] = meshgrid(1:m, 1:n);
-    
-    % Interpolate the metrics on the logical grid for positions u and v
-    Ju = interp2(Xl, Yl, J, (Xl(1:end-1, :)+Xl(2:end, :))/2,...
-                                            (Yl(1:end-1, :)+Yl(2:end, :))/2);
-    Jv = interp2(Xl, Yl, J, (Xl(:, 1:end-1)+Xl(:, 2:end))/2,...
-                                            (Yl(:, 1:end-1)+Yl(:, 2:end))/2);
-    Xev = interp2(Xl, Yl, Xe, (Xl(:, 1:end-1)+Xl(:, 2:end))/2,...
-                                            (Yl(:, 1:end-1)+Yl(:, 2:end))/2);
-    Xnv = interp2(Xl, Yl, Xn, (Xl(:, 1:end-1)+Xl(:, 2:end))/2,...
-                                            (Yl(:, 1:end-1)+Yl(:, 2:end))/2);
-    Yeu = interp2(Xl, Yl, Ye, (Xl(1:end-1, :)+Xl(2:end, :))/2,...
-                                            (Yl(1:end-1, :)+Yl(2:end, :))/2);
-    Ynu = interp2(Xl, Yl, Yn, (Xl(1:end-1, :)+Xl(2:end, :))/2,...
-                                            (Yl(1:end-1, :)+Yl(2:end, :))/2);
-    
-    % Convert metrics to diagonal matrices so they can be multiplied by the 
-    % logical operators
-    Ju = spdiags(1./reshape(Ju', [], 1), 0, numel(Ju), numel(Ju));
-    Jv = spdiags(1./reshape(Jv', [], 1), 0, numel(Jv), numel(Jv));
-    Xev = spdiags(reshape(Xev', [], 1), 0, numel(Xev), numel(Xev));
-    Xnv = spdiags(reshape(Xnv', [], 1), 0, numel(Xnv), numel(Xnv));
-    Yeu = spdiags(reshape(Yeu', [], 1), 0, numel(Yeu), numel(Yeu));
-    Ynu = spdiags(reshape(Ynu', [], 1), 0, numel(Ynu), numel(Ynu));
-    
-    % Construct 2D uniform mimetic gradient operator (d/de, d/dn)
-    G = grad2D(k, m-1, 1, n-1, 1);
-    Ge = G(1:m*(n-1), :);
-    Gn = G(m*(n-1)+1:end, :);
-    
-    % Apply transformation
-    Gx = Ju*(Ynu*Ge-Yeu*GI2(Gn, m-1, n-1, 'Gn'));
-    Gy = Jv*(-Xnv*GI2(Ge, m-1, n-1, 'Ge')+Xev*Gn);
-    
-    % Final 2D curvilinear mimetic gradient operator (d/dx, d/dy)
+
+    if nargin ~=3 && nargin ~= 9
+        error("grad2DCurv:InvalidNumArgs", ...
+              "grad2DCurv expects 3 or 9 arguments")
+    elseif nargin == 3
+        G = grad2DCurvLegacy(k,X,Y);
+        return;
+    end
+
+    % Periodic Handling
+    if isempty(find(dc(1:2).^2 + nc(1:2).^2, 1))
+        Ge = gradPeriodic(k,m,dx);
+        ICFx = interpolCentersToFacesD1DPeriodic(k,m);
+        IFCx = interpolFacesToCentersG1DPeriodic(k,m);
+        Im = speye(m);
+    else
+        Ge = gradNonPeriodic(k,m,dx);
+        ICFx = interpolCentersToFacesD1D(k,m);
+        IFCx = interpolFacesToCentersG1D(k,m);
+        Im = speye(m+2);
+    end
+    if isempty(find(dc(3:4).^2 + nc(3:4).^2, 1))
+        Gn = gradPeriodic(k,n,dy);
+        ICFy = interpolCentersToFacesD1DPeriodic(k,n);
+        IFCy = interpolFacesToCentersG1DPeriodic(k,n);
+        In = speye(n);
+    else
+        Gn = gradNonPeriodic(k,n,dy);
+        ICFy = interpolCentersToFacesD1D(k,n);
+        IFCy = interpolFacesToCentersG1D(k,n);
+        In = speye(n+2);
+    end
+
+    % Make Ge and Gn act on and output to the centers
+    % This allows them to be added together
+    Ge = kron(In,IFCx) * kron(In,Ge);
+    Gn = kron(IFCy,Im) * kron(Gn,Im);
+
+    % Apply Metrics
+    [J,Xe,Xn,Ye,Yn] = jacobian2D(k,X,Y,m,dx,n,dy,dc,nc);
+
+    Gx = (Yn ./ J) .* Ge - (Ye ./ J) .* Gn;
+    Gy = (Xe ./ J) .* Gn - (Xn ./ J) .* Ge;
+
+    % Now have them output to the extended faces
+    Gx = kron(In,ICFx) * Gx;
+    Gy = kron(ICFy,Im) * Gy;
+
     G = [Gx; Gy];
+
 end
