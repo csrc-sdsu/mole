@@ -1,6 +1,6 @@
 /*
 * SPDX-License-Identifier: GPL-3.0-or-later
-* 2008-2024 San Diego State University Research Foundation (SDSURF).
+* © 2008-2024 San Diego State University Research Foundation (SDSURF).
 * See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details. 
 */
 
@@ -9,20 +9,24 @@
  * 
  * @brief Mimetic Gradient Operators
  * 
- * @date 2026/03/16
+ * @date 2024/10/15
  *
  */
 
 #include "gradient.h"
+#include <vector>
 
 // ============================================================================
 // Private helpers
 // ============================================================================
 
-bool Gradient::isPeriodic(const vec& dc, const vec& nc) {
+int Gradient::isPeriodic(const ivec& dc, const ivec& nc) {
   // Periodic when every dc and nc entry for this axis is zero.
-  // Equivalent to checking that the sum of squared coefficients is zero.
-  return !arma::any(dc % dc + nc % nc);
+  // Iterates both vectors explicitly; no element may be nonzero.
+  for (int i = 0; i < (int)dc.n_elem; i++) {
+    if (dc[i] != 0 || nc[i] != 0) return 0;
+  }
+  return 1;
 }
 
 sp_mat Gradient::periodicGrad1D(u16 k, u32 m, Real dx) {
@@ -31,53 +35,53 @@ sp_mat Gradient::periodicGrad1D(u16 k, u32 m, Real dx) {
   assert(m >= 2 * k);
 
   // Stencil vector V holds the first row of the circulant matrix (0-indexed).
-  // Each entry V(d) is the finite-difference weight at offset d from the
-  // diagonal.  The full m×m matrix is then G(i,j) = V((i - j + m) % m).
-  vec V(m, arma::fill::zeros);
+  // Each entry V[d] is the finite-difference weight at offset d from the
+  // diagonal.  The full m×m matrix is then G(i,j) = V[(i - j + m) % m].
+  std::vector<Real> V(m, 0.0);
 
   switch (k) {
     case 2:
       // 2nd-order central difference stencil: [-1, 1] at offsets [1, 2]
-      V(1) =  1.0;
-      V(2) = -1.0;
+      V[1] =  1.0;
+      V[2] = -1.0;
       break;
 
     case 4:
       // 4th-order central difference stencil
-      V(0) = -1.0 / 24.0;
-      V(1) =  9.0 / 8.0;
-      V(2) = -9.0 / 8.0;
-      V(3) =  1.0 / 24.0;
+      V[0] = -1.0 / 24.0;
+      V[1] =  9.0 / 8.0;
+      V[2] = -9.0 / 8.0;
+      V[3] =  1.0 / 24.0;
       break;
 
     case 6:
-      // 6th-order central difference stencil; wrap-around terms at V(m-1)
-      V(0) = -25.0 / 384.0;
-      V(1) =  75.0 / 64.0;
-      V(2) = -75.0 / 64.0;
-      V(3) =  25.0 / 384.0;
-      V(4) = -3.0  / 640.0;
-      V(m - 1) = 3.0 / 640.0;
+      // 6th-order central difference stencil; wrap-around terms at V[m-1]
+      V[0] = -25.0 / 384.0;
+      V[1] =  75.0 / 64.0;
+      V[2] = -75.0 / 64.0;
+      V[3] =  25.0 / 384.0;
+      V[4] = -3.0  / 640.0;
+      V[m - 1] = 3.0 / 640.0;
       break;
 
     case 8:
-      // 8th-order central difference stencil; wrap-around terms at V(m-2), V(m-1)
-      V(0) = -245.0 / 3072.0;
-      V(1) =  1225.0 / 1024.0;
-      V(2) = -1225.0 / 1024.0;
-      V(3) =  245.0 / 3072.0;
-      V(4) = -49.0  / 5120.0;
-      V(5) =   5.0  / 7168.0;
-      V(m - 2) =  -5.0 / 7168.0;
-      V(m - 1) =  49.0 / 5120.0;
+      // 8th-order central difference stencil; wrap-around terms at V[m-2], V[m-1]
+      V[0] = -245.0 / 3072.0;
+      V[1] =  1225.0 / 1024.0;
+      V[2] = -1225.0 / 1024.0;
+      V[3] =  245.0 / 3072.0;
+      V[4] = -49.0  / 5120.0;
+      V[5] =   5.0  / 7168.0;
+      V[m - 2] =  -5.0 / 7168.0;
+      V[m - 1] =  49.0 / 5120.0;
       break;
   }
 
-  // Build the m×m circulant: G(i,j) = V((i - j + m) % m)
+  // Build the m×m circulant: G(i,j) = V[(i - j + m) % m]
   sp_mat G(m, m);
   for (u32 i = 0; i < m; i++) {
     for (u32 j = 0; j < m; j++) {
-      Real val = V((i - j + m) % m);
+      Real val = V[(i - j + m) % m];
       if (val != 0.0) G(i, j) = val;
     }
   }
@@ -285,7 +289,7 @@ Gradient::Gradient(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz) {
 // BC-aware 1-D Constructor
 // ============================================================================
 
-Gradient::Gradient(u16 k, u32 m, Real dx, const vec& dc, const vec& nc)
+Gradient::Gradient(u16 k, u32 m, Real dx, const ivec& dc, const ivec& nc)
     : sp_mat() {
   assert(dc.n_elem == 2 && nc.n_elem == 2);
 
@@ -315,14 +319,14 @@ static sp_mat trimmedIdentity(u32 s) {
 }
 
 Gradient::Gradient(u16 k, u32 m, u32 n, Real dx, Real dy,
-                   const vec& dc, const vec& nc) : sp_mat() {
+                   const ivec& dc, const ivec& nc) : sp_mat() {
   assert(dc.n_elem == 4 && nc.n_elem == 4);
 
   // dc/nc index convention: entries [0,1] control the x-axis (left, right),
   // entries [2,3] control the y-axis (bottom, top).
   // An axis is periodic when all of its dc and nc entries are zero.
-  const bool xPer = isPeriodic(dc.subvec(0, 1), nc.subvec(0, 1));
-  const bool yPer = isPeriodic(dc.subvec(2, 3), nc.subvec(2, 3));
+  const int xPer = isPeriodic(dc.subvec(0, 1), nc.subvec(0, 1));
+  const int yPer = isPeriodic(dc.subvec(2, 3), nc.subvec(2, 3));
 
   sp_mat Gx_m, Gy_m, Im, In;
 
@@ -357,7 +361,7 @@ Gradient::Gradient(u16 k, u32 m, u32 n, Real dx, Real dy,
 // ============================================================================
 
 Gradient::Gradient(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz,
-                   const vec& dc, const vec& nc) : sp_mat() {
+                   const ivec& dc, const ivec& nc) : sp_mat() {
   assert(dc.n_elem == 6 && nc.n_elem == 6);
 
   // dc/nc index convention:
@@ -365,9 +369,9 @@ Gradient::Gradient(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz,
   //   [2,3] = bottom, top  (y-axis)
   //   [4,5] = front, back  (z-axis)
   // An axis is periodic when all of its dc and nc entries are zero.
-  const bool xPer = isPeriodic(dc.subvec(0, 1), nc.subvec(0, 1));
-  const bool yPer = isPeriodic(dc.subvec(2, 3), nc.subvec(2, 3));
-  const bool zPer = isPeriodic(dc.subvec(4, 5), nc.subvec(4, 5));
+  const int xPer = isPeriodic(dc.subvec(0, 1), nc.subvec(0, 1));
+  const int yPer = isPeriodic(dc.subvec(2, 3), nc.subvec(2, 3));
+  const int zPer = isPeriodic(dc.subvec(4, 5), nc.subvec(4, 5));
 
   sp_mat Gx_m, Gy_m, Gz_m, Im, In, Io;
 
