@@ -1,15 +1,7 @@
 # mole_C++ Library Configuration
 
-add_library(mole_C++
-  addscalarbc.cpp
-  divergence.cpp
-  gradient.cpp
-  interpol.cpp
-  laplacian.cpp
-  mixedbc.cpp
-  robinbc.cpp
-  utils.cpp
-)
+file(GLOB SOURCES *.cpp)
+add_library(mole_C++ ${SOURCES})
 target_include_directories(mole_C++ PUBLIC ${ARMADILLO_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${OpenBLAS_INCLUDE_DIRS} ${SUPERLU_INCLUDE_DIR})
 target_link_libraries(mole_C++ PUBLIC ${LINK_LIBS})
 
