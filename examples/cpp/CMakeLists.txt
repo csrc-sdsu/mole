@@ -1,6 +1,5 @@
 # examples_C++ Configuration
 include_directories("${CMAKE_SOURCE_DIR}/src/cpp")
-
 set(EXAMPLE_SOURCES
   backward_euler.cpp
   burgers1D.cpp
@@ -35,7 +34,6 @@ set(EXAMPLE_SOURCES
   wave2d_case2.cpp
   wave2d.cpp
 )
-
 # Create executables for each source file
 foreach(EXAMPLE_SOURCE ${EXAMPLE_SOURCES})
     get_filename_component(EXAMPLE_NAME ${EXAMPLE_SOURCE} NAME_WE)

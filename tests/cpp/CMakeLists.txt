@@ -13,14 +13,8 @@ FetchContent_Declare(
 # Set up the fetched content
 FetchContent_MakeAvailable(googletest)
 
-set(TEST_SOURCES
-  test1.cpp
-  test2.cpp
-  test3.cpp
-  test4.cpp
-  test5.cpp
-  test_addscalarbc.cpp
-)
+# Find all test*.cpp files
+file(GLOB TEST_SOURCES test*.cpp)
 
 set(TEST_EXECUTABLES "")
 
@@ -45,3 +39,4 @@ add_custom_target(run_tests
     COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
     DEPENDS ${TEST_EXECUTABLES}
 )
+
