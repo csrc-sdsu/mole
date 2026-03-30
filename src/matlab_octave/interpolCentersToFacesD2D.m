@@ -13,8 +13,8 @@ function I = interpolCentersToFacesD2D(k, m, n, dc, nc)
               "interpolCentersToFacesD2D expects 3 or 5 arguments")
     elseif nargin == 3
         % Just set some non periodic coefficients
-        dc = [1 1 1 1];
-        nc = [0 0 0 0];
+        dc = [1; 1; 1; 1];
+        nc = [0; 0; 0; 0];
     else
         assert(all(size(dc) == [4 1]), "dc is a 4x1 vector")
         assert(all(size(nc) == [4 1]), "nc is a 4x1 vector")

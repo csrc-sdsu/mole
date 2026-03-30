@@ -13,8 +13,8 @@ function I = interpolCentersToNodes2D(k, m, n, dc, nc)
         error("interpolCentersToNodes2D:InvalidNumArgs",...
               "interpolCentersToNodes2D expects 3 or 5 arguments")
     elseif nargin == 3
-        dc = [1 1 1 1];
-        nc = [0 0 0 0];
+        dc = [1; 1; 1; 1];
+        nc = [0; 0; 0; 0];
     else
         assert(all(size(dc) == [4 1]), "dc is a 4x1 vector")
         assert(all(size(nc) == [4 1]), "nc is a 4x1 vector")
