@@ -56,7 +56,7 @@ addpath('../../../src/matlab_octave');
 fprintf('Running Comparative Convergence Test (Mimetic vs FD)\n');
 fprintf('--------------------------------------------------\n');
 
-mesh_sizes = [20, 40, 80, 160, 300, 400, 500];
+mesh_sizes = [20, 40, 80, 160, 300];
 n_sims = length(mesh_sizes);
 c = 2;
 dt_fixed = 0.0001;
@@ -107,51 +107,50 @@ end
 
 % --- Optional Plotting
 
-##
-##    % Figure 1: Error vs Grid Spacing (dx)
-##    figure(1);
-##    loglog(results.dx_mim, results.err_mim, '-o', 'DisplayName', 'Mimetic');
-##    hold on;
-##    loglog(results.dx_fd, results.err_fd, '-x', 'DisplayName', 'FD');
-##    % Reference line O(h^2) using Mimetic dx
-##    ref_y = results.err_mim(end) * (results.dx_mim / results.dx_mim(end)).^2;
-##    loglog(results.dx_mim, ref_y, '--k', 'DisplayName', 'O(h^2)');
-##    grid on; xlabel('dx'); ylabel('R Error'); legend('Location', 'best');
-##    title('Convergence Comparison: Error vs dx');
-##
-##    % Figure 2: Error vs Number of Cells (m)
-##    figure(2);
-##    loglog(results.m, results.err_mim, '-o', 'DisplayName', 'Mimetic');
-##    hold on;
-##    loglog(results.m, results.err_fd, '-x', 'DisplayName', 'FD');
-##    % Reference line O(m^-2)
-##    ref_y_m = results.err_mim(1) * (results.m / results.m(1)).^(-2);
-##    loglog(results.m, ref_y_m, '--k', 'DisplayName', 'O(m^{-2})');
-##    grid on; xlabel('Cells (m)'); ylabel('R Error'); legend('Location', 'best');
-##    title('Convergence Comparison: Error vs Cells');
-##
-##    fprintf('\nPlots are commented out by default. Uncomment in script to view.\n');
-##
-##
-##
-##
-##    % Figure 1: Error vs dx
-##    figure(1);
-##    loglog(results.dx_mim, results.err_mim, '-o', ...
-##        'LineWidth', 1.2, 'MarkerSize', 6, 'DisplayName', 'Mimetic');
-##    hold on;
-##    loglog(results.dx_fd, results.err_fd, '-x', ...
-##        'LineWidth', 1.2, 'MarkerSize', 6, 'DisplayName', 'FD');
-##    ref_y = results.err_mim(1) * (results.dx_mim / results.dx_mim(1)).^2;
-##    loglog(results.dx_mim, ref_y, '--k', ...
-##        'LineWidth', 1.2, 'DisplayName', 'O(h^2)');
-##    grid on;
-##    grid minor;
-##    xlabel('dx', 'FontSize', 11, 'FontWeight', 'bold');
-##    ylabel('R Error', 'FontSize', 11, 'FontWeight', 'bold');
-##    title('Convergence Comparison: Error vs dx', 'FontSize', 12, 'FontWeight', 'bold');
-##    legend('Location', 'southeast', 'FontSize', 10);
-##    hold off;
-####
-##
+
+    % Figure 1: Error vs Grid Spacing (dx)
+%    figure(1);
+%    loglog(results.dx_mim, results.err_mim, '-o', 'DisplayName', 'Mimetic');
+%    hold on;
+%    loglog(results.dx_fd, results.err_fd, '-x', 'DisplayName', 'FD');
+%    % Reference line O(h^2) using Mimetic dx
+%    ref_y = results.err_mim(end) * (results.dx_mim / results.dx_mim(end)).^2;
+%    loglog(results.dx_mim, ref_y, '--k', 'DisplayName', 'O(h^2)');
+%    grid on; xlabel('dx'); ylabel('R Error'); legend('Location', 'best');
+%    title('Convergence Comparison: Error vs dx');
+
+%    % Figure 2: Error vs Number of Cells (m)
+%    figure(2);
+%    loglog(results.m, results.err_mim, '-o', 'DisplayName', 'Mimetic');
+%    hold on;
+%    loglog(results.m, results.err_fd, '-x', 'DisplayName', 'FD');
+%    % Reference line O(m^-2)
+%    ref_y_m = results.err_mim(1) * (results.m / results.m(1)).^(-2);
+%    loglog(results.m, ref_y_m, '--k', 'DisplayName', 'O(m^{-2})');
+%    grid on; xlabel('Cells (m)'); ylabel('R Error'); legend('Location', 'best');
+%    title('Convergence Comparison: Error vs Cells');
+
+%    fprintf('\nPlots are commented out by default. Uncomment in script to view.\n');
+
+
+
+
+%    % Figure 1: Error vs dx
+%    figure(1);
+%    loglog(results.dx_mim, results.err_mim, '-o', ...
+%        'LineWidth', 1.2, 'MarkerSize', 6, 'DisplayName', 'Mimetic');
+%    hold on;
+%    loglog(results.dx_fd, results.err_fd, '-x', ...
+%        'LineWidth', 1.2, 'MarkerSize', 6, 'DisplayName', 'FD');
+%    ref_y = results.err_mim(1) * (results.dx_mim / results.dx_mim(1)).^2;
+%    loglog(results.dx_mim, ref_y, '--k', ...
+%        'LineWidth', 1.2, 'DisplayName', 'O(h^2)');
+%    grid on;
+%    grid minor;
+%    xlabel('dx', 'FontSize', 11, 'FontWeight', 'bold');
+%    ylabel('R Error', 'FontSize', 11, 'FontWeight', 'bold');
+%    title('Convergence Comparison: Error vs dx', 'FontSize', 12, 'FontWeight', 'bold');
+%    legend('Location', 'southeast', 'FontSize', 10);
+%    hold off;
+%%
 
