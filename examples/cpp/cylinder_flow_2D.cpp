@@ -24,20 +24,19 @@
  *
  * The discrete operators are built using MOLE operators.
  *
- * The final velocity and pressure fields are exported as CSV files:
- * - `U_final.csv`
- * - `V_final.csv`
- * - `p_final.csv`
- * 
- * 
+ * The final velocity and pressure fields are displayed in a single gnuplot figure:
+ * - top:    heatmap of `U`
+ * - middle: heatmap of `V`
+ * - bottom: heatmap of `p`
+ *
  * Extra note:
- *   Re-apply velocity boundary values and obstacle mask after projection. 
- *   The pressure-correction step updates the full cell-centered field, 
+ *   Re-apply velocity boundary values and obstacle mask after projection.
+ *   The pressure-correction step updates the full cell-centered field,
  *   so inlet/wall/corner/masked values are enforced again strongly here.
  */
 
-
-
+#include <cmath>
+#include <cstdio>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -115,6 +114,68 @@ static void applyVelocityBCAndMask(mat& U, mat& V, double Uin, int i1, int i2,
 
   U.submat(i1, j1, i2, j2).zeros();
   V.submat(i1, j1, i2, j2).zeros();
+}
+
+static void writeFieldToGnuplot(FILE* gp, const mat& F, const vec& xgrid,
+                                const vec& ygrid, double x_start,
+                                double y_start) {
+  for (uword i = 1; i < F.n_rows - 1; ++i) {
+    for (uword j = 1; j < F.n_cols - 1; ++j) {
+      const double x_phys = x_start + xgrid(i);
+      const double y_phys = y_start + ygrid(j);
+      std::fprintf(gp, "%.16e %.16e %.16e\n", x_phys, y_phys, F(i, j));
+    }
+    std::fprintf(gp, "\n");
+  }
+  std::fprintf(gp, "e\n");
+}
+
+static void plotFinalFields(const mat& U_final, const mat& V_final,
+                            const mat& p_final, const vec& xgrid,
+                            const vec& ygrid, double x_start, double x_end,
+                            double y_start, double y_end) {
+  FILE* gp = popen("gnuplot -persist", "w");
+  if (!gp) {
+    throw std::runtime_error("Failed to launch gnuplot. Make sure gnuplot is installed and available in PATH.");
+  }
+
+  // Use the system default interactive terminal. On macOS, if needed, you can
+  // uncomment one of the following lines depending on your gnuplot build:
+  // std::fprintf(gp, "set term qt\n");
+  // std::fprintf(gp, "set term aqua\n");
+
+  std::fprintf(gp, "unset key\n");
+  std::fprintf(gp, "set multiplot layout 3,1 title 'Final fields: U, V, p'\n");
+  std::fprintf(gp, "set xrange [%.16e:%.16e]\n", x_start, x_end);
+  std::fprintf(gp, "set yrange [%.16e:%.16e]\n", y_start, y_end);
+  std::fprintf(gp, "set tics out\n");
+  std::fprintf(gp, "set size ratio -1\n");
+  std::fprintf(gp, "set palette rgbformulae 22,13,-31\n");
+
+  std::fprintf(gp, "set title 'U velocity'\n");
+  std::fprintf(gp, "set xlabel ''\n");
+  std::fprintf(gp, "set ylabel 'y'\n");
+  std::fprintf(gp, "set autoscale cb\n");
+  std::fprintf(gp, "plot '-' using 1:2:3 with image\n");
+  writeFieldToGnuplot(gp, U_final, xgrid, ygrid, x_start, y_start);
+
+  std::fprintf(gp, "set title 'V velocity'\n");
+  std::fprintf(gp, "set xlabel ''\n");
+  std::fprintf(gp, "set ylabel 'y'\n");
+  std::fprintf(gp, "set autoscale cb\n");
+  std::fprintf(gp, "plot '-' using 1:2:3 with image\n");
+  writeFieldToGnuplot(gp, V_final, xgrid, ygrid, x_start, y_start);
+
+  std::fprintf(gp, "set title 'Pressure'\n");
+  std::fprintf(gp, "set xlabel 'x'\n");
+  std::fprintf(gp, "set ylabel 'y'\n");
+  std::fprintf(gp, "set autoscale cb\n");
+  std::fprintf(gp, "plot '-' using 1:2:3 with image\n");
+  writeFieldToGnuplot(gp, p_final, xgrid, ygrid, x_start, y_start);
+
+  std::fprintf(gp, "unset multiplot\n");
+  std::fflush(gp);
+  pclose(gp);
 }
 
 int main() {
@@ -408,11 +469,9 @@ int main() {
   mat V_final = reshape(V_flat, m + 2, n + 2);
   mat p_final = reshape(p_new_flat, m + 2, n + 2);
 
-  U_final.save("U_final.csv", csv_ascii);
-  V_final.save("V_final.csv", csv_ascii);
-  p_final.save("p_final.csv", csv_ascii);
-
-  std::cout << "Wrote U_final.csv, V_final.csv, p_final.csv" << std::endl;
+  std::cout << "Displaying final fields with gnuplot..." << std::endl;
+  plotFinalFields(U_final, V_final, p_final, xgrid, ygrid,
+                  x_start, x_end, y_start, y_end);
 
   return 0;
 }

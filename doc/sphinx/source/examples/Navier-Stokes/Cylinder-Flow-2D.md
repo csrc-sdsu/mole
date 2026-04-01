@@ -8,15 +8,15 @@ The cylinder obstacle is introduced as a masked no-slip region inside the channe
 
 We solve the incompressible Navier-Stokes equations
 
-```math
+$$
 \frac{\partial \mathbf{u}}{\partial t}
 + (\mathbf{u}\cdot\nabla)\mathbf{u}
 = -\frac{1}{\rho}\nabla p + \nu \nabla^2 \mathbf{u}
-```
+$$
 
-```math
+$$
 \nabla \cdot \mathbf{u} = 0
-```
+$$
 
 where $\mathbf{u} = (u,v)$ is the velocity field, $p$ is the pressure, $\rho$ is the density, and $\nu$ is the kinematic viscosity.
 
@@ -24,9 +24,9 @@ where $\mathbf{u} = (u,v)$ is the velocity field, $p$ is the pressure, $\rho$ is
 
 The computational domain is
 
-```math
+$$
 x \in [0,8], \qquad y \in [-1,1]
-```
+$$
 
 The default grid is
 
@@ -35,9 +35,9 @@ The default grid is
 
 The Reynolds number is defined through
 
-```math
+$$
 \nu = \frac{U_{\mathrm{init}} D_0}{Re}
-```
+$$
 
 with the default values
 
@@ -50,41 +50,41 @@ with the default values
 
 At $t = 0$,
 
-```math
+$$
 u = U_{\mathrm{init}}, \qquad v = 0
-```
+$$
 
 in the fluid region, and the masked obstacle region is initialized with
 
-```math
+$$
 u = 0, \qquad v = 0
-```
+$$
 
 ### Velocity Boundary Conditions
 
 - **Inlet (left):** Dirichlet inflow
 
-  ```math
+  $$
   u = U_{\mathrm{init}}, \qquad v = 0
-  ```
+  $$
 
 - **Outlet (right):** zero streamwise gradient
 
-  ```math
+  $$
   \frac{\partial u}{\partial x} = 0, \qquad \frac{\partial v}{\partial x} = 0
-  ```
+  $$
 
 - **Top and bottom walls:** no-slip
 
-  ```math
+  $$
   u = 0, \qquad v = 0
-  ```
+  $$
 
 - **Obstacle mask:** no-slip
 
-  ```math
+  $$
   u = 0, \qquad v = 0
-  ```
+  $$
 
 ### Pressure Boundary Conditions
 
@@ -92,15 +92,15 @@ During the pressure Poisson step,
 
 - **Outlet (right):** reference pressure
 
-  ```math
+  $$
   p = 0
-  ```
+  $$
 
 - **All other boundaries:** homogeneous Neumann
 
-  ```math
+  $$
   \frac{\partial p}{\partial n} = 0
-  ```
+  $$
 
 ## Numerical Method
 
@@ -120,11 +120,11 @@ The convective term is nonlinear, so an explicit AB2 treatment keeps the method 
 
 As a result, the intermediate velocity solve uses the matrices
 
-```math
+$$
 M = I - \frac{1}{2}\Delta t \, \nu L,
 \qquad
 M_p = I + \frac{1}{2}\Delta t \, \nu L
-```
+$$
 
 which are the Crank-Nicolson diffusion matrices used in the Helmholtz-type solves for $u^*$ and $v^*$.
 
@@ -136,23 +136,23 @@ An intermediate velocity $\mathbf{u}^*$ is computed first from the momentum equa
 
 The pressure is then obtained from
 
-```math
+$$
 \nabla^2 p^{n+1}
 =
 \frac{\rho}{\Delta t}\nabla \cdot \mathbf{u}^*
-```
+$$
 
 ### Velocity Correction
 
 The velocity is corrected by
 
-```math
+$$
 \mathbf{u}^{n+1}
 =
 \mathbf{u}^*
 -
 \frac{\Delta t}{\rho}\nabla p^{n+1}
-```
+$$
 
 ### Re-application of Velocity Boundary Conditions and Mask
 
@@ -177,15 +177,6 @@ These operators are combined to build
 - the pressure Poisson operator
 - the interpolation maps needed for face fluxes and pressure-gradient correction
 
-## Output
-
-The C++ example writes the final fields to CSV files:
-
-- `U_final.csv`
-- `V_final.csv`
-- `p_final.csv`
-
-These files are then post-processed to produce the final PNG figures.
 
 ## Running the Example
 
@@ -209,10 +200,10 @@ This makes it easier to compare the two implementations and to see how the same 
 
 ## Results
 
-### C++ result (plot generated from csv files with MATLAB)
+### C++ result
 
-![C++ final fields](cylinder_flow_2D_plot_cpp.png)
+![C++ final fields](figures/cylinder_flow_2D_plot_cpp.png)
 
 ### MATLAB result
 
-![MATLAB final fields](cylinder_flow_2D_plot_matlab.png)
+![MATLAB final fields](figures/cylinder_flow_2D_plot_matlab.png)
