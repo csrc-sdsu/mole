@@ -1,132 +1,218 @@
-# 2D Channel Flow with a Cylinder-Like Obstacle (Masked Region)
+# 2D Channel Flow with a Cylinder
 
-This example simulates a 2D incompressible channel flow past a cylinder-like obstacle (implemented as an axis-aligned masked no-slip region) using MOLE mimetic operators and a fractional-step (projection / pressure-correction) method. At moderate Reynolds number, the solution exhibits a wake and may show vortex shedding depending on grid resolution, time step, and the obstacle mask representation.
+This example solves the two-dimensional incompressible Navier-Stokes equations in a channel using MOLE mimetic operators and a projection (pressure-correction) method.
+
+The cylinder obstacle is introduced as a masked no-slip region inside the channel. To make things easy, the current implementation uses an axis-aligned masked block of cells rather than a fitted curved boundary. The purpose of this example is to show how MOLE operators can be combined to build a transient incompressible flow solver in a direct and compact way.
 
 ## Governing Equations
 
-We solve the incompressible Navier–Stokes equations in two dimensions:
+We solve the incompressible Navier-Stokes equations
 
-$$
-\frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u}\cdot\nabla)\mathbf{u}
-= -\frac{1}{\rho}\nabla p + \nu\nabla^{2}\mathbf{u}
-$$
+```math
+\frac{\partial \mathbf{u}}{\partial t}
++ (\mathbf{u}\cdot\nabla)\mathbf{u}
+= -\frac{1}{\rho}\nabla p + \nu \nabla^2 \mathbf{u}
+```
 
-$$
-\nabla\cdot\mathbf{u} = 0
-$$
+```math
+\nabla \cdot \mathbf{u} = 0
+```
 
-where:
-- $$\mathbf{u}=(u,v)$$ is the velocity field  
-- $$p$$ is the (dynamic) pressure  
-- $$\rho$$ is the density  
-- $$\nu$$ is the kinematic viscosity  
+where $\mathbf{u} = (u,v)$ is the velocity field, $p$ is the pressure, $\rho$ is the density, and $\nu$ is the kinematic viscosity.
 
-> Note: If you prefer using kinematic pressure $$\pi=p/\rho$$, the momentum equation becomes  
-> $$\partial_t\mathbf{u}+(\mathbf{u}\cdot\nabla)\mathbf{u}=-\nabla \pi + \nu\nabla^2\mathbf{u}.$$
+## Spatial Domain
 
-## Domain and Initial/Boundary Conditions
+The computational domain is
 
-### Spatial/Temporal Domain
+```math
+x \in [0,8], \qquad y \in [-1,1]
+```
 
-The computational domain is a 2D channel:
+The default grid is
 
-- $$x \in [0,8]$$  
-- $$y \in [-1,1]$$  
-- $$t \in [0, t_{\text{final}}]$$ with $$t_{\text{final}} = \texttt{tspan}$$ (default in code: `tspan = 32.0`)
+- $m = 481$ cells in the $x$-direction
+- $n = 121$ cells in the $y$-direction
 
-A “square cylinder” is represented by a masked block of cells located near
+The Reynolds number is defined through
 
-$$
-x/L_x = \mathtt{cylin}\_\mathtt{pos}
-$$
+```math
+\nu = \frac{U_{\mathrm{init}} D_0}{Re}
+```
 
-with a size controlled by `cylin_size` (default `1/10`). Inside this mask, velocity is forced to zero (no-slip). The mask is applied as an axis-aligned cell region (not a geometric immersed boundary).
+with the default values
 
-### Initial Conditions (t = 0)
+- $Re = 200$
+- $U_{\mathrm{init}} = 1$
 
-At $$t=0$$:
-- $$u(x,y,0)=U_0$$ everywhere in the fluid region  
-- $$v(x,y,0)=0$$  
-- the obstacle mask region is set to $$u=v=0$$  
+## Initial and Boundary Conditions
 
-(Default in code: `U_init = 1.0`.)
+### Initial Conditions
 
-### Boundary Conditions
+At $t = 0$,
 
-Velocity boundary conditions:
-- **Inlet (left)**: Dirichlet inflow with $$u = U_0$$ and $$v = 0$$
-- **Outlet (right)**: zero streamwise gradient (Neumann outflow) with $$\partial u/\partial x = 0$$ and $$\partial v/\partial x = 0$$
-- **Top and bottom walls**: no-slip with $$u=0$$ and $$v=0$$
-- **Obstacle mask**: no-slip enforced by setting $$u=v=0$$ inside the mask region after each time step
+```math
+u = U_{\mathrm{init}}, \qquad v = 0
+```
 
-Pressure boundary conditions (pressure Poisson step):
-- **Outlet (right)**: Dirichlet reference pressure with $$p = 0$$
-- **Other boundaries**: homogeneous Neumann with $$\partial p/\partial n = 0$$
+in the fluid region, and the masked obstacle region is initialized with
 
-## Implementation Details
+```math
+u = 0, \qquad v = 0
+```
 
-### Projection (Fractional-Step) Method
+### Velocity Boundary Conditions
 
-Each time step advances a predictor–corrector scheme to enforce incompressibility:
+- **Inlet (left):** Dirichlet inflow
 
-1. **Prediction (intermediate velocity)**
-   - Compute the intermediate velocity $$\mathbf{u}^*$$ by advancing the momentum equation
-   - Nonlinear convection is advanced with AB2 (AB1 for the first step)
-   - Viscous diffusion is treated with Crank–Nicolson, leading to Helmholtz-type solves for $$u^*$$ and $$v^*$$
+  ```math
+  u = U_{\mathrm{init}}, \qquad v = 0
+  ```
 
-2. **Pressure Poisson solve**
+- **Outlet (right):** zero streamwise gradient
 
-$$
-\nabla^2 p^{n+1} = \frac{\rho}{\Delta t}\nabla\cdot \mathbf{u}^*
-$$
+  ```math
+  \frac{\partial u}{\partial x} = 0, \qquad \frac{\partial v}{\partial x} = 0
+  ```
 
-3. **Velocity correction**
+- **Top and bottom walls:** no-slip
 
-$$
-\mathbf{u}^{n+1} = \mathbf{u}^* - \frac{\Delta t}{\rho}\nabla p^{n+1}
-$$
+  ```math
+  u = 0, \qquad v = 0
+  ```
 
-4. **Re-apply boundary conditions + obstacle mask**
-   - Re-enforce all velocity boundary conditions
-   - Set the masked obstacle region to $$u=0$$ and $$v=0$$.
+- **Obstacle mask:** no-slip
 
-### Mimetic Spatial Operators (MOLE)
+  ```math
+  u = 0, \qquad v = 0
+  ```
 
-The spatial discretization uses MOLE operators:
-- Divergence operator $$D$$
-- Gradient operator $$G$$
-- Laplacian operator $$L = DG$$
+### Pressure Boundary Conditions
 
-along with interpolation operators to map between cell-centered and face-based quantities used in flux evaluations and in the projection step.
+During the pressure Poisson step,
 
-## Output Products
+- **Outlet (right):** reference pressure
 
-The solver writes the final cell-centered fields:
-- `U_final.csv`, `V_final.csv`, `p_final.csv`
+  ```math
+  p = 0
+  ```
 
-A plotting script is provided to visualize these CSV outputs using gnuplot:
-- `cylinder_flow_2D_plot.gnu` → produces `cylinder_flow_2D_plot_cpp.png`
+- **All other boundaries:** homogeneous Neumann
+
+  ```math
+  \frac{\partial p}{\partial n} = 0
+  ```
+
+## Numerical Method
+
+A projection method is used to enforce incompressibility.
+
+This is the same overall time-stepping strategy used in both the MATLAB/Octave and C++ implementations.
+
+### Time Integration
+
+The momentum equation is advanced with a mixed time discretization:
+
+- the **convective term** is treated explicitly with **AB2** (Adams-Bashforth 2)
+- the **first time step** uses **AB1**
+- the **diffusive term** is treated implicitly with **Crank-Nicolson**
+
+The convective term is nonlinear, so an explicit AB2 treatment keeps the method simple and avoids solving a nonlinear system at each time step. The diffusive term is linear and is treated with Crank-Nicolson to obtain a stable and second-order accurate semi-implicit update.
+
+As a result, the intermediate velocity solve uses the matrices
+
+```math
+M = I - \frac{1}{2}\Delta t \, \nu L,
+\qquad
+M_p = I + \frac{1}{2}\Delta t \, \nu L
+```
+
+which are the Crank-Nicolson diffusion matrices used in the Helmholtz-type solves for $u^*$ and $v^*$.
+
+### Intermediate Velocity
+
+An intermediate velocity $\mathbf{u}^*$ is computed first from the momentum equation using the explicit convective update and the semi-implicit diffusive update.
+
+### Pressure Poisson Equation
+
+The pressure is then obtained from
+
+```math
+\nabla^2 p^{n+1}
+=
+\frac{\rho}{\Delta t}\nabla \cdot \mathbf{u}^*
+```
+
+### Velocity Correction
+
+The velocity is corrected by
+
+```math
+\mathbf{u}^{n+1}
+=
+\mathbf{u}^*
+-
+\frac{\Delta t}{\rho}\nabla p^{n+1}
+```
+
+### Re-application of Velocity Boundary Conditions and Mask
+
+After the pressure correction step, the code re-applies the velocity boundary values and the obstacle mask.
+
+This is done because the projection step updates the full cell-centered velocity field. Re-applying these values ensures that the final updated velocity satisfies the intended inlet, wall, outlet, corner, and masked-region constraints exactly.
+
+## Role of the MOLE Operators
+
+This example is intended to highlight how MOLE operators are used in an incompressible flow solver.
+
+The main operators are
+
+- **Laplacian $L$:** used for viscous diffusion
+- **Divergence $D$:** used in the convective flux form and in the pressure Poisson right-hand side
+- **Gradient $G$:** used in the pressure correction step
+- **Interpolation operators:** used to map between cell-centered values and face-based quantities for flux evaluation and projection
+
+These operators are combined to build
+
+- the Crank-Nicolson diffusion operators
+- the pressure Poisson operator
+- the interpolation maps needed for face fluxes and pressure-gradient correction
+
+## Output
+
+The C++ example writes the final fields to CSV files:
+
+- `U_final.csv`
+- `V_final.csv`
+- `p_final.csv`
+
+These files are then post-processed to produce the final PNG figures.
 
 ## Running the Example
 
-Assuming you already configured and built MOLE following the tutorial, run the example from the `examples/cpp` directory so that all outputs (CSV + plots) are written next to the source and plotting scripts:
+After building the C++ examples, run
 
 ```bash
 cd <mole-repo>/examples/cpp
 ../../build/examples/cpp/cylinder_flow_2D
-gnuplot cylinder_flow_2D_plot.gnu
 ```
 
-## MATLAB/Octave Version
+## MATLAB and C++ Versions
 
-A MATLAB/Octave implementation of the same channel-flow-with-masked-obstacle setup is also provided. It is configured with the same domain, grid resolution, time step, final time, Reynolds number, and boundary conditions as the C++ example, so the final fields are directly comparable.
+MATLAB/Octave and C++ versions of this example are provided with the same problem setup and the same overall projection-method structure. In particular, both versions use
 
-The corresponding output figures (generated in this same directory) are:
-- `cylinder_flow_2D_plot_cpp.png`
-- `cylinder_flow_2D_plot_matlab.png`
+- AB2 for the convective term
+- AB1 at the first step
+- Crank-Nicolson for the diffusive term
+- a pressure Poisson solve followed by velocity correction
 
-### C++ result
-![C++: final U/V/p fields](cylinder_flow_2D_plot_cpp.png)
+This makes it easier to compare the two implementations and to see how the same MOLE operators are used in each language.
+
+## Results
+
+### C++ result (plot generated from csv files with MATLAB)
+
+![C++ final fields](cylinder_flow_2D_plot_cpp.png)
 
 ### MATLAB result
-![MATLAB: final U/V/p fields](cylinder_flow_2D_plot_matlab.png)
+
+![MATLAB final fields](cylinder_flow_2D_plot_matlab.png)

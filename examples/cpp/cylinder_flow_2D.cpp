@@ -1,506 +1,314 @@
 /**
  * @file cylinder_flow_2D.cpp
- * @brief Solves the 2D incompressible Navier–Stokes equations for channel flow past an obstacle
- *        using a projection (pressure-correction) method.
+ * @brief Solves the 2D incompressible Navier-Stokes equations in a channel with an immersed cylinder obstacle
  *
- * This example demonstrates how to assemble and use MOLE mimetic operators (Laplacian, Divergence,
- * Gradient, and interpolation operators) to advance the 2D incompressible Navier–Stokes equations
- * in time on a structured Cartesian grid. The convective term is advanced with AB2 (AB1 on the first
- * step) and viscous diffusion is treated with Crank–Nicolson. Incompressibility is enforced via a
- * pressure Poisson solve and velocity correction.
+ * The equations being solved are:
+ *      $$ \nabla \cdot \mathbf{u} = 0 $$
+ *      $$ \rho \frac{\partial \mathbf{u}}{\partial t}
+ *         + \rho \nabla \cdot (\mathbf{u} \otimes \mathbf{u})
+ *         = - \nabla p + \mu \nabla^2 \mathbf{u} $$
  *
- * Equation:
- *   - Momentum:
- *     \f[
- *       \frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u}\cdot\nabla)\mathbf{u}
- *       = -\nabla p + \nu\nabla^{2}\mathbf{u}
- *     \f]
- *   - Incompressibility:
- *     \f[
- *       \nabla\cdot\mathbf{u} = 0
- *     \f]
+ * A projection method is used:
+ * - Pressure correction to enforce incompressibility
  *
- * Domain:
- *   - Rectangular channel: \f$ x \in [0,8],\; y \in [-1,1] \f$.
- *   - A solid obstacle is imposed by masking a block of cells near \f$ x/L_x = 1/8 \f$ with size
- *     set by `cylin_size` (note: the obstacle is applied as an axis-aligned cell mask).
+ * ## Spatial Domain:
+ * - The computational domain is $x \in [0, 8]$, $y \in [-1, 1]$
+ * - The channel contains an internal obstacle represented by a cell mask
+ * - The grid uses $m = 481$ cells in the $x$-direction and $n = 121$ cells in the $y$-direction
  *
- * Boundary Conditions:
- *   - Velocity \f$\mathbf{u}=(u,v)\f$:
- *     - Inlet (left): Dirichlet, \f$ u = U_{\mathrm{init}},\; v=0 \f$.
- *     - Outlet (right): Neumann (zero normal gradient) on velocity.
- *     - Walls (top/bottom): no-slip, \f$ u=v=0 \f$.
- *     - Obstacle: no-slip enforced by zeroing masked cells each step.
- *   - Pressure \f$p\f$:
- *     - Outlet (right): Dirichlet, \f$ p = 0 \f$ (reference).
- *     - Elsewhere: Neumann (zero normal gradient).
+ * ## Boundary Conditions:
+ * - Inlet: prescribed horizontal velocity profile, $u = U_{\mathrm{init}}$, $v = 0$
+ * - Outlet: prescribed pressure, $p = 0$
+ * - Top and bottom walls: no-slip, $u = 0$, $v = 0$
+ * - Obstacle region: masked velocity, $u = 0$, $v = 0$
  *
- * Run:
- * @code
- *   cd examples/cpp
- *   ../../build/examples/cpp/cylinder_flow_2D
- * @endcode
+ * The discrete operators are built using MOLE operators.
  *
- * Outputs:
- *   - U_final.csv, V_final.csv, p_final.csv
- *   - cylinder_flow_2D_plot.gnu, cylinder_flow_2D_plot.png (if gnuplot is available)
+ * The final velocity and pressure fields are exported as CSV files:
+ * - `U_final.csv`
+ * - `V_final.csv`
+ * - `p_final.csv`
+ * 
+ * 
+ * Extra note:
+ *   Re-apply velocity boundary values and obstacle mask after projection. 
+ *   The pressure-correction step updates the full cell-centered field, 
+ *   so inlet/wall/corner/masked values are enforced again strongly here.
  */
 
-#include <armadillo>
 
-// Optional Eigen (for reusable sparse factorization)
-#if defined(__has_include)
-  #if __has_include(<Eigen/Sparse>) && __has_include(<Eigen/SparseLU>)
-    #define HAS_EIGEN 1
-    #include <Eigen/Sparse>
-    #include <Eigen/SparseLU>
-  #else
-    #define HAS_EIGEN 0
-  #endif
-#else
-  #define HAS_EIGEN 0
-#endif
 
-// Mimetic operator library (in ./cpp)
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <stdexcept>
+#include <vector>
 #include "mole.h"
 
-#include <array>
-#include <vector>
-#include <string>
-#include <iostream>
-#include <iomanip>
-#include <cmath>
-#include <fstream>
-#include <stdexcept>
-#include <cstdlib>  
+using namespace arma;
 
-using arma::sp_mat;
-using arma::vec;
-using arma::uvec;
-using arma::mat;
-
-// Reusable sparse linear solver
-class SparseSolver {
-public:
-  SparseSolver() = default;
-
-  void factorize(const sp_mat& A) {
-    n_ = static_cast<long long>(A.n_rows);
-#if HAS_EIGEN
-    eigen_A_.resize(static_cast<int>(A.n_rows), static_cast<int>(A.n_cols));
-    std::vector<Eigen::Triplet<double>> trip;
-    trip.reserve(A.n_nonzero);
-    for (auto it = A.begin(); it != A.end(); ++it) {
-      trip.emplace_back(static_cast<int>(it.row()), static_cast<int>(it.col()), static_cast<double>(*it));
-    }
-    eigen_A_.setFromTriplets(trip.begin(), trip.end());
-    solver_.analyzePattern(eigen_A_);
-    solver_.factorize(eigen_A_);
-    if (solver_.info() != Eigen::Success) {
-      throw std::runtime_error("Eigen::SparseLU factorization failed");
-    }
-#else
-    A_ = A; // fallback
-#endif
-  }
-
-  vec solve(const vec& b) const {
-    if (static_cast<long long>(b.n_elem) != n_) {
-      throw std::runtime_error("SparseSolver::solve dimension mismatch");
-    }
-#if HAS_EIGEN
-    Eigen::Map<const Eigen::VectorXd> rhs(b.memptr(), static_cast<int>(b.n_elem));
-    Eigen::VectorXd x = solver_.solve(rhs);
-    if (solver_.info() != Eigen::Success) {
-      throw std::runtime_error("Eigen::SparseLU solve failed");
-    }
-    return vec(x.data(), static_cast<arma::uword>(x.size()));
-#else
-    vec x;
-    bool ok = arma::spsolve(x, A_, b);
-    if (!ok) {
-      throw std::runtime_error("arma::spsolve failed (no Eigen available)");
-    }
-    return x;
-#endif
-  }
-
-  static bool using_eigen() {
-#if HAS_EIGEN
-    return true;
-#else
-    return false;
-#endif
-  }
-
-private:
-  long long n_{0};
-#if HAS_EIGEN
-  Eigen::SparseMatrix<double> eigen_A_;
-  Eigen::SparseLU<Eigen::SparseMatrix<double>, Eigen::COLAMDOrdering<int>> solver_;
-#else
-  sp_mat A_;
-#endif
-};
-
-// Scalar BC wrapper
-struct BCSide {
-  std::string type;           // Dirichlet/Neumann/Robin
-  std::vector<double> coeffs; // {a} or {b} or {a,b}
-  bool active{false};
-};
-
-static BCSide make_side(double a, double b) {
-  BCSide s;
-  s.active = (a != 0.0) || (b != 0.0);
-  if (!s.active) {
-    s.type = "Dirichlet";
-    s.coeffs = {0.0};
-    return s;
-  }
-  if (a != 0.0 && b == 0.0) {
-    s.type = "Dirichlet";
-    s.coeffs = {a};
-  } else if (a == 0.0 && b != 0.0) {
-    s.type = "Neumann";
-    s.coeffs = {b};
-  } else {
-    s.type = "Robin";
-    s.coeffs = {a, b};
-  }
-  return s;
-}
-
-static uvec bc_left_indices(unsigned m, unsigned n) {
+static uvec bc_left_indices(u32 m, u32 n) {
   uvec idx(n);
-  const unsigned nx = m + 2;
-  for (unsigned jj = 0; jj < n; ++jj) {
-    unsigned j = jj + 1;
-    idx(jj) = 0 + nx * j;
+  u32 nx = m + 2;
+
+  for (u32 jj = 0; jj < n; ++jj) {
+    u32 j = jj + 1;
+    idx(jj) = nx * j;
   }
+
   return idx;
 }
 
-static uvec bc_right_indices(unsigned m, unsigned n) {
+static uvec bc_right_indices(u32 m, u32 n) {
   uvec idx(n);
-  const unsigned nx = m + 2;
-  const unsigned i = m + 1;
-  for (unsigned jj = 0; jj < n; ++jj) {
-    unsigned j = jj + 1;
+  u32 nx = m + 2;
+  u32 i = m + 1;
+
+  for (u32 jj = 0; jj < n; ++jj) {
+    u32 j = jj + 1;
     idx(jj) = i + nx * j;
   }
+
   return idx;
 }
 
-static uvec bc_bottom_indices(unsigned m, unsigned n) {
-  (void)n;
+static uvec bc_bottom_indices(u32 m) {
   uvec idx(m + 2);
-  for (unsigned i = 0; i < m + 2; ++i) idx(i) = i;
-  return idx;
-}
 
-static uvec bc_top_indices(unsigned m, unsigned n) {
-  uvec idx(m + 2);
-  const unsigned nx = m + 2;
-  const unsigned j = n + 1;
-  for (unsigned i = 0; i < m + 2; ++i) idx(i) = i + nx * j;
-  return idx;
-}
-
-struct BCSystem {
-  sp_mat A_bc;
-  vec b0;
-  uvec rowsbc;
-};
-
-static BCSystem build_scalar_bc_system(
-    const sp_mat& A,
-    unsigned k, unsigned m, double dx, unsigned n, double dy,
-    const std::array<double,4>& dc, const std::array<double,4>& nc,
-    const std::array<vec,4>& v) {
-
-  const arma::uword N = A.n_rows;
-  if (A.n_rows != A.n_cols) throw std::runtime_error("A must be square");
-
-  const BCSide left   = make_side(dc[0], nc[0]);
-  const BCSide right  = make_side(dc[1], nc[1]);
-  const BCSide bottom = make_side(dc[2], nc[2]);
-  const BCSide top    = make_side(dc[3], nc[3]);
-
-  MixedBC bc_op(static_cast<u16>(k), static_cast<u32>(m), dx,
-                static_cast<u32>(n), dy,
-                left.type, left.coeffs,
-                right.type, right.coeffs,
-                bottom.type, bottom.coeffs,
-                top.type, top.coeffs);
-
-  std::vector<uvec> pieces;
-  if (left.active)   pieces.push_back(bc_left_indices(m, n));
-  if (right.active)  pieces.push_back(bc_right_indices(m, n));
-  if (bottom.active) pieces.push_back(bc_bottom_indices(m, n));
-  if (top.active)    pieces.push_back(bc_top_indices(m, n));
-
-  uvec rowsbc;
-  if (!pieces.empty()) {
-    rowsbc = pieces[0];
-    for (size_t i = 1; i < pieces.size(); ++i) rowsbc = arma::join_cols(rowsbc, pieces[i]);
-    rowsbc = arma::unique(rowsbc);
-  } else {
-    rowsbc.set_size(0);
+  for (u32 i = 0; i < m + 2; ++i) {
+    idx(i) = i;
   }
 
-  sp_mat P = arma::speye<sp_mat>(N, N);
-  for (arma::uword ii = 0; ii < rowsbc.n_elem; ++ii) {
-    const arma::uword r = rowsbc(ii);
-    P(r, r) = 0.0;
-  }
-
-  BCSystem out;
-  out.A_bc = P * A + static_cast<sp_mat>(bc_op);
-  out.b0 = arma::zeros<vec>(N);
-
-  if (left.active)   out.b0.elem(bc_left_indices(m, n))   = v[0];
-  if (right.active)  out.b0.elem(bc_right_indices(m, n))  = v[1];
-  if (bottom.active) out.b0.elem(bc_bottom_indices(m, n)) = v[2];
-  if (top.active)    out.b0.elem(bc_top_indices(m, n))    = v[3];
-
-  out.rowsbc = rowsbc;
-  return out;
+  return idx;
 }
 
-// enforce inlet/outlet/walls + cylinder
-static void applyVelocityBCAndMask(
-    mat& U, mat& V,
-    double Uin,
-    int i1, int i2, int j1, int j2) {
+static uvec bc_top_indices(u32 m, u32 n) {
+  uvec idx(m + 2);
+  u32 nx = m + 2;
+  u32 j = n + 1;
 
-  const arma::uword nx = U.n_rows;
-  const arma::uword ny = U.n_cols;
+  for (u32 i = 0; i < m + 2; ++i) {
+    idx(i) = i + nx * j;
+  }
 
+  return idx;
+}
+
+static void applyVelocityBCAndMask(mat& U, mat& V, double Uin, int i1, int i2,
+                                   int j1, int j2) {
   U.row(0).fill(Uin);
   V.row(0).zeros();
 
-  U.row(nx - 1) = U.row(nx - 2);
-  V.row(nx - 1) = V.row(nx - 2);
+  U.row(U.n_rows - 1) = U.row(U.n_rows - 2);
+  V.row(V.n_rows - 1) = V.row(V.n_rows - 2);
 
-  U.submat(1, 0, nx - 1, 0).zeros();
-  V.submat(1, 0, nx - 1, 0).zeros();
-  U.submat(1, ny - 1, nx - 1, ny - 1).zeros();
-  V.submat(1, ny - 1, nx - 1, ny - 1).zeros();
+  U.submat(1, 0, U.n_rows - 1, 0).zeros();
+  V.submat(1, 0, V.n_rows - 1, 0).zeros();
 
-  U(0, 0) = 0.0;       U(0, ny - 1) = 0.0;
-  V(0, 0) = 0.0;       V(0, ny - 1) = 0.0;
+  U.submat(1, U.n_cols - 1, U.n_rows - 1, U.n_cols - 1).zeros();
+  V.submat(1, V.n_cols - 1, V.n_rows - 1, V.n_cols - 1).zeros();
+
+  U(0, 0) = 0.0;
+  U(0, U.n_cols - 1) = 0.0;
+  V(0, 0) = 0.0;
+  V(0, V.n_cols - 1) = 0.0;
 
   U.submat(i1, j1, i2, j2).zeros();
   V.submat(i1, j1, i2, j2).zeros();
-}
-
-static void write_gnuplot_script_cylinder_flow(const std::string& filename) {
-  const char* script = R"GNUPLOT(
-set datafile separator ","
-set term pngcairo size 1200,1500
-set output "cylinder_flow_2D_plot.png"
-
-unset key
-set view map
-set pm3d map
-set tics out
-set border lw 1
-set size ratio -1
-
-set multiplot layout 3,1 rowsfirst
-
-set lmargin 8
-set rmargin 8
-set tmargin 1
-set bmargin 1
-
-tcmd(f) = sprintf("awk -F',' '{line=$0; sub(/,+$/,\"\",line); nf=split(line,a,\",\"); for(i=1;i<=nf;i++) A[NR,i]=a[i]; if(nf>max) max=nf} END{for(i=1;i<=max;i++){for(j=1;j<=NR;j++){printf \"%%s%%s\", A[j,i], (j<NR?\",\":\"\")} printf \"\\n\"}}' %s", f)
-
-set xrange [0:482]
-set yrange [0:122]
-
-set title "U"
-plot "< ".tcmd("U_final.csv") matrix with image
-
-set title "V"
-plot "< ".tcmd("V_final.csv") matrix with image
-
-set title "p"
-plot "< ".tcmd("p_final.csv") matrix with image
-
-unset multiplot
-set output
-)GNUPLOT";
-
-  std::ofstream os(filename);
-  if (!os) throw std::runtime_error("Failed to write gnuplot script: " + filename);
-  os << script;
-}
-
-static void run_gnuplot_script(const std::string& script_filename) {
-  const std::string cmd = "gnuplot " + script_filename;
-  int rc = std::system(cmd.c_str());
-  if (rc != 0) {
-    std::cerr << "[warn] gnuplot failed (exit code " << rc
-              << "). Is gnuplot installed and on PATH?\n";
-  }
 }
 
 int main() {
-  // Problem parameters (numerical settings)
-  const double Re = 200.0;
-  const unsigned k = 2;
-  const double tspan = 32.0;
-  const double dt = 0.005;
+  double Re = 200.0;
+  u16 k = 2;
+  double tspan = 32.0;
+  double dt = 0.005;
 
-  // Domain and grid
-  const double x_start = 0.0, x_end = 8.0;
-  const double y_start = -1.0, y_end = 1.0;
-  const unsigned m = 481;
-  const unsigned n = 121;
-  const double dx = (x_end - x_start) / static_cast<double>(m);
-  const double dy = (y_end - y_start) / static_cast<double>(n);
+  double x_start = 0.0;
+  double x_end = 8.0;
+  double y_start = -1.0;
+  double y_end = 1.0;
 
-  // Obstacle (cylinder) geometry parameters
-  const double cylin_pos = 1.0 / 8.0;
-  const double cylin_size = 1.0 / 10.0;
+  u32 m = 481;
+  u32 n = 121;
 
-  // Physical parameters
-  const double rho = 1.0;
-  const double D0 = 2.0 * cylin_size;
-  const double U_init = 1.0;
-  const double nu = U_init * D0 / Re;
+  double dx = (x_end - x_start) / static_cast<double>(m);
+  double dy = (y_end - y_start) / static_cast<double>(n);
 
-  const arma::uword nx = m + 2;
-  const arma::uword ny = n + 2;
-  const arma::uword Ncell = nx * ny;
-  const arma::uword Nfaces_x = (m + 1) * n;
-  const arma::uword Nfaces_y = m * (n + 1);
-  const arma::uword Nfaces = Nfaces_x + Nfaces_y;
+  vec xgrid(m + 2, fill::zeros);
+  vec ygrid(n + 2, fill::zeros);
 
-  std::cout << "Ncell=" << Ncell << ", Nfaces=" << Nfaces
-            << " (" << Nfaces_x << "+" << Nfaces_y << ")\n";
+  xgrid(0) = 0.0;
+  xgrid(m + 1) = x_end - x_start;
+  for (u32 i = 1; i <= m; ++i) {
+    xgrid(i) = (static_cast<double>(i) - 0.5) * dx;
+  }
 
-#if !HAS_EIGEN
-  std::cerr << "[warn] Eigen headers not found; using arma::spsolve.\n";
-#endif
+  ygrid(0) = 0.0;
+  ygrid(n + 1) = y_end - y_start;
+  for (u32 j = 1; j <= n; ++j) {
+    ygrid(j) = (static_cast<double>(j) - 0.5) * dy;
+  }
 
-  // Construct mimetic operators (MOLE)
-  Laplacian L(static_cast<u16>(k), static_cast<u32>(m), static_cast<u32>(n), dx, dy);
-  Divergence D(static_cast<u16>(k), static_cast<u32>(m), static_cast<u32>(n), dx, dy);
-  Gradient   G(static_cast<u16>(k), static_cast<u32>(m), static_cast<u32>(n), dx, dy);
+  mat X(m + 2, n + 2, fill::zeros);
+  mat Y(m + 2, n + 2, fill::zeros);
+  for (u32 i = 0; i < m + 2; ++i) {
+    for (u32 j = 0; j < n + 2; ++j) {
+      X(i, j) = xgrid(i);
+      Y(i, j) = ygrid(j);
+    }
+  }
 
-  Interpol I_cf(static_cast<u32>(m), static_cast<u32>(n), 0.5, 0.5);
-  Interpol Ix_fc(true, static_cast<u32>(m), 0.5);
-  Interpol Iy_fc(true, static_cast<u32>(n), 0.5);
+  double cylin_pos = 1.0 / 8.0;
+  double cylin_size = 1.0 / 10.0;
 
-  sp_mat Im(nx, m);
-  Im.submat(1, 0, m, m - 1) = arma::speye<sp_mat>(m, m);
+  double rho = 1.0;
+  double D0 = 2.0 * cylin_size;
+  double U_init = 1.0;
+  double nu = U_init * D0 / Re;
 
-  sp_mat In(ny, n);
-  In.submat(1, 0, n, n - 1) = arma::speye<sp_mat>(n, n);
+  Laplacian L(k, m, n, dx, dy);
+  Divergence D(k, m, n, dx, dy);
+  Gradient G(k, m, n, dx, dy);
 
-  sp_mat Sx = Utils::spkron(In, static_cast<sp_mat>(Ix_fc));
-  sp_mat Sy = Utils::spkron(static_cast<sp_mat>(Iy_fc), Im);
+  Interpol I(m, n, 0.5, 0.5);
 
-  // AB2 + CN diffusion
-  sp_mat Icell = arma::speye<sp_mat>(Ncell, Ncell);
-  sp_mat M  = Icell - (0.5 * dt * nu) * static_cast<sp_mat>(L);
-  sp_mat Mp = Icell + (0.5 * dt * nu) * static_cast<sp_mat>(L);
+  Interpol Ix(true, m, 0.5);
+  Interpol Iy(true, n, 0.5);
 
-  // Initial conditions / fields
-  mat U(nx, ny, arma::fill::ones);
-  U *= U_init;
-  mat V(nx, ny, arma::fill::zeros);
+  sp_mat Im(m + 2, m);
+  sp_mat In(n + 2, n);
+  Im.submat(1, 0, m, m - 1) = speye<sp_mat>(m, m);
+  In.submat(1, 0, n, n - 1) = speye<sp_mat>(n, n);
 
-  const int m_unit = static_cast<int>(std::floor(cylin_pos * static_cast<double>(m)));
-  const int halfN1 = static_cast<int>(0.5 * static_cast<double>(n + 3));
-  const int rad = static_cast<int>(std::floor(cylin_size * static_cast<double>(m_unit)));
+  sp_mat Sx = Utils::spkron(In, sp_mat(Ix));
+  sp_mat Sy = Utils::spkron(sp_mat(Iy), Im);
 
-  const int i1 = (m_unit - rad) - 1;
-  const int i2 = (m_unit + rad) - 1;
-  const int j1 = (halfN1 - rad) - 1;
-  const int j2 = (halfN1 + rad) - 1;
+  uword Ncell = static_cast<uword>(m + 2) * static_cast<uword>(n + 2);
+  uword Nfaces_x = static_cast<uword>(m + 1) * static_cast<uword>(n);
+  uword Nfaces_y = static_cast<uword>(m) * static_cast<uword>(n + 1);
+
+  sp_mat II(2 * Ncell, Nfaces_x + Nfaces_y);
+  II.submat(0, 0, Ncell - 1, Nfaces_x - 1) = Sx;
+  II.submat(Ncell, Nfaces_x, 2 * Ncell - 1, Nfaces_x + Nfaces_y - 1) = Sy;
+
+  sp_mat Icell = speye<sp_mat>(Ncell, Ncell);
+  sp_mat M = Icell - 0.5 * dt * nu * sp_mat(L);
+  sp_mat Mp = Icell + 0.5 * dt * nu * sp_mat(L);
+
+  mat U = 0.0 * X + U_init;
+  mat V = 0.0 * X;
+
+  int m_unit = static_cast<int>(std::floor(cylin_pos * static_cast<double>(m)));
+  int halfN1 = static_cast<int>(0.5 * static_cast<double>(n + 3));
+  int rad = static_cast<int>(std::floor(cylin_size * static_cast<double>(m_unit)));
+
+  int i1 = m_unit - rad - 1;
+  int i2 = m_unit + rad - 1;
+  int j1 = halfN1 - rad - 1;
+  int j2 = halfN1 + rad - 1;
 
   U.submat(i1, j1, i2, j2).zeros();
   V.submat(i1, j1, i2, j2).zeros();
 
-  vec U_flat = arma::vectorise(U);
-  vec V_flat = arma::vectorise(V);
+  vec U_flat = vectorise(U);
+  vec V_flat = vectorise(V);
 
-  vec AdvU_prev(Ncell, arma::fill::zeros);
-  vec AdvV_prev(Ncell, arma::fill::zeros);
-  vec p_new_flat(Ncell, arma::fill::zeros);
+  vec AdvU_prev(Ncell, fill::zeros);
+  vec AdvV_prev(Ncell, fill::zeros);
+  vec p_new_flat(Ncell, fill::zeros);
 
-  // Velocity Helmholtz operator boundary conditions
-  const std::array<double,4> dcU = {1, 0, 1, 1};
-  const std::array<double,4> ncU = {0, 1, 0, 0};
-  std::array<vec,4> vU = {
-    vec(n, arma::fill::ones),
-    vec(n, arma::fill::zeros),
-    vec(nx, arma::fill::zeros),
-    vec(nx, arma::fill::zeros)
-  };
+  uvec rowsbc_left = bc_left_indices(m, n);
+  uvec rowsbc_right = bc_right_indices(m, n);
+  uvec rowsbc_bottom = bc_bottom_indices(m);
+  uvec rowsbc_top = bc_top_indices(m, n);
 
-  const std::array<double,4> dcV = {1, 0, 1, 1};
-  const std::array<double,4> ncV = {0, 1, 0, 0};
-  std::array<vec,4> vV = {
-    vec(n, arma::fill::zeros),
-    vec(n, arma::fill::zeros),
-    vec(nx, arma::fill::zeros),
-    vec(nx, arma::fill::zeros)
-  };
+  uvec rowsbcU = unique(join_cols(join_cols(rowsbc_left, rowsbc_right),
+                                  join_cols(rowsbc_bottom, rowsbc_top)));
+  uvec rowsbcV = rowsbcU;
+  uvec rowsbcP = rowsbcU;
 
-  BCSystem bcU = build_scalar_bc_system(M, k, m, dx, n, dy, dcU, ncU, vU);
-  BCSystem bcV = build_scalar_bc_system(M, k, m, dx, n, dy, dcV, ncV, vV);
+  sp_mat PU = speye<sp_mat>(Ncell, Ncell);
+  sp_mat PV = speye<sp_mat>(Ncell, Ncell);
+  sp_mat PP = speye<sp_mat>(Ncell, Ncell);
 
-  SparseSolver Au_solver, Av_solver;
-  Au_solver.factorize(bcU.A_bc);
-  Av_solver.factorize(bcV.A_bc);
+  for (uword i = 0; i < rowsbcU.n_elem; ++i) {
+    PU(rowsbcU(i), rowsbcU(i)) = 0.0;
+    PV(rowsbcV(i), rowsbcV(i)) = 0.0;
+    PP(rowsbcP(i), rowsbcP(i)) = 0.0;
+  }
 
-  // Pressure Poisson operator boundary conditions
-  const std::array<double,4> dcP = {0, 1, 0, 0};
-  const std::array<double,4> ncP = {1, 0, 1, 1};
-  std::array<vec,4> vP = {
-    vec(n, arma::fill::zeros),
-    vec(n, arma::fill::zeros),
-    vec(nx, arma::fill::zeros),
-    vec(nx, arma::fill::zeros)
-  };
+  MixedBC bcU_op(k, m, dx, n, dy, "Dirichlet", {1.0}, "Neumann", {1.0},
+                 "Dirichlet", {1.0}, "Dirichlet", {1.0});
+  MixedBC bcV_op(k, m, dx, n, dy, "Dirichlet", {1.0}, "Neumann", {1.0},
+                 "Dirichlet", {1.0}, "Dirichlet", {1.0});
+  MixedBC bcP_op(k, m, dx, n, dy, "Neumann", {1.0}, "Dirichlet", {1.0},
+                 "Neumann", {1.0}, "Neumann", {1.0});
 
-  BCSystem bcP = build_scalar_bc_system(static_cast<sp_mat>(L), k, m, dx, n, dy, dcP, ncP, vP);
-  SparseSolver Ap_solver;
-  Ap_solver.factorize(bcP.A_bc);
+  sp_mat Au = PU * M + sp_mat(bcU_op);
+  sp_mat Av = PV * M + sp_mat(bcV_op);
+  sp_mat Ap = PP * sp_mat(L) + sp_mat(bcP_op);
 
-  const int nSteps = static_cast<int>(std::llround(tspan / dt));
-  const int plotEvery = 100;
+  vec bU0(Ncell, fill::zeros);
+  vec bV0(Ncell, fill::zeros);
+  vec bP0(Ncell, fill::zeros);
 
-  // Time integration loop
-  for (int step = 1; step <= nSteps; ++step) {
-    vec U_faces = static_cast<sp_mat>(I_cf) * U_flat;
-    vec V_faces = static_cast<sp_mat>(I_cf) * V_flat;
+  bU0.elem(rowsbc_left).fill(U_init);
+  bU0.elem(rowsbc_right).zeros();
+  bU0.elem(rowsbc_bottom).zeros();
+  bU0.elem(rowsbc_top).zeros();
 
-    vec U_on_u = U_faces.head(Nfaces_x);
-    vec U_on_v = U_faces.tail(Nfaces_y);
+  bV0.elem(rowsbc_left).zeros();
+  bV0.elem(rowsbc_right).zeros();
+  bV0.elem(rowsbc_bottom).zeros();
+  bV0.elem(rowsbc_top).zeros();
 
-    vec V_on_u = V_faces.head(Nfaces_x);
-    vec V_on_v = V_faces.tail(Nfaces_y);
+  bP0.elem(rowsbc_left).zeros();
+  bP0.elem(rowsbc_right).zeros();
+  bP0.elem(rowsbc_bottom).zeros();
+  bP0.elem(rowsbc_top).zeros();
+
+  arma::spsolve_factoriser Au_fac;
+  arma::spsolve_factoriser Av_fac;
+  arma::spsolve_factoriser Ap_fac;
+
+  if (!Au_fac.factorise(Au)) {
+    throw std::runtime_error("Failed to factorize Au");
+  }
+
+  if (!Av_fac.factorise(Av)) {
+    throw std::runtime_error("Failed to factorize Av");
+  }
+
+  if (!Ap_fac.factorise(Ap)) {
+    throw std::runtime_error("Failed to factorize Ap");
+  }
+
+  int nSteps = static_cast<int>(std::llround(tspan / dt));
+  int plotEvery = 100;
+
+  for (int t_step = 1; t_step <= nSteps; ++t_step) {
+    vec U_stag = sp_mat(I) * U_flat;
+    vec U_on_u = U_stag.rows(0, Nfaces_x - 1);
+    vec U_on_v = U_stag.rows(Nfaces_x, Nfaces_x + Nfaces_y - 1);
+
+    vec V_stag = sp_mat(I) * V_flat;
+    vec V_on_u = V_stag.rows(0, Nfaces_x - 1);
+    vec V_on_v = V_stag.rows(Nfaces_x, Nfaces_x + Nfaces_y - 1);
 
     vec UU_on_u = U_on_u % U_on_u;
     vec UV_on_u = U_on_u % V_on_u;
-
     vec VV_on_v = V_on_v % V_on_v;
     vec UV_on_v = U_on_v % V_on_v;
 
-    vec u_div = arma::join_cols(UU_on_u, UV_on_v);
-    vec v_div = arma::join_cols(UV_on_u, VV_on_v);
+    vec u_div = join_cols(UU_on_u, UV_on_v);
+    vec v_div = join_cols(UV_on_u, VV_on_v);
 
-    vec AdvU_n = static_cast<sp_mat>(D) * u_div;
-    vec AdvV_n = static_cast<sp_mat>(D) * v_div;
+    vec AdvU_n = sp_mat(D) * u_div;
+    vec AdvV_n = sp_mat(D) * v_div;
 
-    vec AdvU_ab, AdvV_ab;
-    if (step == 1) {
+    vec AdvU_ab(Ncell, fill::zeros);
+    vec AdvV_ab(Ncell, fill::zeros);
+    if (t_step == 1) {
       AdvU_ab = AdvU_n;
       AdvV_ab = AdvV_n;
     } else {
@@ -511,96 +319,100 @@ int main() {
     vec rhsU = Mp * U_flat - dt * AdvU_ab;
     vec rhsV = Mp * V_flat - dt * AdvV_ab;
 
-    rhsU.elem(bcU.rowsbc).zeros();
-    rhsV.elem(bcV.rowsbc).zeros();
-    rhsU += bcU.b0;
-    rhsV += bcV.b0;
+    vec rhsU_bc = rhsU;
+    vec rhsV_bc = rhsV;
+    rhsU_bc.elem(rowsbcU).zeros();
+    rhsV_bc.elem(rowsbcV).zeros();
+    rhsU_bc += bU0;
+    rhsV_bc += bV0;
 
-    vec U_star_flat = Au_solver.solve(rhsU);
-    vec V_star_flat = Av_solver.solve(rhsV);
+    mat U_star_mat;
+    mat V_star_mat;
 
-    mat U_star = arma::reshape(U_star_flat, nx, ny);
-    mat V_star = arma::reshape(V_star_flat, nx, ny);
+    if (!Au_fac.solve(U_star_mat, rhsU_bc)) {
+      throw std::runtime_error("Failed to solve for U_star_flat");
+    }
+
+    if (!Av_fac.solve(V_star_mat, rhsV_bc)) {
+      throw std::runtime_error("Failed to solve for V_star_flat");
+    }
+
+    vec U_star_flat = vectorise(U_star_mat);
+    vec V_star_flat = vectorise(V_star_mat);
+
+    mat U_star = reshape(U_star_flat, m + 2, n + 2);
+    mat V_star = reshape(V_star_flat, m + 2, n + 2);
 
     U_star.submat(i1, j1, i2, j2).zeros();
     V_star.submat(i1, j1, i2, j2).zeros();
-    U_star(0, 0) = 0.0;      U_star(0, ny - 1) = 0.0;
-    V_star(0, 0) = 0.0;      V_star(0, ny - 1) = 0.0;
 
-    U_star_flat = arma::vectorise(U_star);
-    V_star_flat = arma::vectorise(V_star);
+    U_star(0, 0) = 0.0;
+    U_star(0, U_star.n_cols - 1) = 0.0;
+    V_star(0, 0) = 0.0;
+    V_star(0, V_star.n_cols - 1) = 0.0;
 
-    vec U_star_faces = static_cast<sp_mat>(I_cf) * U_star_flat;
-    vec V_star_faces = static_cast<sp_mat>(I_cf) * V_star_flat;
+    U_star_flat = vectorise(U_star);
+    V_star_flat = vectorise(V_star);
 
-    vec U_star_on_u = U_star_faces.head(Nfaces_x);
-    vec V_star_on_v = V_star_faces.tail(Nfaces_y);
+    vec U_star_stag = sp_mat(I) * U_star_flat;
+    vec U_star_on_u = U_star_stag.rows(0, Nfaces_x - 1);
 
-    vec UV_star_div = arma::join_cols(U_star_on_u, V_star_on_v);
-    vec RHS = (rho / dt) * (static_cast<sp_mat>(D) * UV_star_div);
+    vec V_star_stag = sp_mat(I) * V_star_flat;
+    vec V_star_on_v = V_star_stag.rows(Nfaces_x, Nfaces_x + Nfaces_y - 1);
 
-    RHS.elem(bcP.rowsbc).zeros();
-    RHS += bcP.b0;
+    vec UV_star_div = join_cols(U_star_on_u, V_star_on_v);
+    vec RHS = (rho / dt) * (sp_mat(D) * UV_star_div);
 
-    p_new_flat = Ap_solver.solve(RHS);
+    vec RHS_bc = RHS;
+    RHS_bc.elem(rowsbcP).zeros();
+    RHS_bc += bP0;
 
-    vec gradp_faces = static_cast<sp_mat>(G) * p_new_flat;
-    vec gradp_x = gradp_faces.head(Nfaces_x);
-    vec gradp_y = gradp_faces.tail(Nfaces_y);
+    mat p_new_mat;
+    if (!Ap_fac.solve(p_new_mat, RHS_bc)) {
+      throw std::runtime_error("Failed to solve for p_new_flat");
+    }
 
-    vec u_corr = Sx * gradp_x;
-    vec v_corr = Sy * gradp_y;
+    p_new_flat = vectorise(p_new_mat);
 
-    vec U_new_flat = U_star_flat - (dt / rho) * u_corr;
-    vec V_new_flat = V_star_flat - (dt / rho) * v_corr;
+    vec U_V_star_flat = join_cols(U_star_flat, V_star_flat);
+    vec U_V_flat = U_V_star_flat - (dt / rho) * (II * (sp_mat(G) * p_new_flat));
 
-    mat U_new = arma::reshape(U_new_flat, nx, ny);
-    mat V_new = arma::reshape(V_new_flat, nx, ny);
+    mat U_new = reshape(U_V_flat.rows(0, Ncell - 1), m + 2, n + 2);
+    mat V_new = reshape(U_V_flat.rows(Ncell, 2 * Ncell - 1), m + 2, n + 2);
 
     applyVelocityBCAndMask(U_new, V_new, U_init, i1, i2, j1, j2);
 
-    U_flat = arma::vectorise(U_new);
-    V_flat = arma::vectorise(V_new);
+    U_flat = vectorise(U_new);
+    V_flat = vectorise(V_new);
+
     AdvU_prev = AdvU_n;
     AdvV_prev = AdvV_n;
 
-    if ((step % plotEvery) == 0 || step == 1 || step == nSteps) {
-      const double maxU = arma::abs(U_new).max();
-      const double maxV = arma::abs(V_new).max();
-      const double CFL  = dt * (maxU / dx + maxV / dy);
-      const double inletMean = arma::mean(U_new.row(0));
+    if ((t_step % plotEvery) == 0 || t_step == 1 || t_step == nSteps) {
+      double maxU = abs(U_new).max();
+      double maxV = abs(V_new).max();
+      double CFL = dt * (maxU / dx + maxV / dy);
+      double inletMean = mean(U_new.row(0));
 
-      std::cout << "step " << std::setw(6) << step << "/" << std::setw(6) << nSteps
-                << " | t=" << std::fixed << std::setprecision(6) << (dt * step)
-                << " | CFL~" << std::setprecision(3) << CFL
-                << " | max|U|=" << std::scientific << std::setprecision(3) << maxU
-                << " | max|V|=" << std::scientific << std::setprecision(3) << maxV
-                << " | mean(U_in)=" << std::fixed << std::setprecision(3) << inletMean
-                << "\n";
+      std::cout << "step " << std::setw(6) << t_step << "/" << std::setw(6)
+                << nSteps << " | t=" << std::fixed << std::setprecision(6)
+                << dt * static_cast<double>(t_step) << " | CFL~"
+                << std::setprecision(3) << CFL << " | max|U|="
+                << std::scientific << std::setprecision(3) << maxU
+                << " | max|V|=" << maxV << " | mean(U_in)="
+                << std::fixed << std::setprecision(3) << inletMean << '\n';
     }
   }
 
-  // Output: save fields + plot via gnuplot (if available)
-  {
-    mat U_final = arma::reshape(U_flat, nx, ny);
-    mat V_final = arma::reshape(V_flat, nx, ny);
-    mat p_final = arma::reshape(p_new_flat, nx, ny);
+  mat U_final = reshape(U_flat, m + 2, n + 2);
+  mat V_final = reshape(V_flat, m + 2, n + 2);
+  mat p_final = reshape(p_new_flat, m + 2, n + 2);
 
-    U_final.save("U_final.csv", arma::csv_ascii);
-    V_final.save("V_final.csv", arma::csv_ascii);
-    p_final.save("p_final.csv", arma::csv_ascii);
+  U_final.save("U_final.csv", csv_ascii);
+  V_final.save("V_final.csv", csv_ascii);
+  p_final.save("p_final.csv", csv_ascii);
 
-    std::cout << "Wrote U_final.csv, V_final.csv, p_final.csv\n";
-
-    try {
-      const std::string gnuFile = "cylinder_flow_2D_plot.gnu";
-      write_gnuplot_script_cylinder_flow(gnuFile);
-      run_gnuplot_script(gnuFile);
-      std::cout << "Wrote cylinder_flow_2D_plot.png\n";
-    } catch (const std::exception& e) {
-      std::cerr << "[warn] Plotting skipped: " << e.what() << "\n";
-    }
-  }
+  std::cout << "Wrote U_final.csv, V_final.csv, p_final.csv" << std::endl;
 
   return 0;
 }
