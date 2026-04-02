@@ -13,10 +13,36 @@ void run_nullity_test(int k, Real tol) {
     EXPECT_NEAR(norm(sol), 0, tol);
 }
 
+void run_periodic_nullity_test(int k, Real tol) {
+    int m = 2 * k + 1;
+    Real dx = 1;
+
+    // All-zero dc/nc → periodic BC; produces an m×m divergence matrix.
+    ivec dc = {0, 0};
+    ivec nc = {0, 0};
+
+    Divergence D(k, m, dx, dc, nc);
+
+    // Periodic divergence acts on m interior values (no ghost cells).
+    // A constant field maps to zero divergence everywhere.
+    vec field(m, fill::ones);
+
+    vec sol = D * field;
+
+    EXPECT_NEAR(norm(sol), 0, tol);
+}
+
 TEST(DivergenceTests, Nullity) {
     Real tol = 1e-10;
     for (int k : {2, 4, 6}) {
         run_nullity_test(k, tol);
+    }
+}
+
+TEST(DivergenceTests, PeriodicNullity) {
+    Real tol = 1e-10;
+    for (int k : {2, 4, 6, 8}) {
+        run_periodic_nullity_test(k, tol);
     }
 }
 
