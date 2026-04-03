@@ -1,6 +1,6 @@
 /*
 * SPDX-License-Identifier: GPL-3.0-or-later
-* © 2008-2024 San Diego State University Research Foundation (SDSURF).
+* 2008-2024 San Diego State University Research Foundation (SDSURF).
 * See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details. 
 */
 
@@ -10,6 +10,7 @@
  * @brief Mimetic Gradient Operators
  * 
  * @date 2024/10/15
+ * last modified: 2026/03/27 by Jiya Rathi
  *
  */
 
@@ -100,19 +101,19 @@ Gradient::Gradient(u16 k, u32 m, Real dx) : sp_mat(m + 1, m + 2) {
   assert(m >= 2 * k);
 
   switch (k) {
-  case 2:
-    at(0, 0) = -8.0 / 3.0;
-    at(0, 1) =  3.0;
-    at(0, 2) = -1.0 / 3.0;
-    at(m, m + 1) =  8.0 / 3.0;
-    at(m, m)     = -3.0;
-    at(m, m - 1) =  1.0 / 3.0;
-    for (u32 i = 1; i < m; i++) {
-      at(i, i)     = -1.0;
-      at(i, i + 1) =  1.0;
-    }
-    P = { 3.0/8.0, 9.0/8.0, 1.0, 9.0/8.0, 3.0/8.0 };
-    break;
+    case 2:
+      at(0, 0) = -8.0 / 3.0;
+      at(0, 1) =  3.0;
+      at(0, 2) = -1.0 / 3.0;
+      at(m, m + 1) =  8.0 / 3.0;
+      at(m, m)     = -3.0;
+      at(m, m - 1) =  1.0 / 3.0;
+      for (u32 i = 1; i < m; i++) {
+        at(i, i)     = -1.0;
+        at(i, i + 1) =  1.0;
+      }
+      P = { 3.0/8.0, 9.0/8.0, 1.0, 9.0/8.0, 3.0/8.0 };
+      break;
 
   case 4:
     at(0, 0) = -352.0/105.0;  at(0, 1) =  35.0/8.0;
