@@ -132,13 +132,13 @@ InterpolCtoF::InterpolCtoF(u16 k, u32 m, u32 n, u32 o, const ivec& dc, const ive
     sp_mat I(I1.n_rows + I2.n_rows + I3.n_rows, I1.n_cols + I2.n_cols + I3.n_cols);
     I(arma::span(0, I1.n_rows - 1), arma::span(0, I1.n_cols - 1)) = I1;
     I(arma::span(I1.n_rows, I1.n_rows + I2.n_rows - 1), arma::span(I1.n_cols, I1.n_cols + I2.n_cols - 1)) = I2;
-    I(arma::span(I1.n_rows + I2.n_rows, I1.n_rows + I2.n_rows + I3.n_rows - 1), arma::span(I1.n_cols + I2.n_cols, I1.n_cols + I2.n_cols + I3.n_cols - 1)) = I3;
+    I(arma::span(I1.n_rows + I2.n_rows, I.n_rows - 1), arma::span(I1.n_cols + I2.n_cols, I.n_cols - 1)) = I3;
 
     *this = I;
 }
 
 // 1-D Nonperiodic Constructor
-InterpolCtoF::InterpolCtoF(u16 k, u32 m) : sp_mat(m+1,m+2)
+InterpolCtoF::InterpolCtoF(u16 k, u32 m) : sp_mat(m + 1, m + 2)
 {
     assert(!(k % 2));
     assert(k > 1 && k < 9);
@@ -313,12 +313,13 @@ InterpolCtoF::InterpolCtoF(u16 k, u32 m) : sp_mat(m+1,m+2)
             at(i, i+3) = 49.0 / 2048.0;
             at(i, i+4) = -5.0 / 2048.0;
         }
+
         break;
     }
 }
 
 // 1-D Periodic Constructor
-InterpolCtoF::InterpolCtoF(u16 k, u32 m, bool dummy) : sp_mat(m,m)
+InterpolCtoF::InterpolCtoF(u16 k, u32 m, bool dummy) : sp_mat(m, m)
 {
     assert(!(k%2))
     assert(k > 1 && k < 9)
