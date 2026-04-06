@@ -43,20 +43,20 @@ public:
      * @param k Order of accuracy
      * @param m Number of cells in x-direction
      * @param n Number of cells in y-direction
-     * @param dc Dirichlet coefficients for the left and right boundaries
-     * @param nc Neumann coefficients for the left and right boundaries
+     * @param dc Dirichlet coefficients for the left, right, bottom, and top boundaries
+     * @param nc Neumann coefficients for the left, right, bottom, and top boundaries
      */
     InterpolCtoF(u16 k, u32 m, u32 n, const ivec& dc, const ivec& nc);
 
     /**
-     * @brief 1-D Mimetic Interpolator from the Centers to Faces Constructor
+     * @brief 3-D Mimetic Interpolator from the Centers to Faces Constructor
      * 
      * @param k Order of accuracy
      * @param m Number of cells in x-direction
      * @param n Number of cells in y-direction
      * @param o Number of cells in z-direction
-     * @param dc Dirichlet coefficients for the left and right boundaries
-     * @param nc Neumann coefficients for the left and right boundaries
+     * @param dc Dirichlet coefficients for the left, right, bottom, top, front, and back boundaries
+     * @param nc Neumann coefficients for the left, right, bottom, top, front, and back boundaries
      */
     InterpolCtoF(u16 k, u32 m, u32 n, u32 o, const ivec& dc, const ivec& nc);
 
