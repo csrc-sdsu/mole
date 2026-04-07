@@ -4,6 +4,10 @@
     See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 =#
 
+# -----------------------
+# 1-D Laplacian Operators
+# -----------------------
+
 """
     lap(k, m, dx)
 
@@ -19,4 +23,42 @@ function lap(k::Int, m::Int, dx)
     G = grad(k,m,dx)
 
     L = D*G;
+end
+
+
+"""
+"""
+function lapPeriodic(k::Int, m::Int, dx, n::Int, dy)
+    
+    D = divPeriodic(k, m, dx)
+    G = gradPeriodic(k, m, dx)
+
+    L = D*G;
+end
+
+#======================
+2-D Laplacian Operators
+======================#
+
+"""
+"""
+function lap2D(k::Int, m::Int, dx, n::Int, dy)
+
+    D = div2D(k, m, dx, n, dy)
+    G = grad2D(k, m, dx, n, dy)
+
+    L = D*G
+
+end
+
+
+"""
+"""
+function lap2DPeriodic(k::Int, m::Int, dx, n::Int, dy)
+
+    D = div2DPeriodic(k, m, dx, n, dy)
+    G = grad2DPeriodic(k, m, dx, n, dy)
+
+    L = D*G;
+
 end
