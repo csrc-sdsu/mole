@@ -49,7 +49,7 @@ InterpolNtoC::InterpolNtoC(u16 k, u32 m, u32 n, const ivec& dc, const ivec& nc)
     if (dc[0] == 0 && dc[1] == 0 && nc[0] == 0 && nc[1] == 0)
     {
         InterpolNtoC interpolx(k, m, true);
-        Ix = interpolx;
+        Ix = interpolx.t(); // I do not know why this needs to be transposed;
     } else {
         InterpolNtoC interpolx(k, m);
         Ix = interpolx;
@@ -59,7 +59,7 @@ InterpolNtoC::InterpolNtoC(u16 k, u32 m, u32 n, const ivec& dc, const ivec& nc)
     if (dc[2] == 0 && dc[3] == 0 && nc[2] == 0 && nc[3] == 0)
     {
         InterpolNtoC interpoly(k, n, true);
-        Iy = interpoly;
+        Iy = interpoly.t(); // I do not know why this needs to be transposed;
     } else {
         InterpolNtoC interpoly(k, n);
         Iy = interpoly;
@@ -81,7 +81,7 @@ InterpolNtoC::InterpolNtoC(u16 k, u32 m, u32 n, u32 o, const ivec& dc, const ive
     if (dc[0] == 0 && dc[1] == 0 && nc[0] == 0 && nc[1] == 0)
     {
         InterpolNtoC interpolx(k, m, true);
-        Ix = interpolx;
+        Ix = interpolx.t(); // I do not know why this needs to be transposed;
     } else {
         InterpolNtoC interpolx(k, m);
         Ix = interpolx;
@@ -91,7 +91,7 @@ InterpolNtoC::InterpolNtoC(u16 k, u32 m, u32 n, u32 o, const ivec& dc, const ive
     if (dc[2] == 0 && dc[3] == 0 && nc[2] == 0 && nc[3] == 0)
     {
         InterpolNtoC interpoly(k, n, true);
-        Iy = interpoly;
+        Iy = interpoly.t(); // I do not know why this needs to be transposed;
     } else {
         InterpolNtoC interpoly(k, n);
         Iy = interpoly;
@@ -101,7 +101,7 @@ InterpolNtoC::InterpolNtoC(u16 k, u32 m, u32 n, u32 o, const ivec& dc, const ive
     if (dc[4] == 0 && dc[5] == 0 && nc[4] == 0 && nc[5] == 0)
     {
         InterpolNtoC interpolz(k, o, true);
-        Iz = interpolz;
+        Iz = interpolz.t(); // I do not know why this needs to be transposed;
     } else {
         InterpolNtoC interpolz(k, o);
         Iz = interpolz;
@@ -352,12 +352,15 @@ InterpolNtoC::InterpolNtoC(u16 k, u32 m, bool dummy) : sp_mat(m, m)
     }
 
     Real val;
+    sp_mat I(m, m);
     for (u32 i = 0; i < m; ++i)
     {
         for (u32 j = 0; j < m; ++j)
         {
             val = V[(i - j + m) % m];
-            if (val != 0.0) at(i, j) = val;
+            if (val != 0.0) I(i, j) = val;
         }
     }
+
+    *this = I;
 }

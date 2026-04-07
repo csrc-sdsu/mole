@@ -49,14 +49,14 @@ InterpolCtoF::InterpolCtoF(u16 k, u32 m, u32 n, const ivec& dc, const ivec& nc)
     if (dc[0] == 0 && dc[1] == 0 && nc[0] == 0 && nc[1] == 0)
     {
         InterpolCtoF interpolx(k, m, true);
-        Ix = interpolx;
+        Ix = interpolx.t(); // I do not know why this needs to be transposed
         Im = speye(m, m);
     } else {
         InterpolCtoF interpolx(k, m);
         Ix = interpolx;
         Im = speye(m + 2, m + 2);
-        Im.shed_col(0);
-        Im.shed_col(m);
+        Im.shed_row(0);
+        Im.shed_row(m);
     }
     
 
@@ -64,14 +64,14 @@ InterpolCtoF::InterpolCtoF(u16 k, u32 m, u32 n, const ivec& dc, const ivec& nc)
     if (dc[2] == 0 && dc[3] == 0 && nc[2] == 0 && nc[3] == 0)
     {
         InterpolCtoF interpoly(k, n, true);
-        Iy = interpoly;
+        Iy = interpoly.t(); // I do not know why this needs to be transposed;
         In = speye(n, n);
     } else {
         InterpolCtoF interpoly(k, n);
         Iy = interpoly;
         In = speye(n + 2, n + 2);
-        In.shed_col(0);
-        In.shed_col(n);
+        In.shed_row(0);
+        In.shed_row(n);
     }
 
     // Join
@@ -97,42 +97,42 @@ InterpolCtoF::InterpolCtoF(u16 k, u32 m, u32 n, u32 o, const ivec& dc, const ive
     if (dc[0] == 0 && dc[1] == 0 && nc[0] == 0 && nc[1] == 0)
     {
         InterpolCtoF interpolx(k, m, true);
-        Ix = interpolx;
+        Ix = interpolx.t(); // I do not know why this needs to be transposed;
         Im = speye(m, m);
     } else {
         InterpolCtoF interpolx(k, m);
         Ix = interpolx;
         Im = speye(m + 2, m + 2);
-        Im.shed_col(0);
-        Im.shed_col(m);
+        Im.shed_row(0);
+        Im.shed_row(m);
     }
 
     // bottom / top periodicity
     if (dc[2] == 0 && dc[3] == 0 && nc[2] == 0 && nc[3] == 0)
     {
         InterpolCtoF interpoly(k, n, true);
-        Iy = interpoly;
+        Iy = interpoly.t(); // I do not know why this needs to be transposed;
         In = speye(n, n);
     } else {
         InterpolCtoF interpoly(k, n);
         Iy = interpoly;
         In = speye(n + 2, n + 2);
-        In.shed_col(0);
-        In.shed_col(n);
+        In.shed_row(0);
+        In.shed_row(n);
     }
 
     // front / back periodicity
     if (dc[4] == 0 && dc[5] == 0 && nc[4] == 0 && nc[5] == 0)
     {
         InterpolCtoF interpolz(k, o, true);
-        Iz = interpolz;
+        Iz = interpolz.t(); // I do not know why this needs to be transposed;
         Io = speye(o, o);
     } else {
         InterpolCtoF interpolz(k, o);
         Iz = interpolz;
         Io = speye(o + 2, o + 2);
-        Io.shed_col(0);
-        Io.shed_col(o);
+        Io.shed_row(0);
+        Io.shed_row(o);
     }
 
     // Join
@@ -384,16 +384,16 @@ InterpolCtoF::InterpolCtoF(u16 k, u32 m, bool dummy) : sp_mat(m, m)
     }
 
     Real val;
+    sp_mat I(m, m);
     for (u32 i = 0; i < m; ++i)
     {
         for (u32 j = 0; j < m; ++j)
         {
             val = V[(i - j + m) % m];
-            if (val != 0.0) at(i, j) = val;
+            if (val != 0.0) I(i, j) = val;
         }
     }
 
     // Compiler does not like *this = *this->t();
-    auto temp = this->t();
-    *this = temp;
+    *this = I.t();
 }
