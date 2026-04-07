@@ -34,6 +34,7 @@ set(EXAMPLE_SOURCES
   wave1d.cpp
   wave2d_case2.cpp
   wave2d.cpp
+  ifc.cpp
 )
 
 # Create executables for each source file
