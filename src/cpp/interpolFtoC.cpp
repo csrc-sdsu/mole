@@ -167,7 +167,7 @@ InterpolFtoC::InterpolFtoC(u16 k, u32 m) : sp_mat(m + 2, m + 1)
             at(i, i) = 1.0;
         }
 
-        *this = *this / 2.0;
+        *this /= 2.0;
         break;
     
     case 4:
@@ -197,7 +197,7 @@ InterpolFtoC::InterpolFtoC(u16 k, u32 m) : sp_mat(m + 2, m + 1)
             at(i, i + 1) = -8.0;
         }
 
-        *this = *this / 128.0;
+        *this /= 128.0;
         break;
 
     case 6:
@@ -249,7 +249,7 @@ InterpolFtoC::InterpolFtoC(u16 k, u32 m) : sp_mat(m + 2, m + 1)
             at(i, i + 2) = 12.0;
         }
 
-        *this = *this / 1024.0;
+        *this /= 1024.0;
         break;
 
     case 8:

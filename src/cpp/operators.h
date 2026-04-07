@@ -85,7 +85,7 @@ inline vec operator*(const InterpolCtoN &I, const vec &v) {
   return (sp_mat)I * v;
 }
 
-inline vec operator*(const InterpolFtoN &I, const vec &v) {
+inline vec operator*(const InterpolFtoC &I, const vec &v) {
   return (sp_mat)I * v;
 }
 

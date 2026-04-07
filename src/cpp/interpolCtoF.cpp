@@ -30,7 +30,7 @@ InterpolCtoF::InterpolCtoF(u16 k, u32 m, const ivec& dc, const ivec& nc)
         I = interpol;
     } else {
         // Nonperiodic case
-        InterpolCtoF inteprol(k, m);
+        InterpolCtoF interpol(k, m);
         I = interpol;
     }
 
@@ -211,7 +211,7 @@ InterpolCtoF::InterpolCtoF(u16 k, u32 m) : sp_mat(m + 1, m + 2)
         at(1, 5) = -330.0;
         at(1, 6) = 42.0;
         at(2, 0) = 256.0;
-        at(2, 1) = -924.0
+        at(2, 1) = -924.0;
         at(2, 2) = 4620.0;
         at(2, 3) = 5544.0;
         at(2, 4) = -1320.0;
@@ -270,14 +270,14 @@ InterpolCtoF::InterpolCtoF(u16 k, u32 m) : sp_mat(m + 1, m + 2)
         at(2, 5) = 77.0 / 512.0;
         at(2, 6) = -27.0 / 512.0;
         at(2, 7) = 77.0 / 6656.0;
-        at(2, 8) = -3.0 2560.0;
+        at(2, 8) = -3.0 / 2560.0;
 
         at(3, 0) = -1.0 / 143.0;
         at(3, 1) = 27.0 / 1024.0;
         at(3, 2) = -105.0 / 1024.0;
         at(3, 3) = 567.0 / 1024.0;
         at(3, 4) = 675.0 / 1024.0;
-        at(3, 5) = -175.0 1024.0;
+        at(3, 5) = -175.0 / 1024.0;
         at(3, 6) = 567.0 / 11264.0;
         at(3, 7) = -135.0 / 13312.0;
         at(3, 8) = 1.0 / 1024.0;
@@ -332,9 +332,9 @@ InterpolCtoF::InterpolCtoF(u16 k, u32 m) : sp_mat(m + 1, m + 2)
 // 1-D Periodic Constructor
 InterpolCtoF::InterpolCtoF(u16 k, u32 m, bool dummy) : sp_mat(m, m)
 {
-    assert(!(k%2))
-    assert(k > 1 && k < 9)
-    assert(m > 2*k)
+    assert(!(k % 2));
+    assert(k > 1 && k < 9);
+    assert(m > 2 * k);
 
     vec V(m, fill::zeros);
 
@@ -391,5 +391,7 @@ InterpolCtoF::InterpolCtoF(u16 k, u32 m, bool dummy) : sp_mat(m, m)
         }
     }
 
-    *this = *this.t();
+    // Compiler does not like *this = *this->t();
+    auto temp = this->t();
+    *this = temp;
 }

@@ -13,7 +13,7 @@
  * 
  */
 
-#include "InterpolNtoC.h"
+#include "interpolNtoC.h"
 
 // 1-D Constructor
 InterpolNtoC::InterpolNtoC(u16 k, u32 m, const ivec& dc, const ivec& nc)
@@ -131,7 +131,7 @@ InterpolNtoC::InterpolNtoC(u16 k, u32 m) : sp_mat(m + 2, m + 1)
             at(i, i) = 1.0;
         }
 
-        *this = *this / 2.0;
+        *this /= 2.0;
         break;
     
     case 4:
@@ -161,7 +161,7 @@ InterpolNtoC::InterpolNtoC(u16 k, u32 m) : sp_mat(m + 2, m + 1)
             at(i, i + 1) = -8.0;
         }
 
-        *this = *this / 128.0;
+        *this /= 128.0;
         break;
 
     case 6:
@@ -213,7 +213,7 @@ InterpolNtoC::InterpolNtoC(u16 k, u32 m) : sp_mat(m + 2, m + 1)
             at(i, i + 2) = 12.0;
         }
 
-        *this = *this / 1024.0;
+        *this /= 1024.0;
         break;
 
     case 8:
