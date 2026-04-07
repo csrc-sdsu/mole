@@ -49,7 +49,7 @@ InterpolFtoC::InterpolFtoC(u16 k, u32 m, u32 n, const ivec& dc, const ivec& nc)
     if (dc[0] == 0 && dc[1] == 0 && nc[0] == 0 && nc[1] == 0)
     {
         InterpolFtoC interpolx(k, m, true);
-        Ix = interpolx.t(); // I do not know why this needs to be transposed;
+        Ix = interpolx;
         Im = speye(m, m);
     } else {
         InterpolFtoC interpolx(k, m);
@@ -63,7 +63,7 @@ InterpolFtoC::InterpolFtoC(u16 k, u32 m, u32 n, const ivec& dc, const ivec& nc)
     if (dc[2] == 0 && dc[3] == 0 && nc[2] == 0 && nc[3] == 0)
     {
         InterpolFtoC interpoly(k, n, true);
-        Iy = interpoly.t(); // I do not know why this needs to be transposed;
+        Iy = interpoly;
         In = speye(n, n);
     } else {
         InterpolFtoC interpoly(k, n);
@@ -96,7 +96,7 @@ InterpolFtoC::InterpolFtoC(u16 k, u32 m, u32 n, u32 o, const ivec& dc, const ive
     if (dc[0] == 0 && dc[1] == 0 && nc[0] == 0 && nc[1] == 0)
     {
         InterpolFtoC interpolx(k, m, true);
-        Ix = interpolx.t(); // I do not know why this needs to be transposed;
+        Ix = interpolx;
         Im = speye(m, m);
     } else {
         InterpolFtoC interpolx(k, m);
@@ -110,7 +110,7 @@ InterpolFtoC::InterpolFtoC(u16 k, u32 m, u32 n, u32 o, const ivec& dc, const ive
     if (dc[2] == 0 && dc[3] == 0 && nc[2] == 0 && nc[3] == 0)
     {
         InterpolFtoC interpoly(k, n, true);
-        Iy = interpoly.t(); // I do not know why this needs to be transposed;
+        Iy = interpoly;
         In = speye(n, n);
     } else {
         InterpolFtoC interpoly(k, n);
@@ -124,7 +124,7 @@ InterpolFtoC::InterpolFtoC(u16 k, u32 m, u32 n, u32 o, const ivec& dc, const ive
     if (dc[4] == 0 && dc[5] == 0 && nc[4] == 0 && nc[5] == 0)
     {
         InterpolFtoC interpolz(k, o, true);
-        Iz = interpolz.t(); // I do not know why this needs to be transposed;
+        Iz = interpolz;
         Io = speye(o, o);
     } else {
         InterpolFtoC interpolz(k, o);
@@ -389,11 +389,11 @@ InterpolFtoC::InterpolFtoC(u16 k, u32 m, bool dummy) : sp_mat(m, m)
 
     Real val;
     sp_mat I(m, m);
-    for (u32 i = 0; i < m; ++i)
+    for (int i = 0; i < (int)m; ++i)
     {
-        for (u32 j = 0; j < m; ++j)
+        for (int j = 0; j < (int)m; ++j)
         {
-            val = V[(i - j + m) % m];
+            val = V[((j - i) % (int)m + (int)m) % (int)m];
             if (val != 0.0) I(i, j) = val;
         }
     }

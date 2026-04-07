@@ -14,25 +14,25 @@ for k = 2:2:8
     ifccpp = readmatrix("pifc1Dk" + k + ".csv");
     inccpp = readmatrix("pinc1Dk" + k + ".csv");
 
-    if ~all(icfcpp - interpolCentersToFacesD1DPeriodic(k, m) < tol, "all")
+    if all(icfcpp - interpolCentersToFacesD1DPeriodic(k, m) < tol, "all")
         disp("1-D, k = " + k + ", Periodic Centers to Faces: Pass")
     else
         disp("1-D, k = " + k + ", Periodic Centers to Faces: Fail")
     end
 
-    if ~all(icncpp - interpolCentersToNodes1DPeriodic(k, m) < tol, "all")
+    if all(icncpp - interpolCentersToNodes1DPeriodic(k, m) < tol, "all")
         disp("1-D, k = " + k + ", Periodic Centers to Nodes: Pass")
     else
         disp("1-D, k = " + k + ", Periodic Centers to Nodes: Fail")
     end
 
-    if ~all(ifccpp - interpolFacesToCentersG1DPeriodic(k, m) < tol, "all")
+    if all(ifccpp - interpolFacesToCentersG1DPeriodic(k, m) < tol, "all")
         disp("1-D, k = " + k + ", Periodic Faces to Centers: Pass")
     else
         disp("1-D, k = " + k + ", Periodic Faces to Centers: Fail")
     end
 
-    if ~all(inccpp - interpolNodesToCenters1DPeriodic(k, m) < tol, "all")
+    if all(inccpp - interpolNodesToCenters1DPeriodic(k, m) < tol, "all")
         disp("1-D, k = " + k + ", Periodic Nodes to Centers: Pass")
     else
         disp("1-D, k = " + k + ", Periodic Nodes to Centers: Fail")
