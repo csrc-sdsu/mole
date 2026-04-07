@@ -123,7 +123,7 @@ InterpolNtoC::InterpolNtoC(u16 k, u32 m) : sp_mat(m + 2, m + 1)
     case 2:
         
         at(0, 0) = 2.0;
-        at(m - 1, m) = 2.0;
+        at(m + 1, m) = 2.0;
 
         for (u32 i = 1; i < m + 1; ++i)
         {
@@ -137,7 +137,7 @@ InterpolNtoC::InterpolNtoC(u16 k, u32 m) : sp_mat(m + 2, m + 1)
     case 4:
         
         at(0, 0) = 128.0;
-        at(m - 1, m) = 128.0;
+        at(m + 1, m) = 128.0;
 
         // A
         at(1, 0) = 35.0;
@@ -322,7 +322,7 @@ InterpolNtoC::InterpolNtoC(u16 k, u32 m, bool dummy) : sp_mat(m, m)
         V[0] = 72.0 / 128.0;
         V[1] = 72.0 / 128.0;
         V[2] = -8.0 / 128.0;
-        V[m-1] = -8.0 / 128.0;
+        V[m - 1] = -8.0 / 128.0;
 
         break;
 
@@ -332,8 +332,8 @@ InterpolNtoC::InterpolNtoC(u16 k, u32 m, bool dummy) : sp_mat(m, m)
         V[1] = 600.0 / 1024.0;
         V[2] = -100.0 / 1024.0;
         V[3] = 12.0 / 1024.0;
-        V[m-2] = 12.0 / 1024.0;
-        V[m-1] = -100.0 / 1024.0;
+        V[m - 2] = 12.0 / 1024.0;
+        V[m - 1] = -100.0 / 1024.0;
 
         break;
 
@@ -344,20 +344,20 @@ InterpolNtoC::InterpolNtoC(u16 k, u32 m, bool dummy) : sp_mat(m, m)
         V[2] = -245.0 / 2048.0;
         V[3] = 49.0 / 2048.0;
         V[4] = -5.0 / 2048.0;
-        V[m-3] = -5.0 / 2048.0;
-        V[m-2] = 49.0 / 2048.0;
-        V[m-1] = -245.0 / 2048.0;
+        V[m - 3] = -5.0 / 2048.0;
+        V[m - 2] = 49.0 / 2048.0;
+        V[m - 1] = -245.0 / 2048.0;
 
         break;
     }
 
     Real val;
-    for (u32 i=0; i<m; ++i)
+    for (u32 i = 0; i < m; ++i)
     {
-        for (u32 j=0; j<m; ++j)
+        for (u32 j = 0; j < m; ++j)
         {
             val = V[(i - j + m) % m];
-            if (val != 0.0) at(i,j) = val;
+            if (val != 0.0) at(i, j) = val;
         }
     }
 }
