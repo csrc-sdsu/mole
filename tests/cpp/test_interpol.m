@@ -3,16 +3,16 @@ addpath("../../src/matlab_octave");
 
 tol = 1e-10;
 
-for k = 2:2:3
+for k = 2:2:8
 
     m = 2 * k + 1;
     n = m + 1;
     o = n + 1;
 
-    icfcpp = readmatrix("picf1D.csv");
-    icncpp = readmatrix("picn1D.csv");
-    ifccpp = readmatrix("pifc1D.csv");
-    inccpp = readmatrix("pinc1D.csv");
+    icfcpp = readmatrix("picf1Dk" + k + ".csv");
+    icncpp = readmatrix("picn1Dk" + k + ".csv");
+    ifccpp = readmatrix("pifc1Dk" + k + ".csv");
+    inccpp = readmatrix("pinc1Dk" + k + ".csv");
 
     if ~all(icfcpp - interpolCentersToFacesD1DPeriodic(k, m) < tol, "all")
         disp("1-D, k = " + k + ", Periodic Centers to Faces: Pass")
@@ -38,10 +38,10 @@ for k = 2:2:3
         disp("1-D, k = " + k + ", Periodic Nodes to Centers: Fail")
     end
 
-    icfcpp = readmatrix("picf2D.csv");
-    icncpp = readmatrix("picn2D.csv");
-    ifccpp = readmatrix("pifc2D.csv");
-    inccpp = readmatrix("pinc2D.csv");
+    icfcpp = readmatrix("picf2Dk" + k + ".csv");
+    icncpp = readmatrix("picn2Dk" + k + ".csv");
+    ifccpp = readmatrix("pifc2Dk" + k + ".csv");
+    inccpp = readmatrix("pinc2Dk" + k + ".csv");
 
     if all(abs(icfcpp - interpolCentersToFacesD2DPeriodic(k, m, n)) < tol, "all")
         disp("2-D, k = " + k + ", Periodic Centers to Faces: Pass")
@@ -67,10 +67,10 @@ for k = 2:2:3
         disp("2-D, k = " + k + ", Periodic Nodes to Centers: Fail")
     end
 
-    icfcpp = readmatrix("picf3D.csv");
-    icncpp = readmatrix("picn3D.csv");
-    ifccpp = readmatrix("pifc3D.csv");
-    inccpp = readmatrix("pinc3D.csv");
+    icfcpp = readmatrix("picf3Dk" + k + ".csv");
+    icncpp = readmatrix("picn3Dk" + k + ".csv");
+    ifccpp = readmatrix("pifc3Dk" + k + ".csv");
+    inccpp = readmatrix("pinc3Dk" + k + ".csv");
 
     if all(abs(icfcpp - interpolCentersToFacesD3DPeriodic(k, m, n, o)) < tol, "all")
         disp("3-D, k = " + k + ", Periodic Centers to Faces: Pass")
@@ -98,10 +98,10 @@ for k = 2:2:3
 
 
 
-    icfcpp = readmatrix("nicf1D.csv");
-    icncpp = readmatrix("nicn1D.csv");
-    ifccpp = readmatrix("nifc1D.csv");
-    inccpp = readmatrix("ninc1D.csv");
+    icfcpp = readmatrix("nicf1Dk" + k + ".csv");
+    icncpp = readmatrix("nicn1Dk" + k + ".csv");
+    ifccpp = readmatrix("nifc1Dk" + k + ".csv");
+    inccpp = readmatrix("ninc1Dk" + k + ".csv");
 
     if all(abs(icfcpp - interpolCentersToFacesD1D(k, m)) < tol, "all")
         disp("1-D, k = " + k + ", Nonperiodic Centers to Faces: Pass")
@@ -127,10 +127,10 @@ for k = 2:2:3
         disp("1-D, k = " + k + ", Nonperiodic Nodes to Centers: Fail")
     end
 
-    icfcpp = readmatrix("nicf2D.csv");
-    icncpp = readmatrix("nicn2D.csv");
-    ifccpp = readmatrix("nifc2D.csv");
-    inccpp = readmatrix("ninc2D.csv");
+    icfcpp = readmatrix("nicf2Dk" + k + ".csv");
+    icncpp = readmatrix("nicn2Dk" + k + ".csv");
+    ifccpp = readmatrix("nifc2Dk" + k + ".csv");
+    inccpp = readmatrix("ninc2Dk" + k + ".csv");
 
     if all(abs(icfcpp - interpolCentersToFacesD2D(k, m, n)) < tol, "all")
         disp("2-D, k = " + k + ", Nonperiodic Centers to Faces: Pass")
@@ -156,10 +156,10 @@ for k = 2:2:3
         disp("2-D, k = " + k + ", Nonperiodic Nodes to Centers: Fail")
     end
 
-    icfcpp = readmatrix("nicf3D.csv");
-    icncpp = readmatrix("nicn3D.csv");
-    ifccpp = readmatrix("nifc3D.csv");
-    inccpp = readmatrix("ninc3D.csv");
+    icfcpp = readmatrix("nicf3Dk" + k + ".csv");
+    icncpp = readmatrix("nicn3Dk" + k + ".csv");
+    ifccpp = readmatrix("nifc3Dk" + k + ".csv");
+    inccpp = readmatrix("ninc3Dk" + k + ".csv");
 
     if all(abs(icfcpp - interpolCentersToFacesD3D(k, m, n, o)) < tol, "all")
         disp("3-D, k = " + k + ", Nonperiodic Centers to Faces: Pass")
