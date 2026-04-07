@@ -4,6 +4,8 @@
     See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 =#
 
+using LinearAlgebra
+
 """
     grad(k, m, dx)
 
@@ -15,8 +17,8 @@ Returns a m+1 by m+2 one-dimensional mimetic gradient operator.
 - `dx`: Step size
 """
 function grad(k::Int,m::Int,dx)
-    if k < 2
-        throw(DomainError(k, "k must be >= 2"))
+    if k < 2 || k > 8
+        throw(DomainError(k, "k must be >= 2 and <= 8"))
     end
 
     if k % 2 != 0
@@ -64,4 +66,91 @@ function grad(k::Int,m::Int,dx)
         end
     end
     G = (1/dx)*G;
+end
+
+
+"""
+"""
+function gradPeriodic(k::Int, m::Int, dx)
+    
+   if k < 2 || k > 8
+        throw(DomainError(k, "k must be >= 2 and <= 8"))
+    end
+
+    if k % 2 != 0
+        throw(DomainError(k, "k must be an positive even integer"))
+    end
+
+    if m < 2*k
+        throw(DomainError(m, "m must be >= 2*k"))
+    end
+    
+    V = zeros(1, m)
+    idx = fill(-1, m, m)
+    idx[:, 1] = 1:m
+    idx = cumsum(idx, dims=2)
+    idx = mod.(idx .+ m, m) .+ 1
+
+    if k == 2
+
+        V[1, 2:3] = [1, -1]
+
+    elseif k == 4
+
+        V[1, 1:4] = [-1/24, 9/8, -9/8, 1/24]
+
+    elseif k == 6
+
+        V[1, 1:5] = [-25/384, 75/64, -75/64, 25/384, -3/640]
+        V[1, end] = 3/640
+
+    elseif k == 8
+
+        V[1, 1:6] = [-245/3072, 1225/1024, -1225/1024, 245/3072, -49/5120, 5/7168]
+        V[1, end-1:end] = [-5/7168, 49/5120]
+
+    end
+
+    G = V[1, idx]
+    G = G ./ dx;
+
+end
+
+
+"""
+"""
+function grad2D(k::Int, m::Int, dx, n::Int, dy)
+
+    Gx = grad(k, m, dx)
+    Gy = grad(k, n, dy)
+
+    Im = Matrix(I, m + 2, m + 2)
+    Im = Im[2:end-1, :]
+
+    In = Matrix(I, n + 2, n + 2)
+    In = In[2:end-1, :]
+
+    Sx = kron(In', Gx)
+    Sy = kron(Gy, Im')
+
+    G = [Sx; Sy];
+
+end
+
+
+"""
+"""
+function grad2DPeriodic(k::Int, m::Int, dx, n::Int, dy)
+
+    Gx = gradPeriodic(k, m, dx)
+    Gy = gradPeriodic(k, n, dy)
+
+    Im = Matrix(I, m, m)
+    In = Matrix(I, n, n)
+
+    Sx = kron(In', Gx)
+    Sy = kron(Gy, Im')
+
+    G = [Sx; Sy];
+
 end
