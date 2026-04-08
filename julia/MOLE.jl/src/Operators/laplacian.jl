@@ -20,3 +20,38 @@ function lap(k::Int, m::Int, dx)
 
     L = D*G;
 end
+
+
+"""
+"""
+function lapPeriodic(k::Int, m::Int, dx, n::Int, dy)
+    
+    D = divPeriodic(k, m, dx)
+    G = gradPeriodic(k, m, dx)
+
+    L = D*G;
+end
+
+
+"""
+"""
+function lap2D(k::Int, m::Int, dx, n::Int, dy)
+
+    D = div2D(k, m, dx, n, dy)
+    G = grad2D(k, m, dx, n, dy)
+
+    L = D*G
+
+end
+
+
+"""
+"""
+function lap2DPeriodic(k::Int, m::Int, dx, n::Int, dy)
+
+    D = div2DPeriodic(k, m, dx, n, dy)
+    G = grad2DPeriodic(k, m, dx, n, dy)
+
+    L = D*G;
+
+end

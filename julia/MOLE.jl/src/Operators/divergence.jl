@@ -15,8 +15,8 @@ Returns a m+2 by m+1 one-dimensional mimetic divergence operator.
 - `dx`: Step size
 """
 function div(k::Int,m::Int,dx)
-    if k < 2
-        throw(DomainError(k, "k must be >= 2"))
+    if k < 2 || k > 8
+        throw(DomainError(k, "k must be >= 2 and <= 8"))
     end
 
     if k % 2 != 0
@@ -59,4 +59,52 @@ function div(k::Int,m::Int,dx)
         end
     end
     D = (1/dx)*D;
+end
+
+
+"""
+"""
+function divPeriodic(k::Int, m::Int, dx)
+
+    D = - gradPeriodic(k, m, dx)';
+    
+end
+
+
+"""
+"""
+function div2D(k::Int, m::Int, dx, n::Int, dy)
+
+    Dx = div(k, m, dx)
+    Dy = div(k, n, dy)
+
+    Im = Matrix(I, m, m)
+    Im = Im[2:end-1, :]
+
+    In = Matrix(I, n, n)
+    In = In[2:end-1, :]
+
+    Sx = kron(In, Dx)
+    Sy = kron(Dy, Im)
+
+    D = [Sx Sy];
+
+end
+
+
+"""
+"""
+function div2DPeriodic(k::Int, m::Int, dx, n::Int, dy)
+
+    Dx = divPeriodic(k, m, dx)
+    Dy = divPeriodic(k, n, dy)
+
+    Im = Matrix(I, m, m)
+    In = Matrix(I, n, n)
+
+    Sx = kron(In, Dx)
+    Sy = kron(Dy, Im)
+
+    D = [Sx Sy];
+
 end
