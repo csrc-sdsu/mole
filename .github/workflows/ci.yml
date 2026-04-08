@@ -39,7 +39,7 @@ jobs:
           wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
           sudo add-apt-repository "deb http://apt.llvm.org/noble/ llvm-toolchain-noble-20 main"
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake clang clang-tidy-20 clang-format libarmadillo-dev libopenblas-dev libsuperlu-dev libeigen3-dev
+          sudo apt-get install -y build-essential cmake clang clang-tidy-20 clang-format perl libarmadillo-dev libopenblas-dev libsuperlu-dev libeigen3-dev
 
       - name: Gather source files
         id: files
@@ -63,8 +63,8 @@ jobs:
             # Note: clang-tidy often prints diagnostics to stdout/stderr; we capture and grep for "warning:" or "error:".
             printf '%s\n' ${{ steps.files.outputs.sources }} > /tmp/clang_tidy_files.txt
             set -o pipefail
-            echo "HeaderFileExtensions: ['h']" > .clang-tidy
-            clang-tidy-20 --format-style='llvm' -header-filter='.*\.cpp$' --exclude-header-filter='third_party_install/.*' -p build $(cat /tmp/clang_tidy_files.txt) 2>&1 | tee clang-tidy.out || true
+            perl -pi -e 's/-I(.*?)third_party_install/-isystem \1third_party_install/g' build/compile_commands.json
+            clang-tidy-20 --format-style='llvm' -p build $(cat /tmp/clang_tidy_files.txt) 2>&1 | tee clang-tidy.out || true
             if grep -E "warning:|error:" clang-tidy.out >/dev/null; then
               echo "clang-tidy reported warnings/errors — failing the job."
               echo ""
