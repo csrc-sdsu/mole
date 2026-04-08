@@ -185,10 +185,37 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
     
     # Store the original first line description as the PURPOSE
     first_desc_line = ""
-    for line in lines:
-        if line.strip() and not re.search(r'[-]{10,}|SPDX-License-Identifier:|© \d{4}-\d{4}|See LICENSE file', line):
-            first_desc_line = line.strip()
+
+    # TAG-based PURPOSE extraction
+    start = None
+    end = None
+
+    # find PURPOSE start (line containing PURPOSE tag)
+    for i, line in enumerate(lines):
+        if re.search(r"\bPURPOSE\b", line.strip(), re.IGNORECASE):
+            start = i
             break
+
+    # find end (next DESCRIPTION or LICENSE tag after PURPOSE)
+    if start is not None:
+        for j in range(start + 1, len(lines)):
+            if re.search(r"\b(DESCRIPTION|LICENSE)\b", lines[j].strip(), re.IGNORECASE):
+                end = j
+                break
+        if end is None:
+            end = len(lines)
+
+        # PURPOSE content: lines AFTER the PURPOSE tag line
+        purpose_lines = []
+        for k in range(start + 1, end):
+            s = lines[k].strip()
+            if s and not re.search(r'[-]{10,}|SPDX-License-Identifier:|© \d{4}-\d{4}|See LICENSE file', s):
+                purpose_lines.append(lines[k].rstrip("\n"))
+
+        first_desc_line = "\n".join(purpose_lines).strip()
+
+        # Remove PURPOSE tag + its captured lines so they can't appear in DESCRIPTION
+        del lines[start:end]
     
     if remove_license:
         # Remove license headers
@@ -222,6 +249,17 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
                 param_name = param_match.group(1)
                 param_desc = param_match.group(2)
                 lines[i] = f"{param_name} : {param_desc}"
+                continue
+
+            # Match: "k : desc" and "(optional) k : desc" (no '%' required)
+            m = re.match(r'\s*(\(\s*optional\s*\)\s*)?(\w+)\s*:\s*(.*)', line, re.IGNORECASE)
+            if m:
+                opt_prefix = (m.group(1) or "").strip()
+                if opt_prefix:
+                    opt_prefix += " "          # normalize spacing: "(optional) "
+                param_name = m.group(2)
+                param_desc = m.group(3)
+                lines[i] = f"{opt_prefix}{param_name} : {param_desc}"
         
         # Extract function signature if available
         signature = ""
@@ -270,7 +308,12 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
                     continue
                 
                 # Check if line looks like a parameter
-                param_match = re.match(r'^\s*([a-zA-Z0-9_]+)\s*:', line) or re.match(r'^\s*:param\s+([^:]+):', line)
+                # "(optional) parameter" to the param match
+                param_match = re.match(
+                    r'^\s*((?:\(\s*optional\s*\)\s*)?[a-zA-Z0-9_]+)\s*:',
+                    line,
+                    re.IGNORECASE
+                ) or re.match(r'^\s*:param\s+([^:]+):', line)
                 
                 if param_match:
                     param_name = param_match.group(1).strip()
