@@ -5,6 +5,7 @@ set(EXAMPLE_SOURCES
   backward_euler.cpp
   burgers1D.cpp
   convection_diffusion3D.cpp
+  cylinder_flow_2D.cpp
   elliptic1D.cpp
   elliptic1DHomogeneousDirichlet.cpp
   elliptic1DLeftNeumannRightDirichlet.cpp
