@@ -349,16 +349,12 @@ InterpolCtoN::InterpolCtoN(u16 k, u32 m, bool dummy) : sp_mat(m, m)
     }
 
     Real val;
-    sp_mat I(m, m);
     for (int i = 0; i < (int)m; ++i)
     {
         for (int j = 0; j < (int)m; ++j)
         {
-            val = V[((j - i) % (int)m + (int)m) % (int)m];
-            if (val != 0.0) I(i, j) = val;
+            val = V[((i - j) % (int)m + (int)m) % (int)m];
+            if (val != 0.0) at(i, j) = val;
         }
     }
-
-    // Compiler does not like *this = *this.t()
-    *this = I.t();
 }
