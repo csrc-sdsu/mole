@@ -186,8 +186,8 @@ Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
 static sp_mat trimmedIdentity_cols(u32 s) {
   sp_mat I = speye(s + 2, s + 2);
   I.shed_col(0);
-  I.shed_col(
-      s);   // original last col (s+1) is now at index s after the first shed
+  I.shed_col(s);
+  // original last col (s+1) is now at index s after the first shed
   return I; // (s+2)xs
 }
 
@@ -217,9 +217,9 @@ Divergence::Divergence(u16 k, u32 m, u32 n, Real dx, Real dy) {
   sp_mat D1 = Utils::spkron(In, Dx);
   sp_mat D2 = Utils::spkron(Dy, Im);
 
-  if (m != n)
+  if (m != n) {
     *this = Utils::spjoin_rows(D1, D2);
-  else {
+  } else {
     sp_mat A1(1, 2), A2(1, 2);
     A1(0, 0) = A2(0, 1) = 1.0;
     *this = Utils::spkron(A1, D1) + Utils::spkron(A2, D2);
@@ -249,9 +249,9 @@ Divergence::Divergence(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz) {
   sp_mat D2 = Utils::spkron(Utils::spkron(Io, Dy), Im);
   sp_mat D3 = Utils::spkron(Utils::spkron(Dz, In), Im);
 
-  if ((m != n) || (n != o))
+  if ((m != n) || (n != o)) {
     *this = Utils::spjoin_rows(Utils::spjoin_rows(D1, D2), D3);
-  else {
+  } else {
     sp_mat A1(1, 3), A2(1, 3), A3(1, 3);
     A1(0, 0) = A2(0, 1) = A3(0, 2) = 1.0;
     *this =
@@ -294,24 +294,8 @@ Divergence::Divergence(u16 k, u32 m, u32 n, Real dx, Real dy, const ivec &dc,
   const int yPer = isPeriodic(dc.subvec(2, 3), nc.subvec(2, 3));
 
   sp_mat Dx_m, Dy_m, Im, In;
-
-  if (xPer) {
-    // Periodic x: m×m divergence matrix; Im is the full m×m identity.
-    Dx_m = periodicDiv1D(k, m, dx);
-    Im = speye(m, m);
-  } else {
-    // Non-periodic x: (m+2)×(m+1) divergence; Im selects the m interior nodes.
-    Dx_m = Divergence(k, m, dx);
-    Im = trimmedIdentity_cols(m);
-  }
-
-  if (yPer) {
-    Dy_m = periodicDiv1D(k, n, dy);
-    In = speye(n, n);
-  } else {
-    Dy_m = Divergence(k, n, dy);
-    In = trimmedIdentity_cols(n);
-  }
+  build_divergence(Dx_m, Im, k, m, dx, xPer);
+  build_divergence(Dy_m, In, k, n, dy, yPer);
 
   // Assemble the 2-D divergence by joining the x- and y-component blocks.
   // D1 = kron(In, Dx_m) applies Dx along each row of the 2-D grid.
@@ -341,29 +325,9 @@ Divergence::Divergence(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz,
 
   sp_mat Dx_m, Dy_m, Dz_m, Im, In, Io;
 
-  if (xPer) {
-    Dx_m = periodicDiv1D(k, m, dx);
-    Im = speye(m, m);
-  } else {
-    Dx_m = Divergence(k, m, dx);
-    Im = trimmedIdentity_cols(m);
-  }
-
-  if (yPer) {
-    Dy_m = periodicDiv1D(k, n, dy);
-    In = speye(n, n);
-  } else {
-    Dy_m = Divergence(k, n, dy);
-    In = trimmedIdentity_cols(n);
-  }
-
-  if (zPer) {
-    Dz_m = periodicDiv1D(k, o, dz);
-    Io = speye(o, o);
-  } else {
-    Dz_m = Divergence(k, o, dz);
-    Io = trimmedIdentity_cols(o);
-  }
+  build_divergence(Dx_m, Im, k, m, dx, xPer);
+  build_divergence(Dy_m, In, k, n, dy, yPer);
+  build_divergence(Dz_m, Io, k, o, dz, zPer);
 
   // Assemble the 3-D divergence by joining the x-, y-, and z-component blocks.
   // D1 = kron(kron(Io, In), Dx_m) applies Dx along x for each (y,z) slice.
