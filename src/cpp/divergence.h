@@ -1,15 +1,15 @@
 /*
-* SPDX-License-Identifier: GPL-3.0-or-later
-* Copyright (c) 2008-2024 San Diego State University Research Foundation
-* (SDSURF).
-* See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details. 
-*/
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * Copyright (c) 2008-2024 San Diego State University Research Foundation
+ * (SDSURF).
+ * See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+ */
 
 /*
  * @file divergence.h
- * 
+ *
  * @brief Mimetic Divergence Operators
- * 
+ *
  * @date 2024/10/15
  * Last Modified: 2026/03/31
  */
@@ -101,12 +101,14 @@ public:
    * @argument n  Number of cells in y-direction
    * @argument dx Spacing between cells in x-direction
    * @argument dy Spacing between cells in y-direction
-   * @argument dc Robin coefficient a0; 4-element integer vector [left, right, bottom, top].
-   *              Entries 0-1 all-zero → periodic in x.
-   *              Entries 2-3 all-zero → periodic in y.
-   * @argument nc Robin coefficient b0; 4-element integer vector [left, right, bottom, top].
+   * @argument dc Robin coefficient a0; 4-element integer vector [left, right,
+   * bottom, top]. Entries 0-1 all-zero → periodic in x. Entries 2-3 all-zero →
+   * periodic in y.
+   * @argument nc Robin coefficient b0; 4-element integer vector [left, right,
+   * bottom, top].
    */
-  Divergence(u16 k, u32 m, u32 n, Real dx, Real dy, const ivec &dc, const ivec &nc);
+  Divergence(u16 k, u32 m, u32 n, Real dx, Real dy, const ivec &dc,
+             const ivec &nc);
 
   /**
    * @brief 3-D Mimetic Divergence (periodic or non-periodic per axis)
@@ -118,11 +120,11 @@ public:
    * @argument dx Spacing between cells in x-direction
    * @argument dy Spacing between cells in y-direction
    * @argument dz Spacing between cells in z-direction
-   * @argument dc Robin coefficient a0; 6-element integer vector [left, right, bottom, top, front, back].
-   *              Entries 0-1 all-zero → periodic in x.
-   *              Entries 2-3 all-zero → periodic in y.
-   *              Entries 4-5 all-zero → periodic in z.
-   * @argument nc Robin coefficient b0; 6-element integer vector, same ordering as dc.
+   * @argument dc Robin coefficient a0; 6-element integer vector [left, right,
+   * bottom, top, front, back]. Entries 0-1 all-zero → periodic in x. Entries
+   * 2-3 all-zero → periodic in y. Entries 4-5 all-zero → periodic in z.
+   * @argument nc Robin coefficient b0; 6-element integer vector, same ordering
+   * as dc.
    */
   Divergence(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz,
              const ivec &dc, const ivec &nc);
@@ -131,7 +133,8 @@ public:
    * @brief Returns the weights used in the Mimetic Divergence Operators.
    *
    * @note For informational purposes only; meaningful for non-periodic 1-D
-   *       divergence operators. Returns an empty vector for periodic or multi-D cases.
+   *       divergence operators. Returns an empty vector for periodic or multi-D
+   * cases.
    */
   vec getQ();
 
@@ -156,11 +159,6 @@ private:
   // Populates D_m and I for one axis; selects periodic or non-periodic form.
   static void build_divergence(sp_mat &D_m, sp_mat &I, u16 k, u32 dim,
                                Real delta, int periodic);
-
-
-
-
-
 };
 
 #endif // DIVERGENCE_H
