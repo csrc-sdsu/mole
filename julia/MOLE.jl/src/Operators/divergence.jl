@@ -4,6 +4,10 @@
     See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 =#
 
+#=======================
+1-D Divergence Operators
+=======================#
+
 """
     div(k, m, dx)
 
@@ -70,6 +74,9 @@ function divPeriodic(k::Int, m::Int, dx)
     
 end
 
+#=======================
+2-D Divergence Operators
+=======================#
 
 """
 """

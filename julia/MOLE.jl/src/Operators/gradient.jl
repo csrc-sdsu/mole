@@ -6,6 +6,10 @@
 
 using LinearAlgebra
 
+#=====================
+1-D Gradient Operators
+=====================#
+
 """
     grad(k, m, dx)
 
@@ -116,6 +120,9 @@ function gradPeriodic(k::Int, m::Int, dx)
 
 end
 
+#=====================
+2-D Gradient Operators
+=====================#
 
 """
 """

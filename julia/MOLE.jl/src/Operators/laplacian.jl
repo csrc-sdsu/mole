@@ -4,6 +4,10 @@
     See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 =#
 
+# -----------------------
+# 1-D Laplacian Operators
+# -----------------------
+
 """
     lap(k, m, dx)
 
@@ -32,6 +36,9 @@ function lapPeriodic(k::Int, m::Int, dx, n::Int, dy)
     L = D*G;
 end
 
+#======================
+2-D Laplacian Operators
+======================#
 
 """
 """
