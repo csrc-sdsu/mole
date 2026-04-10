@@ -1,6 +1,7 @@
 /*
 * SPDX-License-Identifier: GPL-3.0-or-later
-* © 2008-2024 San Diego State University Research Foundation (SDSURF).
+* Copyright (c) 2008-2024 San Diego State University Research Foundation
+* (SDSURF).
 * See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details. 
 */
 
@@ -28,7 +29,6 @@
  * An axis is treated as periodic when all of its dc and nc entries are zero.
  */
 class Divergence : public sp_mat {
-
 public:
   using sp_mat::operator=;
 
@@ -91,7 +91,7 @@ public:
    *
    * Periodic result is m×m; non-periodic result is (m+2)×(m+1).
    */
-  Divergence(u16 k, u32 m, Real dx, const ivec& dc, const ivec& nc);
+  Divergence(u16 k, u32 m, Real dx, const ivec &dc, const ivec &nc);
 
   /**
    * @brief 2-D Mimetic Divergence (periodic or non-periodic per axis)
@@ -106,7 +106,7 @@ public:
    *              Entries 2-3 all-zero → periodic in y.
    * @argument nc Robin coefficient b0; 4-element integer vector [left, right, bottom, top].
    */
-  Divergence(u16 k, u32 m, u32 n, Real dx, Real dy, const ivec& dc, const ivec& nc);
+  Divergence(u16 k, u32 m, u32 n, Real dx, Real dy, const ivec &dc, const ivec &nc);
 
   /**
    * @brief 3-D Mimetic Divergence (periodic or non-periodic per axis)
@@ -125,7 +125,7 @@ public:
    * @argument nc Robin coefficient b0; 6-element integer vector, same ordering as dc.
    */
   Divergence(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz,
-             const ivec& dc, const ivec& nc);
+             const ivec &dc, const ivec &nc);
 
   /**
    * @brief Returns the weights used in the Mimetic Divergence Operators.
@@ -151,7 +151,16 @@ private:
    * Robin boundary condition is prescribed for this axis and the domain
    * should be treated as periodic.  Returns 0 otherwise.
    */
-  static int isPeriodic(const ivec& dc, const ivec& nc);
+  static int isPeriodic(const ivec &dc, const ivec &nc);
+
+  // Populates D_m and I for one axis; selects periodic or non-periodic form.
+  static void build_divergence(sp_mat &D_m, sp_mat &I, u16 k, u32 dim,
+                               Real delta, int periodic);
+
+
+
+
+
 };
 
 #endif // DIVERGENCE_H
