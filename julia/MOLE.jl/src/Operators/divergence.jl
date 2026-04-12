@@ -4,9 +4,9 @@
     See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 =#
 
-#=======================
-1-D Divergence Operators
-=======================#
+# ------------------------
+# 1-D Divergence Operators
+# ------------------------
 
 """
     div(k, m, dx)
@@ -67,6 +67,14 @@ end
 
 
 """
+    divPeriodic(k, m, dx)
+
+Returns a m by m periodic mimetic divergence operator.
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `m::Int`: Number of cells
+- `dx`: Step size
 """
 function divPeriodic(k::Int, m::Int, dx)
 
@@ -74,11 +82,47 @@ function divPeriodic(k::Int, m::Int, dx)
     
 end
 
-#=======================
-2-D Divergence Operators
-=======================#
 
 """
+    divNonUniform(k, ticks)
+
+Returns a m + 2 by m + 1 non-uniform mimetic divergence operator
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `ticks`: Edges' ticks e.g. [0 0.1 0.15 0.2 0.3 0.4 0.45]
+"""
+function divNonUniform(k::Int, ticks)
+
+    D = div(k, length(ticks) - 1, 1)
+
+    m, _ = size(D)
+
+    if size(ticks, 1) == 1
+        J = diags((D * ticks').^-1, 0, m, m)
+    else
+        J = diags((D * ticks).^-1, 0, m, m)
+    end
+
+    D = J * D
+
+end
+
+# ------------------------
+# 2-D Divergence Operators
+# ------------------------
+
+"""
+    div2D(k, m, dx, n, dy)
+
+Returns a two-dimensional mimetic divergence operator.
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `m::Int`: Number of cells in x-direction
+- `dx`: Step size in x-direction
+- `n::Int`: Number of cells in y-direction
+- `dy`: Step size in y-direction
 """
 function div2D(k::Int, m::Int, dx, n::Int, dy)
 
@@ -100,6 +144,16 @@ end
 
 
 """
+    div2DPeriodic(k, m, dx, n, dy)
+
+Returns a two-dimensional periodic mimetic divergence operator.
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `m::Int`: Number of cells in x-direction
+- `dx`: Step size in x-direction
+- `n::Int`: Number of cells in y-direction
+- `dy`: Step size in y-direction
 """
 function div2DPeriodic(k::Int, m::Int, dx, n::Int, dy)
 
@@ -113,5 +167,37 @@ function div2DPeriodic(k::Int, m::Int, dx, n::Int, dy)
     Sy = kron(Dy, Im)
 
     D = [Sx Sy];
+
+end
+
+
+"""
+    div2DNonUniform(k, xticks, yticks)
+
+Returns a two-dimensional non-uniform mimetic divergence operator.
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `xticks`: Edges' ticks (x-axis)
+- `yticks`: Edges' ticks (y-axis)
+"""
+function div2DNonUniform(k::Int, xticks, yticks)
+
+    Dx = divNonUniform(k, xticks)
+    Dy = divNonUniform(k, yticks)
+
+    m = size(Dx, 1)
+    n = size(Dy, 1)
+
+    Im = Matrix(I, m, m)
+    In = Matrix(I, n, n)
+
+    Im = Im[:, 2:end-1]
+    In = In[:, 2:end-1]
+
+    Sx = kron(In, Dx)
+    Sy = kron(Dy, Im)
+
+    D = [Sx Sy]
 
 end
