@@ -6,9 +6,49 @@
 
 using LinearAlgebra
 
-#=====================
-1-D Gradient Operators
-=====================#
+#-----------------------
+# 1-D Gradient Operators
+#-----------------------
+
+"""
+    grad(k, m, dx; dc, nc)
+
+Returns a one-dimensional mimetic gradient operator. Default is non periodic.
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `m::Int`: Number of cells
+- `dx::T`: Step size
+- `dc::NTuple{2,T}`: Dirichlet coefficients of the left and right boundaries (optional)
+- `nc::NTuple{2,T}`: Neumann coefficients of the left and right boundaries (optional)
+"""
+function grad(k::Int, m::Int, dx::T; dc::NTuple{2,T} = (1.0, 1.0), nc::NTuple{2,T} = (1.0, 1.0)) where {T}
+
+    hasbc = (dc[1] != zero(T)) || (dc[2] != zero(T)) || (nc[1] != zero(T)) || (nc[2] != zero(T))
+    if hasbc
+        G = gradNonPeriodic(k, m, dx)
+        return G
+    else
+        G = gradPeriodic(k, m, dx)
+        return G
+    end
+
+end
+
+
+"""
+    grad(k, ticks)
+
+Returns a m + 1 by m + 2 one-dimensional non-uniform mimetic gradient operator
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `ticks`: Centers' ticks e.g. [0 0.5 1 3 5 7 9 9.5 10] (including the boundaries!)
+"""
+function grad(k::Int, ticks::AbstractArray)
+    return gradNonUniform(k, ticks)
+end
+
 
 """
     grad(k, m, dx)
@@ -20,7 +60,7 @@ Returns a m+1 by m+2 one-dimensional mimetic gradient operator.
 - `m::Int`: Number of cells
 - `dx`: Step size
 """
-function grad(k::Int,m::Int,dx)
+function gradNonPeriodic(k::Int,m::Int,dx)
     if k < 2 || k > 8
         throw(DomainError(k, "k must be >= 2 and <= 8"))
     end
@@ -74,6 +114,14 @@ end
 
 
 """
+    gradPeriodic(k, m, dx)
+
+Returns a m by m periodic mimetic gradient operator
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `m::Int`: Number of cells in x-direction
+- `dx`: Step size in x-direction
 """
 function gradPeriodic(k::Int, m::Int, dx)
     
@@ -120,25 +168,75 @@ function gradPeriodic(k::Int, m::Int, dx)
 
 end
 
-#=====================
-2-D Gradient Operators
-=====================#
 
 """
+    gradNonUniform(k, ticks)
+
+Returns a m + 1 by m + 2 one-dimensional non-uniform mimetic gradient operator
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `ticks::AbstractArray`: Centers' ticks e.g. [0 0.5 1 3 5 7 9 9.5 10] (including the boundaries!)
 """
-function grad2D(k::Int, m::Int, dx, n::Int, dy)
+function gradNonUniform(k::Int, ticks::AbstractArray)
 
-    Gx = grad(k, m, dx)
-    Gy = grad(k, n, dy)
+    G = grad(k, length(ticks) - 2, 1)
 
-    Im = Matrix(I, m + 2, m + 2)
-    Im = Im[2:end-1, :]
+    m, _ = size(G)
 
-    In = Matrix(I, n + 2, n + 2)
-    In = In[2:end-1, :]
+    if size(ticks, 1) == 1
+        J = diags((G*ticks').^-1, 0, m, m)
+    else
+        J = diags((G*ticks).^-1, 0, m, m)
+    end
 
-    Sx = kron(In', Gx)
-    Sy = kron(Gy, Im')
+    G = J * G
+
+end
+
+#-----------------------
+# 2-D Gradient Operators
+#-----------------------
+
+"""
+    grad(k, m, dx, n, dy; dc, nc)
+
+Returns a two-dimensional mimetic gradient operator. Default is non periodic.
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `m::Int`: Number of cells in x-direction
+- `dx::T`: Step size in x-direction
+- `n::Int`: Number of cells in y-direction
+- `dy::T`: Step size in y-direction
+- `dc::NTuple{4,T}`: Dirichlet coefficients of the left, right, bottom, and top boundaries (optional)
+- `nc::NTuple{4,T}`: Neumann coefficients of the left, right, bottom, and top boundaries (optional)
+"""
+function grad(k::Int, m::Int, dx::T, n::Int, dy::T; dc::NTuple{4,T} = (1.0, 1.0, 1.0, 1.0), nc::NTuple{4,T} = (1.0, 1.0, 1.0, 1.0)) where {T}
+
+    hasbclr = (dc[1] != zero(T)) || (dc[2] != zero(T)) || (nc[1] != zero(T)) || (nc[2] != zero(T))
+    hasbcbt = (dc[3] != zero(T)) || (dc[4] != zero(T)) || (nc[3] != zero(T)) || (nc[4] != zero(T))
+
+    if hasbclr
+        Gx = gradNonPeriodic(k, m, dx)
+        Im = Matrix(I, m + 2, m + 2)
+        Im = Im[2:end-1, :]
+    else
+        Gx = gradPeriodic(k, m, dx)
+        Im = Matrix(I, m, m)
+    end
+
+    if hasbcbt
+        Gy = gradNonPeriodic(k, n, dy)
+        In = Matrix(I, n + 2, n + 2)
+        In = In[2:end-1, :]
+    else
+        Gy = gradPeriodic(k, n, dy)
+        In = Matrix(I, n, n)
+    end
+
+    Sx = kron(In, Gx)
+    Sy = kron(Gy, Im)
 
     G = [Sx; Sy];
 
@@ -146,8 +244,64 @@ end
 
 
 """
+    grad(k, xticks, yticks)
+
+Returns a two-dimensional non-uniform mimetic gradient operator
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `xticks::AbstractArray`: Centers' ticks (x-axis) (includint the boundaries!)
+- `yticks::AbstractArray`: Centers' ticks (y-axis) (includint the boundaries!)
 """
-function grad2DPeriodic(k::Int, m::Int, dx, n::Int, dy)
+function grad(k::Int, xticks::AbstractArray, yticks::AbstractArray)
+    return gradNonUniform(k, xticks, yticks)
+end
+
+
+"""
+    gradNonPeriodic(k, m, dx, n, dy)
+
+Returns a two-dimensional non periodic mimetic gradient operator.
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `m::Int`: Number of cells in x-direction
+- `dx`: Step size in x-direction
+- `n::Int`: Number of cells in y-direction
+- `dy`: Step size in y-direction
+"""
+function gradNonPeriodic(k::Int, m::Int, dx, n::Int, dy)
+
+    Gx = gradNonPeriodic(k, m, dx)
+    Gy = gradNonPeriodic(k, n, dy)
+
+    Im = Matrix(I, m + 2, m + 2)
+    In = Matrix(I, n + 2, n + 2)
+
+    Im = Im[2:end-1, :]
+    In = In[2:end-1, :]
+
+    Sx = kron(In, Gx)
+    Sy = kron(Gy, Im)
+
+    G = [Sx; Sy];
+    
+end
+
+
+"""
+    gradPeriodic(k, m, dx, n, dy)
+
+Returns a two-dimensional periodic mimetic gradient operator.
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `m::Int`: Number of cells in x-direction
+- `dx`: Step size in x-direction
+- `n::Int`: Number of cells in y-direction
+- `dy`: Step size in y-direction
+"""
+function gradPeriodic(k::Int, m::Int, dx, n::Int, dy)
 
     Gx = gradPeriodic(k, m, dx)
     Gy = gradPeriodic(k, n, dy)
@@ -155,9 +309,41 @@ function grad2DPeriodic(k::Int, m::Int, dx, n::Int, dy)
     Im = Matrix(I, m, m)
     In = Matrix(I, n, n)
 
-    Sx = kron(In', Gx)
-    Sy = kron(Gy, Im')
+    Sx = kron(In, Gx)
+    Sy = kron(Gy, Im)
 
     G = [Sx; Sy];
+
+end
+
+
+"""
+    gradNonUniform(k, xticks, yticks)
+
+Returns a two-dimensional non-uniform mimetic gradient operator
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `xticks::AbstractArray`: Centers' ticks (x-axis) (includint the boundaries!)
+- `yticks::AbstractArray`: Centers' ticks (y-axis) (includint the boundaries!)
+"""
+function gradNonUniform(k::Int, xticks::AbstractArray, yticks::AbstractArray)
+
+    Gx = gradNonUniform(k, xticks)
+    Gy = gradNonUniform(k, yticks)
+
+    m = size(Gx, 2)
+    n = size(Gx, 2)
+
+    Im = Matrix(I, m, m)
+    In = Matrix(I, n, n)
+
+    Im = Im[2:end-1, :]
+    In = In[2:end-1, :]
+
+    Sx = kron(In, Gx)
+    Sx = kron(Gy, Im)
+
+    G = [Sx; Sy]
 
 end
