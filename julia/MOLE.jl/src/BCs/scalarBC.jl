@@ -175,7 +175,7 @@ end
 """
     Internal helper: overwrite RHS at boundary indices
 """
-@inline function _scalarbc2d_rhs(b, dc::NTuple{4,T}, nc::NTuple{4,T}, v::NTuple{4,NTuple{??,T}}, rl::NTuple{??,Int}, rr::NTuple{??,Int}, rb::NTuple{??,Int}, rt::NTuple{??,Int}) where {T}
+@inline function _scalarbc2d_rhs(b, dc::NTuple{4,T}, nc::NTuple{4,T}, v::NTuple{4,AbstractArray}, rl::AbstractArray, rr::AbstractArray, rb::AbstractArray, rt::AbstractArray) where {T}
 
     hasbclr = (dc[1] != zero(T)) || (dc[2] != zero(T)) || (nc[1] != zero(T)) || (nc[2] != zero(T))
     hasbcbt = (dc[3] != zero(T)) || (dc[4] != zero(T)) || (nc[3] != zero(T)) || (nc[4] != zero(T))

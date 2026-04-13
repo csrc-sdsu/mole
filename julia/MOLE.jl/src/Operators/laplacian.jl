@@ -9,84 +9,48 @@
 # -----------------------
 
 """
-    lap(k, m, dx)
+    lap(k, m, dx; dc, nc)
 
-Returns a m+2 by m+2 one-dimensional mimetic laplacian operator.
-
-# Arguments
-- `k::Int`: Order of accuracy
-- `m::Int`: Number of cells
-- `dx`: Step size
-"""
-function lap(k::Int, m::Int, dx)
-    D = div(k,m,dx)
-    G = grad(k,m,dx)
-
-    L = D*G;
-end
-
-
-"""
-    lapPeriodic(k, m, dx)
-
-Returns a m by m one-dimensional periodic mimetic laplacian operator.
+Returns a m+2 by m+2 one-dimensional mimetic laplacian operator. Default is non periodic.
 
 # Arguments
 - `k::Int`: Order of accuracy
 - `m::Int`: Number of cells
-- `dx`: Step size
+- `dx::T`: Step size
+- `dc::NTuple{2,T}`: Dirichlet coefficients of the left and right boundaries (optional)
+- `nc::NTuple{2,T}`: Neumann coefficients of the left and right boundaries (optional)
 """
-function lapPeriodic(k::Int, m::Int, dx)
-    
-    D = divPeriodic(k, m, dx)
-    G = gradPeriodic(k, m, dx)
+function lap(k::Int, m::Int, dx::T; dc::NTuple{2,T} = (1.0, 1.0), nc::NTuple{2,T} = (1.0, 1.0)) where {T}
+    D = div(k, m, dx, dc=dc, nc=nc)
+    G = grad(k, m, dx, dc=dc, nc=nc)
 
     L = D*G;
 end
+
 
 # -----------------------
 # 2-D Laplacian Operators
 # -----------------------
 
 """
-    lap2D(k, m, dx, n, dy)
+    lap(k, m, dx, n, dy; dc, nc)
 
-Returns a two-dimensional mimetic laplacian operator.
+Returns a two-dimensional mimetic laplacian operator. Default is non periodic.
 
 # Arguments
 - `k::Int`: Order of accuracy
 - `m::Int`: Number of cells in x-direction
-- `dx`: Step size in x-direction
+- `dx::T`: Step size in x-direction
 - `n::Int`: Number of cells in y-direction
-- `dy`: Step size in y-direction
+- `dy::T`: Step size in y-direction
+- `dc::NTuple{4,T}`: Dirichlet coefficients of the left and right boundaries (optional)
+- `nc::NTuple{4,T}`: Neumann coefficients of the left and right boundaries (optional)
 """
-function lap2D(k::Int, m::Int, dx, n::Int, dy)
+function lap(k::Int, m::Int, dx::T, n::Int, dy::T; dc::NTuple{4,T} = (1.0, 1.0, 1.0, 1.0), nc::NTuple{4,T} = (1.0, 1.0, 1.0, 1.0)) where {T}
 
-    D = div2D(k, m, dx, n, dy)
-    G = grad2D(k, m, dx, n, dy)
+    D = div(k, m, dx, n, dy, dc=dc, nc=nc)
+    G = grad(k, m, dx, n, dy, dc=dc, nc=nc)
 
     L = D*G
-
-end
-
-
-"""
-    lap2DPeriodic(k, m, dx, n, dy)
-
-Returns a two-dimensional periodic mimetic laplacian operator.
-
-# Arguments
-- `k::Int`: Order of accuracy
-- `m::Int`: Number of cells in x-direction
-- `dx`: Step size in x-direction
-- `n::Int`: Number of cells in y-direction
-- `dy`: Step size in y-direction
-"""
-function lap2DPeriodic(k::Int, m::Int, dx, n::Int, dy)
-
-    D = div2DPeriodic(k, m, dx, n, dy)
-    G = grad2DPeriodic(k, m, dx, n, dy)
-
-    L = D*G;
 
 end
