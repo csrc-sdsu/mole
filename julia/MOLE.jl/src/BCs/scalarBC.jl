@@ -209,27 +209,37 @@ function addScalarBC!(A::SparseMatrixCSC, b::AbstractVector, bc::ScalarBC2D{T},
 
     if hasbclr
 
-        rl = 
-        rr = 
+        rl, _, _ = findnz(Abcl)
+        rr, _, _ = findnz(Abcr)
 
         # remove rows of A associated to boundary
         Abc1 = Abcl .+ Abcr
-        rowsbc1 = 
-        rows1 = 
-        cols1 = 
-        s1 = 
+        rowsbc1, _, _ = findnz(Abc1)
+        rows1, cols1, s1 = findnz(A[rowsbc1, :])
         A = A .- sparse(rows1, cols1, s1, size(A, 1), size(A, 2))
-        # Upd
+        # Update matrix A with boundary information
+        A = A .+ Abc1
+        # Remove b entries associated to bcs
+        b[rowsbc1] .= 0
 
     end
-
 
     if hasbcbt
 
+        rb, _, _ = findnz(Abcb)
+        rt, _, _ = findnz(Abct)
 
+        # Remove rows of A associated to boundary
+        Abc2 = Abct .+ Abcb
+        rowsbc2, _, _ = findnz(Abc2)
+        rows2, cols2, s2 = findnz(A[rowsbc2, :])
+        A = A .- sparse(rows2, cols2, s2, size(A, 1), size(A, 2))
+        # Update matriz A with boundary information
+        A = A .+ Abc2
+        # Remove b entries associated to bcs
+        b[rowsbc2] .= 0
 
     end
-
 
     if hasbclr || hasbcbt
         b = _scalarbc2d_rhs(b, dc, nc, v, rl, rr, rb, rt)
