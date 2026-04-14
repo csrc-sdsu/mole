@@ -1,17 +1,16 @@
 /*
- * SPDX-License-Identifier: GPL-3.0-or-later
- * Copyright (c) 2008-2024 San Diego State University Research Foundation
- * (SDSURF).
- * See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
- */
+* SPDX-License-Identifier: GPL-3.0-or-later
+* © 2008-2024 San Diego State University Research Foundation (SDSURF).
+* See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details. 
+*/
 
 /*
  * @file gradient.h
- *
+ * 
  * @brief Mimetic Gradient Operators
- *
+ * 
  * @date 2024/10/15
- *
+ * 
  */
 
 #ifndef GRADIENT_H
@@ -29,6 +28,7 @@
  * An axis is treated as periodic when all of its dc and nc entries are zero.
  */
 class Gradient : public sp_mat {
+
 public:
   using sp_mat::operator=;
 
@@ -91,7 +91,7 @@ public:
    *
    * Periodic result is m×m; non-periodic result is (m+1)×(m+2).
    */
-  Gradient(u16 k, u32 m, Real dx, const ivec &dc, const ivec &nc);
+  Gradient(u16 k, u32 m, Real dx, const ivec& dc, const ivec& nc);
 
   /**
    * @brief 2-D Mimetic Gradient (periodic or non-periodic per axis)
@@ -101,15 +101,12 @@ public:
    * @argument n  Number of cells in y-direction
    * @argument dx Spacing between cells in x-direction
    * @argument dy Spacing between cells in y-direction
-   * @argument dc Robin coefficient a0; 4-element integer vector
-   *              [left, right, bottom, top].
+   * @argument dc Robin coefficient a0; 4-element integer vector [left, right, bottom, top].
    *              Entries 0-1 all-zero → periodic in x.
    *              Entries 2-3 all-zero → periodic in y.
-   * @argument nc Robin coefficient b0; 4-element integer vector
-   *              [left, right, bottom, top].
+   * @argument nc Robin coefficient b0; 4-element integer vector [left, right, bottom, top].
    */
-  Gradient(u16 k, u32 m, u32 n, Real dx, Real dy, const ivec &dc,
-           const ivec &nc);
+  Gradient(u16 k, u32 m, u32 n, Real dx, Real dy, const ivec& dc, const ivec& nc);
 
   /**
    * @brief 3-D Mimetic Gradient (periodic or non-periodic per axis)
@@ -121,14 +118,14 @@ public:
    * @argument dx Spacing between cells in x-direction
    * @argument dy Spacing between cells in y-direction
    * @argument dz Spacing between cells in z-direction
-   * @argument dc Robin coefficient a0; 6-element integer vector [left, right,
-   * bottom, top, front, back]. Entries 0-1 all-zero → periodic in x. Entries
-   * 2-3 all-zero → periodic in y. Entries 4-5 all-zero → periodic in z.
-   * @argument nc Robin coefficient b0; 6-element integer vector, same ordering
-   * as dc.
+   * @argument dc Robin coefficient a0; 6-element integer vector [left, right, bottom, top, front, back].
+   *              Entries 0-1 all-zero → periodic in x.
+   *              Entries 2-3 all-zero → periodic in y.
+   *              Entries 4-5 all-zero → periodic in z.
+   * @argument nc Robin coefficient b0; 6-element integer vector, same ordering as dc.
    */
   Gradient(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz,
-           const ivec &dc, const ivec &nc);
+           const ivec& dc, const ivec& nc);
 
   /**
    * @brief Returns the weights used in the Mimetic Gradient Operators.
@@ -153,13 +150,7 @@ private:
    * Robin boundary condition is prescribed for this axis and the domain
    * should be treated as periodic.  Returns 0 otherwise.
    */
-  static int isPeriodic(const ivec &dc, const ivec &nc);
-
-  /**
-   * Populates G_m and I for one axis; selects periodic or non-periodic form.
-   */
-  static void build_gradient(sp_mat &G_m, sp_mat &I, u16 k, u32 dim, Real delta,
-                             int periodic);
+  static int isPeriodic(const ivec& dc, const ivec& nc);
 };
 
 #endif // GRADIENT_H
