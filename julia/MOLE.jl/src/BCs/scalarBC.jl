@@ -4,6 +4,7 @@
     See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 =#
 
+using LinearAlgebra
 import ..Operators: Operators, grad
 
 """
@@ -40,7 +41,7 @@ end
 struct ScalarBC2D{T} <: AbstractScalarBC{2}
     dc::NTuple{4,T}
     nc::NTuple{4,T}
-    v::NTuple{4,T}
+    v::NTuple{4,AbstractVector{T}}
 end
 
 
@@ -140,11 +141,12 @@ function _scalarbc2D_lhs(k::Integer, m::Integer, dx, n::Integer, dy, dc::NTuple{
         Abcl0, Abcr0 = _scalarbc1d_lhs(k, m, dx, dc[1:2], nc[1:2])
 
         if !hasbcbt
-            In = Matrix(I, n, n)
+            In = sparse(Matrix(I, n, n))
         else
-            In = Matrix(I, n + 2, n + 2)
+            In = sparse(Matrix(I, n + 2, n + 2))
             In[1, 1] = 0
             In[end, end] = 0
+            dropzeros!(In)
         end
 
         # Left and right edges
@@ -158,9 +160,9 @@ function _scalarbc2D_lhs(k::Integer, m::Integer, dx, n::Integer, dy, dc::NTuple{
         Abcb0, Abct0 = _scalarbc1d_lhs(k, n, dy, dc[3:4], nc[3:4])
 
         if !hasbclr
-            Im = Matrix(m, m)
+            Im = sparse(Matrix(m, m))
         else
-            Im = Matrix(I, m + 2, m + 2)
+            Im = sparse(Matrix(I, m + 2, m + 2))
         end
 
         Abcb = kron(Abcb0, Im)
@@ -175,7 +177,7 @@ end
 """
     Internal helper: overwrite RHS at boundary indices
 """
-@inline function _scalarbc2d_rhs(b, dc::NTuple{4,T}, nc::NTuple{4,T}, v::NTuple{4,AbstractArray}, rl::AbstractArray, rr::AbstractArray, rb::AbstractArray, rt::AbstractArray) where {T}
+@inline function _scalarbc2d_rhs(b, dc::NTuple{4,T}, nc::NTuple{4,T}, v::NTuple{4,AbstractVector{T}}, rl::AbstractVector{Int}, rr::AbstractVector{Int}, rb::AbstractVector{Int}, rt::AbstractVector{Int}) where {T}
 
     hasbclr = (dc[1] != zero(T)) || (dc[2] != zero(T)) || (nc[1] != zero(T)) || (nc[2] != zero(T))
     hasbcbt = (dc[3] != zero(T)) || (dc[4] != zero(T)) || (nc[3] != zero(T)) || (nc[4] != zero(T))
@@ -195,7 +197,7 @@ end
 
 """
 """
-function addScalarBC!(A::SparseMatrixCSC, b::AbstractVector, bc::ScalarBC2D{T},
+function addScalarBC!(A::SparseMatrixCSC, b::AbstractVector{T}, bc::ScalarBC2D{T},
                       k::Integer, m::Integer, dx, n::Integer, dy) where {T}
 
     dc, nc, v = bc.dc, bc.nc, bc.v
@@ -211,6 +213,8 @@ function addScalarBC!(A::SparseMatrixCSC, b::AbstractVector, bc::ScalarBC2D{T},
 
         rl, _, _ = findnz(Abcl)
         rr, _, _ = findnz(Abcr)
+        rl = unique(rl)
+        rr = unique(rr)
 
         # remove rows of A associated to boundary
         Abc1 = Abcl .+ Abcr
