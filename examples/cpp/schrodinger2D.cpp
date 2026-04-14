@@ -1,4 +1,12 @@
-/**
+/*
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * Copyright (c) 2008-2024 San Diego State University Research Foundation
+ * (SDSURF).
+ * See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+ */
+
+ /*
  * @file Schrodinger2D.cpp
  * @brief Solves a 2D Time Dependant Schrodinger's Equation using mimetic
  * methods (MOLE).
@@ -6,6 +14,7 @@
  * Can be visualized as a surface using gnuplot by running the command:
  *
  *     ./Schrodinger2D | sed 1d | gnuplot -p -e "splot '<cat'"
+ * 
  */
 
 #include "mole.h"
