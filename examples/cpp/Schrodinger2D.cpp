@@ -41,6 +41,7 @@ int main() {
   L = L + BC;  
   
   // Ensure the Laplacian is square  
+  int total_size = (m + 2) * (n + 2); // Total size for the grid including boundaries  
   
   // Hamiltonian definition  
   auto H = [&](const vec &x) {  
