@@ -100,7 +100,7 @@ sp_mat Divergence::periodicDiv1D(u16 k, u32 m, Real dx) {
 
 Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
   assert(!(k % 2));
-  assert(k > 1 && k < 7);
+  assert(k > 1 && k < 9);
   assert(m > 2 * k);
   switch (k) {
   case 2:
@@ -185,7 +185,7 @@ Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
     at(1, 4) = 3535.0 / 1024.0;
     at(1, 5) = -2279.0 / 1024.0;
     at(1, 6) = 953.0 / 1024.0;
-    at(1, 7) = -1637.0/7168.0;
+    at(1, 7) = -1637.0 / 7168.0;
     at(1, 8) = 2689.0 / 107520.0;
     at(2, 0) = 2689.0 / 107520.0;
     at(2, 1) = -36527.0 / 35840.0;
@@ -202,12 +202,10 @@ Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
     at(3, 3) = 1135.0 / 1024.0;
     at(3, 4) = 25.0 / 3072.0;
     at(3, 5) = -251.0 / 5120.0;
-    at(3, 6) = 25.0 / 1024.0;
+    at(3, 6) = 25.0 / 1024.0;;
     at(3, 7) = -45.0 / 7168.0;
     at(3, 8) = 5.0 / 7168.0;
-    //  Boundary rows: negate and flip both axes of the boundary stencil A,
-    //  placing the antisymmetric counterpart at the opposite end of the matrix,
-    //  Maps to C++ rows m-2, m-1, m and cols m-8 to m
+    // A'
     at(m, m) = 1423.0 / 1792.0;
     at(m, m - 1) = 491.0 / 7168.0;
     at(m, m - 2) = -7753.0 / 3072.0;
@@ -216,8 +214,8 @@ Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
     at(m, m - 5) = 2279.0 / 1024.0;
     at(m, m - 6) = -953.0 / 1024.0;
     at(m, m - 7) = 1637.0 / 7168.0;
-    at(m, m - 8) = -2686.0 / 107520.0;
-    at(m - 1, m) = -2686.0 / 107520.0;
+    at(m, m - 8) = -2689.0 / 107520.0;
+    at(m - 1, m) = -2689.0 / 107520.0;
     at(m - 1, m - 1) = 36527.0 / 35840.0;
     at(m - 1, m - 2) = -4259.0 / 5120.0;
     at(m - 1, m - 3) = -6497.0 / 15360.0;
@@ -232,11 +230,11 @@ Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
     at(m - 2, m - 3) = -1135.0 / 1024.0;
     at(m - 2, m - 4) = -25.0 / 3072.0;
     at(m - 2, m - 5) = 251.0 / 5120.0;
-    at(m - 2, m - 6) = -25.0 / 1024.0;
-    at(m - 2, m - 7) = 45.0 / 168.0;
+    at(m - 2, m - 6) = -25.0 / 1024.0;;
+    at(m - 2, m - 7) = 45.0 / 7168.0;
     at(m - 2, m - 8) = -5.0 / 7168.0;
-    //  Interior rows: C++ rows 4 to m - 3
-    for (u32 i = 4; i < m - 2; i++) {
+    // Middle
+    for (u32 i = 4; i < m - 2; ++i) {
       at(i, i - 4) = 5.0 / 7168.0;
       at(i, i - 3) = -49.0 / 5120.0;
       at(i, i - 2) = 245.0 / 3072.0;
@@ -246,7 +244,6 @@ Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
       at(i, i + 2) = 49.0 / 5120.0;
       at(i, i + 3) = -5.0 / 7168.0;
     }
-
     //  Weights
     Q  = { 1558.0 / 1247.0 , 271.0 / 3660.0 , 3225.0 / 1181.0 , -1103.0 / 1050.0
       , 797.0 / 312.0 , 632.0 / 2273.0 , 755.0 / 641.0 , 859.0 / 869.0
@@ -255,7 +252,7 @@ Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
       , 1558.0 / 1247.0 };
   }
 
-  
+
   *this /= dx;
 }
 
