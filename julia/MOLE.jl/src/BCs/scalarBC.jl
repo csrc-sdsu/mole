@@ -210,7 +210,7 @@ function addScalarBC!(A::SparseMatrixCSC, b::AbstractVector{T}, bc::ScalarBC2D{T
     Abcl, Abcr, Abcb, Abct = _scalarbc2D_lhs(k, m, dx, n, dy, dc, nc)
 
     if hasbclr
-
+        println("hasbclr")
         rl, _, _ = findnz(Abcl)
         rr, _, _ = findnz(Abcr)
         rl = unique(rl)
@@ -229,7 +229,7 @@ function addScalarBC!(A::SparseMatrixCSC, b::AbstractVector{T}, bc::ScalarBC2D{T
     end
 
     if hasbcbt
-
+        println("hasbcbt")
         rb, _, _ = findnz(Abcb)
         rt, _, _ = findnz(Abct)
 
@@ -250,6 +250,14 @@ function addScalarBC!(A::SparseMatrixCSC, b::AbstractVector{T}, bc::ScalarBC2D{T
     end
 
     return A, b
+end
+
+
+"""
+"""
+function addScalarBC2D!(A::SparseMatrixCSC, b::AbstractVector{T}, bc::ScalarBC2D{T},
+                      k::Integer, m::Integer, dx, n::Integer, dy) where {T}
+    return addScalarBC!(A, b, bc, k, m, dx, n, dy)
 end
 
 
