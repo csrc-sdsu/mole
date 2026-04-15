@@ -23,7 +23,7 @@ function interpol(m::Int,c::Float64)
     n_rows = m+1;
     n_cols = m+2;
 
-    I = sparse(n_rows, n_columns);
+    I = spzeros(n_rows, n_cols);
 
     I[1,1] = 1;
     I[end,end]=1;
