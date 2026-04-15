@@ -43,7 +43,7 @@ Returns a m + 1 by m + 2 one-dimensional non-uniform mimetic gradient operator
 
 # Arguments
 - `k::Int`: Order of accuracy
-- `ticks::AbstractVector`: Centers' ticks e.g. [0 0.5 1 3 5 7 9 9.5 10] (including the boundaries!)
+- `ticks::AbstractVector`: Centers' ticks e.g. (0 0.5 1 3 5 7 9 9.5 10) (including the boundaries!)
 """
 function grad(k::Int, ticks::AbstractVector)
     return gradNonUniform(k, ticks)
@@ -176,7 +176,7 @@ Returns a m + 1 by m + 2 one-dimensional non-uniform mimetic gradient operator
 
 # Arguments
 - `k::Int`: Order of accuracy
-- `ticks::AbstractVector`: Centers' ticks e.g. [0 0.5 1 3 5 7 9 9.5 10] (including the boundaries!)
+- `ticks::AbstractVector`: Centers' ticks e.g. (0 0.5 1 3 5 7 9 9.5 10) (including the boundaries!)
 """
 function gradNonUniform(k::Int, ticks::AbstractVector)
 
