@@ -10,9 +10,8 @@ using namespace std;
 
 constexpr double pi = 3.14159265358979323846;
 
-//------------------------------------------------------------
-// Periodic backward-difference matrix for a > 0 upwind scheme
-//------------------------------------------------------------
+
+// Periodic backward-difference matrix for a > 0 
 sp_mat periodicBackwardDerivative(int m, double dx)
 {
     // Grid has m+1 nodal points: x = 0, dx, ..., 1
@@ -34,9 +33,8 @@ sp_mat periodicBackwardDerivative(int m, double dx)
 
 int main()
 {
-    //--------------------------------------------------------
+
     // 1. Parameters
-    //--------------------------------------------------------
     const double a    = 1.0;
     const double west = 0.0;
     const double east = 1.0;
@@ -47,30 +45,26 @@ int main()
     const double tf = 1.0;
     const double dt = dx / std::abs(a);
 
-    //--------------------------------------------------------
+
     // 2. Grid and initial condition
-    //--------------------------------------------------------
+
     vec grid = regspace(west, dx, east);
     vec U = sin(2.0 * pi * grid);
 
-    //--------------------------------------------------------
+
     // 3. Upwind spatial derivative for a > 0
-    //--------------------------------------------------------
     sp_mat D = periodicBackwardDerivative(m, dx);
 
-    //--------------------------------------------------------
+
     // 4. Explicit Euler update matrix
-    //--------------------------------------------------------
+
     sp_mat A = speye<sp_mat>(D.n_rows, D.n_cols) - a * dt * D;
 
-    //--------------------------------------------------------
+
     // 5. Number of time steps
-    //--------------------------------------------------------
     const int steps = static_cast<int>(std::round(tf / dt));
 
-    //--------------------------------------------------------
     // 6. Output data for all time slices
-    //--------------------------------------------------------
     ofstream dataFile("hyperbolic1D_results.dat");
     if (!dataFile) {
         cerr << "Error: could not open hyperbolic1D_results.dat\n";
@@ -92,9 +86,7 @@ int main()
 
     dataFile.close();
 
-    //--------------------------------------------------------
     // 7. GNUplot script
-    //--------------------------------------------------------
     ofstream scriptFile("hyperbolic1D_plot.gnu");
     if (!scriptFile) {
         cerr << "Error: could not create hyperbolic1D_plot.gnu\n";
@@ -115,9 +107,7 @@ int main()
 
     scriptFile.close();
 
-    //--------------------------------------------------------
     // 8. Run GNUplot
-    //--------------------------------------------------------
     int status = std::system("gnuplot -persistent hyperbolic1D_plot.gnu");
     if (status != 0) {
         cerr << "Error: failed to execute GNUplot.\n";

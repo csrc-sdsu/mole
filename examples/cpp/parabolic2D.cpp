@@ -43,9 +43,7 @@ int main() {
     const double tf = 3.0;
     const double dt = (method == "explicit") ? 0.001 : 0.01;
 
-    // --------------------------------------------------
     // Storage grid
-    // --------------------------------------------------
     vec xgrid(nx + 2, fill::zeros);
     vec ygrid(ny + 2, fill::zeros);
 
@@ -61,9 +59,7 @@ int main() {
     }
     ygrid(ny + 1) = yR;
 
-    // --------------------------------------------------
     // Initial condition
-    // --------------------------------------------------
     mat U = zeros(nx + 2, ny + 2);
 
     for (uint32_t i = 0; i < U.n_rows; ++i) {
@@ -77,9 +73,7 @@ int main() {
 
     vec u = vectorise(U);
 
-    // --------------------------------------------------
     // Construct mimetic Laplacian
-    // --------------------------------------------------
     Laplacian L(k, nx, ny, dx, dy);
 
     // --------------------------------------------------
@@ -99,9 +93,7 @@ int main() {
     // Apply BCs to the spatial operator first
     AddScalarBC::addScalarBC(L, u, k, nx, dx, ny, dy, bc);
 
-    // --------------------------------------------------
     // Build time-stepping operator
-    // --------------------------------------------------
     sp_mat A;
     if (method == "explicit") {
         A = speye<sp_mat>(size(L)) + alpha * dt * L;
@@ -109,9 +101,7 @@ int main() {
         A = speye<sp_mat>(size(L)) - alpha * dt * L;
     }
 
-    // --------------------------------------------------
     // Time integration
-    // --------------------------------------------------
     const uint32_t nsteps = static_cast<uint32_t>(std::round(tf / dt));
 
     for (uint32_t it = 0; it <= nsteps; ++it) {
@@ -133,9 +123,7 @@ int main() {
         U = reshape(u, nx + 2, ny + 2);
     }
 
-    // --------------------------------------------------
     // Save final solution as (x, y, u) triples
-    // --------------------------------------------------
     U = reshape(u, nx + 2, ny + 2);
 
     std::ofstream data_file("solution_xyz.dat");
@@ -152,9 +140,7 @@ int main() {
     }
     data_file.close();
 
-    // --------------------------------------------------
     // Create GNUplot script for shaded 3D surface
-    // --------------------------------------------------
     std::ofstream plot_script("plot.gnu");
     if (!plot_script) {
         std::cerr << "Error: Failed to create GNUplot script.\n";
@@ -173,9 +159,7 @@ int main() {
 
     plot_script.close();
 
-    // --------------------------------------------------
     // Execute GNUplot
-    // --------------------------------------------------
     if (system("gnuplot -persist plot.gnu") != 0) {
         std::cerr << "Error: Failed to execute GNUplot.\n";
         return 1;
