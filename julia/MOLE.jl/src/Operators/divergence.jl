@@ -20,7 +20,7 @@ Returns a one-dimensional mimetic divergence operator. Default is non periodic.
 - `dc::NTuple{2,T}`: Dirichlet coefficients of left and right boundaries (optional)
 - `nc::NTuple{2,T}`: Neumann coefficients of left and right boundaries (optional)
 """
-function div(k::Int, m::Int, dx::T; dc::NTuple{2,T}= (1.0, 1.0), nc::NTuple{2,T} = (1.0, 1.0)) where {T}
+function div(k::Int, m::Int, dx; dc::NTuple{2,T} = (1.0, 1.0), nc::NTuple{2,T} = (1.0, 1.0)) where {T}
 
     hasbc = (dc[1] != zero(T)) || (dc[2] != zero(T)) || (nc[1] != zero(T)) || (nc[2] != zero(T))
     if hasbc
@@ -56,7 +56,7 @@ Returns a m+2 by m+1 one-dimensional mimetic divergence operator.
 - `m::Int`: Number of cells
 - `dx`: Step size
 """
-function divNonPeriodic(k::Int,m::Int,dx)
+function divNonPeriodic(k::Int, m::Int, dx)
     if k < 2 || k > 8
         throw(DomainError(k, "k must be >= 2 and <= 8"))
     end
@@ -128,21 +128,24 @@ Returns a m + 2 by m + 1 non-uniform mimetic divergence operator
 
 # Arguments
 - `k::Int`: Order of accuracy
-- `ticks::AbstractArray`: Edges' ticks e.g. [0 0.1 0.15 0.2 0.3 0.4 0.45]
+- `ticks::AbstractVector`: Edges' ticks e.g. [0 0.1 0.15 0.2 0.3 0.4 0.45]
 """
-function divNonUniform(k::Int, ticks::AbstractArray)
+function divNonUniform(k::Int, ticks::AbstractVector)
 
     D = div(k, length(ticks) - 1, 1)
 
     m, _ = size(D)
 
     if size(ticks, 1) == 1
-        J = diags((D * ticks').^-1, 0, m, m)
+        J = diagm((D * ticks').^-1)
     else
-        J = diags((D * ticks).^-1, 0, m, m)
+        J = diagm((D * ticks).^-1)
     end
 
     D = J * D
+    D[1, :] .= 0
+    D[end, :] .= 0
+    return D;
 
 end
 
@@ -164,7 +167,7 @@ Returns a two-dimensional mimetic divergence operator. Default is non periodic.
 - `dc::NTuple{4,T}`: Dirichlet coefficients of left, right, bottom, and top boundaries (optional)
 - `nc::NTuple{4,T}`: Neumann coefficients of left, right, bottom, and top boundaries (optional)
 """
-function div(k::Int, m::Int, dx::T, n::Int, dy::T; dc::NTuple{4,T} = (1.0, 1.0, 1.0, 1.0), nc::NTuple{4,T} = (1.0, 1.0, 1.0, 1.0)) where {T}
+function div(k::Int, m::Int, dx, n::Int, dy; dc::NTuple{4,T} = (1.0, 1.0, 1.0, 1.0), nc::NTuple{4,T} = (1.0, 1.0, 1.0, 1.0)) where {T}
 
     hasbclr = (dc[1] != zero(T)) || (dc[2] != zero(T)) || (nc[1] != zero(T)) || (nc[2] != zero(T))
     hasbcbt = (dc[3] != zero(T)) || (dc[4] != zero(T)) || (nc[3] != zero(T)) || (nc[4] != zero(T))
@@ -201,10 +204,10 @@ Returns a two-dimensional non-uniform mimetic divergence operator.
 
 # Arguments
 - `k::Int`: Order of accuracy
-- `xticks::AbstractArray`: Edges' ticks (x-axis)
-- `yticks::AbstractArray`: Edges' ticks (y-axis)
+- `xticks::AbstractVector`: Edges' ticks (x-axis)
+- `yticks::AbstractVector`: Edges' ticks (y-axis)
 """
-function div(k::Int, xticks::AbstractArray, yticks::AbstractArray)
+function div(k::Int, xticks::AbstractVector, yticks::AbstractVector)
     return div2DNonUniform(k, xticks, yticks)
 end
 
@@ -216,10 +219,10 @@ Returns a two-dimensional non-uniform mimetic divergence operator.
 
 # Arguments
 - `k::Int`: Order of accuracy
-- `xticks::AbstractArray`: Edges' ticks (x-axis)
-- `yticks::AbstractArray`: Edges' ticks (y-axis)
+- `xticks::AbstractVector`: Edges' ticks (x-axis)
+- `yticks::AbstractVector`: Edges' ticks (y-axis)
 """
-function div2DNonUniform(k::Int, xticks::AbstractArray, yticks::AbstractArray)
+function div2DNonUniform(k::Int, xticks::AbstractVector, yticks::AbstractVector)
 
     Dx = divNonUniform(k, xticks)
     Dy = divNonUniform(k, yticks)
