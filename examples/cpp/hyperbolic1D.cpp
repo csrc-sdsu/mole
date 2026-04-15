@@ -8,7 +8,7 @@
 using namespace arma;
 using namespace std;
 
-constexpr double pi = 3.14159265358979323846;
+constexpr double pi = M_PI;
 
 
 // Periodic backward-difference matrix for a > 0 
