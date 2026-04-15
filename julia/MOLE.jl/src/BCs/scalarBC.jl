@@ -143,10 +143,10 @@ function _scalarbc2D_lhs(k::Integer, m::Integer, dx, n::Integer, dy, dc::NTuple{
         if !hasbcbt
             In = sparse(Matrix(I, n, n))
         else
-            In = sparse(Matrix(I, n + 2, n + 2))
+            In = Matrix(I, n + 2, n + 2)
             In[1, 1] = 0
             In[end, end] = 0
-            dropzeros!(In)
+            In = sparse(In)
         end
 
         # Left and right edges
@@ -160,7 +160,7 @@ function _scalarbc2D_lhs(k::Integer, m::Integer, dx, n::Integer, dy, dc::NTuple{
         Abcb0, Abct0 = _scalarbc1d_lhs(k, n, dy, dc[3:4], nc[3:4])
 
         if !hasbclr
-            Im = sparse(Matrix(m, m))
+            Im = sparse(Matrix(I, m, m))
         else
             Im = sparse(Matrix(I, m + 2, m + 2))
         end
@@ -205,12 +205,12 @@ function addScalarBC!(A::SparseMatrixCSC, b::AbstractVector{T}, bc::ScalarBC2D{T
     hasbclr = (dc[1] != zero(T)) || (dc[2] != zero(T)) || (nc[1] != zero(T)) || (nc[2] != zero(T))
     hasbcbt = (dc[3] != zero(T)) || (dc[4] != zero(T)) || (nc[3] != zero(T)) || (nc[4] != zero(T))
 
-    rl, rr, rb, rt = 0, 0, 0, 0 # periodic case
+    rl, rr, rb, rt = [0], [0], [0], [0] # periodic case
 
     Abcl, Abcr, Abcb, Abct = _scalarbc2D_lhs(k, m, dx, n, dy, dc, nc)
 
     if hasbclr
-        println("hasbclr")
+
         rl, _, _ = findnz(Abcl)
         rr, _, _ = findnz(Abcr)
         rl = unique(rl)
@@ -229,9 +229,11 @@ function addScalarBC!(A::SparseMatrixCSC, b::AbstractVector{T}, bc::ScalarBC2D{T
     end
 
     if hasbcbt
-        println("hasbcbt")
+        
         rb, _, _ = findnz(Abcb)
         rt, _, _ = findnz(Abct)
+        rb = unique(rb)
+        rt = unique(rt)
 
         # Remove rows of A associated to boundary
         Abc2 = Abct .+ Abcb
@@ -254,6 +256,8 @@ end
 
 
 """
+    2D BC applicator. Mirrors MATLAB addScalarBC2D.
+    Signature keeps the discretization params (`k,m,dx,n,dy`) separate from `bc`.
 """
 function addScalarBC2D!(A::SparseMatrixCSC, b::AbstractVector{T}, bc::ScalarBC2D{T},
                       k::Integer, m::Integer, dx, n::Integer, dy) where {T}
@@ -270,5 +274,3 @@ end
     Accepts 2-element vectors too.
 """
 ScalarBC1D(dc, nc, v) = ScalarBC1D(tuple(dc...), tuple(nc...), tuple(v...))
-
-ScalarBC2D(dc, nc, v) = ScalarBC2D(tuple(dc...), tuple(nc...), tuple(v...))
