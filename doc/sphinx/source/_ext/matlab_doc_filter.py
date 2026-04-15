@@ -185,37 +185,70 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
     
     # Store the original first line description as the PURPOSE
     first_desc_line = ""
+    synopsis_text = ""
 
-    # TAG-based PURPOSE extraction
-    start = None
-    end = None
+    # -------------------------
+    # Extract PURPOSE block
+    # -------------------------
+    purpose_start = None
+    purpose_end = None
 
-    # find PURPOSE start (line containing PURPOSE tag)
     for i, line in enumerate(lines):
         if re.search(r"\bPURPOSE\b", line.strip(), re.IGNORECASE):
-            start = i
+            purpose_start = i
             break
 
-    # find end (next DESCRIPTION or LICENSE tag after PURPOSE)
-    if start is not None:
-        for j in range(start + 1, len(lines)):
-            if re.search(r"\b(DESCRIPTION|LICENSE)\b", lines[j].strip(), re.IGNORECASE):
-                end = j
+    if purpose_start is not None:
+        for j in range(purpose_start + 1, len(lines)):
+            if re.search(r"\b(SYNOPSIS|DESCRIPTION|LICENSE)\b", lines[j].strip(), re.IGNORECASE):
+                purpose_end = j
                 break
-        if end is None:
-            end = len(lines)
+        if purpose_end is None:
+            purpose_end = len(lines)
 
-        # PURPOSE content: lines AFTER the PURPOSE tag line
         purpose_lines = []
-        for k in range(start + 1, end):
+        for k in range(purpose_start + 1, purpose_end):
             s = lines[k].strip()
             if s and not re.search(r'[-]{10,}|SPDX-License-Identifier:|© \d{4}-\d{4}|See LICENSE file', s):
                 purpose_lines.append(lines[k].rstrip("\n"))
 
         first_desc_line = "\n".join(purpose_lines).strip()
 
-        # Remove PURPOSE tag + its captured lines so they can't appear in DESCRIPTION
-        del lines[start:end]
+        # Remove PURPOSE block from lines
+        del lines[purpose_start:purpose_end]
+
+    # -------------------------
+    # Extract SYNOPSIS block
+    # -------------------------
+    synopsis_start = None
+    synopsis_end = None
+
+    for i, line in enumerate(lines):
+        if re.search(r"\bSYNOPSIS\b", line.strip(), re.IGNORECASE):
+            synopsis_start = i
+            break
+
+    if synopsis_start is not None:
+        for j in range(synopsis_start + 1, len(lines)):
+            if re.search(r"\b(DESCRIPTION|LICENSE)\b", lines[j].strip(), re.IGNORECASE):
+                synopsis_end = j
+                break
+        if synopsis_end is None:
+            synopsis_end = len(lines)
+
+        synopsis_lines = []
+        for k in range(synopsis_start + 1, synopsis_end):
+            s = lines[k].strip()
+            if s and not re.search(r'[-]{10,}|SPDX-License-Identifier:|© \d{4}-\d{4}|See LICENSE file', s):
+                # minimal change: preserve text, only strip leading "%" if it is still present
+                cleaned = lines[k].rstrip("\n")
+                cleaned = re.sub(r'^\s*%\s?', '', cleaned)
+                synopsis_lines.append(cleaned)
+
+        synopsis_text = "\n".join(synopsis_lines).strip()
+
+        # Remove SYNOPSIS block from lines
+        del lines[synopsis_start:synopsis_end]
     
     if remove_license:
         # Remove license headers
@@ -261,7 +294,7 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
                 param_desc = m.group(3)
                 lines[i] = f"{opt_prefix}{param_name} : {param_desc}"
         
-        # Extract function signature if available
+        # Fallback signature only if SYNOPSIS tag is absent
         signature = ""
         if what == 'function' and name:
             # Try to extract signature from the first line if it contains function definition
@@ -271,6 +304,8 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
                 # Construct a basic signature from the function name
                 signature = f"function {name}"
         
+        rendered_synopsis = synopsis_text if synopsis_text else signature
+
         # Get cross-reference information from our code analysis
         # Get the call information for this function
         function_base_name = name.split('.')[-1] if '.' in name else name
@@ -350,7 +385,13 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
         new_lines.append("^" * len(synopsis_title))
         new_lines.append(".. code-block:: matlab")
         new_lines.append("")
-        new_lines.append(f"    {signature}")
+
+        if rendered_synopsis:
+            for syn_line in rendered_synopsis.splitlines():
+                new_lines.append(f"    {syn_line}")
+        else:
+            new_lines.append("")
+
         new_lines.append("")
         
         # DESCRIPTION section
