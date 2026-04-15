@@ -81,8 +81,6 @@ class Divergence : public sp_mat {
     // prescribed, which corresponds to a periodic (wrap-around) domain.
     // -----------------------------------------------------------------------
 
-    Divergence(u16 k, u32 m, Real dx, const ivec &dc, const ivec &nc);
-
     /**
     * @brief 1-D Mimetic Divergence (periodic or non-periodic)
     *
