@@ -1,7 +1,8 @@
-"""
+#=
 Julia implementation of the 1D Advection equation with periodic boundary conditions
 from MATLAB MOLE example
-"""
+=#
+
 using Printf
 using Plots
 import MOLE: Operators, BCs
@@ -24,10 +25,12 @@ D  = Operators.div(k,m,dx); #1D Mimetic divergence operator
 I  = Operators.interpol(m, 0.5); #1D 2nd order interpolator
 
 # 1D Staggered grid
-grid = [west west+dx/2: dx : east-dx/2 east];
+grid = [west, west+dx/2:dx:east-dx/2, east];
 
 # Initial Condition
-U = sin(2*π*grid)';
+q = 2 * π .* grid
+println(typeof(q))
+U = sin.(q)';
 
 #Periodic Boundary Condition imposed on the divergence operator
 D[1, 2]       = 1/(2*dx);
@@ -53,7 +56,7 @@ for i in 1: t/dt
     #Plot approximation
     plot(grid, U2, label="Approximated")
     #Plot exact solution
-    plot!(grid, sin.(2*π*(grid - a*i*dt)), label="exact")
+    plot!(grid, sin.(2*π .*(grid - a*i*dt)), label="exact")
     #Plot attributes
     title!("1D Advection Equation with Periodic BC");
     xlabel!("x");
