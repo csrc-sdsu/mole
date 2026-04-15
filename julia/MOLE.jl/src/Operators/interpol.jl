@@ -5,12 +5,12 @@ using SparseArrays
         See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 =#
 
-function interpol(m::Int,c::Int)
+function interpol(m::Int,c::Float64)
     """
     implementation of MATLAB interpol.m operator for Julia
     INPUTS: 
-       'm::Int' : number of cells
-       'c::Int' : left interpolation coefficient
+       'm::Int'   : number of cells
+       'c::Float' : left interpolation coefficient
     OUTPUTS:
        I : a (m+1)×(m+2) one-dimensional interpolator of 2nd-order
     """
