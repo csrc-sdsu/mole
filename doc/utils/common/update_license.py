@@ -5,16 +5,28 @@ import re
 import sys
 
 
-def normalize_line(line: str) -> str:
+SUPPORTED_EXTENSIONS = {".m", ".cpp", ".hpp", ".h"}
+
+
+def get_comment_prefix(file_path: Path) -> str:
+    ext = file_path.suffix.lower()
+    if ext == ".m":
+        return "%"
+    if ext in {".cpp", ".hpp", ".h"}:
+        return "//"
+    raise ValueError(f"Unsupported file type: {file_path}")
+
+
+def normalize_line(line: str, comment_prefix: str) -> str:
     """
     Normalize a line for comparison:
     - strip newline
-    - remove leading MATLAB comment marker %
+    - remove leading comment marker
     - trim whitespace
     """
     line = line.rstrip("\n").strip()
-    if line.startswith("%"):
-        line = line[1:].strip()
+    if line.startswith(comment_prefix):
+        line = line[len(comment_prefix):].strip()
     return line
 
 
@@ -24,138 +36,138 @@ def read_license_lines(input_file: Path):
     return [line.rstrip("\n") for line in raw_lines]
 
 
-def make_license_block(license_lines):
+def make_license_block(license_lines, comment_prefix: str, add_trailing_blank_line: bool = True):
     """
-    Build the LICENSE section to insert/update.
-    Format:
-    % LICENSE:
-    % line 1
-    % line 2
+    Build the LICENSE section.
+
+    add_trailing_blank_line=True  -> use when inserting at top
+    add_trailing_blank_line=False -> use when replacing existing block
     """
-    block = ["% LICENSE:"]
+    block = [f"{comment_prefix} LICENSE:"]
     for line in license_lines:
         if line.strip() == "":
-            block.append("%")
+            block.append(comment_prefix)
         else:
-            block.append(f"% {line}")
-    return "\n".join(block) + "\n\n"
+            block.append(f"{comment_prefix} {line}")
+
+    text = "\n".join(block) + "\n"
+    if add_trailing_blank_line:
+        text += "\n"
+    return text
 
 
-def find_purpose_or_description(lines):
+def find_top_license_block(lines, comment_prefix: str):
     """
-    Find first PURPOSE or DESCRIPTION tag line.
-    Returns index or None.
-    """
-    pattern = re.compile(r'^\s*%\s*(PURPOSE|DESCRIPTION)\s*:', re.IGNORECASE)
-    for i, line in enumerate(lines):
-        if pattern.match(line):
-            return i
-    return None
+    Find a LICENSE block only at the top of the file.
 
+    Allowed before LICENSE:
+    - blank lines
 
-def extract_existing_license_block(lines, stop_idx):
-    """
-    Extract LICENSE block if present before stop_idx.
-    If PURPOSE/DESCRIPTION is not present, stop_idx should be len(lines),
-    so the whole file is scanned and a top-of-file LICENSE block can still be found.
-
-    Returns:
-        (start_idx, end_idx, normalized_content_lines)
-    where end_idx is exclusive.
-
-    The LICENSE block starts at a line matching:
-        % LICENSE:
+    The LICENSE block starts at:
+        <comment_prefix> LICENSE:
 
     and continues through consecutive comment lines / blank lines until:
-    - PURPOSE:/DESCRIPTION: is reached, or
     - a non-comment, non-blank line is reached.
+
+    Returns:
+        (start_idx, end_idx, normalized_lines)
+    where end_idx is exclusive.
     """
-    license_tag_pattern = re.compile(r'^\s*%\s*LICENSE\s*:\s*$', re.IGNORECASE)
-    purpose_desc_pattern = re.compile(r'^\s*%\s*(PURPOSE|DESCRIPTION)\s*:', re.IGNORECASE)
+    license_tag_pattern = re.compile(
+        rf'^\s*{re.escape(comment_prefix)}\s*LICENSE\s*:\s*$',
+        re.IGNORECASE
+    )
 
-    for i in range(stop_idx):
-        if license_tag_pattern.match(lines[i]):
-            start = i
-            end = i + 1
+    i = 0
 
-            while end < stop_idx:
-                line = lines[end]
-                stripped = line.strip()
+    # Skip leading blank lines only
+    while i < len(lines) and lines[i].strip() == "":
+        i += 1
 
-                if purpose_desc_pattern.match(line):
-                    break
+    # If first meaningful line is not LICENSE, treat as no top license block
+    if i >= len(lines) or not license_tag_pattern.match(lines[i]):
+        return None, None, None
 
-                if stripped == "" or stripped.startswith("%"):
-                    end += 1
-                else:
-                    break
+    start = i
+    end = i + 1
 
-            existing_lines = lines[start:end]
+    while end < len(lines):
+        stripped = lines[end].strip()
+        if stripped == "" or stripped.startswith(comment_prefix):
+            end += 1
+        else:
+            break
 
-            # Remove trailing blank spacer lines from comparison
-            while existing_lines and normalize_line(existing_lines[-1]) == "":
-                existing_lines.pop()
-                end -= 1
+    existing_lines = lines[start:end]
 
-            normalized = [normalize_line(x) for x in existing_lines]
-            return start, end, normalized
+    # Remove trailing blank spacer lines from comparison
+    while existing_lines and normalize_line(existing_lines[-1], comment_prefix) == "":
+        existing_lines.pop()
+        end -= 1
 
-    return None, None, None
+    normalized = [normalize_line(x, comment_prefix) for x in existing_lines]
+    return start, end, normalized
 
 
-def process_file(m_file: Path, desired_license_lines):
-    with m_file.open("r", encoding="utf-8") as f:
+def process_file(file_path: Path, desired_license_lines):
+    comment_prefix = get_comment_prefix(file_path)
+
+    with file_path.open("r", encoding="utf-8") as f:
         original_lines = f.readlines()
 
-    purpose_idx = find_purpose_or_description(original_lines)
-
-    # If PURPOSE/DESCRIPTION is missing, scan whole file for an existing LICENSE block
-    scan_limit = purpose_idx if purpose_idx is not None else len(original_lines)
-
     desired_normalized = ["LICENSE:"] + [line.strip() for line in desired_license_lines]
-    desired_block = make_license_block(desired_license_lines)
 
-    start, end, existing_normalized = extract_existing_license_block(original_lines, scan_limit)
+    desired_block_for_insert = make_license_block(
+        desired_license_lines, comment_prefix, add_trailing_blank_line=True
+    )
+    desired_block_for_update = make_license_block(
+        desired_license_lines, comment_prefix, add_trailing_blank_line=False
+    )
 
-    # Same LICENSE block already present
+    start, end, existing_normalized = find_top_license_block(original_lines, comment_prefix)
+
+    # Same LICENSE block already present at top
     if existing_normalized is not None and existing_normalized == desired_normalized:
-        print(f"Skipped (same LICENSE header): {m_file}")
+        print(f"Skipped (same LICENSE header): {file_path}")
         return "skipped_same"
 
-    # Different LICENSE block exists -> replace it
+    # Different LICENSE block exists at top -> replace it
     if existing_normalized is not None:
-        new_lines = original_lines[:start] + [desired_block] + original_lines[end:]
-        with m_file.open("w", encoding="utf-8") as f:
+        new_lines = original_lines[:start] + [desired_block_for_update] + original_lines[end:]
+        with file_path.open("w", encoding="utf-8") as f:
             f.writelines(new_lines)
-        print(f"Updated LICENSE header: {m_file}")
+        print(f"Updated LICENSE header: {file_path}")
         return "updated"
 
-    # No LICENSE block found -> insert before PURPOSE/DESCRIPTION if present, else at top
-    insert_idx = purpose_idx if purpose_idx is not None else 0
-    new_lines = original_lines[:insert_idx] + [desired_block] + original_lines[insert_idx:]
-
-    with m_file.open("w", encoding="utf-8") as f:
+# No top LICENSE block found -> insert at top
+    new_lines = [desired_block_for_insert] + original_lines
+    with file_path.open("w", encoding="utf-8") as f:
         f.writelines(new_lines)
 
-    print(f"Inserted LICENSE header: {m_file}")
+    print(f"Inserted LICENSE header: {file_path}")
     return "inserted"
 
 
-def update_matlab_license_headers(input_file, target_folder):
-    input_path = Path(input_file)
+def update_license_headers(license_header_file, target_folder):
+    license_header_path = Path(license_header_file)
     folder_path = Path(target_folder)
 
-    if not input_path.is_file():
-        raise FileNotFoundError(f"Input file not found: {input_path}")
+    if not license_header_path.is_file():
+        raise FileNotFoundError(f"License header file not found: {license_header_path}")
 
     if not folder_path.is_dir():
         raise NotADirectoryError(f"Target folder not found: {folder_path}")
 
-    desired_license_lines = read_license_lines(input_path)
-    m_files = list(folder_path.rglob("*.m"))
+    desired_license_lines = read_license_lines(license_header_path)
 
-    if not m_files:
-        print("No .m files found.")
+    files_to_process = []
+    for ext in SUPPORTED_EXTENSIONS:
+        files_to_process.extend(folder_path.rglob(f"*{ext}"))
+
+    files_to_process = sorted(files_to_process)
+
+    if not files_to_process:
+        print("No supported source files found.")
         return
 
     summary = {
@@ -164,8 +176,8 @@ def update_matlab_license_headers(input_file, target_folder):
         "skipped_same": 0,
     }
 
-    for m_file in m_files:
-        result = process_file(m_file, desired_license_lines)
+    for file_path in files_to_process:
+        result = process_file(file_path, desired_license_lines)
         summary[result] += 1
 
     print("\nDone.")
@@ -176,10 +188,10 @@ def update_matlab_license_headers(input_file, target_folder):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: python update_matlab_license.py <input_file> <target_folder>")
+        print("Usage: python update_license.py <license_header_file> <target_folder>")
         sys.exit(1)
 
-    input_file = sys.argv[1]      # Input #1
-    target_folder = sys.argv[2]   # Input #2
+    license_header_file = sys.argv[1]
+    target_folder = sys.argv[2]
 
-    update_matlab_license_headers(input_file, target_folder)
+    update_license_headers(license_header_file, target_folder)
