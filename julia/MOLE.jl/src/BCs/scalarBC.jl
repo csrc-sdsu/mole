@@ -36,7 +36,7 @@ end
     Fields mirror the MATLAB function:
     - dc: Dirichlet coefficients (left, right, bottom, top)
     - nc: Neumann/Robin coefficients (left, right, bottom, top)
-    - vc: prescribed boundary value g (left, right, bottom, top)
+    - v: prescribed boundary value g (left, right, bottom, top)
 """
 struct ScalarBC2D{T} <: AbstractScalarBC{2}
     dc::NTuple{4,T}
