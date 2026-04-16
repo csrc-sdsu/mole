@@ -221,8 +221,10 @@ function addScalarBC!(A::SparseMatrixCSC, b::AbstractVector{T}, bc::ScalarBC2D{T
         # remove rows of A associated to boundary
         Abc1 = Abcl .+ Abcr
         rowsbc1, _, _ = findnz(Abc1)
-        rows1, cols1, s1 = findnz(A[rowsbc1, :])
-        A = A .- sparse(rows1, cols1, s1, size(A, 1), size(A, 2))
+        # For some reason, the below code doesn't work:
+            # rows1, cols1, s1 = findnz(A[rowsbc1, :])
+            # A = A .- sparse(rows1, cols1, s1, size(A, 1), size(A, 2))
+        A[rowsbc1, :] = spzeros(size(A[rowsbc1, :])) # This does though
         # Update matrix A with boundary information
         A = A .+ Abc1
         # Remove b entries associated to bcs
@@ -240,8 +242,9 @@ function addScalarBC!(A::SparseMatrixCSC, b::AbstractVector{T}, bc::ScalarBC2D{T
         # Remove rows of A associated to boundary
         Abc2 = Abct .+ Abcb
         rowsbc2, _, _ = findnz(Abc2)
-        rows2, cols2, s2 = findnz(A[rowsbc2, :])
-        A = A .- sparse(rows2, cols2, s2, size(A, 1), size(A, 2))
+        # rows2, cols2, s2 = findnz(A[rowsbc2, :])
+        # A = A .- sparse(rows2, cols2, s2, size(A, 1), size(A, 2))
+        A[rowsbc2, :] = spzeros(size(A[rowsbc2, :]))
         # Update matriz A with boundary information
         A = A .+ Abc2
         # Remove b entries associated to bcs
