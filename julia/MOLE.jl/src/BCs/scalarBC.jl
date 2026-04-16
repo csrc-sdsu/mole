@@ -196,10 +196,10 @@ end
 end
 
 """
-    1D BC applicator. Mirrors MATLAB addScalarBC1D.
-    Signature keeps the discretization params (`k,m,dx`) separate from `bc`.
+    2D BC applicator. Mirrors MATLAB addScalarBC2D.
+    Signature keeps the discretization params (`k,m,dx,n,dy`) separate from `bc`.
 """
-function addScalarBC!(A::SparseMatrixCSC, b::AbstractVector{T}, bc::ScalarBC2D{T},
+function addScalarBC!(A::SparseMatrixCSC, b::AbstractVector, bc::ScalarBC2D{T},
                       k::Integer, m::Integer, dx, n::Integer, dy) where {T}
 
     dc, nc, v = bc.dc, bc.nc, bc.v

@@ -106,10 +106,10 @@ MOLE.Operators.lap(k::Int, m::Int, dx, n::Int, dy; dc::NTuple{4,T}, nc::NTuple{4
 ```@docs
 MOLE.BCs.robinBC(k::Int, m::Int, dx, a, b)
 MOLE.BCs.robinBC(k::Int, m::Int, dx, n::Int, dy, a, b)
-MOLE.BCs.ScalarBC1D(dc::NTuple{2,T}, nc::NTuple{2,T}, v::NTuple{2,T})
-MOLE.BCs.ScalarBC2D(dc::NTuple{4,T}, nc::NTuple{4,T}, v::NTuple{4,AbstractVector{T}})
-MOLE.BCs.addScalarBC!(A::SparseMatrixCSC, b::AbstractVector, bc::ScalarBC1D{T}, k::Integer, m::Integer, dx)
-MOLE.BCs.addScalarBC!(A::SparseMatrixCSC, b::AbstractVector, bc::ScalarBC2D{T}, k::Integer, m::Integer, dx, n::Integer, dy)
+MOLE.BCs.ScalarBC1D{T}
+MOLE.BCs.ScalarBC2D{T}
+MOLE.BCs.addScalarBC!(A::SparseMatrixCSC, b::AbstractVector, bc::MOLE.BCs.ScalarBC1D, k::Integer, m::Integer, dx)
+MOLE.BCs.addScalarBC!(A::SparseMatrixCSC, b::AbstractVector, bc::MOLE.BCs.ScalarBC2D, k::Integer, m::Integer, dx, n::Integer, dy)
 ```
 
 ## Examples
