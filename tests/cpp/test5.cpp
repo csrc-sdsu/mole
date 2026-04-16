@@ -46,7 +46,7 @@ void run_test(int k, vec grid_sizes) {
 
 TEST(PoissonTests, Accuracy) {
     vec grid_sizes = {20, 40};
-    for (int k : {2, 4, 6}) {
+    for (int k : {2, 4, 6}) { // We ignore k=8 b/c e = O(1e-12)
         run_test(k, grid_sizes);
     }
 }
