@@ -1,3 +1,19 @@
+"""
+A Julia script that solves the 1D Poisson's equation with Robin boundary
+conditions using mimetic operators. This example uses addScalarBC
+
+u_xx = e^x
+
+0 < x < 1
+
+Robin Boundary Conditions:
+u(0) - u_x(0) = 0
+u(1) + u_x(1) = 2 e
+
+Exact Solution:
+u(x) = e^x
+"""
+
 using LinearAlgebra
 using SparseArrays
 using Plots
@@ -11,6 +27,9 @@ east = 1.0
 k  = 6 # operator order of accuracy
 m  = 2k + 1 # minimum number of cells to attain desired accuracy
 dx = (east - west) / m # step length
+
+path = joinpath(@__DIR__, "output") # Output path to store generated plots
+mkpath(path)
 
 # 1D staggered grid
 grid = [west; (west + dx/2):dx:(east - dx/2); east]
@@ -35,15 +54,14 @@ L0, rhs0 = BCs.addScalarBC!(sparse(L), rhs, bc, k, m, dx)
 u = L0 \ rhs0
 
 # Plot
-p = scatter(grid, u; label="Approximated", marker=:circle)
-plot!(p, grid, exp.(grid); label="Analytical")
+p = scatter(grid, u; label="Approximated", marker=:circle, show = false)
+plot!(p, grid, exp.(grid); label="Analytical", show = false)
 plot!(
     p, 
-    title="Poisson's equation with Robin BC",
+    title="Poisson's equation with Robin BC using addScalarBC",
     xlabel="x",
     ylabel="u(x)",
-    legend=:topleft
+    legend=:topleft,
+    show = false
 )
-display(p)
-println("Press Enter to close the plot and exit.")
-readline()
+Plots.png(p, joinpath(path, "elliptic1DaddScalarBC_output.png"))

@@ -1,3 +1,22 @@
+"""
+A Julia script that solves the 2D Laplace's equation with Dirichlet boundary
+conditions using mimetic operators. This example uses addScalarBC.
+
+u_xx + u_yy = 0
+
+0 < x < pi
+0 < y < pi
+
+Boundary Conditions:
+u(0,  y) = cos(y)
+u(pi, y) = e^pi cos(y)
+u(x,  0) = e^x
+u(x, pi) = -e^x
+
+Exact Solution:
+u(x, y) = e^x cos(y)
+"""
+
 using LinearAlgebra
 using SparseArrays
 using Plots
@@ -10,6 +29,9 @@ m = 99      # Number of cells in x-direction
 n = m + 2   # Number of cells in y-direction
 dx = pi / m # Step size in x-direction
 dy = pi / n # Step size in y-direction
+
+path = joinpath(@__DIR__, "output") # Output path to store generated plots
+mkpath(path)
 
 # Grid
 xc = [0; (dx / 2.0) : dx : (pi - dx / 2.0); pi]
@@ -40,15 +62,37 @@ A0, b0 = BCs.addScalarBC!(sparse(A), b, bc, k, m, dx, n, dy)
 ua = A0 \ b0
 ua = Matrix(reshape(ua, m + 2, n + 2))
 
-pa = heatmap(xc, yc, ua, title = "Approximate Solution", xlabel = "X", ylabel = "Y", colorbar_title = "u(x,y)", aspect_ratio = :equal)
-display(pa)
-println("Press Enter to close the plot and open the next.")
-readline()
+Plots.png(
+    Plots.heatmap(
+        xc, 
+        yc, 
+        ua, 
+        title = "Approximate Solution", 
+        xlabel = "X", 
+        ylabel = "Y", 
+        colorbar_title = "u(x,y)", 
+        aspect_ratio = :equal,
+        colormap = :jet1,
+        show = false
+    ),
+    joinpath(path, "elliptic2DXDYD_approximate.png")
+)
 
-pe = heatmap(xc, yc, ue, title = "Exact Solution", xlabel = "X", ylabel = "Y", colorbar_title = "u(x,y)", aspect_ratio = :equal)
-display(pe)
-println("Press Enter to close the plot and exit.")
-readline()
+Plots.png(
+    Plots.heatmap(
+        xc, 
+        yc, 
+        ue, 
+        title = "Exact Solution", 
+        xlabel = "X", 
+        ylabel = "Y", 
+        colorbar_title = "u(x,y)", 
+        aspect_ratio = :equal,
+        colormap = :jet1,
+        show = false
+    ),
+    joinpath(path, "elliptic2DXDYD_exact.png")
+)
 
 max_err = maximum(abs, ue - ua)
 println("Maximum error: $max_err")
