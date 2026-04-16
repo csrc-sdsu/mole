@@ -101,6 +101,14 @@ Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
       , 2383.0 / 2005.0 };
     break;
   case 8:
+    /*
+    WARNING:
+      At the 8th order, the weight matrix Q loses positive definiteness, 
+      so the inner product induced by Q is no longer well-defined. If 
+      the inner product is not valid, the discrete integration by parts 
+      identity has no meaning, which breaks the structure that makes 
+      the divergence mimetic.
+    */
     // A
     at(1, 0) = -1423.0 / 1792.0;
     at(1, 1) = -491.0 / 7168.0;
