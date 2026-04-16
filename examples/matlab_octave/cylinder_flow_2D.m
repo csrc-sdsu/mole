@@ -1,6 +1,86 @@
-%% 2D incompressible flow over a square cylinder
-% Projection method: AB2 (advection) + CN (diffusion)
-% MATLAB version aligned with the C++ example settings/output plotting.
+%% 2D incompressible channel flow past a cylinder
+%
+% This example solves the two-dimensional incompressible Navier-Stokes
+% equations in a rectangular channel,
+%
+%     du/dt + d(u^2)/dx + d(uv)/dy = -(1/rho) dp/dx + nu * Lap(u),
+%     dv/dt + d(uv)/dx + d(v^2)/dy = -(1/rho) dp/dy + nu * Lap(v),
+%     du/dx + dv/dy = 0,
+%
+% on the domain
+%
+%     x in [0, 8],   y in [-1, 1].
+%
+% The flow is advanced with a projection (pressure-correction) method:
+%
+%   1) compute tentative velocities U*, V* from the momentum equations
+%      without the new pressure,
+%   2) solve a pressure Poisson equation so that the corrected velocity
+%      satisfies incompressibility,
+%   3) correct the velocity field with the pressure gradient.
+%
+% Boundary conditions:
+%
+%   Velocity:
+%     - inlet   (left)   : u = U_init, v = 0
+%     - outlet  (right)  : du/dx = 0, dv/dx = 0
+%     - walls   (top/bot): u = 0, v = 0   (no-slip)
+%
+%   Pressure:
+%     - outlet  (right)  : p = 0   (reference pressure)
+%     - elsewhere        : zero normal pressure gradient
+%
+% Initial condition:
+%
+%   The velocity is initialized as
+%
+%     u = U_init,   v = 0
+%
+%   in the fluid region, and is set to zero inside the masked obstacle
+%   region.
+%
+% Mimetic discretization (MOLE):
+%
+%   This script uses MOLE mimetic operators on a Cartesian grid. The main
+%   discrete operators are
+%
+%     L  = lap2D(...)    : cell-centered Laplacian for viscous diffusion
+%     D  = div2D(...)    : divergence of stacked face fluxes [Fx; Fy]
+%     G  = grad2D(...)   : gradient of cell-centered pressure
+%     I  = interpolCentersToFacesD2D(...)
+%                        : interpolation from cell centers to faces
+%     II = interpolFacesToCentersG2D(...)
+%                        : interpolation from faces back to cell centers
+%
+%   The convective terms are assembled in conservative flux form on faces,
+%   then mapped back to cell centers by the mimetic divergence operator.
+%   Pressure is stored at cell centers, its gradient is computed on faces,
+%   and the velocity correction is brought back to the cell-centered
+%   storage used in this example.
+%
+% Storage convention:
+%
+%   U_flat, V_flat, and p_new_flat are column-vector versions of the
+%   cell-centered fields (including MOLE boundary locations). Quantities
+%   with suffixes _on_u and _on_v denote values located on vertical and
+%   horizontal faces, respectively.
+%
+% Obstacle mask:
+%
+%   The obstacle is introduced through a Cartesian mask rather than a
+%   body-fitted curved boundary. A block of grid cells near the nominal
+%   cylinder location is marked as solid, and velocities are forced to zero
+%   there at initialization and after each update. In this sense, the mask
+%   acts as a simple immersed no-slip obstacle on the background grid.
+%
+% Notes:
+%
+%   - Although motivated by flow past a cylinder, the present MATLAB
+%     implementation uses a masked block of cells, not a fitted circular
+%     boundary.
+%   - The purpose of this example is to demonstrate how MOLE mimetic
+%     operators and interpolation matrices can be combined to build a
+%     transient incompressible flow solver in a compact way.
 
 close all; clear; clc;
 addpath('../../src/matlab_octave')
