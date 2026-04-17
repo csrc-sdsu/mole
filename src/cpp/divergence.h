@@ -27,6 +27,12 @@
  * The BC-aware constructors accept Robin coefficient vectors dc and nc
  * representing a0 and b0 in the condition a0*U + b0*dU/dn = g.
  * An axis is treated as periodic when all of its dc and nc entries are zero.
+ * WARNING:
+ *    At the 8th order, the weight matrix Q loses positive definiteness, 
+ *    so the inner product induced by Q is no longer well-defined. If 
+ *    the inner product is not valid, the discrete integration by parts 
+ *    identity has no meaning, which breaks the structure that makes 
+ *    the divergence mimetic.
  */
 class Divergence : public sp_mat {
 public:

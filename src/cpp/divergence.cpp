@@ -101,6 +101,7 @@ sp_mat Divergence::periodicDiv1D(u16 k, u32 m, Real dx) {
 Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
   assert(!(k % 2));
   assert(k > 1 && k < 9);
+  assert(k > 1 && k < 9);
   assert(m > 2 * k);
   switch (k) {
   case 2:
@@ -175,9 +176,16 @@ Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
          1706.0 / 1457.0, 3124.0 / 5901.0, 887.0 / 531.0,   929.0 / 2002.0,
          2383.0 / 2005.0};
     break;
-
   case 8:
-    //  A: rows 1–3 (C++ rows 1–3), cols 1–9 (C++ cols 0–8)
+    /*
+    WARNING:
+      At the 8th order, the weight matrix Q loses positive definiteness, 
+      so the inner product induced by Q is no longer well-defined. If 
+      the inner product is not valid, the discrete integration by parts 
+      identity has no meaning, which breaks the structure that makes 
+      the divergence mimetic.
+    */
+    // A: rows 1–3 (C++ rows 1–3), cols 1–9 (C++ cols 0–8)
     at(1, 0) = -1423.0 / 1792.0;
     at(1, 1) = -491.0 / 7168.0;
     at(1, 2) = 7753.0 / 3072.0;
@@ -202,7 +210,7 @@ Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
     at(3, 3) = 1135.0 / 1024.0;
     at(3, 4) = 25.0 / 3072.0;
     at(3, 5) = -251.0 / 5120.0;
-    at(3, 6) = 25.0 / 1024.0;
+    at(3, 6) = 25.0 / 1024.0;;
     at(3, 7) = -45.0 / 7168.0;
     at(3, 8) = 5.0 / 7168.0;
     // A'
@@ -230,7 +238,7 @@ Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
     at(m - 2, m - 3) = -1135.0 / 1024.0;
     at(m - 2, m - 4) = -25.0 / 3072.0;
     at(m - 2, m - 5) = 251.0 / 5120.0;
-    at(m - 2, m - 6) = -25.0 / 1024.0;
+    at(m - 2, m - 6) = -25.0 / 1024.0;;
     at(m - 2, m - 7) = 45.0 / 7168.0;
     at(m - 2, m - 8) = -5.0 / 7168.0;
     // Middle
@@ -244,14 +252,13 @@ Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
       at(i, i + 2) = 49.0 / 5120.0;
       at(i, i + 3) = -5.0 / 7168.0;
     }
-    //  Weights
-    Q = {1558.0 / 1247.0, 271.0 / 3660.0,   3225.0 / 1181.0, -1103.0 / 1050.0,
-         797.0 / 312.0,   632.0 / 2273.0,   755.0 / 641.0,   859.0 / 869.0,
-         966.0 / 971.0,   859.0 / 869.0,    755.0 / 641.0,   632.0 / 2273.0,
-         797.0 / 312.0,   -1103.0 / 1050.0, 3225.0 / 1181.0, 271.0 / 3660.0,
-         1558.0 / 1247.0};
+    // Weights
+    Q  = { 1558.0 / 1247.0 , 271.0 / 3660.0 , 3225.0 / 1181.0 , -1103.0 / 1050.0
+      , 797.0 / 312.0 , 632.0 / 2273.0 , 755.0 / 641.0 , 859.0 / 869.0
+      , 966.0 / 971.0 , 859.0 / 869.0 , 755.0 / 641.0 , 632.0 / 2273.0
+      , 797.0 / 312.0 , -1103.0 / 1050.0 , 3225.0 / 1181.0 , 271.0 / 3660.0
+      , 1558.0 / 1247.0 };
   }
-
   *this /= dx;
 }
 
