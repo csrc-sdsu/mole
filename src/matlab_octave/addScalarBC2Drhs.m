@@ -1,9 +1,11 @@
 function b = addScalarBC2Drhs(b, dc, nc, v, rl, rr, rb, rt)
+% PURPOSE
 % function b = addBC2Drhs(b, m, n, dc, nc, v, vec)
 % This function uses the boundary condition type of each face and the rhs b 
 % indices and values associated to left, right, bottom, top, front, back 
 % faces to modify the rhs vector b.
 %
+% DESCRIPTION
 % Parameters:
 % output
 %         b : Right hand side with boundary conditions added
@@ -18,6 +20,9 @@ function b = addScalarBC2Drhs(b, dc, nc, v, rl, rr, rb, rt)
 %        rb : indices of rhs bottom indices    
 %        rt : indices of rhs top indices    
 %        vec: vector with indices of rhs associated to bc
+%
+% SYNTAX
+% b = addScalarBC2Drhs(b, dc, nc, v, rl, rr, rb, rt)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later

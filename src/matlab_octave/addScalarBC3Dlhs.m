@@ -1,7 +1,9 @@
 function [Abcl,Abcr,Abcb,Abct,Abcf,Abcz] = addScalarBC3Dlhs(k, m, dx, n, dy, o, dz, dc, nc)
+% PURPOSE
 % This functions uses geometry and boundary type conditions to create
 % modifications of matrix A associated to each of the boundary faces.
 %
+% DESCRIPTION
 % Parameters:
 % output
 %      Abcl : Matrix coefficients associated to boundary conditions for left face
@@ -21,6 +23,9 @@ function [Abcl,Abcr,Abcb,Abct,Abcf,Abcz] = addScalarBC3Dlhs(k, m, dx, n, dy, o, 
 %        dz : Depth cell size
 %        dc : a0 (6x1 vector for left, right, bottom, top, front, back boundary types, resp.)
 %        nc : b0 (6x1 vector for left, right, bottom, top, front, back boundary types, resp.)
+%
+% SYNTAX
+% [Abcl,Abcr,Abcb,Abct,Abcf,Abcz] = addScalarBC3Dlhs(k, m, dx, n, dy, o, dz, dc, nc)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later

@@ -1,8 +1,15 @@
 function N = neumann3DCurv(G, m, n, o, b)
+% PURPOSE
 % Returns a 3D curvilinear Neumann BC operator
-
-    % G is the curvilinear gradient and b is the Neumann coeff.
-
+%
+% DESCRIPTION
+% Parameters:
+%                G: Curvilinear gradient
+%                b: Neumann coeff.
+%
+% SYNTAX
+% N = neumann3DCurv(G, m, n, o, b)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

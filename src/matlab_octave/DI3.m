@@ -1,4 +1,11 @@
 function I = DI3(m, n, o, type)
+% PURPOSE
+%
+% DESCRIPTION
+%
+% SYNTAX
+% I = DI3(m, n, o, type)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

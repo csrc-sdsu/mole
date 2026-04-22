@@ -148,6 +148,11 @@ def get_function_description(func_name, matlab_src_dir):
             if line.strip().startswith('%'):
                 # Found the first comment line
                 description = line.strip()[1:].strip()
+
+                # Skip tag-only lines (so we don't return "PURPOSE")
+                if re.match(r'^(PURPOSE|DESCRIPTION|SYNTAX|LICENSE)\s*:?\s*$', description, re.IGNORECASE):
+                    continue
+
                 # Clean up the description by removing dash sequences
                 description = re.sub(r'-{5,}', '', description).strip()
                 _function_descriptions[func_name] = description
@@ -164,7 +169,7 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
     
     This transforms the docstrings to have clear sections like:
     - PURPOSE
-    - SYNOPSIS
+    - SYNTAX
     - DESCRIPTION
     - CROSS-REFERENCE INFORMATION
     """
@@ -183,12 +188,72 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
     if matlab_src_dir and not _analyzed_code:
         analyze_matlab_code(matlab_src_dir)
     
-    # Store the original first line description as the PURPOSE
+    # Store extracted tagged content
     first_desc_line = ""
-    for line in lines:
-        if line.strip() and not re.search(r'[-]{10,}|SPDX-License-Identifier:|© \d{4}-\d{4}|See LICENSE file', line):
-            first_desc_line = line.strip()
+    syntax_text = ""
+
+    # -------------------------
+    # Extract PURPOSE block
+    # -------------------------
+    purpose_start = None
+    purpose_end = None
+
+    for i, line in enumerate(lines):
+        if re.search(r"\bPURPOSE\b", line.strip(), re.IGNORECASE):
+            purpose_start = i
             break
+
+    if purpose_start is not None:
+        for j in range(purpose_start + 1, len(lines)):
+            if re.search(r"\b(SYNTAX|DESCRIPTION|LICENSE)\b", lines[j].strip(), re.IGNORECASE):
+                purpose_end = j
+                break
+        if purpose_end is None:
+            purpose_end = len(lines)
+
+        purpose_lines = []
+        for k in range(purpose_start + 1, purpose_end):
+            s = lines[k].strip()
+            if s and not re.search(r'[-]{10,}|SPDX-License-Identifier:|© \d{4}-\d{4}|See LICENSE file', s):
+                purpose_lines.append(lines[k].rstrip("\n"))
+
+        first_desc_line = "\n".join(purpose_lines).strip()
+
+        # Remove PURPOSE block from lines
+        del lines[purpose_start:purpose_end]
+
+    # -------------------------
+    # Extract SYNTAX block
+    # -------------------------
+    syntax_start = None
+    syntax_end = None
+
+    for i, line in enumerate(lines):
+        if re.search(r"\bSYNTAX\b", line.strip(), re.IGNORECASE):
+            syntax_start = i
+            break
+
+    if syntax_start is not None:
+        for j in range(syntax_start + 1, len(lines)):
+            if re.search(r"\b(DESCRIPTION|LICENSE)\b", lines[j].strip(), re.IGNORECASE):
+                syntax_end = j
+                break
+        if syntax_end is None:
+            syntax_end = len(lines)
+
+        syntax_lines = []
+        for k in range(syntax_start + 1, syntax_end):
+            s = lines[k].strip()
+            if s and not re.search(r'[-]{10,}|SPDX-License-Identifier:|© \d{4}-\d{4}|See LICENSE file', s):
+                # minimal change: preserve text, only strip leading "%" if it is still present
+                cleaned = lines[k].rstrip("\n")
+                cleaned = re.sub(r'^\s*%\s?', '', cleaned)
+                syntax_lines.append(cleaned)
+
+        syntax_text = "\n".join(syntax_lines).strip()
+
+        # Remove SYNTAX block from lines
+        del lines[syntax_start:syntax_end]
     
     if remove_license:
         # Remove license headers
@@ -222,8 +287,19 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
                 param_name = param_match.group(1)
                 param_desc = param_match.group(2)
                 lines[i] = f"{param_name} : {param_desc}"
+                continue
+
+            # Match: "k : desc" and "(optional) k : desc" (no '%' required)
+            m = re.match(r'\s*(\(\s*optional\s*\)\s*)?(\w+)\s*:\s*(.*)', line, re.IGNORECASE)
+            if m:
+                opt_prefix = (m.group(1) or "").strip()
+                if opt_prefix:
+                    opt_prefix += " "          # normalize spacing: "(optional) "
+                param_name = m.group(2)
+                param_desc = m.group(3)
+                lines[i] = f"{opt_prefix}{param_name} : {param_desc}"
         
-        # Extract function signature if available
+        # Fallback signature only if SYNTAX tag is absent
         signature = ""
         if what == 'function' and name:
             # Try to extract signature from the first line if it contains function definition
@@ -233,6 +309,8 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
                 # Construct a basic signature from the function name
                 signature = f"function {name}"
         
+        rendered_syntax = syntax_text if syntax_text else signature
+
         # Get cross-reference information from our code analysis
         # Get the call information for this function
         function_base_name = name.split('.')[-1] if '.' in name else name
@@ -270,7 +348,12 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
                     continue
                 
                 # Check if line looks like a parameter
-                param_match = re.match(r'^\s*([a-zA-Z0-9_]+)\s*:', line) or re.match(r'^\s*:param\s+([^:]+):', line)
+                # "(optional) parameter" to the param match
+                param_match = re.match(
+                    r'^\s*((?:\(\s*optional\s*\)\s*)?[a-zA-Z0-9_]+)\s*:',
+                    line,
+                    re.IGNORECASE
+                ) or re.match(r'^\s*:param\s+([^:]+):', line)
                 
                 if param_match:
                     param_name = param_match.group(1).strip()
@@ -301,13 +384,19 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
         new_lines.append(first_desc_line)
         new_lines.append("")
         
-        # SYNOPSIS section
-        synopsis_title = "SYNOPSIS"
+        # SYNTAX section
+        synopsis_title = "SYNTAX"
         new_lines.append(synopsis_title)
         new_lines.append("^" * len(synopsis_title))
         new_lines.append(".. code-block:: matlab")
         new_lines.append("")
-        new_lines.append(f"    {signature}")
+
+        if rendered_syntax:
+            for syntax_line in rendered_syntax.splitlines():
+                new_lines.append(f"    {syntax_line}")
+        else:
+            new_lines.append("")
+
         new_lines.append("")
         
         # DESCRIPTION section
@@ -415,4 +504,4 @@ def setup(app):
         'version': '0.1',
         'parallel_read_safe': True,
         'parallel_write_safe': True,
-    } 
+    }

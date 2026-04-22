@@ -1,9 +1,15 @@
 function Y = amean(X)
+% PURPOSE
 % Returns the arithmetic mean for every two pairs in a column vector
 % And, Y(1) = X(1), Y(end) = X(end)
 %
+% DESCRIPTION
 % Parameters:
 %                X : Column vector
+%
+% SYNTAX
+% Y = amean(X)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

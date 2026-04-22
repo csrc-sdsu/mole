@@ -1,7 +1,9 @@
 function [Abcl,Abcr,Abcb,Abct] = addScalarBC2Dlhs(k, m, dx, n, dy, dc, nc)
+% PURPOSE
 % This functions uses geometry and boundary type conditions to create
 % modifications of matrix A associated to each of the boundary edges.
 %
+% DESCRIPTION
 % Parameters:
 % output
 %      Abcl : Matrix coefficients associated to boundary conditions for left edge
@@ -17,6 +19,9 @@ function [Abcl,Abcr,Abcb,Abct] = addScalarBC2Dlhs(k, m, dx, n, dy, dc, nc)
 %        dy : Horizontal cell size
 %        dc : a0 (4x1 vector for left, right, bottom, top boundaries, resp.)
 %        nc : b0 (4x1 vector for left, right, bottom, top boundaries resp.)
+%
+% SYNTAX
+% [Abcl,Abcr,Abcb,Abct] = addScalarBC2Dlhs(k, m, dx, n, dy, dc, nc)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later

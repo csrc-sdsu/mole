@@ -1,6 +1,8 @@
 function BC = mixedBC3D(k, m, dx, n, dy, o, dz, left, coeffs_left, right, coeffs_right, bottom, coeffs_bottom, top, coeffs_top, front, coeffs_front, back, coeffs_back)
+% PURPOSE
 % Constructs a 3D mimetic mixed boundary conditions operator
 %
+% DESCRIPTION
 % Parameters:
 %    k               : Order of accuracy
 %    m               : Number of cells in x-direction
@@ -21,6 +23,10 @@ function BC = mixedBC3D(k, m, dx, n, dy, o, dz, left, coeffs_left, right, coeffs
 %    coeffs_front    : Coefficients for the front boundary condition (a, b for Robin, otherwise coeff. for Dirichlet or Neumann)
 %    back            : Type of boundary condition at the back boundary ('Dirichlet', 'Neumann', 'Robin')
 %    coeffs_back     : Coefficients for the back boundary condition (a, b for Robin, otherwise coeff. for Dirichlet or Neumann)
+%
+% SYNTAX
+% BC = mixedBC3D(k, m, dx, n, dy, o, dz, left, coeffs_left, right, coeffs_right, bottom, coeffs_bottom, top, coeffs_top, front, coeffs_front, back, coeffs_back)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

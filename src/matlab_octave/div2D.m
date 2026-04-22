@@ -1,8 +1,10 @@
 function D = div2D(k, m, dx, n, dy, dc, nc)
+% PURPOSE
 % Returns a two-dimensional mimetic divergence operator depending on whether
 % or not the operator will contain a periodic boundary condition type
 %                              a0 U + b0 dU/dn = g,
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                m : Number of cells
@@ -11,6 +13,10 @@ function D = div2D(k, m, dx, n, dy, dc, nc)
 %               dy : Step size along y-axis
 %    (optional) dc : a0 (4x1 vector for left, right, bottom, top boundaries, resp.)
 %    (optional) nc : b0 (4x1 vector for left, right, bottom, top boundaries, resp.)
+%
+% SYNTAX
+% D = div2D(k, m, dx, n, dy)
+% D = div2D(k, m, dx, n, dy, dc, nc)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
