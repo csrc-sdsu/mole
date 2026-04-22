@@ -6,7 +6,7 @@
 %       d^2u/dt^2 = c^2 * d^2u/dx^2,   -2 <= x <= 2
 %       initial condition: u(0,t) = cos(pi x)^2, |x|<.5
 %                                 = 0,           otherwise
-%       boundary condition: u(0,t) = 0, u(M,t) = 0
+%       boundary condition: du/dx(0,t) = 0, du/dx(M,t) = 0
 %
 %  METHODS:
 %    1. mimetic_diff_two_way_wave_eq.m
@@ -95,7 +95,7 @@ addpath('../../../../src/matlab_octave');
 
 %% Problem definition - These values aremimicked in the FD and MD functions
 k    = 4;        % Mimetic Order of Accuracy, can change to 4,6,8
-c    = 0.1;      % Velocity, 1 makes FD sceme exact
+c    = 0.1;      % Velocity, 1 makes FD scheme exact
 west = -2.0;     % Domain's leftmost limits
 east = 2.0;      % Domain's rightmost limit
 

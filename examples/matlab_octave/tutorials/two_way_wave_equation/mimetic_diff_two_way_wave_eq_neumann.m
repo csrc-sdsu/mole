@@ -45,7 +45,7 @@ west = -2.0;     % Domain's leftmost limits
 east = 2.0;      % Domain's rightmost limit
 
 %% Number of cells to try, points is cells+1
-num_cells = [10, 20, 40, 80, 160];
+num_cells = [ 10, 20, 40, 80, 160 ];
 
 % generic holders for loop info
 error_md = zeros(size(num_cells));

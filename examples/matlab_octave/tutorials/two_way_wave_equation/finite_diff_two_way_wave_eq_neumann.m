@@ -53,7 +53,7 @@ u = @(x,t) 0.5 * ( f(x - c * t) + f(x + c * t) );
 for cell_index = 1 : numel(num_cells)
 
     %% Setup the domain
-    m = num_cells(cell_index);      % Number of cells, mimetics uses 'cells'
+    m = num_cells(cell_index);      % Number of cells
     nx = m+1;                       % number of grid points
 
     dx = (east - west) / m;         % spatial discretization
