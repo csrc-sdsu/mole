@@ -1,11 +1,16 @@
 function G = gradPeriodic(k, m, dx)
+% PURPOSE
 % Returns a m by m+2 one-dimensional mimetic gradient operator
 % when the boundary condition is periodic
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                m : Number of cells
 %               dx : Step size
+%
+% SYNTAX
+% G = gradPeriodic(k, m, dx)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later

@@ -1,12 +1,18 @@
 function G = grad3DNonUniform(k, xticks, yticks, zticks)
+% PURPOSE
 % Returns a three-dimensional non-uniform mimetic gradient operator
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                xticks : Centers' ticks (x-axis)
 %                yticks : Centers' ticks (y-axis)
 %                zticks : Centers' ticks (z-axis)
 %                         (including the boundaries!)
+%
+% SYNTAX
+% G = grad3DNonUniform(k, xticks, yticks, zticks)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

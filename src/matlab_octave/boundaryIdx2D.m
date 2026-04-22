@@ -1,10 +1,16 @@
 function idx = boundaryIdx2D(m, n)
+% PURPOSE
 % Returns the indices of the nodes that lie on the boundary of a 2D nodal
 % grid
 %
+% DESCRIPTION
 % Parameters:
 %           m : Number of nodes along x-axis
 %           n : Number of nodes along y-axis
+%
+% SYNTAX
+% idx = boundaryIdx2D(m, n)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

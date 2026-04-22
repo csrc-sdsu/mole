@@ -1,5 +1,12 @@
 function G = grad2DCurv(k, X, Y)
+% PURPOSE
 % Returns a 2D curvilinear mimetic gradient
+%
+% DESCRIPTION
+%
+% SYNTAX
+% G = grad2DCurv(k, X, Y)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

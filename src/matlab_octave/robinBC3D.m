@@ -1,7 +1,9 @@
 function BC = robinBC3D(k, m, dx, n, dy, o, dz, a, b)
+% PURPOSE
 % Returns a three-dimensional mimetic boundary operator that 
 % imposes a boundary condition of Robin's type
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                m : Number of cells along x-axis
@@ -12,6 +14,10 @@ function BC = robinBC3D(k, m, dx, n, dy, o, dz, a, b)
 %               dz : Step size along z-axis
 %                a : Dirichlet Coefficient
 %                b : Neumann Coefficient
+%
+% SYNTAX
+% BC = robinBC3D(k, m, dx, n, dy, o, dz, a, b)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

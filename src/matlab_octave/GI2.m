@@ -1,4 +1,11 @@
 function I = GI2(M, m, n, type)
+% PURPOSE
+%
+% DESCRIPTION
+%
+% SYNTAX
+% I = GI2(M, m, n, type)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

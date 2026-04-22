@@ -1,7 +1,17 @@
 function I = interpolCentersToFacesD3D(k, m, n, o)
+% PURPOSE
 % 3D interpolation from centers to faces
 % logical centers are [1 1.5 ... m-0.5 m]x[1 1.5 ... n-0.5 n]x[1 1.5 ... o-0.5 o]
-% m, n, o, are the number of cells in the logical x-, y-, z- axes
+%
+% DESCRIPTION
+% Parameters:
+%                   m: Number of cells in the logic x-axis
+%                   n: Number of cells in the logic y-axis
+%                   o: Number of cells in the logic z-axis
+%
+% SYNTAX
+% I = interpolCentersToFacesD3D(k, m, n, o)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

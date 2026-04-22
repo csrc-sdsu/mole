@@ -1,8 +1,16 @@
 function I = interpolFacesToCentersG1DPeriodic(k, m)
+% PURPOSE
 % 1D interpolation from faces to centers
 % when the boundary condition is periodic
-% centers logical coordinates [1,1.5:m-0.5]
-% m is the number of cells in the logical x-axis
+%
+% DESCRIPTION
+% centers logical coordinates [1,1.5:m-0.5,m]
+%
+% Parameters:
+%                 m: Number of cells in the logical x-axis
+%
+% SYNTAX
+% I = interpolFacesToCentersG1DPeriodic(k, m)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later

@@ -1,8 +1,18 @@
 function I = interpolCentersToNodes2D(k, m, n)
+% PURPOSE
 % interpolation operator from staggered to nodes
-% m, n, are the number of cells in the logical x-, y- axes
+%
+% DESCRIPTION
 % nodal logical coordinates are [1:1:m]x[1:1:n]
 % centers logical coordinates [1,1.5:m-0.5,m]x[1,1.5:n-0.5,n]
+%
+% Parameters:
+%                    m: Number of cells in the logical x-axis
+%                    n: Number of cells in the logical y-axis
+%
+% SYNTAX
+% I = interpolCentersToNodes2D(k, m, n)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

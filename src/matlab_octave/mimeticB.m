@@ -1,9 +1,15 @@
 function B = mimeticB(k, m)
+% PURPOSE
 % Returns a m+2 by m+1 one-dimensional mimetic boundary operator
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                m : Number of cells
+%
+% SYNTAX
+% B = mimeticB(k, m)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

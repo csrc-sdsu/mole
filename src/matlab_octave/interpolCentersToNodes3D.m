@@ -1,8 +1,19 @@
 function I = interpolCentersToNodes3D(k, m, n, o)
+% PURPOSE
 % interpolation operator from staggered to nodes
-% m, n, o, are the number of cells in the logical x-, y-, z- axes
+%
+% DESCRIPTION
 % nodal logical coordinates are [1:1:m]x[1:1:n]x[1:1:o]
 % centers logical coordinates [1,1.5:m-0.5,m]x[1,1.5:n-0.5,n]x[1,1.5:o-0.5,o]
+%
+% Parameters:
+%                    m: Number of cells in the logical x-axis
+%                    n: Number of cells in the logical y-axis
+%                    o: Number of cells in the logical z-axis
+%
+% SYNTAX
+% I = interpolCentersToNodes3D(k, m, n, o)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
