@@ -148,6 +148,11 @@ def get_function_description(func_name, matlab_src_dir):
             if line.strip().startswith('%'):
                 # Found the first comment line
                 description = line.strip()[1:].strip()
+
+                # Skip tag-only lines (so we don't return "PURPOSE")
+                if re.match(r'^(PURPOSE|DESCRIPTION|SYNTAX|LICENSE)\s*:?\s*$', description, re.IGNORECASE):
+                    continue
+
                 # Clean up the description by removing dash sequences
                 description = re.sub(r'-{5,}', '', description).strip()
                 _function_descriptions[func_name] = description
