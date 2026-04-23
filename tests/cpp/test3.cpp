@@ -15,7 +15,7 @@ void run_nullity_test(int k, Real tol) {
 
 TEST(LaplacianTests, Nullity) {
     Real tol = 1e-10;
-    for (int k : {2, 4, 6}) {
+    for (int k : {2, 4, 6, 8}) {
         run_nullity_test(k, tol);
     }
 }
