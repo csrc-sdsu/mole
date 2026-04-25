@@ -31,3 +31,44 @@ function robinBC(k::Int, m::Int, dx, a, b)
 
     BC = A + B*G;
 end
+
+"""
+    robinBC2D(k, m, dx, n, dy, a, b)
+
+Returns a two-dimensional mimetic boundary condition operator that imposes a boundary condition of Robin's type
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `m::Int`: Number of cells in x-direction
+- `dx`: Step size in x-direction
+- `n::Int`: Number of cells in y-direction
+- `dy`: Step size in y-direction
+- `a`: Dirichlet Coefficient
+- `b`: Neumann Coefficient
+"""
+function robinBC2D(k::Int, m::Int, dx, n::Int, dy, a, b)
+
+    Bm = robinBC(k, m, dx, a, b)
+    Bn = robinBC(k, n, dy, a, b)
+
+    Im = Matrix(I, m + 2, m + 2)
+
+    In = Matrix(I, n + 2, n + 2)
+    In[1, 1] = 0
+    In[end, end] = 0
+
+    BC1 = kron(In, Bm)
+    BC2 = kron(Bn, Im)
+
+    BC = BC1 + BC2
+
+end
+
+"""
+    robinBC(k, m, dx, n, dy, a, b)
+
+Alias of robinBC2D
+"""
+function robinBC(k::Int, m::Int, dx, n::Int, dy, a, b)
+    return robinBC2D(k, m, dx, n, dy, a, b);
+end

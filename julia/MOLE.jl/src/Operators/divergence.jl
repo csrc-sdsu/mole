@@ -4,8 +4,50 @@
     See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 =#
 
+# ------------------------
+# 1-D Divergence Operators
+# ------------------------
+
 """
-    div(k, m, dx)
+    div(k, m, dx; dc, nc)
+
+Returns a one-dimensional mimetic divergence operator. Default is non periodic.
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `m::Int`: Number of cells
+- `dx::T`: Step size
+- `dc::NTuple{2,T}`: Dirichlet coefficients of left and right boundaries (optional)
+- `nc::NTuple{2,T}`: Neumann coefficients of left and right boundaries (optional)
+"""
+function div(k::Int, m::Int, dx; dc::NTuple{2,T} = (1.0, 1.0), nc::NTuple{2,T} = (1.0, 1.0)) where {T}
+
+    hasbc = (dc[1] != zero(T)) || (dc[2] != zero(T)) || (nc[1] != zero(T)) || (nc[2] != zero(T))
+    if hasbc
+        D = divNonPeriodic(k, m, dx)
+        return D
+    else
+        D = divPeriodic(k, m, dx)
+        return D
+    end
+
+end
+
+"""
+    div(k, ticks)
+
+Returns a m + 2 by m + 1 non-uniform mimetic divergence operator
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `ticks::AbstractArray`: Edges' ticks e.g. [0 0.1 0.15 0.2 0.3 0.4 0.45]
+"""
+function div(k::Int, ticks::AbstractArray)
+    return divNonUniform(k, ticks)
+end
+
+"""
+    divNonPeriodic(k, m, dx)
 
 Returns a m+2 by m+1 one-dimensional mimetic divergence operator.
 
@@ -14,9 +56,9 @@ Returns a m+2 by m+1 one-dimensional mimetic divergence operator.
 - `m::Int`: Number of cells
 - `dx`: Step size
 """
-function div(k::Int,m::Int,dx)
-    if k < 2
-        throw(DomainError(k, "k must be >= 2"))
+function divNonPeriodic(k::Int, m::Int, dx)
+    if k < 2 || k > 8
+        throw(DomainError(k, "k must be >= 2 and <= 8"))
     end
 
     if k % 2 != 0
@@ -59,4 +101,144 @@ function div(k::Int,m::Int,dx)
         end
     end
     D = (1/dx)*D;
+end
+
+
+"""
+    divPeriodic(k, m, dx)
+
+Returns a m by m periodic mimetic divergence operator.
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `m::Int`: Number of cells
+- `dx`: Step size
+"""
+function divPeriodic(k::Int, m::Int, dx)
+
+    D = - gradPeriodic(k, m, dx)';
+    
+end
+
+
+"""
+    divNonUniform(k, ticks)
+
+Returns a m + 2 by m + 1 non-uniform mimetic divergence operator
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `ticks::AbstractVector`: Edges' ticks e.g. [0 0.1 0.15 0.2 0.3 0.4 0.45]
+"""
+function divNonUniform(k::Int, ticks::AbstractVector)
+
+    D = div(k, length(ticks) - 1, 1)
+
+    m, _ = size(D)
+
+    if size(ticks, 1) == 1
+        J = diagm((D * ticks').^-1)
+    else
+        J = diagm((D * ticks).^-1)
+    end
+
+    D = J * D
+    D[1, :] .= 0
+    D[end, :] .= 0
+    return D;
+
+end
+
+# ------------------------
+# 2-D Divergence Operators
+# ------------------------
+
+"""
+    div(k, m, dx, n, dy; dc, nc)
+
+Returns a two-dimensional mimetic divergence operator. Default is non periodic.
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `m::Int`: Number of cells in x-direction
+- `dx::T`: Step size in x-direction
+- `n::Int`: Number of cells in y-direction
+- `dy::T`: Step size in y-direction
+- `dc::NTuple{4,T}`: Dirichlet coefficients of left, right, bottom, and top boundaries (optional)
+- `nc::NTuple{4,T}`: Neumann coefficients of left, right, bottom, and top boundaries (optional)
+"""
+function div(k::Int, m::Int, dx, n::Int, dy; dc::NTuple{4,T} = (1.0, 1.0, 1.0, 1.0), nc::NTuple{4,T} = (1.0, 1.0, 1.0, 1.0)) where {T}
+
+    hasbclr = (dc[1] != zero(T)) || (dc[2] != zero(T)) || (nc[1] != zero(T)) || (nc[2] != zero(T))
+    hasbcbt = (dc[3] != zero(T)) || (dc[4] != zero(T)) || (nc[3] != zero(T)) || (nc[4] != zero(T))
+
+    if hasbclr
+        Dx = divNonPeriodic(k, m, dx)
+        Im = Matrix(I, m + 2, m + 2)
+        Im = Im[:, 2:end-1]
+    else
+        Dx = divPeriodic(k, m, dx)
+        Im = Matrix(I, m, m)
+    end
+
+    if hasbcbt
+        Dy = divNonPeriodic(k, n, dy)
+        In = Matrix(I, n + 2, n + 2)
+        In = In[:, 2:end-1]
+    else
+        Dy = divPeriodic(k, n, dy)
+        In = Matrix(I, n, n)
+    end
+
+    Sx = kron(In, Dx)
+    Sy = kron(Dy, Im)
+
+    D = [Sx Sy];
+
+end
+
+"""
+    div(k, xticks, yticks)
+
+Returns a two-dimensional non-uniform mimetic divergence operator.
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `xticks::AbstractVector`: Edges' ticks (x-axis)
+- `yticks::AbstractVector`: Edges' ticks (y-axis)
+"""
+function div(k::Int, xticks::AbstractVector, yticks::AbstractVector)
+    return div2DNonUniform(k, xticks, yticks)
+end
+
+
+"""
+    div2DNonUniform(k, xticks, yticks)
+
+Returns a two-dimensional non-uniform mimetic divergence operator.
+
+# Arguments
+- `k::Int`: Order of accuracy
+- `xticks::AbstractVector`: Edges' ticks (x-axis)
+- `yticks::AbstractVector`: Edges' ticks (y-axis)
+"""
+function div2DNonUniform(k::Int, xticks::AbstractVector, yticks::AbstractVector)
+
+    Dx = divNonUniform(k, xticks)
+    Dy = divNonUniform(k, yticks)
+
+    m = size(Dx, 1) # Really m + 2, but makes for simpler augmented identity matrix constuction
+    n = size(Dy, 1) # Really n + 2, but makes for simpler augmented identity matrix constuction
+
+    Im = Matrix(I, m, m)
+    In = Matrix(I, n, n)
+
+    Im = Im[:, 2:end-1]
+    In = In[:, 2:end-1]
+
+    Sx = kron(In, Dx)
+    Sy = kron(Dy, Im)
+
+    D = [Sx Sy]
+
 end
