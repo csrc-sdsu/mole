@@ -20,7 +20,7 @@ classdef testLapPolynomial < matlab.unittest.TestCase
                 analytic = k * (k-1) * sfield.^(k-2);
                 
                 % Note: ignore boundary points (because of divergence)
-                err = norm(approx(2:end-1)-analytic(2:end-1));
+                err = approx(2:end-1) - analytic(2:end-1);
 
                 testCase.verifyLessThan(norm(err), tol, ...
                     sprintf("Nullity test failed for k = %d", k));
@@ -65,7 +65,7 @@ classdef testLapPolynomial < matlab.unittest.TestCase
                 analytic_int(2:end-1, 2:end-1) = analytic(2:end-1, 2:end-1);
                 analytic_int = reshape(analytic_int, [], 1);
 
-                err = norm(approx - analytic_int);
+                err = approx - analytic_int;
 
                 testCase.verifyLessThan(norm(err), tol, ...
                     sprintf("Nullity test failed for k = %d", k));
@@ -118,7 +118,7 @@ classdef testLapPolynomial < matlab.unittest.TestCase
                 analytic_int(2:end-1, 2:end-1, 2:end-1) = analytic(2:end-1, 2:end-1, 2:end-1);
                 analytic_int = reshape(analytic_int, [], 1);
 
-                err = norm(approx - analytic_int);
+                err = approx - analytic_int;
 
                 testCase.verifyLessThan(norm(err), tol, ...
                     sprintf("Nullity test failed for k = %d", k));

@@ -4,7 +4,7 @@ classdef testGradPolynomial < matlab.unittest.TestCase
             addpath('../../src/matlab_octave')
             
             ks = [2, 4, 6, 8];  % Different orders of accuracy
-            tol = 1e-10;
+            tol = 1e-11;
             x1 = 0;
             x2 = 1;
 
@@ -20,7 +20,7 @@ classdef testGradPolynomial < matlab.unittest.TestCase
                 approx = G * sfield.^k;
                 analytic = k * vfield.^(k-1);
                 
-                err = norm(approx-analytic);
+                err = approx - analytic;
 
                 testCase.verifyLessThan(norm(err), tol, ...
                     sprintf("Nullity test failed for k = %d", k));
@@ -68,7 +68,7 @@ classdef testGradPolynomial < matlab.unittest.TestCase
                 analytic_y = k * vfield_y.^(k-1);
                 analytic_combined = [analytic_x; analytic_y];
                 
-                err = norm(approx - analytic_combined);
+                err = approx - analytic_combined;
 
                 testCase.verifyLessThan(norm(err), tol, ...
                     sprintf("Nullity test failed for k = %d", k));
@@ -127,7 +127,7 @@ classdef testGradPolynomial < matlab.unittest.TestCase
                 analytic_z = k * vfield_z.^(k-1);
                 analytic_combined = [analytic_x; analytic_y; analytic_z];
                 
-                err = norm(approx - analytic_combined);
+                err = approx - analytic_combined;
 
                 testCase.verifyLessThan(norm(err), tol, ...
                     sprintf("Nullity test failed for k = %d", k));
