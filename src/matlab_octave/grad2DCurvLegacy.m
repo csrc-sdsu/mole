@@ -1,4 +1,9 @@
 function G = grad2DCurvLegacy(k, X, Y)
+% 
+% ----------------------------------------------------------------------------
+%                 !!! WARNING: DEPRICATED BY grad2DCurv.m !!!
+% ----------------------------------------------------------------------------
+% 
 % Returns a 2D curvilinear mimetic gradient
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later

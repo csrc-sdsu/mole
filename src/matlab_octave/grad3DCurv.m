@@ -1,11 +1,33 @@
-function G = grad3DCurv(k, X, Y, Z)
+function G = grad3DCurv(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
 % PURPOSE
-% Returns a 3D curvilinear mimetic gradient
+% Returns a 3D curvilinear mimetic gradient operator
 %
 % DESCRIPTION
+% Returns:
+%                G : 3D curvilinear mimetic gradient operator. If optional
+%                    arguments are specified, it outputs to the extended
+%                    faces (normal faces plus boundaries)
+%
+% Parameters:
+%                k : Order of accuracy
+%                X : x-coordinates (physical) of meshgrid centers if
+%                    optional arguments are specified, else nodes
+%                Y : y-coordinates (physical) of meshgrid centers if
+%                    optional arguments are specified, else nodes
+%    (optional)  m : Number of cells in xi direction
+%    (optional) dx : Step size in xi direction
+%    (optional)  n : Number of cells in eta direction
+%    (optional) dy : Step size in eta direction
+%    (optional)  o : Number of cells in kappa direction
+%    (optional) dz : Step size in kappa direction
+%    (optional) dc : a0 (6x1 vector for left, right, bottom, top
+%                    boundaries, resp.)
+%    (optional) nc : b0 (6x1 vector for left, right, bottom, top
+%                    boundaries, resp.)
 %
 % SYNTAX
 % G = grad3DCurv(k, X, Y, Z)
+% G = grad3DCurv(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
@@ -13,87 +35,76 @@ function G = grad3DCurv(k, X, Y, Z)
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
 
-    % Get the determinant of the jacobian and the metrics
-    [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3D(k, X, Y, Z);
-    
-    % Dimensions of nodal grid
-    [n, m, o] = size(X);
-    
-    % Make them volumes so they can be interpolated
-    J = permute(reshape(J, m, n, o), [2, 1, 3]);
-    A = permute(reshape(Yn.*Zc-Zn.*Yc, m, n, o), [2, 1, 3]);
-    B = permute(reshape(Zn.*Xc-Xn.*Zc, m, n, o), [2, 1, 3]);
-    C = permute(reshape(Xn.*Yc-Yn.*Xc, m, n, o), [2, 1, 3]);
-    D = permute(reshape(Ze.*Yc-Ye.*Zc, m, n, o), [2, 1, 3]);
-    E = permute(reshape(Xe.*Zc-Ze.*Xc, m, n, o), [2, 1, 3]);
-    F = permute(reshape(Ye.*Xc-Xe.*Yc, m, n, o), [2, 1, 3]);
-    G = permute(reshape(Ye.*Zn-Ze.*Yn, m, n, o), [2, 1, 3]);
-    H = permute(reshape(Ze.*Xn-Xe.*Zn, m, n, o), [2, 1, 3]);
-    I = permute(reshape(Xe.*Yn-Ye.*Xn, m, n, o), [2, 1, 3]);
-    
-    % Logical grids
-    [Xl, Yl, Zl] = meshgrid(1:m, 1:n, 1:o);
-    
-    % Interpolate the metrics on the logical grid for positions u, v and w
-    Xl_ = (Xl(1:end-1, :, :)+Xl(2:end, :, :))/2;
-    Xl_ = (Xl_(:, :, 1:end-1)+Xl_(:, :, 2:end))/2;
-    Yl_ = (Yl(1:end-1, :, :)+Yl(2:end, :, :))/2;
-    Yl_ = (Yl_(:, :, 1:end-1)+Yl_(:, :, 2:end))/2;
-    Zl_ = (Zl(1:end-1, :, :)+Zl(2:end, :, :))/2;
-    Zl_ = (Zl_(:, :, 1:end-1)+Zl_(:, :, 2:end))/2;
-    Ju = interp3(Xl, Yl, Zl, J, Xl_, Yl_, Zl_);
-    A = interp3(Xl, Yl, Zl, A, Xl_, Yl_, Zl_);
-    D = interp3(Xl, Yl, Zl, D, Xl_, Yl_, Zl_);
-    G = interp3(Xl, Yl, Zl, G, Xl_, Yl_, Zl_);
-    
-    Xl_ = (Xl(:, 1:end-1, :)+Xl(:, 2:end, :))/2;
-    Xl_ = (Xl_(:, :, 1:end-1)+Xl_(:, :, 2:end))/2;
-    Yl_ = (Yl(:, 1:end-1, :)+Yl(:, 2:end, :))/2;
-    Yl_ = (Yl_(:, :, 1:end-1)+Yl_(:, :, 2:end))/2;
-    Zl_ = (Zl(:, 1:end-1, :)+Zl(:, 2:end, :))/2;
-    Zl_ = (Zl_(:, :, 1:end-1)+Zl_(:, :, 2:end))/2;
-    Jv = interp3(Xl, Yl, Zl, J, Xl_, Yl_, Zl_);
-    B = interp3(Xl, Yl, Zl, B, Xl_, Yl_, Zl_);
-    E = interp3(Xl, Yl, Zl, E, Xl_, Yl_, Zl_);
-    H = interp3(Xl, Yl, Zl, H, Xl_, Yl_, Zl_);
-    
-    Xl_ = (Xl(1:end-1, :, :)+Xl(2:end, :, :))/2;
-    Xl_ = (Xl_(:, 1:end-1, :)+Xl_(:, 2:end, :))/2;
-    Yl_ = (Yl(1:end-1, :, :)+Yl(2:end, :, :))/2;
-    Yl_ = (Yl_(:, 1:end-1, :)+Yl_(:, 2:end, :))/2;
-    Zl_ = (Zl(1:end-1, :, :)+Zl(2:end, :, :))/2;
-    Zl_ = (Zl_(:, 1:end-1, :)+Zl_(:, 2:end, :))/2;
-    Jw = interp3(Xl, Yl, Zl, J, Xl_, Yl_, Zl_);
-    C = interp3(Xl, Yl, Zl, C, Xl_, Yl_, Zl_);
-    F = interp3(Xl, Yl, Zl, F, Xl_, Yl_, Zl_);
-    I = interp3(Xl, Yl, Zl, I, Xl_, Yl_, Zl_);
-    
-    % Convert metrics to diagonal matrices so they can be multiplied by the 
-    % logical operators
-    Ju = spdiags(1./reshape(permute(Ju, [2, 1, 3]), [], 1), 0, numel(Ju), numel(Ju));
-    Jv = spdiags(1./reshape(permute(Jv, [2, 1, 3]), [], 1), 0, numel(Jv), numel(Jv));
-    Jw = spdiags(1./reshape(permute(Jw, [2, 1, 3]), [], 1), 0, numel(Jw), numel(Jw));
-    A = spdiags(reshape(permute(A, [2, 1, 3]), [], 1), 0, numel(A), numel(A));
-    B = spdiags(reshape(permute(B, [2, 1, 3]), [], 1), 0, numel(B), numel(B));
-    C = spdiags(reshape(permute(C, [2, 1, 3]), [], 1), 0, numel(C), numel(C));
-    D = spdiags(reshape(permute(D, [2, 1, 3]), [], 1), 0, numel(D), numel(D));
-    E = spdiags(reshape(permute(E, [2, 1, 3]), [], 1), 0, numel(E), numel(E));
-    F = spdiags(reshape(permute(F, [2, 1, 3]), [], 1), 0, numel(F), numel(F));
-    G = spdiags(reshape(permute(G, [2, 1, 3]), [], 1), 0, numel(G), numel(G));
-    H = spdiags(reshape(permute(H, [2, 1, 3]), [], 1), 0, numel(H), numel(H));
-    I = spdiags(reshape(permute(I, [2, 1, 3]), [], 1), 0, numel(I), numel(I));
-    
-    % Construct 3D uniform mimetic gradient operator (d/de, d/dn, d/dc)
-    Grad = grad3D(k, m-1, 1, n-1, 1, o-1, 1);
-    Ge = Grad(1:m*(n-1)*(o-1), :);
-    Gn = Grad(m*(n-1)*(o-1)+1:m*(n-1)*(o-1)+(m-1)*n*(o-1), :);
-    Gc = Grad(m*(n-1)*(o-1)+(m-1)*n*(o-1)+1:end, :);
-    
-    % Apply transformation
-    Gx = Ju*(A*Ge+D*GI13(Gn, m-1, n-1, o-1, 'Gn')+G*GI13(Gc, m-1, n-1, o-1, 'Gc'));
-    Gy = Jv*(B*GI13(Ge, m-1, n-1, o-1, 'Ge')+E*Gn+H*GI13(Gc, m-1, n-1, o-1, 'Gcy'));
-    Gz = Jw*(C*GI13(Ge, m-1, n-1, o-1, 'Gee')+F*GI13(Gn, m-1, n-1, o-1, 'Gnn')+I*Gc);
-    
-    % Final 3D curvilinear mimetic gradient operator (d/dx, d/dy, d/dz)
+    if nargin ~= 4 && nargin ~= 12
+        error("grad3DCurv:InvalidNumArgs", ...
+              "grad3DCurv expects 4 or 12 arguments")
+    elseif nargin == 4
+        G = grad3DCurvLegacy(k, X, Y, Z);
+        return;
+    end
+
+    assert(all(size(dc) == [6 1]), "dc is a 6x1 vector")
+    assert(all(size(nc) == [6 1]), "nc is a 6x1 vector")
+
+    % Periodic Handling
+    if isempty(find(dc(1:2).^2 + nc(1:2).^2, 1))
+        Ge = gradPeriodic(k,m,dx);
+        ICFx = interpolCentersToFacesD1DPeriodic(k,m);
+        IFCx = interpolFacesToCentersG1DPeriodic(k,m);
+        Im = speye(m);
+    else
+        Ge = gradNonPeriodic(k,m,dx);
+        ICFx = interpolCentersToFacesD1D(k,m);
+        IFCx = interpolFacesToCentersG1D(k,m);
+        Im = speye(m+2);
+    end
+    if isempty(find(dc(3:4).^2 + nc(3:4).^2, 1))
+        Gn = gradPeriodic(k,n,dy);
+        ICFy = interpolCentersToFacesD1DPeriodic(k,n);
+        IFCy = interpolFacesToCentersG1DPeriodic(k,n);
+        In = speye(n);
+    else
+        Gn = gradNonPeriodic(k,n,dy);
+        ICFy = interpolCentersToFacesD1D(k,n);
+        IFCy = interpolFacesToCentersG1D(k,n);
+        In = speye(n+2);
+    end
+    if isempty(find(dc(5:6).^2 + nc(5:6).^2, 1))
+        Gk = gradPeriodic(k, o, dz);
+        ICFz = interpolCentersToFacesD1DPeriodic(k,o);
+        IFCz = interpolFacesToCentersG1DPeriodic(k,o);
+        Io = speye(o);
+    else
+        Gk = gradNonPeriodic(k,o,dz);
+        ICFz = interpolCentersToFacesD1D(k,o);
+        IFCz = interpolFacesToCentersG1D(k,o);
+        Io = speye(o+2);
+    end
+
+    % Make Ge, Gn, and Gk act on and output to the centers
+    % This allows them to be added together
+    Ge = kron(kron(Io, In), IFCx) * kron(kron(Io, In), Ge);
+    Gn = kron(kron(Io, IFCy), Im) * kron(kron(Io, Gn), Im);
+    Gk = kron(kron(IFCz, In), Im) * kron(kron(Gk, In), Im);
+
+    % Apply metrics
+    [J, Xe, Xn, Xk, Ye, Yn, Yk, Ze, Zn, Zk] = jacobian3D(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc);
+
+    Gx = ((Yn .* Zk - Zn .* Yk) ./ J) .* Ge ...
+       + ((Ze .* Yk - Ye .* Zk) ./ J) .* Gn ...
+       + ((Ye .* Zn - Ze .* Yn) ./ J) .* Gk;
+    Gy = ((Zn .* Xk - Xn .* Zk) ./ J) .* Ge ...
+       + ((Xe .* Zk - Ze .* Xk) ./ J) .* Gn ...
+       + ((Ze .* Xn - Xe .* Zn) ./ J) .* Gk;
+    Gz = ((Xn .* Yk - Yn .* Xk) ./ J) .* Ge ...
+       + ((Ye .* Xk - Xe .* Yk) ./ J) .* Gn ...
+       + ((Xe .* Yn - Ye .* Xn) ./ J) .* Gk;
+
+    % Now have them output to the extended faces
+    Gx = kron(kron(Io, In), ICFx) * Gx;
+    Gy = kron(kron(Io, ICFy), Im) * Gy;
+    Gz = kron(kron(ICFz, In), Im) * Gz;
+
     G = [Gx; Gy; Gz];
+
 end

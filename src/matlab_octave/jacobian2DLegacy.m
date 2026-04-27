@@ -1,4 +1,9 @@
 function [J, Xe, Xn, Ye, Yn] = jacobian2DLegacy(k, X, Y)
+% 
+% ----------------------------------------------------------------------------
+%                 !!! WARNING: DEPRICATED BY jacobian2D.m !!!
+% ----------------------------------------------------------------------------
+% 
 % Returns:
 %                J : Determinant of the Jacobian (XeYn - XnYe) on the nodes
 %               Xe : dx/de metric on the nodes

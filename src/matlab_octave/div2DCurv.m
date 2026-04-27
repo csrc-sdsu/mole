@@ -50,22 +50,30 @@ function D = div2DCurv(k, X, Y, m, dx, n, dy, dc, nc)
         IFCx = interpolFacesToCentersG1DPeriodic(k,m);
         ICFx = interpolCentersToFacesD1DPeriodic(k,m);
         Im = speye(m);
+        Bx = sparse(m, m);
     else
         De = divNonPeriodic(k,m,dx);
         IFCx = interpolFacesToCentersG1D(k,m);
         ICFx = interpolCentersToFacesD1D(k,m);
         Im = speye(m+2);
+        Bx = sparse(m + 2, m + 1);
+        Bx(1, 1) = 1;
+        Bx(end, end) = 1;
     end
     if isempty(find(dc(3:4).^2 + nc(3:4).^2,1))
         Dn = divPeriodic(k,n,dy);
         IFCy = interpolFacesToCentersG1DPeriodic(k,n);
         ICFy = interpolCentersToFacesD1DPeriodic(k,n);
         In = speye(n);
+        By = sparse(n, n);
     else
         Dn = divNonPeriodic(k,n,dy);
         IFCy = interpolFacesToCentersG1D(k,n);
         ICFy = interpolCentersToFacesD1D(k,n);
         In = speye(n+2);
+        By = sparse(n + 2, n + 1);
+        By(1, 1) = 1;
+        By(end, end) = 1;
     end
 
     % Make De and Dn act on and output to the centers
@@ -85,8 +93,9 @@ function D = div2DCurv(k, X, Y, m, dx, n, dy, dc, nc)
 
     D = [Dx Dy];
 
-    % Ensure no output on boundary -- Probably a cleaner way to do this
-    bdry = find(sum(spones(div2D(2,m,1,n,1,dc,nc)), 2) == 0);
+    % Ensure no output on boundary
+    B = [kron(By, Im) kron(In, Bx)];
+    bdry = find(sum(B, 2) ~= 0);
     D(bdry,:) = sparse(size(bdry,1),size(D,2));
 
 end
