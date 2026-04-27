@@ -31,7 +31,7 @@ classdef testGradPolynomial < matlab.unittest.TestCase
             addpath('../../src/matlab_octave')
             
             ks = [2, 4, 6, 8];  % Different orders of accuracy
-            tol = 1e-10;
+            tol = 1e-11;
             x1 = 0;
             x2 = 1;
             y1 = 0;
@@ -79,7 +79,7 @@ classdef testGradPolynomial < matlab.unittest.TestCase
             addpath('../../src/matlab_octave')
             
             ks = [2, 4, 6, 8];  % Different orders of accuracy
-            tol = 1e-10;
+            tol = 1e-11;
             x1 = 0;
             x2 = 1;
             y1 = 0;
