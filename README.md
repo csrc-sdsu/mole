@@ -221,15 +221,3 @@ The archival copy of the MOLE User Manual is maintained on [Zenodo](https://zeno
 }
 ```
 
-## Gallery
-
-Now, some cool pictures obtained with MOLE:
-
-![Obtained with curvilinear operators](doc/assets/img/4thOrder.png)
-![Obtained with curvilinear operators](doc/assets/img/4thOrder2.png)
-![Obtained with curvilinear operators](doc/assets/img/4thOrder3.png)
-![Obtained with curvilinear operators](doc/assets/img/grid2.png)
-![Obtained with curvilinear operators](doc/assets/img/grid.png)
-![Obtained with curvilinear operators](doc/assets/img/WavyGrid.png)
-![Obtained with curvilinear operators](doc/assets/img/wave2D.png)
-![Obtained with curvilinear operators](doc/assets/img/burgers.png)
