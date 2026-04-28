@@ -3,10 +3,7 @@
 % k = angular wave number
 % n = refractive index
 % This equation models the wifi signal propagation in a room
-
-clc
-close all
-
+clear; clc; close all;
 addpath('../../src/matlab_octave')
 
 % define the walls
