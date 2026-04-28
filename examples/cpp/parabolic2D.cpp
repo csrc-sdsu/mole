@@ -1,10 +1,10 @@
- /**
+/**
  * Solving the 2D Parabolic Diffusion Equation with Dirichlet Boundary Conditions
  *
  * Equation: u_t = alpha * (u_xx + u_yy)
  * Domain:   0 < x,y < 2 on an (nx+2) x (ny+2) grid
  * Initial Condition:
- *   u(x,y,0) = 2 on [1,1.5] x [1,1.5], and 0 elsewhere
+ *   u(x,y,0) = 2 on a centered square region, and 0 elsewhere
  * Boundary Conditions:
  *   u = 0 on all boundaries
  *
@@ -12,30 +12,76 @@
  *   - Explicit Euler
  *   - Implicit Euler
  *
- * The final solution is written as (x,y,u) triples to "solution_xyz.dat"
- * and plotted with GNUplot as a shaded 3D surface.
+ * The solution is saved as animation frames and displayed with GNUplot
+ * as a shaded 3D surface.
  */
 
 #include <armadillo>
 #include "mole.h"
+#include "addscalarbc.h"
 #include <iostream>
 #include <string>
 #include <cmath>
 #include <fstream>
 #include <cstdlib>
+#include <sstream>
+#include <iomanip>
 
+using namespace std;
 using namespace arma;
+using namespace AddScalarBC;
+
+// Write one animation frame as (x,y,u) triples.
+static bool write_frame(
+    const string& filename,
+    const vec& xgrid,
+    const vec& ygrid,
+    const mat& U
+) {
+    ofstream data_file(filename);
+
+    if (!data_file) {
+        cerr << "Error: Failed to create " << filename << "\n";
+        return false;
+    }
+
+    for (uint32_t i = 0; i < U.n_rows; ++i) {
+        for (uint32_t j = 0; j < U.n_cols; ++j) {
+            data_file << xgrid(i) << " "
+                      << ygrid(j) << " "
+                      << U(i, j) << "\n";
+        }
+        data_file << "\n";
+    }
+
+    return true;
+}
+
+// Build frame filename.
+static string frame_name(uint32_t frame_id) {
+    ostringstream name;
+
+    name << "frames/frame_"
+         << setw(4)
+         << setfill('0')
+         << frame_id
+         << ".dat";
+
+    return name.str();
+}
 
 int main() {
-    std::string method = "implicit";
+    string method = "implicit";
 
     constexpr uint16_t k = 2;
     constexpr uint32_t nx = 40;
     constexpr uint32_t ny = 50;
     constexpr double alpha = 0.1;
 
-    constexpr double xL = 0.0, xR = 2.0;
-    constexpr double yL = 0.0, yR = 2.0;
+    constexpr double xL = 0.0;
+    constexpr double xR = 2.0;
+    constexpr double yL = 0.0;
+    constexpr double yR = 2.0;
 
     const double dx = (xR - xL) / nx;
     const double dy = (yR - yL) / ny;
@@ -43,29 +89,52 @@ int main() {
     const double tf = 3.0;
     const double dt = (method == "explicit") ? 0.001 : 0.01;
 
+    const uint32_t frame_stride = (method == "explicit") ? 20 : 5;
+
+    if (system("mkdir -p frames") != 0) {
+        cerr << "Error: Failed to create frames directory.\n";
+        return 1;
+    }
+
     // Storage grid
+
     vec xgrid(nx + 2, fill::zeros);
     vec ygrid(ny + 2, fill::zeros);
 
     xgrid(0) = xL;
+
     for (uint32_t i = 1; i <= nx; ++i) {
-        xgrid(i) = dx / 2.0 + (i - 1) * dx;
+        xgrid(i) = xL + dx / 2.0 + (i - 1) * dx;
     }
+
     xgrid(nx + 1) = xR;
 
     ygrid(0) = yL;
+
     for (uint32_t j = 1; j <= ny; ++j) {
-        ygrid(j) = dy / 2.0 + (j - 1) * dy;
+        ygrid(j) = yL + dy / 2.0 + (j - 1) * dy;
     }
+
     ygrid(ny + 1) = yR;
 
     // Initial condition
+
     mat U = zeros(nx + 2, ny + 2);
+
+    const double source_width = 0.5;
+
+    const double x_center = 0.5 * (xL + xR);
+    const double y_center = 0.5 * (yL + yR);
+
+    const double xA = x_center - 0.5 * source_width;
+    const double xB = x_center + 0.5 * source_width;
+    const double yA = y_center - 0.5 * source_width;
+    const double yB = y_center + 0.5 * source_width;
 
     for (uint32_t i = 0; i < U.n_rows; ++i) {
         for (uint32_t j = 0; j < U.n_cols; ++j) {
-            if (xgrid(i) >= 1.0 && xgrid(i) <= 1.5 &&
-                ygrid(j) >= 1.0 && ygrid(j) <= 1.5) {
+            if (xgrid(i) >= xA && xgrid(i) <= xB &&
+                ygrid(j) >= yA && ygrid(j) <= yB) {
                 U(i, j) = 2.0;
             }
         }
@@ -74,14 +143,13 @@ int main() {
     vec u = vectorise(U);
 
     // Construct mimetic Laplacian
+
     Laplacian L(k, nx, ny, dx, dy);
 
-    // --------------------------------------------------
-    // Boundary conditions
-    // Dirichlet on all boundaries: u = 0
-    // Use full edge lengths including corners
-    // --------------------------------------------------
-    AddScalarBC::BC2D bc;
+    // Dirichlet boundary conditions
+
+    BC2D bc;
+
     bc.dc = ones<vec>(4);
     bc.nc = zeros<vec>(4);
 
@@ -90,82 +158,126 @@ int main() {
     bc.v[2] = zeros<vec>(nx + 2);  // bottom
     bc.v[3] = zeros<vec>(nx + 2);  // top
 
-    // Apply BCs to the spatial operator first
-    AddScalarBC::addScalarBC(L, u, k, nx, dx, ny, dy, bc);
+    addScalarBC(L, u, k, nx, dx, ny, dy, bc);
 
     // Build time-stepping operator
+
     sp_mat A;
+
     if (method == "explicit") {
         A = speye<sp_mat>(size(L)) + alpha * dt * L;
     } else {
         A = speye<sp_mat>(size(L)) - alpha * dt * L;
     }
 
-    // Time integration
-    const uint32_t nsteps = static_cast<uint32_t>(std::round(tf / dt));
+    // Time integration with frame output
+
+    const uint32_t nsteps = static_cast<uint32_t>(round(tf / dt));
+
+    uint32_t frame_id = 0;
 
     for (uint32_t it = 0; it <= nsteps; ++it) {
-        const double t = it * dt;
-        std::cout << "time = " << t << std::endl;
+        U = reshape(u, nx + 2, ny + 2);
+
+        if (it % frame_stride == 0 || it == nsteps) {
+            if (!write_frame(frame_name(frame_id), xgrid, ygrid, U)) {
+                return 1;
+            }
+
+            ++frame_id;
+        }
+
+        if (it == nsteps) {
+            break;
+        }
 
         if (method == "explicit") {
             u = A * u;
         } else {
             vec unew;
+
             bool ok = spsolve(unew, A, u, "superlu");
+
             if (!ok) {
-                std::cerr << "Sparse solve failed at step " << it << std::endl;
+                cerr << "Sparse solve failed at step " << it << "\n";
                 return 1;
             }
+
             u = unew;
         }
-
-        U = reshape(u, nx + 2, ny + 2);
     }
 
-    // Save final solution as (x, y, u) triples
+    // Save final solution
+
     U = reshape(u, nx + 2, ny + 2);
 
-    std::ofstream data_file("solution_xyz.dat");
-    if (!data_file) {
-        std::cerr << "Error: Failed to create solution data file.\n";
+    ofstream final_file("solution_xyz.dat");
+
+    if (!final_file) {
+        cerr << "Error: Failed to create solution_xyz.dat\n";
         return 1;
     }
 
     for (uint32_t i = 0; i < U.n_rows; ++i) {
         for (uint32_t j = 0; j < U.n_cols; ++j) {
-            data_file << xgrid(i) << " " << ygrid(j) << " " << U(i, j) << "\n";
+            final_file << xgrid(i) << " "
+                       << ygrid(j) << " "
+                       << U(i, j) << "\n";
         }
-        data_file << "\n";
-    }
-    data_file.close();
 
-    // Create GNUplot script for shaded 3D surface
-    std::ofstream plot_script("plot.gnu");
+        final_file << "\n";
+    }
+
+    final_file.close();
+
+    // Create GNUplot 3D animation script
+
+    ofstream plot_script("plot_animation.gnu");
+
     if (!plot_script) {
-        std::cerr << "Error: Failed to create GNUplot script.\n";
+        cerr << "Error: Failed to create plot_animation.gnu\n";
         return 1;
     }
 
-    plot_script << "set title \"2D Diffusion Final Solution\"\n";
+    plot_script << "set term qt size 800,700 persist\n";
     plot_script << "set xlabel 'x'\n";
     plot_script << "set ylabel 'y'\n";
     plot_script << "set zlabel 'u'\n";
+
+    plot_script << "set xrange [" << xL << ":" << xR << "]\n";
+    plot_script << "set yrange [" << yL << ":" << yR << "]\n";
+    plot_script << "set zrange [0:2.1]\n";
+    plot_script << "set cbrange [0:2.1]\n";
+
     plot_script << "set hidden3d\n";
     plot_script << "set pm3d\n";
     plot_script << "set palette rgb 33,13,10\n";
+
     plot_script << "set view 60,45\n";
-    plot_script << "splot 'solution_xyz.dat' with pm3d notitle\n";
+    plot_script << "set ticslevel 0\n";
+    plot_script << "set xyplane 0\n";
+    plot_script << "set size square\n";
+
+    plot_script << "unset key\n";
+    plot_script << "set colorbox\n";
+
+    plot_script << "nframes = " << frame_id << "\n";
+    plot_script << "frame_dt = " << frame_stride * dt << "\n";
+
+    plot_script << "do for [i=0:nframes-1] {\n";
+    plot_script << "    set title sprintf('2D Diffusion, t = %.3f', i*frame_dt)\n";
+    plot_script << "    splot sprintf('frames/frame_%04d.dat', i) using 1:2:3 with pm3d notitle\n";
+    plot_script << "    pause 0.05\n";
+    plot_script << "}\n";
 
     plot_script.close();
 
-    // Execute GNUplot
-    if (system("gnuplot -persist plot.gnu") != 0) {
-        std::cerr << "Error: Failed to execute GNUplot.\n";
+    // Run animation
+
+    if (system("gnuplot -persist plot_animation.gnu") != 0) {
+        cerr << "Error: Failed to execute GNUplot animation.\n";
         return 1;
     }
 
     return 0;
 }
-
-
