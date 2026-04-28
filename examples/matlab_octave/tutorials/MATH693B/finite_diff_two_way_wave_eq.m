@@ -1,4 +1,4 @@
-function [ U2_fd, error_fd, walltime_fd, flops_fd ] = finite_diff_two_way_wave_eq(c,dt)
+function [ U2_fd, error_fd, walltime_fd, flops_fd ] = finite_diff_two_way_wave_eq(c,dt, num_cells)
 %% FINITE_DIFF_TWO_WAY_WAVE_EQ
 %  Solve the 1D two-way wave equation using standard finite differences.
 %
@@ -11,6 +11,11 @@ function [ U2_fd, error_fd, walltime_fd, flops_fd ] = finite_diff_two_way_wave_e
 %  where D_fd is the standard second-derivative finite-difference matrix:
 %
 %      D_fd = (1/dx^2) * tridiag([1, -2, 1])
+%
+%  INPUTS:
+%    c           - wave speed
+%    dt          - time step
+%    num_cells   - array of number of cells to test.
 %
 %  OUTPUTS:
 %    U2_fd       - Final solution vector at last time step
@@ -41,9 +46,6 @@ function [ U2_fd, error_fd, walltime_fd, flops_fd ] = finite_diff_two_way_wave_e
 %% Problem definition
 west = -2.0;     % Domain's leftmost limits
 east = 2.0;      % Domain's rightmost limit
-
-%% Number of cells to try, grid points is cells+1
-num_cells = [ 20, 40, 80, 160 ];
 
 % generic holders for metrics within the loops
 error_fd = zeros(size(num_cells));

@@ -1,4 +1,4 @@
-function [ U2_md, error_md, walltime_md, flops_md ] = mimetic_diff_two_way_wave_eq(k,c,dt)
+function [ U2_md, error_md, walltime_md, flops_md ] = mimetic_diff_two_way_wave_eq(k,c,dt, num_cells)
 %% MIMETIC_DIFF_TWO_WAY_WAVE_EQ
 %  Solve the 1D two-way wave equation using mimetic finite differences.
 %
@@ -10,6 +10,12 @@ function [ U2_md, error_md, walltime_md, flops_md ] = mimetic_diff_two_way_wave_
 %      U^{n+1} = 2*U^{n} - U^{n-1} + (c^2 * dt^2 * L) * U^{n}
 %  where L is the mimetic discrete Laplacian operator. Note there is no spacial
 %  discretization, the L takes care of that.
+%
+%
+%  INPUTS:
+%    c           - wave speed
+%    dt          - time step
+%    num_cells   - array of number of cells to test.
 %
 %  OUTPUTS:
 %    U2_md       - Final solution vector at last time step
@@ -46,9 +52,6 @@ function [ U2_md, error_md, walltime_md, flops_md ] = mimetic_diff_two_way_wave_
 % k    = 2;        % Mimetic Order of Accuracy, can change to 4,6,8
 west = -2.0;     % Domain's leftmost limits
 east = 2.0;      % Domain's rightmost limit
-
-%% Number of cells to try, points is cells+1
-num_cells = [ 20, 40, 80, 160 ];
 
 % generic holders for loop info
 error_md = zeros(size(num_cells));

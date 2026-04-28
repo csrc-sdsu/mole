@@ -96,18 +96,18 @@ clear
 addpath('../../../../src/matlab_octave');
 
 %% Problem definition - These values aremimicked in the FD and MD functions
-k    = 2;        % Mimetic Order of Accuracy, can change to 4,6,8
-c    = 0.1;      % Velocity, 1 makes FD sceme exact
+k    = 6;        % Mimetic Order of Accuracy, can change to 4,6,8
+c    = 0.4;      % Velocity, 1 makes FD sceme exact
 west = -2.0;     % Domain's leftmost limits
 east = 2.0;      % Domain's rightmost limit
-dt = 0.001;
+dt = 0.0001;      % dt for all step sizes.
 
 % Number of cells to try, points is cells+1
-num_cells = [ 20, 40, 80, 160 ];
+num_cells = [ 20, 40, 80 ];
 
 %% Run each of the methods over the different grids
-[ U2_fd, error_fd, walltime_fd, flops_fd ] = finite_diff_two_way_wave_eq(c,dt);
-[ U2_md, error_md, walltime_md, flops_md ] = mimetic_diff_two_way_wave_eq(k,c,dt);
+[ U2_fd, error_fd, walltime_fd, flops_fd ] = finite_diff_two_way_wave_eq(c,dt, num_cells);
+[ U2_md, error_md, walltime_md, flops_md ] = mimetic_diff_two_way_wave_eq(k,c,dt, num_cells);
 
 %% Error analysis
 
