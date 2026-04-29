@@ -245,7 +245,6 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
         for k in range(syntax_start + 1, syntax_end):
             s = lines[k].strip()
             if s and not re.search(r'[-]{10,}|SPDX-License-Identifier:|© \d{4}-\d{4}|See LICENSE file', s):
-                # minimal change: preserve text, only strip leading "%" if it is still present
                 cleaned = lines[k].rstrip("\n")
                 cleaned = re.sub(r'^\s*%\s?', '', cleaned)
                 syntax_lines.append(cleaned)
@@ -336,6 +335,8 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
         description_content = []
         parameters = []
         in_params_section = False
+        pending_param_name = ""
+        last_param_idx = None
         
         # First pass: collect all lines that are not part of the cross-reference section
         cross_ref_keywords = ['this function calls', 'this function is called by']
@@ -348,23 +349,40 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
                     continue
                 
                 # Check if line looks like a parameter
+                s = line.strip()
+
+                if in_params_section and s and (':' not in s) and s.endswith(','):
+                    pending_param_name = (pending_param_name + "\n" + s).strip() if pending_param_name else s
+                    continue
+ 
                 # "(optional) parameter" to the param match
                 param_match = re.match(
-                    r'^\s*((?:\(\s*optional\s*\)\s*)?[a-zA-Z0-9_]+)\s*:',
+                    r'^\s*((?:\(\s*optional\s*\)\s*)?[A-Za-z0-9_,\s]+?)\s*:\s*(.*)$',
                     line,
                     re.IGNORECASE
-                ) or re.match(r'^\s*:param\s+([^:]+):', line)
+                ) or re.match(r'^\s*:param\s+([^:]+):\s*(.*)$', line)
                 
                 if param_match:
                     param_name = param_match.group(1).strip()
-                    if ':' in line:
-                        parts = line.split(':', 1)
-                        desc = parts[1].strip() if len(parts) > 1 and parts[1].strip() else "Parameter description not provided"
-                    else:
+                    desc = param_match.group(2).strip() if param_match.group(2) else ""
+
+                    if pending_param_name:
+                        param_name = pending_param_name + "\n" + param_name
+                        pending_param_name = ""
+
+                    if not desc:
                         desc = "Parameter description not provided"
-                    parameters.append((param_name, desc))
+
+                    parameters.append([param_name, desc])
+                    last_param_idx = len(parameters) - 1
                     in_params_section = True
-                elif not in_params_section:
+                    continue
+
+                if in_params_section and last_param_idx is not None and s and (line.startswith(' ') or line.startswith('\t')):
+                    parameters[last_param_idx][1] += "\n" + s
+                    continue
+                
+                if not in_params_section:
                     # If not in parameters section, treat as description
                     if line.strip() and not line.strip().startswith(':'):
                         description_content.append(line.strip())
@@ -373,6 +391,8 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
                     if not any(keyword in line.lower() for keyword in cross_ref_keywords):
                         description_content.append(line.strip())
                     in_params_section = False
+                    pending_param_name = ""
+                    last_param_idx = None
         
         # Now reconstruct the docstring in M2HTML style
         new_lines = []
@@ -421,7 +441,23 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
             
             # Add parameters with proper formatting
             for param_name, param_desc in parameters:
-                new_lines.append(f"    {param_name:>16} : {param_desc}")
+                name_lines = str(param_name).splitlines()
+                desc_lines = str(param_desc).splitlines() if param_desc is not None else [""]
+
+                if len(name_lines) > 1:
+                    for nl in name_lines[:-1]:
+                        new_lines.append(f"    {'':>16}   {nl}")
+
+                    first_desc = desc_lines[0] if desc_lines else ""
+                    new_lines.append(f"    {'':>16}   {name_lines[-1]} : {first_desc}")
+
+                    for extra in desc_lines[1:]:
+                        new_lines.append(f"    {'':>16}   {extra}")
+                else:
+                    first_desc = desc_lines[0] if desc_lines else ""
+                    new_lines.append(f"    {name_lines[0]:>16} : {first_desc}")
+                    for extra in desc_lines[1:]:
+                        new_lines.append(f"    {'':>16}   {extra}")
         
         # CROSS-REFERENCE INFORMATION section
         cross_ref_title = "CROSS-REFERENCE INFORMATION"
