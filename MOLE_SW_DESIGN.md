@@ -69,10 +69,6 @@ Since there is no absolute way to prove portability, many MOLE submissions demon
 
 ## Ownership
 
-Are you sure you own the code you are thinking of submitting?   "How to Copyright Software" by MJ Salone, Nolo Press, 1990 says:
-
-Doing work on your own time that is very similar to programming you do for your employer on company time can raise nasty legal problems.  In this situation, it's best to get a written release from your employer in advance.
-
 Place a copyright notice in all the important files you submit. Code can be submitted under your copyright, but the license must be present for inclusion in the library.
 
 ---
