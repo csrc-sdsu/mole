@@ -9,6 +9,10 @@ add_library(mole_C++
   mixedbc.cpp
   robinbc.cpp
   utils.cpp
+  interpolCtoF.cpp
+  interpolCtoN.cpp
+  interpolFtoC.cpp
+  interpolNtoC.cpp
 )
 target_include_directories(mole_C++ PUBLIC ${ARMADILLO_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${OpenBLAS_INCLUDE_DIRS} ${SUPERLU_INCLUDE_DIR})
 target_link_libraries(mole_C++ PUBLIC ${LINK_LIBS})

@@ -100,13 +100,14 @@ k    = 2;        % Mimetic Order of Accuracy, can change to 4,6,8
 c    = 0.1;      % Velocity, 1 makes FD sceme exact
 west = -2.0;     % Domain's leftmost limits
 east = 2.0;      % Domain's rightmost limit
+dt   = 0.001;    % Time step, must work for all cell sizes
 
 % Number of cells to try, points is cells+1
-num_cells = [ 10, 20, 40, 80, 160 ];
+num_cells = [ 20, 40, 80, 160 ];
 
 %% Run each of the methods over the different grids
-[ U2_fd, error_fd, walltime_fd, flops_fd ] = finite_diff_two_way_wave_eq();
-[ U2_md, error_md, walltime_md, flops_md ] = mimetic_diff_two_way_wave_eq();
+[ U2_fd, error_fd, walltime_fd, flops_fd ] = finite_diff_two_way_wave_eq(c, dt, num_cells);
+[ U2_md, error_md, walltime_md, flops_md ] = mimetic_diff_two_way_wave_eq(k, c, dt, num_cells);
 
 %% Error analysis
 
@@ -129,7 +130,8 @@ loglog(1 ./ num_cells, error_md, 'LineWidth', 2)
 xlim([1 / num_cells(end) 1 / num_cells(1)]);
 xlabel('dx'); ylabel('error');
 grid on;
-title(['Error: FD slope~', num2str(p_fd(1)), ', MD slope~', num2str(p_md(1))]);
+title(['Error Convergence, FD slope=', num2str(p_fd(1),'%.2f'), ...
+       ', MD slope=', num2str(p_md(1),'%.2f')]);
 legend('FD Error','MD error')
 set(gca, "linewidth", 2, "fontsize", 16)
 
@@ -142,7 +144,7 @@ xlim([num_cells(1) num_cells(end)]);
 ylim([min( min(walltime_fd), min(walltime_md) )  max( max(walltime_fd), max(walltime_md) )]);
 xlabel('num points'); ylabel('walltime [s]');
 grid on;
-title(['Walltime, MD is order ', num2str(k)]);
+title(['Walltime: FD (order 2) vs MD (order ', num2str(k), ')']);
 legend('FD time', 'MD time');
 set(gca, "linewidth", 2, "fontsize", 16)
 
@@ -154,7 +156,7 @@ loglog(num_cells, flops_md, 'LineWidth', 2);
 xlim([ num_cells(1) num_cells(end) ]); ylim([ 1e5 1e8 ]);
 xlabel('num cells'); ylabel('FLOPs');
 grid on;
-title(['FLOPs for each method, mimetic order:', num2str(k)]);
+title(['FLOPs: FD (order 2) vs MD (order ', num2str(k), ')']);
 legend('FD FLOPs', 'MD FLOPs');
 set(gca, "linewidth", 2, "fontsize", 16)
 

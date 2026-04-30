@@ -1,4 +1,4 @@
-function I = interpolNodesToCenters2D(k, m, n)
+function I = interpolNodesToCenters2D(k, m, n, dc, nc)
 % interpolation operator from nodal coordinates to staggered centers
 % m, n, are the number of cells in the logical x-, y- axes
 % nodal logical coordinates are [1:1:m]x[1:1:n]
@@ -9,8 +9,27 @@ function I = interpolNodesToCenters2D(k, m, n)
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
 
-    I1 = interpolFacesToCentersG1D(k, m);
-    I2 = interpolFacesToCentersG1D(k, n);
+    if nargin ~= 3 && nargin ~= 5
+        error("interpolNodesToCenters2D:InvalidNumArgs",...
+              "interpolNodesToCenters2D expects 3 or 5 arguments")
+    elseif nargin == 3
+        dc = [1; 1; 1; 1];
+        nc = [0; 0; 0; 0];
+    else
+        assert(all(size(dc) == [4 1]), "dc is a 4x1 vector")
+        assert(all(size(nc) == [4 1]), "nc is a 4x1 vector")
+    end
+
+    if isempty(find(dc(1:2).^2 + nc(1:2).^2, 1))
+        I1 = interpolFacesToCentersG1DPeriodic(k,m);
+    else
+        I1 = interpolFacesToCentersG1D(k,m);
+    end
+    if isempty(find(dc(3:4).^2 + nc(3:4).^2, 1))
+        I2 = interpolFacesToCentersG1DPeriodic(k,n);
+    else
+        I2 = interpolFacesToCentersG1D(k,n);
+    end
 
     I = kron(I2, I1);
 end
