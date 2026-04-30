@@ -1,103 +1,93 @@
 % Tests the 2D curvilinear divergence
+% on an annulus of 1 < r < 2
 clc
 close all
+clear
 
 addpath('../../src/matlab_octave')
 
 % Parameters
 k = 2;
-m = 20;
-n = 30;
+m = 30;
+n = 20;
+dx = 1 / m;
+dy = 1 / n;
+dc = [0; 0; 1; 1];
+nc = [0; 0; 0; 0];
 
-% Grid
-r1 = 1; % Inner radius
-r2 = 2; % Outer radius
-nR = linspace(r1, r2, m) ;
-nT = linspace(0, 2*pi, n) ;
-[R, T] = meshgrid(nR, nT) ;
-% Convert grid to cartesian coordinates
-X = R.*cos(T);
-Y = R.*sin(T);
+% Nodal Grid Generation
+r1 = 1;
+r2 = 2;
+nR = linspace(r1, r2, n + 1);
+nT = linspace(2 * pi, 0, m + 1);
+nT = nT(1:end-1); % No duplicate points
+[T, R] = meshgrid(nT, nR);
+X = R .* cos(T);
+Y = R .* sin(T);
 
-% Test on another grid
-% [X, Y] = genCurvGrid(n, m);
+xn = reshape(X', [], 1);
+yn = reshape(Y', [], 1);
 
-mesh(X, Y, zeros(n, m), 'Marker', '.', 'MarkerSize', 10)
-%    Az  El
-view([0 90])
+% Interpolators
+NtoC = interpolNodesToCenters2D(k, m, n, dc, nc);
+CtoU = interpolCentersToFacesD1DPeriodic(k, m);
+CtoU = kron(speye(n + 2), CtoU); % From the centers to the extended faces
+CtoV = interpolCentersToFacesD1D(k, n);
+CtoV = kron(CtoV, speye(m)); % From the centers to the extended faces
+
+% Plot Mesh
+mesh([X X(:, 1)], [Y Y(:, 1)], zeros(n + 1, m + 1), 'Marker', '.', 'MarkerSize', 10)
+view(0, 90)
 axis equal
 hold on
 
-[n, m] = size(X);
-n = n-1;
-m = m-1;
+Ux = CtoU * NtoC * xn;
+Uy = CtoU * NtoC * yn;
+scatter3(Ux, Uy, zeros(size(Ux)), '+', 'MarkerEdgeColor', 'k')
 
-Ux = (X(1:end-1, :) + X(2:end, :))/2;
-Uy = (Y(1:end-1, :) + Y(2:end, :))/2;
-scatter3(Ux(:), Uy(:), zeros(n*(m+1), 1), '+', 'MarkerEdgeColor', 'k')
+Vx = CtoV * NtoC * xn;
+Vy = CtoV * NtoC * yn;
+scatter3(Vx, Vy, zeros(size(Vx)), '*', 'MarkerEdgeColor', 'k')
 
-Vx = (X(:, 1:end-1) + X(:, 2:end))/2;
-Vy = (Y(:, 1:end-1) + Y(:, 2:end))/2;
-scatter3(Vx(:), Vy(:), zeros((n+1)*m, 1), '*', 'MarkerEdgeColor', 'k')
-
-Cx = (Vx(1:end-1, :) + Vx(2:end, :))/2;
-Cy = (Uy(:, 1:end-1) + Uy(:, 2:end))/2;
-scatter3(Cx(:), Cy(:), zeros(n*m, 1), '.', 'MarkerEdgeColor', 'r')
-
-%% Interpolators
-% Some useful numbers
-num_nodes = (m+1)*(n+1);
-num_centers = (m+2)*(n+2);
-num_u = (m+1)*n;
-num_v = m*(n+1);
-
-% MOLE Interpolator Matrices of 'k' order
-NtoC = interpolNodesToCenters2D(k, n, m);
-CtoF = interpolCentersToFacesD2D(k, n, m); % V is the top part!!
-
-% Center to specific face, u or v
-CtoV = CtoF(1:(n+1)*m, 1:num_centers);
-CtoU = CtoF((n+1)*m+1:end, num_centers+1:end);
-
-% Node to X interpolator is pre-multiplied
-NtoU = CtoU * NtoC;
-NtoV = CtoV * NtoC;
-
-% Interpolate U values
-Ugiven = sin(X);
-U = NtoU * Ugiven(:);
-U = reshape(U,n,m+1);
-
-% Interpolate V values
-Vgiven = cos(Y);
-V = NtoV * Vgiven(:);
-V = reshape(V,n+1,m);
-
-Cgiven = cos(X)-sin(Y);
-C = NtoC * Cgiven(:);
-C = reshape(C,n+2,m+2);
-
-% Interpolate Nodal grid to centered grid.
-Cx = NtoC * X(:);
-Cx = reshape(Cx,n+2,m+2);
-
-Cy = NtoC * Y(:);
-Cy = reshape(Cy, n+2,m+2);
-
-scatter3(Cx(:), Cy(:), zeros((m+2)*(n+2), 1), 'o', 'MarkerEdgeColor', 'r')
-legend('Nodal points', 'u', 'v', 'Centers', 'All centers')
+Cx = NtoC * xn;
+Cy = NtoC * yn;
+scatter3(Cx, Cy, zeros(size(Cx)), 'o', 'MarkerEdgeColor', 'r')
+legend("Nodal Points", "u", "v", "Centers")
 hold off
 
 tic
-D = div2DCurv(k, X, Y);
+D = div2DCurv(k, Cx, Cy, m, dx, n, dy, dc, nc);
 toc
 
-Ccomp = D*[reshape(U', [], 1); reshape(V', [], 1)];
-Ccomp = reshape(Ccomp, m+2, n+2);
+% Vector Field
+U = sin(Ux);
+V = cos(Vy);
+
+% Exact Solution
+C = cos(Cx) - sin(Cy);
+C = reshape(C, m, n + 2)';
+
+% Approximate Solution
+Ccomp = D * [U; V];
+Ccomp = reshape(Ccomp, m, n + 2)';
+
+% Remove boundary points (divergence returns 0 on boundaries)
+Cx = reshape(Cx, m, n + 2)';
+Cy = reshape(Cy, m, n + 2)';
+Cx = Cx(2:end-1, :);
+Cy = Cy(2:end-1, :);
+C = C(2:end-1, :);
+Ccomp = Ccomp(2:end-1, :);
+
+% Join left and right sides for plotting
+Cx = [Cx Cx(:, 1)];
+Cy = [Cy Cy(:, 1)];
+C = [C C(:, 1)];
+Ccomp = [Ccomp Ccomp(:, 1)];
 
 figure
 subplot(2, 1, 1)
-surf(Cx(2:end-1, 2:end-1), Cy(2:end-1, 2:end-1), C(2:end-1, 2:end-1), 'EdgeColor', 'none');
+surf(Cx, Cy, C, 'EdgeColor', 'none');
 view([0 90])
 colorbar
 title('Exact')
@@ -106,7 +96,7 @@ ylabel('y')
 axis equal
 shading interp
 subplot(2, 1, 2)
-surf(Cx(2:end-1, 2:end-1), Cy(2:end-1, 2:end-1), Ccomp(2:end-1, 2:end-1)', 'EdgeColor', 'none')
+surf(Cx, Cy, Ccomp, 'EdgeColor', 'none')
 view([0 90])
 colorbar
 title('Approx')
@@ -114,3 +104,6 @@ xlabel('x')
 ylabel('y')
 axis equal
 shading interp
+
+l2_norm = norm(C(:) - Ccomp(:));
+disp("L2 norm: " + l2_norm)

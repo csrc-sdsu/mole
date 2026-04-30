@@ -76,8 +76,6 @@ function [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y, m, dx, n, dy, dc, nc)
     Gn = kron(IFCy,Im) * kron(Gn,Im);
     G = [Ge; Gn];
 
-    X = reshape(X',[],1);
-    Y = reshape(Y',[],1);
     metrics = G * [X Y];
 
     Xe = metrics(1:numC,1);
