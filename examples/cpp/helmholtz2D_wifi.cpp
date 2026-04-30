@@ -1,3 +1,28 @@
+/**
+ * @file helmholtz2D_wifi.cpp
+ * @brief Solves a 2D complex Helmholtz WiFi propagation model with homogeneous Neumann BCs.
+ *
+ * Models a scalar time-harmonic field on a rectangular domain with wall-dependent
+ * complex material coefficients and a fixed circular hotspot source.
+ *
+ * Equation:
+ *      ∇²u + c(x,y)u = 0,
+ *      c(x,y) = wn² / (1 + (aa + i bb)W(x,y))²
+ *
+ * Domain:
+ *      Ω = [0,40] × [0,40]
+ *
+ * Boundary Conditions:
+ *      ∂u/∂n = 0 on ∂Ω
+ *
+ * Source Constraint:
+ *      u = 1 on the circular hotspot region.
+ *
+ * Numerical Method:
+ *      MOLE mimetic Laplacian + sparse complex Helmholtz operator +
+ *      hotspot elimination + sparse SuperLU solve.
+ */
+
 #include <armadillo>
 #include "mole.h"
 #include "addscalarbc.h"
@@ -6,19 +31,18 @@
 #include <complex>
 #include <cstdlib>
 
+using namespace std;
 using namespace arma;
+using namespace AddScalarBC;
 
-// --------------------------------------------------
-// Helper: extract sparse principal submatrix A(keep,keep)
-// for Armadillo builds that do not support SpMat::submat(uvec,uvec)
-// --------------------------------------------------
+// Extract sparse principal submatrix A(keep, keep).
 static sp_cx_mat extract_sparse_principal_submatrix(
     const sp_cx_mat& A,
     const uvec& keep
 ) {
     const uword n_keep = keep.n_elem;
 
-    // Map old global indices -> new reduced indices
+    // Map global indices to reduced-system indices.
     uvec old_to_new(A.n_rows, fill::zeros);
     umat is_kept(A.n_rows, 1, fill::zeros);
 
@@ -27,11 +51,12 @@ static sp_cx_mat extract_sparse_principal_submatrix(
         is_kept(keep(k), 0) = 1;
     }
 
-    // Worst-case allocation: every nonzero survives
+    // Store surviving nonzeros.
     umat locations(2, A.n_nonzero);
     cx_vec values(A.n_nonzero);
 
     uword count = 0;
+
     for (sp_cx_mat::const_iterator it = A.begin(); it != A.end(); ++it) {
         const uword i = it.row();
         const uword j = it.col();
@@ -51,25 +76,24 @@ static sp_cx_mat extract_sparse_principal_submatrix(
 }
 
 int main() {
-    // --------------------------------------------------
+	
     // Problem parameters
-    // --------------------------------------------------
-    const double aa = 0.7;
-    const double bb = 0.9 * 0.5;
-    const double wn = 6.0;
+    const double aa = 0.7;        // Wall coefficient, real part
+    const double bb = 0.9 * 0.5;  // Wall coefficient, imaginary part
+    const double wn = 6.0;        // Wave number
 
-    const double hsx = 2.0;
-    const double hsy = 20.0;
-    const double hsr = 1.0;
+    const double hsx = 2.0;       // Hotspot center x
+    const double hsy = 10.0;      // Hotspot center y
+    const double hsr = 1.0;       // Hotspot radius
 
-    const uint16_t k = 2;
-    const uint32_t m = 500;
-    const uint32_t n = 500;
+    const uint16_t k = 2;         // MOLE accuracy order
+    const uint32_t m = 500;       // Cells in x
+    const uint32_t n = 500;       // Cells in y
 
-    const double a  = 0.0;
-    const double b  = 40.0;
-    const double c0 = 0.0;
-    const double d  = 40.0;
+    const double a  = 0.0;        // Left boundary
+    const double b  = 40.0;       // Right boundary
+    const double c0 = 0.0;        // Bottom boundary
+    const double d  = 40.0;       // Top boundary
 
     const uword Nx = m + 2;
     const uword Ny = n + 2;
@@ -78,91 +102,77 @@ int main() {
     const double dx = (b - a)  / static_cast<double>(m);
     const double dy = (d - c0) / static_cast<double>(n);
 
-    // --------------------------------------------------
-    // 2D staggered grid
-    // --------------------------------------------------
+    // Staggered grid
     vec xgrid(Nx, fill::zeros);
     vec ygrid(Ny, fill::zeros);
 
     xgrid(0) = a;
+
     for (uword i = 1; i <= m; ++i) {
         xgrid(i) = a + dx / 2.0 + (i - 1) * dx;
     }
+
     xgrid(m + 1) = b;
 
     ygrid(0) = c0;
+
     for (uword j = 1; j <= n; ++j) {
         ygrid(j) = c0 + dy / 2.0 + (j - 1) * dy;
     }
+
     ygrid(n + 1) = d;
 
-    // --------------------------------------------------
-    // Meshgrid-style arrays
-    // --------------------------------------------------
+    // Coordinate arrays
     mat X = repmat(xgrid, 1, Ny);
     mat Y = repmat(ygrid.t(), Nx, 1);
 
-    // --------------------------------------------------
     // Wall mask
-    // --------------------------------------------------
     umat WALL = conv_to<umat>::from(
         ((X >= 10.0) % (X <= 39.0) % (Y >= 20.0) % (Y <= 21.0)) ||
         ((X >= 30.0) % (X <= 31.0) % (Y >= 1.0 ) % (Y <= 16.0)) ||
         ((X <= 0.5)  || (X >= 39.5) || (Y <= 0.5) || (Y >= 39.5))
     );
 
-    // --------------------------------------------------
-    // Complex coefficient
-    // --------------------------------------------------
-    const std::complex<double> wall_coeff(aa, bb);
+    // Complex Helmholtz coefficient
+    const complex<double> wall_coeff(aa, bb);
+
     cx_mat C = (wn * wn) / square(1.0 + wall_coeff * conv_to<mat>::from(WALL));
     cx_vec cvec = vectorise(C);
 
-    // --------------------------------------------------
     // Hotspot mask
-    // --------------------------------------------------
     mat HSmat = conv_to<mat>::from(
         square(X - hsx) + square(Y - hsy) < (hsr * hsr)
     );
+
     vec HS = vectorise(HSmat);
 
     uvec ind = find(HS > 0.5);
 
     uvec is_hotspot(N, fill::zeros);
     is_hotspot.elem(ind).ones();
+
     uvec freenodes = find(is_hotspot == 0);
 
-    // --------------------------------------------------
     // Mimetic Laplacian
-    // --------------------------------------------------
     Laplacian Lreal(k, m, n, dx, dy);
     sp_mat Llap = sp_mat(Lreal);
 
-    // --------------------------------------------------
-    // Boundary-condition matrix using addScalarBClhs
-    // homogeneous Neumann on all four sides
-    // --------------------------------------------------
+    // Homogeneous Neumann boundary conditions
     vec dc = zeros<vec>(4);
     vec nc = ones<vec>(4);
 
     sp_mat Al, Ar, Ab, At;
-    AddScalarBC::addScalarBClhs(k, m, dx, n, dy, dc, nc, Al, Ar, Ab, At);
+
+    addScalarBClhs(k, m, dx, n, dy, dc, nc, Al, Ar, Ab, At);
 
     sp_mat Lbc = Al + Ar + Ab + At;
 
-    // --------------------------------------------------
-    // Full operator
-    // --------------------------------------------------
+    // Sparse complex operator assembly
     sp_cx_mat L = conv_to<sp_cx_mat>::from(Llap);
     L += sp_cx_mat(diagmat(cvec));
     L += conv_to<sp_cx_mat>::from(Lbc);
 
-    // --------------------------------------------------
-    // Reduced-system solve
-    // RHS = -L*HS
-    // SOL(freenodes) = Lff \ RHS(freenodes)
-    // SOL(ind) = 1
-    // --------------------------------------------------
+    // Reduced sparse solve
     cx_vec HS_cx = conv_to<cx_vec>::from(HS);
     cx_vec RHS   = -L * HS_cx;
 
@@ -173,26 +183,24 @@ int main() {
     cx_vec SOLf;
 
     bool ok = spsolve(SOLf, Lff, RHSf, "superlu");
+
     if (!ok) {
-        std::cerr << "Error: Reduced sparse solve failed.\n";
+        cerr << "Error: Reduced sparse solve failed.\n";
         return 1;
     }
 
     SOL.elem(freenodes) = SOLf;
     SOL.elem(ind).ones();
 
-    // --------------------------------------------------
-    // Plot quantity
-    // --------------------------------------------------
+    // Visualization quantity
     vec logSOL = log(abs(SOL) + 1.0e-14);
     mat LOGSOL = reshape(logSOL, Nx, Ny);
 
-    // --------------------------------------------------
-    // Output solution data
-    // --------------------------------------------------
-    std::ofstream data_file("helmholtz2d_logsol.dat");
+    // Write solution data
+    ofstream data_file("helmholtz2d_logsol.dat");
+
     if (!data_file) {
-        std::cerr << "Error: Failed to create solution data file.\n";
+        cerr << "Error: Failed to create solution data file.\n";
         return 1;
     }
 
@@ -202,20 +210,21 @@ int main() {
                       << Y(i, j) << " "
                       << LOGSOL(i, j) << "\n";
         }
+
         data_file << "\n";
     }
+
     data_file.close();
 
-    // --------------------------------------------------
-    // GNUplot script
-    // --------------------------------------------------
-    std::ofstream plot_script("plot.gnu");
+    // Write GNUplot script
+    ofstream plot_script("plot.gnu");
+
     if (!plot_script) {
-        std::cerr << "Error: Failed to create GNUplot script.\n";
+        cerr << "Error: Failed to create GNUplot script.\n";
         return 1;
     }
 
-    plot_script << "set title \"2D Helmholtz: log(|SOL| + 1e-14)\"\n";
+    plot_script << "set title '2D Helmholtz WiFi Propagation'\n";
     plot_script << "set xlabel 'x'\n";
     plot_script << "set ylabel 'y'\n";
     plot_script << "set view map\n";
@@ -226,15 +235,14 @@ int main() {
 
     plot_script.close();
 
+    // Plot solution
     if (system("gnuplot -persist plot.gnu") != 0) {
-        std::cerr << "Error: Failed to execute GNUplot.\n";
+        cerr << "Error: Failed to execute GNUplot.\n";
         return 1;
     }
 
     return 0;
 }
-
-
 
 
 
