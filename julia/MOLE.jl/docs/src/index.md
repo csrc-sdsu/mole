@@ -86,15 +86,15 @@ Once you have built the documentation (either from the REPL or the command line)
 ### Operators
 
 ```@docs
-MOLE.div(k::Int,m::Int,dx)
-MOLE.grad(k::Int,m::Int,dx)
-MOLE.lap(k::Int,m::Int,dx)
+MOLE.Operators.div(k::Int,m::Int,dx)
+MOLE.Operators.grad(k::Int,m::Int,dx)
+MOLE.Operators.lap(k::Int,m::Int,dx)
 ```
 
 ### Utilities
 
 ```@docs
-MOLE.robinBC(k::Int, m::Int, dx, a, b)
+MOLE.BCs.robinBC(k::Int, m::Int, dx, a, b)
 ```
 
 ## Examples

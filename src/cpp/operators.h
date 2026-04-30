@@ -28,9 +28,29 @@
 #include "laplacian.h"
 #include "mixedbc.h"
 #include "robinbc.h"
+#include "interpolCtoF.h"
+#include "interpolCtoN.h"
+#include "interpolFtoC.h"
+#include "interpolNtoC.h"
 
 inline sp_mat operator*(const Divergence &div, const Gradient &grad) {
   return (sp_mat)div * (sp_mat)grad;
+}
+
+inline sp_mat operator*(const InterpolCtoF &I, const Divergence &div) {
+  return (sp_mat)I * (sp_mat)div;
+}
+
+inline sp_mat operator*(const InterpolFtoC &I, const Gradient &grad) {
+  return (sp_mat)I * (sp_mat)grad;
+}
+
+inline sp_mat operator*(const Divergence &div, const InterpolCtoF &I) {
+  return (sp_mat)div * (sp_mat)I;
+}
+
+inline sp_mat operator*(const Gradient &grad, const InterpolFtoC &I) {
+  return (sp_mat)grad * (sp_mat)I;
 }
 
 inline sp_mat operator+(const Laplacian &lap, const RobinBC &bc) {
@@ -57,6 +77,22 @@ inline vec operator*(const Interpol &I, const vec &v) {
   return (sp_mat)I * v; 
 }
 
+inline vec operator*(const InterpolCtoF &I, const vec &v) {
+  return (sp_mat)I * v;
+}
+
+inline vec operator*(const InterpolCtoN &I, const vec &v) {
+  return (sp_mat)I * v;
+}
+
+inline vec operator*(const InterpolFtoC &I, const vec &v) {
+  return (sp_mat)I * v;
+}
+
+inline vec operator*(const InterpolNtoC &I, const vec &v) {
+  return (sp_mat)I * v;
+}
+
 // Add scalar multiplication operators
 inline sp_mat operator*(const double scalar, const Interpol& I) {
     return scalar * (sp_mat)I;
@@ -80,6 +116,22 @@ inline sp_mat operator*(const double scalar, const RobinBC& bc) {
 
 inline sp_mat operator*(const RobinBC& bc, const double scalar) {
     return scalar * (sp_mat)bc;
+}
+
+inline sp_mat operator*(const InterpolCtoF& I, const double scalar) {
+    return scalar * (sp_mat)I;
+}
+
+inline sp_mat operator*(const InterpolCtoN& I, const double scalar) {
+    return scalar * (sp_mat)I;
+}
+
+inline sp_mat operator*(const InterpolFtoC& I, const double scalar) {
+    return scalar * (sp_mat)I;
+}
+
+inline sp_mat operator*(const InterpolNtoC& I, const double scalar) {
+    return scalar * (sp_mat)I;
 }
 
 #endif // OPERATORS_H
