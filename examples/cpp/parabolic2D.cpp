@@ -97,7 +97,6 @@ int main() {
     }
 
     // Storage grid
-
     vec xgrid(nx + 2, fill::zeros);
     vec ygrid(ny + 2, fill::zeros);
 
@@ -118,18 +117,12 @@ int main() {
     ygrid(ny + 1) = yR;
 
     // Initial condition
-
     mat U = zeros(nx + 2, ny + 2);
 
-    const double source_width = 0.5;
-
-    const double x_center = 0.5 * (xL + xR);
-    const double y_center = 0.5 * (yL + yR);
-
-    const double xA = x_center - 0.5 * source_width;
-    const double xB = x_center + 0.5 * source_width;
-    const double yA = y_center - 0.5 * source_width;
-    const double yB = y_center + 0.5 * source_width;
+    const double xA = 0.75;
+    const double xB = 1.25;
+    const double yA = 0.75;
+    const double yB = 1.25;
 
     for (uint32_t i = 0; i < U.n_rows; ++i) {
         for (uint32_t j = 0; j < U.n_cols; ++j) {
@@ -143,11 +136,9 @@ int main() {
     vec u = vectorise(U);
 
     // Construct mimetic Laplacian
-
     Laplacian L(k, nx, ny, dx, dy);
 
     // Dirichlet boundary conditions
-
     BC2D bc;
 
     bc.dc = ones<vec>(4);
@@ -161,7 +152,6 @@ int main() {
     addScalarBC(L, u, k, nx, dx, ny, dy, bc);
 
     // Build time-stepping operator
-
     sp_mat A;
 
     if (method == "explicit") {
@@ -171,7 +161,6 @@ int main() {
     }
 
     // Time integration with frame output
-
     const uint32_t nsteps = static_cast<uint32_t>(round(tf / dt));
 
     uint32_t frame_id = 0;
@@ -208,7 +197,6 @@ int main() {
     }
 
     // Save final solution
-
     U = reshape(u, nx + 2, ny + 2);
 
     ofstream final_file("solution_xyz.dat");
@@ -231,7 +219,6 @@ int main() {
     final_file.close();
 
     // Create GNUplot 3D animation script
-
     ofstream plot_script("plot_animation.gnu");
 
     if (!plot_script) {
@@ -267,7 +254,7 @@ int main() {
     plot_script << "do for [i=0:nframes-1] {\n";
     plot_script << "    set title sprintf('2D Diffusion, t = %.3f', i*frame_dt)\n";
     plot_script << "    splot sprintf('frames/frame_%04d.dat', i) using 1:2:3 with pm3d notitle\n";
-    plot_script << "    pause 0.05\n";
+    plot_script << "    pause 0.125\n";
     plot_script << "}\n";
 
     plot_script.close();
