@@ -2,6 +2,7 @@
 include_directories("${CMAKE_SOURCE_DIR}/src/cpp")
 
 set(EXAMPLE_SOURCES
+  comparison_two_way_wave_md_vs_fd_neumann.cpp
   backward_euler.cpp
   burgers1D.cpp
   convection_diffusion3D.cpp
