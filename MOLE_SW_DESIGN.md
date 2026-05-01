@@ -121,6 +121,7 @@ Redirection
 
 If the documentation is in a doc sub-directory, the primary directory index.html file should just do an automatic redirection to the doc subdirectory:
 
+```html
 \<html\>  
 \<head\>  
 \<meta http-equiv="refresh" content="0; URL=doc/index.html"\>  
@@ -130,6 +131,7 @@ Automatic redirection failed, please go to
 \<a href="doc/index.html"\>doc/index.html\</a\>  
 \</body\>  
 \</html\>
+```
 
 ### Documentation
 
