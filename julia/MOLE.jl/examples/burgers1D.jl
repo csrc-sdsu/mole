@@ -29,10 +29,9 @@ xgrid = [west; (west+(dx/2)):dx: (east-(dx/2)); east];
 
 #Initial Condition
 U = exp.(-(xgrid.^2)/50);
-println(size(U))
+
 #Premultiply out of the time loop (since it does not change)
 D = -dt/2*D*I;
-println(size(D))
 
 vx = range(west,east, length=k+m)
 #Time integration loop
