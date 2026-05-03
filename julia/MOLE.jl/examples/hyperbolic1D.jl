@@ -1,9 +1,8 @@
 #=
 Julia implementation of the 1D Advection equation with periodic boundary conditions
-from MATLAB MOLE example
+from MATLAB MOLE example using the Leapfrog Scheme
 =#
 
-using Printf
 using Plots
 import MOLE: Operators, BCs
 
@@ -25,21 +24,19 @@ D  = Operators.div(k,m,dx); #1D Mimetic divergence operator
 I  = Operators.interpol(m, 0.5); #1D 2nd order interpolator
 
 # 1D Staggered grid
-grid = [west, west+dx/2:dx:east-dx/2, east];
+grid = [west; (west+(dx/2)):dx: (east-(dx/2)); east];
 
 # Initial Condition
-q = 2 * π .* grid
-println(typeof(q))
-U = sin.(q)';
+U = sin.(2 * π * grid);
 
 #Periodic Boundary Condition imposed on the divergence operator
 D[1, 2]       = 1/(2*dx);
 D[1, end-1]   = -1/(2*dx);
-D[end, 1]     = -1/(2*dx);
+D[end, 2]     = 1/(2*dx);
 D[end, end-1] = -1/(2*dx);
 
 #Premultiply out of the time loop (since it does not change)
-D = -a*dt*2*D*I;
+D = -a*dt*2 *D*I;
 
 #=
         We could have also defined 
@@ -48,24 +45,26 @@ D = -a*dt*2*D*I;
         grid = west : dx :east (nodal)
 =#
 
-U2 = U + D/2*U #Compute one step using Euler's method
-
+U2 = U + D/2*U; #Compute one step using Euler's method
 
 #Time integration loop
 for i in 1: t/dt
     #Plot approximation
-    plot(grid, U2, label="Approximated")
+    plot(grid, U2, label="Approximated", ls=:dot, lw=3)
     #Plot exact solution
-    plot!(grid, sin.(2*π .*(grid - a*i*dt)), label="exact")
+    plot!(grid, sin.(2*π .*(grid .- a*i*dt)), label="exact")
     #Plot attributes
-    title!("1D Advection Equation with Periodic BC");
+    title!("1D Advection Equation with Periodic BC t = $(round(i*dt, sigdigits=2))");
     xlabel!("x");
     ylabel!("u(x,t)");
-    axis!([west east -1.5 1.5]);
+    xlims!(west, east);
+    ylims!(-1.5, 1.5);
+    plot!(legend=:bottomright)
     sleep(0.04);
-    U3 = U + D*U2; #Compute next step using leapfrog scheme
-    U  = U2;
-    U2 = U3;
+    U3 =  U + D* U2; #Compute next step using leapfrog scheme
+    global U  =  U2;
+    global U2 =  U3;
+    gui()
 end
 
 
