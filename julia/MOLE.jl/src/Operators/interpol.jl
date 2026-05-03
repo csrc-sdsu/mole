@@ -23,7 +23,7 @@ function interpol(m::Int,c::Float64)
     n_rows = m+1;
     n_cols = m+2;
 
-    I = spzeros(n_rows, n_cols);
+    I = zeros(n_rows, n_cols);
 
     I[1,1] = 1;
     I[end,end]=1;
@@ -32,9 +32,10 @@ function interpol(m::Int,c::Float64)
     avg = [c 1-c];
 
     j = 2;
-    for i = 2: n_rows - 1
+    for i in 2: n_rows - 1
         I[i, j:j+2-1] = avg;
         j = j + 1;
     end
+    return I
 end
 
