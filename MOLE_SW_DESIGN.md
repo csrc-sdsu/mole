@@ -2,31 +2,33 @@
 ## Table of Contents
 
 1. [Introduction](#introduction)
-2. [License Requirements](#license-requirements)
-3. [Portability requirements](#portability-requirements)
-4. [Ownership](#ownership)
-5. [Guidelines](#guidelines)
+2. [Requirements](#requirements)
+- [License Requirements](#license-requirements)
+- [Portability requirements](#portability-requirements)
+3. [Ownership](#ownership)
+4. [Guidelines](#guidelines)
 - [Design and Programming](#design-and-programming)
 -  [Directory Structure and Filenames](#directory-structure-and-filenames)
 -  [Documentation](#documentation)
-6. [Rationale](#rationale)
+5. [Rationale](#rationale)
 - [Exception-specification rationale](#exception-specification-rationale)
 - [Source code fonts rationale](#source-code-fonts-rationale)
 - [Tabs rationale](#tabs-rationale)
 -  [Rationale rationale](#rationale-rationale)
 - [Acknowldegements Rationale](#acknowledgements-rationale )
-7. [Naming   consistency](#naming-consistency)
+6. [Naming   consistency](#naming-consistency)
 
 ## Introduction
 
 This page describes requirements and guidelines for the content of contributions submitted to MOLE. “Contributions” includes library updates, examples, or anything else under the guise of the code contributed for inclusion in the MOLE Library.  
 See the [***Contributing To MOLE*** **webpage**](https://mole-docs.readthedocs.io/en/main/intros/contributing_wrapper.html) for a description of the process involved.  
-Requirements
+
+## Requirements
 
 To avoid the frustration and wasted time of a proposed contribution being rejected, it must meet these requirements:
 
 * The contribution must be generally useful and not restricted to a narrow problem domain.  
-* The contribution must meet the [portability requirement](#portability-requirements) s below.   
+* The contribution must meet the [portability requirements](#portability-requirements) below.   
 * The contribution must come reasonably close to meeting the [Guidelines](#guidelines) below.  
   * [Design and Programming](#design-and-programming)  
   * [Directory Structure](#directory-structure-and-filenames)  
@@ -41,7 +43,7 @@ In order to preserve software coherence, integrity, and sustainability, all new 
 
 ---
 
-## License requirements
+### License requirements
 
 MOLE is being developed and distributed under a  GNU GPL v3. See **[LICENSE](https://github.com/csrc-sdsu/mole/blob/main/LICENSE).**
 
@@ -54,13 +56,13 @@ Current requirements for the MOLE  license are:
 * Must not require that the source code be available for execution or other binary uses of the library.  
 * Must be compatible with GPL 3.0 license
 
-All Collaborators’ contributions developed and distributed under a different software license not compatible with MOLE’s license will be listed on the [**MOLE website**](http://mole-ose.org) as a recommended reference and include a link where the particular software can be obtained. 
+All collaborators’ contributions developed and distributed under a different software license not compatible with MOLE’s license will be listed on the [**MOLE website**](http://mole-ose.org) as a recommended reference and include a link where the particular software can be obtained. 
 
 ---
 
-## Portability requirements 
-* A contribution interface must be portable and not restricted to a particular compiler or operating system. Ie, A C++ example must not require the Intel Compiler. A Python example does not require a Linux operating system for compiling.  
-* A contribution's implementation must, if possible, be portable and not restricted to a particular compiler or operating system.  If a portable implementation is not possible, non-portable constructions are acceptable if reasonably easy to port to other environments, and implementations are provided for at least two popular operating systems (such as UNIX and Windows).  
+### Portability requirements 
+* A contribution interface must be portable and not restricted to a particular compiler for a particular operating system. (i.e, A C++ example must not require the Intel Compiler, a Python example does not require a Linux operating system for compiling, etc.).  
+If a portable implementation is not possible, non-portable constructions are acceptable if reasonably easy to port to other environments, and implementations are provided for at least two popular operating systems (such as UNIX and Windows).  
 * There is no requirement that a contribution run on C++ compilers that do not conform to the ISO standard. 
 
 Since there is no absolute way to prove portability, many MOLE submissions demonstrate practical portability by compiling and executing correctly with two different C++ compilers, often under different operating systems.  Otherwise reviewers may disbelieve that porting is in fact practical.
@@ -114,32 +116,18 @@ Please use these guidelines as a checklist for preparing the content of a submis
 | build | CMake files for building library and examples | If any build files. |
 | doc | Documentation (HTML,PDF) files. | If several doc files. |
 | example | Sample program files, all languages | If several sample files. |
+|Julia | Contains Julia's implementation own relevant docs, examples, src, and test subdirectories |
 | src | Source files which must be compiled to build the library.  | If any source files. |
 | test | Regression or other test programs or scripts. | If several test files. |
-
-Redirection
-
-If the documentation is in a doc sub-directory, the primary directory index.html file should just do an automatic redirection to the doc subdirectory:
-
-```html
-\<html\>  
-\<head\>  
-\<meta http-equiv="refresh" content="0; URL=doc/index.html"\>  
-\</head\>  
-\<body\>  
-Automatic redirection failed, please go to  
-\<a href="doc/index.html"\>doc/index.html\</a\>  
-\</body\>  
-\</html\>
-```
+ 
 
 ### Documentation
 
 Even the simplest library needs some documentation; the amount should be proportional to the need.  The documentation should assume the readers have a basic knowledge of C++, but are not necessarily experts.
 
-The format for documentation should be HTML, and should not require an advanced browser or server-side extensions. Style sheets are acceptable. ECMAScript/JavaScript is not acceptable. The documentation entry point should always be a file named index.html or index.htm; see [Redirection](#heading=h.f70c0ohjk3o8).
+The format for documentation should be Markdown, and should not require an advanced browser or server-side extensions. Style sheets are acceptable. ECMAScript/JavaScript is not acceptable.
 
-There is no single right way to do documentation. HTML documentation is often organized quite differently from traditional printed documents. Task-oriented styles differ from reference oriented styles. In the end, it comes down to the question: Is the documentation sufficient for the mythical "average" C++ programmer to use the library successfully?
+There is no single right way to do documentation. 
 
 Appropriate topics for documentation often include:
 
@@ -152,8 +140,8 @@ Appropriate topics for documentation often include:
 * How to compile and link.  
 * How to test.  
 * Version or revision history.  
-* Rationale for design decisions.  See [Rationale rationale](#heading=h.bnpcyov6xn2t).  
-* Acknowledgements.  See [Acknowledgments rationale.](#heading=h.ehzogyplxsoq)
+* Rationale for design decisions.  See [Rationale](#rationale).  
+* Acknowledgements.  See [Acknowledgments rationale](#acknowledgments-rationale).
 
 ---
 
@@ -163,9 +151,11 @@ Rationale for some of the requirements and guidelines follows.
 
 ### Exception-specification rationale
 
-Exception specifications \[ISO 15.4\] are sometimes coded to indicate what exceptions may be thrown, or because the programmer hopes they will improve performance.  But consider the following member from a smart pointer:
+For C++ contributions, exception specifications \[ISO 15.4\] are sometimes coded to indicate what exceptions may be thrown, or because the programmer hopes they will improve performance.  But consider the following member from a smart pointer:
 
+```C
    T& operator\*() const throw()  { return \*ptr; }
+   ```
 
 This function calls no other functions; it only manipulates fundamental data types like pointers Therefore, no runtime behavior of the exception-specification can ever be invoked.  The function is completely exposed to the compiler; indeed it is declared inline Therefore, a smart compiler can easily deduce that the functions are incapable of throwing exceptions, and make the same optimizations it would have made based on the empty exception-specification. A "dumb" compiler, however, may make all kinds of pessimizations.
 
