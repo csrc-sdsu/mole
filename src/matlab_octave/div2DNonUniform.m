@@ -1,10 +1,16 @@
 function D = div2DNonUniform(k, xticks, yticks)
+% PURPOSE
 % Returns a two-dimensional non-uniform mimetic divergence operator
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                xticks : Edges' ticks (x-axis)
 %                yticks : Edges' ticks (y-axis)
+%
+% SYNTAX
+% D = div2DNonUniform(k, xticks, yticks)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

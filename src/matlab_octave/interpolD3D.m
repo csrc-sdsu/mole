@@ -1,11 +1,19 @@
 function I = interpolD3D(m, n, o, c1, c2, c3)
+% PURPOSE
 % Returns a three-dimensional interpolator of 2nd-order
+%
+% DESCRIPTION
+% Parameters:
 %                m : Number of cells along x-axis
 %                n : Number of cells along y-axis
 %                o : Number of cells along z-axis
 %               c1 : Left interpolation coeff.
 %               c2 : Bottom interpolation coeff.
 %               c3 : Front interpolation coeff.
+%
+% SYNTAX
+% I = interpolD3D(m, n, o, c1, c2, c3)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

@@ -1,10 +1,16 @@
 function D = divNonUniform(k, ticks)
+% PURPOSE
 % Returns a m+2 by m+1 one-dimensional non-uniform mimetic divergence
 % operator
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                ticks : Edges' ticks e.g. [0 0.1 0.15 0.2 0.3 0.4 0.45]
+%
+% SYNTAX
+% D = divNonUniform(k, ticks)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

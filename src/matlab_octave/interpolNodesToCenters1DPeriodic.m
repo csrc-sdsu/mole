@@ -1,9 +1,17 @@
 function I = interpolNodesToCenters1DPeriodic(k, m)
+% PURPOSE
 % interpolation operator from nodal coordinates to staggered centers
 % when the boundary condition is periodic
-% m is the number of cells in the logical x-axis
+%
+% DESCRIPTION
 % nodal logical coordinates are [1:1:m]
 % centers logical coordinates [1,1.5:m-0.5,m]
+%
+% Parameters:
+%                 m is the number of cells in the logical x-axis
+%
+% SYNTAX
+% I = interpolNodesToCenters1DPeriodic(k, m)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later

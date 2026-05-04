@@ -1,14 +1,20 @@
 function L = lap(k, m, dx, dc, nc)
+% PURPOSE
 % Returns a one-dimensional mimetic Laplacian operator depending on whether
 % or not the operator will contain a periodic boundary condition type
 %                              a0 U + b0 dU/dn = g,
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                m : Number of cells
 %               dx : Step size
 %    (optional) dc : a0 (2x1 vector for left and right vertices, resp.)
 %    (optional) nc : b0 (2x1 vector for left and right vertices, resp.)
+%
+% SYNTAX
+% L = lap(k, m, dx)
+% L = lap(k, m, dx, dc, nc)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later

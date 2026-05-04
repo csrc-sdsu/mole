@@ -8,8 +8,12 @@ enable_testing()
 foreach(TEST_SOURCE ${TEST_SOURCES})
     get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
 
-    add_test(NAME ${TEST_NAME}
-        COMMAND matlab -batch "addpath('${CMAKE_CURRENT_SOURCE_DIR}'); runtests('${TEST_NAME}')"
+    add_test(
+        NAME ${TEST_NAME}
+        COMMAND matlab
+          -nojvm
+          -batch
+          "addpath('${CMAKE_CURRENT_SOURCE_DIR}'); assertSuccess(runtests('${TEST_NAME}'))"
     )
 endforeach()
 

@@ -1,11 +1,17 @@
 function D = div3DNonUniform(k, xticks, yticks, zticks)
+% PURPOSE
 % Returns a three-dimensional non-uniform mimetic divergence operator
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                xticks : Edges' ticks (x-axis)
 %                yticks : Edges' ticks (y-axis)
 %                zticks : Edges' ticks (z-axis)
+%
+% SYNTAX
+% D = div3DNonUniform(k, xticks, yticks, zticks)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

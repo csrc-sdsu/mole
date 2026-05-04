@@ -1,7 +1,15 @@
 function N = neumann2DCurv(G, m, n, b)
+% PURPOSE
 % Returns a 2D curvilinear Neumann BC operator
-
-    % G is the curvilinear gradient and b is the Neumann coeff.
+%
+% DESCRIPTION
+% Parameters:
+%                G: Curvilinear gradient
+%                b: Neumann coeff.
+%
+% SYNTAX
+% N = neumann2DCurv(G, m, n, b)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
