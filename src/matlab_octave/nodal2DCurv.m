@@ -1,4 +1,11 @@
 function [Nx, Ny] = nodal2DCurv(k, X, Y)
+% PURPOSE
+%
+% DESCRIPTION
+%
+% SYNTAX
+% [Nx, Ny] = nodal2DCurv(k, X, Y)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

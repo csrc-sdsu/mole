@@ -1,18 +1,26 @@
 function C = curl2D(k, m, dx, n, dy, west, east, south, north, U, V)
+% PURPOSE
 % Returns a two-dimensional mimetic curl operator
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                m : Number of cells along x-axis
 %               dx : Step size along x-axis
 %                n : Number of cells along y-axis
 %               dy : Step size along y-axis
-%      west, east,
-%     south, north : west, east, south, north limits
+%             west : west limit on x-axis
+%             east : east limit on x-axis
+%            south : south limit on y-axis
+%            north : north limit on Y-axis
 %                U : Vector space function acting on x-direction
 %                    U(X,Y) must be defined as function handle
 %                V : Vector space function acting on y-direction
 %                    V(X,Y) must be defined as function handle
+%
+% SYNTAX
+% C = curl2D(k, m, dx, n, dy, west, east, south, north, U, V)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

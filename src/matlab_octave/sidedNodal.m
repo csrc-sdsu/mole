@@ -1,11 +1,17 @@
 function S = sidedNodal(m, dx, type)
+% PURPOSE
 % Returns a m+1 by m+1 one-dimensional sided approximation for uniformly
 % spaced data points. This function is handy for advective terms.
 %
+% DESCRIPTION
 % Parameters:
 %                m : Number of cells
 %               dx : Step size
 %             type : 'backward', 'forward' or 'centered'
+%
+% SYNTAX
+% S = sidedNodal(m, dx, type)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

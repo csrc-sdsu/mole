@@ -1,9 +1,15 @@
 function KG = tensorGrad2D(K, G)
+% PURPOSE
 % Returns a two-dimensional flux operator
 %
+% DESCRIPTION
 % Parameters:
 %                K : Tensor (e.g. diffusion tensor)
 %                G : 2D mimetic gradient operator
+%
+% SYNTAX
+% KG = tensorGrad2D(K, G)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

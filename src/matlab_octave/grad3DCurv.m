@@ -1,5 +1,12 @@
 function G = grad3DCurv(k, X, Y, Z)
+% PURPOSE
 % Returns a 3D curvilinear mimetic gradient
+%
+% DESCRIPTION
+%
+% SYNTAX
+% G = grad3DCurv(k, X, Y, Z)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

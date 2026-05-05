@@ -1,4 +1,11 @@
 function [Nx, Ny, Nz] = nodal3DCurv(k, X, Y, Z)
+% PURPOSE
+%
+% DESCRIPTION
+%
+% SYNTAX
+% [Nx, Ny, Nz] = nodal3DCurv(k, X, Y, Z)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

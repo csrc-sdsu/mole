@@ -1,11 +1,16 @@
 function D = divPeriodic(k, m, dx)
+% PURPOSE
 % Returns a m+2 by m one-dimensional mimetic divergence operator
 % when the boundary condition is periodic
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                m : Number of cells
 %               dx : Step size
+%
+% SYNTAX
+% D = divPeriodic(k, m, dx)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later

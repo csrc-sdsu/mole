@@ -1,4 +1,4 @@
-function [ U2_md, error_md, walltime_md, flops_md ] = mimetic_diff_two_way_wave_eq()
+function [ U2_md, error_md, walltime_md, flops_md ] = mimetic_diff_two_way_wave_eq(k, c, dt, num_cells)
 %% MIMETIC_DIFF_TWO_WAY_WAVE_EQ
 %  Solve the 1D two-way wave equation using mimetic finite differences.
 %
@@ -10,6 +10,12 @@ function [ U2_md, error_md, walltime_md, flops_md ] = mimetic_diff_two_way_wave_
 %      U^{n+1} = 2*U^{n} - U^{n-1} + (c^2 * dt^2 * L) * U^{n}
 %  where L is the mimetic discrete Laplacian operator. Note there is no spacial
 %  discretization, the L takes care of that.
+%
+%  INPUTS:
+%    k           - mimetic order of accuracy (2,4,6,8)
+%    c           - wave speed
+%    dt          - time step
+%    num_cells   - array of number of cells to test.
 %
 %  OUTPUTS:
 %    U2_md       - Final solution vector at last time step
@@ -43,13 +49,8 @@ function [ U2_md, error_md, walltime_md, flops_md ] = mimetic_diff_two_way_wave_
 %
 
 %% Problem definition
-k    = 2;        % Mimetic Order of Accuracy, can change to 4,6,8
-c    = 0.1;      % Velocity, 1 makes FD sceme exact
 west = -2.0;     % Domain's leftmost limits
 east = 2.0;      % Domain's rightmost limit
-
-%% Number of cells to try, points is cells+1
-num_cells = [ 10, 20, 40, 80, 160 ];
 
 % generic holders for loop info
 error_md = zeros(size(num_cells));
@@ -57,7 +58,7 @@ walltime_md = zeros(size(num_cells));
 flops_md = zeros(size(num_cells));
 
 % Initial Condition Function
-f = @(x) ( (x > -0.5) & (x < 0.5) ) .* (cos(pi * x).^2);
+f = @(x) exp( -x.^2 / 0.1 );
 
 % Wave solution using d'Almbert
 u = @(x,t) 0.5 * ( f(x - c * t) + f(x + c * t) );
@@ -69,7 +70,6 @@ for cell_index = 1 : numel(num_cells)
     nx = m+1;                       % number of grid points
 
     dx = (east - west) / m;         % spacial discretization
-    dt = 0.001;                     % Time step constant for error analysis
 
     r2_md = c^2 * (dt^2);           % c in the equation, dx is built into the
                                     % mimetic operator Laplacian (L)
@@ -108,6 +108,7 @@ for cell_index = 1 : numel(num_cells)
 
     % Number of flops
     flops_md(cell_index) = (2 * nnz_md + (3 * length(U0_md)) ) * t;
-    error_md(cell_index) = max(U2_md-analytic_md);
+    diff = U2_md - analytic_md;
+    error_md(cell_index) = norm(diff) / norm(analytic_md);
 
 end

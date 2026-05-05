@@ -1,10 +1,16 @@
 function Q = weightsQ(k, m, dx)
+% PURPOSE
 % Returns the m+2 weights of Q
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                m : Number of cells
 %               dx : Step size
+%
+% SYNTAX
+% Q = weightsQ(k, m, dx)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

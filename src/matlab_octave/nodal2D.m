@@ -1,13 +1,19 @@
 function N = nodal2D(k, m, dx, n, dy)
+% PURPOSE
 % Returns a two-dimensional operator that approximates the first-order 
 % derivatives on a uniform nodal grid
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                m : Number of nodes along x-axis
 %               dx : Step size along x-axis
 %                n : Number of nodes along y-axis
 %               dy : Step size along y-axis
+%
+% SYNTAX
+% N = nodal2D(k, m, dx, n, dy)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

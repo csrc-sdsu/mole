@@ -1,6 +1,8 @@
 function [A, b] = addScalarBC1D(A, b, k, m, dx, dc, nc, v)
+% PURPOSE
 % Separates cases non-periodic and periodic for dealing with boundary data
 %
+% DESCRIPTION
 % Parameters:
 % output
 %        A0 : Linear operator with boundary conditions added
@@ -15,6 +17,9 @@ function [A, b] = addScalarBC1D(A, b, k, m, dx, dc, nc, v)
 %        dc : a0 (2x1 vector for left and right vertices, resp.)
 %        nc : b0 (2x1 vector for left and right vertices, resp.)
 %         v : g (2x1 vector for left and right vertices, resp.)
+%
+% SYNTAX
+% [A, b] = addScalarBC1D(A, b, k, m, dx, dc, nc, v)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later

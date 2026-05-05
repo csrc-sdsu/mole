@@ -1,4 +1,5 @@
 function [A, b] = addScalarBC3D(A, b, k, m, dx, n, dy, o, dz, dc, nc, v)
+% PURPOSE
 % This function assumes that the unknown u, which represents the discrete
 % solution the continuous second-order 3D PDE operator 
 %                                   L U = f, 
@@ -8,6 +9,7 @@ function [A, b] = addScalarBC3D(A, b, k, m, dx, n, dy, o, dz, dc, nc, v)
 % all discrete calculations are performed at the 3D cell centers and boundary 
 % face centers.
 %
+% DESCRIPTION
 % The function receives as input quantities associated to the discrete
 % analog of the continuous problem given by the squared linear system 
 %                                 A u = b 
@@ -68,6 +70,9 @@ function [A, b] = addScalarBC3D(A, b, k, m, dx, n, dy, o, dz, dc, nc, v)
 %        dc : a0 (6x1 vector for left, right, bottom, top, front, back boundary types, resp.)
 %        nc : b0 (6x1 vector for left, right, bottom, top, front, back boundary types, resp.)
 %         v : g (6x1 vector of arrays for left, right, bottom, top, front, back boundaries, resp.)
+%
+% SYNTAX
+% [A, b] = addScalarBC3D(A, b, k, m, dx, n, dy, o, dz, dc, nc, v)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later

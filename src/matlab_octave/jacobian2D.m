@@ -1,4 +1,7 @@
 function [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y)
+% PURPOSE
+%
+% DESCRIPTION
 % Returns:
 %                J : Determinant of the Jacobian (XeYn - XnYe)
 %               Xe : dx/de metric
@@ -10,6 +13,10 @@ function [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y)
 %                k : Order of accuracy
 %                X : x-coordinates (physical) of meshgrid
 %                Y : y-coordinates (physical) of meshgrid
+%
+% SYNTAX
+% [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

@@ -1,12 +1,32 @@
-% Generates a comma-delimited file for weights used by MOLE libray
+% PURPOSE
+% Generates a comma-delimited file for weights used by MOLE library
 % Note: These weights are generated assuming dx = 1.0.  To use them they
 % should be multiplied by dx for the problem being computed.
 %
+% DESCRIPTION
 % Parameters:
 %   None
 %
 % Returns:
 %   None
+%
+% SYNTAX
+%   From MATLAB or GNU Octave, change the current working directory to the
+%   directory containing `generateWeights.m`, then run:
+%
+%       generateWeights
+%
+%   Alternatively, run:
+%
+%       run('generateWeights.m')
+%
+%   Dependencies:
+%       weightsP, weightsQ
+%
+%   Outputs:
+%       ../dat/pweights.csv
+%       ../dat/qweights.csv
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

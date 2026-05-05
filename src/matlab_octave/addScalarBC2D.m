@@ -1,4 +1,5 @@
 function [A, b] = addScalarBC2D(A, b, k, m, dx, n, dy, dc, nc, v)
+% PURPOSE
 % This function assumes that the unknown u, which represents the discrete
 % solution the continuous second-order 2D PDE operator 
 %                                   L U = f, 
@@ -8,6 +9,7 @@ function [A, b] = addScalarBC2D(A, b, k, m, dx, n, dy, dc, nc, v)
 % all discrete calculations are performed at the 2D cell centers and boundary 
 % face centers.
 %
+% DESCRIPTION
 % The function receives as input quantities associated to the discrete
 % analog of the continuous problem given by the squared linear system 
 %                                 A u = b 
@@ -61,6 +63,9 @@ function [A, b] = addScalarBC2D(A, b, k, m, dx, n, dy, dc, nc, v)
 %        dc : a0 (4x1 vector for left, right, bottom, top boundaries, resp.)
 %        nc : b0 (4x1 vector for left, right, bottom, top boundaries, resp.)
 %         v : g (4x1 vector of arrays for left, right, bottom, top boundaries, resp.)
+%
+% SYNTAX
+% [A, b] = addScalarBC2D(A, b, k, m, dx, n, dy, dc, nc, v)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later

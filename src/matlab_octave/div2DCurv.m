@@ -1,11 +1,17 @@
 function D = div2DCurv(k, X, Y)
+% PURPOSE
+% Returns a 2D curvilinear mimetic divergence
+%
+% DESCRIPTION
+%
+% SYNTAX
+% D = div2DCurv(k, X, Y)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
-
-% Returns a 2D curvilinear mimetic divergence
 
     % Get the determinant of the jacobian and the metrics
     [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y);

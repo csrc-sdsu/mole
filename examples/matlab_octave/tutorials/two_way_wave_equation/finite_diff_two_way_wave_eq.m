@@ -1,4 +1,4 @@
-function [ U2_fd, error_fd, walltime_fd, flops_fd ] = finite_diff_two_way_wave_eq()
+function [ U2_fd, error_fd, walltime_fd, flops_fd ] = finite_diff_two_way_wave_eq(c, dt, num_cells)
 %% FINITE_DIFF_TWO_WAY_WAVE_EQ
 %  Solve the 1D two-way wave equation using standard finite differences.
 %
@@ -11,6 +11,11 @@ function [ U2_fd, error_fd, walltime_fd, flops_fd ] = finite_diff_two_way_wave_e
 %  where D_fd is the standard second-derivative finite-difference matrix:
 %
 %      D_fd = (1/dx^2) * tridiag([1, -2, 1])
+%
+%  INPUTS:
+%    c           - wave speed
+%    dt          - time step
+%    num_cells   - array of number of cells to test.
 %
 %  OUTPUTS:
 %    U2_fd       - Final solution vector at last time step
@@ -39,12 +44,8 @@ function [ U2_fd, error_fd, walltime_fd, flops_fd ] = finite_diff_two_way_wave_e
 %
 
 %% Problem definition
-c    = 0.1;      % Velocity, 1 makes FD scheme exact
 west = -2.0;     % Domain's leftmost limits
 east = 2.0;      % Domain's rightmost limit
-
-%% Number of cells to try, grid points is cells+1
-num_cells = [ 10, 20, 40, 80, 160 ];
 
 % generic holders for metrics within the loops
 error_fd = zeros(size(num_cells));
@@ -52,7 +53,7 @@ walltime_fd = zeros(size(num_cells));
 flops_fd = zeros(size(num_cells));
 
 % Initial Condition Function
-f = @(x) ( (x > -0.5) & (x < 0.5) ) .* (cos(pi * x).^2);
+f = @(x) exp( -x.^2 / 0.1 );
 
 % Wave solution using d'Alembert
 u = @(x,t) 0.5 * ( f(x - c * t) + f(x + c * t) );
@@ -64,7 +65,6 @@ for cell_index = 1 : numel(num_cells)
     nx = m+1;                       % number of grid points
 
     dx = (east - west) / m;         % spacial discretization
-    dt = 0.001;                     % Time step constant for error analysis
 
     r2_fd = c^2 * (dt^2 / dx^2);    % c in the equation
 
@@ -126,7 +126,8 @@ for cell_index = 1 : numel(num_cells)
 
     % Number of flops
     flops_fd(cell_index) = (2 * nnz_fd + length(U0_fd)) * t;
-    error_fd(cell_index) = max(U2_fd-analytic_fd);
+    diff = U2_fd - analytic_fd;
+    error_fd(cell_index) = norm(diff) / norm(analytic_fd);
 
 end
 
