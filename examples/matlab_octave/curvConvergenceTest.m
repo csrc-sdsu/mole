@@ -1,4 +1,4 @@
-%% Convegence Test for Cuvilinear Operators
+%% Convergence Test for Cuvilinear Operators
 % 
 % In 2D space, MOLE operators can only calculate the xi and eta derivatives
 % On a curvilinear domain, the x and xi, and y and eta directions are

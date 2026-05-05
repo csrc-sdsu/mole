@@ -1,9 +1,20 @@
 function D = div2DCurvLegacy(k, X, Y)
 % 
 % ----------------------------------------------------------------------------
-%                 !!! WARNING: DEPRICATED BY div2DCurv.m !!!
+%                 !!! WARNING: DEPRECATED BY div2DCurv.m !!!
 % ----------------------------------------------------------------------------
 % 
+% PURPOSE
+% Returns a 2D curvilinear mimetic divergence operator
+% 
+% DESCRIPTION
+% Parameters:
+%                k : Order of accuracy
+%                X : x-coordinates (physical) of meshgrid nodes
+%                Y : y-coordinates (physical) of meshgrid nodes
+% 
+% SYNTAX
+% D = div2DCurvLegacy(k, X, Y)
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

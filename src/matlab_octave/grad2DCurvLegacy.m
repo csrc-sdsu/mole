@@ -1,10 +1,21 @@
 function G = grad2DCurvLegacy(k, X, Y)
 % 
 % ----------------------------------------------------------------------------
-%                 !!! WARNING: DEPRICATED BY grad2DCurv.m !!!
+%                 !!! WARNING: DEPRECATED BY grad2DCurv.m !!!
 % ----------------------------------------------------------------------------
 % 
-% Returns a 2D curvilinear mimetic gradient
+% PURPOSE
+% Returns a 2D curvilinear mimetic gradient operator
+% 
+% DESCRIPTION
+% % Parameters:
+%                k : Order of accuracy
+%                X : x-coordinates (physical) of meshgrid nodes
+%                Y : y-coordinates (physical) of meshgrid nodes
+% 
+% SYNTAX
+% G = grad2DCurvLegacy(k, X, Y)
+% 
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

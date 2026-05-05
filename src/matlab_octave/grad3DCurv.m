@@ -1,18 +1,17 @@
 function G = grad3DCurv(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
 % PURPOSE
-% Returns a 3D curvilinear mimetic gradient operator
+% Returns a 3D curvilinear mimetic gradient operator. If optional
+% arguments are specified, it outputs to the extended
+% faces (normal faces plus boundaries)
 %
 % DESCRIPTION
-% Returns:
-%                G : 3D curvilinear mimetic gradient operator. If optional
-%                    arguments are specified, it outputs to the extended
-%                    faces (normal faces plus boundaries)
-%
 % Parameters:
 %                k : Order of accuracy
 %                X : x-coordinates (physical) of meshgrid centers if
 %                    optional arguments are specified, else nodes
 %                Y : y-coordinates (physical) of meshgrid centers if
+%                    optional arguments are specified, else nodes
+%                Z : Z-coordinates (physical) of meshgrid centers if
 %                    optional arguments are specified, else nodes
 %    (optional)  m : Number of cells in xi direction
 %    (optional) dx : Step size in xi direction
@@ -20,15 +19,15 @@ function G = grad3DCurv(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
 %    (optional) dy : Step size in eta direction
 %    (optional)  o : Number of cells in kappa direction
 %    (optional) dz : Step size in kappa direction
-%    (optional) dc : a0 (6x1 vector for left, right, bottom, top
-%                    boundaries, resp.)
-%    (optional) nc : b0 (6x1 vector for left, right, bottom, top
-%                    boundaries, resp.)
-%
+%    (optional) dc : a0 (6x1 vector for left, right, bottom, top, front, and
+%                    back boundaries, resp.)
+%    (optional) nc : b0 (6x1 vector for left, right, bottom, top, front, and
+%                    back boundaries, resp.)
+% 
 % SYNTAX
 % G = grad3DCurv(k, X, Y, Z)
 % G = grad3DCurv(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
-%
+% 
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

@@ -1,13 +1,10 @@
 function D = div2DCurv(k, X, Y, m, dx, n, dy, dc, nc)
 % PURPOSE
-% Returns a 2D curvilinear mimetic divergence operator
+% Returns a 2D curvilinear mimetic divergence operator. If optional
+% arguments are specified, it acts on the extended faces
+% (normal faces plus boundaries)
 %
 % DESCRIPTION
-% Returns:
-%                D : 2D curvilinear mimetic divergence operator. If optional
-%                    arguments are specified, it acts on the extended faces
-%                    (normal faces plus boundaries)
-%
 % Parameters:
 %                k : Order of accuracy
 %                X : x-coordinates (physical) of meshgrid centers if
@@ -22,11 +19,11 @@ function D = div2DCurv(k, X, Y, m, dx, n, dy, dc, nc)
 %                    boundaries, resp.)
 %    (optional) nc : b0 (4x1 vector for left, right, bottom, top
 %                    boundaries, resp.)
-%
+% 
 % SYNTAX
 % D = div2DCurv(k, X, Y)
 % D = div2DCurv(k, X, Y, m, dx, n, dy, dc, nc)
-%
+% 
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

@@ -1,18 +1,17 @@
 function D = div3DCurv(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
 % PURPOSE
-% Returns a 3D curvilinear mimetic divergence operator
+% Returns a 3D curvilinear mimetic divergence operator. If optional
+% arguments are specified, it acts on the extended faces
+% (normal faces plus boundaries)
 %
 % DESCRIPTION
-% Returns:
-%                D : 3D curvilinear mimetic divergence operator. If optional
-%                    arguments are specified, it acts on the extended faces
-%                    (normal faces plus boundaries)
-%
 % Parameters:
 %                k : Order of accuracy
 %                X : x-coordinates (physical) of meshgrid centers if
 %                    optional arguments are specified, else nodes
 %                Y : y-coordinates (physical) of meshgrid centers if
+%                    optional arguments are specified, else nodes
+%                Z : z-coordinates (physical) of meshgrid centers if
 %                    optional arguments are specified, else nodes
 %    (optional)  m : Number of cells in xi direction
 %    (optional) dx : Step size in xi direction
@@ -20,15 +19,15 @@ function D = div3DCurv(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
 %    (optional) dy : Step size in eta direction
 %    (optional)  o : Number of cells in kappa direction
 %    (optional) dz : Step size in kappa direction
-%    (optional) dc : a0 (6x1 vector for left, right, bottom, top
-%                    boundaries, resp.)
-%    (optional) nc : b0 (6x1 vector for left, right, bottom, top
-%                    boundaries, resp.)
-%
+%    (optional) dc : a0 (6x1 vector for left, right, bottom, top, front, and
+%                    back boundaries, resp.)
+%    (optional) nc : b0 (6x1 vector for left, right, bottom, top, front, and
+%                    back boundaries, resp.)
+% 
 % SYNTAX
 % D = div3DCurv(k, X, Y, Z)
 % D = div3DCurv(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
-%
+% 
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
@@ -36,8 +35,8 @@ function D = div3DCurv(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
 % ----------------------------------------------------------------------------
 
     if nargin ~= 4 && nargin ~= 12
-        error("div2DCurv:InvalidNumArgs", ...
-              "div2DCurv expects 4 or 12 arguments")
+        error("div3DCurv:InvalidNumArgs", ...
+              "div3DCurv expects 4 or 12 arguments")
     elseif nargin == 4
         D = div3DCurvLegacy(k, X, Y, Z);
         return;

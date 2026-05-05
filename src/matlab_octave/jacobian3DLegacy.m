@@ -1,26 +1,22 @@
 function [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3DLegacy(k, X, Y, Z)
 % 
 % ----------------------------------------------------------------------------
-%                  !!! WARNING: DEPRICATED BY jacobian3D.m !!!
+%                  !!! WARNING: DEPRECATED BY jacobian3D.m !!!
 % ----------------------------------------------------------------------------
 % 
-% Returns:
-%                J : Determinant of the Jacobian
-%               Xe : dx/de metric
-%               Xn : dx/dn metric
-%               Xc : dx/dc metric
-%               Ye : dy/de metric
-%               Yn : dy/dn metric
-%               Yc : dy/dc metric
-%               Ze : dz/de metric
-%               Zn : dz/dn metric
-%               Zc : dz/dc metric
+% PUPOSE
+% Returns the 3D jacobian metrics of a mesh
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
-%                X : x-coordinates (physical) of meshgrid
-%                Y : y-coordinates (physical) of meshgrid
-%                Z : z-coordinates (physical) of meshgrid
+%                X : x-coordinates (physical) of meshgrid nodes
+%                Y : y-coordinates (physical) of meshgrid nodes
+%                Z : z-coordinates (physical) of meshgrid nodes
+% 
+% SYNTAX
+% [J, Xe, Xn, Xk, Ye, Yn, Yk, Ze, Zn, Zk] = jacobian3DLegacy(k, X, Y, Z)
+% 
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

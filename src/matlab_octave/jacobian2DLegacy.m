@@ -1,20 +1,22 @@
 function [J, Xe, Xn, Ye, Yn] = jacobian2DLegacy(k, X, Y)
 % 
 % ----------------------------------------------------------------------------
-%                 !!! WARNING: DEPRICATED BY jacobian2D.m !!!
+%                 !!! WARNING: DEPRECATED BY jacobian2D.m !!!
 % ----------------------------------------------------------------------------
 % 
-% Returns:
-%                J : Determinant of the Jacobian (XeYn - XnYe) on the nodes
-%               Xe : dx/de metric on the nodes
-%               Xn : dx/dn metric on the nodes
-%               Ye : dy/de metric on the nodes
-%               Yn : dy/dn metric on the nodes
+% PURPOSE
+% Returns the Jacobian metrics (Xe, Xn, Ye, Yn, and J = XeYn - XnYe) of a
+% mesh
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                X : x-coordinates (physical) of meshgrid nodes
 %                Y : y-coordinates (physical) of meshgrid nodes
+% 
+% SYNTAX
+% [J, Xe, Xn, Ye, Yn] = jacobian2DLegacy(k, X, Y)
+% 
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

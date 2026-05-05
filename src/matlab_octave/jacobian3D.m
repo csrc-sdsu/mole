@@ -1,30 +1,8 @@
 function [J, Xe, Xn, Xk, Ye, Yn, Yk, Ze, Zn, Zk] = jacobian3D(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
 % PURPOSE
-% 3D Jacobian metrics for curvilinear operators
+% Returns the 3D jacobian metrics of a mesh
 %
 % DESCRIPTION
-% Returns:
-%                J : Determinant of the Jacobian on the centers if optional
-%                    arguments are specified, else nodes
-%               Xe : dx/de metric on the centers if optional arguments are 
-%                    specified, else nodes
-%               Xn : dx/dn metric on the centers if optional arguments are 
-%                    specified, else nodes
-%               Xk : dx/dk metric on the centers if optional arguments are 
-%                    specified, else nodes
-%               Ye : dy/de metric on the centers if optional arguments are 
-%                    specified, else nodes
-%               Yn : dy/dn metric on the centers if optional arguments are 
-%                    specified, else nodes
-%               Yk : dy/dk metric on the centers if optional arguments are 
-%                    specified, else nodes
-%               Ze : dz/de metric on the centers if optional arguments are 
-%                    specified, else nodes
-%               Zn : dz/dn metric on the centers if optional arguments are 
-%                    specified, else nodes
-%               Zk : dz/dk metric on the centers if optional arguments are 
-%                    specified, else nodes
-%
 % Parameters:
 %                k : Order of accuracy
 %                X : x-coordinates (physical) of meshgrid centers if optional
@@ -39,15 +17,15 @@ function [J, Xe, Xn, Xk, Ye, Yn, Yk, Ze, Zn, Zk] = jacobian3D(k, X, Y, Z, m, dx,
 %    (optional) dy : Step size in eta direction
 %    (optional)  o : Number of cells in kappa direction
 %    (optional) dz : Step size in kappa direction
-%    (optional) dc : a0 (6x1 vector for left, right, bottom, top
-%                    boundaries, resp.)
-%    (optional) nc : b0 (6x1 vector for left, right, bottom, top
-%                    boundaries, resp.)
-%
+%    (optional) dc : a0 (6x1 vector for left, right, bottom, top, front, and
+%                    back boundaries, resp.)
+%    (optional) nc : b0 (6x1 vector for left, right, bottom, top, front, and
+%                    back boundaries, resp.)
+% 
 % SYNTAX
-% [J, Xe, Xn, Xv, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3D(k, X, Y, Z)
-% [J, Xe, Xn, Xv, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3D(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
-%
+% [J, Xe, Xn, Xk, Ye, Yn, Yk, Ze, Zn, Zk] = jacobian3D(k, X, Y, Z)
+% [J, Xe, Xn, Xk, Ye, Yn, Yk, Ze, Zn, Zk] = jacobian3D(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
+% 
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
@@ -56,7 +34,7 @@ function [J, Xe, Xn, Xk, Ye, Yn, Yk, Ze, Zn, Zk] = jacobian3D(k, X, Y, Z, m, dx,
     
     if nargin ~= 4 && nargin ~= 12
         error("jacobian3D:InvalidNumArgs", ...
-              "jacobian3D expects 4 or 9 arguments")
+              "jacobian3D expects 4 or 12 arguments")
     elseif nargin == 4
         [J, Xe, Xn, Xk, Ye, Yn, Yk, Ze, Zn, Zk] = jacobian3DLegacy(k, X, Y, Z);
         return;
