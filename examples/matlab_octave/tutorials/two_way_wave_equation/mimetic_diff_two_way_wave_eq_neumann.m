@@ -1,4 +1,4 @@
-function [ U2_md, error_md, walltime_md, flops_md ] = mimetic_diff_two_way_wave_eq(k, c, dt, num_cells)
+function [ U2_md, error_md, walltime_md, flops_md ] = mimetic_diff_two_way_wave_eq_neumann(k, c, dt, num_cells)
 %% MIMETIC_DIFF_TWO_WAY_WAVE_EQ
 %  Solve the 1D two-way wave equation using mimetic finite differences.
 %
