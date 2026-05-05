@@ -43,8 +43,11 @@ flops_fd = zeros(size(num_cells));
 % Initial Condition Function
 f = @(x) cos(pi*x/2).^2;
 
-% Wave solution using d'Alembert
-u = @(x,t) 0.5 * ( f(x - c * t) + f(x + c * t) );
+interval = east - west;
+reflected_x = @(x) west + interval - abs(mod(x - west, 2*interval) - interval);
+f_new = @(x) f(reflected_x(x));
+u = @(x,t) 0.5 * (f_new(x - c*t) + f_new(x + c*t));
+
 
 for cell_index = 1 : numel(num_cells)
 
@@ -56,7 +59,8 @@ for cell_index = 1 : numel(num_cells)
 
     r2_fd = c^2 * (dt^2 / dx^2);    % Courant-like factor
 
-    t = ceil( 1/(c * dt) );         % first step euler, so t is one less
+    Tfinal = 4 / c;       % hit boundary once and return to center
+    t = ceil(Tfinal / dt);
 
     % FD grid
     grid_fd = west : dx : east;
@@ -113,8 +117,23 @@ for cell_index = 1 : numel(num_cells)
 
         U2_fd(1)   = U2_fd(2);
         U2_fd(end) = U2_fd(end-1);
+  %      t_now = (i + 1) * dt;
+   %     analytic_now = u(grid_fd, t_now);
 
-        % Shift everyone back for leapfrog scheme
+    %    plot(grid_fd, U2_fd, 'b-', 'LineWidth', 1.5);
+     %   hold on;
+      %  plot(grid_fd, analytic_now, 'r--', 'LineWidth', 1.5);
+       % hold off;
+
+%        xlabel('x');
+ %       ylabel('u(x,t)');
+  %      title(sprintf('m = %d, t = %.4f', m, t_now));
+   %     legend('Numerical', 'Analytical', 'Location', 'best');
+    %    grid on;
+     %   ylim([0 1.1]);
+      %  drawnow;
+
+        %Shift everyone back for leapfrog scheme
         U0_fd = U1_fd;
         U1_fd = U2_fd;
 
@@ -125,6 +144,8 @@ for cell_index = 1 : numel(num_cells)
     flops_fd(cell_index) = (2 * nnz_fd + length(U0_fd)) * t;
 
     % Error
-    diff = U2_fd - analytic_fd;
-    error_fd(cell_index) = norm(diff) / norm(analytic_fd);
+    %diff = U2_fd - analytic_fd;
+    %error_fd(cell_index) = norm(diff) / norm(analytic_fd);
+
+    error_fd(cell_index) = max(U2_fd-analytic_fd);
 end
