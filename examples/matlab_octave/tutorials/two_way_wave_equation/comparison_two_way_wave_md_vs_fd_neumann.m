@@ -92,23 +92,12 @@ clear
 
 addpath('../../../../src/matlab_octave');
 
-%% Problem definition - These values are mimicked in the FD and MD functions
-%k    = 6;
-%c    = 0.1;
-%west = -2.0;
-%east = 2.0;
-
-%num_cells = [ 20, 40, 80, 160 ];
-
-%dx_min = (east - west) / max(num_cells);
-%dt = 0.5 * dx_min / c;   % CFL = 0.5 on finest grid
-% Number of cells to try, points is cells+1
 %% Problem definition - These values aremimicked in the FD and MD functions
-k    = 2;        % Mimetic Order of Accuracy, can change to 4,6,8
+k    = 6;        % Mimetic Order of Accuracy, can change to 4,6,8
 c    = 0.1;      % Velocity, 1 makes FD sceme exact
 west = -2.0;     % Domain's leftmost limits
 east = 2.0;      % Domain's rightmost limit
-dt   = 0.1;    % Time step, must work for all cell sizes
+dt   = .001;    % Time step, must work for all cell sizes
 
 % Number of cells to try, points is cells+1
 num_cells = [ 20, 40, 80 ];
@@ -167,8 +156,3 @@ grid on;
 title(['FLOPs: FD (order 2) vs MD (order ', num2str(k), ')']);
 legend('FD FLOPs', 'MD FLOPs');
 set(gca, "linewidth", 2, "fontsize", 16)
-
-fprintf("md:")
-disp(error_md)
-fprintf("fd:")
-disp(error_fd)
