@@ -53,9 +53,6 @@ MOLE OSE Organization <intros/ose_organization_wrapper>
 MOLE OSE Governance <intros/ose_governance_wrapper>
 Code of Conduct <intros/code_of_conduct_wrapper>
 Publications <intros/publications_wrapper>
-<!-- [MENU links to be added later]: #
-[Communications <intros/communications_wrapper]: #
-[Upcoming Events <intros/upcoming_events_wrapper>]: # -->
 ```
 
 <!-- ```{toctree}
