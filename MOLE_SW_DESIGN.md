@@ -168,10 +168,7 @@ A non-inline function is the one place a "throws nothing" exception-specificatio
 ---
 
 ### Source code fonts rationale 
-( from BOOST )
-
-Dave Abrahams comments: An important purpose (I daresay the primary purpose) of source code is communication: the documentation of intent. This is a doubly important goal for MOLE, I think. Using a fixed-width font allows us to communicate with more people, in more ways (diagrams are possible) right there in the source. Code written for fixed-width fonts using spaces will read reasonably well when viewed with a variable-width font, and as far as I can tell every editor supporting variable-width fonts also supports fixed width. I don't think the converse is true.
-
+ Using a fixed-width font allows us to communicate with more people, in more ways (diagrams are possible) right there in the source. Code written for fixed-width (monospaced) fonts using spaces will read reasonably well when viewed with a variable-width (proportional) font.  Further, while most modern text editors and word processors support both fixed- and variable-width fonts, specialized or older editors designed strictly around a grid system may lack support for variable-width fonts. Conversely, a modern application supporting variable-width fonts almost certainly supports fixed-width fonts.
 ---
 
 ### Tabs rationale
