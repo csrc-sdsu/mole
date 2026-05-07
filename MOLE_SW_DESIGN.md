@@ -123,7 +123,7 @@ Please use these guidelines as a checklist for preparing the content of a submis
 
 ### Documentation
 
-Even the simplest library needs some documentation; the amount should be proportional to the need.  The documentation should assume the readers have a basic knowledge of C++, but are not necessarily experts.
+Even the simplest library needs some documentation; the amount should be proportional to the need.  The documentation should assume the readers have a basic knowledge of the implemented language, but are not necessarily experts.
 
 The format for documentation should be Markdown, and should not require an advanced browser or server-side extensions. Style sheets are acceptable. ECMAScript/JavaScript is not acceptable.
 
