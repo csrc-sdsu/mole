@@ -49,6 +49,7 @@ examples/index
 :name: community-nav
 MOLE Community Roles <intros/community_roles_wrapper>
 Contributing to MOLE <intros/contributing_wrapper>
+Software Design Guidelines <intros/mole_sw_design_wrapper>
 MOLE OSE Organization <intros/ose_organization_wrapper>
 MOLE OSE Governance <intros/ose_governance_wrapper>
 Code of Conduct <intros/code_of_conduct_wrapper>
