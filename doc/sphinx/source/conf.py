@@ -36,7 +36,7 @@ copyright = '2023, CSRC SDSU'
 with open("../../../AUTHORS") as f:
     authorlist = f.readlines()
 author = ", ".join(authorlist)
-release = '1.1.0'
+release = '1.2.0'
 master_doc = 'index'
 root_doc = 'index'
 
