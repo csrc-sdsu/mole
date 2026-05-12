@@ -88,8 +88,7 @@ for cell_index = 1 : numel(num_cells)
     U0_md = u(grid_md', 0);
 
     % The analytic solution, so we can check the error
-    U0_md_initial = U0_md;
-    analytic_md = U0_md_initial;
+    analytic_md = u(grid_md', (t+1) * dt);
 
     %% Mimetic Scheme Matrix L
     L = lap(k,m,dx);
