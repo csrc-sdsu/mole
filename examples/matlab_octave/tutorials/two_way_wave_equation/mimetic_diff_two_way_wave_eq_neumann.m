@@ -60,8 +60,6 @@ flops_md = zeros(size(num_cells));
 % Initial Condition Function
 f = @(x) exp( -x.^2 / 0.1 );
 
-% Wave solution using d'Almbert
-%u = @(x,t) 0.5 * ( f(x - c * t) + f(x + c * t) );
 
 interval = east - west;
 reflected_x = @(x) west + interval - abs(mod(x - west, 2*interval) - interval);
@@ -80,7 +78,7 @@ for cell_index = 1 : numel(num_cells)
     r2_md = c^2 * (dt^2);           % c in the equation, dx is built into the
                                     % mimetic operator Laplacian (L)
 
-    Tfinal = 10 / c;
+    Tfinal = 4 / c;
     t = ceil(Tfinal / dt);
 
     % MD grid, note the extra staggered (dx/2) step near the boundaries
@@ -90,45 +88,48 @@ for cell_index = 1 : numel(num_cells)
     U0_md = u(grid_md', 0);
 
     % The analytic solution, so we can check the error
-    analytic_md = u(grid_md', (t+1) * dt);
+    U0_md_initial = U0_md;
+    analytic_md = U0_md_initial;
 
     %% Mimetic Scheme Matrix L
-    L = lap(k,m,dx);    % mimetic Laplacian operator
+    L = lap(k,m,dx);
+    
 
     dc = [0; 0];
     nc = [1; 1];
+    v  = [0; 0];
+    
+    [L,U0_md] = addScalarBC1D(L,U0_md,k,m,dx,dc,nc,v);
+    L = r2_md * L;
 
-    [Abcl, Abcr] = addScalarBC1Dlhs(k, m, dx, dc, nc);
 
-    L = L + Abcl + Abcr;
-    L = r2_md * L;   
+    U1_md = U0_md + (0.5 * L * U0_md); % First step, Euler
 
-    U1_md = U0_md + (0.5 * L * U0_md);  % First step, Euler
-    U2_md = U1_md;      % Increment time step
+    U2_md = U1_md; % Increment time step
 
     %% Loop over time values
     nnz_md = nnz(L);
     tic
     for i = 1 : t
-
         U2_md = (2.0 * U1_md) + (L * U1_md) - U0_md;
 
+
         %% Plot it
-        t_now = (i + 1) * dt;
-        analytic_now = u(grid_md, t_now);
+        %t_now = (i + 1) * dt;
+        %analytic_now = u(grid_md, t_now);
 
-        plot(grid_md, U2_md, 'b-', 'LineWidth', 1.5);
-        hold on;
-        plot(grid_md, analytic_now, 'r--', 'LineWidth', 1.5);
-        hold off;
+        %plot(grid_md, U2_md, 'b-', 'LineWidth', 1.5);
+        %hold on;
+        %plot(grid_md, analytic_now, 'r--', 'LineWidth', 1.5);
+        %hold off;
 
-        xlabel('x');
-        ylabel('u(x,t)');
-        title(sprintf('m = %d, t = %.4f', m, t_now));
-        legend('Numerical', 'Analytical', 'Location', 'best');
-        grid on;
-        ylim([0 1.1]);
-        drawnow;
+        %xlabel('x');
+        %ylabel('u(x,t)');
+        %title(sprintf('addScalarBC1D Function: m = %d, t = %.4f', m, t_now));
+        %legend('Numerical', 'Analytical', 'Location', 'best');
+        %grid on;
+        %ylim([0 1.1]);
+        %drawnow;
 
 
         % Shift everyone back for leapfrog scheme
