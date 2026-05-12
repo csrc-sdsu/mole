@@ -9,13 +9,16 @@ We ideally want all release mechanics to be in one commit, which will then be ta
 
 Some minor bookkeeping updates are needed when releasing a new version of MOLE.
 
-The version number must be updated in:
+The version number must be updated in the following files:
 
-* `CITATION.cff` (update the `doi` field and `date-published` if needed)
-* `README.md` (if version-specific badges or information exist)
+* `mole/CITATION.cff`: update the `authors`, `doi`, and `date-released` fields if needed
+* `mole/README.md`: in the How to Cite section
+* `mole/doc/sphinx/source/conf.py`: the `release` field
 
-Additionally, the release notes should be generated and reviewed.
-Use `git log --first-parent v1.0..` to get a sense of the pull requests that have been merged since the last release and thus might warrant emphasizing in the release notes.
+
+Additionally, the change log should be generated and reviewed.
+
+Use `git log --first-parent v1.0..` to get a sense of the pull requests that have been merged since the last release and thus might warrant emphasizing in the change log.
 
 While doing this, gather a couple sentences for key features to highlight on [GitHub releases](https://github.com/csrc-sdsu/mole/releases).
 

@@ -56,6 +56,13 @@ Code of Conduct <intros/code_of_conduct_wrapper>
 Publications <intros/publications_wrapper>
 ```
 
+```{toctree}
+:maxdepth: 1
+:caption: Developer Notes
+:name: developer-nav
+dev-notes/index
+```
+
 <!-- ```{toctree}
 :caption: Reference
 :hidden:
