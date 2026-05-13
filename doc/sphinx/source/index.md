@@ -49,13 +49,18 @@ examples/index
 :name: community-nav
 MOLE Community Roles <intros/community_roles_wrapper>
 Contributing to MOLE <intros/contributing_wrapper>
+Software Design Guidelines <intros/mole_sw_design_wrapper>
 MOLE OSE Organization <intros/ose_organization_wrapper>
 MOLE OSE Governance <intros/ose_governance_wrapper>
 Code of Conduct <intros/code_of_conduct_wrapper>
 Publications <intros/publications_wrapper>
-<!-- [MENU links to be added later]: #
-[Communications <intros/communications_wrapper]: #
-[Upcoming Events <intros/upcoming_events_wrapper>]: # -->
+```
+
+```{toctree}
+:maxdepth: 1
+:caption: Developer Notes
+:name: developer-nav
+dev-notes/index
 ```
 
 <!-- ```{toctree}
