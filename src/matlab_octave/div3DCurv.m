@@ -1,77 +1,126 @@
-function D = div3DCurv(k, X, Y, Z)
+function D = div3DCurv(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
 % PURPOSE
-% Returns a 3D curvilinear mimetic divergence
+% Returns a 3D curvilinear mimetic divergence operator. If optional
+% arguments are specified, it acts on the extended faces
+% (normal faces plus boundaries)
 %
 % DESCRIPTION
-%
+% Parameters:
+%                k : Order of accuracy
+%                X : x-coordinates (physical) of meshgrid centers if
+%                    optional arguments are specified, else nodes
+%                Y : y-coordinates (physical) of meshgrid centers if
+%                    optional arguments are specified, else nodes
+%                Z : z-coordinates (physical) of meshgrid centers if
+%                    optional arguments are specified, else nodes
+%    (optional)  m : Number of cells in xi direction
+%    (optional) dx : Step size in xi direction
+%    (optional)  n : Number of cells in eta direction
+%    (optional) dy : Step size in eta direction
+%    (optional)  o : Number of cells in kappa direction
+%    (optional) dz : Step size in kappa direction
+%    (optional) dc : a0 (6x1 vector for left, right, bottom, top, front, and
+%                    back boundaries, resp.)
+%    (optional) nc : b0 (6x1 vector for left, right, bottom, top, front, and
+%                    back boundaries, resp.)
+% 
 % SYNTAX
 % D = div3DCurv(k, X, Y, Z)
-%
+% D = div3DCurv(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
+% 
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
 
-    % Get the determinant of the jacobian and the metrics
-    [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3D(k, X, Y, Z);
-    
-    % Dimensions of nodal grid
-    [n, m, o] = size(X);
-    
-    % Make them volumes so they can be interpolated
-    J = permute(reshape(J, m, n, o), [2, 1, 3]);
-    A = permute(reshape(Yn.*Zc-Zn.*Yc, m, n, o), [2, 1, 3]);
-    B = permute(reshape(Zn.*Xc-Xn.*Zc, m, n, o), [2, 1, 3]);
-    C = permute(reshape(Xn.*Yc-Yn.*Xc, m, n, o), [2, 1, 3]);
-    D = permute(reshape(Ze.*Yc-Ye.*Zc, m, n, o), [2, 1, 3]);
-    E = permute(reshape(Xe.*Zc-Ze.*Xc, m, n, o), [2, 1, 3]);
-    F = permute(reshape(Ye.*Xc-Xe.*Yc, m, n, o), [2, 1, 3]);
-    G = permute(reshape(Ye.*Zn-Ze.*Yn, m, n, o), [2, 1, 3]);
-    H = permute(reshape(Ze.*Xn-Xe.*Zn, m, n, o), [2, 1, 3]);
-    I = permute(reshape(Xe.*Yn-Ye.*Xn, m, n, o), [2, 1, 3]);
-    
-    % Logical grids
-    [Xl, Yl, Zl] = meshgrid(1:m, 1:n, 1:o);
-    % Staggered logical grid
-    [Xs, Ys, Zs] = meshgrid([1 1.5 : 1 : m-0.5 m], [1 1.5 : 1 : n-0.5 n], [1 1.5 : 1 : o-0.5 o]);
-    
-    % Interpolate the metrics on the logical grid for positions (Xs, Ys, Zs)
-    J = interp3(Xl, Yl, Zl, J, Xs, Ys, Zs);
-    A = interp3(Xl, Yl, Zl, A, Xs, Ys, Zs);
-    B = interp3(Xl, Yl, Zl, B, Xs, Ys, Zs);
-    C = interp3(Xl, Yl, Zl, C, Xs, Ys, Zs);
-    D = interp3(Xl, Yl, Zl, D, Xs, Ys, Zs);
-    E = interp3(Xl, Yl, Zl, E, Xs, Ys, Zs);
-    F = interp3(Xl, Yl, Zl, F, Xs, Ys, Zs);
-    G = interp3(Xl, Yl, Zl, G, Xs, Ys, Zs);
-    H = interp3(Xl, Yl, Zl, H, Xs, Ys, Zs);
-    I = interp3(Xl, Yl, Zl, I, Xs, Ys, Zs);
-    
-    % Convert metrics to diagonal matrices so they can be multiplied by the 
-    % logical operators
-    J = spdiags(1./reshape(permute(J, [2, 1, 3]), [], 1), 0, numel(J), numel(J));
-    A = spdiags(reshape(permute(A, [2, 1, 3]), [], 1), 0, numel(A), numel(A));
-    B = spdiags(reshape(permute(B, [2, 1, 3]), [], 1), 0, numel(B), numel(B));
-    C = spdiags(reshape(permute(C, [2, 1, 3]), [], 1), 0, numel(C), numel(C));
-    D = spdiags(reshape(permute(D, [2, 1, 3]), [], 1), 0, numel(D), numel(D));
-    E = spdiags(reshape(permute(E, [2, 1, 3]), [], 1), 0, numel(E), numel(E));
-    F = spdiags(reshape(permute(F, [2, 1, 3]), [], 1), 0, numel(F), numel(F));
-    G = spdiags(reshape(permute(G, [2, 1, 3]), [], 1), 0, numel(G), numel(G));
-    H = spdiags(reshape(permute(H, [2, 1, 3]), [], 1), 0, numel(H), numel(H));
-    I = spdiags(reshape(permute(I, [2, 1, 3]), [], 1), 0, numel(I), numel(I));
-    
-    % Construct 3D uniform mimetic divergence operator (d/de + d/dn + d/dc)
-    Div = div3D(k, m-1, 1, n-1, 1, o-1, 1);
-    De = Div(:, 1:m*(n-1)*(o-1));
-    Dn = Div(:, m*(n-1)*(o-1)+1:m*(n-1)*(o-1)+(m-1)*n*(o-1));
-    Dc = Div(:, m*(n-1)*(o-1)+(m-1)*n*(o-1)+1:end);
-    
-    % Apply transformation
-    Dx = J*(A*De+D*DI3(m-1, n-1, o-1, 'Dn')+G*DI3(m-1, n-1, o-1, 'Dc'));
-    Dy = J*(B*DI3(m-1, n-1, o-1, 'De')+E*Dn+H*DI3(m-1, n-1, o-1, 'Dcc'));
-    Dz = J*(C*DI3(m-1, n-1, o-1, 'Dee')+F*DI3(m-1, n-1, o-1, 'Dnn')+I*Dc);
-    
-    % Final 3D curvilinear mimetic divergence operator (d/dx + d/dy + d/dz)
+    if nargin ~= 4 && nargin ~= 12
+        error("div3DCurv:InvalidNumArgs", ...
+              "div3DCurv expects 4 or 12 arguments")
+    elseif nargin == 4
+        D = div3DCurvLegacy(k, X, Y, Z);
+        return;
+    end
+
+    assert(all(size(dc) == [6 1]), "dc is a 6x1 vector")
+    assert(all(size(nc) == [6 1]), "nc is a 6x1 vector")
+
+    % Periodic Handling
+    if isempty(find(dc(1:2).^2 + nc(1:2).^2,1))
+        De = divPeriodic(k,m,dx);
+        IFCx = interpolFacesToCentersG1DPeriodic(k,m);
+        ICFx = interpolCentersToFacesD1DPeriodic(k,m);
+        Im = speye(m);
+        Bx = sparse(m, m);
+    else
+        De = divNonPeriodic(k,m,dx);
+        IFCx = interpolFacesToCentersG1D(k,m);
+        ICFx = interpolCentersToFacesD1D(k,m);
+        Im = speye(m+2);
+        Bx = sparse(m + 2, m + 1);
+        Bx(1, 1) = 1;
+        Bx(end, end) = 1;
+    end
+    if isempty(find(dc(3:4).^2 + nc(3:4).^2,1))
+        Dn = divPeriodic(k,n,dy);
+        IFCy = interpolFacesToCentersG1DPeriodic(k,n);
+        ICFy = interpolCentersToFacesD1DPeriodic(k,n);
+        In = speye(n);
+        By = sparse(n, n);
+    else
+        Dn = divNonPeriodic(k,n,dy);
+        IFCy = interpolFacesToCentersG1D(k,n);
+        ICFy = interpolCentersToFacesD1D(k,n);
+        In = speye(n+2);
+        By = sparse(n + 2, n + 1);
+        By(1, 1) = 1;
+        By(end, end) = 1;
+    end
+    if isempty(find(dc(5:6).^2 + nc(5:6).^2, 1))
+        Dk = divPeriodic(k, o, dz);
+        IFCz = interpolFacesToCentersG1DPeriodic(k, o);
+        ICFz = interpolCentersToFacesD1DPeriodic(k, o);
+        Io = speye(o);
+        Bz = sparse(o, o);
+    else
+        Dk = divNonPeriodic(k, o, dz);
+        IFCz = interpolFacesToCentersG1D(k, o);
+        ICFz = interpolCentersToFacesD1D(k, o);
+        Io = speye(o + 2);
+        Bz = sparse(o + 2, o + 1);
+        Bz(1, 1) = 1;
+        Bz(end, end) = 1;
+    end
+
+    % Make De, Dn, and Dk act on and output to the centers
+    % This allows them to be added together
+    De = kron(kron(Io, In), De) * kron(kron(Io, In), ICFx);
+    Dn = kron(kron(Io, Dn), Im) * kron(kron(Io, ICFy), Im);
+    Dk = kron(kron(Dk, In), Im) * kron(kron(ICFz, In), Im);
+
+    % Apply metrics
+    [J, Xe, Xn, Xk, Ye, Yn, Yk, Ze, Zn, Zk] = jacobian3D(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc);
+
+    Dx = ((Yn .* Zk - Zn .* Yk) ./ J) .* De ...
+       + ((Ze .* Yk - Ye .* Zk) ./ J) .* Dn ...
+       + ((Ye .* Zn - Ze .* Yn) ./ J) .* Dk;
+    Dy = ((Zn .* Xk - Xn .* Zk) ./ J) .* De ...
+       + ((Xe .* Zk - Ze .* Xk) ./ J) .* Dn ...
+       + ((Ze .* Xn - Xe .* Zn) ./ J) .* Dk;
+    Dz = ((Xn .* Yk - Yn .* Xk) ./ J) .* De ...
+       + ((Ye .* Xk - Xe .* Yk) ./ J) .* Dn ...
+       + ((Xe .* Yn - Ye .* Xn) ./ J) .* Dk;
+
+    % Now have them act on the extended faces
+    Dx = Dx * kron(kron(Io, In), IFCx);
+    Dy = Dy * kron(kron(Io, IFCy), Im);
+    Dz = Dz * kron(kron(IFCz, In), Im);
+
     D = [Dx Dy Dz];
+
+    % Ensure no output on boundary
+    B = [kron(kron(Io, In), Bx) kron(kron(Io, By), Im) kron(kron(Bz, In), Im)];
+    bdry = find(sum(B, 2) ~= 0);
+    D(bdry, :) = sparse(size(bdry, 1), size(D, 2));
+
 end
