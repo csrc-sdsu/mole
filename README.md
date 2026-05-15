@@ -204,20 +204,23 @@ The archival copy of the MOLE User Manual is maintained on [Zenodo](https://zeno
                   Hellmers, Joe and
                   Ilaty, Arshia and
                   Kaviani, Katayoon and
+                  Loschen, Marc and
                   Nzerem, Oluchi and
                   Pagallo, Giulia and
                   Paolini, Christopher and
+                  Rathi, Jiya and
                   Rosano, Valentina and
                   Srinivas, Aneesh Murthy and
                   Srinivasan, Janani Priyadharshini and
-                  Valera, Manuel},
-   title        = {{MOLE User Manual}},
-   month        = aug,
-   year         = 2025,
-   publisher    = {Zenodo},
-   version      = {1.1.0},
-   doi          = {10.5281/zenodo.16898575},
-   url          = {https://doi.org/10.5281/zenodo.16898575},
+                  Valera, Manuel and
+                  Wagner, Ben and
+                  Zade, Deepanshu},
+  title        = {MOLE User Manual},
+  month        = may,
+  year         = 2026,
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.20128874},
+  url          = {https://doi.org/10.5281/zenodo.20128874},
 }
 ```
 
