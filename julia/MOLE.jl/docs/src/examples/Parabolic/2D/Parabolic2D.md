@@ -1,0 +1,22 @@
+# Parabolic2D
+
+Solves the 2D heat equation with Dirichlet boundary conditiions
+
+```math
+u_t = - \nu \nabla^2 u
+```
+
+with $x \in [0, 2]$ and $y \in [0, 2]$.
+
+The boundary conditions are given by
+
+```math
+a u + b \nabla u \cdot \hat n = g
+```
+
+with $a = 1$, $b = 0$, and $g = 0$, which is equivalent to Dirichlet conditions along each boundary. This corresponds to the call to `addScalarBC!` of `addScalarBC!(A, b, k, m, dx, n, dy, bc)`, where `A` is the operator matrix, `b` is the right hand side vector, and `bc` is a boundary condition sturc that contains the tuples `dc`, `nc`, and `v` which hold the coefficients for $a$, $b$, and $g$ in the above systems of equations. `dc` $= (1.0, 1.0, 1.0, 1.0)$, `nc` $= (0.0, 0.0, 0.0, 0.0)$, and `v` is composed of 4 vectors which all contain $0.0$.
+
+There is no analytical solution.
+
+---
+This examples is implemented in [`parabolic2D.jl`](https://github.com/csrc-sdsu/mole/blob/main/julia/MOLE.jl/examples/parabolic/parabolic2D.jl)
