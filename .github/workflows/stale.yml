@@ -38,7 +38,7 @@ jobs:
 
     steps:
       - name: Manage stale lifecycle
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           PRE_STALE_REMINDER_DAYS: ${{ github.event.inputs.pre_stale_reminder_days || '14' }}
           STALE_DAYS: ${{ github.event.inputs.stale_days || '28' }}
