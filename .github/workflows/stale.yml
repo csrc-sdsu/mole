@@ -1,0 +1,339 @@
+name: Stale issue and PR cleanup
+
+on:
+  schedule:
+    - cron: '0 16 * * *'
+  workflow_dispatch:
+    inputs:
+      pre_stale_reminder_days:
+        description: Days of inactivity before the pre-stale reminder.
+        required: false
+        default: '14'
+      stale_days:
+        description: Days of inactivity before adding stale.
+        required: false
+        default: '28'
+      close_days_after_stale:
+        description: Days after stale before closing.
+        required: false
+        default: '42'
+      keep_open_reminder_days:
+        description: Days of inactivity between keep-open reminders.
+        required: false
+        default: '28'
+      debug_only:
+        description: Preview changes without labeling, commenting, or closing.
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale:
+    name: Manage inactive issues and PRs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Manage stale lifecycle
+        uses: actions/github-script@v7
+        env:
+          PRE_STALE_REMINDER_DAYS: ${{ github.event.inputs.pre_stale_reminder_days || '14' }}
+          STALE_DAYS: ${{ github.event.inputs.stale_days || '28' }}
+          CLOSE_DAYS_AFTER_STALE: ${{ github.event.inputs.close_days_after_stale || '42' }}
+          KEEP_OPEN_REMINDER_DAYS: ${{ github.event.inputs.keep_open_reminder_days || '28' }}
+          DEBUG_ONLY: ${{ github.event.inputs.debug_only || 'false' }}
+        with:
+          script: |
+            const DAY = 24 * 60 * 60 * 1000;
+            const now = Date.now();
+            const debugOnly = process.env.DEBUG_ONLY === 'true';
+
+            const settings = {
+              preStaleReminderDays: Number(process.env.PRE_STALE_REMINDER_DAYS),
+              staleDays: Number(process.env.STALE_DAYS),
+              closeDaysAfterStale: Number(process.env.CLOSE_DAYS_AFTER_STALE),
+              keepOpenReminderDays: Number(process.env.KEEP_OPEN_REMINDER_DAYS)
+            };
+
+            const markers = {
+              preStale: '<!-- mole-stale:pre-stale-reminder -->',
+              stale: '<!-- mole-stale:stale-warning -->',
+              keepOpen: '<!-- mole-stale:keep-open-reminder -->',
+              close: '<!-- mole-stale:close -->'
+            };
+
+            const botLogins = new Set(['github-actions[bot]']);
+
+            const labelNames = (item) => item.labels.map((label) => label.name);
+            const hasLabel = (item, name) => labelNames(item).includes(name);
+            const isBot = (user) => !user || botLogins.has(user.login);
+            const toTime = (value) => new Date(value).getTime();
+            const daysSince = (time) => Math.floor((now - time) / DAY);
+
+            const logAction = (message) => {
+              core.info(`${debugOnly ? '[debug-only] ' : ''}${message}`);
+            };
+
+            async function ensureLabel(label) {
+              try {
+                await github.rest.issues.updateLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label.name,
+                  color: label.color,
+                  description: label.description
+                });
+              } catch (error) {
+                if (error.status !== 404) {
+                  throw error;
+                }
+
+                await github.rest.issues.createLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ...label
+                });
+              }
+            }
+
+            async function listComments(item) {
+              return github.paginate(github.rest.issues.listComments, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: item.number,
+                per_page: 100
+              });
+            }
+
+            async function listTimeline(item) {
+              return github.paginate(github.rest.issues.listEventsForTimeline, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: item.number,
+                per_page: 100
+              });
+            }
+
+            async function listPullRequestActivity(item) {
+              if (!item.pull_request) {
+                return [];
+              }
+
+              const [commits, reviews] = await Promise.all([
+                github.paginate(github.rest.pulls.listCommits, {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: item.number,
+                  per_page: 100
+                }),
+                github.paginate(github.rest.pulls.listReviews, {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: item.number,
+                  per_page: 100
+                })
+              ]);
+
+              const dates = [];
+
+              for (const commit of commits) {
+                if (!isBot(commit.author)) {
+                  dates.push(toTime(commit.commit.author?.date || commit.commit.committer?.date));
+                }
+              }
+
+              for (const review of reviews) {
+                if (!isBot(review.user) && review.submitted_at) {
+                  dates.push(toTime(review.submitted_at));
+                }
+              }
+
+              return dates.filter(Boolean);
+            }
+
+            function latestMarkerDate(comments, marker) {
+              const dates = comments
+                .filter((comment) => isBot(comment.user) && comment.body?.includes(marker))
+                .map((comment) => toTime(comment.created_at));
+
+              return dates.length ? Math.max(...dates) : 0;
+            }
+
+            function hasMarkerAfter(comments, marker, time) {
+              return latestMarkerDate(comments, marker) > time;
+            }
+
+            async function latestHumanActivity(item, comments, timeline) {
+              const dates = [toTime(item.created_at)];
+
+              for (const comment of comments) {
+                if (!isBot(comment.user)) {
+                  dates.push(toTime(comment.created_at));
+                }
+              }
+
+              for (const event of timeline) {
+                if (event.actor && !isBot(event.actor) && event.created_at) {
+                  dates.push(toTime(event.created_at));
+                }
+              }
+
+              dates.push(...await listPullRequestActivity(item));
+
+              return Math.max(...dates.filter(Boolean));
+            }
+
+            async function addComment(item, body) {
+              if (debugOnly) {
+                logAction(`Would comment on #${item.number}: ${body.replace(/\n+/g, ' ')}`);
+                return;
+              }
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: item.number,
+                body
+              });
+            }
+
+            async function addStaleLabel(item) {
+              if (debugOnly) {
+                logAction(`Would add stale label to #${item.number}`);
+                return;
+              }
+
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: item.number,
+                labels: ['stale']
+              });
+            }
+
+            async function removeStaleLabel(item) {
+              if (debugOnly) {
+                logAction(`Would remove stale label from #${item.number}`);
+                return;
+              }
+
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: item.number,
+                  name: 'stale'
+                });
+              } catch (error) {
+                if (error.status !== 404) {
+                  throw error;
+                }
+              }
+            }
+
+            async function closeItem(item) {
+              if (debugOnly) {
+                logAction(`Would close #${item.number}`);
+                return;
+              }
+
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: item.number,
+                state: 'closed'
+              });
+            }
+
+            if (!debugOnly) {
+              await ensureLabel({
+                name: 'stale',
+                color: 'ededed',
+                description: 'No recent activity; scheduled for automatic closure.'
+              });
+              await ensureLabel({
+                name: 'keep-open',
+                color: '0e8a16',
+                description: 'Do not close this issue or pull request for inactivity.'
+              });
+            }
+
+            const items = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100
+            });
+
+            for (const item of items) {
+              const [comments, timeline] = await Promise.all([
+                listComments(item),
+                listTimeline(item)
+              ]);
+
+              const latestActivity = await latestHumanActivity(item, comments, timeline);
+              const inactiveDays = daysSince(latestActivity);
+              const isKeepOpen = hasLabel(item, 'keep-open');
+              const isStale = hasLabel(item, 'stale');
+              const itemType = item.pull_request ? 'pull request' : 'issue';
+
+              if (isKeepOpen) {
+                if (isStale) {
+                  await removeStaleLabel(item);
+                }
+
+                const lastReminder = latestMarkerDate(comments, markers.keepOpen);
+                const reminderBase = Math.max(latestActivity, lastReminder);
+
+                if (daysSince(reminderBase) >= settings.keepOpenReminderDays) {
+                  await addComment(
+                    item,
+                    `${markers.keepOpen}\nThis is a maintenance reminder: this ${itemType} is marked \`keep-open\` and has had no activity for ${settings.keepOpenReminderDays} days. No automatic closure will happen while \`keep-open\` remains applied.`
+                  );
+                }
+
+                continue;
+              }
+
+              const staleWarningDate = latestMarkerDate(comments, markers.stale);
+
+              if (isStale && staleWarningDate && latestActivity > staleWarningDate) {
+                await removeStaleLabel(item);
+                continue;
+              }
+
+              if (isStale) {
+                if (staleWarningDate && daysSince(staleWarningDate) >= settings.closeDaysAfterStale) {
+                  await addComment(
+                    item,
+                    `${markers.close}\nClosing because this ${itemType} stayed stale for ${settings.closeDaysAfterStale} days with no activity. If this is still needed, please reopen it or open a new ${itemType} with updated context.`
+                  );
+                  await closeItem(item);
+                }
+
+                continue;
+              }
+
+              if (inactiveDays >= settings.staleDays) {
+                await addStaleLabel(item);
+                await addComment(
+                  item,
+                  `${markers.stale}\nThanks for the discussion and work here. This ${itemType} has had no activity for ${settings.staleDays} days, so it is now marked \`stale\`. If there is no further activity, it will be closed in ${settings.closeDaysAfterStale} days.`
+                );
+                continue;
+              }
+
+              if (
+                inactiveDays >= settings.preStaleReminderDays &&
+                !hasMarkerAfter(comments, markers.preStale, latestActivity)
+              ) {
+                const daysUntilStale = settings.staleDays - inactiveDays;
+                await addComment(
+                  item,
+                  `${markers.preStale}\nThis ${itemType} has had no activity for ${inactiveDays} days. It will be marked \`stale\` in ${Math.max(daysUntilStale, 0)} days if there is no further activity.`
+                );
+              }
+            }
