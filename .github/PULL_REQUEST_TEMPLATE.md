@@ -49,6 +49,12 @@ _Please replace this line with instructions on how to test your changes, a note
 on the devices and browsers this has been tested on, as well as any relevant
 images for UI changes._
 
+## Keep-open request
+
+- [ ] I am requesting maintainer review for `keep-open`.
+
+Reason:
+
 ## Added/updated tests?
 _We encourage you to test all code included with MOLE, including examples.
 
