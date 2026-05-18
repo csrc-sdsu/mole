@@ -50,7 +50,7 @@ These examples are implemented in:
 - [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/sturmLiouvilleHelmholtzDirichletDirichlet.cpp)
 - [MATLAB/OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/sturmLiouvilleHelmholtzDirichletRobin.m)
 - [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/sturmLiouvilleHelmholtzDirichletRobin.cpp)
-Additional MATLAB/ OCTAVE and C++ variant:
+Additional MATLAB/OCTAVE and C++ variant:
 - [MATLAB/OCTAVE Wifi](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/helmholtz2D_wifi.m)
 - [C++ Wifi](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/helmholtz2D_wifi.cpp)
 ## Results
