@@ -233,6 +233,8 @@ function grid = localNormalizeGrid3D(grid)
     else
         grid.type = 'uniform';
     end
+
+    grid = localGenerateCoordinates3D(grid);
 end
 
 function [dc, nc, hasData] = localNormalizeBoundaryCoefficients(bc, expectedCount, errId)
@@ -308,4 +310,23 @@ function grid = localGenerateCoordinates2D(grid)
     [grid.centers.X, grid.centers.Y] = ndgrid(xc, yc);
     [grid.faces.u.X, grid.faces.u.Y] = ndgrid(xu, yu);
     [grid.faces.v.X, grid.faces.v.Y] = ndgrid(xv, yv);
+end
+
+function grid = localGenerateCoordinates3D(grid)
+    m = grid.m; n = grid.n; o = grid.o;
+    dx = grid.dx; dy = grid.dy; dz = grid.dz;
+
+    xn = (0:m) * dx;
+    yn = (0:n) * dy;
+    zn = (0:o) * dz;
+    xc = [0, (0.5:m-0.5) * dx, m*dx];
+    yc = [0, (0.5:n-0.5) * dy, n*dy];
+    zc = [0, (0.5:o-0.5) * dz, o*dz];
+
+    [grid.nodes.X,   grid.nodes.Y,   grid.nodes.Z]   = ndgrid(xn, yn, zn);
+    [grid.centers.X, grid.centers.Y, grid.centers.Z] = ndgrid(xc, yc, zc);
+
+    [grid.faces.u.X, grid.faces.u.Y, grid.faces.u.Z] = ndgrid(xn, (0.5:n-0.5)*dy, (0.5:o-0.5)*dz);
+    [grid.faces.v.X, grid.faces.v.Y, grid.faces.v.Z] = ndgrid((0.5:m-0.5)*dx, yn, (0.5:o-0.5)*dz);
+    [grid.faces.w.X, grid.faces.w.Y, grid.faces.w.Z] = ndgrid((0.5:m-0.5)*dx, (0.5:n-0.5)*dy, zn);
 end

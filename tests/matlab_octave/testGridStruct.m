@@ -108,5 +108,38 @@ classdef testGridStruct < matlab.unittest.TestCase
             testCase.verifyEqual(grid.faces.v.X(1, 1), 0.5*dx, 'AbsTol', 1e-14);
         end
 
+        function test3DUniformNodes(testCase)
+            addpath('../../src/matlab_octave');
+            m = 4; n = 5; o = 3; dx = 0.25; dy = 0.2; dz = 0.5;
+            grid = makeGrid('m', m, 'n', n, 'o', o, 'dx', dx, 'dy', dy, 'dz', dz);
+
+            testCase.verifySize(grid.nodes.X, [m+1, n+1, o+1]);
+            testCase.verifySize(grid.nodes.Y, [m+1, n+1, o+1]);
+            testCase.verifySize(grid.nodes.Z, [m+1, n+1, o+1]);
+            testCase.verifyEqual(grid.nodes.X(1,1,1), 0,     'AbsTol', 1e-14);
+            testCase.verifyEqual(grid.nodes.X(end,1,1), m*dx, 'AbsTol', 1e-14);
+            testCase.verifyEqual(grid.nodes.Z(1,1,end), o*dz, 'AbsTol', 1e-14);
+        end
+
+        function test3DUniformCenters(testCase)
+            addpath('../../src/matlab_octave');
+            m = 4; n = 5; o = 3; dx = 0.25; dy = 0.2; dz = 0.5;
+            grid = makeGrid('m', m, 'n', n, 'o', o, 'dx', dx, 'dy', dy, 'dz', dz);
+
+            testCase.verifySize(grid.centers.X, [m+2, n+2, o+2]);
+            testCase.verifySize(grid.centers.Y, [m+2, n+2, o+2]);
+            testCase.verifySize(grid.centers.Z, [m+2, n+2, o+2]);
+        end
+
+        function test3DUniformFaces(testCase)
+            addpath('../../src/matlab_octave');
+            m = 4; n = 5; o = 3; dx = 0.25; dy = 0.2; dz = 0.5;
+            grid = makeGrid('m', m, 'n', n, 'o', o, 'dx', dx, 'dy', dy, 'dz', dz);
+
+            testCase.verifySize(grid.faces.u.X, [m+1, n,   o  ]);
+            testCase.verifySize(grid.faces.v.X, [m,   n+1, o  ]);
+            testCase.verifySize(grid.faces.w.X, [m,   n,   o+1]);
+        end
+
     end  % methods(Test)
 end  % classdef
