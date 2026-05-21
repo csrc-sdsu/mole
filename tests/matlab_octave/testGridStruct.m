@@ -60,7 +60,7 @@ classdef testGridStruct < matlab.unittest.TestCase
             testCase.verifyTrue(isstruct(grid.nodes));
             testCase.verifySize(grid.nodes.X, [m+1, n+1]);
             testCase.verifySize(grid.nodes.Y, [m+1, n+1]);
-            % first row: x advances with dx, y = 0
+            % x varies along dim-1 (rows), y varies along dim-2 (cols)
             testCase.verifyEqual(grid.nodes.X(1, 1), 0,    'AbsTol', 1e-14);
             testCase.verifyEqual(grid.nodes.X(end, 1), m*dx, 'AbsTol', 1e-14);
             testCase.verifyEqual(grid.nodes.Y(1, 1), 0,    'AbsTol', 1e-14);
