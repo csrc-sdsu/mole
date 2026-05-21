@@ -255,9 +255,7 @@ matlab -nojvm -batch "addpath('../../src/matlab_octave'); addpath('.'); \
 
 ## 10. File Header Convention
 
-Every new `.m` file must include a standard header. Two tiers apply:
-
-### Tier 1 — Public entry points and operator-level `_impl` files
+Every new `.m` file — public entry point, internal `_impl`, helper, or utility — must include the full header block:
 
 ```matlab
 function [outputs] = funcName(inputs)
@@ -281,11 +279,4 @@ function [outputs] = funcName(inputs)
 % ----------------------------------------------------------------------------
 ```
 
-### Tier 2 — Internal helper files (`boundaries/`, `internal/`, `geometry/metrics/`, etc.)
-
-```matlab
-function [outputs] = funcName(inputs)
-% Canonical implementation for <publicFunctionName>.
-```
-
-The license block is omitted for pure-internal helpers that are never on the public path. Any file reachable by a user (including those in `utils/`) uses Tier 1.
+No exceptions — internal helpers, transfer implementations, and geometry utilities all get the full block. Existing files that lack it should have it added when touched during this refactor.
