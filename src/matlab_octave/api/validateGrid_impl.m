@@ -180,6 +180,8 @@ function grid = localNormalizeGrid2D(grid)
     else
         grid.type = 'uniform';
     end
+
+    grid = localGenerateCoordinates2D(grid);
 end
 
 function grid = localNormalizeGrid3D(grid)
@@ -287,4 +289,23 @@ function grid = localGenerateCoordinates1D(grid)
     grid.nodes.X   = x_node;
     grid.centers.X = x_center;
     grid.faces.X   = x_face;
+end
+
+function grid = localGenerateCoordinates2D(grid)
+    m = grid.m; n = grid.n;
+    dx = grid.dx; dy = grid.dy;
+
+    xn = (0:m) * dx;                          % node x: m+1 values
+    yn = (0:n) * dy;                           % node y: n+1 values
+    xc = [0, (0.5:m-0.5) * dx, m*dx];         % center x: m+2 values
+    yc = [0, (0.5:n-0.5) * dy, n*dy];         % center y: n+2 values
+    xu = xn;                                   % u-face x: m+1 (same as nodes)
+    yu = (0.5:n-0.5) * dy;                    % u-face y: n values
+    xv = (0.5:m-0.5) * dx;                    % v-face x: m values
+    yv = yn;                                   % v-face y: n+1 (same as nodes)
+
+    [grid.nodes.X,   grid.nodes.Y]   = ndgrid(xn, yn);
+    [grid.centers.X, grid.centers.Y] = ndgrid(xc, yc);
+    [grid.faces.u.X, grid.faces.u.Y] = ndgrid(xu, yu);
+    [grid.faces.v.X, grid.faces.v.Y] = ndgrid(xv, yv);
 end
