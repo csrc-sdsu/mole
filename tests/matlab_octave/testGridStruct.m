@@ -148,5 +148,57 @@ classdef testGridStruct < matlab.unittest.TestCase
             testCase.verifyEqual(grid.faces.w.Z(1,1,1), 0,      'AbsTol', 1e-14);
         end
 
+        function test2DCurvilinearFacesFromNodes(testCase)
+            addpath('../../src/matlab_octave');
+            m = 3; n = 4;
+            % Simple rectilinear node coords supplied as curvilinear
+            [NX, NY] = ndgrid((0:m)*0.5, (0:n)*0.25);
+            grid = makeGrid('m', m, 'n', n, 'dx', 0.5, 'dy', 0.25);
+            grid.type = 'curvilinear';
+            grid.nodes.X = NX;
+            grid.nodes.Y = NY;
+            grid = validateGrid(grid);
+
+            testCase.verifySize(grid.faces.u.X, [m+1, n]);
+            testCase.verifySize(grid.faces.u.Y, [m+1, n]);
+            testCase.verifySize(grid.faces.v.X, [m,   n+1]);
+            testCase.verifySize(grid.faces.v.Y, [m,   n+1]);
+            % u-face: average of adjacent nodes in y
+            testCase.verifyEqual(grid.faces.u.X(1,1), 0.5*(NX(1,1)+NX(1,2)), 'AbsTol', 1e-14);
+            testCase.verifyEqual(grid.faces.u.Y(1,1), 0.5*(NY(1,1)+NY(1,2)), 'AbsTol', 1e-14);
+            % v-face: average of adjacent nodes in x
+            testCase.verifyEqual(grid.faces.v.X(1,1), 0.5*(NX(1,1)+NX(2,1)), 'AbsTol', 1e-14);
+            testCase.verifyEqual(grid.faces.v.Y(1,1), 0.5*(NY(1,1)+NY(2,1)), 'AbsTol', 1e-14);
+        end
+
+        function test2DCurvilinearCentersFromNodes(testCase)
+            addpath('../../src/matlab_octave');
+            m = 3; n = 4;
+            [NX, NY] = ndgrid((0:m)*0.5, (0:n)*0.25);
+            grid = makeGrid('m', m, 'n', n, 'dx', 0.5, 'dy', 0.25);
+            grid.type = 'curvilinear';
+            grid.nodes.X = NX;
+            grid.nodes.Y = NY;
+            grid = validateGrid(grid);
+
+            testCase.verifySize(grid.centers.X, [m, n]);
+            testCase.verifySize(grid.centers.Y, [m, n]);
+            % bilinear average of 4 surrounding nodes
+            expectedX = 0.25*(NX(1,1)+NX(2,1)+NX(1,2)+NX(2,2));
+            expectedY = 0.25*(NY(1,1)+NY(2,1)+NY(1,2)+NY(2,2));
+            testCase.verifyEqual(grid.centers.X(1,1), expectedX, 'AbsTol', 1e-14);
+            testCase.verifyEqual(grid.centers.Y(1,1), expectedY, 'AbsTol', 1e-14);
+        end
+
+        function test2DCurvilinearMissingNodesError(testCase)
+            addpath('../../src/matlab_octave');
+            m = 3; n = 4;
+            % Build a minimal curvilinear grid struct without nodes
+            % (do NOT use makeGrid here, which would auto-populate nodes)
+            grid = struct('m', m, 'n', n, 'dx', 0.5, 'dy', 0.25, ...
+                          'type', 'curvilinear', 'dim', 2);
+            testCase.verifyError(@() validateGrid(grid), 'validateGrid:CurvilinearMissingNodes');
+        end
+
     end  % methods(Test)
 end  % classdef
