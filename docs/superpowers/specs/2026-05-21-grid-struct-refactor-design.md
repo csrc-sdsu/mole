@@ -154,7 +154,8 @@ src/matlab_octave/
 - `gradNonPeriodic.m`, `gradPeriodic.m`, `gradNonUniform.m`
 - `grad2DCurv.m`, `grad3DCurv.m`
 - `gradOp.m` (shim replaced by `grad.m` directly)
-- Same pattern for `div*`, `lap*`, `nodal*`
+- `divOp.m`, `lapOp.m`, `nodalOp.m` (same — shims replaced by their operator entry points)
+- Same pattern for remaining `div*`, `lap*`, `nodal*` top-level variants
 - `curl2D.m` → renamed/promoted to `curl.m`
 - `jacobian2D.m`, `jacobian3D.m` (moved to `geometry/metrics/jacobian_impl.m`)
 
@@ -175,7 +176,7 @@ src/matlab_octave/
 - Top-level `interpolCentersToFaces*.m`, `interpolFacesToCenters*.m`,
   `interpolNodesToCenters*.m`, `interpolCentersToNodes*.m` (implementations stay under `interpolation/transfers/`)
 
-### Private normalizers (deleted after validateGrid absorbs their logic)
+### Private normalizers (deleted in Phase 1 — already thin shims that delegate to validateGrid)
 - `private/normalizeGrid1D.m`, `private/normalizeGrid2D.m`, `private/normalizeGrid3D.m`
 
 ---
@@ -249,3 +250,42 @@ All tests remain in `tests/matlab_octave/`. No new test framework.
 matlab -nojvm -batch "addpath('../../src/matlab_octave'); addpath('.'); \
   assertSuccess(runtests({'testBCConsistency','testGridFirstV2Migration','testPoissonAccuracy'}))"
 ```
+
+---
+
+## 10. File Header Convention
+
+Every new `.m` file must include a standard header. Two tiers apply:
+
+### Tier 1 — Public entry points and operator-level `_impl` files
+
+```matlab
+function [outputs] = funcName(inputs)
+% PURPOSE
+% One-line description of what this function returns or does.
+%
+% DESCRIPTION
+% Longer description: inputs, mathematical context, behavior notes.
+%
+% Parameters:
+%   output1 : description
+%   input1  : description
+%
+% SYNTAX
+% [outputs] = funcName(inputs)
+%
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
+```
+
+### Tier 2 — Internal helper files (`boundaries/`, `internal/`, `geometry/metrics/`, etc.)
+
+```matlab
+function [outputs] = funcName(inputs)
+% Canonical implementation for <publicFunctionName>.
+```
+
+The license block is omitted for pure-internal helpers that are never on the public path. Any file reachable by a user (including those in `utils/`) uses Tier 1.
