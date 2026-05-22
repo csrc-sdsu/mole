@@ -1,21 +1,28 @@
 # MOLE Software Design Guidelines**
+
 ## Table of Contents
 
 1. [Introduction](#introduction)
 2. [Requirements](#requirements)
-- [License Requirements](#license-requirements)
-- [Portability requirements](#portability-requirements)
+
+  - [License Requirements](#license-requirements)
+  - [Portability requirements](#portability-requirements)
+
 3. [Ownership](#ownership)
-4. [Guidelines](#guidelines)
-- [Design and Programming](#design-and-programming)
--  [Directory Structure and Filenames](#directory-structure-and-filenames)
--  [Documentation](#documentation)
+2. [Guidelines](#guidelines)
+
+  - [Design and Programming](#design-and-programming)
+  - [Directory Structure and Filenames](#directory-structure-and-filenames)
+  - [Documentation](#documentation)
+
 5. [Rationale](#rationale)
-- [Exception-specification rationale](#exception-specification-rationale)
-- [Source code fonts rationale](#source-code-fonts-rationale)
-- [Tabs rationale](#tabs-rationale)
--  [Rationale rationale](#rationale-rationale)
-- [Acknowldegements Rationale](#acknowledgements-rationale )
+
+  - [Exception-specification rationale](#exception-specification-rationale)
+  - [Source code fonts rationale](#source-code-fonts-rationale)
+  - [Tabs rationale](#tabs-rationale)
+  - [Rationale rationale](#rationale-rationale)
+  - [Acknowldegements Rationale](#acknowledgements-rationale )
+
 6. [Naming   consistency](#naming-consistency)
 
 ## Introduction
@@ -27,17 +34,17 @@ See the [***Contributing To MOLE*** **webpage**](https://mole-docs.readthedocs.i
 
 To avoid the frustration and wasted time of a proposed contribution being rejected, it must meet these requirements:
 
-* The contribution must be generally useful and not restricted to a narrow problem domain.  
-* The contribution must meet the [portability requirements](#portability-requirements) below.   
-* The contribution must come reasonably close to meeting the [Guidelines](#guidelines) below.  
-  * [Design and Programming](#design-and-programming)  
-  * [Directory Structure](#directory-structure-and-filenames)  
-  * [Documentation](#documentation)  
-* The author must be willing to participate in discussions on the mailing list, and to refine the library accordingly.  
-* Contributors must use these 3-steps when submitting software contributions:  
-  * First, create an Issue on GitHub, describing the nature of the contribution  
-  * Create a new branch where their contributions will be pushed to the MOLE repository,  
-  * Second, create a GitHub PR, linking the previously created issue with proposed software contributions.
+- The contribution must be generally useful and not restricted to a narrow problem domain.  
+- The contribution must meet the [portability requirements](#portability-requirements) below.
+- The contribution must come reasonably close to meeting the [Guidelines](#guidelines) below:  
+  - [Design and Programming](#design-and-programming),
+  - [Directory Structure](#directory-structure-and-filenames),
+  - [Documentation](#documentation).
+- The author must be willing to participate in discussions on the mailing list, and to refine the library accordingly.  
+- Contributors must use these 3-steps when submitting software contributions:  
+  - First, create an Issue on GitHub, describing the nature of the contribution  
+  - Create a new branch where their contributions will be pushed to the MOLE repository,  
+  - Second, create a GitHub PR, linking the previously created issue with proposed software contributions.
 
 In order to preserve software coherence, integrity, and sustainability, all new contributions are reviewed and approved by members of ***the MOLE Software Engineering Circle*** or the ***MOLE Leadership team*** before these contributions are merged to the MOLE main branch.
 
@@ -45,25 +52,25 @@ In order to preserve software coherence, integrity, and sustainability, all new 
 
 ### License requirements
 
-MOLE is being developed and distributed under a  GNU GPL v3. See **[LICENSE](https://github.com/csrc-sdsu/mole/blob/main/LICENSE).**
+MOLE is being developed and distributed under a GNU GPL v3. See **[LICENSE](https://github.com/csrc-sdsu/mole/blob/main/LICENSE).**
 
-Current requirements for the MOLE  license are: 
+Current requirements for the MOLE license are:
 
-* Must be simple to read and understand.  
-* Must grant permission without fee to copy, use and modify the software for any use (commercial and non-commercial).   
-* Must require that the license appear on all copies of the software source code.  
-* Must not require that the license appear with executables or other binary uses of the library.  
-* Must not require that the source code be available for execution or other binary uses of the library.  
-* Must be compatible with GPL 3.0 license
+- Must be simple to read and understand.  
+- Must grant permission without fee to copy, use and modify the software for any use (commercial and non-commercial).
+- Must require that the license appear on all copies of the software source code.  
+- Must not require that the license appear with executables or other binary uses of the library.  
+- Must not require that the source code be available for execution or other binary uses of the library.  
+- Must be compatible with GPL 3.0 license.
 
-All collaborators’ contributions developed and distributed under a different software license not compatible with MOLE’s license will be listed on the [**MOLE website**](http://mole-ose.org) as a recommended reference and include a link where the particular software can be obtained. 
+All collaborators’ contributions developed and distributed under a different software license not compatible with MOLE’s license will be listed on the [**MOLE website**](http://mole-ose.org) as a recommended reference and include a link where the particular software can be obtained.
 
 ---
 
-### Portability requirements 
-* A contribution interface must be portable and not restricted to a particular compiler for a particular operating system. (i.e, A C++ example must not require the Intel Compiler, a Python example does not require a Linux operating system for compiling, etc.).  
-If a portable implementation is not possible, non-portable constructions are acceptable if reasonably easy to port to other environments, and implementations are provided for at least two popular operating systems (such as UNIX and Windows).  
-* There is no requirement that a contribution run on C++ compilers that do not conform to the ISO standard. 
+### Portability requirements
+
+- A contribution interface must be portable and not restricted to a particular compiler for a particular operating system. (i.e, A C++ example must not require the Intel Compiler, a Python example does not require a Linux operating system for compiling, etc.) If a portable implementation is not possible, non-portable constructions are acceptable if reasonably easy to port to other environments, and implementations are provided for at least two popular operating systems (such as UNIX and Windows).
+- There is no requirement that a contribution run on C++ compilers that do not conform to the ISO standard.
 
 Since there is no absolute way to prove portability, many MOLE submissions demonstrate practical portability by compiling and executing correctly with two different C++ compilers, often under different operating systems.  Otherwise reviewers may disbelieve that porting is in fact practical.
 
@@ -79,35 +86,39 @@ Place a copyright notice in all the important files you submit. Code can be subm
 
 Please use these guidelines as a checklist for preparing the content of a submission.  Not every guideline applies to every submission, but a reasonable effort to comply is expected.
 
-### Design and Programming 
+### Design and Programming
+
 ( C++ , apply appropriately for other languages )
 
-* Aim first for clarity and correctness; optimization should be only a secondary concern in most MOLE contributions.  
-* Aim for ISO Standard C++. That means making effective use of the standard features of the language, and avoiding non-standard compiler extensions. It also means using the C++ Standard Library where applicable.  
-* Headers should be good neighbors. See the HEADER and NAMING CONSISTENCY.  
-* Follow quality programming practices. See, for example, "Effective C++" 2nd Edition, and "More Effective C++", both by Scott Meyers, published by Addison Wesley,“Clean Code”, by Robert Martin, and “*A Philosophy of Software Design”* by John Ousterhout .   
-* Use the C++ Standard Library, but only when the benefits outweigh the costs.  Do not use libraries other than the C++ Standard Library.  
-* Use the naming conventions of the C++ Standard Library:    
-  * Names (except as noted below) should be all lowercase, with words separated by underscores.  
-  * Acronyms should be treated as ordinary names (e.g. xml\_parser instead of XML\_parser).  
-  * Template parameter names begin with an uppercase letter.  
-  * Macro (gasp\!) names all uppercase and begin with MOLE\_.  
-* Choose meaningful names \- explicit is better than implicit, and readability counts. There is a strong preference for clear and descriptive names, even if lengthy.  
-* Use exceptions to report errors where appropriate, and write code that is safe in the face of exceptions.  
-* Provide sample programs or confidence tests so potential users can see how to use your library.  
-* Provide a regression test program or programs that follow the TEST POLICY.  
-* Although some older MOLE examples use proportional fonts, tabs, and unrestricted line lengths in their own code, MOLEs source code should follow more conservative guidelines:  
-  * Use fixed-width fonts.  
-  * Use spaces rather than tabs.  
-  * Limit line lengths to 80 characters.  
-* End all documentation files (HTML or otherwise) with a copyright message and a licensing message. See the END\_OF\_THIS\_FILE for an example of the preferred form.  
-* Begin all source files (including programs, headers, scripts, etc.) with:  
-     
-  * A comment line describing the contents of the file.
+- Aim first for clarity and correctness; optimization should be only a secondary concern in most MOLE contributions.  
+- Aim for ISO Standard C++. That means making effective use of the standard features of the language, and avoiding non-standard compiler extensions. It also means using the C++ Standard Library where applicable.  
+- Headers should be good neighbors. See the HEADER and NAMING CONSISTENCY.  
+- Follow quality programming practices. See, for example: 
+  - ["Effective C++ Programming", 2nd Edition](https://dl.acm.org/doi/abs/10.5555/264000) by Scott Meyers,  
+  - ["More Effective C++"](https://dl.acm.org/doi/book/10.5555/525754) by Scott Meyers,
+  - ["Clean Code: A Handbook of Agile Software Craftsmanship"](https://dl.acm.org/doi/10.5555/1388398) by Robert Martin, and
+  - [“A Philosophy of Software Design”](https://dl.acm.org/doi/10.5555/3288797) by John Ousterhout.
+- Use the C++ Standard Library, but only when the benefits outweigh the costs.  Do not use libraries other than the C++ Standard Library.  
+- Use the naming conventions of the C++ Standard Library:
+  - Names (except as noted below) should be all lowercase, with words separated by underscores.  
+  - Acronyms should be treated as ordinary names (e.g. xml\_parser instead of XML\_parser).  
+  - Template parameter names begin with an uppercase letter.  
+  - Macro (gasp\!) names all uppercase and begin with MOLE\_.  
+- Choose meaningful names \- explicit is better than implicit, and readability counts. There is a strong preference for clear and descriptive names, even if lengthy.  
+- Use exceptions to report errors where appropriate, and write code that is safe in the face of exceptions.  
+- Provide sample programs or confidence tests so potential users can see how to use your library.  
+- Provide a regression test program or programs that follow the TEST POLICY.  
+- Although some older MOLE examples use proportional fonts, tabs, and unrestricted line lengths in their own code, MOLEs source code should follow more conservative guidelines:  
+  - Use fixed-width fonts.  
+  - Use spaces rather than tabs.  
+  - Limit line lengths to 80 characters.  
+- End all documentation files (HTML or otherwise) with a copyright message and a licensing message. See the END\_OF\_THIS\_FILE for an example of the preferred form.  
+- Begin all source files (including programs, headers, scripts, etc.) with:  
+  - A comment line describing the contents of the file.
 
 ### Directory Structure and Filenames
 
-* File and directory names must contain only lowercase ASCII letters, numbers, underscores, and a period.  The leading character must be alphabetic. Maximum length 31\. Only a single period is permitted.  These requirements ensure file and directory names are relatively portable. No periods for directory names.
+- File and directory names must contain only lowercase ASCII letters, numbers, underscores, and a period.  The leading character must be alphabetic. Maximum length 31\. Only a single period is permitted.  These requirements ensure file and directory names are relatively portable. No periods for directory names.
 
 **MOLE standard sub-directory names**
 
@@ -119,7 +130,6 @@ Please use these guidelines as a checklist for preparing the content of a submis
 |Julia | Contains Julia's implementation own relevant docs, examples, src, and test subdirectories |
 | src | Source files which must be compiled to build the library.  | If any source files. |
 | test | Regression or other test programs or scripts. | If several test files. |
- 
 
 ### Documentation
 
@@ -127,21 +137,21 @@ Even the simplest library needs some documentation; the amount should be proport
 
 The format for documentation should be Markdown, and should not require an advanced browser or server-side extensions. Style sheets are acceptable. ECMAScript/JavaScript is not acceptable.
 
-There is no single right way to do documentation. 
+There is no single right way to do documentation.
 
 Appropriate topics for documentation often include:
 
-* General introduction to the library.  
-* Description of each class.  
-* Relationship between classes.  
-* For each function, as applicable, description, requirements (preconditions), effects, post-conditions, returns, and throws.  
-* Discussion of error detection and recovery strategy.  
-* How to use it including description of typical uses.  
-* How to compile and link.  
-* How to test.  
-* Version or revision history.  
-* Rationale for design decisions.  See [Rationale](#rationale).  
-* Acknowledgements.  See [Acknowledgments rationale](#acknowledgments-rationale).
+- General introduction to the library.  
+- Description of each class.  
+- Relationship between classes.  
+- For each function, as applicable, description, requirements (preconditions), effects, post-conditions, returns, and throws.  
+- Discussion of error detection and recovery strategy.  
+- How to use it including description of typical uses.  
+- How to compile and link.  
+- How to test.  
+- Version or revision history.  
+- Rationale for design decisions.  See [Rationale](#rationale).  
+- Acknowledgements.  See [Acknowledgments rationale](#acknowledgments-rationale).
 
 ---
 
@@ -157,7 +167,7 @@ For C++ contributions, exception specifications \[ISO 15.4\] are sometimes coded
    T& operator\*() const throw()  { return \*ptr; }
    ```
 
-This function calls no other functions; it only manipulates fundamental data types like pointers Therefore, no runtime behavior of the exception-specification can ever be invoked.  The function is completely exposed to the compiler; indeed it is declared inline Therefore, a smart compiler can easily deduce that the functions are incapable of throwing exceptions, and make the same optimizations it would have made based on the empty exception-specification. A "dumb" compiler, however, may make all kinds of pessimizations.
+This function calls no other functions; it only manipulates fundamental data types like pointers. Therefore, no runtime behavior of the exception-specification can ever be invoked.  The function is completely exposed to the compiler; indeed it is declared inline. Therefore, a smart compiler can easily deduce that the functions are incapable of throwing exceptions, and make the same optimizations it would have made based on the empty exception-specification. A "dumb" compiler, however, may make all kinds of pessimizations.
 
 For example, some compilers turn off inlining if there is an exception-specification.  Some compilers add try/catch blocks. Such pessimizations can be a performance disaster which makes the code unusable in practical applications.
 
@@ -167,8 +177,10 @@ A non-inline function is the one place a "throws nothing" exception-specificatio
 
 ---
 
-### Source code fonts rationale 
- Using a fixed-width font allows us to communicate with more people, in more ways (diagrams are possible) right there in the source. Code written for fixed-width (monospaced) fonts using spaces will read reasonably well when viewed with a variable-width (proportional) font.  Further, while most modern text editors and word processors support both fixed- and variable-width fonts, specialized or older editors designed strictly around a grid system may lack support for variable-width fonts. Conversely, a modern application supporting variable-width fonts almost certainly supports fixed-width fonts.
+### Source code fonts rationale
+
+Using a fixed-width font allows us to communicate with more people, in more ways (diagrams are possible) right there in the source. Code written for fixed-width (monospaced) fonts using spaces will read reasonably well when viewed with a variable-width (proportional) font.  Further, while most modern text editors and word processors support both fixed- and variable-width fonts, specialized or older editors designed strictly around a grid system may lack support for variable-width fonts. Conversely, a modern application supporting variable-width fonts almost certainly supports fixed-width fonts
+
 ---
 
 ### Tabs rationale
@@ -177,12 +189,11 @@ Tabs are banned because of the practical problems caused by tabs in multi-develo
 
 ---
 
-### Rationale rationale 
-( from BOOST )
+### Rationale rationale
 
 Rationale is defined as "The fundamental reasons for something; basis" by the American Heritage Dictionary.
 
-Beman Dawes comments:  Failure to supply contemporaneous rationale for design decisions is a major defect in many software projects. Lack of accurate rationale causes issues to be revisited endlessly, causes maintenance bugs when a maintainer changes something without realizing it was done a certain way for some purpose, and shortens the useful lifetime of software.
+Beman Dawes, founder of BOOST.org, said "Failure to supply contemporaneous rationale for design decisions is a major defect in many software projects. Lack of accurate rationale causes issues to be revisited endlessly, causes maintenance bugs when a maintainer changes something without realizing it was done a certain way for some purpose, and shortens the useful lifetime of software."
 
 Rationale is fairly easy to provide at the time decisions are made, but very hard to accurately recover even a short time later.
 
@@ -200,8 +211,8 @@ As library developers and users have gained experience using MOLE, the following
 
 Here is how it works. The library is given a name which describes the contents of the library.  Cryptic abbreviations are not acceptable. Following the practice of the C++ Standard Library, names are usually singular rather than plural.  For example, a library dealing with file systems might choose the name "filesystem", but not "filesystems", "fs" or "nicecode".
 
-* The library's primary directory (in parent *mole/src*) is given that same name.  For example, *mole/src/filesystem*.  
-     
-* The library's primary header directory (in parent mole/src) is given that same name. For example,mole*/src/filesystem*.h  
-     
-* The library's primary namespace (in parent *::mole*) is given that same name. For example, *::mole::filesystem*.
+- The library's primary directory (in parent *mole/src*) is given that same name.  For example, *mole/src/filesystem*.  
+
+- The library's primary header directory (in parent mole/src) is given that same name. For example,mole*/src/filesystem*.h  
+
+- The library's primary namespace (in parent *::mole*) is given that same name. For example, *::mole::filesystem*.
