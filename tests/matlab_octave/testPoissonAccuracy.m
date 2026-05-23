@@ -1,7 +1,6 @@
 classdef testPoissonAccuracy < matlab.unittest.TestCase
     methods(Test)
         function testforEnergy(testCase)
-            addpath ('../../src/matlab_octave')
             
             west = 0;  % Domain's limits
 	    east = 1;
