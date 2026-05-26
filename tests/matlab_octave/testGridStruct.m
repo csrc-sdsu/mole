@@ -200,5 +200,16 @@ classdef testGridStruct < matlab.unittest.TestCase
             testCase.verifyError(@() validateGrid(grid), 'validateGrid:CurvilinearMissingNodes');
         end
 
+        function test2DNodeYSizeMismatchError(testCase)
+            addpath('../../src/matlab_octave');
+            m = 4; n = 5;
+            good_X = zeros(m+1, n+1);
+            bad_Y  = zeros(m+1, n);   % wrong: should be (m+1)×(n+1)
+            grid = struct('m', m, 'n', n, 'dx', 1, 'dy', 1, ...
+                          'type', 'curvilinear', ...
+                          'nodes', struct('X', good_X, 'Y', bad_Y));
+            testCase.verifyError(@() validateGrid(grid), 'validateGrid:SizeMismatch');
+        end
+
     end  % methods(Test)
 end  % classdef
