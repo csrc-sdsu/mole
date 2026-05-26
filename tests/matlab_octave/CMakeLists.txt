@@ -13,7 +13,7 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
         COMMAND matlab
           -nojvm
           -batch
-          "addpath('${CMAKE_CURRENT_SOURCE_DIR}'); assertSuccess(runtests('${TEST_NAME}'))"
+          "addpath('${CMAKE_CURRENT_SOURCE_DIR}'); addpath('${CMAKE_SOURCE_DIR}/src/matlab_octave'); assertSuccess(runtests('${TEST_NAME}'))"
     )
 endforeach()
 
