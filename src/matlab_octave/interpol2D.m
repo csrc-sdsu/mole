@@ -1,34 +1,8 @@
 function I = interpol2D(m, n, c1, c2)
-% PURPOSE
-% Returns a two-dimensional interpolator of 2nd-order
-%
-% DESCRIPTION
-% Parameters:
-%                m : Number of cells along x-axis
-%                n : Number of cells along y-axis
-%               c1 : Left interpolation coeff.
-%               c2 : Bottom interpolation coeff.
-%
-% SYNTAX
-% I = interpol2D(m, n, c1, c2)
-%
-% ----------------------------------------------------------------------------
-% SPDX-License-Identifier: GPL-3.0-or-later
-% © 2008-2024 San Diego State University Research Foundation (SDSURF).
-% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
-% ----------------------------------------------------------------------------
-
-    Ix = interpol(m, c1);
-    Iy = interpol(n, c2);
-    
-    Im = sparse(m + 2, m);
-    In = sparse(n + 2, n);
-    
-    Im(2:(m+2)-1, :) = speye(m, m);
-    In(2:(n+2)-1, :) = speye(n, n);
-    
-    Sx = kron(In', Ix);
-    Sy = kron(Iy, Im');
-    
-    I = [Sx; Sy];
+% Backward-compatible entry point that delegates to v2 implementation.
+    ensureMatlabOctaveSubdirs();
+    if nargin < 4
+        c2 = c1;
+    end
+    I = interpol2D_impl(m, n, c1, c2);
 end
