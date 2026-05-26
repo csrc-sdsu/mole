@@ -22,7 +22,7 @@ function [X, Y] = tfi(grid_name, m, n, plot_grid)
     
     assert(m > 4 && n > 4, 'm and n must be greater than 4')
     
-    addpath(['grids/' grid_name])
+    addpath(resolveGridTemplatePath(grid_name))
     
     % Logical grid
     xi = linspace(0, 1, m);

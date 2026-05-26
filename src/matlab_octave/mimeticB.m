@@ -6,8 +6,10 @@ function B = mimeticB(k, m)
 % Parameters:
 %                k : Order of accuracy
 %                m : Number of cells
+%             grid : Struct carrying at least grid.m and optional grid.dx.
 %
 % SYNTAX
+% B = mimeticB(grid, k)
 % B = mimeticB(k, m)
 %
 % ----------------------------------------------------------------------------
@@ -16,10 +18,20 @@ function B = mimeticB(k, m)
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
 
-    Q = sparse(diag(weightsQ(k, m, 1)));
-    D = div(k, m, 1);
-    G = grad(k, m, 1);
-    P = sparse(diag(weightsP(k, m, 1)));
+    dx = 1;
+    if nargin == 2 && isstruct(k)
+        grid = k;
+        k = m;
+        m = grid.m;
+        if isfield(grid, 'dx')
+            dx = grid.dx;
+        end
+    end
+
+    Q = sparse(diag(weightsQ(k, m, dx)));
+    D = div(k, m, dx);
+    G = grad(k, m, dx);
+    P = sparse(diag(weightsP(k, m, dx)));
     
     B = Q*D + G'*P;
 end
