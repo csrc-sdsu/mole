@@ -23,8 +23,11 @@ function BC = mixedBC3D(k, m, dx, n, dy, o, dz, left, coeffs_left, right, coeffs
 %    coeffs_front    : Coefficients for the front boundary condition (a, b for Robin, otherwise coeff. for Dirichlet or Neumann)
 %    back            : Type of boundary condition at the back boundary ('Dirichlet', 'Neumann', 'Robin')
 %    coeffs_back     : Coefficients for the back boundary condition (a, b for Robin, otherwise coeff. for Dirichlet or Neumann)
+%    grid            : Struct carrying at least grid.m, grid.n, grid.o,
+%                      grid.dx, grid.dy, and grid.dz.
 %
 % SYNTAX
+% BC = mixedBC3D(grid, k, left, coeffs_left, right, coeffs_right, bottom, coeffs_bottom, top, coeffs_top, front, coeffs_front, back, coeffs_back)
 % BC = mixedBC3D(k, m, dx, n, dy, o, dz, left, coeffs_left, right, coeffs_right, bottom, coeffs_bottom, top, coeffs_top, front, coeffs_front, back, coeffs_back)
 %
 % ----------------------------------------------------------------------------
@@ -33,26 +36,19 @@ function BC = mixedBC3D(k, m, dx, n, dy, o, dz, left, coeffs_left, right, coeffs
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
 
-    % 1-D boundary operators
-    Bm = mixedBC(k, m, dx, left, coeffs_left, right, coeffs_right);
-    Bn = mixedBC(k, n, dy, bottom, coeffs_bottom, top, coeffs_top);
-    Bo = mixedBC(k, o, dz, front, coeffs_front, back, coeffs_back);
+    if nargin == 14 && isstruct(k)
+        grid = k;
+        k = m;
+        m = grid.m;
+        dx = grid.dx;
+        n = grid.n;
+        dy = grid.dy;
+        o = grid.o;
+        dz = grid.dz;
+    end
 
-    Im = speye(m+2);
+    deprecatedBoundaryWrapperWarning('mixedBC3D', 'addScalarBC3D');
 
-    In = speye(n+2);
-
-    Io = speye(o+2);
-    Io(1, 1) = 0;
-    Io(end, end) = 0;
-
-    In2 = In;
-    In2(1, 1) = 0;
-    In2(end, end) = 0;
-
-    BC1 = kron(kron(Io, In2), Bm);
-    BC2 = kron(kron(Io, Bn), Im);
-    BC3 = kron(kron(Bo, In), Im);
-
-    BC = BC1 + BC2 + BC3;
+    ensureMatlabOctaveSubdirs();
+    BC = mixedBC3D_impl(k, m, dx, n, dy, o, dz, left, coeffs_left, right, coeffs_right, bottom, coeffs_bottom, top, coeffs_top, front, coeffs_front, back, coeffs_back);
 end

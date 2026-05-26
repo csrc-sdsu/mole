@@ -12,8 +12,11 @@ function BC = robinBC2D(k, m, dx, n, dy, a, b)
 %               dy : Step size along y-axis
 %                a : Dirichlet Coefficient
 %                b : Neumann Coefficient
+%             grid : Struct carrying at least grid.m, grid.n, grid.dx,
+%                    and grid.dy.
 %
 % SYNTAX
+% BC = robinBC2D(grid, k, a, b)
 % BC = robinBC2D(k, m, dx, n, dy, a, b)
 %
 % ----------------------------------------------------------------------------
@@ -22,18 +25,17 @@ function BC = robinBC2D(k, m, dx, n, dy, a, b)
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
 
-    % 1-D boundary operator
-    Bm = robinBC(k, m, dx, a, b);
-    Bn = robinBC(k, n, dy, a, b);
-    
-    Im = speye(m+2);
-    
-    In = speye(n+2);
-    In(1, 1) = 0;
-    In(end, end) = 0;
-    
-    BC1 = kron(In, Bm);
-    BC2 = kron(Bn, Im);
-    
-    BC = BC1 + BC2;
+    if nargin == 4 && isstruct(k)
+        grid = k;
+        k = m;
+        m = grid.m;
+        dx = grid.dx;
+        n = grid.n;
+        dy = grid.dy;
+    end
+
+    deprecatedBoundaryWrapperWarning('robinBC2D', 'addScalarBC2D');
+
+    ensureMatlabOctaveSubdirs();
+    BC = robinBC2D_impl(k, m, dx, n, dy, a, b);
 end

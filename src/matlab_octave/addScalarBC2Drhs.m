@@ -30,17 +30,7 @@ function b = addScalarBC2Drhs(b, dc, nc, v, rl, rr, rb, rt)
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------    
 %
-    
-    % rhs for non-periodic boundary conditions (assumes data given in cell array)
-    qrl = find(dc(1:2).*dc(1:2) + nc(1:2).*nc(1:2),1);
-    if ~isempty(qrl)
-        b(rl,1) = v{1}; % left boundary
-        b(rr,1) = v{2}; % right boundary
-    end
 
-    qbt = find(dc(3:4).*dc(3:4) + nc(3:4).*nc(3:4),1);
-    if ~isempty(qbt)
-        b(rb,1) = v{3}; % bottom boundary
-        b(rt,1) = v{4}; % top boundary
-    end
+    ensureMatlabOctaveSubdirs();
+    b = addScalarBC2Drhs_impl(b, dc, nc, v, rl, rr, rb, rt);
 end

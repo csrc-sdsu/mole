@@ -10,8 +10,10 @@ function BC = robinBC(k, m, dx, a, b)
 %               dx : Step size
 %                a : Dirichlet Coefficient
 %                b : Neumann Coefficient
+%             grid : Struct carrying at least grid.m and grid.dx.
 %
 % SYNTAX
+% BC = robinBC(grid, k, a, b)
 % BC = robinBC(k, m, dx, a, b)
 %
 % ----------------------------------------------------------------------------
@@ -20,15 +22,15 @@ function BC = robinBC(k, m, dx, a, b)
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
 
-    A = sparse(m+2, m+2);
-    A(1, 1) = a;
-    A(end, end) = a;
-    
-    B = sparse(m+2, m+1);
-    B(1, 1) = -b;
-    B(end, end) = b;
-    
-    G = grad(k, m, dx);
-    
-    BC = A + B*G;
+    if nargin == 4 && isstruct(k)
+        grid = k;
+        k = m;
+        m = grid.m;
+        dx = grid.dx;
+    end
+
+    deprecatedBoundaryWrapperWarning('robinBC', 'addScalarBC1D');
+
+    ensureMatlabOctaveSubdirs();
+    BC = robinBC_impl(k, m, dx, a, b);
 end

@@ -23,6 +23,6 @@ function b = addScalarBC1Drhs(b, v, vec)
 % ----------------------------------------------------------------------------
 %
 
-    % rhs for non-periodic boundary conditions
-    b(vec) = v; 
+    ensureMatlabOctaveSubdirs();
+    b = addScalarBC1Drhs_impl(b, v, vec);
 end

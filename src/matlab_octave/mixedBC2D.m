@@ -17,8 +17,11 @@ function BC = mixedBC2D(k, m, dx, n, dy, left, coeffs_left, right, coeffs_right,
 %    coeffs_bottom : Coefficients for the bottom boundary condition (a, b for Robin, otherwise coeff. for Dirichlet or Neumann)
 %    top           : Type of boundary condition at the top boundary ('Dirichlet', 'Neumann', 'Robin')
 %    coeffs_top    : Coefficients for the top boundary condition (a, b for Robin, otherwise coeff. for Dirichlet or Neumann)
+%    grid          : Struct carrying at least grid.m, grid.n, grid.dx,
+%                    and grid.dy.
 %
 % SYNTAX
+% BC = mixedBC2D(grid, k, left, coeffs_left, right, coeffs_right, bottom, coeffs_bottom, top, coeffs_top)
 % BC = mixedBC2D(k, m, dx, n, dy, left, coeffs_left, right, coeffs_right, bottom, coeffs_bottom, top, coeffs_top)
 %
 % ----------------------------------------------------------------------------
@@ -27,18 +30,17 @@ function BC = mixedBC2D(k, m, dx, n, dy, left, coeffs_left, right, coeffs_right,
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
 
-    % 1-D boundary operators
-    Bm = mixedBC(k, m, dx, left, coeffs_left, right, coeffs_right);
-    Bn = mixedBC(k, n, dy, bottom, coeffs_bottom, top, coeffs_top);
-    
-    Im = speye(m+2);
-    
-    In = speye(n+2);
-    In(1, 1) = 0;
-    In(end, end) = 0;
-    
-    BC1 = kron(In, Bm);
-    BC2 = kron(Bn, Im);
-    
-    BC = BC1 + BC2;
+    if nargin == 10 && isstruct(k)
+        grid = k;
+        k = m;
+        m = grid.m;
+        dx = grid.dx;
+        n = grid.n;
+        dy = grid.dy;
+    end
+
+    deprecatedBoundaryWrapperWarning('mixedBC2D', 'addScalarBC2D');
+
+    ensureMatlabOctaveSubdirs();
+    BC = mixedBC2D_impl(k, m, dx, n, dy, left, coeffs_left, right, coeffs_right, bottom, coeffs_bottom, top, coeffs_top);
 end

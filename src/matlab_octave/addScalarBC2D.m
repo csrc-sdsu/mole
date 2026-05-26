@@ -63,8 +63,11 @@ function [A, b] = addScalarBC2D(A, b, k, m, dx, n, dy, dc, nc, v)
 %        dc : a0 (4x1 vector for left, right, bottom, top boundaries, resp.)
 %        nc : b0 (4x1 vector for left, right, bottom, top boundaries, resp.)
 %         v : g (4x1 vector of arrays for left, right, bottom, top boundaries, resp.)
+%      grid : Struct carrying at least grid.m, grid.n, grid.dx, grid.dy,
+%             and grid.bc.{dc,nc}.
 %
 % SYNTAX
+% [A, b] = addScalarBC2D(A, b, k, grid, v)
 % [A, b] = addScalarBC2D(A, b, k, m, dx, n, dy, dc, nc, v)
 %
 % ----------------------------------------------------------------------------
@@ -74,74 +77,30 @@ function [A, b] = addScalarBC2D(A, b, k, m, dx, n, dy, dc, nc, v)
 % ----------------------------------------------------------------------------
 %
 
-    % verify bc sizes and square linear system
-    cellsz = cellfun(@size,v,'uni',false);
-    assert(all(size(dc) == [4 1]), 'dc is a 4x1 vector');
-    assert(all(size(nc) == [4 1]), 'nc is a 4x1 vector');
-    assert(all(size(v) == [4 1]), 'v is a 4x1 vector');
-    assert(all(size(A,1) == size(A,2)), 'A is a square matrix');
-    assert(all(size(A,2) == numel(b)), 'b size = A columns');
-
-    % A and b changes depend on whether bc is periodic or not in each axis
-    qrl = find(dc(1:2).*dc(1:2) + nc(1:2).*nc(1:2),1);
-    qbt = find(dc(3:4).*dc(3:4) + nc(3:4).*nc(3:4),1);
-
-    % verify bc data sizes for non-periodic boundary condition
-    if ~isempty(qrl)    
-        assert(all(cellsz{1} == [n 1]), 'v{1} is a nx1 vector'); % left
-        assert(all(cellsz{2} == [n 1]), 'v{2} is a nx1 vector'); % right
-    end
-
-    if ~isempty(qbt)
-        if ~isempty(qrl)    
-            assert(all(cellsz{3} == [m+2 1]), 'v{3} is a (m+2)x1 vector'); % bottom
-            assert(all(cellsz{4} == [m+2 1]), 'v{4} is a (m+2)x1 vector'); % top
+    if nargin == 5
+        if isstruct(m)
+            % Preferred grid-signature call shape is addScalarBC2D(A, b, k, grid, v).
+            grid = validateGrid(m);
+            v = dx;
+        elseif isstruct(k)
+            % Backward-compatible legacy grid-signature:
+            % addScalarBC2D(A, b, grid, k, v).
+            grid = validateGrid(k);
+            k = m;
+            v = dx;
         else
-            assert(all(cellsz{3} == [m 1]), 'v{3} is a mx1 vector'); % bottom
-            assert(all(cellsz{4} == [m 1]), 'v{4} is a mx1 vector'); % top
+            error('addScalarBC2D:InvalidGridSignature', ...
+                  'For 5-input form, use addScalarBC2D(A, b, k, grid, v).');
         end
+
+        m = grid.m;
+        dx = grid.dx;
+        n = grid.n;
+        dy = grid.dy;
+        dc = grid.bc.dc;
+        nc = grid.bc.nc;
     end
 
-    rl = 0; rr = 0; rb = 0; rt = 0; % periodic case
-
-    % get modifications of A for left, right, bottom, top edges, resp.
-    [Abcl,Abcr,Abcb,Abct] = addScalarBC2Dlhs(k, m, dx, n, dy, dc, nc);
-
-    % get rhs entries affected by bcs for left, right, bottom, top edges, resp.
-    if ~isempty(qrl)    
-        [rl,~,~] = find(Abcl);
-        [rr,~,~] = find(Abcr);
-        rl = unique(rl);
-        rr = unique(rr);
-        % remove rows of A associated to boundary
-        Abc1 = Abcl + Abcr;
-        [rowsbc1,~,~] = find(Abc1);
-        [rows1,cols1,s1] = find(A(rowsbc1,:));
-        A = A - sparse(rows1, cols1, s1, size(A,1), size(A,2));
-        % update matrix A with boundary information
-        A = A + Abc1;    
-        % remove b entries associated to bcs
-        b(rowsbc1) = 0;    
-    end
-
-    if ~isempty(qbt)
-        [rb,~,~] = find(Abcb);
-        [rt,~,~] = find(Abct);
-        rb = unique(rb);
-        rt = unique(rt);
-        % remove rows of A associated to boundary
-        Abc2 = Abct + Abcb;
-        [rowsbc2,~,~] = find(Abc2);
-        [rows2,cols2,s2] = find(A(rowsbc2,:));
-        A = A - sparse(rows2, cols2, s2, size(A,1), size(A,2));
-        % update matrix A with boundary information
-        A = A + Abc2;
-        % remove b entries associated to bcs
-        b(rowsbc2) = 0;    
-    end
-
-    % update b with boundary information
-    if ~(isempty(qrl) && isempty(qbt))  
-        b = addScalarBC2Drhs(b, dc, nc, v, rl, rr, rb, rt);
-    end
+    ensureMatlabOctaveSubdirs();
+    [A, b] = addScalarBC2D_impl(A, b, k, m, dx, n, dy, dc, nc, v);
 end
