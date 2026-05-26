@@ -1,53 +1,33 @@
-function G = grad(k, m, dx, dc, nc)
+function G = grad(varargin)
 % PURPOSE
-% This gradient operator computes the vector of partial derivatives,
-% indicating the direction of maximum rate of increase and the steepest
-% slope of a scalar field.
+% Mimetic gradient operator — 1-D, 2-D, and 3-D, uniform and curvilinear.
 %
 % DESCRIPTION
-% Returns a one-dimensional mimetic gradient operator depending on whether
-% or not the operator will contain a periodic boundary condition type
-%                              a0 U + b0 dU/dn = g,
+% Public entry point for the grid-struct API. Validates the grid and
+% dispatches to gradOp_impl, which handles uniform, periodic, and
+% curvilinear grids across all dimensions.
 %
 % Parameters:
-%                k : Order of accuracy
-%                m : Number of cells
-%               dx : Step size
-%    (optional) dc : a0 (2x1 vector for left and right vertices, resp.)
-%    (optional) nc : b0 (2x1 vector for left and right vertices, resp.)
+%   G    : Sparse matrix — mimetic gradient operator
+%   grid : Grid struct produced by makeGrid or validateGrid
+%   k    : Order of accuracy (even integer >= 2)
 %
 % SYNTAX
-% G = grad(k, m, dx)
-% G = grad(k, m, dx, dc, nc)
+% G = grad(grid, k)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
-%
 
-    if nargin ~= 3 && nargin ~= 5
-        error('grad:InvalidNumArgs', 'grad expects 3 or 5 arguments');
-    end
-    
-    % for legacy code
-    if nargin == 3
-        G = gradNonPeriodic(k, m, dx);
-        return;
+    if numel(varargin) ~= 2 || ~isstruct(varargin{1})
+        error('grad:InvalidSignature', ...
+              'grad(grid, k) is the only supported signature');
     end
 
-    % Assertions:
-    assert(k >= 2, 'k >= 2');
-    assert(mod(k, 2) == 0, 'k % 2 = 0');
-    assert(m >= 2*k, ['m >= ' num2str(2*k) ' for k = ' num2str(k)]);
-
-    % periodic boundary condition case
-    q = find(dc.*dc + nc.*nc,1);
-
-    if isempty(q)
-        G = gradPeriodic(k, m, dx);
-    else
-        G = gradNonPeriodic(k, m, dx);
-    end
+    grid = varargin{1};
+    k    = varargin{2};
+    ensureMatlabOctaveSubdirs();
+    G = gradOp_impl(grid, k);
 end
