@@ -13,8 +13,10 @@ function [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y)
 %                k : Order of accuracy
 %                X : x-coordinates (physical) of meshgrid
 %                Y : y-coordinates (physical) of meshgrid
+%             grid : Struct carrying grid.X and grid.Y.
 %
 % SYNTAX
+% [J, Xe, Xn, Ye, Yn] = jacobian2D(grid, k)
 % [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y)
 %
 % ----------------------------------------------------------------------------
@@ -23,6 +25,16 @@ function [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y)
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
     
+    if nargin == 2 && isstruct(k)
+        grid = k;
+        k = X;
+
+        assert(isfield(grid, 'X'), 'grid.X is required');
+        assert(isfield(grid, 'Y'), 'grid.Y is required');
+        X = grid.X;
+        Y = grid.Y;
+    end
+
     [n, m] = size(X);
     
     X = reshape(X', [], 1);

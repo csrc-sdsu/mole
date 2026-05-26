@@ -28,9 +28,9 @@ function C = curl2D(k, m, dx, n, dy)
 
     C = sparse(n*(m+1)+(n+1)*m+n*m, (n+1)*m+n*(m+1)+(n+1)*(m+1));
 
-    Dx = full(div(k, m, dx));
+    Dx = full(divNonPeriodic(k, m, dx));
     Dx = sparse(Dx(2:end-1,:));
-    Dy = full(div(k, n, dy));
+    Dy = full(divNonPeriodic(k, n, dy));
     Dy = sparse(Dy(2:end-1,:));
 
     % first component

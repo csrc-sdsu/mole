@@ -13,8 +13,11 @@ function L = lap2D(k, m, dx, n, dy, dc, nc)
 %               dy : Step size along y-axis
 %    (optional) dc : a0 (4x1 vector for left, right, bottom, top boundaries, resp.)
 %    (optional) nc : b0 (4x1 vector for left, right, bottom, top boundaries, resp.)
+%             grid : Struct carrying at least grid.m, grid.n, grid.dx,
+%                    and grid.dy, with optional grid.bc.dc and grid.bc.nc.
 %
 % SYNTAX
+% L = lap2D(grid, k)
 % L = lap2D(k, m, dx, n, dy)
 % L = lap2D(k, m, dx, n, dy, dc, nc)
 %
@@ -25,8 +28,15 @@ function L = lap2D(k, m, dx, n, dy, dc, nc)
 % ----------------------------------------------------------------------------
 %
 
+    if nargin == 2 && isstruct(k)
+        grid = k;
+        k = m;
+        L = lapOp(grid, k);
+        return;
+    end
+
     if nargin ~= 5 && nargin ~= 7
-        error('lap2D:InvalidNumArgs', 'lap2D expects 5 or 7 arguments');
+        error('lap2D:InvalidNumArgs', 'lap2D expects (grid, k), 5, or 7 arguments');
     end
     
     % for legacy code

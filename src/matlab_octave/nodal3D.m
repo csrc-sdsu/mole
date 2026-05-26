@@ -12,8 +12,13 @@ function N = nodal3D(k, m, dx, n, dy, o, dz)
 %               dy : Step size along y-axis
 %                o : Number of nodes along z-axis
 %               dz : Step size along z-axis
+%             grid : Struct carrying at least grid.m, grid.n, grid.o,
+%                    grid.dx, grid.dy, and grid.dz. If the grid is
+%                    cell-based, nodal counts default to one plus the cell
+%                    counts along each axis.
 %
 % SYNTAX
+% N = nodal3D(grid, k)
 % N = nodal3D(k, m, dx, n, dy, o, dz)
 %
 % ----------------------------------------------------------------------------
@@ -22,6 +27,13 @@ function N = nodal3D(k, m, dx, n, dy, o, dz)
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
     
+    if nargin == 2 && isstruct(k)
+        grid = k;
+        k = m;
+        N = nodalOp(grid, k);
+        return;
+    end
+
     Nx = nodal(k, m, dx);
     Ny = nodal(k, n, dy);
     Nz = nodal(k, o, dz);

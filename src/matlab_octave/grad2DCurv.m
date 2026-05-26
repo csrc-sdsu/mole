@@ -5,6 +5,7 @@ function G = grad2DCurv(k, X, Y)
 % DESCRIPTION
 %
 % SYNTAX
+% G = grad2DCurv(grid, k)
 % G = grad2DCurv(k, X, Y)
 %
 % ----------------------------------------------------------------------------
@@ -13,6 +14,16 @@ function G = grad2DCurv(k, X, Y)
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
     % Get the determinant of the jacobian and the metrics
+    if nargin == 2 && isstruct(k)
+        grid = k;
+        k = X;
+
+        assert(isfield(grid, 'X'), 'grid.X is required');
+        assert(isfield(grid, 'Y'), 'grid.Y is required');
+        X = grid.X;
+        Y = grid.Y;
+    end
+
     [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y);
     
     % Dimensions of nodal grid

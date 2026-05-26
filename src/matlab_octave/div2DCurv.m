@@ -5,6 +5,7 @@ function D = div2DCurv(k, X, Y)
 % DESCRIPTION
 %
 % SYNTAX
+% D = div2DCurv(grid, k)
 % D = div2DCurv(k, X, Y)
 %
 % ----------------------------------------------------------------------------
@@ -12,6 +13,16 @@ function D = div2DCurv(k, X, Y)
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
+
+    if nargin == 2 && isstruct(k)
+        grid = k;
+        k = X;
+
+        assert(isfield(grid, 'X'), 'grid.X is required');
+        assert(isfield(grid, 'Y'), 'grid.Y is required');
+        X = grid.X;
+        Y = grid.Y;
+    end
 
     % Get the determinant of the jacobian and the metrics
     [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y);

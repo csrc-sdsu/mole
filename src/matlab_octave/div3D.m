@@ -15,8 +15,12 @@ function D = div3D(k, m, dx, n, dy, o, dz, dc, nc)
 %               dz : Step size along z-axis
 %    (optional) dc : a0 (6x1 vector for left, right, bottom, top, front, back boundary types, resp.)
 %    (optional) nc : b0 (6x1 vector for left, right, bottom, top, front, back boundary types, resp.)
+%             grid : Struct carrying at least grid.m, grid.n, grid.o,
+%                    grid.dx, grid.dy, and grid.dz, with optional
+%                    grid.bc.dc and grid.bc.nc.
 %
 % SYNTAX
+% D = div3D(grid, k)
 % D = div3D(k, m, dx, n, dy, o, dz)
 % D = div3D(k, m, dx, n, dy, o, dz, dc, nc)
 %
@@ -27,8 +31,15 @@ function D = div3D(k, m, dx, n, dy, o, dz, dc, nc)
 % ----------------------------------------------------------------------------
 %
 
+    if nargin == 2 && isstruct(k)
+        grid = k;
+        k = m;
+        D = divOp(grid, k);
+        return;
+    end
+
     if nargin ~= 7 && nargin ~= 9
-        error('div3D:InvalidNumArgs', 'div3D expects 7 or 9 arguments');
+        error('div3D:InvalidNumArgs', 'div3D expects (grid, k), 7, or 9 arguments');
     end
     
     % for legacy code

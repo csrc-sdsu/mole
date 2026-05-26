@@ -10,8 +10,12 @@ function N = nodal2D(k, m, dx, n, dy)
 %               dx : Step size along x-axis
 %                n : Number of nodes along y-axis
 %               dy : Step size along y-axis
+%             grid : Struct carrying at least grid.m, grid.n, grid.dx,
+%                    and grid.dy. If the grid is cell-based, nodal counts
+%                    default to grid.m+1 and grid.n+1.
 %
 % SYNTAX
+% N = nodal2D(grid, k)
 % N = nodal2D(k, m, dx, n, dy)
 %
 % ----------------------------------------------------------------------------
@@ -20,6 +24,13 @@ function N = nodal2D(k, m, dx, n, dy)
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
     
+    if nargin == 2 && isstruct(k)
+        grid = k;
+        k = m;
+        N = nodalOp(grid, k);
+        return;
+    end
+
     Nx = nodal(k, m, dx);
     Ny = nodal(k, n, dy);
     

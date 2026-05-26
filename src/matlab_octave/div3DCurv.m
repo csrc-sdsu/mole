@@ -5,6 +5,7 @@ function D = div3DCurv(k, X, Y, Z)
 % DESCRIPTION
 %
 % SYNTAX
+% D = div3DCurv(grid, k)
 % D = div3DCurv(k, X, Y, Z)
 %
 % ----------------------------------------------------------------------------
@@ -12,6 +13,18 @@ function D = div3DCurv(k, X, Y, Z)
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
+
+    if nargin == 2 && isstruct(k)
+        grid = k;
+        k = X;
+
+        assert(isfield(grid, 'X'), 'grid.X is required');
+        assert(isfield(grid, 'Y'), 'grid.Y is required');
+        assert(isfield(grid, 'Z'), 'grid.Z is required');
+        X = grid.X;
+        Y = grid.Y;
+        Z = grid.Z;
+    end
 
     % Get the determinant of the jacobian and the metrics
     [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3D(k, X, Y, Z);

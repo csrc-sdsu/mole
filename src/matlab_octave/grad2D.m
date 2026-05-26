@@ -13,8 +13,11 @@ function G = grad2D(k, m, dx, n, dy, dc, nc)
 %               dy : Step size along y-axis
 %    (optional) dc : a0 (4x1 vector for left, right, bottom, top boundaries, resp.)
 %    (optional) nc : b0 (4x1 vector for left, right, bottom, top boundaries, resp.)
+%             grid : Struct carrying at least grid.m, grid.n, grid.dx,
+%                    and grid.dy, with optional grid.bc.dc and grid.bc.nc.
 %
 % SYNTAX
+% G = grad2D(grid, k)
 % G = grad2D(k, m, dx, n, dy)
 % G = grad2D(k, m, dx, n, dy, dc, nc)
 %
@@ -25,8 +28,15 @@ function G = grad2D(k, m, dx, n, dy, dc, nc)
 % ----------------------------------------------------------------------------
 %
 
+    if nargin == 2 && isstruct(k)
+        grid = k;
+        k = m;
+        G = gradOp(grid, k);
+        return;
+    end
+
     if nargin ~= 5 && nargin ~= 7
-        error('grad2D:InvalidNumArgs', 'grad2D expects 5 or 7 arguments');
+        error('grad2D:InvalidNumArgs', 'grad2D expects (grid, k), 5, or 7 arguments');
     end
     
     % for legacy code
