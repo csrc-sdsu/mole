@@ -23,10 +23,15 @@ ygrid = [c c+dy/2 : dy : d-dy/2 d];
 [X, Y] = meshgrid(xgrid, ygrid);
 
 % Mimetic operator (Laplacian)
-L = lap2D(k, m, dx, n, dy);
-L = L + robinBC2D(k, m, dx, n, dy, 1, 0); % Dirichlet BC
-I = interpol2D(m, n, 0.5, 0.5);
-I2 = interpolD2D(m, n, 0.5, 0.5);
+dc = [1; 1; 1; 1];
+nc = [0; 0; 0; 0];
+g = makeGrid('m', m, 'n', n, 'dx', dx, 'dy', dy, 'bc', struct('dc', dc, 'nc', nc));
+L = lap(g, k);
+v = {zeros(n,1); zeros(n,1); zeros(m+2,1); zeros(m+2,1)};
+[L_bc, ~] = addScalarBC(sparse(size(L,1), size(L,2)), zeros(size(L,1),1), k, g, v); % Dirichlet BC
+L = L + L_bc;
+I = interpol(g, 'CentersToFaces');
+I2 = interpol(g, 'FacesToCenters');
 
 % Wave propagation speed
 speed = 1;  % (T/p) Tension over density

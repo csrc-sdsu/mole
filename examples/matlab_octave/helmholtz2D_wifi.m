@@ -50,10 +50,15 @@ ind = find(HS>0);
 freenodes = setdiff(1:(m+2)*(n+2),ind);
 
 % Mimetic operator (Laplacian)
-L = lap2D(k, m, dx, n, dy);
+dc = [0; 0; 0; 0];
+nc = [1; 1; 1; 1];
+g = makeGrid('m', m, 'n', n, 'dx', dx, 'dy', dy, 'bc', struct('dc', dc, 'nc', nc));
+L = lap(g, k);
 id_op = diag(sparse(c));
 L = L + id_op;
-L = L + robinBC2D(k, m, dx, n, dy, 0, 1); % Neumann BC
+v = {zeros(n,1); zeros(n,1); zeros(m+2,1); zeros(m+2,1)};
+[L_bc, ~] = addScalarBC(sparse(size(L,1), size(L,2)), zeros(size(L,1),1), k, g, v); % Neumann BC
+L = L + L_bc;
 
 % RHS
 RHS = zeros(m+2,n+2);

@@ -29,12 +29,22 @@ RHS = interp3(F, Xs, Ys, Zs);
 
 RHS = reshape(permute(RHS, [2, 1, 3]), [], 1);
 
+% Build 3D curvilinear grid (X, Y, Z are meshgrid n×m×o; store as ndgrid m×n×o)
+% Node counts: m, n, o → cell counts: m-1, n-1, o-1
+dc = [1; 1; 1; 1; 1; 1];
+nc = [0; 0; 0; 0; 0; 0];
+g = struct('m', m-1, 'n', n-1, 'o', o-1, 'type', 'curvilinear', 'bc', struct('dc', dc, 'nc', nc));
+g.nodes.X = permute(X, [2, 1, 3]);
+g.nodes.Y = permute(Y, [2, 1, 3]);
+g.nodes.Z = permute(Z, [2, 1, 3]);
+
 % Get 3D curvilinear mimetic divergence
-D = div3DCurv(k, X, Y, Z);
+D = div(g, k);
 % Get 3D curvilinear mimetic gradient
-G = grad3DCurv(k, X, Y, Z);
+G = grad(g, k);
 % Dirichlet BCs
-BC = robinBC3D(k, m-1, 1, n-1, 1, o-1, 1, 1, 0);
+v = {zeros((n-1)*(o-1),1); zeros((n-1)*(o-1),1); zeros((o-1)*(m+1),1); zeros((o-1)*(m+1),1); zeros((n+1)*(m+1),1); zeros((n+1)*(m+1),1)};
+[BC, ~] = addScalarBC(sparse(size(D,1), size(D,1)), zeros(size(D,1),1), k, g, v);
 % Laplacian operator with BCs
 L = D*G+BC;
 

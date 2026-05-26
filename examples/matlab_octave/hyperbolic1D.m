@@ -16,8 +16,9 @@ dx = (east-west)/m;
 t = 1; % Simulation time
 dt = dx/abs(a); % CFL condition for explicit schemes
 
-D = div(k, m, dx); % 1D Mimetic divergence operator
-I = interpol(m, 0.5); % 1D 2nd order interpolator
+g = makeGrid('m', m, 'dx', dx);
+D = div(g, k); % 1D Mimetic divergence operator
+I = interpol(g, 'CentersToFaces'); % 1D centers-to-faces interpolator
 
 % 1D Staggered grid
 grid = [west west+dx/2: dx :east-dx/2 east];

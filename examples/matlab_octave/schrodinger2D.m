@@ -24,10 +24,15 @@ ygrid = [0 dy/2:dy:Lxy-dy/2 Lxy]; % Staggered grid y
 [X, Y] = meshgrid(xgrid, ygrid);  % Grid
 
 % Mimetic Laplacian operator and interpolator
-L = lap2D(k, m, dx, n, dy);
-L = L + robinBC2D(k, m, dx, n, dy, 1, 0);
-I = interpol2D(m, n, 0.5, 0.5);
-I2 = interpolD2D(m, n, 0.5, 0.5);
+dc = [1; 1; 1; 1];
+nc = [0; 0; 0; 0];
+g = makeGrid('m', m, 'n', n, 'dx', dx, 'dy', dy, 'bc', struct('dc', dc, 'nc', nc));
+L = lap(g, k);
+v = {zeros(n,1); zeros(n,1); zeros(m+2,1); zeros(m+2,1)};
+[L_bc, ~] = addScalarBC(sparse(size(L,1), size(L,2)), zeros(size(L,1),1), k, g, v);
+L = L + L_bc;
+I = interpol(g, 'CentersToFaces');
+I2 = interpol(g, 'FacesToCenters');
 
 % Premultiplying
 I = dt*I;

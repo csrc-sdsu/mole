@@ -10,8 +10,13 @@ m = 5; % -> 7
 n = 6; % -> 8
 o = 7; % -> 9
 
-L = lap3D(k, m, 1, n, 1, o, 1); % 3D Mimetic laplacian operator
-L = L + robinBC3D(k, m, 1, n, 1, o, 1, 1, 0); % Dirichlet BC
+dc = [1; 1; 1; 1; 1; 1];
+nc = [0; 0; 0; 0; 0; 0];
+g = makeGrid('m', m, 'n', n, 'o', o, 'dx', 1, 'dy', 1, 'dz', 1, 'bc', struct('dc', dc, 'nc', nc));
+L = lap(g, k); % 3D Mimetic laplacian operator
+v = {zeros(n*o,1); zeros(n*o,1); zeros(o*(m+2),1); zeros(o*(m+2),1); zeros((n+2)*(m+2),1); zeros((n+2)*(m+2),1)};
+[L_bc, ~] = addScalarBC(sparse(size(L,1), size(L,2)), zeros(size(L,1),1), k, g, v);
+L = L + L_bc; % Dirichlet BC
 
 RHS = zeros(m+2, n+2, o+2);
 

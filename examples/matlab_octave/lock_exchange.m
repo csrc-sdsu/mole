@@ -66,19 +66,24 @@ nu = mu/rho_middle;           % m2/s Kinematic viscosity
 
 %% Mimetic operators
 k = 2;                        % Spatial order of accuracy
-D = div2D(k, m, dx, n, dy);   % Divergence
-G = grad2D(k, m, dx, n, dy);  % Gradient
+dc = [0; 0; 0; 0];
+nc = [1; 1; 1; 1];
+g = makeGrid('m', m, 'n', n, 'dx', dx, 'dy', dy, 'bc', struct('dc', dc, 'nc', nc));
+D = div(g, k);   % Divergence
+G = grad(g, k);  % Gradient
 L = D*G;                      % Laplacian
 
 % Premultiplication of G
 G = -dt/rho_middle*G;
 
 % Apply Neumann BCs to Laplacian
-L = L+robinBC2D(k, m, dx, n, dy, 0, 1);
+v = {zeros(n,1); zeros(n,1); zeros(m+2,1); zeros(m+2,1)};
+[L_bc, ~] = addScalarBC(sparse(size(L,1), size(L,2)), zeros(size(L,1),1), k, g, v);
+L = L + L_bc;
 
 % Interpolators
-I0 = interpol2D(m, n, 0, 0);  % For downwind
-I1 = interpol2D(m, n, 1, 1);  % For upwind
+I0 = interpol(g, 'CentersToFaces');
+I1 = interpol(g, 'CentersToFaces');
 
 %% Convenient definitions
 SOL = zeros(size(D, 2), 1);

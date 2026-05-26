@@ -32,9 +32,10 @@ function richards
     top_bc = -61.5;
 
     % Get mimetic operators
-    D = div(k, m, dx);
-    G = grad(k, m, dx);
-    I = interpol(m, 0.5);
+    g = makeGrid('m', m, 'dx', dx);
+    D = div(g, k);
+    G = grad(g, k);
+    I = interpol(g, 'CentersToFaces');
 
     K_psi = @(psi) (K_s.* A)./(A + abs(psi).^gamma);
 

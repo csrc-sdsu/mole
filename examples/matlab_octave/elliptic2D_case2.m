@@ -78,14 +78,21 @@ scatter3(Cx(:), Cy(:), zeros((m+2)*(n+2), 1), 'o', 'MarkerEdgeColor', 'r')
 legend('Nodal points', 'u', 'v', 'Centers', 'All centers')
 hold off
 
+% Build curvilinear grid (X, Y are meshgrid (n+1)x(m+1); store as ndgrid (m+1)x(n+1))
+dc = [1; 1; 1; 1];
+nc = [0; 0; 0; 0];
+g = struct('m', m, 'n', n, 'type', 'curvilinear', 'bc', struct('dc', dc, 'nc', nc));
+g.nodes.X = X';
+g.nodes.Y = Y';
+
 % Get curvilinear mimetic operators
 disp('D')
 tic
-D = div2DCurv(k, X, Y);
+D = div(g, k);
 toc
 disp('G')
 tic
-G = grad2DCurv(k, X, Y);
+G = grad(g, k);
 toc
 disp('KG')
 tic
@@ -97,7 +104,8 @@ L = D*KG;
 toc
 
 % Impose boundary conditions
-Robin = robinBC2D(k, m, 1, n, 1, 1, 0);
+v = {zeros(n,1); zeros(n,1); zeros(m+2,1); zeros(m+2,1)};
+[Robin, ~] = addScalarBC(sparse(size(L,1), size(L,2)), zeros(size(L,1),1), k, g, v);
 L = L + Robin;
 figure
 set(gcf, 'Color', 'w')

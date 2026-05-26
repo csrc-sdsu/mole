@@ -26,9 +26,10 @@ dy = (d-c)/n;
 dz = (f-e)/o;
 
 % Mimetic operators
-D = div3D(k, m, dx, n, dy, o, dz);
-G = grad3D(k, m, dx, n, dy, o, dz);
-I = interpol3D(m, n, o, 1, 1, 1);
+g = makeGrid('m', m, 'n', n, 'o', o, 'dx', dx, 'dy', dy, 'dz', dz);
+D = div(g, k);
+G = grad(g, k);
+I = interpol(g, 'CentersToFaces');
 
 % Pore velocity vector
 V = zeros(size(G, 1), 1);
