@@ -33,18 +33,18 @@ classdef testGridFirstV2Migration < matlab.unittest.TestCase
             dy = 1 / n;
             grid = makeGrid('m', m, 'n', n, 'dx', dx, 'dy', dy);
 
-            Gnew = grad2D(grid, k);
-            Gold = grad2D(k, m, dx, n, dy);
-            Dnew = div2D(grid, k);
-            Dold = div2D(k, m, dx, n, dy);
-            Lnew = lap2D(grid, k);
-            Lold = lap2D(k, m, dx, n, dy);
+            Gnew = grad(grid, k);
+            Gold = gradOp_impl(grid, k);
+            Dnew = div(grid, k);
+            Dold = divOp_impl(grid, k);
+            Lnew = lap(grid, k);
+            Lold = lapOp_impl(grid, k);
 
             testCase.verifyLessThan(norm(Gnew - Gold, 'fro'), 1e-12);
             testCase.verifyLessThan(norm(Dnew - Dold, 'fro'), 1e-12);
             testCase.verifyLessThan(norm(Lnew - Lold, 'fro'), 1e-12);
 
-            N = nodal2D(grid, k);
+            N = nodal(grid, k);
             nodes = (m + 1) * (n + 1);
             testCase.verifySize(N, [2*nodes, nodes]);
         end
@@ -61,18 +61,18 @@ classdef testGridFirstV2Migration < matlab.unittest.TestCase
             dz = 1 / o;
             grid = makeGrid('m', m, 'n', n, 'o', o, 'dx', dx, 'dy', dy, 'dz', dz);
 
-            Gnew = grad3D(grid, k);
-            Gold = grad3D(k, m, dx, n, dy, o, dz);
-            Dnew = div3D(grid, k);
-            Dold = div3D(k, m, dx, n, dy, o, dz);
-            Lnew = lap3D(grid, k);
-            Lold = lap3D(k, m, dx, n, dy, o, dz);
+            Gnew = grad(grid, k);
+            Gold = gradOp_impl(grid, k);
+            Dnew = div(grid, k);
+            Dold = divOp_impl(grid, k);
+            Lnew = lap(grid, k);
+            Lold = lapOp_impl(grid, k);
 
             testCase.verifyLessThan(norm(Gnew - Gold, 'fro'), 1e-12);
             testCase.verifyLessThan(norm(Dnew - Dold, 'fro'), 1e-12);
             testCase.verifyLessThan(norm(Lnew - Lold, 'fro'), 1e-12);
 
-            N = nodal3D(grid, k);
+            N = nodal(grid, k);
             nodes = (m + 1) * (n + 1) * (o + 1);
             testCase.verifySize(N, [3*nodes, nodes]);
         end
@@ -85,29 +85,29 @@ classdef testGridFirstV2Migration < matlab.unittest.TestCase
             o = 7;
             k = 2;
 
-            % Deprecated wrappers should agree with transfer families.
             g1 = makeGrid('m', m, 'dx', 1/m);
             g2 = makeGrid('m', m, 'n', n, 'dx', 1/m, 'dy', 1/n);
             g3 = makeGrid('m', m, 'n', n, 'o', o, 'dx', 1/m, 'dy', 1/n, 'dz', 1/o);
 
-            testCase.verifyLessThan(norm(interpol(g1, 0.5) - interpolCentersToFacesD1D(k, m), 'fro'), 1e-12);
-            testCase.verifyLessThan(norm(interpolD(g1, 0.5) - interpolFacesToCentersG1D(k, m), 'fro'), 1e-12);
-            testCase.verifyLessThan(norm(interpol2D(g2, 0.5, 0.5) - interpolCentersToFacesD2D(k, m, n), 'fro'), 1e-12);
-            testCase.verifyLessThan(norm(interpolD2D(g2, 0.5, 0.5) - interpolFacesToCentersG2D(k, m, n), 'fro'), 1e-12);
-            testCase.verifyLessThan(norm(interpol3D(g3, 0.5, 0.5, 0.5) - interpolCentersToFacesD3D(k, m, n, o), 'fro'), 1e-12);
-            testCase.verifyLessThan(norm(interpolD3D(g3, 0.5, 0.5, 0.5) - interpolFacesToCentersG3D(k, m, n, o), 'fro'), 1e-12);
+            % Unified interpol(grid, direction) vs _impl baseline.
+            testCase.verifyLessThan(norm(interpol(g1, 'CentersToFaces') - interpolCentersToFacesD1D_impl(k, m), 'fro'), 1e-12);
+            testCase.verifyLessThan(norm(interpol(g1, 'FacesToCenters') - interpolFacesToCentersG1D_impl(k, m), 'fro'), 1e-12);
+            testCase.verifyLessThan(norm(interpol(g2, 'CentersToFaces') - interpolCentersToFacesD2D_impl(k, m, n), 'fro'), 1e-12);
+            testCase.verifyLessThan(norm(interpol(g2, 'FacesToCenters') - interpolFacesToCentersG2D_impl(k, m, n), 'fro'), 1e-12);
+            testCase.verifyLessThan(norm(interpol(g3, 'CentersToFaces') - interpolCentersToFacesD3D_impl(k, m, n, o), 'fro'), 1e-12);
+            testCase.verifyLessThan(norm(interpol(g3, 'FacesToCenters') - interpolFacesToCentersG3D_impl(k, m, n, o), 'fro'), 1e-12);
 
-            % Periodic signature path consistency.
+            % Periodic impl consistency: all-zero dc/nc → periodic result.
             dc2 = zeros(4, 1);
             nc2 = zeros(4, 1);
-            I2a = interpolCentersToFacesD2D(k, m, n, dc2, nc2);
-            I2b = interpolCentersToFacesD2DPeriodic(k, m, n);
+            I2a = interpolCentersToFacesD2D_impl(k, m, n, dc2, nc2);
+            I2b = interpolCentersToFacesD2DPeriodic_impl(k, m, n);
             testCase.verifyLessThan(norm(I2a - I2b, 'fro'), 1e-12);
 
             dc3 = zeros(6, 1);
             nc3 = zeros(6, 1);
-            I3a = interpolFacesToCentersG3D(k, m, n, o, dc3, nc3);
-            I3b = interpolFacesToCentersG3DPeriodic(k, m, n, o);
+            I3a = interpolFacesToCentersG3D_impl(k, m, n, o, dc3, nc3);
+            I3b = interpolFacesToCentersG3DPeriodic_impl(k, m, n, o);
             testCase.verifyLessThan(norm(I3a - I3b, 'fro'), 1e-12);
         end
 
@@ -161,6 +161,22 @@ classdef testGridFirstV2Migration < matlab.unittest.TestCase
                                  'validateGrid:InvalidBC2D');
             testCase.verifyError(@() validateGrid(struct('m', 5, 'n', 6, 'o', 7, 'dx', 0.1, 'dy', 0.2, 'dz', 0.3, 'bc', struct('nc', 1))), ...
                                  'validateGrid:InvalidBC3D');
+        end
+
+        function testDeprecatedDimensionalOperatorsDeleted(testCase)
+            addpath('../../src/matlab_octave');
+            % Confirm that the deprecated dimensional variant files are gone.
+            testCase.verifyError(@() grad2D(2, 10, 0.1, 8, 0.125), 'MATLAB:UndefinedFunction');
+            testCase.verifyError(@() div2D(2, 10, 0.1, 8, 0.125),  'MATLAB:UndefinedFunction');
+            testCase.verifyError(@() lap2D(2, 10, 0.1, 8, 0.125),  'MATLAB:UndefinedFunction');
+            testCase.verifyError(@() grad3D(2, 10, 0.1, 8, 0.125, 6, 0.1), 'MATLAB:UndefinedFunction');
+        end
+
+        function testDeprecatedInterpolFunctionsDeleted(testCase)
+            addpath('../../src/matlab_octave');
+            testCase.verifyError(@() interpol2D(10, 0.5, 0.5),  'MATLAB:UndefinedFunction');
+            testCase.verifyError(@() interpolD(10, 0.5),         'MATLAB:UndefinedFunction');
+            testCase.verifyError(@() interpolCentersToFacesD1D(2, 10), 'MATLAB:UndefinedFunction');
         end
     end
 end
