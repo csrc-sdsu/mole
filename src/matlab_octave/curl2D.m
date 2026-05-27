@@ -1,30 +1,34 @@
-% SPDX-License-Identifier: GPL-3.0-only
-% 
-% Copyright 2008-2024 San Diego State University Research Foundation (SDSURF).
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, version 3.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% LICENSE file or on the web GNU General Public License 
-% <https://www.gnu.org/licenses/> for more details.
-%
-% ------------------------------------------------------------------------
 function C = curl2D(k, m, dx, n, dy)
+% PURPOSE
 % Returns a two-dimensional mimetic curl operator
-% The 1st component is computed at horizontal faces (tangential vertical derivative)
-% The 2nd component is computed at vertical faces (tangential horizontal derivative)
-% The (scalar) curl or third component is computed at the cell centers (normal to the plane)
 %
+% DESCRIPTION
 % Parameters:
-%                k : Order of accuracy
-%                m : Number of cells along x-axis
-%               dx : Step size along x-axis
-%                n : Number of cells along y-axis
-%               dy : Step size along y-axis
+% output
+%        C : 2D curl operator with 3 components.
+%            The 1st component is computed at horizontal faces 
+%            (tangential vertical derivative)
+%            The 2nd component is computed at vertical faces 
+%            (tangential horizontal derivative)
+%            The third component or (scalar) curl is computed 
+%            at the cell centers (normal to the plane)
+%
+% input
+%         k : Order of accuracy
+%         m : Number of cells along x-axis
+%        dx : Step size along x-axis
+%         n : Number of cells along y-axis
+%        dy : Step size along y-axis
+%
+% SYNTAX
+% C = curl2D(k, m, dx, n, dy)
+%
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
+% 
 
     C = sparse(n*(m+1)+(n+1)*m+n*m, (n+1)*m+n*(m+1)+(n+1)*(m+1));
 
