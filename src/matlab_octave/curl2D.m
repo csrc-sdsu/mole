@@ -28,10 +28,10 @@ function C = curl2D(k, m, dx, n, dy)
 
     C = sparse(n*(m+1)+(n+1)*m+n*m, (n+1)*m+n*(m+1)+(n+1)*(m+1));
 
-    Dx = full(div(k, m, dx));
-    Dx = sparse(Dx(2:end-1,:));
-    Dy = full(div(k, n, dy));
-    Dy = sparse(Dy(2:end-1,:));
+    Dx = div(k, m, dx);
+    Dx = Dx(2:end-1,:);
+    Dy = div(k, n, dy);
+    Dy = Dy(2:end-1,:);
 
     % first component
     C(1:(m+1)*n,(n+1)*m+n*(m+1)+1:end) = kron(Dy,speye(m+1,m+1));

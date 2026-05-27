@@ -58,16 +58,16 @@ classdef testCurl2D < matlab.unittest.TestCase
             ks=[2,4,6,8];
             tolcomp12 = [5e-2,5e-4,5e-14,5e-14];
             tolcomp3  = [6e-2,3e-3,6e-14,6e-14];
-            tolglob   = [e-1,4e-3,8e-14,8e-14];
+            tolglob   = [1e-1,4e-3,8e-14,8e-14];
 
             for k = ks
                 % tolerances
-                tolc12 = tolcomp12(k);
-                tolc3 = tolcomp3(k);
-                tolg = tolglob(k);
+                tolc12 = tolcomp12(k/2);
+                tolc3 = tolcomp3(k/2);
+                tolg = tolglob(k/2);
 
                 % 2D curl operator                
-                C = curl2D(k, m, dx, n, dy); % need to modify the last component of 2D curl
+                C = curl2D(k, m, dx, n, dy);
                 
                 C0  = C*vp; % approximated 2D curl
                 CC1 = C0(1:(m+1)*n); % first component of approximated 2D curl
