@@ -6,65 +6,131 @@ from MATLAB MOLE example using the Leapfrog Scheme
 using Plots
 import MOLE: Operators, BCs
 
-# Domain limits
+function advection_hyperbolic(u0, a, grid, T, k, m, dx)
+    #Solves the 1D Advection equation using MOLE Operators
+    #=
+    INPUTS: 
+    u0    : Initial condition
+    a     : velocity
+    grid  : staggered grid
+    T     : final time
+    k     : Operator order of accuracy
+    m     : number of cells
+    OUTPUTS:
+    U     : solution
+    t     : time interval
+    =#
+    #CFL condition for explicit schemes
+    dt = dx/abs(a);
+
+    #Create stepsize for time with given T
+    t  = collect(0.0:dt:T)
+
+    #Use of MOLE Operators
+    D  = Operators.div(k,m,dx);
+    I  = Operators.interpol(m,0.5);
+    
+    #Periodic Boundary Conditions imposed on Divergence Operator
+    D[1, 2]       = 1/(2*dx);
+    D[1, end-1]   = -1/(2*dx);
+    D[end, 2]     = 1/(2*dx);
+    D[end, end-1] = -1/(2*dx);
+
+    #Premultiply out of time loop (does not change)
+    D  = -a*dt*2 *D*I;
+    
+    #Create an array that holds solution at each time step
+    U = zeros(length(t)+2, length(grid))
+
+    #Set initial condition at first time element
+    U[1,:] .= u0.(grid)
+
+    #Leapfrog scheme requires two steps, hence we would use Euler's step
+    U[2,:] .= U[1,:] + D/2*U[1,:];
+
+    for k in eachindex(t)
+        U[k+2,:] .= U[k,:] + D * U[k+1,:];
+    end
+
+    return t, U
+end
+
+### MAIN LOOP ###
+
+#Domain limits
 west = 0;
 east = 1;
 
-a  = 1; #velocity
+#velocity
+a = 1;
 
+#number of cells
+m = 50;
 
-k  = 2; #Operator's order of accuracy
-m  = 50; # number of cells
+#stepsize
 dx = (east - west) / m;
 
-t  = 1; #Simulation time
-dt = dx/abs(a); #CFL condition for explicit schemes
+#Simulation time
+T = 1;
 
-D  = Operators.div(k,m,dx); #1D Mimetic divergence operator
-I  = Operators.interpol(m, 0.5); #1D 2nd order interpolator
+#Operator's order of accuracy
+k = 2;
 
-# 1D Staggered grid
-grid = [west; (west+(dx/2)):dx: (east-(dx/2)); east];
+#1D Staggered grid
+xgrid = [west; (west + (dx/2)):dx: (east - (dx/2)); east];
 
-# Initial Condition
-U = sin.(2 * π * grid);
+#Initial Condition
+u0(x) = sin.(2 * π * x);
 
-#Periodic Boundary Condition imposed on the divergence operator
-D[1, 2]       = 1/(2*dx);
-D[1, end-1]   = -1/(2*dx);
-D[end, 2]     = 1/(2*dx);
-D[end, end-1] = -1/(2*dx);
+t, U = advection_hyperbolic(u0, a, xgrid, T, k, m, dx)
 
-#Premultiply out of the time loop (since it does not change)
-D = -a*dt*2 *D*I;
+#Output path to store generated plot
+path = joinpath(@__DIR__, "output") 
 
-#=
-        We could have also defined 
-        D = -a*dt*2*I*D
-        if the grid was defined as:
-        grid = west : dx :east (nodal)
-=#
-
-U2 = U + D/2*U; #Compute one step using Euler's method
-
-#Time integration loop
-for i in 1: t/dt
-    #Plot approximation
-    plot(grid, U2, label="Approximated", ls=:dot, lw=3)
-    #Plot exact solution
-    plot!(grid, sin.(2*π .*(grid .- a*i*dt)), label="exact")
-    #Plot attributes
-    title!("1D Advection Equation with Periodic BC t = $(round(i*dt, sigdigits=2))");
-    xlabel!("x");
-    ylabel!("u(x,t)");
-    xlims!(west, east);
-    ylims!(-1.5, 1.5);
-    plot!(legend=:bottomright)
-    sleep(0.04);
-    U3 =  U + D* U2; #Compute next step using leapfrog scheme
-    global U  =  U2;
-    global U2 =  U3;
-    gui()
+#Creation of animation
+animation = Plots.@animate for k in eachindex(t)
+    Plots.plot(xgrid, U[k,:];
+               label  = "approximated",
+               xlabel = "x",
+               ylabel = "u(x,t)",
+               grid   = true,
+               ls     = :dot,
+               lw     = 3,
+               title  = "1D Advection Equation with Periodic BC t = $(round(t[k], sigdigits=2))",
+               legend = :bottomright,
+               xlims  = (west, east),
+               ylims  = (-1.5, 1.5)
+              )
+    Plots.plot!(xgrid, sin.(2*π .*(xgrid .- a*t[k]));
+               label  = "exact",
+              )
 end
+
+#Storing animation as gif to output directory
+Plots.gif(animation, joinpath(path, "hyperbolic1D.gif"), fps=10)
+
+#Creating plot object for approximation
+p1 = plot(xgrid, U[end-2,:]; #Due to length of t and U being off by 2
+               label  = "approximated",
+               xlabel = "x",
+               ylabel = "u(x,t)",
+               grid   = true,
+               ls     = :dot,
+               lw     = 3,
+               title  = "1D Advection Equation with Periodic BC t = $(round(t[end], sigdigits=2))",
+               legend = :bottomright,
+               xlims  = (west, east),
+               ylims  = (-1.5, 1.5)
+              )
+#Mutating plot to include exact solution
+plot!(xgrid, sin.(2*π .*(xgrid .- a*t[end]));
+              label = "exact",
+             )
+
+#Storing png file of last iteration
+Plots.png(
+    p1,
+    joinpath(path, "hyperbolic_end.png")
+)
 
 
