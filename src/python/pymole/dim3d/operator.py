@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from pymole.operator import MimeticOperator
+from pymole.mimetic_operator import MimeticOperator
 
 if TYPE_CHECKING:
     from pymole.dim1d.grid import Grid1D

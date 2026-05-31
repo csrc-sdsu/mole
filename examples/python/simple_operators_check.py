@@ -1,5 +1,7 @@
+from pathlib import Path
 import sys
-sys.path.insert(0, "src/python")
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "src" / "python"))
 
 import numpy as np
 from numpy.typing import NDArray
