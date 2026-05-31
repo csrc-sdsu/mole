@@ -132,6 +132,10 @@ Currently, the following examples are available in the MOLE Julia package.
   - 2D Examples
     - ```elliptic2DXDirichletYDirichlet```: A script that solves the 2D Laplace equation, $\nabla^2 u = 0$, with Dirichlet boundary conditions in $x$ and $y$ using mimetic operators.
     - ```elliptic2DXPerYDirichlet```: A script that solves the 2D Laplace equation, $\nabla^2 u = 0$, with periodic bonudary conditions in $x$ and Dirichlet boundary conditions in $y$ using mimetic operators.
+- Hyperbolic Problems
+  - 1D Examples
+    - ```burgers1D```: A script that solves the 1D conservative form of inviscid Burgers equation using mimetic operators.
+    - ```hyperbolic1D```: A script that solves the 1D Hyperbolic Equation with Periodic boundary conditions using mimetic operators.
 - Parabolic Problems
   - 2D Examples
     - ```parabolic2D```: A script that solves the 2D heat equation, $u_t = \nu \nabla^2 u$, with Dirichlet boundary conditions in $x$ and $y$ using mimetic operators.
