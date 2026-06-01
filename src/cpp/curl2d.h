@@ -6,11 +6,11 @@
  */
 
 /*
- * @file curl2D.h
+ * @file curl2d.h
  *
- * @brief Mimetic 2-D Curl Operator
+ * @brief 2-D Mimetic Curl Operators
  *
- * @date 2026/04/26
+ * @date 2024/06/01
  */
 
 #ifndef CURL2D_H
@@ -20,27 +20,21 @@
 #include <cassert>
 
 /**
- * @brief Mimetic 2-D Curl operator (z-component)
+ * @brief 2-D Mimetic Curl operator
  *
- * Computes curl(U, V) = V_x - U_y as a sparse matrix acting on a stacked
- * face-field vector [U_x_faces; V_y_faces]:
- *
- *   Curl * [U; V]  =  D1*V - D2*U  =  V_x - U_y
- *
- * where D1 and D2 are the x- and y-derivative blocks of the 2-D divergence.
- * The matrix is assembled as [-D2 | D1], the direct matrix equivalent of the
- * MATLAB curl2D operator which computes div2D * [V_faces; -U_faces].
+ * Non-periodic only, mirroring the MATLAB curl2D reference.
  */
 class Curl2D : public sp_mat {
 public:
   using sp_mat::operator=;
 
   /**
-   * @brief 2-D Mimetic Curl (non-periodic)
+   * @brief 2-D Mimetic Curl non-periodic operator
    *
-   * Produces a matrix of size (m+2)(n+2) x [n(m+1) + m(n+1)].
-   * Apply to a stacked vector [U_x_faces; V_y_faces] to obtain the
-   * z-component of the curl at all (m+2)(n+2) grid nodes.
+   * Returns the staggered 2-D curl with three output components:
+   *   - tangential vertical derivative at horizontal faces
+   *   - tangential horizontal derivative at vertical faces
+   *   - scalar z-curl at cell centers
    *
    * @argument k  Order of accuracy
    * @argument m  Number of cells in x-direction
@@ -49,6 +43,11 @@ public:
    * @argument dy Spacing between cells in y-direction
    */
   Curl2D(u16 k, u32 m, u32 n, Real dx, Real dy);
+
+private:
+  // Returns the interior rows of the 1-D divergence: rows 2..end-1 of the
+  // (dim+2)x(dim+1) operator, leaving a dim x (dim+1) derivative.
+  static sp_mat interiorDiv1D(u16 k, u32 dim, Real delta);
 };
 
 #endif // CURL2D_H
