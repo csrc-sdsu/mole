@@ -30,7 +30,7 @@ function G = gradNonUniform(k, ticks, dc, nc)
         periodic = all(dc == 0) & all(nc == 0);
     end
 
-    ticks = ticks(:);   % normalize to column vector
+    ticks = ticks(:);   % forcing ticks to be a column vector
 
     if periodic
         m = length(ticks);
