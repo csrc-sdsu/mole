@@ -1,5 +1,3 @@
-using Plots
-
 @testset "addScalarBC! (1D) tests" begin
 
     @testset "no BCs test" begin
