@@ -85,21 +85,19 @@ for i = 1:numel(k)
     rsC = [1 1+dy/2:dy:2-dy/2 2];
     tsC = [pi pi-dx/2:-dx:dx/2 0];
     [TSC,RSC] = meshgrid(tsC,rsC);
-    xc = RSC .* cos(TSC); xc = reshape(xc',[],1);
-    yc = RSC .* sin(TSC); yc = reshape(yc',[],1);
+    X = RSC .* cos(TSC);
+    Y = RSC .* sin(TSC);
 
     % Build operators
     curG = grad2DCurv(k(i),xn,yn);
     curD =  div2DCurv(k(i),xn,yn);
     curL = curD * curG;
 
-    newG = grad2DCurv(k(i),xc,yc,m,dx,n,dy,dc,nc);
-    newD =  div2DCurv(k(i),xc,yc,m,dx,n,dy,dc,nc);
+    newG = grad2DCurv(k(i),X,Y,dc,nc);
+    newD =  div2DCurv(k(i),X,Y,dc,nc);
     newL = newD * newG;
 
     % Boundary Conditions
-    X = reshape(xc,m+2,n+2)'; % Reshape for plotting and easier BC
-    Y = reshape(yc,m+2,n+2)';
     u = ue(X,Y);
 
     l = u(:,1);  r = u(:,end);
@@ -164,21 +162,19 @@ for i = 1:numel(numCenters)
     rsC = [1 1+dy(i)/2:dy(i):2-dy(i)/2 2];
     tsC = [pi pi-dx(i)/2:-dx(i):dx(i)/2 0];
     [TSC,RSC] = meshgrid(tsC,rsC);
-    xc = RSC .* cos(TSC); xc = reshape(xc',[],1);
-    yc = RSC .* sin(TSC); yc = reshape(yc',[],1);
+    X = RSC .* cos(TSC);
+    Y = RSC .* sin(TSC);
 
     % Build operators
     curG = grad2DCurv(k,xn,yn);
     curD =  div2DCurv(k,xn,yn);
     curL = curD * curG;
 
-    newG = grad2DCurv(k,xc,yc,m(i),dx(i),n(i),dy(i),dc,nc);
-    newD =  div2DCurv(k,xc,yc,m(i),dx(i),n(i),dy(i),dc,nc);
+    newG = grad2DCurv(k,X,Y,dc,nc);
+    newD =  div2DCurv(k,X,Y,dc,nc);
     newL = newD * newG;
 
     % Boundary Conditions
-    X = reshape(xc,m(i)+2,n(i)+2)'; % Reshape for plotting and easier BC
-    Y = reshape(yc,m(i)+2,n(i)+2)';
     u = ue(X,Y);
 
     l = u(:,1);  r = u(:,end);

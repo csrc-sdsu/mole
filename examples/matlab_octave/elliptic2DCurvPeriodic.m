@@ -31,20 +31,15 @@ ue = @(X, Y) X.^2 - Y.^2;
 rs = [1 (1 + dy / 2) : dy : (2 - dy / 2) 2];
 ts = 0 : dx : (2*pi - dx);
 [T,R] = meshgrid(ts, rs);
-xc = R .* cos(T);
-yc = R .* sin(T);
-xc = reshape(xc', [], 1);
-yc = reshape(yc', [], 1);
+X = R .* cos(T);
+Y = R .* sin(T);
 
 % Build Operators
-G = grad2DCurv(k, xc, yc, m, dx, n, dy, dc, nc);
-D = div2DCurv(k, xc, yc, m, dx, n, dy, dc, nc);
+G = grad2DCurv(k, X, Y, dc, nc);
+D = div2DCurv(k, X, Y, dc, nc);
 L = D * G;
 
 % Boundary Conditions
-X = reshape(xc, m, n + 2)'; % Reshape for plotting and easier BC
-Y = reshape(yc, m, n + 2)';
-
 u = ue(X, Y);
 
 l = 0; % Left and right boundaries don't exist
@@ -52,7 +47,7 @@ r = 0;
 b = u(1, :)';
 t = u(end, :)';
 v = {l; r; b; t};
-B = zeros(size(xc));
+B = zeros(numel(X), 1);
 [L0, B0] = addScalarBC2D(L, B, k, m, dx, n, dy, dc, nc, v);
 
 ua = L0 \ B0;

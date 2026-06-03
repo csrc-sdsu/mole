@@ -4,7 +4,7 @@
 % u = x^2 + y^2
 % Gu = <2x, 2y>
 % 
-
+clear
 clc
 close all
 
@@ -29,15 +29,16 @@ axis equal
 set(gcf, 'Color', 'w')
 
 % Staggered logical grid
-[Xs, Ys] = meshgrid([1 1.5 : 1 : m-0.5 m], [1 1.5 : 1 : n-0.5 n]);
-Cs = Xs.^2 + Ys.^2;
-% Reshape the field so it can be multiplied by the operator later on
-C_ = reshape(Cs', [], 1);
-Xs = reshape(Xs', [], 1);
-Ys = reshape(Ys', [], 1);
+NtoC = interpolNodesToCenters2D(k, m - 1, n - 1, dc, nc);
+xc = NtoC * reshape(X', [], 1);
+yc = NtoC * reshape(Y', [], 1);
+C_ = xc.^2 + yc.^2;
+Xs = reshape(xc, m + 1, n + 1)';
+Ys = reshape(yc, m + 1, n + 1)';
+Cs = reshape(C_, m + 1, n + 1)';
 
 % Get 2D curvilinear mimetic gradient
-G = grad2DCurv(k, Xs, Ys, m - 1, dx, n - 1, dy, dc, nc);
+G = grad2DCurv(k, Xs, Ys, dc, nc);
 
 % Apply the operator to the field
 TMP = G*C_;
@@ -53,10 +54,10 @@ CtoU = kron(speye(n + 1), CtoU);
 CtoV = interpolCentersToFacesD1D(k, n - 1);
 CtoV = kron(CtoV, speye(m + 1));
 
-Ux = CtoU * Xs;
-Uy = CtoU * Ys;
-Vx = CtoV * Xs;
-Vy = CtoV * Ys;
+Ux = CtoU * xc;
+Uy = CtoU * yc;
+Vx = CtoV * xc;
+Vy = CtoV * yc;
 
 Ux = reshape(Ux, m + 1, n)';
 Uy = reshape(Uy, m + 1, n)';
@@ -67,7 +68,7 @@ Vy = reshape(Vy, m, n + 1)';
 figure
 set(gcf, 'Color', 'w')
 subplot(3, 1, 1)
-surf(reshape(Xs, m + 1, n + 1)', reshape(Ys, m + 1, n + 1)', Cs, 'EdgeColor', 'none');
+surf(Xs, Ys, Cs, 'EdgeColor', 'none');
 colorbar
 xlabel('x')
 ylabel('y')
@@ -97,7 +98,7 @@ shading interp
 figure
 set(gcf, 'Color', 'w')
 subplot(3, 1, 1)
-surf(reshape(Xs, m + 1, n + 1)', reshape(Ys, m + 1, n + 1)', Cs, 'EdgeColor', 'none');
+surf(Xs, Ys, Cs, 'EdgeColor', 'none');
 colorbar
 xlabel('x')
 ylabel('y')

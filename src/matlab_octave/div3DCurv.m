@@ -1,4 +1,4 @@
-function D = div3DCurv(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
+function D = div3DCurv(k, X, Y, Z, dc, nc)
 % PURPOSE
 % Returns a 3D curvilinear mimetic divergence operator. If optional
 % arguments are specified, it acts on the extended faces
@@ -13,12 +13,6 @@ function D = div3DCurv(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
 %                    optional arguments are specified, else nodes
 %                Z : z-coordinates (physical) of meshgrid centers if
 %                    optional arguments are specified, else nodes
-%    (optional)  m : Number of cells in xi direction
-%    (optional) dx : Step size in xi direction
-%    (optional)  n : Number of cells in eta direction
-%    (optional) dy : Step size in eta direction
-%    (optional)  o : Number of cells in kappa direction
-%    (optional) dz : Step size in kappa direction
 %    (optional) dc : a0 (6x1 vector for left, right, bottom, top, front, and
 %                    back boundaries, resp.)
 %    (optional) nc : b0 (6x1 vector for left, right, bottom, top, front, and
@@ -26,7 +20,7 @@ function D = div3DCurv(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
 % 
 % SYNTAX
 % D = div3DCurv(k, X, Y, Z)
-% D = div3DCurv(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
+% D = div3DCurv(k, X, Y, Z, dc, nc)
 % 
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
@@ -34,9 +28,9 @@ function D = div3DCurv(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
 
-    if nargin ~= 4 && nargin ~= 12
+    if nargin ~= 4 && nargin ~= 6
         error("div3DCurv:InvalidNumArgs", ...
-              "div3DCurv expects 4 or 12 arguments")
+              "div3DCurv expects 4 or 6 arguments")
     elseif nargin == 4
         D = div3DCurvLegacy(k, X, Y, Z);
         return;
@@ -45,14 +39,25 @@ function D = div3DCurv(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
     assert(all(size(dc) == [6 1]), "dc is a 6x1 vector")
     assert(all(size(nc) == [6 1]), "nc is a 6x1 vector")
 
+    assert(size(X, 2) ~= 1, "X must be in matrix form")
+    assert(size(Y, 2) ~= 1, "Y must be in matrix form")
+    assert(size(Z, 2) ~= 1, "Z must be in matrix form")
+
+    assert(all(size(X) == size(Y)) && all(size(X) == size(Z)), "X, Y, and Z must all be the same size")
+
+    [n, m, o] = size(X);
+
     % Periodic Handling
     if isempty(find(dc(1:2).^2 + nc(1:2).^2,1))
+        dx = 1 / m;
         De = divPeriodic(k,m,dx);
         IFCx = interpolFacesToCentersG1DPeriodic(k,m);
         ICFx = interpolCentersToFacesD1DPeriodic(k,m);
         Im = speye(m);
         Bx = sparse(m, m);
     else
+        m = m - 2;
+        dx = 1 / m;
         De = divNonPeriodic(k,m,dx);
         IFCx = interpolFacesToCentersG1D(k,m);
         ICFx = interpolCentersToFacesD1D(k,m);
@@ -62,12 +67,15 @@ function D = div3DCurv(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
         Bx(end, end) = 1;
     end
     if isempty(find(dc(3:4).^2 + nc(3:4).^2,1))
+        dy = 1 / n;
         Dn = divPeriodic(k,n,dy);
         IFCy = interpolFacesToCentersG1DPeriodic(k,n);
         ICFy = interpolCentersToFacesD1DPeriodic(k,n);
         In = speye(n);
         By = sparse(n, n);
     else
+        n = n - 2;
+        dy = 1 / n;
         Dn = divNonPeriodic(k,n,dy);
         IFCy = interpolFacesToCentersG1D(k,n);
         ICFy = interpolCentersToFacesD1D(k,n);
@@ -77,12 +85,15 @@ function D = div3DCurv(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
         By(end, end) = 1;
     end
     if isempty(find(dc(5:6).^2 + nc(5:6).^2, 1))
+        dz = 1 / o;
         Dk = divPeriodic(k, o, dz);
         IFCz = interpolFacesToCentersG1DPeriodic(k, o);
         ICFz = interpolCentersToFacesD1DPeriodic(k, o);
         Io = speye(o);
         Bz = sparse(o, o);
     else
+        o = o - 2;
+        dz = 1 / o;
         Dk = divNonPeriodic(k, o, dz);
         IFCz = interpolFacesToCentersG1D(k, o);
         ICFz = interpolCentersToFacesD1D(k, o);
@@ -99,7 +110,7 @@ function D = div3DCurv(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc)
     Dk = kron(kron(Dk, In), Im) * kron(kron(ICFz, In), Im);
 
     % Apply metrics
-    [J, Xe, Xn, Xk, Ye, Yn, Yk, Ze, Zn, Zk] = jacobian3D(k, X, Y, Z, m, dx, n, dy, o, dz, dc, nc);
+    [J, Xe, Xn, Xk, Ye, Yn, Yk, Ze, Zn, Zk] = jacobian3D(k, X, Y, Z, dc, nc);
 
     Dx = ((Yn .* Zk - Zn .* Yk) ./ J) .* De ...
        + ((Ze .* Yk - Ye .* Zk) ./ J) .* Dn ...

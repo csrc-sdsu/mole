@@ -42,6 +42,12 @@ xc = INC * xn;
 yc = INC * yn;
 zc = INC * zn;
 C = xc.^2 + yc.^2 + zc.^2;
+X = reshape(xc, m + 1, n + 1, o + 1);
+Y = reshape(yc, m + 1, n + 1, o + 1);
+Z = reshape(zc, m + 1, n + 1, o + 1);
+X = permute(X, [2, 1, 3]);
+Y = permute(Y, [2, 1, 3]);
+Z = permute(Z, [2, 1, 3]);
 
 Ux = ICFx * xc;
 Uy = ICFy * yc;
@@ -64,7 +70,7 @@ zlabel('z')
 axis equal
 
 % Get 3D curvilinear mimetic gradient
-G = grad3DCurv(k, xc, yc, zc, m - 1, dx, n - 1, dy, o - 1, dz, dc, nc);
+G = grad3DCurv(k, X, Y, Z, dc, nc);
 
 % Apply the operator to the field
 TMP = G*C;

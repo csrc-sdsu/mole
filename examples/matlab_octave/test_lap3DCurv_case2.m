@@ -32,13 +32,17 @@ xc = INC * reshape(permute(X, [2, 1, 3]), [], 1);
 yc = INC * reshape(permute(Y, [2, 1, 3]), [], 1);
 zc = INC * reshape(permute(Z, [2, 1, 3]), [], 1);
 
+X = permute(reshape(xc, m + 1, n + 1, o + 1), [2, 1, 3]);
+Y = permute(reshape(yc, m + 1, n + 1, o + 1), [2, 1, 3]);
+Z = permute(reshape(zc, m + 1, n + 1, o + 1), [2, 1, 3]);
+
 ue = -(xc.^2 + yc.^2 + zc.^2); % Unknown function
 RHS = ue;
 
 % Get 3D curvilinear mimetic divergence
-D = div3DCurv(k, xc, yc, zc, m - 1, dx, n - 1, dy, o - 1, dz, dc, nc);
+D = div3DCurv(k, X, Y, Z, dc, nc);
 % Get 3D curvilinear mimetic gradient
-G = grad3DCurv(k, xc, yc, zc, m - 1, dx, n - 1, dy, o - 1, dz, dc, nc);
+G = grad3DCurv(k, X, Y, Z, dc, nc);
 % Dirichlet BCs
 BC = robinBC3D(k, m-1, 1, n-1, 1, o-1, 1, 1, 0);
 % Laplacian operator with BCs

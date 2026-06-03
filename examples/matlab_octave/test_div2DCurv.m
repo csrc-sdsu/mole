@@ -55,8 +55,11 @@ scatter3(Cx, Cy, zeros(size(Cx)), 'o', 'MarkerEdgeColor', 'r')
 legend("Nodal Points", "u", "v", "Centers")
 hold off
 
+X = reshape(Cx, m, n + 2)';
+Y = reshape(Cy, m, n + 2)';
+
 tic
-D = div2DCurv(k, Cx, Cy, m, dx, n, dy, dc, nc);
+D = div2DCurv(k, X, Y, dc, nc);
 toc
 
 % Vector Field
@@ -72,10 +75,8 @@ Ccomp = D * [U; V];
 Ccomp = reshape(Ccomp, m, n + 2)';
 
 % Remove boundary points (divergence returns 0 on boundaries)
-Cx = reshape(Cx, m, n + 2)';
-Cy = reshape(Cy, m, n + 2)';
-Cx = Cx(2:end-1, :);
-Cy = Cy(2:end-1, :);
+Cx = X(2:end-1, :);
+Cy = Y(2:end-1, :);
 C = C(2:end-1, :);
 Ccomp = Ccomp(2:end-1, :);
 
