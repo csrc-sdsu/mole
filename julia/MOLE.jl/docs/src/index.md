@@ -99,6 +99,7 @@ MOLE.Operators.grad(k::Int, m::Int, dx, n::Int, dy; dc::NTuple{4,T}, nc::NTuple{
 MOLE.Operators.grad(k::Int, xticks::AbstractVector, yticks::AbstractVector)
 MOLE.Operators.lap(k::Int, m::Int, dx; dc::NTuple{2,T}, nc::NTuple{2,T})
 MOLE.Operators.lap(k::Int, m::Int, dx, n::Int, dy; dc::NTuple{4,T}, nc::NTuple{4,T})
+MOLE.Operators.interpol(m::Int, c::Float64)
 ```
 
 ### Utilities
