@@ -5,13 +5,76 @@
 '''
 # pyrefly: ignore [missing-import]
 import numpy as np
-from typing import Tuple, Union, List
+from typing import Tuple, Union, List, Optional
 
 class Grid:
     """
-    A utility class to generate 1D, 2D, or 3D grids using NumPy's meshgrid.
+    A class that encapsulates 1D, 2D, or 3D grids generated using NumPy's meshgrid,
+    providing access to individual dimension arrays and unpacking support.
     """
     
+    def __init__(
+        self,
+        x: np.ndarray,
+        y: Optional[np.ndarray] = None,
+        z: Optional[np.ndarray] = None
+    ):
+        self._x = x
+        self._y = y
+        self._z = z
+
+    @property
+    def x(self) -> np.ndarray:
+        return self._x
+
+    @property
+    def y(self) -> Optional[np.ndarray]:
+        return self._y
+
+    @property
+    def z(self) -> Optional[np.ndarray]:
+        return self._z
+
+    @property
+    def X(self) -> np.ndarray:
+        return self._x
+
+    @property
+    def Y(self) -> Optional[np.ndarray]:
+        return self._y
+
+    @property
+    def Z(self) -> Optional[np.ndarray]:
+        return self._z
+
+    @property
+    def ndim(self) -> int:
+        if self._z is not None:
+            return 3
+        if self._y is not None:
+            return 2
+        return 1
+
+    def __iter__(self):
+        """Allows unpacking the grid object, e.g., X, Y = Grid.generate(...)"""
+        if self.ndim == 1:
+            yield self.x
+        elif self.ndim == 2:
+            yield self.x
+            yield self.y
+        else:
+            yield self.x
+            yield self.y
+            yield self.z
+
+    def __repr__(self) -> str:
+        if self.ndim == 1:
+            return f"Grid(ndim=1, x={self.x.shape})"
+        elif self.ndim == 2:
+            return f"Grid(ndim=2, x={self.x.shape}, y={self.y.shape})"
+        else:
+            return f"Grid(ndim=3, x={self.x.shape}, y={self.y.shape}, z={self.z.shape})"
+
     @staticmethod
     def generate(
         p1: Union[float, int, np.ndarray, List[float], Tuple[float, ...]],
@@ -19,7 +82,7 @@ class Grid:
         shape: Union[int, np.ndarray, List[int], Tuple[int, ...], None] = None,
         spacing: Union[float, np.ndarray, List[float], Tuple[float, ...], None] = None,
         indexing: str = 'xy'
-    ) -> Union[np.ndarray, Tuple[np.ndarray, ...]]:
+    ) -> 'Grid':
         """
         Generates a 1D, 2D, or 3D grid using shape (number of points/cells) or spacing (physical mesh size).
         
@@ -31,7 +94,7 @@ class Grid:
             indexing: 'xy' (default, MATLAB-style) or 'ij' (Matrix-style).
             
         Returns:
-            A single array (for 1D) or a tuple of arrays (for 2D/3D).
+            A Grid object encapsulating the coordinate arrays.
         """
         if (shape is None) == (spacing is None):
             raise ValueError("Exactly one of 'shape' or 'spacing' must be specified.")
@@ -82,26 +145,28 @@ class Grid:
         coords = [np.linspace(p1_arr[i], p2_arr[i], n_arr[i]) for i in range(dims)]
         
         if dims == 1:
-            return coords[0]
+            return Grid(coords[0])
             
-        return np.meshgrid(*coords, indexing=indexing)
+        mesh = np.meshgrid(*coords, indexing=indexing)
+        return Grid(*mesh)
 
 if __name__ == "__main__":
     # Example usage:
     # 1D: p1=0, p2=10, shape=5
     grid1d = Grid.generate(0, 10, shape=5)
-    print(f"1D Grid shape: {grid1d.shape}")
-    print(f"1D Grid points: {grid1d}")
+    print(f"1D Grid object: {grid1d}")
+    print(f"1D Grid x shape: {grid1d.x.shape}")
+    print(f"1D Grid points: {grid1d.x}")
     
     # 2D: p1=[0, 0], p2=[10, 20], spacing=[2.5, 10.0]
-    X, Y = Grid.generate([0, 0], [10, 20], spacing=[2.5, 10.0])
-    print(f"2D Grid X shape: {X.shape}, Y shape: {Y.shape}")
-    print(f"2D Grid points for X:\n {X}")
-    print(f"2D Grid points for Y:\n {Y}")
+    grid2d = Grid.generate([0, 0], [10, 20], spacing=[2.5, 10.0])
+    print(f"2D Grid object: {grid2d}")
+    print(f"2D Grid X shape: {grid2d.X.shape}, Y shape: {grid2d.Y.shape}")
+    print(f"2D Grid points for X:\n {grid2d.X}")
+    print(f"2D Grid points for Y:\n {grid2d.Y}")
 
-    # 3D: p1=[0, 0, 0], p2=[10, 20, 30], shape=[5, 3, 4]
-    X, Y, Z = Grid.generate([0, 0, 0], [10, 20, 30], shape=[5, 3, 4])
-    print(f"3D Grid X shape: {X.shape}, Y shape: {Y.shape}, Z shape: {Z.shape}")
-    print(f"2D Grid points for X:\n {X}")
-    print(f"2D Grid points for Y:\n {Y}")
-    print(f"2D Grid points for Z:\n {Z}")
+    # 3D: p1=[0, 0, 0], p2=[10, 20, 30], shape=[5, 3, 4] (using unpacking)
+    grid3d = Grid.generate([0, 0, 0], [10, 20, 30], shape=[5, 3, 4])
+    print(f"3D Grid object: {grid3d}")
+    X, Y, Z = grid3d
+    print(f"Unpacked 3D Grid X shape: {X.shape}, Y shape: {Y.shape}, Z shape: {Z.shape}")

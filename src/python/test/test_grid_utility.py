@@ -3,10 +3,11 @@
     © 2008-2024 San Diego State University Research Foundation (SDSURF).
     See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 '''
+from pathlib import Path
 import pytest
 import numpy as np
 import sys
-from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from pymole.grid import Grid
@@ -14,28 +15,36 @@ from pymole.grid import Grid
 def test_shape_grid_1d():
     # Test 1D grid generation using shape
     grid = Grid.generate(0, 10, shape=5)
+    assert grid.ndim == 1
+    assert grid.y is None
+    assert grid.z is None
     expected = np.array([0.0, 2.5, 5.0, 7.5, 10.0])
-    assert np.allclose(grid, expected)
-    assert grid.shape == (5,)
+    assert np.allclose(grid.x, expected)
+    assert grid.x.shape == (5,)
 
 def test_spacing_grid_1d():
     # Test 1D grid generation using spacing
     grid = Grid.generate(0, 10, spacing=2.0)
+    assert grid.ndim == 1
     expected = np.array([0.0, 2.0, 4.0, 6.0, 8.0, 10.0])
-    assert np.allclose(grid, expected)
-    assert grid.shape == (6,)
+    assert np.allclose(grid.x, expected)
+    assert grid.x.shape == (6,)
 
 def test_spacing_grid_1d_non_divisible():
     # Test 1D grid with non-divisible spacing (should round to nearest number of cells)
     # Length is 10, spacing is 3. 10/3 = 3.33 -> rounds to 3 cells (4 points)
     grid = Grid.generate(0, 10, spacing=3.0)
     expected = np.linspace(0, 10, 4)
-    assert np.allclose(grid, expected)
-    assert grid.shape == (4,)
+    assert np.allclose(grid.x, expected)
+    assert grid.x.shape == (4,)
 
 def test_shape_grid_2d():
     # Test 2D grid generation using shape
-    X, Y = Grid.generate([0, 0], [10, 20], shape=[5, 3])
+    grid = Grid.generate([0, 0], [10, 20], shape=[5, 3])
+    assert grid.ndim == 2
+    assert grid.z is None
+    
+    X, Y = grid.x, grid.y
     assert X.shape == (3, 5)  # for 'xy' indexing, shape of X is (Ny, Nx)
     assert Y.shape == (3, 5)
     
@@ -45,11 +54,16 @@ def test_shape_grid_2d():
     assert Y[0, 0] == 0.0
     assert Y[-1, 0] == 20.0
 
+    # Check uppercase properties
+    assert grid.X is grid.x
+    assert grid.Y is grid.y
+
 def test_spacing_grid_2d():
     # Test 2D grid generation using spacing
-    X, Y = Grid.generate([0, 0], [10, 20], spacing=[2.5, 10.0])
+    grid = Grid.generate([0, 0], [10, 20], spacing=[2.5, 10.0])
     # x spacing 2.5 -> 10/2.5 = 4 cells -> 5 points
     # y spacing 10.0 -> 20/10 = 2 cells -> 3 points
+    X, Y = grid.X, grid.Y
     assert X.shape == (3, 5)
     assert Y.shape == (3, 5)
     
@@ -58,23 +72,60 @@ def test_spacing_grid_2d():
 
 def test_shape_grid_3d():
     # Test 3D grid generation using shape
-    X, Y, Z = Grid.generate([0, 0, 0], [10, 20, 30], shape=[5, 3, 4])
+    grid = Grid.generate([0, 0, 0], [10, 20, 30], shape=[5, 3, 4])
+    assert grid.ndim == 3
+    X, Y, Z = grid.x, grid.y, grid.z
     # indexing 'xy' -> shape is (shape[1], shape[0], shape[2])
     # which is (3, 5, 4)
     assert X.shape == (3, 5, 4)
     assert Y.shape == (3, 5, 4)
     assert Z.shape == (3, 5, 4)
 
+    # Check uppercase properties
+    assert grid.X is grid.x
+    assert grid.Y is grid.y
+    assert grid.Z is grid.z
+
 def test_spacing_grid_3d():
     # Test 3D grid generation using spacing
-    X, Y, Z = Grid.generate([0, 0, 0], [10, 20, 30], spacing=[2.5, 10.0, 10.0])
+    grid = Grid.generate([0, 0, 0], [10, 20, 30], spacing=[2.5, 10.0, 10.0])
     # x spacing 2.5 -> 4 cells -> 5 points
     # y spacing 10.0 -> 2 cells -> 3 points
     # z spacing 10.0 -> 3 cells -> 4 points
     # shape is (3, 5, 4)
+    X, Y, Z = grid.X, grid.Y, grid.Z
     assert X.shape == (3, 5, 4)
     assert Y.shape == (3, 5, 4)
     assert Z.shape == (3, 5, 4)
+
+def test_grid_unpacking():
+    # 1D
+    grid1d = Grid.generate(0, 10, shape=5)
+    x, = grid1d
+    assert np.allclose(x, grid1d.x)
+
+    # 2D
+    grid2d = Grid.generate([0, 0], [10, 20], shape=[5, 3])
+    x, y = grid2d
+    assert np.allclose(x, grid2d.x)
+    assert np.allclose(y, grid2d.y)
+
+    # 3D
+    grid3d = Grid.generate([0, 0, 0], [10, 20, 30], shape=[5, 3, 4])
+    x, y, z = grid3d
+    assert np.allclose(x, grid3d.x)
+    assert np.allclose(y, grid3d.y)
+    assert np.allclose(z, grid3d.z)
+
+def test_grid_repr():
+    grid1d = Grid.generate(0, 10, shape=5)
+    assert repr(grid1d) == "Grid(ndim=1, x=(5,))"
+
+    grid2d = Grid.generate([0, 0], [10, 20], shape=[5, 3])
+    assert repr(grid2d) == "Grid(ndim=2, x=(3, 5), y=(3, 5))"
+
+    grid3d = Grid.generate([0, 0, 0], [10, 20, 30], shape=[5, 3, 4])
+    assert repr(grid3d) == "Grid(ndim=3, x=(3, 5, 4), y=(3, 5, 4), z=(3, 5, 4))"
 
 def test_both_specified_raises_error():
     with pytest.raises(ValueError, match="Exactly one of 'shape' or 'spacing' must be specified"):
