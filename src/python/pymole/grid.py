@@ -54,6 +54,28 @@ class Grid:
         if self._y is not None:
             return 2
         return 1
+    @property
+    def num_cells(self):
+        if self.ndim == 1:
+            return len(self.x) - 1
+
+        return tuple(s - 1 for s in self.x.shape)
+
+    @property
+    def spacing(self):
+        if self.ndim == 1:
+            return self.x[1] - self.x[0]
+
+        if self.ndim == 2:
+            dx = self.x[0, 1] - self.x[0, 0]
+            dy = self.y[1, 0] - self.y[0, 0]
+            return dx, dy
+
+        dx = self.x[0, 0, 1] - self.x[0, 0, 0]
+        dy = self.y[0, 1, 0] - self.y[0, 0, 0]
+        dz = self.z[1, 0, 0] - self.z[0, 0, 0]
+
+        return dx, dy, dz
 
     def __iter__(self):
         """Allows unpacking the grid object, e.g., X, Y = Grid.generate(...)"""
