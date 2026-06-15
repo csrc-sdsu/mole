@@ -3,12 +3,14 @@ from .dim2d import Divergence2D, Gradient2D, Laplacian2D
 from .dim3d import Gradient3D
 from .grid import Grid
 from .divergence import Divergence
+from .gradient import Gradient
 
 __version__ = "0.1.1"
 __all__ = [
     "Divergence",
     "Divergence1D",
     "Divergence2D",
+    "Gradient",
     "Gradient1D",
     "Gradient2D",
     "Gradient3D",

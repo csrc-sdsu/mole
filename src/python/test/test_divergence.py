@@ -10,8 +10,6 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-#from pymole.grid import Grid
-#from pymole.divergence import Divergence
 from pymole import Grid, Divergence
 
 class TestDivergence:
