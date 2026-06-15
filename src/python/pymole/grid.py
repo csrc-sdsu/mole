@@ -70,11 +70,10 @@ class Grid:
             dx = self.x[0, 1] - self.x[0, 0]
             dy = self.y[1, 0] - self.y[0, 0]
             return dx, dy
-
-        dx = self.x[0, 0, 1] - self.x[0, 0, 0]
-        dy = self.y[0, 1, 0] - self.y[0, 0, 0]
-        dz = self.z[1, 0, 0] - self.z[0, 0, 0]
-
+       
+        dx = self.x[0, 1, 0] - self.x[0, 0, 0]
+        dy = self.y[1, 0, 0] - self.y[0, 0, 0]
+        dz = self.z[0, 0, 1] - self.z[0, 0, 0]
         return dx, dy, dz
 
     def __iter__(self):
