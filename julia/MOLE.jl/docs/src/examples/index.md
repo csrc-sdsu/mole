@@ -11,6 +11,7 @@ The name for OCTAVE/MATLAB, C++, and Julia will be the same (i.e., the files `el
 
 src/examples/Elliptic/index
 src/examples/Parabolic/index
+src/examples/Hyperbolic/index
 ```
 
 More examples will be added in the future.
