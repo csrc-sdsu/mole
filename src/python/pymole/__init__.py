@@ -4,6 +4,7 @@ from .dim3d import Gradient3D
 from .grid import Grid
 from .divergence import Divergence
 from .gradient import Gradient
+from .laplacian import Laplacian
 
 __version__ = "0.1.1"
 __all__ = [
@@ -16,6 +17,7 @@ __all__ = [
     "Gradient3D",
     "Grid",
     "Grid1D",
+    "Laplacian",
     "Laplacian1D",
     "Laplacian2D",
 ]
