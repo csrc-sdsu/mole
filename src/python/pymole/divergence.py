@@ -7,6 +7,7 @@
 import numpy as np
 from scipy import sparse
 
+
 class Divergence:
     """
     Unified divergence operator supporting 1D and 2D Grid objects.

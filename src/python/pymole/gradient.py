@@ -34,6 +34,23 @@ class Gradient:
         """Returns tuple of gradient matrices (Gx,) for 1D, (Gx, Gy) for 2D, or (Gx, Gy, Gz) for 3D."""
         return self._matrices
 
+    @property
+    def matrix(self):
+        """Returns the combined gradient matrix for divergence-based Laplacian."""
+        match self.grid.ndim:
+            case 1:
+                return self._construct_1d()
+            case 2:
+                return self._construct_2d_matrix()
+            case 3:
+                raise NotImplementedError(
+                    "Gradient.matrix is only available for 1D and 2D grids."
+                )
+            case _:
+                raise ValueError(
+                    f"Unsupported grid dimension: {self.grid.ndim}"
+                )
+
     def _construct_matrices(self):
 
         if self.accuracy_order != 2:
@@ -60,9 +77,10 @@ class Gradient:
                 )
 
     def _construct_1d(self):
-        """Constructs 1D gradient operator (du/dx)."""
+        """Constructs 1D gradient operator from nodal scalar values."""
 
         n = len(self.grid.x)
+        dx = self.grid.spacing
 
         if n < self.minimum_cells_for_order(self.accuracy_order):
             raise ValueError(
@@ -71,30 +89,34 @@ class Gradient:
                 f"points for order {self.accuracy_order}"
             )
 
-        dx = self.grid.spacing
-
         return self._build_1d_gradient(n, dx)
 
     def _construct_2d(self):
-        """Constructs 2D gradient operators (du/dx, du/dy)."""
+        """Constructs 2D gradient operators from nodal scalar values."""
 
-        m, n = self.grid.X.shape
+        m, n = self.grid.num_cells
         dx, dy = self.grid.spacing
 
-        minimum_points = self.minimum_cells_for_order(
+        minimum_cells = self.minimum_cells_for_order(
             self.accuracy_order
         )
 
-        if m < minimum_points or n < minimum_points:
+        if m < minimum_cells or n < minimum_cells:
             raise ValueError(
                 f"Both dimensions require at least "
-                f"{minimum_points} points."
+                f"{minimum_cells} cells."
             )
 
         Gx = self._build_2d_gradient_x(m, n, dx)
         Gy = self._build_2d_gradient_y(m, n, dy)
 
         return Gx, Gy
+
+    def _construct_2d_matrix(self):
+        """Constructs the combined 2D gradient matrix [Gx; Gy]."""
+
+        Gx, Gy = self._construct_2d()
+        return sparse.vstack([Gx, Gy], format="csr")
 
     def _construct_3d(self):
         """Constructs 3D gradient operators (du/dx, du/dy, du/dz)."""
@@ -141,18 +163,49 @@ class Gradient:
     def _build_2d_gradient_x(self, m: int, n: int, dx: float):
         """Builds 2D gradient operator in x-direction."""
 
-        Gx_1d = self._build_1d_gradient(n, dx)
-        Im = sparse.eye(m, format="csr")
+        rows = n * (m + 1)
+        cols = (m + 1) * (n + 1)
+        G = sparse.lil_matrix((rows, cols), dtype=float)
 
-        return sparse.kron(Im, Gx_1d, format="csr")
+        for yi in range(n):
+            for xj in range(m + 1):
+                row = yi * (m + 1) + xj
+                base = yi * (m + 1)
+                if xj == 0:
+                    G[row, base + xj] = -1.0 / dx
+                    G[row, base + xj + 1] = 1.0 / dx
+                elif xj == m:
+                    G[row, base + xj - 1] = -1.0 / dx
+                    G[row, base + xj] = 1.0 / dx
+                else:
+                    G[row, base + xj - 1] = -1.0 / (2.0 * dx)
+                    G[row, base + xj + 1] = 1.0 / (2.0 * dx)
+
+        return G.tocsr()
 
     def _build_2d_gradient_y(self, m: int, n: int, dy: float):
         """Builds 2D gradient operator in y-direction."""
 
-        Gy_1d = self._build_1d_gradient(m, dy)
-        In = sparse.eye(n, format="csr")
+        rows = m * (n + 1)
+        cols = (m + 1) * (n + 1)
+        G = sparse.lil_matrix((rows, cols), dtype=float)
 
-        return sparse.kron(Gy_1d, In, format="csr")
+        for xj in range(m):
+            for yi in range(n + 1):
+                row = xj * (n + 1) + yi
+                col_bottom = yi * (m + 1) + xj
+                col_top = (yi + 1) * (m + 1) + xj
+                if yi == 0:
+                    G[row, col_bottom] = -1.0 / dy
+                    G[row, col_top] = 1.0 / dy
+                elif yi == n:
+                    G[row, col_bottom - (m + 1)] = -1.0 / dy
+                    G[row, col_bottom] = 1.0 / dy
+                else:
+                    G[row, col_bottom - (m + 1)] = -1.0 / (2.0 * dy)
+                    G[row, col_top] = 1.0 / (2.0 * dy)
+
+        return G.tocsr()
 
     def _build_3d_gradient_x(self, m: int, n: int, p: int, dx: float):
         """Builds 3D gradient operator in x-direction."""
