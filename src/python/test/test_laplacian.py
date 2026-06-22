@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from pymole import Grid, Laplacian
+from pymole import Grid, Gradient, Divergence, Laplacian
 
 class TestLaplacian:
 
@@ -86,3 +86,12 @@ class TestLaplacian:
         # so we verify the interior portion only.
         assert np.allclose(Lu[2:-2], 2.0, atol=1e-1)
         assert np.isfinite(Lu).all()
+
+def test_laplacian_equals_divergence_times_gradient(self):
+        grid = Grid.generate([0.0, 0.0], [3.0, 2.0], shape=[7, 6])
+
+        D = Divergence(grid).matrix
+        G = Gradient(grid).matrix
+        L = Laplacian(grid).matrix
+
+        assert np.allclose((L - D @ G).toarray(), 0.0, atol=1e-12)
