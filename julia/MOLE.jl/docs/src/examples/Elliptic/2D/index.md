@@ -2,9 +2,7 @@
 
 These examples cover two-dimensional elliptic partial differential equations.
 
-```@contents
-:maxdepth: 1
+## Available Examples
 
-Elliptic2D-X-Dirichlet-Y-Dirichlet
-Elliptic2D-X-Periodic-Y-Dirichlet
-```
+- [Elliptic2D X Dirichlet Y Dirichlet](Elliptic2D-X-Dirichlet-Y-Dirichlet.md)
+- [Elliptic2D X Periodic Y Dirichlet](Elliptic2D-X-Periodic-Y-Dirichlet.md)
