@@ -87,7 +87,7 @@ class TestLaplacian:
         assert np.allclose(Lu[2:-2], 2.0, atol=1e-1)
         assert np.isfinite(Lu).all()
 
-def test_laplacian_equals_divergence_times_gradient(self):
+    def test_laplacian_equals_divergence_times_gradient(self):
         grid = Grid.generate([0.0, 0.0], [3.0, 2.0], shape=[7, 6])
 
         D = Divergence(grid).matrix
