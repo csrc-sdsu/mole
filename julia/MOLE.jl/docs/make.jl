@@ -41,3 +41,9 @@ makedocs(
         ],
     ],
 )
+
+deploydocs(
+    repo = "github.com/csrc-sdsu/mole.git",
+    devbranch = "main",
+    push_preview = true,
+)
