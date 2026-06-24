@@ -2,9 +2,7 @@
 
 These examples demonstrate the solution of hyperbolic equations in one dimension.
 
-```@contents
-:maxdepth: 1
+## Available Examples
 
-Hyperbolic1D
-Burgers1D
-``` 
+- [Hyperbolic 1D](Hyperbolic1D.md)
+- [Burgers 1D](Burgers1D.md)

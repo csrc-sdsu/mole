@@ -2,8 +2,6 @@
 
 These examples cover two-dimensional parabolic partial differential equations.
 
-```@contents
-:maxdepth: 1
+## Available Examples
 
-Parabolic2D
-```
+- [Parabolic2D](Parabolic2D.md)
