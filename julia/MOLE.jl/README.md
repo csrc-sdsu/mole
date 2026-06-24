@@ -85,8 +85,38 @@ Once you have built the documentation (either from the REPL or the command line)
 
 The MOLE library contains examples demonstrating how to use the operators, in a broad range of partial differential equations (PDEs). More information on the mathematical content can be found in the [main MOLE documentation](https://mole-docs.readthedocs.io/en/main/examples/index.html).
 
-Currently, the following examples are available in the MOLE Julia package.
+The examples are organized by PDE type and dimension in the base MOLE documentation:
 
-- Elliptic Problems
-    - 1D Examples
-        - `elliptic1D`: A script that solves the 1D Poisson's equation with Robin boundary conditions using mimetic operators.
+- **Base Examples Documentation:** https://csrc-sdsu.github.io/mole/stable/examples/
+
+Currently, not all of them are available in the MOLE Julia package. They will be added in the near future.
+
+## Formatter
+
+To test the JuliaFormatter locally, please make sure to have a working julia installation and add the `JuliaFormatter` package to your either global or local environment. At a global, system level, this would be:
+
+```
+julia -e 'using Pkg; Pkg.add("JuliaFormatter")'
+```
+
+Now that your environment has the JuliaFormatter package, do the following to apply format style changes to the MOLE.jl directory:
+
+1. From the `mole/julia/MOLE.jl` directory, run 
+
+```
+julia -e 'using JuliaFormatter; format(".", overwrite=true, verbose=true) || error("Formatting issues detected")'
+```
+
+2. Review the generated style changes applied by the formatter with 
+
+```
+git status
+``` 
+
+and 
+
+```
+git diff
+```
+
+Stage the modified files and commit the necessary changes.
