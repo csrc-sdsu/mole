@@ -1,0 +1,46 @@
+name: Julia Documentation
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    tags: '*'
+
+permissions:
+  contents: write
+  pull-requests: read
+  statuses: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docbuild:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: julia-actions/setup-julia@v3
+        with:
+          version: '1.10'
+
+      - uses: julia-actions/cache@v3
+
+      - name: Install dependencies
+        run: >
+          cd julia/MOLE.jl &&
+          julia --project=docs -e 'using Pkg;
+          Pkg.develop(path=".");
+          Pkg.instantiate(; verbose=true);
+          Pkg.build()'
+
+      - name: Build and deploy
+        env:
+          GKSwstype: "100" # headless GR: https://discourse.julialang.org/t/generation-of-documentation-fails-qt-qpa-xcb-could-not-connect-to-display/60988/2
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # For authentication with GitHub Actions token
+        run: >
+          cd julia/MOLE.jl &&
+          julia --project=docs docs/make.jl
