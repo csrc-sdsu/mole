@@ -16,7 +16,7 @@ Returns a (m+1)×(m+2) one-dimensional interpolator of 2nd-order
 - `c::Float`: left interpolation coefficient
 """
 function interpol(m::Int, c::Float64)
-    
+
     #Assertions:
     @assert m>=4 ["m >= 4"];
     @assert c >= 0 && c <= 1 ["0 <= c <= 1"];
@@ -27,17 +27,16 @@ function interpol(m::Int, c::Float64)
 
     I = zeros(n_rows, n_cols);
 
-    I[1,1] = 1;
-    I[end,end]=1;
+    I[1, 1] = 1;
+    I[end, end]=1;
 
     #Average between two continuous cells
     avg = [c 1-c];
 
     j = 2;
-    for i in 2: n_rows - 1
-        I[i, j:j+2-1] = avg;
+    for i in 2:(n_rows - 1)
+        I[i, j:(j + 2 - 1)] = avg;
         j = j + 1;
     end
     return I
 end
-

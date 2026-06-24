@@ -1,4 +1,4 @@
-push!(LOAD_PATH,"../src/")
+push!(LOAD_PATH, "../src/")
 using Documenter, MOLE, SparseArrays
 
 makedocs(
@@ -12,15 +12,12 @@ makedocs(
                 "1D Elliptic Problems" => [
                     "Overview" => "examples/Elliptic/1D/index.md",
                     "Elliptic 1D" => "examples/Elliptic/1D/Elliptic1D.md",
-                    "Elliptic 1D Add Scalar Boundary Conditions" =>
-                        "examples/Elliptic/1D/Elliptic1D-add-Scalar-BC.md",
+                    "Elliptic 1D Add Scalar Boundary Conditions" => "examples/Elliptic/1D/Elliptic1D-add-Scalar-BC.md",
                 ],
                 "2D Elliptic Problems" => [
                     "Overview" => "examples/Elliptic/2D/index.md",
-                    "X Dirichlet Y Dirichlet" =>
-                        "examples/Elliptic/2D/Elliptic2D-X-Dirichlet-Y-Dirichlet.md",
-                    "X Periodic Y Dirichlet" =>
-                        "examples/Elliptic/2D/Elliptic2D-X-Periodic-Y-Dirichlet.md",
+                    "X Dirichlet Y Dirichlet" => "examples/Elliptic/2D/Elliptic2D-X-Dirichlet-Y-Dirichlet.md",
+                    "X Periodic Y Dirichlet" => "examples/Elliptic/2D/Elliptic2D-X-Periodic-Y-Dirichlet.md",
                 ],
             ],
             "Hyperbolic Problems" => [

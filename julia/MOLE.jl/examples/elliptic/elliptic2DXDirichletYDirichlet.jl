@@ -34,8 +34,8 @@ path = joinpath(@__DIR__, "output") # Output path to store generated plots
 mkpath(path)
 
 # Grid
-xc = [0; (dx / 2.0) : dx : (pi - dx / 2.0); pi]
-yc = [0; (dy / 2.0) : dy : (pi - dy / 2.0); pi]
+xc = [0; (dx / 2.0):dx:(pi - dx / 2.0); pi]
+yc = [0; (dy / 2.0):dy:(pi - dy / 2.0); pi]
 X = ones(1, n + 2) .* xc
 Y = yc' .* ones(m + 2, 1)
 
@@ -45,11 +45,11 @@ ue = exp.(X) .* cos.(Y)
 # Boundary Conditions
 dc = (1.0, 1.0, 1.0, 1.0)
 nc = (0.0, 0.0, 0.0, 0.0)
-v = (vec(ue[1,2:end-1]'), vec(ue[end,2:end-1]'), vec(ue[:,1]), vec(ue[:, end]))
+v = (vec(ue[1, 2:(end - 1)]'), vec(ue[end, 2:(end - 1)]'), vec(ue[:, 1]), vec(ue[:, end]))
 bc = BCs.ScalarBC2D(dc, nc, v)
 
 # Operator
-A = - Operators.lap(k, m, dx, n, dy, dc=dc, nc=nc)
+A = - Operators.lap(k, m, dx, n, dy, dc = dc, nc = nc)
 
 # RHS
 b = zeros(m + 2, n + 2)
@@ -64,34 +64,34 @@ ua = Matrix(reshape(ua, m + 2, n + 2))
 
 Plots.png(
     Plots.heatmap(
-        xc, 
-        yc, 
-        ua, 
-        title = "Approximate Solution", 
-        xlabel = "X", 
-        ylabel = "Y", 
-        colorbar_title = "u(x,y)", 
+        xc,
+        yc,
+        ua,
+        title = "Approximate Solution",
+        xlabel = "X",
+        ylabel = "Y",
+        colorbar_title = "u(x,y)",
         aspect_ratio = :equal,
         colormap = :jet1,
-        show = false
+        show = false,
     ),
-    joinpath(path, "elliptic2DXDYD_approximate.png")
+    joinpath(path, "elliptic2DXDYD_approximate.png"),
 )
 
 Plots.png(
     Plots.heatmap(
-        xc, 
-        yc, 
-        ue, 
-        title = "Exact Solution", 
-        xlabel = "X", 
-        ylabel = "Y", 
-        colorbar_title = "u(x,y)", 
+        xc,
+        yc,
+        ue,
+        title = "Exact Solution",
+        xlabel = "X",
+        ylabel = "Y",
+        colorbar_title = "u(x,y)",
         aspect_ratio = :equal,
         colormap = :jet1,
-        show = false
+        show = false,
     ),
-    joinpath(path, "elliptic2DXDYD_exact.png")
+    joinpath(path, "elliptic2DXDYD_exact.png"),
 )
 
 max_err = maximum(abs, ue - ua)
