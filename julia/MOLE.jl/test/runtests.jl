@@ -21,7 +21,7 @@ import MOLE: Operators, BCs
 end
 
 @testset "Testing Boundary Conditions" begin
-    
+
     @testset "Test addScalarBC" begin
         include("BCs/scalarBC.jl")
     end

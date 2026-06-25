@@ -22,9 +22,16 @@ Returns a one-dimensional mimetic gradient operator. Default is non periodic.
 - `dc::NTuple{2,T}`: Dirichlet coefficients of the left and right boundaries (optional)
 - `nc::NTuple{2,T}`: Neumann coefficients of the left and right boundaries (optional)
 """
-function grad(k::Int, m::Int, dx; dc::NTuple{2,T} = (1.0, 1.0), nc::NTuple{2,T} = (1.0, 1.0)) where {T}
+function grad(
+    k::Int,
+    m::Int,
+    dx;
+    dc::NTuple{2, T} = (1.0, 1.0),
+    nc::NTuple{2, T} = (1.0, 1.0),
+) where {T}
 
-    hasbc = (dc[1] != zero(T)) || (dc[2] != zero(T)) || (nc[1] != zero(T)) || (nc[2] != zero(T))
+    hasbc =
+        (dc[1] != zero(T)) || (dc[2] != zero(T)) || (nc[1] != zero(T)) || (nc[2] != zero(T))
     if hasbc
         G = gradNonPeriodic(k, m, dx)
         return G
@@ -73,40 +80,43 @@ function gradNonPeriodic(k::Int, m::Int, dx)
         throw(DomainError(m, "m must be >= 2*k"))
     end
 
-    G = zeros(m+1,m+2)
+    G = zeros(m+1, m+2)
     if k == 2
         A = [-8/3 3 -1/3]
-        G[1,1:3] = A #[-8/3 3 -1/3]
-        G[m+1,m:(m+2)] = -reverse(A) #[1/3, -3, 8/3]
-        for i = 2:m
-            G[i,i:(i+1)] = [-1 1]
+        G[1, 1:3] = A #[-8/3 3 -1/3]
+        G[m + 1, m:(m + 2)] = -reverse(A) #[1/3, -3, 8/3]
+        for i in 2:m
+            G[i, i:(i + 1)] = [-1 1]
         end
     elseif k == 4
-        A = [-352/105  35/8  -35/24  21/40  -5/56; 
-              16/105  -31/24  29/24  -3/40   1/168]
-        G[1:2,1:5] = A
-        G[m:(m+1), (m-2):(m+2)] = -rot180(A)
-        for i = 3:(m-1)
-            G[i,(i-1):(i+2)] = [1/24 -9/8 9/8 -1/24]
+        A = [-352/105 35/8 -35/24 21/40 -5/56;
+            16/105 -31/24 29/24 -3/40 1/168]
+        G[1:2, 1:5] = A
+        G[m:(m + 1), (m - 2):(m + 2)] = -rot180(A)
+        for i in 3:(m - 1)
+            G[i, (i - 1):(i + 2)] = [1/24 -9/8 9/8 -1/24]
         end
     elseif k == 6
-        A = [-13016/3465  693/128  -385/128  693/320  -495/448  385/1152  -63/1408;
-                496/3465 -811/640   449/384  -29/960   -11/448   13/1152  -37/21120;
-                 -8/385   179/1920 -153/128  381/320  -101/1344   1/128    -3/7040];
-        G[1:3,1:7] = A
-        G[(m-1):(m+1), (m-4):(m+2)] = -rot180(A)
-        for i = 4:(m-2)
-            G[i,(i-2):(i+3)] = [-3/640 25/384 -75/64 75/64 -25/384 3/640]
+        A = [-13016/3465 693/128 -385/128 693/320 -495/448 385/1152 -63/1408;
+            496/3465 -811/640 449/384 -29/960 -11/448 13/1152 -37/21120;
+            -8/385 179/1920 -153/128 381/320 -101/1344 1/128 -3/7040];
+        G[1:3, 1:7] = A
+        G[(m - 1):(m + 1), (m - 4):(m + 2)] = -rot180(A)
+        for i in 4:(m - 2)
+            G[i, (i - 2):(i + 3)] = [-3/640 25/384 -75/64 75/64 -25/384 3/640]
         end
     elseif k == 8
-        A = [-182144/45045     6435/1024    -5005/1024  27027/5120  -32175/7168  25025/9216  -12285/11264  3465/13312   -143/5120;
-               86048/675675 -131093/107520  49087/46080 10973/76800  -4597/21504  4019/27648 -10331/168960 2983/199680 -2621/1612800;
-               -3776/225225    8707/107520 -17947/15360 29319/25600   -533/21504  -263/9216     903/56320  -283/66560    257/537600;
-                  32/9009      -543/35840     265/3072  -1233/1024    8625/7168   -775/9216     639/56320  -15/13312       1/21504]
-        G[1:4,1:9] = A
-        G[(m-2):(m+1), (m-6):(m+2)] = -rot180(A)
-        for i = 5:(m-3)
-            G[i,(i-3):(i+4)] = [5/7168 -49/5120 245/3072 -1225/1024 1225/1024 -245/3072 49/5120 -5/7168]
+        A = [
+            -182144/45045 6435/1024 -5005/1024 27027/5120 -32175/7168 25025/9216 -12285/11264 3465/13312 -143/5120;
+            86048/675675 -131093/107520 49087/46080 10973/76800 -4597/21504 4019/27648 -10331/168960 2983/199680 -2621/1612800;
+            -3776/225225 8707/107520 -17947/15360 29319/25600 -533/21504 -263/9216 903/56320 -283/66560 257/537600;
+            32/9009 -543/35840 265/3072 -1233/1024 8625/7168 -775/9216 639/56320 -15/13312 1/21504
+        ]
+        G[1:4, 1:9] = A
+        G[(m - 2):(m + 1), (m - 6):(m + 2)] = -rot180(A)
+        for i in 5:(m - 3)
+            G[i, (i - 3):(i + 4)] =
+                [5/7168 -49/5120 245/3072 -1225/1024 1225/1024 -245/3072 49/5120 -5/7168]
         end
     end
     G = (1/dx)*G;
@@ -124,8 +134,8 @@ Returns a m by m periodic mimetic gradient operator
 - `dx`: Step size in x-direction
 """
 function gradPeriodic(k::Int, m::Int, dx)
-    
-   if k < 2 || k > 8
+
+    if k < 2 || k > 8
         throw(DomainError(k, "k must be >= 2 and <= 8"))
     end
 
@@ -136,11 +146,11 @@ function gradPeriodic(k::Int, m::Int, dx)
     if m < 2*k
         throw(DomainError(m, "m must be >= 2*k"))
     end
-    
+
     V = zeros(1, m)
     idx = fill(-1, m, m)
     idx[:, 1] = 1:m
-    idx = cumsum(idx, dims=2)
+    idx = cumsum(idx, dims = 2)
     idx = mod.(idx .+ m, m) .+ 1
 
     if k == 2
@@ -159,7 +169,7 @@ function gradPeriodic(k::Int, m::Int, dx)
     elseif k == 8
 
         V[1, 1:6] = [-245/3072, 1225/1024, -1225/1024, 245/3072, -49/5120, 5/7168]
-        V[1, end-1:end] = [-5/7168, 49/5120]
+        V[1, (end - 1):end] = [-5/7168, 49/5120]
 
     end
 
@@ -183,9 +193,9 @@ function gradNonUniform(k::Int, ticks::AbstractVector)
     G = grad(k, length(ticks) - 2, 1)
 
     if size(ticks, 1) == 1
-        J = diagm((G*ticks').^-1)
+        J = diagm((G*ticks') .^ -1)
     else
-        J = diagm((G*ticks).^-1)
+        J = diagm((G*ticks) .^ -1)
     end
 
     G = J * G
@@ -210,15 +220,25 @@ Returns a two-dimensional mimetic gradient operator. Default is non periodic.
 - `dc::NTuple{4,T}`: Dirichlet coefficients of the left, right, bottom, and top boundaries (optional)
 - `nc::NTuple{4,T}`: Neumann coefficients of the left, right, bottom, and top boundaries (optional)
 """
-function grad(k::Int, m::Int, dx, n::Int, dy; dc::NTuple{4,T} = (1.0, 1.0, 1.0, 1.0), nc::NTuple{4,T} = (1.0, 1.0, 1.0, 1.0)) where {T}
+function grad(
+    k::Int,
+    m::Int,
+    dx,
+    n::Int,
+    dy;
+    dc::NTuple{4, T} = (1.0, 1.0, 1.0, 1.0),
+    nc::NTuple{4, T} = (1.0, 1.0, 1.0, 1.0),
+) where {T}
 
-    hasbclr = (dc[1] != zero(T)) || (dc[2] != zero(T)) || (nc[1] != zero(T)) || (nc[2] != zero(T))
-    hasbcbt = (dc[3] != zero(T)) || (dc[4] != zero(T)) || (nc[3] != zero(T)) || (nc[4] != zero(T))
+    hasbclr =
+        (dc[1] != zero(T)) || (dc[2] != zero(T)) || (nc[1] != zero(T)) || (nc[2] != zero(T))
+    hasbcbt =
+        (dc[3] != zero(T)) || (dc[4] != zero(T)) || (nc[3] != zero(T)) || (nc[4] != zero(T))
 
     if hasbclr
         Gx = gradNonPeriodic(k, m, dx)
         Im = Matrix(I, m + 2, m + 2)
-        Im = Im[2:end-1, :]
+        Im = Im[2:(end - 1), :]
     else
         Gx = gradPeriodic(k, m, dx)
         Im = Matrix(I, m, m)
@@ -227,7 +247,7 @@ function grad(k::Int, m::Int, dx, n::Int, dy; dc::NTuple{4,T} = (1.0, 1.0, 1.0, 
     if hasbcbt
         Gy = gradNonPeriodic(k, n, dy)
         In = Matrix(I, n + 2, n + 2)
-        In = In[2:end-1, :]
+        In = In[2:(end - 1), :]
     else
         Gy = gradPeriodic(k, n, dy)
         In = Matrix(I, n, n)
@@ -276,14 +296,14 @@ function gradNonPeriodic(k::Int, m::Int, dx, n::Int, dy)
     Im = Matrix(I, m + 2, m + 2)
     In = Matrix(I, n + 2, n + 2)
 
-    Im = Im[2:end-1, :]
-    In = In[2:end-1, :]
+    Im = Im[2:(end - 1), :]
+    In = In[2:(end - 1), :]
 
     Sx = kron(In, Gx)
     Sy = kron(Gy, Im)
 
     G = [Sx; Sy];
-    
+
 end
 
 
@@ -336,8 +356,8 @@ function gradNonUniform(k::Int, xticks::AbstractVector, yticks::AbstractVector)
     Im = Matrix(I, m, m)
     In = Matrix(I, n, n)
 
-    Im = Im[2:end-1, :]
-    In = In[2:end-1, :]
+    Im = Im[2:(end - 1), :]
+    In = In[2:(end - 1), :]
 
     Sx = kron(In, Gx)
     Sy = kron(Gy, Im)

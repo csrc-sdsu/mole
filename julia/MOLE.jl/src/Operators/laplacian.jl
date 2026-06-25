@@ -20,9 +20,15 @@ Returns a m+2 by m+2 one-dimensional mimetic laplacian operator. Default is non 
 - `dc::NTuple{2,T}`: Dirichlet coefficients of the left and right boundaries (optional)
 - `nc::NTuple{2,T}`: Neumann coefficients of the left and right boundaries (optional)
 """
-function lap(k::Int, m::Int, dx; dc::NTuple{2,T} = (1.0, 1.0), nc::NTuple{2,T} = (1.0, 1.0)) where {T}
-    D = div(k, m, dx, dc=dc, nc=nc)
-    G = grad(k, m, dx, dc=dc, nc=nc)
+function lap(
+    k::Int,
+    m::Int,
+    dx;
+    dc::NTuple{2, T} = (1.0, 1.0),
+    nc::NTuple{2, T} = (1.0, 1.0),
+) where {T}
+    D = div(k, m, dx, dc = dc, nc = nc)
+    G = grad(k, m, dx, dc = dc, nc = nc)
 
     L = D*G;
 end
@@ -46,10 +52,18 @@ Returns a two-dimensional mimetic laplacian operator. Default is non periodic.
 - `dc::NTuple{4,T}`: Dirichlet coefficients of the left and right boundaries (optional)
 - `nc::NTuple{4,T}`: Neumann coefficients of the left and right boundaries (optional)
 """
-function lap(k::Int, m::Int, dx, n::Int, dy; dc::NTuple{4}=(1.0, 1.0, 1.0, 1.0), nc::NTuple{4}=(1.0, 1.0, 1.0, 1.0))
+function lap(
+    k::Int,
+    m::Int,
+    dx,
+    n::Int,
+    dy;
+    dc::NTuple{4} = (1.0, 1.0, 1.0, 1.0),
+    nc::NTuple{4} = (1.0, 1.0, 1.0, 1.0),
+)
 
-    D = div(k, m, dx, n, dy, dc=dc, nc=nc)
-    G = grad(k, m, dx, n, dy, dc=dc, nc=nc)
+    D = div(k, m, dx, n, dy, dc = dc, nc = nc)
+    G = grad(k, m, dx, n, dy, dc = dc, nc = nc)
 
     L = D*G
 

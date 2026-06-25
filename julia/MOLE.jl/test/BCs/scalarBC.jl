@@ -2,19 +2,19 @@
 
     @testset "no BCs test" begin
         # Problem size
-        m  = 8
-        n  = m + 2
-        k  = 2
+        m = 8
+        n = m + 2
+        k = 2
         dx = 0.1
 
         # Nontrivial sparse A and b
-        A_dense = reshape(collect(1.0:(n*n)), n, n) ./ 13.0
+        A_dense = reshape(collect(1.0:(n * n)), n, n) ./ 13.0
         A = sparse(A_dense)
         b = collect(1.0:n) ./ 7.0
 
         dc0 = (0.0, 0.0)
         nc0 = (0.0, 0.0)
-        v0  = (9.0, 9.0)  # required by ScalarBC1D even if unused
+        v0 = (9.0, 9.0)  # required by ScalarBC1D even if unused
         bc0 = BCs.ScalarBC1D(dc0, nc0, v0)
 
         A2, b2 = BCs.addScalarBC!(A, b, bc0, k, m, dx)
@@ -26,19 +26,19 @@
 
     @testset "Dirichlet/Neumann BC with grad and dense matrix reference" begin
         # Problem size
-        m  = 8
-        n  = m + 2
-        k  = 2
+        m = 8
+        n = m + 2
+        k = 2
         dx = 0.1
 
         # Nontrivial sparse A and b
-        A_dense = reshape(collect(1.0:(n*n)), n, n) ./ 13.0
+        A_dense = reshape(collect(1.0:(n * n)), n, n) ./ 13.0
         A = sparse(A_dense)
         b = collect(1.0:n) ./ 7.0
 
         dc = (2.0, 3.0)
         nc = (4.0, 5.0)
-        v  = (7.0, 8.0)
+        v = (7.0, 8.0)
         bc = BCs.ScalarBC1D(dc, nc, v)
 
         A2, b2 = BCs.addScalarBC!(A, b, bc, k, m, dx)
@@ -64,7 +64,7 @@
         Bl = zeros(Float64, n, m + 1)
         Br = zeros(Float64, n, m + 1)
         Bl[1, 1] = -nc[1]
-        Br[end, end] =  nc[2]
+        Br[end, end] = nc[2]
 
         A_ref .+= (Al + Bl * Gl) .+ (Ar + Br * Gr)
 
@@ -72,25 +72,25 @@
         b_ref[1] = v[1]
         b_ref[end] = v[2]
 
-        @test isapprox(norm(A2 - sparse(A_ref)), 0.0; rtol=1e-12, atol=1e-12)
-        @test isapprox(norm(b2 - b_ref), 0.0; rtol=1e-12, atol=1e-12)
+        @test isapprox(norm(A2 - sparse(A_ref)), 0.0; rtol = 1e-12, atol = 1e-12)
+        @test isapprox(norm(b2 - b_ref), 0.0; rtol = 1e-12, atol = 1e-12)
     end
 
     @testset "Dirichlet/Neumann BC with sparse format reference" begin
         # Problem size
-        m  = 8
-        n  = m + 2
-        k  = 2
+        m = 8
+        n = m + 2
+        k = 2
         dx = 0.1
 
         # Nontrivial sparse A and b
-        A_dense = reshape(collect(1.0:(n*n)), n, n) ./ 13.0
+        A_dense = reshape(collect(1.0:(n * n)), n, n) ./ 13.0
         A = sparse(A_dense)
         b = collect(1.0:n) ./ 7.0
 
         dc = (2.0, 3.0)
         nc = (4.0, 5.0)
-        v  = (7.0, 8.0)
+        v = (7.0, 8.0)
         bc = BCs.ScalarBC1D(dc, nc, v)
 
         A2, b2 = BCs.addScalarBC!(A, b, bc, k, m, dx)
@@ -130,7 +130,7 @@
         Bl = spzeros(Float64, n, m + 1)
         Br = spzeros(Float64, n, m + 1)
         Bl[1, 1] = -nc[1]
-        Br[end, end] =  nc[2]
+        Br[end, end] = nc[2]
 
         A_ref .+= (Al + Bl * Gl) .+ (Ar + Br * Gr)
 
@@ -161,7 +161,7 @@ end
 
         # Non trivial sparse A and b
         A = sparse(rand(m * n, m * n))
-        b = rand(m * n,)
+        b = rand(m * n)
 
         A2, b2 = BCs.addScalarBC!(A, b, bc, k, m, dx, n, dy)
 
@@ -183,13 +183,13 @@ end
         # Boundary conditions
         dc = (3.0, 2.0, 1.0, 4.0)
         nc = (1.0, 8.0, 3.0, 6.0)
-        v = (rand(n,), rand(n,), rand(m + 2,), rand(m + 2,))
+        v = (rand(n), rand(n), rand(m + 2), rand(m + 2))
         bc = BCs.ScalarBC2D(dc, nc, v)
 
         # Non trivial sparse A and b
         A_dense = rand(numC, numC)
         A = sparse(A_dense)
-        b = rand(numC,)
+        b = rand(numC)
 
         A2, b2 = BCs.addScalarBC!(A, b, bc, k, m, dx, n, dy)
 
@@ -229,7 +229,7 @@ end
         Inn = copy(In)
         Inn[1, 1] = 0
         Inn[end, end] = 0
-        
+
         Bl = zeros(Float64, m + 2, m + 1)
         Br = zeros(Float64, m + 2, m + 1)
         Bb = zeros(Float64, n + 2, n + 1)
@@ -252,17 +252,20 @@ end
 
         A_ref .+= Al .+ Ar .+ Ab .+ At
 
-        bdry_v = zeros(size(bdry_rows,))
+        bdry_v = zeros(size(bdry_rows))
         bdry_v[1:length(v[3])] = v[3]
         midd = []
-        for i = 1:length(v[1]); midd = [midd; v[1][i]; v[2][i]]; end
-        bdry_v[length(v[3])+1:length([v[1];v[2];v[3]])] = midd
-        bdry_v[end-length(v[4])+1:end] = v[4]
+        for i in 1:length(v[1])
+            ;
+            midd = [midd; v[1][i]; v[2][i]];
+        end
+        bdry_v[(length(v[3]) + 1):length([v[1]; v[2]; v[3]])] = midd
+        bdry_v[(end - length(v[4]) + 1):end] = v[4]
         b_ref[bdry_rows] = bdry_v
 
 
-        @test isapprox(norm(A2 - sparse(A_ref)), 0.0; rtol=1e-12, atol=1e-12)
-        @test isapprox(norm(b2 - b_ref), 0.0; rtol=1e-12, atol=1e-12)
+        @test isapprox(norm(A2 - sparse(A_ref)), 0.0; rtol = 1e-12, atol = 1e-12)
+        @test isapprox(norm(b2 - b_ref), 0.0; rtol = 1e-12, atol = 1e-12)
 
     end
 
@@ -278,12 +281,12 @@ end
         # Nontrivial sparse A and b
         A_dense = rand(numC, numC)
         A = sparse(A_dense)
-        b = rand(numC,)
+        b = rand(numC)
 
         # Boundary conditions
         dc = (1.0, 3.3, 4.0, 2.0)
         nc = (1.0, 3.3, 4.0, 2.0)
-        v = (rand(n,), rand(n,), rand(m + 2,), rand(m + 2,))
+        v = (rand(n), rand(n), rand(m + 2), rand(m + 2))
         bc = BCs.ScalarBC2D(dc, nc, v)
 
         A2, b2 = BCs.addScalarBC!(A, b, bc, k, m, dx, n, dy)
@@ -303,17 +306,20 @@ end
         bdry_y[1, 1] = 1
         bdry_y[end, end] = 1
         bdry_rows = findall(vec(any(kron(In, bdry_x) .+ kron(bdry_y, Im) .!= 0, dims = 2)))
-        
+
         A_ref[bdry_rows, :] = spzeros(size(A_ref[bdry_rows, :]))
 
         # RHS boundaries
         b_ref = copy(b)
-        bdry_v = zeros(size(bdry_rows,))
+        bdry_v = zeros(size(bdry_rows))
         bdry_v[1:length(v[3])] = v[3]
         midd = []
-        for i = 1:length(v[1]); midd = [midd; v[1][i]; v[2][i]]; end
-        bdry_v[length(v[3])+1:length([v[1];v[2];v[3]])] = midd
-        bdry_v[end-length(v[4])+1:end] = v[4]
+        for i in 1:length(v[1])
+            ;
+            midd = [midd; v[1][i]; v[2][i]];
+        end
+        bdry_v[(length(v[3]) + 1):length([v[1]; v[2]; v[3]])] = midd
+        bdry_v[(end - length(v[4]) + 1):end] = v[4]
         b_ref[bdry_rows] = bdry_v
 
         # LHS boundaries
@@ -335,7 +341,7 @@ end
         Inn = copy(In)
         Inn[1, 1] = 0
         Inn[end, end] = 0
-        
+
         Bl = spzeros(Float64, m + 2, m + 1)
         Br = spzeros(Float64, m + 2, m + 1)
         Bb = spzeros(Float64, n + 2, n + 1)
@@ -356,7 +362,7 @@ end
         Ab = kron(Ab, Im)
         At = kron(At, Im)
 
-        A_ref .+= Al .+ Ar .+ Ab .+ At     
+        A_ref .+= Al .+ Ar .+ Ab .+ At
 
         # pure sparse comparisons
         @test norm(A2 - A_ref) ≤ 1e-12

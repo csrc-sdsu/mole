@@ -9,7 +9,7 @@ import MOLE: Operators, BCs
 
 
 function upwind_burgers(u0, xgrid, T, k, m, dx)
-#Solves Burgers equation using MOLE Operators
+    #Solves Burgers equation using MOLE Operators
     #=
     INPUTS:
     u0    : Initial condition
@@ -22,26 +22,26 @@ function upwind_burgers(u0, xgrid, T, k, m, dx)
     t     : time interval
     =#
     #CFL Condition for explicit schemes
-    dt = dx;    
-    
+    dt = dx;
+
     #Create stepsize for time with given T
-    t  = collect(0.0:dt:T) 
-    
+    t = collect(0.0:dt:T)
+
     #Use of MOLE Operators
-    D  = Operators.div(k, m, dx)
-    I  = Operators.interpol(m, 1.0)
-    
+    D = Operators.div(k, m, dx)
+    I = Operators.interpol(m, 1.0)
+
     #Premultiply out of time loop (does not change)
-    D  = -dt/2*D*I
-    
+    D = -dt/2*D*I
+
     #Create an array that holds solution at each time step
-    U  = zeros(length(t)+1,length(xgrid))
-    
+    U = zeros(length(t)+1, length(xgrid))
+
     #Set initial condition at first time element
-    U[1,:] .= u0.(xgrid)
-   
+    U[1, :] .= u0.(xgrid)
+
     for k in eachindex(t)
-        U[k+1,:] .= U[k,:] + D * U[k,:].^2;
+        U[k + 1, :] .= U[k, :] + D * U[k, :] .^ 2;
     end
 
     return t, U
@@ -67,11 +67,11 @@ T = 13
 k = 2;
 
 # 1D Staggered grid
-xgrid = [west; (west + (dx/2)):dx: (east - (dx/2)); east];
+xgrid = [west; (west + (dx / 2)):dx:(east - (dx / 2)); east];
 
 # Initial Condition
-u0(x) = exp.(-(x.^2)/50);
- 
+u0(x) = exp.(-(x .^ 2)/50);
+
 t, U = upwind_burgers(u0, xgrid, T, k, m, dx)
 
 path = joinpath(@__DIR__, "output") # Output path to store generated plots
@@ -79,28 +79,27 @@ mkpath(path)
 
 
 animation = Plots.@animate for k in eachindex(t)
-    Plots.plot(xgrid, U[k,:];
-         label  = "approximated",
-         xlabel = "x",
-         ylabel = "u(x,t)",
-         grid   = true,
-         title  = "1D Inviscid Burgers' Equation t = $(round(t[k]; digits=3))",
-         legend = :topleft
-        )
+    Plots.plot(xgrid, U[k, :];
+        label = "approximated",
+        xlabel = "x",
+        ylabel = "u(x,t)",
+        grid = true,
+        title = "1D Inviscid Burgers' Equation t = $(round(t[k]; digits=3))",
+        legend = :topleft,
+    )
 end
 
 
-Plots.gif(animation, joinpath(path,"burgers1D.gif"), fps=10)
+Plots.gif(animation, joinpath(path, "burgers1D.gif"), fps = 10)
 
 Plots.png(
-    Plots.plot(xgrid, U[end,:];
-         label  = "approximated",
-         xlabel = "x",
-         ylabel = "u(x,t)",
-         grid   = true,
-         title  = "1D Inviscid Burgers' Equation t = $(round(t[end]; digits=3))",
-         legend = :topleft
-        ),
-    joinpath(path,"burgers_end.png"),
+    Plots.plot(xgrid, U[end, :];
+        label = "approximated",
+        xlabel = "x",
+        ylabel = "u(x,t)",
+        grid = true,
+        title = "1D Inviscid Burgers' Equation t = $(round(t[end]; digits=3))",
+        legend = :topleft,
+    ),
+    joinpath(path, "burgers_end.png"),
 )
-

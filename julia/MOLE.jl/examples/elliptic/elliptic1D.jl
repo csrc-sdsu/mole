@@ -28,15 +28,15 @@ dx = (east-west)/m # step length
 path = joinpath(@__DIR__, "output") # Output path to store generated plots
 mkpath(path)
 
-L = Operators.lap(k,m,dx)
+L = Operators.lap(k, m, dx)
 
 # Impose Robin boundary condition on laplacian operator
 a = 1.0
 b = 1.0
-L = L + BCs.robinBC(k,m,dx,a,b)
+L = L + BCs.robinBC(k, m, dx, a, b)
 
 # 1D staggered grid
-grid = [west; (west+(dx/2)):dx:(east-(dx/2)); east]
+grid = [west; (west + (dx / 2)):dx:(east - (dx / 2)); east]
 
 # RHS
 U = exp.(grid)
@@ -46,13 +46,13 @@ U[end] = 2*exp(1)
 U = L\U
 
 # Plot result
-p = Plots.scatter(grid, U, label="Approximated", show = false)
-plot!(p, grid, exp.(grid), label="Analytical", show = false)
+p = Plots.scatter(grid, U, label = "Approximated", show = false)
+plot!(p, grid, exp.(grid), label = "Analytical", show = false)
 plot!(
     p,
-    xlabel="x",
-    ylabel="u(x)",
-    title="Poisson's equation with Robin BC",
-    show = false
+    xlabel = "x",
+    ylabel = "u(x)",
+    title = "Poisson's equation with Robin BC",
+    show = false,
 )
 Plots.png(p, joinpath(path, "elliptic1D_output.png"))
