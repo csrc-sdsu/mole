@@ -1,0 +1,43 @@
+name: Run MATLAB Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Run MATLAB Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v3
+        with:
+          release: latest
+
+      - name: Run MATLAB tests
+        uses: matlab-actions/run-tests@v3
+        with:
+          test-results-junit: test-results/results.xml
+          code-coverage-cobertura: code-coverage/coverage.xml
+          source-folder: tests
+          select-by-folder: matlab_octave
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: matlab-test-results
+          path: test-results/results.xml
+
+      - name: Upload code coverage
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: matlab-code-coverage
+          path: code-coverage/coverage.xml
