@@ -27,8 +27,11 @@ jobs:
         with:
           test-results-junit: test-results/results.xml
           code-coverage-cobertura: code-coverage/coverage.xml
-          source-folder: tests
-          select-by-folder: matlab_octave
+          source-folder: matlab_octave
+          select-by-folder: tests/matlab_octave
+          strict: false
+          use-parallel: false
+          generate-summary: true
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
