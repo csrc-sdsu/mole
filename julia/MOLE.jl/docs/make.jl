@@ -38,3 +38,9 @@ makedocs(
         ],
     ],
 )
+
+deploydocs(
+    repo = "github.com/csrc-sdsu/MOLE.jl-docs.git",
+    devbranch = "main",
+    push_preview = true,
+)
