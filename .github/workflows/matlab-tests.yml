@@ -22,12 +22,18 @@ jobs:
         with:
           release: latest
 
+      - name: Show repository layout
+        run: |
+          pwd
+          find . -maxdepth 3 -type d | sort
+          find . -maxdepth 4 -name "*.m" | sort
+
       - name: Run MATLAB tests
         uses: matlab-actions/run-tests@v3
         with:
           test-results-junit: test-results/results.xml
           code-coverage-cobertura: code-coverage/coverage.xml
-          source-folder: matlab_octave
+          source-folder: src/matlab_octave
           select-by-folder: tests/matlab_octave
           strict: false
           use-parallel: false
