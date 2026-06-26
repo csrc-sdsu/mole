@@ -38,6 +38,8 @@ jobs:
           strict: false
           use-parallel: false
           generate-summary: true
+          output-detail: verbose
+          logging-level: verbose
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
