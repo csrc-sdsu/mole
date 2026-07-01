@@ -151,6 +151,7 @@ MOLE comes with comprehensive documentation:
 
 - **API Reference & User Guide**: Access our online [Documentation](https://mole-docs.readthedocs.io/en/latest/)
 - **Building Documentation**: To build documentation locally, follow our [Documentation Guide](https://github.com/csrc-sdsu/mole/blob/main/doc/sphinx/README.md).
+- **MOLE.jl Documentation**: Access the [MOLE.jl Documentation](https://www.mole-ose.org/MOLE.jl-docs/dev/) for the description of the MOLE Julia language implementation.
 
 > **Important Note:** Performing non-unary operations involving operands constructed over different grids may lead to unexpected results. While MOLE allows such operations without throwing errors, users must exercise caution when manipulating operators across different grids.
 
