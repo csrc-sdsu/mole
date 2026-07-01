@@ -91,6 +91,8 @@ The examples are organized by PDE type and dimension in the base MOLE documentat
 
 Currently, not all of them are available in the MOLE Julia package. They will be added in the near future.
 
+- **MOLE.jl Documentation:** The [MOLE.jl documentation](https://www.mole-ose.org/MOLE.jl-docs/dev/) is publicly available.
+
 ## Formatter
 
 To test the JuliaFormatter locally, please make sure to have a working julia installation and add the `JuliaFormatter` package to your either global or local environment. At a global, system level, this would be:
