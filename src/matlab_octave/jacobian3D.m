@@ -19,8 +19,10 @@ function [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3D(k, X, Y, Z)
 %                X : x-coordinates (physical) of meshgrid
 %                Y : y-coordinates (physical) of meshgrid
 %                Z : z-coordinates (physical) of meshgrid
+%             grid : Struct carrying grid.X, grid.Y, and grid.Z.
 %
 % SYNTAX
+% [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3D(grid, k)
 % [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3D(k, X, Y, Z)
 %
 % ----------------------------------------------------------------------------
@@ -29,6 +31,18 @@ function [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3D(k, X, Y, Z)
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
     
+    if nargin == 2 && isstruct(k)
+        grid = k;
+        k = X;
+
+        assert(isfield(grid, 'X'), 'grid.X is required');
+        assert(isfield(grid, 'Y'), 'grid.Y is required');
+        assert(isfield(grid, 'Z'), 'grid.Z is required');
+        X = grid.X;
+        Y = grid.Y;
+        Z = grid.Z;
+    end
+
     [n, m, o] = size(X);
     
     X = reshape(permute(X, [2, 1, 3]), [], 1);
