@@ -40,17 +40,72 @@ function [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y)
     X = reshape(X', [], 1);
     Y = reshape(Y', [], 1);
     
-    N = nodal2D(k, m, 1, n, 1);
-    
+    N = localNodalUniform2D(k, m, n);
+
     X = N*X;
     Y = N*Y;
-    
+
     mn = m*n;
-    
+
     Xe = X(1:mn);
     Xn = X(mn+1:end);
     Ye = Y(1:mn);
     Yn = Y(mn+1:end);
-    
+
     J = Xe.*Yn-Xn.*Ye;
+end
+
+function N = localNodalUniform2D(k, m, n)
+% Stacked [Nx; Ny] uniform 2-D nodal derivative operator on unit spacing.
+
+    Nx = localNodal1D(k, m, 1);
+    Ny = localNodal1D(k, n, 1);
+    Im = speye(m, m);
+    In = speye(n, n);
+    N = [kron(In, Nx); kron(Ny, Im)];
+end
+
+function N = localNodal1D(k, mNodes, dx)
+    n_rows = mNodes;
+    n_cols = mNodes;
+    N = sparse(n_rows, n_cols);
+
+    neighbors = zeros(1, k+1);
+    neighbors(1) = -k/2;
+    len = k+1;
+    for i = 2:len
+        neighbors(i) = neighbors(i-1) + 1;
+    end
+    A = vander(neighbors)';
+    b = zeros(len, 1);
+    b(len-1) = 1;
+    coeffs = A \ b;
+
+    j = 1;
+    for i = k/2+1 : n_rows-k/2
+        N(i, j:j+len-1) = coeffs;
+        j = j + 1;
+    end
+
+    p = k/2;
+    q = k+1;
+    Abdy = sparse(p, q);
+    for i = 1:p
+        nb = zeros(1, q);
+        nb(1) = 1 - i;
+        for jj = 2:q
+            nb(jj) = nb(jj-1) + 1;
+        end
+        V = vander(nb)';
+        b2 = zeros(q, 1);
+        b2(q-1) = 1;
+        Abdy(i, 1:q) = (V \ b2)';
+    end
+    N(1:p, 1:q) = Abdy;
+
+    Pp = fliplr(speye(p));
+    Pq = fliplr(speye(q));
+    N(n_rows-p+1:n_rows, n_cols-q+1:n_cols) = -Pp * Abdy * Pq;
+
+    N = (1/dx) * N;
 end
