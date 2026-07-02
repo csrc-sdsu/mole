@@ -13,7 +13,7 @@ function [A, b] = addScalarBC1D(A, b, k, m, dx, dc, nc, v)
 % The function receives as input quantities associated with the discrete
 % analog of the continuous problem given by the square linear system
 %                                 A u = b
-% where A is the discrete analog of L and b is the discrete analog of g,
+% where A is the discrete analog of L and b is the discrete analog of f,
 % both constructed by the user without boundary conditions.
 % The function output is the modified square linear system
 %                                 A u = b
