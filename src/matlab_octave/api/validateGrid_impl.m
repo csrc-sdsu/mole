@@ -72,6 +72,14 @@ function grid = localNormalizeIfUniform1D(grid, allowPartial)
 end
 
 function grid = localNormalizeIfUniform2D(grid, allowPartial)
+    % Curvilinear grids have their own normalisation path
+    if strcmp(grid.type, 'curvilinear')
+        if isfield(grid, 'm') && isfield(grid, 'n')
+            grid = localNormalizeCurvilinear2D(grid);
+        end
+        return;
+    end
+
     hasUniform = isfield(grid, 'm') && isfield(grid, 'n') && ...
                  isfield(grid, 'dx') && isfield(grid, 'dy');
     if hasUniform
@@ -329,4 +337,46 @@ function grid = localGenerateCoordinates3D(grid)
     [grid.faces.u.X, grid.faces.u.Y, grid.faces.u.Z] = ndgrid(xn, (0.5:n-0.5)*dy, (0.5:o-0.5)*dz);
     [grid.faces.v.X, grid.faces.v.Y, grid.faces.v.Z] = ndgrid((0.5:m-0.5)*dx, yn, (0.5:o-0.5)*dz);
     [grid.faces.w.X, grid.faces.w.Y, grid.faces.w.Z] = ndgrid((0.5:m-0.5)*dx, (0.5:n-0.5)*dy, zn);
+end
+
+function grid = localNormalizeCurvilinear2D(grid)
+    if isfield(grid, 'dim')
+        assert(grid.dim == 2, 'grid.dim must be 2 for 2-D operators');
+    else
+        grid.dim = 2;
+    end
+    grid.m = double(grid.m);
+    grid.n = double(grid.n);
+    grid = localValidateCurvilinearNodes2D(grid);
+    grid = localDeriveCurvilinearCoordinates2D(grid);
+end
+
+function grid = localValidateCurvilinearNodes2D(grid)
+    m = grid.m; n = grid.n;
+    if ~isfield(grid, 'nodes') || ~isfield(grid.nodes, 'X') || ~isfield(grid.nodes, 'Y')
+        error('validateGrid:CurvilinearMissingNodes', ...
+            'Curvilinear grid requires grid.nodes.X and grid.nodes.Y to be set before calling validateGrid.');
+    end
+    expected = [m+1, n+1];
+    if ~isequal(size(grid.nodes.X), expected) || ~isequal(size(grid.nodes.Y), expected)
+        error('validateGrid:SizeMismatch', ...
+            'Curvilinear grid.nodes.X/Y must be (%d x %d); got (%s) and (%s).', ...
+            m+1, n+1, mat2str(size(grid.nodes.X)), mat2str(size(grid.nodes.Y)));
+    end
+end
+
+function grid = localDeriveCurvilinearCoordinates2D(grid)
+    NX = grid.nodes.X;
+    NY = grid.nodes.Y;
+    % u-faces: average adjacent nodes along y (columns)
+    grid.faces.u.X = 0.5 * (NX(:, 1:end-1) + NX(:, 2:end));
+    grid.faces.u.Y = 0.5 * (NY(:, 1:end-1) + NY(:, 2:end));
+    % v-faces: average adjacent nodes along x (rows)
+    grid.faces.v.X = 0.5 * (NX(1:end-1, :) + NX(2:end, :));
+    grid.faces.v.Y = 0.5 * (NY(1:end-1, :) + NY(2:end, :));
+    % cell centers: bilinear average of 4 surrounding nodes
+    grid.centers.X = 0.25 * (NX(1:end-1, 1:end-1) + NX(2:end, 1:end-1) + ...
+                              NX(1:end-1, 2:end)   + NX(2:end, 2:end));
+    grid.centers.Y = 0.25 * (NY(1:end-1, 1:end-1) + NY(2:end, 1:end-1) + ...
+                              NY(1:end-1, 2:end)   + NY(2:end, 2:end));
 end
