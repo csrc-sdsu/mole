@@ -55,25 +55,28 @@ function grid = validateGrid_impl(grid, allowPartial)
         end
     end
 
-    if ~isfield(grid, 'type')
+    if ~isfield(grid, 'topology')
         if isfield(grid, 'X') || isfield(grid, 'Y') || isfield(grid, 'Z')
-            grid.type = 'curvilinear';
+            grid.topology = 'curvilinear';
         elseif isfield(grid, 'x') || isfield(grid, 'y') || isfield(grid, 'z')
-            grid.type = 'nonuniform';
+            grid.topology = 'nonuniform';
         else
-            grid.type = 'uniform';
+            grid.topology = 'uniform';
         end
     end
 
     switch grid.dim
     case 1
         localRequire(grid, {'m'}, allowPartial, 'validateGrid:MissingField1D');
+        localValidateCellCounts(grid, {'m'}, 'validateGrid:InvalidCellCount1D');
         grid = localNormalizeIfUniform1D(grid, allowPartial);
     case 2
         localRequire(grid, {'m', 'n'}, allowPartial, 'validateGrid:MissingField2D');
+        localValidateCellCounts(grid, {'m', 'n'}, 'validateGrid:InvalidCellCount2D');
         grid = localNormalizeIfUniform2D(grid, allowPartial);
     case 3
         localRequire(grid, {'m', 'n', 'o'}, allowPartial, 'validateGrid:MissingField3D');
+        localValidateCellCounts(grid, {'m', 'n', 'o'}, 'validateGrid:InvalidCellCount3D');
         grid = localNormalizeIfUniform3D(grid, allowPartial);
     otherwise
         error('validateGrid:InvalidDim', 'grid.dim must be 1, 2, or 3');
@@ -88,11 +91,44 @@ function localRequire(grid, names, allowPartial, errId)
     end
 end
 
+function localValidateCellCounts(grid, names, errId)
+% Cell counts (m, n, o) must be positive, finite, integer-valued scalars.
+    for i = 1:numel(names)
+        name = names{i};
+        if ~isfield(grid, name)
+            continue;
+        end
+        value = grid.(name);
+        if ~isnumeric(value) || ~isscalar(value) || ~isreal(value)
+            error(errId, 'grid.%s must be a real numeric scalar', name);
+        elseif ~isfinite(value)
+            error(errId, 'grid.%s must be finite', name);
+        elseif value <= 0 || value ~= round(value)
+            error(errId, 'grid.%s must be a positive integer', name);
+        end
+    end
+end
+
+function localValidateSpacing(grid, names, errId)
+% Step sizes (dx, dy, dz) must be positive, finite, real numeric scalars.
+    for i = 1:numel(names)
+        name = names{i};
+        value = grid.(name);
+        if ~isnumeric(value) || ~isscalar(value) || ~isreal(value)
+            error(errId, 'grid.%s must be a real numeric scalar', name);
+        elseif ~isfinite(value)
+            error(errId, 'grid.%s must be finite', name);
+        elseif value <= 0
+            error(errId, 'grid.%s must be positive', name);
+        end
+    end
+end
+
 function grid = localNormalizeIfUniform1D(grid, allowPartial)
     hasUniform = isfield(grid, 'm') && isfield(grid, 'dx');
     if hasUniform
         grid = localNormalizeGrid1D(grid);
-    elseif ~allowPartial && strcmpi(grid.type, 'uniform')
+    elseif ~allowPartial && strcmpi(grid.topology, 'uniform')
         error('validateGrid:MissingUniform1D', ...
               'Uniform 1-D grid requires grid.m and grid.dx');
     end
@@ -100,7 +136,7 @@ end
 
 function grid = localNormalizeIfUniform2D(grid, allowPartial)
     % Curvilinear grids have their own normalisation path
-    if strcmp(grid.type, 'curvilinear')
+    if strcmp(grid.topology, 'curvilinear')
         if isfield(grid, 'm') && isfield(grid, 'n')
             grid = localNormalizeCurvilinear2D(grid);
         end
@@ -111,18 +147,26 @@ function grid = localNormalizeIfUniform2D(grid, allowPartial)
                  isfield(grid, 'dx') && isfield(grid, 'dy');
     if hasUniform
         grid = localNormalizeGrid2D(grid);
-    elseif ~allowPartial && strcmpi(grid.type, 'uniform')
+    elseif ~allowPartial && strcmpi(grid.topology, 'uniform')
         error('validateGrid:MissingUniform2D', ...
               'Uniform 2-D grid requires grid.m, grid.n, grid.dx, and grid.dy');
     end
 end
 
 function grid = localNormalizeIfUniform3D(grid, allowPartial)
+    % Curvilinear grids have their own normalisation path
+    if strcmp(grid.topology, 'curvilinear')
+        if isfield(grid, 'm') && isfield(grid, 'n') && isfield(grid, 'o')
+            grid = localNormalizeCurvilinear3D(grid);
+        end
+        return;
+    end
+
     hasUniform = isfield(grid, 'm') && isfield(grid, 'n') && isfield(grid, 'o') && ...
                  isfield(grid, 'dx') && isfield(grid, 'dy') && isfield(grid, 'dz');
     if hasUniform
         grid = localNormalizeGrid3D(grid);
-    elseif ~allowPartial && strcmpi(grid.type, 'uniform')
+    elseif ~allowPartial && strcmpi(grid.topology, 'uniform')
         error('validateGrid:MissingUniform3D', ...
               'Uniform 3-D grid requires grid.m, grid.n, grid.o, grid.dx, grid.dy, and grid.dz');
     end
@@ -137,6 +181,8 @@ function grid = localNormalizeGrid1D(grid)
 
     assert(isfield(grid, 'm'), 'grid.m is required');
     assert(isfield(grid, 'dx'), 'grid.dx is required for uniform 1-D operators');
+
+    localValidateSpacing(grid, {'dx'}, 'validateGrid:InvalidSpacing1D');
 
     grid.m = double(grid.m);
     grid.dx = double(grid.dx);
@@ -163,9 +209,9 @@ function grid = localNormalizeGrid1D(grid)
 
     grid.bc = bc;
     if grid.bc.isPeriodic
-        grid.type = 'periodic';
+        grid.topology = 'periodic';
     else
-        grid.type = 'uniform';
+        grid.topology = 'uniform';
     end
 
     grid = localGenerateCoordinates1D(grid);
@@ -182,6 +228,8 @@ function grid = localNormalizeGrid2D(grid)
     assert(isfield(grid, 'n'), 'grid.n is required');
     assert(isfield(grid, 'dx'), 'grid.dx is required for uniform 2-D operators');
     assert(isfield(grid, 'dy'), 'grid.dy is required for uniform 2-D operators');
+
+    localValidateSpacing(grid, {'dx', 'dy'}, 'validateGrid:InvalidSpacing2D');
 
     grid.m = double(grid.m);
     grid.n = double(grid.n);
@@ -211,9 +259,9 @@ function grid = localNormalizeGrid2D(grid)
 
     grid.bc = bc;
     if any(grid.bc.isPeriodic)
-        grid.type = 'periodic';
+        grid.topology = 'periodic';
     else
-        grid.type = 'uniform';
+        grid.topology = 'uniform';
     end
 
     grid = localGenerateCoordinates2D(grid);
@@ -232,6 +280,8 @@ function grid = localNormalizeGrid3D(grid)
     assert(isfield(grid, 'dx'), 'grid.dx is required for uniform 3-D operators');
     assert(isfield(grid, 'dy'), 'grid.dy is required for uniform 3-D operators');
     assert(isfield(grid, 'dz'), 'grid.dz is required for uniform 3-D operators');
+
+    localValidateSpacing(grid, {'dx', 'dy', 'dz'}, 'validateGrid:InvalidSpacing3D');
 
     grid.m = double(grid.m);
     grid.n = double(grid.n);
@@ -264,9 +314,9 @@ function grid = localNormalizeGrid3D(grid)
 
     grid.bc = bc;
     if any(grid.bc.isPeriodic)
-        grid.type = 'periodic';
+        grid.topology = 'periodic';
     else
-        grid.type = 'uniform';
+        grid.topology = 'uniform';
     end
 
     grid = localGenerateCoordinates3D(grid);
@@ -406,4 +456,80 @@ function grid = localDeriveCurvilinearCoordinates2D(grid)
                               NX(1:end-1, 2:end)   + NX(2:end, 2:end));
     grid.centers.Y = 0.25 * (NY(1:end-1, 1:end-1) + NY(2:end, 1:end-1) + ...
                               NY(1:end-1, 2:end)   + NY(2:end, 2:end));
+end
+
+function grid = localNormalizeCurvilinear3D(grid)
+    if isfield(grid, 'dim')
+        assert(grid.dim == 3, 'grid.dim must be 3 for 3-D operators');
+    else
+        grid.dim = 3;
+    end
+    grid.m = double(grid.m);
+    grid.n = double(grid.n);
+    grid.o = double(grid.o);
+    grid = localValidateCurvilinearNodes3D(grid);
+    grid = localDeriveCurvilinearCoordinates3D(grid);
+end
+
+function grid = localValidateCurvilinearNodes3D(grid)
+    m = grid.m; n = grid.n; o = grid.o;
+    if ~isfield(grid, 'nodes') || ~isfield(grid.nodes, 'X') || ...
+       ~isfield(grid.nodes, 'Y') || ~isfield(grid.nodes, 'Z')
+        error('validateGrid:CurvilinearMissingNodes', ...
+            'Curvilinear grid requires grid.nodes.X, grid.nodes.Y, and grid.nodes.Z to be set before calling validateGrid.');
+    end
+    expected = [m+1, n+1, o+1];
+    if ~isequal(size(grid.nodes.X), expected) || ~isequal(size(grid.nodes.Y), expected) || ...
+       ~isequal(size(grid.nodes.Z), expected)
+        error('validateGrid:SizeMismatch', ...
+            'Curvilinear grid.nodes.X/Y/Z must be (%d x %d x %d); got X=(%s), Y=(%s), Z=(%s).', ...
+            m+1, n+1, o+1, mat2str(size(grid.nodes.X)), mat2str(size(grid.nodes.Y)), mat2str(size(grid.nodes.Z)));
+    end
+end
+
+function grid = localDeriveCurvilinearCoordinates3D(grid)
+    NX = grid.nodes.X;
+    NY = grid.nodes.Y;
+    NZ = grid.nodes.Z;
+
+    % u-faces: full range in x, bilinear average over y and z
+    grid.faces.u.X = 0.25 * (NX(:,1:end-1,1:end-1) + NX(:,2:end,1:end-1) + ...
+                              NX(:,1:end-1,2:end)   + NX(:,2:end,2:end));
+    grid.faces.u.Y = 0.25 * (NY(:,1:end-1,1:end-1) + NY(:,2:end,1:end-1) + ...
+                              NY(:,1:end-1,2:end)   + NY(:,2:end,2:end));
+    grid.faces.u.Z = 0.25 * (NZ(:,1:end-1,1:end-1) + NZ(:,2:end,1:end-1) + ...
+                              NZ(:,1:end-1,2:end)   + NZ(:,2:end,2:end));
+
+    % v-faces: full range in y, bilinear average over x and z
+    grid.faces.v.X = 0.25 * (NX(1:end-1,:,1:end-1) + NX(2:end,:,1:end-1) + ...
+                              NX(1:end-1,:,2:end)   + NX(2:end,:,2:end));
+    grid.faces.v.Y = 0.25 * (NY(1:end-1,:,1:end-1) + NY(2:end,:,1:end-1) + ...
+                              NY(1:end-1,:,2:end)   + NY(2:end,:,2:end));
+    grid.faces.v.Z = 0.25 * (NZ(1:end-1,:,1:end-1) + NZ(2:end,:,1:end-1) + ...
+                              NZ(1:end-1,:,2:end)   + NZ(2:end,:,2:end));
+
+    % w-faces: full range in z, bilinear average over x and y
+    grid.faces.w.X = 0.25 * (NX(1:end-1,1:end-1,:) + NX(2:end,1:end-1,:) + ...
+                              NX(1:end-1,2:end,:)   + NX(2:end,2:end,:));
+    grid.faces.w.Y = 0.25 * (NY(1:end-1,1:end-1,:) + NY(2:end,1:end-1,:) + ...
+                              NY(1:end-1,2:end,:)   + NY(2:end,2:end,:));
+    grid.faces.w.Z = 0.25 * (NZ(1:end-1,1:end-1,:) + NZ(2:end,1:end-1,:) + ...
+                              NZ(1:end-1,2:end,:)   + NZ(2:end,2:end,:));
+
+    % cell centers: trilinear average of 8 surrounding nodes
+    grid.centers.X = 0.125 * ( ...
+        NX(1:end-1,1:end-1,1:end-1) + NX(2:end,1:end-1,1:end-1) + ...
+        NX(1:end-1,2:end,1:end-1)   + NX(2:end,2:end,1:end-1)   + ...
+        NX(1:end-1,1:end-1,2:end)   + NX(2:end,1:end-1,2:end)   + ...
+        NX(1:end-1,2:end,2:end)     + NX(2:end,2:end,2:end));
+    grid.centers.Y = 0.125 * ( ...
+        NY(1:end-1,1:end-1,1:end-1) + NY(2:end,1:end-1,1:end-1) + ...
+        NY(1:end-1,2:end,1:end-1)   + NY(2:end,2:end,1:end-1)   + ...
+        NY(1:end-1,1:end-1,2:end)   + NY(2:end,1:end-1,2:end)   + ...
+        NY(1:end-1,2:end,2:end)     + NY(2:end,2:end,2:end));
+    grid.centers.Z = 0.125 * ( ...
+        NZ(1:end-1,1:end-1,1:end-1) + NZ(2:end,1:end-1,1:end-1) + ...
+        NZ(1:end-1,2:end,1:end-1)   + NZ(2:end,2:end,1:end-1)   + ...
+        NZ(1:end-1,1:end-1,2:end)   + NZ(2:end,1:end-1,2:end)   + ...
+        NZ(1:end-1,2:end,2:end)     + NZ(2:end,2:end,2:end));
 end

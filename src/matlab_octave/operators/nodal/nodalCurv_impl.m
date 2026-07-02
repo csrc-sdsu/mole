@@ -9,7 +9,7 @@ function N = nodalCurv_impl(grid, k)
 %
 % Parameters:
 %   N    : Stacked sparse matrix of curvilinear nodal operators
-%   grid : Validated grid struct with grid.type='curvilinear' and
+%   grid : Validated grid struct with grid.topology='curvilinear' and
 %          grid.nodes.X/Y (2D) or grid.nodes.X/Y/Z (3D)
 %   k    : Order of accuracy (even integer >= 2)
 %

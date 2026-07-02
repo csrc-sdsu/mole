@@ -34,7 +34,7 @@ function G = gradOp_impl(grid, k)
         assert(grid.m >= 2*k, ['m >= ' num2str(2*k) ' for k = ' num2str(k)]);
         assert(grid.n >= 2*k, ['n >= ' num2str(2*k) ' for k = ' num2str(k)]);
 
-        if strcmpi(grid.type, 'curvilinear')
+        if strcmpi(grid.topology, 'curvilinear')
             G = gradCurv_impl(grid, k);
             return;
         end
@@ -66,7 +66,7 @@ function G = gradOp_impl(grid, k)
         assert(grid.n >= 2*k, ['n >= ' num2str(2*k) ' for k = ' num2str(k)]);
         assert(grid.o >= 2*k, ['o >= ' num2str(2*k) ' for k = ' num2str(k)]);
 
-        if strcmpi(grid.type, 'curvilinear')
+        if strcmpi(grid.topology, 'curvilinear')
             G = gradCurv_impl(grid, k);
             return;
         end

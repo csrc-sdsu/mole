@@ -20,7 +20,7 @@ function N = nodalOp_impl(grid, k)
     assert(k >= 2, 'k >= 2');
     assert(mod(k, 2) == 0, 'k % 2 = 0');
 
-    if strcmpi(grid.type, 'curvilinear')
+    if strcmpi(grid.topology, 'curvilinear')
         N = nodalCurv_impl(grid, k);
         return;
     end
