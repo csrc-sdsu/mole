@@ -1,5 +1,32 @@
 function grid = validateGrid_impl(grid, allowPartial)
-% Canonical implementation for validateGrid.
+% PURPOSE
+% Canonical implementation for validateGrid — normalizes and enriches a
+% grid struct with coordinate arrays for nodes, faces, and centers.
+%
+% DESCRIPTION
+% Accepts a partial or complete grid struct, infers dim and type from
+% present fields, normalizes grid.bc.{dc,nc,isPeriodic}, and populates
+% grid.nodes, grid.faces, and grid.centers with meshgrid-style arrays.
+% For curvilinear grids, grid.nodes.X/Y must be supplied by the caller;
+% faces and centers are derived by interpolation.
+% Throws validateGrid:SizeMismatch if pre-populated coordinate arrays
+% disagree with m/n/o, and validateGrid:CurvilinearMissingNodes if a
+% curvilinear grid lacks node coordinates.
+%
+% Parameters:
+%   grid         : Input struct (partial or complete)
+%   allowPartial : (optional) logical, default false — skip missing-field
+%                  errors during incremental construction
+%
+% SYNTAX
+% grid = validateGrid_impl(grid)
+% grid = validateGrid_impl(grid, allowPartial)
+%
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
 
     if nargin < 2
         allowPartial = false;
