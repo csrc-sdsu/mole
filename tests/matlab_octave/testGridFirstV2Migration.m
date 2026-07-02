@@ -155,12 +155,17 @@ classdef testGridFirstV2Migration < matlab.unittest.TestCase
         function testValidateGridRejectsPartialBoundarySpec(testCase)
             addpath('../../src/matlab_octave');
 
-            testCase.verifyError(@() validateGrid(struct('m', 5, 'dx', 0.1, 'bc', struct('dc', 1))), ...
-                                 'validateGrid:InvalidBC1D');
-            testCase.verifyError(@() validateGrid(struct('m', 5, 'n', 6, 'dx', 0.1, 'dy', 0.2, 'bc', struct('dc', [1;1;1;1], 'nc', []))), ...
-                                 'validateGrid:InvalidBC2D');
-            testCase.verifyError(@() validateGrid(struct('m', 5, 'n', 6, 'o', 7, 'dx', 0.1, 'dy', 0.2, 'dz', 0.3, 'bc', struct('nc', 1))), ...
-                                 'validateGrid:InvalidBC3D');
+            g1 = validateGrid(struct('m', 5, 'dx', 0.1, 'bc', struct('dc', 1)));
+            testCase.verifyTrue(g1.error.hasError);
+            testCase.verifyEqual(g1.error.code, 104);
+
+            g2 = validateGrid(struct('m', 5, 'n', 6, 'dx', 0.1, 'dy', 0.2, 'bc', struct('dc', [1;1;1;1], 'nc', [])));
+            testCase.verifyTrue(g2.error.hasError);
+            testCase.verifyEqual(g2.error.code, 104);
+
+            g3 = validateGrid(struct('m', 5, 'n', 6, 'o', 7, 'dx', 0.1, 'dy', 0.2, 'dz', 0.3, 'bc', struct('nc', 1)));
+            testCase.verifyTrue(g3.error.hasError);
+            testCase.verifyEqual(g3.error.code, 104);
         end
 
         function testDeprecatedDimensionalOperatorsDeleted(testCase)
@@ -178,5 +183,24 @@ classdef testGridFirstV2Migration < matlab.unittest.TestCase
             testCase.verifyError(@() interpolD(10, 0.5),         'MATLAB:UndefinedFunction');
             testCase.verifyError(@() interpolCentersToFacesD1D(2, 10), 'MATLAB:UndefinedFunction');
         end
+
+        function testMakeGridRejectsOddNameValuePairs(testCase)
+            addpath('../../src/matlab_octave');
+            g1 = makeGrid('m');
+            testCase.verifyTrue(isstruct(g1));
+            testCase.verifyTrue(g1.error.hasError);
+            testCase.verifyEqual(g1.error.code, 100);
+            testCase.verifyEqual(g1.error.id, 'makeGrid:InvalidInput');
+        end
+
+        function testMakeGridRejectsInvalidFieldName(testCase)
+            addpath('../../src/matlab_octave');
+            g1 = makeGrid(123, 5);
+            testCase.verifyTrue(isstruct(g1));
+            testCase.verifyTrue(g1.error.hasError);
+            testCase.verifyEqual(g1.error.code, 100);
+            testCase.verifyEqual(g1.error.id, 'makeGrid:InvalidFieldName');
+        end
+
     end
 end

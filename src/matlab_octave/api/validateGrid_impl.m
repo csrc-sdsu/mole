@@ -9,9 +9,8 @@ function grid = validateGrid_impl(grid, allowPartial)
 % grid.nodes, grid.faces, and grid.centers with meshgrid-style arrays.
 % For curvilinear grids, grid.nodes.X/Y must be supplied by the caller;
 % faces and centers are derived by interpolation.
-% Throws validateGrid:SizeMismatch if pre-populated coordinate arrays
-% disagree with m/n/o, and validateGrid:CurvilinearMissingNodes if a
-% curvilinear grid lacks node coordinates.
+% On validation failure, returns immediately with grid.error populated.
+% Grid-related errors use codes 100-199.
 %
 % Parameters:
 %   grid         : Input struct (partial or complete)
@@ -32,7 +31,15 @@ function grid = validateGrid_impl(grid, allowPartial)
         allowPartial = false;
     end
 
-    assert(isstruct(grid), 'grid must be a struct');
+    if ~isstruct(grid)
+        grid = struct();
+        grid = addGridError(grid, 100, 'validateGrid:InvalidInput', '', 'grid must be a struct');
+        return;
+    end
+
+    if ~isfield(grid, 'error') || ~isstruct(grid.error)
+        grid.error = struct('hasError', false, 'code', 0, 'id', '', 'field', '', 'message', '');
+    end
 
     if ~isfield(grid, 'bc') || ~isstruct(grid.bc)
         grid.bc = struct();
@@ -67,23 +74,31 @@ function grid = validateGrid_impl(grid, allowPartial)
 
     switch grid.dim
     case 1
-        localRequire(grid, {'m'}, allowPartial, 'validateGrid:MissingField1D');
+        grid = localRequire(grid, {'m'}, allowPartial, 'validateGrid:MissingField1D');
+        if grid.error.hasError, return; end
         grid = localNormalizeIfUniform1D(grid, allowPartial);
+        if grid.error.hasError, return; end
     case 2
-        localRequire(grid, {'m', 'n'}, allowPartial, 'validateGrid:MissingField2D');
+        grid = localRequire(grid, {'m', 'n'}, allowPartial, 'validateGrid:MissingField2D');
+        if grid.error.hasError, return; end
         grid = localNormalizeIfUniform2D(grid, allowPartial);
+        if grid.error.hasError, return; end
     case 3
-        localRequire(grid, {'m', 'n', 'o'}, allowPartial, 'validateGrid:MissingField3D');
+        grid = localRequire(grid, {'m', 'n', 'o'}, allowPartial, 'validateGrid:MissingField3D');
+        if grid.error.hasError, return; end
         grid = localNormalizeIfUniform3D(grid, allowPartial);
+        if grid.error.hasError, return; end
     otherwise
-        error('validateGrid:InvalidDim', 'grid.dim must be 1, 2, or 3');
+        grid = addGridError(grid, 102, 'validateGrid:InvalidDim', 'dim', 'grid.dim must be 1, 2, or 3');
+        return;
     end
 end
 
-function localRequire(grid, names, allowPartial, errId)
+function grid = localRequire(grid, names, allowPartial, errId)
     for i = 1:numel(names)
         if ~isfield(grid, names{i}) && ~allowPartial
-            error(errId, ['Missing required field grid.' names{i}]);
+            grid = addGridError(grid, 101, errId, names{i}, ['Missing required field grid.' names{i}]);
+            return;
         end
     end
 end
@@ -93,8 +108,8 @@ function grid = localNormalizeIfUniform1D(grid, allowPartial)
     if hasUniform
         grid = localNormalizeGrid1D(grid);
     elseif ~allowPartial && strcmpi(grid.type, 'uniform')
-        error('validateGrid:MissingUniform1D', ...
-              'Uniform 1-D grid requires grid.m and grid.dx');
+        grid = addGridError(grid, 103, 'validateGrid:MissingUniform1D', '', 'Uniform 1-D grid requires grid.m and grid.dx');
+        return;
     end
 end
 
@@ -112,8 +127,8 @@ function grid = localNormalizeIfUniform2D(grid, allowPartial)
     if hasUniform
         grid = localNormalizeGrid2D(grid);
     elseif ~allowPartial && strcmpi(grid.type, 'uniform')
-        error('validateGrid:MissingUniform2D', ...
-              'Uniform 2-D grid requires grid.m, grid.n, grid.dx, and grid.dy');
+        grid = addGridError(grid, 103, 'validateGrid:MissingUniform2D', '', 'Uniform 2-D grid requires grid.m, grid.n, grid.dx, and grid.dy');
+        return;
     end
 end
 
@@ -123,20 +138,23 @@ function grid = localNormalizeIfUniform3D(grid, allowPartial)
     if hasUniform
         grid = localNormalizeGrid3D(grid);
     elseif ~allowPartial && strcmpi(grid.type, 'uniform')
-        error('validateGrid:MissingUniform3D', ...
-              'Uniform 3-D grid requires grid.m, grid.n, grid.o, grid.dx, grid.dy, and grid.dz');
+        grid = addGridError(grid, 103, 'validateGrid:MissingUniform3D', '', 'Uniform 3-D grid requires grid.m, grid.n, grid.o, grid.dx, grid.dy, and grid.dz');
+        return;
     end
 end
 
 function grid = localNormalizeGrid1D(grid)
     if isfield(grid, 'dim')
-        assert(grid.dim == 1, 'grid.dim must be 1 for 1-D operators');
+        if grid.dim ~= 1
+            grid = addGridError(grid, 102, 'validateGrid:InvalidDim1D', 'dim', 'grid.dim must be 1 for 1-D operators');
+            return;
+        end
     else
         grid.dim = 1;
     end
 
-    assert(isfield(grid, 'm'), 'grid.m is required');
-    assert(isfield(grid, 'dx'), 'grid.dx is required for uniform 1-D operators');
+    if ~isfield(grid, 'm'), grid = addGridError(grid, 101, 'validateGrid:MissingM', 'm', 'grid.m is required'); return; end
+    if ~isfield(grid, 'dx'), grid = addGridError(grid, 103, 'validateGrid:MissingDx', 'dx', 'grid.dx is required for uniform 1-D operators'); return; end
 
     grid.m = double(grid.m);
     grid.dx = double(grid.dx);
@@ -154,12 +172,13 @@ function grid = localNormalizeGrid1D(grid)
         bc.nc = grid.nc;
     end
 
-    [bc.dc, bc.nc, bc.hasData] = localNormalizeBoundaryCoefficients(bc, 2, 'validateGrid:InvalidBC1D');
-    if bc.hasData
-        bc.isPeriodic = isempty(find(bc.dc .* bc.dc + bc.nc .* bc.nc, 1));
-    else
-        bc.isPeriodic = false;
+    [bc.dc, bc.nc, bc.hasData, errGrid] = localNormalizeBoundaryCoefficients(grid, bc, 2, 'validateGrid:InvalidBC1D');
+    if errGrid.error.hasError
+        grid = errGrid;
+        return;
     end
+    [bc.isPeriodic, grid] = localNormalizeIsPeriodic(grid, bc, bc.hasData, 1, 'validateGrid:InvalidBC1D');
+    if grid.error.hasError, return; end
 
     grid.bc = bc;
     if grid.bc.isPeriodic
@@ -173,15 +192,18 @@ end
 
 function grid = localNormalizeGrid2D(grid)
     if isfield(grid, 'dim')
-        assert(grid.dim == 2, 'grid.dim must be 2 for 2-D operators');
+        if grid.dim ~= 2
+            grid = addGridError(grid, 102, 'validateGrid:InvalidDim2D', 'dim', 'grid.dim must be 2 for 2-D operators');
+            return;
+        end
     else
         grid.dim = 2;
     end
 
-    assert(isfield(grid, 'm'), 'grid.m is required');
-    assert(isfield(grid, 'n'), 'grid.n is required');
-    assert(isfield(grid, 'dx'), 'grid.dx is required for uniform 2-D operators');
-    assert(isfield(grid, 'dy'), 'grid.dy is required for uniform 2-D operators');
+    if ~isfield(grid, 'm'), grid = addGridError(grid, 101, 'validateGrid:MissingM', 'm', 'grid.m is required'); return; end
+    if ~isfield(grid, 'n'), grid = addGridError(grid, 101, 'validateGrid:MissingN', 'n', 'grid.n is required'); return; end
+    if ~isfield(grid, 'dx'), grid = addGridError(grid, 103, 'validateGrid:MissingDx', 'dx', 'grid.dx is required for uniform 2-D operators'); return; end
+    if ~isfield(grid, 'dy'), grid = addGridError(grid, 103, 'validateGrid:MissingDy', 'dy', 'grid.dy is required for uniform 2-D operators'); return; end
 
     grid.m = double(grid.m);
     grid.n = double(grid.n);
@@ -201,13 +223,13 @@ function grid = localNormalizeGrid2D(grid)
         bc.nc = grid.nc;
     end
 
-    [bc.dc, bc.nc, bc.hasData] = localNormalizeBoundaryCoefficients(bc, 4, 'validateGrid:InvalidBC2D');
-    if bc.hasData
-        bc.isPeriodic = [isempty(find(bc.dc(1:2).^2 + bc.nc(1:2).^2, 1)); ...
-                         isempty(find(bc.dc(3:4).^2 + bc.nc(3:4).^2, 1))];
-    else
-        bc.isPeriodic = [false; false];
+    [bc.dc, bc.nc, bc.hasData, errGrid] = localNormalizeBoundaryCoefficients(grid, bc, 4, 'validateGrid:InvalidBC2D');
+    if errGrid.error.hasError
+        grid = errGrid;
+        return;
     end
+    [bc.isPeriodic, grid] = localNormalizeIsPeriodic(grid, bc, bc.hasData, 2, 'validateGrid:InvalidBC2D');
+    if grid.error.hasError, return; end
 
     grid.bc = bc;
     if any(grid.bc.isPeriodic)
@@ -221,17 +243,20 @@ end
 
 function grid = localNormalizeGrid3D(grid)
     if isfield(grid, 'dim')
-        assert(grid.dim == 3, 'grid.dim must be 3 for 3-D operators');
+        if grid.dim ~= 3
+            grid = addGridError(grid, 102, 'validateGrid:InvalidDim3D', 'dim', 'grid.dim must be 3 for 3-D operators');
+            return;
+        end
     else
         grid.dim = 3;
     end
 
-    assert(isfield(grid, 'm'), 'grid.m is required');
-    assert(isfield(grid, 'n'), 'grid.n is required');
-    assert(isfield(grid, 'o'), 'grid.o is required');
-    assert(isfield(grid, 'dx'), 'grid.dx is required for uniform 3-D operators');
-    assert(isfield(grid, 'dy'), 'grid.dy is required for uniform 3-D operators');
-    assert(isfield(grid, 'dz'), 'grid.dz is required for uniform 3-D operators');
+    if ~isfield(grid, 'm'), grid = addGridError(grid, 101, 'validateGrid:MissingM', 'm', 'grid.m is required'); return; end
+    if ~isfield(grid, 'n'), grid = addGridError(grid, 101, 'validateGrid:MissingN', 'n', 'grid.n is required'); return; end
+    if ~isfield(grid, 'o'), grid = addGridError(grid, 101, 'validateGrid:MissingO', 'o', 'grid.o is required'); return; end
+    if ~isfield(grid, 'dx'), grid = addGridError(grid, 103, 'validateGrid:MissingDx', 'dx', 'grid.dx is required for uniform 3-D operators'); return; end
+    if ~isfield(grid, 'dy'), grid = addGridError(grid, 103, 'validateGrid:MissingDy', 'dy', 'grid.dy is required for uniform 3-D operators'); return; end
+    if ~isfield(grid, 'dz'), grid = addGridError(grid, 103, 'validateGrid:MissingDz', 'dz', 'grid.dz is required for uniform 3-D operators'); return; end
 
     grid.m = double(grid.m);
     grid.n = double(grid.n);
@@ -253,14 +278,13 @@ function grid = localNormalizeGrid3D(grid)
         bc.nc = grid.nc;
     end
 
-    [bc.dc, bc.nc, bc.hasData] = localNormalizeBoundaryCoefficients(bc, 6, 'validateGrid:InvalidBC3D');
-    if bc.hasData
-        bc.isPeriodic = [isempty(find(bc.dc(1:2).^2 + bc.nc(1:2).^2, 1)); ...
-                         isempty(find(bc.dc(3:4).^2 + bc.nc(3:4).^2, 1)); ...
-                         isempty(find(bc.dc(5:6).^2 + bc.nc(5:6).^2, 1))];
-    else
-        bc.isPeriodic = [false; false; false];
+    [bc.dc, bc.nc, bc.hasData, errGrid] = localNormalizeBoundaryCoefficients(grid, bc, 6, 'validateGrid:InvalidBC3D');
+    if errGrid.error.hasError
+        grid = errGrid;
+        return;
     end
+    [bc.isPeriodic, grid] = localNormalizeIsPeriodic(grid, bc, bc.hasData, 3, 'validateGrid:InvalidBC3D');
+    if grid.error.hasError, return; end
 
     grid.bc = bc;
     if any(grid.bc.isPeriodic)
@@ -272,7 +296,7 @@ function grid = localNormalizeGrid3D(grid)
     grid = localGenerateCoordinates3D(grid);
 end
 
-function [dc, nc, hasData] = localNormalizeBoundaryCoefficients(bc, expectedCount, errId)
+function [dc, nc, hasData, grid] = localNormalizeBoundaryCoefficients(grid, bc, expectedCount, errId)
     hasDC = isfield(bc, 'dc');
     hasNC = isfield(bc, 'nc');
 
@@ -284,7 +308,8 @@ function [dc, nc, hasData] = localNormalizeBoundaryCoefficients(bc, expectedCoun
     end
 
     if hasDC ~= hasNC
-        error(errId, 'grid.bc.dc and grid.bc.nc must be provided together');
+        grid = addGridError(grid, 104, errId, 'bc', 'grid.bc.dc and grid.bc.nc must be provided together');
+        dc=[]; nc=[]; hasData=false; return;
     end
 
     if isempty(bc.dc) && isempty(bc.nc)
@@ -295,23 +320,33 @@ function [dc, nc, hasData] = localNormalizeBoundaryCoefficients(bc, expectedCoun
     end
 
     if isempty(bc.dc) || isempty(bc.nc)
-        error(errId, 'grid.bc.dc and grid.bc.nc must both be empty or both be non-empty');
+        grid = addGridError(grid, 104, errId, 'bc', 'grid.bc.dc and grid.bc.nc must both be empty or both be non-empty');
+        dc=[]; nc=[]; hasData=false; return;
     end
 
-    dc = localNormalizeBoundaryVector(bc.dc, expectedCount, 'grid.bc.dc', errId);
-    nc = localNormalizeBoundaryVector(bc.nc, expectedCount, 'grid.bc.nc', errId);
+    [dc, grid] = localNormalizeBoundaryVector(grid, bc.dc, expectedCount, 'grid.bc.dc', errId);
+    if grid.error.hasError, nc=[]; hasData=false; return; end
+    [nc, grid] = localNormalizeBoundaryVector(grid, bc.nc, expectedCount, 'grid.bc.nc', errId);
+    if grid.error.hasError, dc=[]; hasData=false; return; end
     hasData = true;
 end
 
-function values = localNormalizeBoundaryVector(values, expectedCount, fieldName, errId)
-    assert(isnumeric(values), [fieldName ' must be numeric']);
-    assert(isvector(values), [fieldName ' must be a scalar or vector']);
+function [values, grid] = localNormalizeBoundaryVector(grid, values, expectedCount, fieldName, errId)
+    if ~isnumeric(values)
+        grid = addGridError(grid, 105, errId, fieldName, [fieldName ' must be numeric']);
+        values=[]; return;
+    end
+    if ~isvector(values)
+        grid = addGridError(grid, 105, errId, fieldName, [fieldName ' must be a scalar or vector']);
+        values=[]; return;
+    end
 
     values = double(values(:));
     if numel(values) == 1
         values = repmat(values, expectedCount, 1);
     elseif numel(values) ~= expectedCount
-        error(errId, '%s must be a scalar or a %dx1 vector', fieldName, expectedCount);
+        grid = addGridError(grid, 105, errId, fieldName, sprintf('%s must be a scalar or a %dx1 vector', fieldName, expectedCount));
+        values=[]; return;
     end
 end
 
@@ -368,27 +403,32 @@ end
 
 function grid = localNormalizeCurvilinear2D(grid)
     if isfield(grid, 'dim')
-        assert(grid.dim == 2, 'grid.dim must be 2 for 2-D operators');
+        if grid.dim ~= 2
+            grid = addGridError(grid, 102, 'validateGrid:InvalidDim2D', 'dim', 'grid.dim must be 2 for 2-D operators');
+            return;
+        end
     else
         grid.dim = 2;
     end
     grid.m = double(grid.m);
     grid.n = double(grid.n);
     grid = localValidateCurvilinearNodes2D(grid);
+    if grid.error.hasError, return; end
     grid = localDeriveCurvilinearCoordinates2D(grid);
 end
 
 function grid = localValidateCurvilinearNodes2D(grid)
     m = grid.m; n = grid.n;
     if ~isfield(grid, 'nodes') || ~isfield(grid.nodes, 'X') || ~isfield(grid.nodes, 'Y')
-        error('validateGrid:CurvilinearMissingNodes', ...
-            'Curvilinear grid requires grid.nodes.X and grid.nodes.Y to be set before calling validateGrid.');
+        grid = addGridError(grid, 106, 'validateGrid:CurvilinearMissingNodes', 'nodes', 'Curvilinear grid requires grid.nodes.X and grid.nodes.Y to be set before calling validateGrid.');
+        return;
     end
     expected = [m+1, n+1];
     if ~isequal(size(grid.nodes.X), expected) || ~isequal(size(grid.nodes.Y), expected)
-        error('validateGrid:SizeMismatch', ...
-            'Curvilinear grid.nodes.X/Y must be (%d x %d); got (%s) and (%s).', ...
-            m+1, n+1, mat2str(size(grid.nodes.X)), mat2str(size(grid.nodes.Y)));
+        grid = addGridError(grid, 107, 'validateGrid:SizeMismatch', 'nodes', ...
+            sprintf('Curvilinear grid.nodes.X/Y must be (%d x %d); got %s and %s.', ...
+            m+1, n+1, mat2str(size(grid.nodes.X)), mat2str(size(grid.nodes.Y))));
+        return;
     end
 end
 
@@ -406,4 +446,40 @@ function grid = localDeriveCurvilinearCoordinates2D(grid)
                               NX(1:end-1, 2:end)   + NX(2:end, 2:end));
     grid.centers.Y = 0.25 * (NY(1:end-1, 1:end-1) + NY(2:end, 1:end-1) + ...
                               NY(1:end-1, 2:end)   + NY(2:end, 2:end));
+end
+
+function [isPeriodic, grid] = localNormalizeIsPeriodic(grid, bc, hasData, numAxes, errId)
+    if isfield(bc, 'isPeriodic')
+        if ~islogical(bc.isPeriodic) && ~isnumeric(bc.isPeriodic)
+            grid = addGridError(grid, 105, errId, 'bc.isPeriodic', 'isPeriodic must be logical');
+            isPeriodic = []; return;
+        end
+        isPeriodic = logical(bc.isPeriodic(:));
+        if numel(isPeriodic) == 1
+            isPeriodic = repmat(isPeriodic, numAxes, 1);
+        elseif numel(isPeriodic) ~= numAxes
+            grid = addGridError(grid, 105, errId, 'bc.isPeriodic', sprintf('isPeriodic must be a scalar or %dx1 logical vector', numAxes));
+            isPeriodic = []; return;
+        end
+        
+        if hasData
+            for a = 1:numAxes
+                idx1 = 2*a - 1;
+                idx2 = 2*a;
+                if isPeriodic(a) && ~isempty(find(bc.dc(idx1:idx2).^2 + bc.nc(idx1:idx2).^2, 1))
+                    grid = addGridError(grid, 108, 'validateGrid:PeriodicBCConflict', 'bc', 'Periodic axis cannot carry non-periodic BC coefficients');
+                    return;
+                end
+            end
+        end
+    else
+        isPeriodic = false(numAxes, 1);
+        if hasData
+            for a = 1:numAxes
+                idx1 = 2*a - 1;
+                idx2 = 2*a;
+                isPeriodic(a) = isempty(find(bc.dc(idx1:idx2).^2 + bc.nc(idx1:idx2).^2, 1));
+            end
+        end
+    end
 end

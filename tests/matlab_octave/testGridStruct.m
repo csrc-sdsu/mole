@@ -197,7 +197,9 @@ classdef testGridStruct < matlab.unittest.TestCase
             % (do NOT use makeGrid here, which would auto-populate nodes)
             grid = struct('m', m, 'n', n, 'dx', 0.5, 'dy', 0.25, ...
                           'type', 'curvilinear', 'dim', 2);
-            testCase.verifyError(@() validateGrid(grid), 'validateGrid:CurvilinearMissingNodes');
+            g1 = validateGrid(grid);
+            testCase.verifyTrue(g1.error.hasError);
+            testCase.verifyEqual(g1.error.code, 106);
         end
 
         function test2DNodeYSizeMismatchError(testCase)
@@ -208,7 +210,42 @@ classdef testGridStruct < matlab.unittest.TestCase
             grid = struct('m', m, 'n', n, 'dx', 1, 'dy', 1, ...
                           'type', 'curvilinear', ...
                           'nodes', struct('X', good_X, 'Y', bad_Y));
-            testCase.verifyError(@() validateGrid(grid), 'validateGrid:SizeMismatch');
+            g1 = validateGrid(grid);
+            testCase.verifyTrue(g1.error.hasError);
+            testCase.verifyEqual(g1.error.code, 107);
+        end
+
+        function testValidateGridRejectsNonStructInput(testCase)
+            addpath('../../src/matlab_octave');
+            g1 = validateGrid(5);
+            testCase.verifyTrue(isstruct(g1));
+            testCase.verifyTrue(g1.error.hasError);
+            testCase.verifyEqual(g1.error.code, 100);
+            testCase.verifyEqual(g1.error.id, 'validateGrid:InvalidInput');
+        end
+
+        function testValidateGridRejectsMissingDx(testCase)
+            addpath('../../src/matlab_octave');
+            g1 = validateGrid(struct('m', 5));
+            testCase.verifyTrue(g1.error.hasError);
+            testCase.verifyEqual(g1.error.code, 103);
+        end
+
+        function testValidateGridRejectsInvalidDim(testCase)
+            addpath('../../src/matlab_octave');
+            g1 = validateGrid(struct('dim', 4, 'm', 5, 'dx', 0.1));
+            testCase.verifyTrue(g1.error.hasError);
+            testCase.verifyEqual(g1.error.code, 102);
+        end
+
+        function testValidateGridRejectsBadBoundaryVectorSize(testCase)
+            addpath('../../src/matlab_octave');
+            grid = struct('m', 5, 'n', 6, 'dx', 0.1, 'dy', 0.2, ...
+                          'bc', struct('dc', [1; 1; 1], 'nc', [1; 1; 1]));
+            
+            g1 = validateGrid(grid);
+            testCase.verifyTrue(g1.error.hasError);
+            testCase.verifyEqual(g1.error.code, 105);
         end
 
     end  % methods(Test)
