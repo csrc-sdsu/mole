@@ -1,4 +1,4 @@
-function D = divOp_impl(grid, k)
+function [D, err] = divOp_impl(grid, k)
 % PURPOSE
 % Grid-first mimetic divergence operator for 1-D, 2-D, and 3-D uniform grids.
 %
@@ -17,6 +17,11 @@ function D = divOp_impl(grid, k)
 % ----------------------------------------------------------------------------
 
     grid = validateGrid(grid);
+    err = grid.error;
+    if err.hasError
+        D = [];
+        return;
+    end
 
     assert(k >= 2, 'k >= 2');
     assert(mod(k, 2) == 0, 'k % 2 = 0');

@@ -1,4 +1,4 @@
-function [A, b] = addScalarBC(A, b, k, grid, v)
+function [A, b, err] = addScalarBC(A, b, k, grid, v)
 % PURPOSE
 % Apply scalar boundary conditions to a linear system for any grid dimension.
 %
@@ -34,5 +34,9 @@ function [A, b] = addScalarBC(A, b, k, grid, v)
 
     ensureMatlabOctaveSubdirs();
     grid = validateGrid(grid);
+    err = grid.error;
+    if err.hasError
+        return;
+    end
     [A, b] = addScalarBC_impl(A, b, k, grid, v);
 end

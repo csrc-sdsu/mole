@@ -202,5 +202,20 @@ classdef testGridFirstV2Migration < matlab.unittest.TestCase
             testCase.verifyEqual(g1.error.id, 'makeGrid:InvalidFieldName');
         end
 
+        function testOperatorsPropagateGridError(testCase)
+            addpath('../../src/matlab_octave');
+            % Invalid grid (uniform 1D missing dx -> code 103). Operators must
+            % return the error via the second output instead of throwing.
+            [G, gErr] = grad(struct('m', 5), 4);
+            testCase.verifyEmpty(G);
+            testCase.verifyTrue(gErr.hasError);
+            testCase.verifyEqual(gErr.code, 103);
+
+            [D, dErr] = div(struct('m', 5), 4);
+            testCase.verifyEmpty(D);
+            testCase.verifyTrue(dErr.hasError);
+            testCase.verifyEqual(dErr.code, 103);
+        end
+
     end
 end

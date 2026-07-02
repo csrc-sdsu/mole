@@ -1,4 +1,4 @@
-function C = curlOp_impl(grid, k)
+function [C, err] = curlOp_impl(grid, k)
 % PURPOSE
 % Grid-first mimetic 2-D curl operator.
 %
@@ -24,6 +24,11 @@ function C = curlOp_impl(grid, k)
 % ----------------------------------------------------------------------------
 
     grid = validateGrid(grid);
+    err = grid.error;
+    if err.hasError
+        C = [];
+        return;
+    end
 
     assert(grid.dim == 2, ...
            'curlOp_impl:InvalidDim', 'curl is only implemented for 2-D grids');

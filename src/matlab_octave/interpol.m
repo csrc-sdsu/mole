@@ -1,4 +1,4 @@
-function I = interpol(grid, direction)
+function [I, err] = interpol(grid, direction)
 % PURPOSE
 % Returns an interpolation operator for the specified transfer direction.
 %
@@ -32,5 +32,10 @@ function I = interpol(grid, direction)
 
     ensureMatlabOctaveSubdirs();
     grid = validateGrid(grid);
+    err = grid.error;
+    if err.hasError
+        I = [];
+        return;
+    end
     I = interpol_impl(grid, direction);
 end

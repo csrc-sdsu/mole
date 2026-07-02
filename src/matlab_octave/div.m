@@ -1,4 +1,4 @@
-function D = div(varargin)
+function [D, err] = div(varargin)
 % PURPOSE
 % Mimetic divergence operator — 1-D, 2-D, and 3-D, uniform and curvilinear.
 %
@@ -29,5 +29,5 @@ function D = div(varargin)
     grid = varargin{1};
     k    = varargin{2};
     ensureMatlabOctaveSubdirs();
-    D = divOp_impl(grid, k);
+    [D, err] = divOp_impl(grid, k);
 end

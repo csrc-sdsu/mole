@@ -1,4 +1,4 @@
-function G = grad(varargin)
+function [G, err] = grad(varargin)
 % PURPOSE
 % Mimetic gradient operator — 1-D, 2-D, and 3-D, uniform and curvilinear.
 %
@@ -29,5 +29,5 @@ function G = grad(varargin)
     grid = varargin{1};
     k    = varargin{2};
     ensureMatlabOctaveSubdirs();
-    G = gradOp_impl(grid, k);
+    [G, err] = gradOp_impl(grid, k);
 end

@@ -1,4 +1,4 @@
-function G = gradOp_impl(grid, k)
+function [G, err] = gradOp_impl(grid, k)
 % PURPOSE
 % Grid-first mimetic gradient operator for 1-D, 2-D, and 3-D uniform grids.
 %
@@ -17,6 +17,11 @@ function G = gradOp_impl(grid, k)
 % ----------------------------------------------------------------------------
 
     grid = validateGrid(grid);
+    err = grid.error;
+    if err.hasError
+        G = [];
+        return;
+    end
 
     assert(k >= 2, 'k >= 2');
     assert(mod(k, 2) == 0, 'k % 2 = 0');

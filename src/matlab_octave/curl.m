@@ -1,4 +1,4 @@
-function C = curl(grid, k)
+function [C, err] = curl(grid, k)
 % PURPOSE
 % Returns the mimetic 2-D curl operator for a uniform grid.
 %
@@ -28,5 +28,5 @@ function C = curl(grid, k)
     end
 
     ensureMatlabOctaveSubdirs();
-    C = curlOp_impl(grid, k);
+    [C, err] = curlOp_impl(grid, k);
 end

@@ -1,4 +1,4 @@
-function N = nodal(varargin)
+function [N, err] = nodal(varargin)
 % PURPOSE
 % Mimetic nodal derivative operator — 1-D, 2-D, and 3-D.
 %
@@ -28,7 +28,7 @@ function N = nodal(varargin)
         grid = varargin{1};
         k    = varargin{2};
         ensureMatlabOctaveSubdirs();
-        N = nodalOp_impl(grid, k);
+        [N, err] = nodalOp_impl(grid, k);
         return;
     end
 
@@ -41,7 +41,7 @@ function N = nodal(varargin)
         dx = varargin{3};
         grid = makeGrid('m', m_nodes - 1, 'dx', dx);
         ensureMatlabOctaveSubdirs();
-        N = nodalOp_impl(grid, k);
+        [N, err] = nodalOp_impl(grid, k);
         return;
     end
 

@@ -1,4 +1,4 @@
-function N = nodalOp_impl(grid, k)
+function [N, err] = nodalOp_impl(grid, k)
 % PURPOSE
 % Grid-first nodal derivative operator for 1-D, 2-D, and 3-D uniform grids.
 %
@@ -16,6 +16,11 @@ function N = nodalOp_impl(grid, k)
 % ----------------------------------------------------------------------------
 
     grid = validateGrid(grid, true);
+    err = grid.error;
+    if err.hasError
+        N = [];
+        return;
+    end
 
     assert(k >= 2, 'k >= 2');
     assert(mod(k, 2) == 0, 'k % 2 = 0');
