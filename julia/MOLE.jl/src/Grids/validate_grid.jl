@@ -196,7 +196,7 @@ function _normalize_1d(raw, bc_raw, topology; allowPartial)
         )
     end
 
-    return Grid(dim = 1, topology = topology)
+    return Grid{Float64}(dim = 1, topology = topology)
 end
 
 function _normalize_2d(raw, bc_raw, topology; allowPartial)
@@ -254,7 +254,7 @@ function _normalize_2d(raw, bc_raw, topology; allowPartial)
         )
     end
 
-    return Grid(dim = 2, topology = topology)
+    return Grid{Float64}(dim = 2, topology = topology)
 end
 
 function _normalize_3d(raw, bc_raw, topology; allowPartial)
@@ -311,7 +311,7 @@ function _normalize_3d(raw, bc_raw, topology; allowPartial)
         )
     end
 
-    return Grid(dim = 3, topology = topology)
+    return Grid{Float64}(dim = 3, topology = topology)
 end
 
 function _normalize_curvilinear_2d(raw, bc_raw)
