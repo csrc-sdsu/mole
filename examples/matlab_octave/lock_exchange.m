@@ -8,7 +8,7 @@ clc
 close all
 
 %% MOLE'S path so mimetic methods can be used
-addpath('../../src/matlab_octave')
+addpath(genpath('../../src/matlab_octave'))
 
 tic  % Start the timer
 %--------------------------------------------------------------------------

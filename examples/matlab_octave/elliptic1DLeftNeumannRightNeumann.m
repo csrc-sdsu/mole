@@ -9,7 +9,7 @@
 %
 close all; clc;
 
-addpath('../../src/matlab_octave');
+addpath(genpath('../../src/matlab_octave'));
 
 k = 2;
 bvp = 4;

@@ -1,7 +1,7 @@
 classdef testEnergy < matlab.unittest.TestCase
     methods(Test)
         function testforEnergy(testCase)
-            addpath ('../../src/matlab_octave')
+            addpath(genpath('../../src/matlab_octave'))
             
             %parameteres
             k = 4;
