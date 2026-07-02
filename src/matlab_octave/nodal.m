@@ -1,16 +1,22 @@
-function N = nodal(k, m, dx)
+function N = nodal(varargin)
 % PURPOSE
-% Returns a m+1 by m+1 one-dimensional operator that approximates the 
-% first-order derivatives on a uniform nodal grid
+% Mimetic nodal derivative operator — 1-D, 2-D, and 3-D.
 %
 % DESCRIPTION
+% Public entry point for the grid-struct API. Validates the grid and
+% dispatches to nodalOp_impl, which handles uniform and curvilinear grids.
+%
+% The legacy 3-argument form nodal(k, m, dx) where m is the node count
+% is retained for backwards compatibility with internal callers (nodal2D)
+% and will be removed in Plan 3 when nodal2D.m is deleted.
+%
 % Parameters:
-%                k : Order of accuracy
-%                m : Number of nodes
-%               dx : Step size
+%   N    : Sparse matrix — mimetic nodal derivative operator
+%   grid : Grid struct produced by makeGrid or validateGrid
+%   k    : Order of accuracy (even integer >= 2)
 %
 % SYNTAX
-% N = nodal(k, m, dx)
+% N = nodal(grid, k)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
@@ -18,67 +24,27 @@ function N = nodal(k, m, dx)
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
 
-    m = m-1;
-    n_rows = m+1;
-    n_cols = n_rows;
-
-    N = sparse(n_rows, n_cols);
-
-    neighbors = zeros(1, k+1); % Bandwidth = k+1
-    neighbors(1) = -k/2;
-    len = k+1;
-    j = 1;
-
-    for i = 2 : len
-        neighbors(i) = neighbors(i-1)+1;
+    if numel(varargin) == 2 && isstruct(varargin{1})
+        grid = varargin{1};
+        k    = varargin{2};
+        ensureMatlabOctaveSubdirs();
+        N = nodalOp_impl(grid, k);
+        return;
     end
 
-    % Create a k by k Vandermonde matrix based on the neighbors:
-    A = vander(neighbors)';
-
-    % First-order derivative
-    b = zeros(len, 1);
-    b(len-1) = 1;
-
-    % Solve the linear system to get the coefficients
-    coeffs = A\b;
-
-    for i = k/2+1 : n_rows-k/2
-        N(i, j:j+len-1) = coeffs;
-        j = j+1;
+    if numel(varargin) == 3 && ~isstruct(varargin{1})
+        % Legacy internal form: nodal(k, m_nodes, dx)
+        % Called by nodal2D which receives node counts from jacobian2D.
+        % Route through a synthetic 1D grid (m_cells = m_nodes - 1).
+        k  = varargin{1};
+        m_nodes = varargin{2};
+        dx = varargin{3};
+        grid = makeGrid('m', m_nodes - 1, 'dx', dx);
+        ensureMatlabOctaveSubdirs();
+        N = nodalOp_impl(grid, k);
+        return;
     end
 
-    p = k/2;
-    q = k+1;
-    A = sparse(p, q);
-    for i = 1 : p % For each row of A
-        neighbors = zeros(1, q); % k+1 points are used for the boundaries
-        neighbors(1) = 1-i; % Shifting the stencil to the right
-        neighbors(2) = neighbors(1)+1;
-
-        for j = 3 : q
-            neighbors(j) = neighbors(j-1)+1;
-        end
-
-        V = vander(neighbors)';
-        b = zeros(q, 1);
-        b(q-1) = 1;
-        coeffs = V\b;
-        A(i, 1:q) = coeffs;
-    end
-
-    % Insert A into N (upper-left corner of N)
-    N(1:p, 1:q) = A;
-
-    % Permutation matrices
-    Pp = fliplr(speye(p));
-    Pq = fliplr(speye(q));
-    % Construct A' (lower-right corner of N)
-    A = -Pp*A*Pq;
-
-    % Insert A' into N
-    N(n_rows-p+1:n_rows, n_cols-q+1:n_cols) = A;
-
-    % Scale N
-    N = 1/dx*N;
+    error('nodal:InvalidSignature', ...
+          'nodal(grid, k) is the only supported public signature');
 end

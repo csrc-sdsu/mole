@@ -1,40 +1,33 @@
-function L = lap(k, m, dx, dc, nc)
+function L = lap(varargin)
 % PURPOSE
-% Returns a one-dimensional mimetic Laplacian operator depending on whether
-% or not the operator will contain a periodic boundary condition type
-%                              a0 U + b0 dU/dn = g,
+% Mimetic Laplacian operator — 1-D, 2-D, and 3-D, uniform and curvilinear.
 %
 % DESCRIPTION
+% Public entry point for the grid-struct API. Composes div*grad via
+% lapOp_impl, which inherits curvilinear support from the individual
+% operator impls.
+%
 % Parameters:
-%                k : Order of accuracy
-%                m : Number of cells
-%               dx : Step size
-%    (optional) dc : a0 (2x1 vector for left and right vertices, resp.)
-%    (optional) nc : b0 (2x1 vector for left and right vertices, resp.)
+%   L    : Sparse matrix — mimetic Laplacian operator
+%   grid : Grid struct produced by makeGrid or validateGrid
+%   k    : Order of accuracy (even integer >= 2)
 %
 % SYNTAX
-% L = lap(k, m, dx)
-% L = lap(k, m, dx, dc, nc)
+% L = lap(grid, k)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
-%
 
-    if nargin ~= 3 && nargin ~= 5
-        error('lap:InvalidNumArgs', 'lap expects 3 or 5 arguments');
-    end
-    
-    % for legacy code
-    if nargin == 3
-        L = lapNonPeriodic(k, m, dx);
-        return;
+    if numel(varargin) ~= 2 || ~isstruct(varargin{1})
+        error('lap:InvalidSignature', ...
+              'lap(grid, k) is the only supported signature');
     end
 
-    D = div(k, m, dx, dc, nc);
-    G = grad(k, m, dx, dc, nc);
-    
-    L = D*G;
+    grid = varargin{1};
+    k    = varargin{2};
+    ensureMatlabOctaveSubdirs();
+    L = lapOp_impl(grid, k);
 end
