@@ -1,6 +1,8 @@
 classdef testDivPolynomial < matlab.unittest.TestCase
     methods (Test)
         function testDivOfPolynomial1D(testCase)
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/matlab_octave'))
             
             ks = [2, 4, 6, 8];  % Different orders of accuracy
@@ -29,6 +31,8 @@ classdef testDivPolynomial < matlab.unittest.TestCase
         end
 
         function testDivOfPolynomial2D(testCase)
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/matlab_octave'))
             
             ks = [2, 4, 6, 8];  % Different orders of accuracy
@@ -78,6 +82,8 @@ classdef testDivPolynomial < matlab.unittest.TestCase
         end
 
         function testDivOfPolynomial3D(testCase)
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/matlab_octave'))
             
             ks = [2, 4, 6, 8];  % Different orders of accuracy

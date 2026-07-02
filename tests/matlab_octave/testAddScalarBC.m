@@ -1,6 +1,8 @@
 classdef testAddScalarBC < matlab.unittest.TestCase
     methods(Test)
         function testBC1D(testCase)
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/matlab_octave'));
 
             k = 2;
@@ -66,6 +68,8 @@ classdef testAddScalarBC < matlab.unittest.TestCase
         end
 
         function testBC2D(testCase)
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/matlab_octave'));
 
             k = 2;
@@ -162,6 +166,8 @@ classdef testAddScalarBC < matlab.unittest.TestCase
         end
         
         function testBC3D(testCase)
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/matlab_octave'));
 
             k = 2;

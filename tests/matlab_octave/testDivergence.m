@@ -1,6 +1,8 @@
 classdef testDivergence < matlab.unittest.TestCase
     methods (Test)
         function testNullityOfDivergence(testCase)
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/matlab_octave'))
             
             ks = [2, 4, 6, 8];  % Different orders of accuracy

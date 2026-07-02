@@ -1,6 +1,8 @@
 classdef testEnergy < matlab.unittest.TestCase
     methods(Test)
         function testforEnergy(testCase)
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/matlab_octave'))
             
             %parameteres
