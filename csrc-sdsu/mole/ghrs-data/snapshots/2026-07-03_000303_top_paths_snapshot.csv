@@ -1,0 +1,11 @@
+url_path,views_total,views_unique
+/csrc-sdsu/mole,131,33
+/csrc-sdsu/mole/issues,94,12
+/csrc-sdsu/mole/pulls,91,11
+/csrc-sdsu/mole/actions,32,3
+/csrc-sdsu/mole/issues/378,26,11
+/csrc-sdsu/mole/pull/392,18,8
+/csrc-sdsu/mole/pull/391,17,7
+/csrc-sdsu/mole/issues/395,16,5
+/csrc-sdsu/mole/pull/388,15,4
+/csrc-sdsu/mole/blob/feat/dev.matlab.2.0/src/matlab_octave/api/validateGrid_impl.m,15,3
