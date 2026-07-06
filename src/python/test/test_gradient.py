@@ -103,12 +103,11 @@ class TestGradient:
             2,
         ).matrices
 
-        m, n = grid.X.shape
+        m, n = grid.num_cells
+        total_nodes = (m + 1) * (n + 1)
 
-        total_nodes = m * n
-
-        assert Gx.shape == (total_nodes, total_nodes)
-        assert Gy.shape == (total_nodes, total_nodes)
+        assert Gx.shape == (n * (m + 1), total_nodes)
+        assert Gy.shape == (m * (n + 1), total_nodes)
 
     def test_3d_matrix_shape(self):
 

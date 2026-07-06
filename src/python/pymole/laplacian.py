@@ -7,6 +7,9 @@ import numpy as np
 from pymole.divergence import Divergence
 from pymole.gradient import Gradient
 
+from pymole import Gradient
+from pymole import Divergence
+
 class Laplacian:
     """
     Unified Laplacian operator for 1D and 2D Grid objects.
