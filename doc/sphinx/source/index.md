@@ -25,6 +25,7 @@ Documentation Guide <intros/doc_readme_wrapper>
 
 api/cpp/index
 api/matlab_octave/index-beta
+api/julia/index
 ```
 
 ```{toctree}
