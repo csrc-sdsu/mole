@@ -14,10 +14,16 @@ dx = (east-west)/m;  % Step length
 
 L = lap(k, m, dx);  % 1D Mimetic laplacian operator
 
+full(L)
+size(L)
+
 % Impose Robin BC on laplacian operator
 a = 1;
 b = 1;
 L = L + robinBC(k, m, dx, a, b);
+
+full(L)
+%size(L)
 
 % 1D Staggered grid
 grid = [west west+dx/2 : dx : east-dx/2 east];
