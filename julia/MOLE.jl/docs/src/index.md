@@ -45,6 +45,7 @@ julia --project=. path/to/myScript.jl
 To run the unit tests, first enter the Julia REPL as in the above section (that is, by running the command `julia --project=.` from the directory `mole/julia/MOLE.jl`). Next, enter the `pkg` mode by pressing `]`, then type the command `test`. The results of the unit tests should be displayed to your console.
 
 ## Building the documentation
+
 MOLE.jl uses [Documenter.jl](https://documenter.juliadocs.org/stable/) to build its Julia implementation documentation. From the `mole/julia/MOLE.jl` directory, navigate to the `docs/` directory, with 
 
 ```sh
@@ -62,6 +63,7 @@ include("make.jl")
 ```
 
 ### From the command line
+
 To build the documentation from the `docs/` directory, use the following commands to instatiate and precompile the documentation environment:
 
 ```sh
@@ -79,6 +81,7 @@ julia --project=. make.jl
 ```
 
 ### Preview the documentation
+
 Once you have built the documentation (either from the REPL or the command line), you can inspect the documentation in `docs/build` with the `index.html` file as the homepage.
 
 ## Functions
@@ -86,23 +89,54 @@ Once you have built the documentation (either from the REPL or the command line)
 ### Operators
 
 ```@docs
-MOLE.Operators.div(k::Int,m::Int,dx)
-MOLE.Operators.grad(k::Int,m::Int,dx)
-MOLE.Operators.lap(k::Int,m::Int,dx)
+MOLE.Operators.div(k::Int, m::Int, dx; dc::NTuple{2,T}, nc::NTuple{2,T})
+MOLE.Operators.div(k::Int, ticks::AbstractVector)
+MOLE.Operators.div(k::Int, m::Int, dx, n::Int, dy; dc::NTuple{4,T}, nc::NTuple{4,T})
+MOLE.Operators.div(k::Int, xticks::AbstractVector, yticks::AbstractVector)
+MOLE.Operators.grad(k::Int, m::Int, dx; dc::NTuple{2,T}, nc::NTuple{2,T})
+MOLE.Operators.grad(k::Int, ticks::AbstractVector)
+MOLE.Operators.grad(k::Int, m::Int, dx, n::Int, dy; dc::NTuple{4,T}, nc::NTuple{4,T})
+MOLE.Operators.grad(k::Int, xticks::AbstractVector, yticks::AbstractVector)
+MOLE.Operators.lap(k::Int, m::Int, dx; dc::NTuple{2,T}, nc::NTuple{2,T})
+MOLE.Operators.lap(k::Int, m::Int, dx, n::Int, dy; dc::NTuple{4,T}, nc::NTuple{4,T})
+MOLE.Operators.interpol(m::Int, c::Float64)
 ```
 
 ### Utilities
 
 ```@docs
 MOLE.BCs.robinBC(k::Int, m::Int, dx, a, b)
+MOLE.BCs.robinBC(k::Int, m::Int, dx, n::Int, dy, a, b)
+MOLE.BCs.ScalarBC1D{T}
+MOLE.BCs.ScalarBC2D{T}
+MOLE.BCs.addScalarBC!(A::SparseMatrixCSC, b::AbstractVector, bc::MOLE.BCs.ScalarBC1D, k::Integer, m::Integer, dx)
+MOLE.BCs.addScalarBC!(A::SparseMatrixCSC, b::AbstractVector, bc::MOLE.BCs.ScalarBC2D, k::Integer, m::Integer, dx, n::Integer, dy)
 ```
 
 ## Examples
 
 The MOLE library contains examples demonstrating how to use the operators, in a broad range of partial differential equations (PDEs). More information on the mathematical content can be found in the [main MOLE documentation](https://mole-docs.readthedocs.io/en/main/examples/index.html).
 
+```@contents
+:maxdepth: 2
+:caption: Examples
+:name: examples-nav
+
+src/examples/
+```
+
 Currently, the following examples are available in the MOLE Julia package.
 
 - Elliptic Problems
-    - 1D Examples
-        - ```elliptic1D```: A script that solves the 1D Poisson's equation with Robin boundary conditions using mimetic operators.
+  - 1D Examples
+    - ```elliptic1D```: A script that solves the 1D Poisson's equation with Robin boundary conditions using mimetic operators.
+  - 2D Examples
+    - ```elliptic2DXDirichletYDirichlet```: A script that solves the 2D Laplace equation, $\nabla^2 u = 0$, with Dirichlet boundary conditions in $x$ and $y$ using mimetic operators.
+    - ```elliptic2DXPerYDirichlet```: A script that solves the 2D Laplace equation, $\nabla^2 u = 0$, with periodic bonudary conditions in $x$ and Dirichlet boundary conditions in $y$ using mimetic operators.
+- Hyperbolic Problems
+  - 1D Examples
+    - ```burgers1D```: A script that solves the 1D conservative form of inviscid Burgers equation using mimetic operators.
+    - ```hyperbolic1D```: A script that solves the 1D Hyperbolic Equation with Periodic boundary conditions using mimetic operators.
+- Parabolic Problems
+  - 2D Examples
+    - ```parabolic2D```: A script that solves the 2D heat equation, $u_t = \nu \nabla^2 u$, with Dirichlet boundary conditions in $x$ and $y$ using mimetic operators.

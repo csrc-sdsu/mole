@@ -14,10 +14,13 @@ set(EXAMPLE_SOURCES
   elliptic2D.cpp
   elliptic2D_x_dirichlet_y_dirichlet.cpp
   elliptic3D.cpp
+  helmholtz2D_wifi.cpp
+  hyperbolic1D.cpp
   hyperbolic1D_upwind.cpp
   lock_exchange.cpp
   maxwell1D.cpp
   parabolic1D.cpp
+  parabolic2D.cpp
   poisson2D.cpp
   poisson_2D_dirichlet.cpp
   RK2.cpp

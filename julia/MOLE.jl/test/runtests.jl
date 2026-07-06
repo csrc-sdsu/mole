@@ -14,10 +14,14 @@ import MOLE: Operators, BCs
     @testset "Testing 1D laplacian" begin
         include("Operators/laplacian.jl")
     end
+
+    @testset "Testing interpol" begin
+        include("Operators/interpol.jl")
+    end
 end
 
 @testset "Testing Boundary Conditions" begin
-    
+
     @testset "Test addScalarBC" begin
         include("BCs/scalarBC.jl")
     end

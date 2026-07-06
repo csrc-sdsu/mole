@@ -1,0 +1,45 @@
+name: Julia Formatter
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+    tags: '*'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  format:
+    name: Check Julia formatting
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: julia/MOLE.jl
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Julia
+        uses: julia-actions/setup-julia@v3
+        with:
+          version: '1.10'
+
+      - name: Cache Julia artifacts
+        uses: julia-actions/cache@v3
+
+      - name: Install JuliaFormatter
+        run: julia -e 'using Pkg; Pkg.add("JuliaFormatter")'
+
+      - name: Check formatting
+        run: |
+          julia -e '
+          using JuliaFormatter
+          format(".", overwrite=false, verbose=true) || error("Formatting issues detected")
+          '
