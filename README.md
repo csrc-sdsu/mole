@@ -9,7 +9,7 @@
 
 ## Description
 
-MOLE is a high-quality (C++ & MATLAB/Octave) library that implements
+MOLE is a high-quality (C++, MATLAB/Octave, and Julia) library that implements
 high-order mimetic operators to solve partial differential equations.
 It provides discrete analogs of the most common vector calculus operators:
 Gradient, Divergence, Laplacian, Bilaplacian, and Curl. These operators (highly sparse matrices) act
@@ -139,11 +139,15 @@ and on Windows downlaoding and running the file from [here](https://sourceforge.
 
 ### C++
 
-Four self-contained, well-documented examples demonstrating typical PDE solutions. These are automatically built with `make` and serve as an excellent starting point for C++ users.
+There are several self-contained, well-documented examples demonstrating typical PDE solutions. These are automatically built with `make` and serve as an excellent starting point for C++ users.
 
 ### MATLAB/Octave Examples
 
 A collection of over 30 examples showcasing various PDE solutions, from simple linear one-dimensional problems to complex nonlinear multidimensional scenarios.
+
+### Julia Examples
+
+Several self-contained, well-documented examples demostrate the MOLE.jl use. Their documentation can be found in the [MOLE.jl Documentation website Examples section](https://www.mole-ose.org/MOLE.jl-docs/dev/examples/).
 
 ## Documentation
 
@@ -151,6 +155,7 @@ MOLE comes with comprehensive documentation:
 
 - **API Reference & User Guide**: Access our online [Documentation](https://mole-docs.readthedocs.io/en/latest/)
 - **Building Documentation**: To build documentation locally, follow our [Documentation Guide](https://github.com/csrc-sdsu/mole/blob/main/doc/sphinx/README.md).
+- **MOLE.jl Documentation**: Access the [MOLE.jl Documentation](https://www.mole-ose.org/MOLE.jl-docs/dev/) for the description of the MOLE Julia language implementation.
 
 > **Important Note:** Performing non-unary operations involving operands constructed over different grids may lead to unexpected results. While MOLE allows such operations without throwing errors, users must exercise caution when manipulating operators across different grids.
 
