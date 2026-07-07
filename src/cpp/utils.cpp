@@ -17,6 +17,9 @@
 
 #include "utils.h"
 #include <cassert>
+#include <cmath>
+#include <stdexcept>
+#include <string>
 
 #ifdef EIGEN
 #include <eigen3/Eigen/SparseLU>
@@ -242,5 +245,14 @@ double Utils::trapz(const vec &x, const vec &y) {
     sum += (x(i+1) - x(i)) * (y(i) + y(i+1));
   }
   return 0.5 * sum;
+}
+
+// Spacing validation shared across every operator entry point.
+void mole::check_spacing(Real h, const char* name) {
+  if (!std::isfinite(h) || h <= 0.0) {
+    throw std::invalid_argument(
+        std::string("MOLE: ") + name +
+        " must be a positive finite number, got " + std::to_string(h));
+  }
 }
 
