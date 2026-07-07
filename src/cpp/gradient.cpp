@@ -35,6 +35,7 @@ int Gradient::isPeriodic(const ivec &dc, const ivec &nc) {
 }
 
 sp_mat Gradient::periodicGrad1D(u16 k, u32 m, Real dx) {
+  mole::check_spacing(dx, "dx");
   assert(!(k % 2));
   assert(k > 1 && k < 9);
   assert(m >= 2 * k);
@@ -97,6 +98,7 @@ sp_mat Gradient::periodicGrad1D(u16 k, u32 m, Real dx) {
 // ============================================================================
 
 Gradient::Gradient(u16 k, u32 m, Real dx) : sp_mat(m + 1, m + 2) {
+  mole::check_spacing(dx, "dx");
   assert(!(k % 2));
   assert(k > 1 && k < 9);
   assert(m >= 2 * k);
@@ -325,6 +327,8 @@ void Gradient::build_gradient(sp_mat &G_m, sp_mat &I, u16 k, u32 dim,
 // ============================================================================
 
 Gradient::Gradient(u16 k, u32 m, u32 n, Real dx, Real dy) {
+  mole::check_spacing(dx, "dx");
+  mole::check_spacing(dy, "dy");
   Gradient Gx(k, m, dx);
   Gradient Gy(k, n, dy);
 
@@ -348,6 +352,9 @@ Gradient::Gradient(u16 k, u32 m, u32 n, Real dx, Real dy) {
 // ============================================================================
 
 Gradient::Gradient(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz) {
+  mole::check_spacing(dx, "dx");
+  mole::check_spacing(dy, "dy");
+  mole::check_spacing(dz, "dz");
   Gradient Gx(k, m, dx);
   Gradient Gy(k, n, dy);
   Gradient Gz(k, o, dz);
@@ -376,6 +383,7 @@ Gradient::Gradient(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz) {
 
 Gradient::Gradient(u16 k, u32 m, Real dx, const ivec &dc, const ivec &nc)
     : sp_mat() {
+  mole::check_spacing(dx, "dx");
   assert(dc.n_elem == 2 && nc.n_elem == 2);
 
   if (isPeriodic(dc, nc)) {
@@ -396,6 +404,8 @@ Gradient::Gradient(u16 k, u32 m, Real dx, const ivec &dc, const ivec &nc)
 Gradient::Gradient(u16 k, u32 m, u32 n, Real dx, Real dy, const ivec &dc,
                    const ivec &nc)
     : sp_mat() {
+  mole::check_spacing(dx, "dx");
+  mole::check_spacing(dy, "dy");
   assert(dc.n_elem == 4 && nc.n_elem == 4);
   // dc/nc index convention: entries [0,1] control the x-axis (left, right),
   // entries [2,3] control the y-axis (bottom, top).
@@ -422,6 +432,9 @@ Gradient::Gradient(u16 k, u32 m, u32 n, Real dx, Real dy, const ivec &dc,
 Gradient::Gradient(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz,
                    const ivec &dc, const ivec &nc)
     : sp_mat() {
+  mole::check_spacing(dx, "dx");
+  mole::check_spacing(dy, "dy");
+  mole::check_spacing(dz, "dz");
   assert((dc.n_elem == 6) && (nc.n_elem == 6));
   // dc/nc index convention:
   //   [0,1] = left, right  (x-axis)
