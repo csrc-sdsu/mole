@@ -99,7 +99,11 @@ MOLE.Operators.grad(k::Int, m::Int, dx, n::Int, dy; dc::NTuple{4,T}, nc::NTuple{
 MOLE.Operators.grad(k::Int, xticks::AbstractVector, yticks::AbstractVector)
 MOLE.Operators.lap(k::Int, m::Int, dx; dc::NTuple{2,T}, nc::NTuple{2,T})
 MOLE.Operators.lap(k::Int, m::Int, dx, n::Int, dy; dc::NTuple{4,T}, nc::NTuple{4,T})
-MOLE.Operators.interpol(m::Int, c::Float64)
+MOLE.Operators.interpol(m::Int, c::Real)
+MOLE.Operators.interpol(::Val{:centers_to_faces}, k::Int, m::Int)
+MOLE.Operators.interpol(::Val{:faces_to_centers}, k::Int, m::Int)
+MOLE.Operators.interpol(::Val{:centers_to_faces}, k::Int, m::Int, n::Int)
+MOLE.Operators.interpol(::Val{:faces_to_centers}, k::Int, m::Int, n::Int)
 ```
 
 ### Utilities
