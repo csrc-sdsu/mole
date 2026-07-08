@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 import numpy as np
 from scipy import sparse
 
+from .gradient import Gradient
 
 class BoundaryCondition(ABC):
     @abstractmethod
@@ -65,16 +66,6 @@ class BoundaryCondition(ABC):
         B = sparse.lil_matrix((size + 2, size + 1), dtype=float)
         B[0, 0] = -b
         B[-1, -1] = b
-
-        G = self._build_1d_gradient(size, dx)
+        
+        G = Gradient(self.grid, self.accuracy_order).matrix
         return (A + B @ G).tocsr()
-
-    def _build_1d_gradient(self, size: int, dx: float):
-        G = sparse.lil_matrix((size + 1, size + 2), dtype=float)
-        G[0, 0:3] = [-8.0 / 3.0, 3.0, -1.0 / 3.0]
-        G[size, size - 1 : size + 2] = [1.0 / 3.0, -3.0, 8.0 / 3.0]
-
-        for i in range(1, size):
-            G[i, i : i + 2] = [-1.0, 1.0]
-
-        return (G / dx).tocsr()

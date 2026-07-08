@@ -6,6 +6,7 @@
 import numpy as np
 import sys
 import shutil
+import matplotlib.pyplot as plt
 
 from pathlib import Path
 
@@ -24,10 +25,20 @@ L = Laplacian(grid, accuracy_order=k).matrix
 
 terminal_width, _ = shutil.get_terminal_size()
 np.set_printoptions(linewidth=terminal_width, suppress=True)
-print(L.toarray())
 
 BC = RobinBoundaryCondition(grid, k, dirichlet_coefficient=1.0, neumann_coefficient=1.0)
-print(BC.matrix.toarray())
-
 L_BC = L + BC.matrix
-print(L_BC.toarray())
+
+x = np.r_[west, np.arange(west + grid.spacing/2, east - grid.spacing/2 + grid.spacing/2, grid.spacing), east]
+U = np.exp(x)[:, None]
+U[0] = 0          # West BC
+U[-1] = 2*np.exp(1)  # East BC
+U = np.linalg.inv(L_BC.toarray()) @ U
+
+plt.plot(x, U, 'o', label='Approximated')
+plt.plot(x, np.exp(x), label='Analytical')
+plt.legend(loc='upper left')
+plt.title("Poisson's equation with Robin BC")
+plt.xlabel('x')
+plt.ylabel('u(x)')
+plt.show()
