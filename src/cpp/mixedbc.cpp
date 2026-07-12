@@ -18,6 +18,7 @@
 MixedBC::MixedBC(u16 k, u32 m, Real dx, const std::string &left,
                  const std::vector<Real> &coeffs_left, const std::string &right,
                  const std::vector<Real> &coeffs_right) {
+  mole::check_spacing(dx, "dx");
   sp_mat A(m + 2, m + 2);
   sp_mat BG(m + 2, m + 2);
 
@@ -65,6 +66,8 @@ MixedBC::MixedBC(u16 k, u32 m, Real dx, u32 n, Real dy, const std::string &left,
                  const std::string &bottom,
                  const std::vector<Real> &coeffs_bottom, const std::string &top,
                  const std::vector<Real> &coeffs_top) {
+  mole::check_spacing(dx, "dx");
+  mole::check_spacing(dy, "dy");
   MixedBC Bm(k, m, dx, left, coeffs_left, right, coeffs_right);
   MixedBC Bn(k, n, dy, bottom, coeffs_bottom, top, coeffs_top);
 
@@ -90,6 +93,9 @@ MixedBC::MixedBC(u16 k, u32 m, Real dx, u32 n, Real dy, u32 o, Real dz,
                  const std::vector<Real> &coeffs_top, const std::string &front,
                  const std::vector<Real> &coeffs_front, const std::string &back,
                  const std::vector<Real> &coeffs_back) {
+  mole::check_spacing(dx, "dx");
+  mole::check_spacing(dy, "dy");
+  mole::check_spacing(dz, "dz");
   MixedBC Bm(k, m, dx, left, coeffs_left, right, coeffs_right);
   MixedBC Bn(k, n, dy, bottom, coeffs_bottom, top, coeffs_top);
   MixedBC Bo(k, o, dz, front, coeffs_front, back, coeffs_back);

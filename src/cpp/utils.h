@@ -116,4 +116,23 @@ public:
   static double trapz(const vec &x, const vec &y);
 };
 
+namespace mole {
+
+/**
+ * @brief Validate a cell-spacing argument.
+ *
+ * Throws std::invalid_argument if @p h is zero, negative, NaN, or Inf.
+ * Called at the top of every operator constructor and AddScalarBC free
+ * function that takes a dx / dy / dz argument, so validation is active
+ * in both Debug and Release builds (unlike assert(), which vanishes
+ * under NDEBUG).
+ *
+ * @param h    Spacing value to check.
+ * @param name Parameter name for the error message (e.g. "dx").
+ * @throws std::invalid_argument if h is not a positive finite number.
+ */
+void check_spacing(Real h, const char* name);
+
+} // namespace mole
+
 #endif // UTILS_H
