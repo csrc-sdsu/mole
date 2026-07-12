@@ -2,7 +2,7 @@
 clc
 close all
 
-addpath('../../src/matlab_octave')
+addpath(genpath('../../src/matlab_octave'))
 
 % Parameters
 Lxy = 1;              % Length of box in x and y
