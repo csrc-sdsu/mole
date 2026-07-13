@@ -32,6 +32,7 @@ int Divergence::isPeriodic(const ivec &dc, const ivec &nc) {
 }
 
 sp_mat Divergence::periodicDiv1D(u16 k, u32 m, Real dx) {
+  mole::check_spacing(dx, "dx");
   assert(!(k % 2));
   assert(k > 1 && k < 9);
   assert(m >= 2 * k);
@@ -99,6 +100,7 @@ sp_mat Divergence::periodicDiv1D(u16 k, u32 m, Real dx) {
 // ============================================================================
 
 Divergence::Divergence(u16 k, u32 m, Real dx) : sp_mat(m + 2, m + 1) {
+  mole::check_spacing(dx, "dx");
   assert(!(k % 2));
   assert(k > 1 && k < 9);
   assert(k > 1 && k < 9);
@@ -290,6 +292,8 @@ void Divergence::build_divergence(sp_mat &D_m, sp_mat &I, u16 k, u32 dim,
 // ============================================================================
 
 Divergence::Divergence(u16 k, u32 m, u32 n, Real dx, Real dy) {
+  mole::check_spacing(dx, "dx");
+  mole::check_spacing(dy, "dy");
   Divergence Dx(k, m, dx);
   Divergence Dy(k, n, dy);
 
@@ -313,6 +317,9 @@ Divergence::Divergence(u16 k, u32 m, u32 n, Real dx, Real dy) {
 // ============================================================================
 
 Divergence::Divergence(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz) {
+  mole::check_spacing(dx, "dx");
+  mole::check_spacing(dy, "dy");
+  mole::check_spacing(dz, "dz");
   Divergence Dx(k, m, dx);
   Divergence Dy(k, n, dy);
   Divergence Dz(k, o, dz);
@@ -347,6 +354,7 @@ Divergence::Divergence(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz) {
 
 Divergence::Divergence(u16 k, u32 m, Real dx, const ivec &dc, const ivec &nc)
     : sp_mat() {
+  mole::check_spacing(dx, "dx");
   assert(dc.n_elem == 2 && nc.n_elem == 2);
 
   if (isPeriodic(dc, nc)) {
@@ -367,6 +375,8 @@ Divergence::Divergence(u16 k, u32 m, Real dx, const ivec &dc, const ivec &nc)
 Divergence::Divergence(u16 k, u32 m, u32 n, Real dx, Real dy, const ivec &dc,
                        const ivec &nc)
     : sp_mat() {
+  mole::check_spacing(dx, "dx");
+  mole::check_spacing(dy, "dy");
   assert(dc.n_elem == 4 && nc.n_elem == 4);
 
   // dc/nc index convention: entries [0,1] control the x-axis (left, right),
@@ -394,6 +404,9 @@ Divergence::Divergence(u16 k, u32 m, u32 n, Real dx, Real dy, const ivec &dc,
 Divergence::Divergence(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz,
                        const ivec &dc, const ivec &nc)
     : sp_mat() {
+  mole::check_spacing(dx, "dx");
+  mole::check_spacing(dy, "dy");
+  mole::check_spacing(dz, "dz");
   assert(dc.n_elem == 6 && nc.n_elem == 6);
 
   // dc/nc index convention:

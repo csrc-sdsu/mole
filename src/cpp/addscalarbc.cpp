@@ -145,6 +145,7 @@ void applyBCPairRhs(vec &b, const vec &dc, const vec &nc,
 void addScalarBClhs(u16 k, u32 m, Real dx,
                     const vec &dc, const vec &nc,
                     sp_mat &Al, sp_mat &Ar) {
+    mole::check_spacing(dx, "dx");
     Al = sp_mat(m+2, m+2);
     Ar = sp_mat(m+2, m+2);
 
@@ -171,6 +172,8 @@ void addScalarBClhs(u16 k, u32 m, Real dx,
 void addScalarBClhs(u16 k, u32 m, Real dx, u32 n, Real dy,
                     const vec &dc, const vec &nc,
                     sp_mat &Al, sp_mat &Ar, sp_mat &Ab, sp_mat &At) {
+    mole::check_spacing(dx, "dx");
+    mole::check_spacing(dy, "dy");
     Al.set_size(0, 0); Ar.set_size(0, 0);
     Ab.set_size(0, 0); At.set_size(0, 0);
 
@@ -202,6 +205,9 @@ void addScalarBClhs(u16 k, u32 m, Real dx, u32 n, Real dy, u32 o, Real dz,
                     const vec &dc, const vec &nc,
                     sp_mat &Al, sp_mat &Ar, sp_mat &Ab,
                     sp_mat &At, sp_mat &Af, sp_mat &Ak) {
+    mole::check_spacing(dx, "dx");
+    mole::check_spacing(dy, "dy");
+    mole::check_spacing(dz, "dz");
     Al.set_size(0,0); Ar.set_size(0,0);
     Ab.set_size(0,0); At.set_size(0,0);
     Af.set_size(0,0); Ak.set_size(0,0);
@@ -284,6 +290,7 @@ void addScalarBCrhs(vec &b, const vec &dc, const vec &nc,
 // ============================================================================
 
 void addScalarBC(sp_mat &A, vec &b, u16 k, u32 m, Real dx, const BC1D &bc) {
+    mole::check_spacing(dx, "dx");
     assert(bc.dc.n_elem == 2 && "dc must be a 2x1 vector");
     assert(bc.nc.n_elem == 2 && "nc must be a 2x1 vector");
     assert(A.n_rows == A.n_cols && "A must be square");
@@ -306,6 +313,8 @@ void addScalarBC(sp_mat &A, vec &b, u16 k, u32 m, Real dx, const BC1D &bc) {
 
 void addScalarBC(sp_mat &A, vec &b, u16 k, u32 m, Real dx,
                  u32 n, Real dy, const BC2D &bc) {
+    mole::check_spacing(dx, "dx");
+    mole::check_spacing(dy, "dy");
     assert(bc.dc.n_elem == 4 && "dc must be a 4x1 vector");
     assert(bc.nc.n_elem == 4 && "nc must be a 4x1 vector");
     assert(bc.v.size() == 4  && "v must have 4 vectors");
@@ -328,6 +337,9 @@ void addScalarBC(sp_mat &A, vec &b, u16 k, u32 m, Real dx,
 
 void addScalarBC(sp_mat &A, vec &b, u16 k, u32 m, Real dx,
                  u32 n, Real dy, u32 o, Real dz, const BC3D &bc) {
+    mole::check_spacing(dx, "dx");
+    mole::check_spacing(dy, "dy");
+    mole::check_spacing(dz, "dz");
     assert(bc.dc.n_elem == 6 && "dc must be a 6x1 vector");
     assert(bc.nc.n_elem == 6 && "nc must be a 6x1 vector");
     assert(bc.v.size() == 6  && "v must have 6 vectors");

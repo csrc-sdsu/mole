@@ -1,12 +1,46 @@
 function [A, b] = addScalarBC1D(A, b, k, m, dx, dc, nc, v)
 % PURPOSE
-% Separates cases non-periodic and periodic for dealing with boundary data
+% This function assumes that the unknown u, which represents the discrete
+% solution of the continuous second-order 1D PDE
+%                                   L u = f,
+% with continuous boundary condition
+%                              a0 u + b0 du/dn = g,
+% is given at the 1D cell centers and boundary face centers. Furthermore,
+% all discrete calculations are performed at the 1D cell centers and boundary
+% face centers.
 %
 % DESCRIPTION
+% The function receives as input quantities associated with the discrete
+% analog of the continuous problem given by the square linear system
+%                                 A u = b
+% where A is the discrete analog of L and b is the discrete analog of f,
+% both constructed by the user without boundary conditions.
+% The function output is the modified square linear system
+%                                 A u = b
+% where both A and b include boundary condition information.
+%
+% The boundary condition is always one of the following forms:
+%
+% For Dirichlet set: a0 not equal to zero and b0 = 0.
+% For Neumann set  : a0 = 0 and b0 not equal to zero.
+% For Robin set    : both a0 and b0 not equal to zero.
+% For Periodic set : both a0 = 0 and b0 = 0.
+%
+% For periodic bc, it is assumed that not only u but also du/dn are the
+% same at both ends of the domain since a second-order PDE is assumed.
+%
+% dc, nc, and v are each 2x1 vectors ordered [left; right], giving a0, b0,
+% and g respectively at the left and right boundary of the 1D domain.
+%
+% The code assumes the following assertions:
+% assert(k >= 2, 'k >= 2');
+% assert(mod(k, 2) == 0, 'k % 2 = 0');
+% assert(m >= 2*k+1, ['m >= ' num2str(2*k+1) ' for k = ' num2str(k)]);
+%
 % Parameters:
 % output
-%        A0 : Linear operator with boundary conditions added
-%        b0 : Right hand side with boundary conditions added
+%         A : Linear operator with boundary conditions added
+%         b : Right hand side with boundary conditions added
 %
 % input
 %         A : Linear operator without boundary conditions added

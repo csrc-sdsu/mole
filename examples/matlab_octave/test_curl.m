@@ -12,7 +12,7 @@ clc
 close all
 clear
 
-addpath('../../src/matlab_octave')
+addpath(genpath('../../src/matlab_octave'))
 
 % This P and Q will produce a scalar curl = 2
 P = @(~, Y) -Y;   % U(x,y) = -y
