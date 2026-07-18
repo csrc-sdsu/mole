@@ -16,17 +16,9 @@
  #include "MOLE_Errors.h"
 
  // This function initializes the error stack by 
- // clearing any existing errors and setting grid validation
- // error to ensure the grid is validated before proceeding with 
- // MOLE operations.
+ // clearing any existing errors
  void MOLEerr_init(stack<MOLE_Errors>& errorStack){
-    MOLE_Errors err;
     errorStack = stack<MOLE_Errors>(); // Clear the stack
-
-    err.errCode = MOLE_ERR_GRID_UNCHECKED;
-    err.errLocation = "NEW MOLE GRID";
-    err.paramError = "";
-    errorStack.push(err);
 }
 
 // This function pushes an error onto the error stack
@@ -40,8 +32,8 @@ void MOLEerr_log(stack<MOLE_Errors>& errorStack, int errCode,
 }
 
 // This is an auxiliary function that checks whether a specific error
-// code exists in the error stack. It returns true if the error code is found, 
-// otherwise false (this is used my MOLEerr_validgrid)
+// code exists in the error stack. It returns true if the error code 
+// is found, otherwise false.
 bool MOLEerr_contains(const stack<MOLE_Errors> errorStack, int targetCode) {
     stack<MOLE_Errors> tempStack = errorStack;
     while (!tempStack.empty()) {
@@ -64,7 +56,8 @@ bool MOLEerr_haserrors(stack<MOLE_Errors>& errorStack)
 void MOLEerr_remove(stack<MOLE_Errors>& errorStack, int targetCode) {
     stack<MOLE_Errors> tempStack;
 
-    // Pop everything, keep the elements we want, reverse order into tempStack
+    // Pop everything, keep the elements we want, reverse order 
+    // into tempStack
     while (!errorStack.empty()) {
         MOLE_Errors err = errorStack.top();
         errorStack.pop();
@@ -73,8 +66,8 @@ void MOLEerr_remove(stack<MOLE_Errors>& errorStack, int targetCode) {
         }
     }
 
-    // tempStack now has the kept elements in reverse order — 
-    // push back to restore original order
+    // tempStack now has kept elements in reverse order — 
+    // push back to restore the backtracing original order
     while (!tempStack.empty()) {
         errorStack.push(tempStack.top());
         tempStack.pop();
@@ -85,14 +78,56 @@ void MOLEerr_remove(stack<MOLE_Errors>& errorStack, int targetCode) {
 // in the error stack. It is used inside MOLEerr_print.
 void MOLEerr_print_args(const string& strargx) {
     if (!strargx.empty()) {
-        cout << ", with input parameter sent: " << strargx << endl;
+        cout << "with arg value(s): " << strargx << endl;
     } else {
         cout << endl;
     }
 }
 
-// This function prints out any errors logged in the stack.
-// it preserves the error stack for other user support and debugging.
+// writeErrtoStOut writes an error to the log_error file
+void writeErrtoStdOut(int errNum, int errCode, string errLocation, 
+                      string errParams, const std::string& errMsg) {
+    cout << "Error #" << errNum << ": MOLE Error code [" << 
+          errCode << "] - "<< errMsg << endl;
+          "occurred inside:" << errLocation;
+          MOLEerr_print_args(errParams);
+}
+
+// Produces a timestamp string to create a unique filename to output
+// log_errors messages and backtracing information
+std::string getDateTimeString() {
+#include <ctime>
+    std::time_t now = std::time(nullptr);
+    char buf[100];
+    std::strftime(buf, sizeof(buf), "%Y%m%d_%H%M%S", 
+                  std::localtime(&now));
+    return std::string(buf);
+}
+
+// MOLEerr_write_args is similar to MOLEerr_print_args but it writes 
+// to a log_error file instead of standard output 
+void MOLEerr_write_args(std::ofstream& ofile, 
+                        const string& strargx) {
+    if (!strargx.empty()) {
+        ofile << "with arg value(s): " << strargx << endl;
+    } else {
+        ofile << endl;
+    }
+}
+
+// writeErrtoFile writes an error to the log_error file
+#include <fstream>
+void writeErrtoFile(std::ofstream& ofile, int errNum, int errCode,
+                  string errLocation, string errParams, 
+                  const std::string& errMsg) {
+    ofile << "Error #" << errNum << ": MOLE Error code [" << 
+          errCode << "] - "<< errMsg << endl;
+          "occurred inside:" << errLocation;
+          MOLEerr_write_args(ofile, errParams);
+}
+
+// This function prints out to std output any errors logged in a
+// stack, preserving the error stack for further enabled debugging.
 void MOLEerr_print(const stack<MOLE_Errors>& errorStack){
     // Create a copy to preserve the original stack
     stack<MOLE_ErrStack> tempStack = errorStack;
@@ -100,25 +135,78 @@ void MOLEerr_print(const stack<MOLE_Errors>& errorStack){
         cout << "No errors logged." << endl;
         return;
     }
+    cout << "========================================"<< endl;
+    cout << "Backtracing all logged MOLE Errors :" << endl;
+    cout << "========================================"<< endl;
+    
+    int i = 0;
     while (!tempStack.empty()) {
         MOLE_ErrStack err = tempStack.top();
         tempStack.pop();
         if (err.errCode == MOLE_ERR_GRID_UNCHECKED) {
-            cout << MOLE_errors_messages[err.errCode] << endl;
+            writeErrtoStdOut(i, err.errCode, err.errLocation, 
+                err.paramError, MOLE_errors_messages[err.errCode]);
+            i++;
             continue;
         }
         auto errMsg = MOLE_errors_messages.find(err.errCode);
         if (errMsg != MOLE_errors_messages.end()) { 
-            cout << "Error [" << err.errCode << "]: " 
-                 << errMsg->second << "\n"
-                 << "occurred inside a call to: " << err.errLocation; 
-            MOLEerr_print_args(err.paramError);
+            writeErrtoStdOut(i, err.errCode, err.errLocation, 
+                            err.paramError, errMsg->second);
         } else {
-            cout << "Error [" << err.errCode << "]: " 
-                    << "Unknown MOLE error code "
-                    << "occurred inside a call to: " 
+            cout << "Error #[" << err.errCode << "]: " 
+                    << "is Unknown MOLE error code "
+                    << "occurred inside: " 
                     << err.errLocation << "\n"; 
+            cout << "Error #" << i << ": Invalid MOLE Error code [" 
+                 << errCode << "] - "<< "occurred inside:" 
+                 << errLocation;
+            MOLEerr_print_args(errParams);
+        }
+        i++;
+    }
+}
+
+// This function produces a file with all errors logged in a stack.
+// The file name is a string form by the concatanetion of the MOLE
+// class type associated with the erros (i.e., grid, operator, or 
+// bcs) and a unique timestamp
+void MOLEerr_dumpErrLog(stack<MOLE_Errors>& errorStack, 
+    string logType){
+    // create a string for the filename
+    string filename = logType + getDateTimeString();
+    std::ofstream outFile(filename);
+
+    // Dump the logged errors to an output file
+    if (tempStack.empty()) {
+        writeErrFile(outFile, 0, "No errors logged.");
+        return;
+    } 
+    else {
+        int i == 1;
+        outFile << "========================================"<< endl;
+        outFile << "Backtracing all logged MOLE Errors :" << endl;
+        outFile << "========================================"<< endl;
+        while (!tempStack.empty()) {
+            MOLE_ErrStack err = tempStack.top();
+            tempStack.pop();
+            if (err.errCode == MOLE_ERR_GRID_UNCHECKED) {
+                writeErrtoFile(outFile, i, MOLE_ERR_GRID_UNCHECKED,
+                    err.Location, MOLE_errors_messages[err.errCode]);
+                i++;
+                continue;
+            }
+            auto errMsg = MOLE_errors_messages.find(err.errCode);
+            if (errMsg != MOLE_errors_messages.end()) { 
+                writeErrtoFile(outFile, i, err.errCode, err.Location,
+                    errMsg->second, err.paramError);
+            } 
+            else {
+                writeErrFile(outFile, i, 999, err.Location,
+                   "Unknown MOLE error code ", to_string(err.errCode));
+            }
+            i++;
         }
     }
-
+    outFile.close(); 
 }
