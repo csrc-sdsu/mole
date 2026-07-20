@@ -1,6 +1,6 @@
 name = "MOLE"
 uuid = "32da6bfa-ea95-4826-ae25-7537d33b039c"
-version = "0.1.0"
+version = "0.1.1"
 
 [deps]
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
