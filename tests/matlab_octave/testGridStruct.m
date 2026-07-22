@@ -212,6 +212,15 @@ classdef testGridStruct < matlab.unittest.TestCase
             testCase.verifyError(@() validateGrid(grid), 'validateGrid:SizeMismatch');
         end
 
+        function test2DCurvilinearAsymmetricMissingNodeFieldError(testCase)
+            addpath('../../src/matlab_octave');
+            m = 3; n = 4;
+            % Only nodes.X supplied; nodes.Y missing entirely (not just wrong size).
+            grid = struct('m', m, 'n', n, 'topology', 'curvilinear', ...
+                          'nodes', struct('X', zeros(m+1, n+1)));
+            testCase.verifyError(@() validateGrid(grid), 'validateGrid:CurvilinearMissingNodes');
+        end
+
         %% -- 3-D curvilinear grids ------------------------------------------
 
         function test3DCurvilinearMissingNodesError(testCase)
@@ -229,6 +238,15 @@ classdef testGridStruct < matlab.unittest.TestCase
             grid = struct('m', m, 'n', n, 'o', o, 'topology', 'curvilinear', ...
                           'nodes', struct('X', good, 'Y', bad, 'Z', good));
             testCase.verifyError(@() validateGrid(grid), 'validateGrid:SizeMismatch');
+        end
+
+        function test3DCurvilinearAsymmetricMissingNodeFieldError(testCase)
+            addpath('../../src/matlab_octave');
+            m = 3; n = 4; o = 2;
+            % X and Y supplied; Z missing entirely.
+            grid = struct('m', m, 'n', n, 'o', o, 'topology', 'curvilinear', ...
+                          'nodes', struct('X', zeros(m+1, n+1, o+1), 'Y', zeros(m+1, n+1, o+1)));
+            testCase.verifyError(@() validateGrid(grid), 'validateGrid:CurvilinearMissingNodes');
         end
 
         function test3DCurvilinearFacesFromNodes(testCase)
@@ -262,6 +280,14 @@ classdef testGridStruct < matlab.unittest.TestCase
             testCase.verifyEqual(grid.centers.X(1,1,1), expected, 'AbsTol', 1e-14);
         end
 
+        %% -- grid.dim validation ----------------------------------------------
+
+        function testInvalidDimRejected(testCase)
+            addpath('../../src/matlab_octave');
+            testCase.verifyError(@() validateGrid(struct('dim', 4, 'm', 5)), 'validateGrid:InvalidDim');
+            testCase.verifyError(@() validateGrid(struct('dim', 0, 'm', 5)), 'validateGrid:InvalidDim');
+        end
+
         %% -- Cell-count (m, n, o) validation ---------------------------------
 
         function testNonPositiveCellCountRejected(testCase)
@@ -275,11 +301,27 @@ classdef testGridStruct < matlab.unittest.TestCase
             testCase.verifyError(@() validateGrid(struct('m', 3.5, 'dx', 1)), 'validateGrid:InvalidCellCount1D');
         end
 
-        function testNonNumericCellCountRejected2D3D(testCase)
+        function testNonPositiveCellCountRejected2D3D(testCase)
             addpath('../../src/matlab_octave');
             testCase.verifyError(@() validateGrid(struct('m', 5, 'n', 0, 'dx', 1, 'dy', 1)), ...
                                  'validateGrid:InvalidCellCount2D');
             testCase.verifyError(@() validateGrid(struct('m', 5, 'n', 5, 'o', -1, 'dx', 1, 'dy', 1, 'dz', 1)), ...
+                                 'validateGrid:InvalidCellCount3D');
+        end
+
+        function testNonNumericCellCountRejected2D3D(testCase)
+            addpath('../../src/matlab_octave');
+            testCase.verifyError(@() validateGrid(struct('m', 5, 'n', 'a', 'dx', 1, 'dy', 1)), ...
+                                 'validateGrid:InvalidCellCount2D');
+            testCase.verifyError(@() validateGrid(struct('m', 5, 'n', 5, 'o', [1 2], 'dx', 1, 'dy', 1, 'dz', 1)), ...
+                                 'validateGrid:InvalidCellCount3D');
+        end
+
+        function testComplexOrNonFiniteCellCountRejected2D3D(testCase)
+            addpath('../../src/matlab_octave');
+            testCase.verifyError(@() validateGrid(struct('m', 5, 'n', 3+2i, 'dx', 1, 'dy', 1)), ...
+                                 'validateGrid:InvalidCellCount2D');
+            testCase.verifyError(@() validateGrid(struct('m', 5, 'n', 5, 'o', NaN, 'dx', 1, 'dy', 1, 'dz', 1)), ...
                                  'validateGrid:InvalidCellCount3D');
         end
 
@@ -308,6 +350,162 @@ classdef testGridStruct < matlab.unittest.TestCase
                                  'validateGrid:InvalidSpacing2D');
             testCase.verifyError(@() validateGrid(struct('m', 5, 'n', 5, 'o', 5, 'dx', 1, 'dy', 1, 'dz', 0)), ...
                                  'validateGrid:InvalidSpacing3D');
+        end
+
+        function testNonNumericOrNonScalarSpacingRejected2D3D(testCase)
+            addpath('../../src/matlab_octave');
+            testCase.verifyError(@() validateGrid(struct('m', 5, 'n', 5, 'dx', 1, 'dy', 'a')), ...
+                                 'validateGrid:InvalidSpacing2D');
+            testCase.verifyError(@() validateGrid(struct('m', 5, 'n', 5, 'dx', 1, 'dy', [1 2])), ...
+                                 'validateGrid:InvalidSpacing2D');
+            testCase.verifyError(@() validateGrid(struct('m', 5, 'n', 5, 'o', 5, 'dx', 1, 'dy', 1, 'dz', NaN)), ...
+                                 'validateGrid:InvalidSpacing3D');
+        end
+
+        function testComplexOrNonFiniteSpacingRejected2D3D(testCase)
+            addpath('../../src/matlab_octave');
+            testCase.verifyError(@() validateGrid(struct('m', 5, 'n', 5, 'dx', 1, 'dy', 1+2i)), ...
+                                 'validateGrid:InvalidSpacing2D');
+            testCase.verifyError(@() validateGrid(struct('m', 5, 'n', 5, 'o', 5, 'dx', 1, 'dy', 1, 'dz', Inf)), ...
+                                 'validateGrid:InvalidSpacing3D');
+        end
+
+        %% -- Missing uniform-grid fields (m/n/o present, spacing absent) ------
+
+        function testMissingUniformFieldsRejected(testCase)
+            addpath('../../src/matlab_octave');
+            testCase.verifyError(@() validateGrid(struct('m', 5, 'topology', 'uniform')), ...
+                                 'validateGrid:MissingUniform1D');
+            testCase.verifyError(@() validateGrid(struct('m', 5, 'n', 5, 'topology', 'uniform')), ...
+                                 'validateGrid:MissingUniform2D');
+            testCase.verifyError(@() validateGrid(struct('m', 5, 'n', 5, 'o', 5, 'topology', 'uniform')), ...
+                                 'validateGrid:MissingUniform3D');
+        end
+
+        %% -- "nonuniform" topology removed: stray lowercase coordinate ------
+        %% -- fields no longer produce a silent no-op ------------------------
+
+        function testStrayLowercaseXFieldWithoutSpacingErrors1D(testCase)
+            addpath('../../src/matlab_octave');
+            % Previously inferred as topology='nonuniform' and silently
+            % returned an unbuilt grid. Now reads as an incomplete uniform
+            % grid (missing dx) and must error clearly.
+            grid = struct('m', 5, 'x', (0:5)');
+            testCase.verifyError(@() validateGrid(grid), 'validateGrid:MissingUniform1D');
+        end
+
+        function testStrayLowercaseFieldsWithoutSpacingErrors2D(testCase)
+            addpath('../../src/matlab_octave');
+            grid = struct('m', 4, 'n', 5, 'x', (0:4)', 'y', (0:5)');
+            testCase.verifyError(@() validateGrid(grid), 'validateGrid:MissingUniform2D');
+        end
+
+        function testStrayLowercaseFieldsWithoutSpacingErrors3D(testCase)
+            addpath('../../src/matlab_octave');
+            grid = struct('m', 4, 'n', 5, 'o', 3, 'x', (0:4)', 'y', (0:5)', 'z', (0:3)');
+            testCase.verifyError(@() validateGrid(grid), 'validateGrid:MissingUniform3D');
+        end
+
+        %% -- Input struct shape validation ------------------------------------
+
+        function testNonStructInputRejected(testCase)
+            addpath('../../src/matlab_octave');
+            testCase.verifyError(@() validateGrid(5), 'validateGrid:InvalidGrid');
+        end
+
+        function testNonScalarStructInputRejected(testCase)
+            addpath('../../src/matlab_octave');
+            badGrid = struct('m', {5, 6});   % 1x2 struct array, not a scalar struct
+            testCase.verifyError(@() validateGrid(badGrid), 'validateGrid:InvalidGrid');
+        end
+
+        %% -- Conflicting metadata (explicit dim/topology vs. present fields) --
+
+        function testExplicitDimConflictsWithPresentFieldsErrors(testCase)
+            addpath('../../src/matlab_octave');
+            % dim=1 explicit, but 'n' implies at least 2-D
+            testCase.verifyError(@() validateGrid(struct('dim', 1, 'n', 5)), ...
+                                 'validateGrid:DimMismatch');
+            % dim=2 explicit, but 'o' implies 3-D
+            testCase.verifyError(@() validateGrid(struct('dim', 2, 'o', 5)), ...
+                                 'validateGrid:DimMismatch');
+            % dim=1 explicit, but 'dz' implies 3-D
+            testCase.verifyError(@() validateGrid(struct('dim', 1, 'dz', 0.1)), ...
+                                 'validateGrid:DimMismatch');
+        end
+
+        function testExplicitTopologyConflictsWithLegacyFieldsErrors(testCase)
+            addpath('../../src/matlab_octave');
+            grid = struct('topology', 'uniform', 'X', zeros(2, 2));
+            testCase.verifyError(@() validateGrid(grid), 'validateGrid:TopologyMismatch');
+        end
+
+        function testExplicitTopologyConflictsWithRawNodesErrors(testCase)
+            addpath('../../src/matlab_octave');
+            m = 3; n = 4;
+            [NX, NY] = ndgrid((0:m)*0.5, (0:n)*0.25);
+            grid = struct('m', m, 'n', n, 'topology', 'uniform', ...
+                          'nodes', struct('X', NX, 'Y', NY));
+            testCase.verifyError(@() validateGrid(grid), 'validateGrid:TopologyMismatch');
+        end
+
+        function testCurvilinearInferredFromNestedNodesNoExplicitTopology(testCase)
+            addpath('../../src/matlab_octave');
+            m = 3; n = 4;
+            [NX, NY] = ndgrid((0:m)*0.5, (0:n)*0.25);
+            grid = struct('m', m, 'n', n, 'nodes', struct('X', NX, 'Y', NY));
+            grid = validateGrid(grid);
+            testCase.verifyEqual(grid.topology, 'curvilinear');
+            testCase.verifySize(grid.centers.X, [m, n]);
+        end
+
+        function testRevalidatedUniformGridNotFlaggedAsCurvilinear(testCase)
+            addpath('../../src/matlab_octave');
+            % grid.nodes.X/Y are validateGrid's own generated output here, not
+            % raw caller input, and must not be mistaken for curvilinear evidence.
+            grid = makeGrid('m', 4, 'n', 5, 'dx', 0.25, 'dy', 0.2);
+            grid2 = validateGrid(grid);
+            testCase.verifyEqual(grid2.topology, 'uniform');
+        end
+
+        %% -- Curvilinear node coordinate content validation -------------------
+
+        function test2DCurvilinearNonNumericNodesRejected(testCase)
+            addpath('../../src/matlab_octave');
+            m = 3; n = 4;
+            grid = struct('m', m, 'n', n, 'topology', 'curvilinear', ...
+                          'nodes', struct('X', false(m+1, n+1), 'Y', zeros(m+1, n+1)));
+            testCase.verifyError(@() validateGrid(grid), 'validateGrid:InvalidCurvilinearNodes');
+        end
+
+        function test2DCurvilinearNaNNodesRejected(testCase)
+            addpath('../../src/matlab_octave');
+            m = 3; n = 4;
+            X = zeros(m+1, n+1); X(1, 1) = NaN;
+            grid = struct('m', m, 'n', n, 'topology', 'curvilinear', ...
+                          'nodes', struct('X', X, 'Y', zeros(m+1, n+1)));
+            testCase.verifyError(@() validateGrid(grid), 'validateGrid:InvalidCurvilinearNodes');
+        end
+
+        function test3DCurvilinearNonNumericNodesRejected(testCase)
+            addpath('../../src/matlab_octave');
+            m = 3; n = 4; o = 2;
+            grid = struct('m', m, 'n', n, 'o', o, 'topology', 'curvilinear', ...
+                          'nodes', struct('X', false(m+1, n+1, o+1), ...
+                                          'Y', zeros(m+1, n+1, o+1), ...
+                                          'Z', zeros(m+1, n+1, o+1)));
+            testCase.verifyError(@() validateGrid(grid), 'validateGrid:InvalidCurvilinearNodes');
+        end
+
+        function test3DCurvilinearInfNodesRejected(testCase)
+            addpath('../../src/matlab_octave');
+            m = 3; n = 4; o = 2;
+            Z = zeros(m+1, n+1, o+1); Z(end, end, end) = Inf;
+            grid = struct('m', m, 'n', n, 'o', o, 'topology', 'curvilinear', ...
+                          'nodes', struct('X', zeros(m+1, n+1, o+1), ...
+                                          'Y', zeros(m+1, n+1, o+1), ...
+                                          'Z', Z));
+            testCase.verifyError(@() validateGrid(grid), 'validateGrid:InvalidCurvilinearNodes');
         end
 
     end  % methods(Test)

@@ -32,7 +32,9 @@ function grid = validateGrid_impl(grid, allowPartial)
         allowPartial = false;
     end
 
-    assert(isstruct(grid), 'grid must be a struct');
+    if ~isstruct(grid) || ~isscalar(grid)
+        error('validateGrid:InvalidGrid', 'grid must be a scalar struct');
+    end
 
     if ~isfield(grid, 'bc') || ~isstruct(grid.bc)
         grid.bc = struct();
@@ -46,23 +48,29 @@ function grid = validateGrid_impl(grid, allowPartial)
     end
 
     if ~isfield(grid, 'dim')
-        if isfield(grid, 'o') || isfield(grid, 'dz') || isfield(grid, 'Z')
-            grid.dim = 3;
-        elseif isfield(grid, 'n') || isfield(grid, 'dy') || isfield(grid, 'Y')
-            grid.dim = 2;
-        else
-            grid.dim = 1;
+        grid.dim = localInferDim(grid);
+    elseif isequal(grid.dim, 1) || isequal(grid.dim, 2) || isequal(grid.dim, 3)
+        % Only a legal dim value can meaningfully "conflict" with the fields
+        % present; anything else falls through to the switch below, which
+        % raises validateGrid:InvalidDim.
+        inferredDim = localInferDim(grid);
+        if grid.dim ~= inferredDim
+            error('validateGrid:DimMismatch', ...
+                  'grid.dim is %d, but present fields imply a %d-D grid.', ...
+                  grid.dim, inferredDim);
         end
     end
 
     if ~isfield(grid, 'topology')
-        if isfield(grid, 'X') || isfield(grid, 'Y') || isfield(grid, 'Z')
+        if localHasCurvilinearEvidence(grid)
             grid.topology = 'curvilinear';
-        elseif isfield(grid, 'x') || isfield(grid, 'y') || isfield(grid, 'z')
-            grid.topology = 'nonuniform';
         else
             grid.topology = 'uniform';
         end
+    elseif localHasCurvilinearEvidence(grid) && ~strcmpi(grid.topology, 'curvilinear')
+        error('validateGrid:TopologyMismatch', ...
+              'grid.X/Y/Z or grid.nodes.X/Y/Z coordinates imply a curvilinear grid, but grid.topology is ''%s''.', ...
+              grid.topology);
     end
 
     switch grid.dim
@@ -89,6 +97,32 @@ function localRequire(grid, names, allowPartial, errId)
             error(errId, ['Missing required field grid.' names{i}]);
         end
     end
+end
+
+function dim = localInferDim(grid)
+    if isfield(grid, 'o') || isfield(grid, 'dz') || isfield(grid, 'Z')
+        dim = 3;
+    elseif isfield(grid, 'n') || isfield(grid, 'dy') || isfield(grid, 'Y')
+        dim = 2;
+    else
+        dim = 1;
+    end
+end
+
+function tf = localHasNodeField(grid, fieldName)
+    tf = isfield(grid, 'nodes') && isstruct(grid.nodes) && isfield(grid.nodes, fieldName);
+end
+
+function tf = localHasCurvilinearEvidence(grid)
+% True when the grid's own fields imply curvilinear topology: legacy
+% top-level X/Y/Z, or raw (caller-supplied) grid.nodes.X/Y/Z. Once
+% grid.faces/grid.centers have been derived by validateGrid itself, the
+% presence of grid.nodes.X/Y/Z is that generated output, not caller intent,
+% so it no longer counts as curvilinear evidence.
+    hasLegacyFields = isfield(grid, 'X') || isfield(grid, 'Y') || isfield(grid, 'Z');
+    hasRawNodes = localHasNodeField(grid, 'X') || localHasNodeField(grid, 'Y') || localHasNodeField(grid, 'Z');
+    hasGeneratedGeometry = isfield(grid, 'faces') || isfield(grid, 'centers');
+    tf = hasLegacyFields || (hasRawNodes && ~hasGeneratedGeometry);
 end
 
 function localValidateCellCounts(grid, names, errId)
@@ -440,6 +474,7 @@ function grid = localValidateCurvilinearNodes2D(grid)
             'Curvilinear grid.nodes.X/Y must be (%d x %d); got (%s) and (%s).', ...
             m+1, n+1, mat2str(size(grid.nodes.X)), mat2str(size(grid.nodes.Y)));
     end
+    localValidateCurvilinearNodeData(grid.nodes, {'X', 'Y'});
 end
 
 function grid = localDeriveCurvilinearCoordinates2D(grid)
@@ -484,6 +519,23 @@ function grid = localValidateCurvilinearNodes3D(grid)
         error('validateGrid:SizeMismatch', ...
             'Curvilinear grid.nodes.X/Y/Z must be (%d x %d x %d); got X=(%s), Y=(%s), Z=(%s).', ...
             m+1, n+1, o+1, mat2str(size(grid.nodes.X)), mat2str(size(grid.nodes.Y)), mat2str(size(grid.nodes.Z)));
+    end
+    localValidateCurvilinearNodeData(grid.nodes, {'X', 'Y', 'Z'});
+end
+
+function localValidateCurvilinearNodeData(nodes, fieldNames)
+% Curvilinear node coordinates must be real, finite numeric data -- correct
+% array shape alone doesn't guarantee they're safe to interpolate/derive from.
+    for i = 1:numel(fieldNames)
+        name = fieldNames{i};
+        value = nodes.(name);
+        if ~isnumeric(value) || ~isreal(value)
+            error('validateGrid:InvalidCurvilinearNodes', ...
+                'grid.nodes.%s must be real numeric data', name);
+        elseif ~all(isfinite(value(:)))
+            error('validateGrid:InvalidCurvilinearNodes', ...
+                'grid.nodes.%s must contain only finite values', name);
+        end
     end
 end
 
