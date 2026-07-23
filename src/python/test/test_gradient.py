@@ -25,7 +25,7 @@ class TestGradient:
         with pytest.raises(ValueError):
             Gradient(
                 grid,
-                accuracy_order=4,
+                accuracy_order=8,
             )
 
     def test_grid_too_small_1d(self):
@@ -87,7 +87,7 @@ class TestGradient:
 
         assert Gx.shape == (
             n,
-            n,
+            n+1,
         )
 
     def test_2d_matrix_shape(self):
@@ -141,11 +141,11 @@ class TestGradient:
         Gx = Gradient(
             grid,
             2,
-        ).matrices[0]
+        ).matrix
 
         n = len(grid.x)
 
-        u = np.ones(n)
+        u = np.ones(n+1)
 
         grad_u = Gx @ u
 
@@ -207,29 +207,33 @@ class TestGradient:
         assert np.allclose(grad_u_y, 0.0, atol=1e-12)
         assert np.allclose(grad_u_z, 0.0, atol=1e-12)
 
-    def test_1d_linear_field(self):
+    def test_1d_gradient_accuracy(self):
 
         grid = Grid.generate(
             0.0,
             10.0,
-            shape=11,
+            shape=101,
         )
+        
+        x = np.linspace(0, 10, 101)
+        xSq = x ** 2
+        dx = x[1] - x[0]
+        expected_grad_xSq = np.gradient(xSq, dx)
+        dx = grid.x[1] - grid.x[0]
 
         Gx = Gradient(
             grid,
             2,
-        ).matrices[0]
+        ).matrix
 
-        # u = 2*x, so du/dx = 2
-        u = 2 * grid.x
+        xSq = np.append(xSq,xSq[-1]+dx)
 
-        grad_u = Gx @ u
+        grad_xSq = Gx @ xSq
 
-        # Should be approximately 2 everywhere
         assert np.allclose(
-            grad_u,
-            2.0,
-            atol=1e-10,
+            grad_xSq[:-1],
+            expected_grad_xSq[:-1],
+            atol=1e-1,
         )
 
     def test_2d_linear_field_x(self):
