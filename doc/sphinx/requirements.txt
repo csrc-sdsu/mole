@@ -69,7 +69,11 @@ sphinxcontrib-jquery==4.1
 sphinxcontrib-matlabdomain==0.22.1
 
 # Image handling
+<<<<<<< HEAD
 Pillow==12.3.0
+=======
+Pillow==12.3.0==12.1.1
+>>>>>>> d18aa745 (Bump pillow from 12.1.1 to 12.3.0 in /doc/sphinx)
 
 # HTTP requests for contributors extension
 requests>=2.32.3
