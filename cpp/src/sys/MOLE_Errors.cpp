@@ -89,7 +89,7 @@ void writeErrtoStdOut(int errNum, int errCode, string errLocation,
                       string errParams, const std::string& errMsg) {
     cout << "Error #" << errNum << ": MOLE Error code [" << 
           errCode << "] - "<< errMsg << endl;
-          "occurred inside:" << errLocation;
+    cout << "occurred inside:" << errLocation;
           MOLEerr_print_args(errParams);
 }
 
@@ -122,7 +122,7 @@ void writeErrtoFile(std::ofstream& ofile, int errNum, int errCode,
                   const std::string& errMsg) {
     ofile << "Error #" << errNum << ": MOLE Error code [" << 
           errCode << "] - "<< errMsg << endl;
-          "occurred inside:" << errLocation;
+    ofile << "occurred inside:" << errLocation;
           MOLEerr_write_args(ofile, errParams);
 }
 
@@ -130,7 +130,7 @@ void writeErrtoFile(std::ofstream& ofile, int errNum, int errCode,
 // stack, preserving the error stack for further enabled debugging.
 void MOLEerr_print(const stack<MOLE_Errors>& errorStack){
     // Create a copy to preserve the original stack
-    stack<MOLE_ErrStack> tempStack = errorStack;
+    stack<MOLE_Errors> tempStack = errorStack;
     if (tempStack.empty()) {
         cout << "No errors logged." << endl;
         return;
@@ -141,7 +141,7 @@ void MOLEerr_print(const stack<MOLE_Errors>& errorStack){
     
     int i = 0;
     while (!tempStack.empty()) {
-        MOLE_ErrStack err = tempStack.top();
+        MOLE_Errors err = tempStack.top();
         tempStack.pop();
         if (err.errCode == MOLE_ERR_GRID_UNCHECKED) {
             writeErrtoStdOut(i, err.errCode, err.errLocation, 
@@ -159,9 +159,9 @@ void MOLEerr_print(const stack<MOLE_Errors>& errorStack){
                     << "occurred inside: " 
                     << err.errLocation << "\n"; 
             cout << "Error #" << i << ": Invalid MOLE Error code [" 
-                 << errCode << "] - "<< "occurred inside:" 
-                 << errLocation;
-            MOLEerr_print_args(errParams);
+                 << err.errCode << "] - "<< "occurred inside:" 
+                 << err.errLocation;
+            MOLEerr_print_args(err.paramError);
         }
         i++;
     }
@@ -176,33 +176,39 @@ void MOLEerr_dumpErrLog(stack<MOLE_Errors>& errorStack,
     // create a string for the filename
     string filename = logType + getDateTimeString();
     std::ofstream outFile(filename);
+    stack<MOLE_Errors> tempStack = errorStack;
 
     // Dump the logged errors to an output file
     if (tempStack.empty()) {
-        writeErrFile(outFile, 0, "No errors logged.");
+        outFile << "No errors logged." << endl;
         return;
     } 
     else {
-        int i == 1;
+        int i = 1;
         outFile << "========================================"<< endl;
         outFile << "Backtracing all logged MOLE Errors :" << endl;
         outFile << "========================================"<< endl;
         while (!tempStack.empty()) {
-            MOLE_ErrStack err = tempStack.top();
+            MOLE_Errors err = tempStack.top();
             tempStack.pop();
+            // if the grid has not been validated
             if (err.errCode == MOLE_ERR_GRID_UNCHECKED) {
                 writeErrtoFile(outFile, i, MOLE_ERR_GRID_UNCHECKED,
-                    err.Location, MOLE_errors_messages[err.errCode]);
+                                err.errLocation, 
+                                MOLE_errors_messages[err.errCode], 
+                                err.paramError);
                 i++;
                 continue;
             }
+             // For all other MOLE errors recorded, check for valid
+             // error code, in case the error log has been corrupted
             auto errMsg = MOLE_errors_messages.find(err.errCode);
             if (errMsg != MOLE_errors_messages.end()) { 
-                writeErrtoFile(outFile, i, err.errCode, err.Location,
+                writeErrtoFile(outFile, i, err.errCode, err.errLocation,
                     errMsg->second, err.paramError);
             } 
             else {
-                writeErrFile(outFile, i, 999, err.Location,
+                writeErrtoFile(outFile, i, 999, err.errLocation,
                    "Unknown MOLE error code ", to_string(err.errCode));
             }
             i++;

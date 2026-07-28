@@ -25,8 +25,9 @@ using namespace std;
 // to identify specific errors that may occur during the execution 
 // of MOLE functions. These error symbols are used throughout the 
 // MOLE library to provide consistent error handling and reporting.
-
+//
 // Initialization Errors. 001 = grid not validated
+//
 #define MOLE_ERR_GRID_UNCHECKED 001   // Grid has not been validated
 #define MOLE_ERR_INVALID_GRID_ARGS 002 // Grid is invalid
 #define MOLE_ERR_GRID_CONSTRUCTION_FAILED 003
@@ -34,7 +35,9 @@ using namespace std;
 #define MAKE_GRID_MISSING_ARGS 005
 #define MAKE_GRID_UNKNOWN_ATTRIBUTE 006
 #define MAKE_GRID_DUPLICATE_ATTRIBUTES 007
+//
 // Grid definition Errors. Error codes 100-199
+//
 #define MOLE_ERR_INVALID_GRID_DIM 100 // Invalid grid dimension
 #define MOLE_ERR_INVALID_GRID_TOPOLOGY 101 // Invalid grid topology
 #define MOLE_ERR_INVALID_GRID_SPACING 102 // Invalid grid spacing
@@ -45,48 +48,111 @@ using namespace std;
 #define MOLE_ERR_INVALID_INPUT_TYPE 107 // Invalid input type 
 #define MOLE_ERR_ARRAY_HAS_NULL_POINTER 108 // Array has null pointer 
 #define MOLE_ERR_INVALID_CELL_COUNT 109 // Invalid grid cell count
-#define MOLE_ERR_INVALID_GRID_SPACING 110 // Invalid cell spacing
-#define MOLE_ERR_INVALID_ISPERIODIC_DIM 111 // invalid array dim
-#define MOLE_ERR_ISPERIODIC_TYPE 112 // invalid array type
-#define MOLE_ERR_INVALID_CURVILINEAR_GRID 113 // Need nodal coordines
-#define MOLE_ERR_INVALID_1D_CURVILINEAR 114 // 1D Curvilinear invalid
-#define MOLE_ERR_INVALID_NONUNIFORM_GRID 115 // Need nodal coordines
-#define MOLE_ERR_INVALID_ARRAY_INDEX 116 // invalid array indexing
+#define MOLE_ERR_INVALID_ISPERIODIC_DIM 110 // invalid array dim
+#define MOLE_ERR_ISPERIODIC_TYPE 111 // invalid array type
+#define MOLE_ERR_INVALID_CURVILINEAR_GRID 112 // Need nodal coordines
+#define MOLE_ERR_INVALID_1D_CURVILINEAR 113 // 1D Curvilinear invalid
+#define MOLE_ERR_INVALID_NONUNIFORM_GRID 114 // Need nodal coordines
+#define MOLE_ERR_INVALID_ARRAY_INDEX 115 // invalid array indexing
+#define MOLE_ERR_INVALID_NODAL_COORDINATES 116 // invalid user coords
+#define MOLE_ERR_INVALID_CENTER_COORDINATES 117 // invalid user coords
+#define MOLE_ERR_INVALID_NORMAL_FACE_COORDINATES 118 // invalid coords
+
+//
+// Flat array defition Errors. sError codes 200-299
+//
+#define MOLE_ERR_INVALID_ARRAY_SIZE 200 //invalid array sizes
+#define MOLE_ERR_ARRAY_SIZE_OVERFLOW 201 // array allocation overflow
+
+//
 // Dictionary of error codes and their corresponding messages 
 // for printing error messages in the MOLE library.
+//
 static unordered_map<int, string> MOLE_errors_messages = {
+    // 001
     {MOLE_ERR_GRID_UNCHECKED, 
     "Grid has not been validated, call validateGrid() first"},
+     // 002
     {MOLE_ERR_INVALID_GRID_ARGS, 
     "Error(s) in input parameters, resulting MOLE grid is invalid."},
+     // 003
     {MOLE_ERR_GRID_CONSTRUCTION_FAILED,
-    "Grid construction failed, see full list of errors"},
+    "Grid construction failed, review the list of errors"},
+     // 004
+    {MAKE_GRID_INVALID_INPUT_ARGS, ""},
+    // 005
+    {MAKE_GRID_MISSING_ARGS,""},
+    // 006 
+    {MAKE_GRID_UNKNOWN_ATTRIBUTE,""},
+    // 007
+    {MAKE_GRID_DUPLICATE_ATTRIBUTES,""},
+    // 100
     {MOLE_ERR_INVALID_GRID_DIM, 
     "Invalid grid dimension entered. Valid values are 1, 2, or 3"},
+    // 101
     {MOLE_ERR_INVALID_GRID_TOPOLOGY, 
-    "Invalid grid topology entered. Valid values are 'u'=uniform or 'c'=curvilinear) or 'n'=non-uniform"},
-    {MOLE_ERR_INVALID_GRID_SPACING, "Grid spacing must be positive"},
-    {MOLE_ERR_INVALID_GRID_SIZE, "Grid size must be positive"},
-    {MOLE_ERR_GRID_NODAL_SZ_MISMATCH, "Grid node array size mismatch"},
+    "Invalid grid topology entered. Valid values are 'u'=uniform "
+    "or 'c'=curvilinear) or 'n'=non-uniform"},
+    // 102
+    {MOLE_ERR_INVALID_GRID_SPACING, 
+    "Grid spacing must be > 0.0 and a valid, finite real number"},
+    // 103
+    {MOLE_ERR_INVALID_GRID_SIZE, 
+    "Grid size must be a natural number > 0"},
+    // 104
+    {MOLE_ERR_GRID_NODAL_SZ_MISMATCH, 
+    "Nodal grid coordinates array size mismatch"},
+    // 105
     {MOLE_ERR_GRID_CENTERS_SZ_MISMATCH, 
-    "Grid center array size mismatch"},
-    {MOLE_ERR_GRID_FACES_SZ_MISMATCH, "Grid face array size mismatch"},
-    {MOLE_ERR_INVALID_INPUT_TYPE, "Invalid input type for input name"},
+    "Center grid coordinates array size mismatch"},
+    // 106
+    {MOLE_ERR_GRID_FACES_SZ_MISMATCH, 
+    "Normal faces coordinates array size mismatch"},
+    // 107
+    {MOLE_ERR_INVALID_INPUT_TYPE, 
+        "Invalid input type for input name"},
+    // 108
     {MOLE_ERR_ARRAY_HAS_NULL_POINTER, 
     "Array has a null pointer. Array allocation may have failed"},
+    // 109
     {MOLE_ERR_INVALID_CELL_COUNT, "Non-positive cell count"},
-    {MOLE_ERR_INVALID_GRID_SPACING, 
-        "dh must be > 0.0 and  "},
+    // 110
     {MOLE_ERR_INVALID_ISPERIODIC_DIM, 
         "Wrong size for isPeriodic 1D:(1x1), 2D:(2x1), 3D:(3x1)"},
+    // 111
     {MOLE_ERR_ISPERIODIC_TYPE, 
-        "isPeriodic is not a boolean array"},
+        "isPeriodic requires a boolean array"},
+    // 112
     {MOLE_ERR_INVALID_CURVILINEAR_GRID, 
     "Curvilinear grids need user-provided nodal coordinates"},
+    // 113
     {MOLE_ERR_INVALID_1D_CURVILINEAR, 
-        "Curvilinear grids cannot be one dimensional"},
+    "Curvilinear grids fundamentally cannot be one dimensional"},
+    // 114
     {MOLE_ERR_INVALID_NONUNIFORM_GRID, 
     "Non-uniform grids need user-provided nodal coordinates"},
+    // 115
+    {MOLE_ERR_INVALID_ARRAY_INDEX,
+    "One or more indices to the array are out of bound," 
+    "check array dimensions"},
+    // 116
+    {MOLE_ERR_INVALID_NODAL_COORDINATES, 
+    "User-provided nodal coordinates do not agree with other "
+    "uniform grid parameters passed"},
+    // 117
+    {MOLE_ERR_INVALID_CENTER_COORDINATES, 
+    "User-provided center coordinates do not agree with other "
+    "uniform grid parameters passed"},
+    // 118
+    {MOLE_ERR_INVALID_NORMAL_FACE_COORDINATES,
+    "User-provided normal face coordinates do not agree with "
+    "other uniform grid parameters passed"},
+    // 200
+    {MOLE_ERR_INVALID_ARRAY_SIZE,
+    "Array dimensions need to be natural numbers >= 1"},
+    // 201
+    {MOLE_ERR_ARRAY_SIZE_OVERFLOW,
+    "Array dimensions too large to fit in memory"},
 };
 
 // MOLE errors are stored in a stack to allow tracking and 
@@ -121,7 +187,7 @@ void MOLEerr_remove(stack<MOLE_Errors>& errorStack, int targetCode);
 
 // 6. These functions are used for printing the error stack to 
 // standard output
-void MOLEerr_print(stack<MOLE_Errors>& errorStack);
+void MOLEerr_print(const stack<MOLE_Errors>& errorStack);
 
 // 7. Writes error output to a log file (not implemented yet)
 void MOLEerr_dumpErrLog(stack<MOLE_Errors>& errorStack, string logType);
