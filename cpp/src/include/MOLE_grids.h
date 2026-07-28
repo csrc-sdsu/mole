@@ -34,9 +34,6 @@ using Array1D = std::vector<Real>;
 using Array2D = flat2DArray;
 using Array3D = flat3DArray;
 
-// Import Armadillo typedefs for matrix and vector operations
-#include <armadillo>
-using namespace arma;
 using namespace std;
 
 // ----------------------------------------------------------------//
@@ -82,7 +79,7 @@ struct gridParams2D {
     Array2D faces_u_Y; // y-normal faces
     Array2D faces_v_X; // x-normal faces
     Array2D faces_v_Y; // y-normal faces
-    bool bc_isPeriodic[2] = {{false}, {false}}; //periodic bcs?
+    bool bc_isPeriodic[2] = {false, false}; //periodic bcs?
 };
 
 //
@@ -114,14 +111,8 @@ struct gridParams3D {
     Array3D faces_w_X; // x-normal faces
     Array3D faces_w_Y; // y-normal faces
     Array3D faces_w_Z; // z-normal faces
-    bool bc_isPeriodic[3] = {{false}, {false}, {false}};
+    bool bc_isPeriodic[3] = {false, false, false};
 };
-
-// ----------------------------------------------------------------
-//                VARIANT STRUCTURES AND CLASSES
-// variant for data structures holding MOLE's grid information
-using paramVars = std::variant<gridParams1D, 
-                               gridParams2D, gridParams3D>;
 
 // -----------------------------------------------------------------//
 //
@@ -215,12 +206,30 @@ class grid3D : public gridBase{
         bool validGrid();
 };
 
+// Grid Null Class - This grid object is return when errors are found
+// with the grid specifications and the grid could not be built.
+class gridNull: public gridBase{
+    public:
+        paramsNull ErrData;
+        ~gridNull() = default;
+        gridNull(paramsNull inParams, const stack<MOLE_Errors>& inerrs);
+        bool validGrid(){return false;}
+};
+
+// ----------------------------------------------------------------
+//                VARIANT STRUCTURES AND CLASSES
+// variant for data structures holding MOLE's grid information
+// or ParamsNull = for reporting error when a grid cannot be 
+// generated (ParamsNull is declared in MOLE_Errors.h)
+using paramVars = std::variant<paramsNull, gridParams1D, 
+                               gridParams2D, gridParams3D>;
 // Handling MOLE variant classes and data structures. These are
 // variant over the concrete derived types — used purely for
 // type-safe dispatch for MOLE grid classes and generic grid
-// handling
+// handling. gridNull is an empty shell created whenever errors
+// occur and it is unsafe to use the grid.
 // ----------------------------------------------------------------
-using gridVar = std::variant<grid1D, grid2D, grid3D>;
+using gridVar = std::variant<grid1D, grid2D, grid3D, gridNull>;
 
 // Auxiliar functions used by some MOLE grids
   
@@ -228,5 +237,10 @@ bool isValidGrid(gridVar& g); // validates a generic grid
 bool validSpacing(Real dh);  // checks for valid dx, dy, or dz
 void generateNodalPts(size_t npts, Real delta, Array1D& out_array);
 void generateCenterPts(size_t npts, Real delta, Array1D& out_array);
+
+// gridVar makeGrid is a factory function that works for any of the 3
+// grid dimensionalities, intended for cases when the users need to
+// define the dimensionality at runtime. 
+gridVar makeGrid(paramVars params, const stack<MOLE_Errors>& errs);
 
 #endif

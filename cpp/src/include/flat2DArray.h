@@ -64,9 +64,9 @@ public:
     // flat2DArray error handling
     void logArr2DErr(size_t errCode, string errLoc, 
                      string errParm) const;
-    bool hasArr2DErrors();
-    void print_ErrorLog();
-    void write_ErrorLog();
+    bool hasArr2DErrors() const;
+    void print_ErrorLog() const;
+    void write_ErrorLog() const;
     
 private:
     size_t rows_ = 0, cols_ = 0;

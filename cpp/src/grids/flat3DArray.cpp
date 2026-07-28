@@ -152,23 +152,67 @@ void flat3DArray::resize(size_t dim1, size_t dim2, size_t dim3,
 // Accessing a full i-plane: 
 // pointer + length (dim2_ * dim3_ elements)
 Real* flat3DArray::plane(size_t i) {
-    assert(i < dim1_);
-    return data_.data() + i * dim2_ * dim3_;
+    if (i >= dim1_){
+        // logs an error for invalid index and returns nullptr
+        string errmsg = "index ( i = " + to_string(i);
+        errmsg += " ) is out of bounds (dim1 = " + to_string(dim1_);
+        errmsg += " ) ";
+        logArr3DErr(MOLE_ERR_ARRAY_INDEX_OUTBOUNDS,
+                    "flat3DArray:plane", errmsg );
+        return nullptr;
+    }
+    else {
+        return data_.data() + i * dim2_ * dim3_;
+    }
 }
 
 const Real* flat3DArray::plane(size_t i) const {
-    assert(i < dim1_);
-    return data_.data() + i * dim2_ * dim3_;
+    if (i >= dim1_){
+        // logs an error for invalid index and returns nullptr
+        string errmsg = "index ( i = " + to_string(i);
+        errmsg += " ) is out of bounds (dim1 = " + to_string(dim1_);
+        errmsg += " ) ";
+        logArr3DErr(MOLE_ERR_ARRAY_INDEX_OUTBOUNDS,
+                    "flat3DArray:plane", errmsg );
+        return nullptr;
+    }
+    else {
+        return data_.data() + i * dim2_ * dim3_;
+    }
 }
 
 // Accessing a single (i,j) 
 // row: pointer + length (dim3_ elements) 
 Real* flat3DArray::row(size_t i, size_t j) {
-    assert(i < dim1_ && j < dim2_);
-    return data_.data() + (i * dim2_ + j) * dim3_;
+    if (i >= dim1_ || j >= dim2_){
+        // logs an error for invalid indices and returns nullptr
+        string errmsg = "indeces ( i = " + to_string(i);
+        errmsg += ", j = " + to_string(j) + " ) are out of bounds.";
+        errmsg += " (dim1 = " + to_string(dim1_) + ", dim2 = ";
+        errmsg += to_string(dim2_) + " ) ";
+        logArr3DErr(MOLE_ERR_ARRAY_INDEX_OUTBOUNDS,
+                    "flat3DArray::row", errmsg );
+        return nullptr;
+    }
+    else {
+        return data_.data() + (i * dim2_ + j) * dim3_;
+    }
+
 }
 
 const Real* flat3DArray::row(size_t i, size_t j) const {
-    assert(i < dim1_ && j < dim2_);
-    return data_.data() + (i * dim2_ + j) * dim3_;
+    if (i >= dim1_ || j >= dim2_){
+        // logs an error for invalid indices and returns nullptr
+        string errmsg = "indeces ( i = " + to_string(i);
+        errmsg += ", j = " + to_string(j) + " ) are out of bounds.";
+        errmsg += " (dim1 = " + to_string(dim1_) + ", dim2 = ";
+        errmsg += to_string(dim2_) + " ) ";
+        logArr3DErr(MOLE_ERR_ARRAY_INDEX_OUTBOUNDS,
+                    "flat3DArray::row", errmsg );
+        return nullptr;
+    }
+    else {
+        return data_.data() + (i * dim2_ + j) * dim3_;
+    }
+
 }

@@ -33,7 +33,7 @@ void flat2DArray::logArr2DErr(size_t errCode, string errLoc,
 // flat2DArray::hasArr2DErrors check whether are issues or 
 // errors with the flat2Darray 
 //
-bool flat2DArray::hasArr2DErrors(){
+bool flat2DArray::hasArr2DErrors() const {
     return MOLEerr_haserrors(a_errs);
 }
 
@@ -41,7 +41,7 @@ bool flat2DArray::hasArr2DErrors(){
 // flat2DArray::print_ErrorLog prints out errors with the flat2DArray
 // to standard output
 //
-void flat2DArray::print_ErrorLog(){
+void flat2DArray::print_ErrorLog() const {
     MOLEerr_print(a_errs);
 }
 
@@ -50,10 +50,9 @@ void flat2DArray::print_ErrorLog(){
 // to an output file with name starting with MOLEArr2DErrors - the 
 // full name of the file also includes a timestamp
 //
-void flat2DArray::write_ErrorLog(){
+void flat2DArray::write_ErrorLog() const {
     MOLEerr_dumpErrLog(a_errs, "MOLEArr2DErrors");
 }
-
 
 // -------------
 //
@@ -167,6 +166,23 @@ void flat2DArray::resize(size_t rows, size_t cols, Real fillVal) {
 // Accessing a flat2DArray using Row-wise access: pointer + length
 //
 Real* flat2DArray::row(size_t i) {
+    if (i < rows_){
+        return data_.data() + i * cols_;
+    } 
+    else {
+    // logs an error for invalid row index and returns a NaN
+        string wparams = "row index: i = ";
+        wparams += to_string(i) + " >= " + to_string(rows_) + "rows";
+        logArr2DErr(MOLE_ERR_INVALID_ARRAY_INDEX, 
+                "Flat2DArray Operation", wparams);
+        return nullptr;
+    }  
+}
+
+//
+// const flat2DArray::row - Row-wise access: pointer + length
+//
+const Real* flat2DArray::row(size_t i) const {
     if (i < rows_){
         return data_.data() + i * cols_;
     } 

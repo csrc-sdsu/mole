@@ -14,6 +14,8 @@
  */
 
  #include "MOLE_Errors.h"
+ #include <ctime>
+ #include <fstream>
 
  // This function initializes the error stack by 
  // clearing any existing errors
@@ -22,8 +24,10 @@
 }
 
 // This function pushes an error onto the error stack
+// (default for inputParam is already given in the MOLE_Errors.h
+// declaration; C++ forbids repeating it here)
 void MOLEerr_log(stack<MOLE_Errors>& errorStack, int errCode, 
-    const string& location, const string& inputParam = ""){
+    const string& location, const string& inputParam){
     MOLE_Errors err;
     err.errCode = errCode;
     err.errLocation = location;
@@ -96,7 +100,6 @@ void writeErrtoStdOut(int errNum, int errCode, string errLocation,
 // Produces a timestamp string to create a unique filename to output
 // log_errors messages and backtracing information
 std::string getDateTimeString() {
-#include <ctime>
     std::time_t now = std::time(nullptr);
     char buf[100];
     std::strftime(buf, sizeof(buf), "%Y%m%d_%H%M%S", 
@@ -116,7 +119,6 @@ void MOLEerr_write_args(std::ofstream& ofile,
 }
 
 // writeErrtoFile writes an error to the log_error file
-#include <fstream>
 void writeErrtoFile(std::ofstream& ofile, int errNum, int errCode,
                   string errLocation, string errParams, 
                   const std::string& errMsg) {

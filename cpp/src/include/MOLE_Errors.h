@@ -63,6 +63,7 @@ using namespace std;
 //
 #define MOLE_ERR_INVALID_ARRAY_SIZE 200 //invalid array sizes
 #define MOLE_ERR_ARRAY_SIZE_OVERFLOW 201 // array allocation overflow
+#define MOLE_ERR_ARRAY_INDEX_OUTBOUNDS 202 // array index out of bounds
 
 //
 // Dictionary of error codes and their corresponding messages 
@@ -153,6 +154,9 @@ static unordered_map<int, string> MOLE_errors_messages = {
     // 201
     {MOLE_ERR_ARRAY_SIZE_OVERFLOW,
     "Array dimensions too large to fit in memory"},
+    // 202
+    {MOLE_ERR_ARRAY_INDEX_OUTBOUNDS,
+    "Array index is out of bounds." },
 };
 
 // MOLE errors are stored in a stack to allow tracking and 
@@ -191,6 +195,14 @@ void MOLEerr_print(const stack<MOLE_Errors>& errorStack);
 
 // 7. Writes error output to a log file (not implemented yet)
 void MOLEerr_dumpErrLog(stack<MOLE_Errors>& errorStack, string logType);
+
+// ParamsNull is a struct used for reporting errors with any
+// MOLE objects (classes). The structure can accumulate errors from
+// other MOLE classes (i.e, grids, boundaries, etc)in type_errs
+struct paramsNull {
+    size_t num_errs = 0; // Number of errors
+    stack<string> type_errs; // Types of MOLE errors 
+};
 
 
 #endif // MOLE_ERRORS_H

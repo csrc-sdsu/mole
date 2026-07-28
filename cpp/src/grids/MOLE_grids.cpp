@@ -13,7 +13,7 @@
  * 
  */
 
-#include "MOLE_grid.h"
+#include "MOLE_grids.h"
 
 // ------------------------------------------------------------------
 //                      gridBase Errors Implementation
@@ -342,7 +342,7 @@ grid1D::grid1D(const gridParams1D p1,
     grid.nodes_X = p1.nodes_X;
     grid.centers_X = p1.centers_X;
 
-    // scan the error log for previous error
+    // scan the error log for previous errors
     stack<MOLE_Errors> tmp_stk = inerrs;
     while (!tmp_stk.empty()){
         logGridErr(tmp_stk.top().errCode, tmp_stk.top().errLocation,
@@ -633,7 +633,7 @@ grid2D::grid2D(gridParams2D p2,
     grid.faces_v_X = p2.faces_v_X;
     grid.faces_v_Y = p2.faces_v_Y;
     
-    // scan the error log for previous error
+    // scan the error log for previous errors
     stack<MOLE_Errors> tmp_stk = inerrs;
     while (!tmp_stk.empty()){
         logGridErr(tmp_stk.top().errCode, tmp_stk.top().errLocation,
@@ -1037,7 +1037,7 @@ grid3D::grid3D(gridParams3D p3,
     grid.faces_w_Y = p3.faces_w_Y;
     grid.faces_w_Z = p3.faces_w_Z;
 
-    // scan the error log for previous error
+    // scan the error log for previous errors
     stack<MOLE_Errors> tmp_stk = inerrs;
     while (!tmp_stk.empty()){
         logGridErr(tmp_stk.top().errCode, tmp_stk.top().errLocation,
@@ -1067,7 +1067,30 @@ grid3D::grid3D(gridParams3D p3,
                 "grid3D[grid3D constructor]", errmsg);
     }
 }
-
+// ------------------------------------------------------------------
+//
+// MOLE gridNull Class methods (declarations in MOLE_grid.h)
+//
+// ------------------------------------------------------------------
+//
+// gridNull sole constructor requires a paramsNull struct and errors
+//
+gridNull::gridNull(paramsNull in_p, 
+                const stack<MOLE_Errors>& inerrs): gridBase(0){
+    // scan the error log for previous errors
+    stack<MOLE_Errors> tmp_stk = inerrs;
+    while (!tmp_stk.empty()){
+        logGridErr(tmp_stk.top().errCode, tmp_stk.top().errLocation,
+                    tmp_stk.top().paramError);
+        tmp_stk.pop();
+    }
+    if(ErrData.num_errs == 0){
+        ErrData.num_errs  = inerrs.size();
+    } else {
+        ErrData.num_errs += inerrs.size();
+    }
+    ErrData.type_errs.push("MOLE Grid");
+}
 // ----------------------------------------------------------------
 // 
 // gridVar makeGrid is a factory function that works for any of the 3 
@@ -1088,7 +1111,10 @@ gridVar makeGrid(paramVars params, const stack<MOLE_Errors>& errs){
             return grid2D(p, errs);
         } else if constexpr (std::is_same_v<T, gridParams3D>){
             return grid3D(p, errs);
+        } else if constexpr (std::is_same_v<T, paramsNull>){
+            return gridNull(p, errs);
         }
+        
     }, params);
 }
 
