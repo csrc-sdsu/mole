@@ -213,3 +213,37 @@ TEST(flat3D_resize_overflow_is_rejected_and_unchanged) {
     CHECK_EQ(A.dim2(), 2u);
     CHECK_EQ(A.dim3(), 2u);
 }
+
+// ---------------------------------------------------------------
+// has_size() - new in this revision. Lets a caller confirm an array
+// actually ended up the requested size after construction/resize,
+// which is how MOLE_grids.cpp now detects an overflow-rejected
+// allocation before trying to use the (still-empty) array.
+// ---------------------------------------------------------------
+
+TEST(flat3D_has_size_true_when_matching) {
+    flat3DArray A(2, 3, 4, 0.0);
+    CHECK_TRUE(A.has_size(2, 3, 4));
+}
+
+TEST(flat3D_has_size_false_when_any_dim_mismatches) {
+    flat3DArray A(2, 3, 4, 0.0);
+    CHECK_FALSE(A.has_size(9, 3, 4));
+    CHECK_FALSE(A.has_size(2, 9, 4));
+    CHECK_FALSE(A.has_size(2, 3, 9));
+}
+
+TEST(flat3D_has_size_detects_rejected_overflow_ctor) {
+    size_t d = 4194304ULL; // 2^22; d^3 wraps to 0 on 64-bit size_t
+    flat3DArray A(d, d, d, 1.0);
+    CHECK_FALSE(A.has_size(d, d, d));
+    CHECK_TRUE(A.has_size(0, 0, 0));
+}
+
+TEST(flat3D_has_size_detects_rejected_overflow_resize) {
+    flat3DArray A(2, 2, 2, 1.0);
+    size_t d = 4194304ULL;
+    A.resize(d, d, d, 5.0);
+    CHECK_FALSE(A.has_size(d, d, d));
+    CHECK_TRUE(A.has_size(2, 2, 2));
+}

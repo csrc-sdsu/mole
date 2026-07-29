@@ -234,3 +234,46 @@ TEST(flat2D_print_error_log_does_not_crash) {
     A.print_ErrorLog(); // just verify no crash/exception
     CHECK_TRUE(A.hasArr2DErrors());
 }
+
+// ---------------------------------------------------------------
+// has_size() - new in this revision. Used by MOLE_grids.cpp to
+// verify an array actually ended up the requested size after a
+// construction/resize, so a caller can detect an overflow-rejected
+// allocation without needing to separately check hasArr2DErrors().
+// ---------------------------------------------------------------
+
+TEST(flat2D_has_size_true_when_matching) {
+    flat2DArray A(3, 4, 0.0);
+    CHECK_TRUE(A.has_size(3, 4));
+}
+
+TEST(flat2D_has_size_false_when_rows_mismatch) {
+    flat2DArray A(3, 4, 0.0);
+    CHECK_FALSE(A.has_size(5, 4));
+}
+
+TEST(flat2D_has_size_false_when_cols_mismatch) {
+    flat2DArray A(3, 4, 0.0);
+    CHECK_FALSE(A.has_size(3, 7));
+}
+
+TEST(flat2D_has_size_detects_rejected_overflow_ctor) {
+    // Constructing with an overflowing rows*cols leaves the array
+    // empty (rows()==cols()==0); has_size() against the ORIGINALLY
+    // requested dims should report false, letting a caller detect
+    // the rejected allocation.
+    size_t huge = 4294967296ULL;
+    flat2DArray A(huge, huge, 1.0);
+    CHECK_FALSE(A.has_size(huge, huge));
+    CHECK_TRUE(A.has_size(0, 0)); // it did end up empty, as expected
+}
+
+TEST(flat2D_has_size_detects_rejected_overflow_resize) {
+    flat2DArray A(2, 2, 1.0);
+    size_t huge = 4294967296ULL;
+    A.resize(huge, huge, 5.0);
+    // resize was rejected, so the array still has its ORIGINAL size,
+    // not the huge requested one.
+    CHECK_FALSE(A.has_size(huge, huge));
+    CHECK_TRUE(A.has_size(2, 2));
+}

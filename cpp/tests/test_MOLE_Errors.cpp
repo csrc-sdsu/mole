@@ -93,21 +93,14 @@ TEST(err_print_preserves_stack_contents) {
 
 // KNOWN BUG: MOLEerr_dumpErrLog() writes the log message and the
 // user-supplied parameter string to the WRONG fields for known error
-// codes. Compare the argument order used for the stdout path
-// (writeErrtoStdOut(i, code, location, PARAM, MESSAGE)) against the
-// file path (writeErrtoFile(..., location, MESSAGE, PARAM) for the
-// MOLE_ERR_GRID_UNCHECKED branch, and (..., location, "Unknown MOLE
-// error code ", to_string(code)) for the unknown-code branch). Both
-// calls have errParams and errMsg swapped relative to the stdout
-// version and relative to writeErrtoFile's own signature
-// (ofile, errNum, errCode, errLocation, errParams, errMsg).
-//
-// This test writes a log with a known error code and confirms the
-// dumped file contains the human-readable error MESSAGE text; it
-// currently FAILS because the message ends up printed as if it were
-// the "arg value(s)" and the actual param ("m=5") is dropped into the
-// message slot instead.
-TEST(err_KNOWNBUG_dumpErrLog_field_order) {
+// codes (message and param arguments were swapped relative to
+// writeErrtoFile's signature: ofile, errNum, errCode, errLocation,
+// errParams, errMsg). FIXED in this revision: writeErrtoFile is now
+// called with the arguments in the correct order, matching the
+// stdout path (writeErrtoStdOut). This test confirms the dumped file
+// puts the human-readable MESSAGE before "occurred inside" and the
+// raw param ("m=5") after "with arg value(s):".
+TEST(err_dumpErrLog_field_order_is_correct) {
     stack<MOLE_Errors> errs;
     MOLEerr_log(errs, MOLE_ERR_INVALID_GRID_SIZE, "testLoc", "m=5");
 
@@ -133,9 +126,6 @@ TEST(err_KNOWNBUG_dumpErrLog_field_order) {
     // Correct layout should read (see writeErrtoStdOut/writeErrtoFile
     // signature: errNum, errCode, errLocation, errParams, errMsg):
     //   "...] - <MESSAGE>\noccurred inside:<loc>with arg value(s): <m=5>"
-    // i.e. the human-readable MESSAGE should appear BEFORE
-    // "occurred inside", and the raw param "m=5" should appear AFTER
-    // "with arg value(s):". The buggy implementation swaps them.
     auto occurred_pos = contents.find("occurred inside");
     auto message_pos  = contents.find("Grid size must be a natural number > 0");
     auto param_pos    = contents.find("m=5");
@@ -146,7 +136,6 @@ TEST(err_KNOWNBUG_dumpErrLog_field_order) {
     if (occurred_pos == std::string::npos || message_pos == std::string::npos
         || param_pos == std::string::npos) return;
 
-    // These are the two checks that currently FAIL due to the bug:
-    CHECK_TRUE(message_pos < occurred_pos); // message should come first
-    CHECK_TRUE(param_pos > occurred_pos);   // raw param should come after
+    CHECK_TRUE(message_pos < occurred_pos); // message comes first
+    CHECK_TRUE(param_pos > occurred_pos);   // raw param comes after
 }

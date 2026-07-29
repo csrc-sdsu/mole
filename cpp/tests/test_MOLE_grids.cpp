@@ -4,6 +4,10 @@
 #include "mini_test.h"
 #include "MOLE_grids.h"
 #include <cmath>
+#include <fstream>
+#include <sstream>
+#include <filesystem>
+#include <cstdio>
 
 // ---------------------------------------------------------------
 // validSpacing()
@@ -267,6 +271,65 @@ TEST(grid3D_construction_with_prior_errors_accumulates_them) {
 }
 
 // ---------------------------------------------------------------
+// New in this revision: grid construction now checks has_size() on
+// each internal flat2DArray/flat3DArray coordinate buffer right
+// after building it, so an overflow-rejected allocation (which
+// leaves that buffer empty instead of the requested size) is
+// detected and logged as MOLE_ERR_FAILED_ARRAY_ALLOC /
+// MOLE_ERR_FAILED_ARRAY_RESIZE instead of silently continuing with
+// mismatched/empty coordinate data.
+//
+// For a 3D grid this is safely reproducible: (m+1)*(n+1)*(o+1) only
+// needs to exceed ~2^64, which happens with each axis around 2^22
+// (~4.19 million) - small enough that the per-axis Array1D vectors
+// MOLE builds first (grid.m+1 doubles, ~33 MB) allocate just fine,
+// while the cubic combination in the flat3DArray still overflows
+// size_t and gets rejected by the array's own overflow guard.
+// (The analogous 2D scenario is NOT included as an automated test:
+// reaching a 2D array-size overflow requires at least one axis near
+// 2^32, and MOLE builds an unguarded plain std::vector of that axis
+// size BEFORE ever reaching the guarded flat2DArray allocation - see
+// the write-up accompanying this test suite for details.)
+TEST(grid3D_array_overflow_is_caught_and_logged_via_has_size) {
+    gridParams3D p;
+    p.topology = 'u';
+    size_t d = 4194304ULL; // 2^22
+    p.m = d; p.n = d; p.o = d;
+    p.dx = 1.0; p.dy = 1.0; p.dz = 1.0;
+
+    grid3D g(p);
+    CHECK_FALSE(g.validGrid());
+    CHECK_TRUE(g.hasGridErrors());
+
+    // Confirm MOLE_ERR_FAILED_ARRAY_ALLOC actually made it into the
+    // grid's error log (not just "some error or other") by dumping
+    // the log and inspecting its contents end-to-end.
+    g.write_ErrorLog(); // writes "MOLEGridErrors<timestamp>" in cwd
+
+    std::string found_file;
+    for (auto& entry : std::filesystem::directory_iterator(".")) {
+        std::string fname = entry.path().filename().string();
+        if (fname.rfind("MOLEGridErrors", 0) == 0) {
+            found_file = fname;
+            break;
+        }
+    }
+    CHECK_FALSE(found_file.empty());
+    if (found_file.empty()) return;
+
+    std::ifstream in(found_file);
+    std::stringstream buffer;
+    buffer << in.rdbuf();
+    std::string contents = buffer.str();
+    in.close();
+    std::remove(found_file.c_str());
+
+    bool found_alloc_failure =
+        contents.find("Array allocation failed") != std::string::npos;
+    CHECK_TRUE(found_alloc_failure);
+}
+
+// ---------------------------------------------------------------
 // gridNull
 // ---------------------------------------------------------------
 
@@ -286,6 +349,27 @@ TEST(gridNull_accumulates_prior_errors) {
     gridNull g(pn, errs);
     CHECK_TRUE(g.hasGridErrors());
     CHECK_EQ(g.ErrData.num_errs, 2u);
+}
+
+// gridNull now also folds in whatever num_errs the caller's own
+// paramsNull already carried, combining it with inerrs.size() rather
+// than silently dropping it (as an earlier revision did).
+TEST(gridNull_combines_own_num_errs_with_inerrs_size) {
+    paramsNull pn;
+    pn.num_errs = 3; // errors the caller already knew about
+    stack<MOLE_Errors> errs;
+    MOLEerr_log(errs, MOLE_ERR_GRID_CONSTRUCTION_FAILED, "factory", "");
+    MOLEerr_log(errs, MOLE_ERR_INVALID_GRID_DIM, "factory2", "");
+    gridNull g(pn, errs);
+    CHECK_EQ(g.ErrData.num_errs, 5u); // 3 (own) + 2 (inerrs)
+}
+
+TEST(gridNull_num_errs_with_no_inerrs_keeps_own_count) {
+    paramsNull pn;
+    pn.num_errs = 4;
+    stack<MOLE_Errors> errs; // empty
+    gridNull g(pn, errs);
+    CHECK_EQ(g.ErrData.num_errs, 4u);
 }
 
 // ---------------------------------------------------------------

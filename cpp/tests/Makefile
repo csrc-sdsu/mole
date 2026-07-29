@@ -25,4 +25,4 @@ test: $(BIN)
 	./$(BIN)
 
 clean:
-	rm -f $(BIN) MOLE_TEST_DUMP_*
+	rm -f $(BIN) MOLE_TEST_DUMP_* MOLEGridErrors*
