@@ -216,7 +216,7 @@ void flat3DArray::resize(size_t dim1, size_t dim2, size_t dim3,
 // that fail to allocate the array
 //
 bool flat3DArray::has_size(const size_t edim1, const size_t edim2, 
-                            const size_t edim3){
+                            const size_t edim3) const {
     if (dim1() == edim1 && dim2() == edim2 && dim3() == edim3){
         return true;
     } else {

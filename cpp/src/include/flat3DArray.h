@@ -51,7 +51,7 @@ public:
 
     // checks whether a 3D array has size e_dim1 x e_dim2 x e_dim3
     bool has_size(const size_t e_dim1, const size_t dim2, 
-                  const size_t dim3);
+                  const size_t dim3) const;
 
     // returns flat3DArray dimensions dim1, dim2 or dim3
     size_t dim1() const { return dim1_; }

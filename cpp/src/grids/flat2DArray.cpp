@@ -193,7 +193,8 @@ void flat2DArray::resize(size_t rows, size_t cols, Real fillVal) {
 // is called after a creation of allocation, it guards from overflows
 // that fail to allocate the array
 //
-bool flat2DArray::has_size(const size_t e_rows, const size_t e_cols){
+bool flat2DArray::has_size(const size_t e_rows, const size_t e_cols)
+    const {
     if (rows() == e_rows && cols() == e_cols){
         return true;
     } else {

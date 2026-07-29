@@ -51,7 +51,7 @@ public:
     void resize(size_t rows, size_t cols, Real fillVal= 0.0);
 
     // checks whether a 2D array has size e_rows x e_cols
-    bool has_size(const size_t e_rows, const size_t e_cols);
+    bool has_size(const size_t e_rows, const size_t e_cols) const;
 
     // returns flat2DArray dimensions rows or cols
     size_t rows() const { return rows_; }

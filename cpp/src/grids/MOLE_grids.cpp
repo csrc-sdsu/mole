@@ -514,8 +514,8 @@ bool grid2D::validGrid() {
             }   
         } else {
             string errmsg = "dim1 = ";
-            errmsg += to_string(grid.m+1) + " X dim2 = ";
-            errmsg += to_string(grid.n+1);
+            errmsg += to_string(grid.m+2) + " X dim2 = ";
+            errmsg += to_string(grid.n+2);
             logGridErr(MOLE_ERR_FAILED_ARRAY_RESIZE,
                 "grid2D[construct] Center Coordinates", errmsg);
             isValid = false;    
