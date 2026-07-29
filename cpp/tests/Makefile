@@ -1,40 +1,28 @@
-# Makefile for the MOLE test suite (GoogleTest)
-#
-# Prerequisites:
-#   - g++ with C++17 support
-#   - libgtest-dev / libgtest_main (e.g. `apt install libgtest-dev`)
-#   - libarmadillo-dev            (e.g. `apt install libarmadillo-dev`)
-#
-# Usage:
-#   make            # builds ./test_all_mole
-#   make run        # builds and runs all tests
-#   make clean
+CXX      ?= g++
+CXXFLAGS ?= -std=c++17 -Wall -Wextra -g
+INCLUDES  = -I../src/include
 
-CXX      := g++
-CXXFLAGS := -std=c++17 -Wall -I ../src/include
-LDFLAGS  := -lgtest -lgtest_main -lpthread 
+SRC = test_main.cpp \
+      test_flat2DArray.cpp \
+      test_flat3DArray.cpp \
+      test_MOLE_Errors.cpp \
+      test_MOLE_grids.cpp \
+      ../src/grids/flat2DArray.cpp \
+      ../src/grids/flat3DArray.cpp \
+      ../src/grids/MOLE_grids.cpp \
+      ../src/sys/MOLE_Errors.cpp
 
-SRC := ../src/grids/MOLE_grids.cpp \
-       ../src/grids/flat2DArray.cpp \
-       ../src/grids/flat3DArray.cpp \
-       ../src/sys/MOLE_Errors.cpp
+BIN = run_tests
 
-TESTS := test_MOLE_Errors.cpp \
-         test_flat2DArray.cpp \
-         test_flat3DArray.cpp \
-         test_MOLE_grids.cpp
-
-BIN := test_all_mole
-
-.PHONY: all run clean
+.PHONY: all test clean
 
 all: $(BIN)
 
-$(BIN): $(TESTS) $(SRC)
-	$(CXX) $(CXXFLAGS) $(TESTS) $(SRC) $(LDFLAGS) -o $(BIN)
+$(BIN): $(SRC) mini_test.h
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SRC) -o $(BIN)
 
-run: $(BIN)
+test: $(BIN)
 	./$(BIN)
 
 clean:
-	rm -f $(BIN)
+	rm -f $(BIN) MOLE_TEST_DUMP_*

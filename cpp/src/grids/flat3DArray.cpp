@@ -69,6 +69,28 @@ static bool valid_indeces3(size_t i, size_t j, size_t k,
     return i < vd1 && j < vd2 && k < vd3;
 }
 
+//
+// safeArraySize3D computes dim1*dim2*dim3 and returns whether the
+// multiplication overflows size_t. Checked as two
+// chained multiplications (dim1*dim2, then that result*dim3) so an
+// overflow in either step is caught. On overflow, outSize is left at
+// 0 and the caller logs a MOLE_ERR_ARRAY_SIZE_OVERFLOW error instead
+// of throwing.
+//
+static bool safeArraySize3D(size_t dim1, size_t dim2, size_t dim3,
+                             size_t& outSize) {
+    if (dim1 == 0 || dim2 == 0 || dim3 == 0) {
+        outSize = 0;
+        return true; // any zero dimension is a valid, empty array
+    }
+    size_t d12 = dim1 * dim2;
+    if (d12 / dim1 != dim2) return false; // dim1*dim2 overflowed
+
+    outSize = d12 * dim3;
+    if (outSize / d12 != dim3) return false; // *dim3 overflowed
+
+    return true;
+}
 
 // -------------
 //
@@ -78,7 +100,33 @@ static bool valid_indeces3(size_t i, size_t j, size_t k,
 //
 
 //
-// flat2DArray::operator() - returns flat3DArray(i,j,k)
+// flat3DArray::flat3DArray constructor
+//
+// This constructor attempts to allocate an array of size dim1 x dim2
+// x dim3. It guards from overflow when an array of a size that can't
+// be stored in a size_t. Instead of throwing an exception, it logs a
+// MOLE error, MOLE_ERR_ARRAY_SIZE_OVERFLOW, and leaves the array 
+// empty (dim1()==dim2()==dim3()==0).
+//
+flat3DArray::flat3DArray(size_t dim1, size_t dim2, size_t dim3,
+                          Real fillVal) {
+    size_t total = 0;
+    if (!safeArraySize3D(dim1, dim2, dim3, total)) {
+        string errmsg = "dim1 = " + to_string(dim1);
+        errmsg += ", dim2 = " + to_string(dim2);
+        errmsg += ", dim3 = " + to_string(dim3);
+        logArr3DErr(MOLE_ERR_ARRAY_SIZE_OVERFLOW,
+                    "Flat3DArray Construction", errmsg);
+        return;
+    }
+    dim1_ = dim1;
+    dim2_ = dim2;
+    dim3_ = dim3;
+    data_.assign(total, fillVal);
+}
+
+//
+// flat3DArray::operator() - returns flat3DArray(i,j,k)
 // 
 Real& flat3DArray::operator()(size_t i, size_t j, size_t k) {
     if (valid_indeces3(i, j, k, dim1_, dim2_, dim3_)) {
@@ -139,14 +187,41 @@ bool flat3DArray::operator!=(const flat3DArray& other) const {
 }
 
 //
-// flat3DArray::resize class method to resize a falt3DArray
-// 
+// flat3DArray::resize class method to resize a flat3DArray
+//
+// It uses the same safeArraySize3D() to guard overflows, if these
+// occur, an error is logged and the resize is rejected, leaving the 
+// array unchanged.
+//
 void flat3DArray::resize(size_t dim1, size_t dim2, size_t dim3, 
     Real fillVal) {
+    size_t total = 0;
+    if (!safeArraySize3D(dim1, dim2, dim3, total)) {
+        string errmsg = "dim1 = " + to_string(dim1);
+        errmsg += ", dim2 = " + to_string(dim2);
+        errmsg += ", dim3 = " + to_string(dim3);
+        logArr3DErr(MOLE_ERR_ARRAY_SIZE_OVERFLOW,
+                    "Flat3DArray Resize", errmsg);
+        return; // reject the resize; array left as it was
+    }
     dim1_ = dim1;
     dim2_ = dim2;
     dim3_ = dim3;
-    data_.assign(dim1 * dim2 * dim3, fillVal);
+    data_.assign(total, fillVal);
+}
+
+//
+// has_size checks whether a 3D array has the expected size. When it
+// is called after a creation of allocation, it guards from overflows 
+// that fail to allocate the array
+//
+bool flat3DArray::has_size(const size_t edim1, const size_t edim2, 
+                            const size_t edim3){
+    if (dim1() == edim1 && dim2() == edim2 && dim3() == edim3){
+        return true;
+    } else {
+        return false;
+    }
 }
 
 // Accessing a full i-plane: 

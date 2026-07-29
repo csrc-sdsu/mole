@@ -196,9 +196,8 @@ void MOLEerr_dumpErrLog(stack<MOLE_Errors>& errorStack,
             // if the grid has not been validated
             if (err.errCode == MOLE_ERR_GRID_UNCHECKED) {
                 writeErrtoFile(outFile, i, MOLE_ERR_GRID_UNCHECKED,
-                                err.errLocation, 
-                                MOLE_errors_messages[err.errCode], 
-                                err.paramError);
+                                err.errLocation, err.paramError,  
+                                MOLE_errors_messages[err.errCode]);
                 i++;
                 continue;
             }
@@ -206,12 +205,12 @@ void MOLEerr_dumpErrLog(stack<MOLE_Errors>& errorStack,
              // error code, in case the error log has been corrupted
             auto errMsg = MOLE_errors_messages.find(err.errCode);
             if (errMsg != MOLE_errors_messages.end()) { 
-                writeErrtoFile(outFile, i, err.errCode, err.errLocation,
-                    errMsg->second, err.paramError);
+                writeErrtoFile(outFile, i, err.errCode, 
+                    err.errLocation, err.paramError, errMsg->second);
             } 
             else {
                 writeErrtoFile(outFile, i, 999, err.errLocation,
-                   "Unknown MOLE error code ", to_string(err.errCode));
+                   to_string(err.errCode), "Unknown MOLE error code ");
             }
             i++;
         }

@@ -212,7 +212,7 @@ class gridNull: public gridBase{
     public:
         paramsNull ErrData;
         ~gridNull() = default;
-        gridNull(paramsNull inParams, const stack<MOLE_Errors>& inerrs);
+        gridNull(const paramsNull in_p, const stack<MOLE_Errors>& inerrs);
         bool validGrid(){return false;}
 };
 

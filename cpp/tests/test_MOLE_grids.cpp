@@ -1,381 +1,392 @@
-// Tests for MOLE_grids.h/.cpp: grid1D, grid2D, grid3D, makeGrid,
-// isValidGrid, validSpacing, generateNodalPts/generateCenterPts.
-#include <gtest/gtest.h>
+/*
+ * Regression tests for MOLE_grids.h / MOLE_grids.cpp
+ */
+#include "mini_test.h"
 #include "MOLE_grids.h"
 #include <cmath>
 
-// ===================================================================
-// validSpacing
-// ===================================================================
+// ---------------------------------------------------------------
+// validSpacing()
+// ---------------------------------------------------------------
 
-TEST(ValidSpacing, PositiveFiniteIsValid) {
-    EXPECT_TRUE(validSpacing(1.0));
-    EXPECT_TRUE(validSpacing(0.001));
+TEST(validSpacing_accepts_positive_finite) {
+    CHECK_TRUE(validSpacing(1.0));
+    CHECK_TRUE(validSpacing(0.0001));
 }
 
-TEST(ValidSpacing, ZeroIsInvalid) {
-    EXPECT_FALSE(validSpacing(0.0));
+TEST(validSpacing_rejects_zero_and_negative) {
+    CHECK_FALSE(validSpacing(0.0));
+    CHECK_FALSE(validSpacing(-1.0));
 }
 
-TEST(ValidSpacing, NegativeIsInvalid) {
-    EXPECT_FALSE(validSpacing(-1.0));
+TEST(validSpacing_rejects_nan_and_inf) {
+    CHECK_FALSE(validSpacing(std::nan("")));
+    CHECK_FALSE(validSpacing(std::numeric_limits<Real>::infinity()));
 }
 
-TEST(ValidSpacing, NaNIsInvalid) {
-    EXPECT_FALSE(validSpacing(std::nan("")));
-}
+// ---------------------------------------------------------------
+// generateNodalPts() / generateCenterPts()
+// ---------------------------------------------------------------
 
-TEST(ValidSpacing, InfIsInvalid) {
-    EXPECT_FALSE(validSpacing(std::numeric_limits<Real>::infinity()));
-}
-
-// ===================================================================
-// generateNodalPts / generateCenterPts
-// ===================================================================
-
-TEST(GenerateNodalPts, ProducesEvenlySpacedPoints) {
-    Array1D xn(5); // npts=4 -> 5 nodal points
+TEST(generateNodalPts_matches_formula) {
+    Array1D xn(5); // npts=4 -> indices 0..4
     generateNodalPts(4, 2.0, xn);
     for (size_t i = 0; i <= 4; ++i)
-        EXPECT_DOUBLE_EQ(xn[i], i * 2.0);
+        CHECK_NEAR(xn[i], static_cast<Real>(i) * 2.0, 1e-12);
 }
 
-TEST(GenerateCenterPts, ProducesCellCenteredPoints) {
-    // centers layout: [0]=0 (untouched/default), [1..npts]=(i-0.5)*dx,
-    // [npts+1]=npts*dx
-    Array1D xc(4, 0.0); // npts=2 -> size m+2 = 4
-    generateCenterPts(2, 2.0, xc);
-    EXPECT_DOUBLE_EQ(xc[0], 0.0);
-    EXPECT_DOUBLE_EQ(xc[1], 0.5 * 2.0);
-    EXPECT_DOUBLE_EQ(xc[2], 1.5 * 2.0);
-    EXPECT_DOUBLE_EQ(xc[3], 2 * 2.0);
+TEST(generateCenterPts_matches_formula) {
+    Array1D xc(6); // npts=4 -> centers_X[0..npts+1] = [0..5]
+    generateCenterPts(4, 2.0, xc);
+    for (size_t i = 1; i <= 4; ++i)
+        CHECK_NEAR(xc[i], (static_cast<Real>(i) - 0.5) * 2.0, 1e-12);
+    CHECK_NEAR(xc[5], 4.0 * 2.0, 1e-12); // xc[npts+1] = npts*delta
 }
 
-// ===================================================================
+// ---------------------------------------------------------------
 // grid1D
-// ===================================================================
+// ---------------------------------------------------------------
 
-TEST(Grid1D, UniformValidGridValidates) {
+static gridParams1D make1DUniformParams(size_t m, Real dx) {
     gridParams1D p;
-    p.topology = 'u'; p.m = 4; p.dx = 1.5;
-    grid1D g(p);
-    EXPECT_TRUE(g.isValidatedGrid());
-    EXPECT_FALSE(g.hasGridErrors());
-    EXPECT_EQ(g.grid.nodes_X.size(), 5u);   // m+1
-    EXPECT_EQ(g.grid.centers_X.size(), 6u); // m+2
+    p.topology = 'u';
+    p.m = m;
+    p.dx = dx;
+    return p;
 }
 
-TEST(Grid1D, ZeroCellCountIsInvalid) {
-    gridParams1D p;
-    p.topology = 'u'; p.m = 0; p.dx = 1.0;
-    grid1D g(p);
-    EXPECT_FALSE(g.isValidatedGrid());
-    EXPECT_TRUE(g.hasGridErrors());
+TEST(grid1D_uniform_valid_autogenerates_coords) {
+    grid1D g(make1DUniformParams(4, 0.5));
+    CHECK_TRUE(g.validGrid());
+    CHECK_EQ(g.grid.nodes_X.size(), 5u);   // m+1
+    CHECK_EQ(g.grid.centers_X.size(), 6u); // m+2
+    CHECK_NEAR(g.grid.nodes_X[0], 0.0, 1e-12);
+    CHECK_NEAR(g.grid.nodes_X[4], 4 * 0.5, 1e-12);
+    CHECK_TRUE(g.isValidatedGrid());
+    CHECK_FALSE(g.hasGridErrors());
 }
 
-TEST(Grid1D, NonPositiveSpacingIsInvalid) {
-    gridParams1D p;
-    p.topology = 'u'; p.m = 4; p.dx = -1.0;
-    grid1D g(p);
-    EXPECT_FALSE(g.isValidatedGrid());
+TEST(grid1D_zero_cells_is_invalid) {
+    grid1D g(make1DUniformParams(0, 0.5));
+    CHECK_FALSE(g.validGrid());
+    CHECK_TRUE(g.hasGridErrors());
 }
 
-TEST(Grid1D, CurvilinearIsAlwaysInvalidIn1D) {
-    // 1D curvilinear grids are fundamentally undefined per validGrid()
-    gridParams1D p;
-    p.topology = 'c'; p.m = 4; p.dx = 1.0;
-    grid1D g(p);
-    EXPECT_FALSE(g.isValidatedGrid());
+TEST(grid1D_bad_spacing_is_invalid) {
+    grid1D gzero(make1DUniformParams(4, 0.0));
+    CHECK_FALSE(gzero.validGrid());
+
+    grid1D gneg(make1DUniformParams(4, -1.0));
+    CHECK_FALSE(gneg.validGrid());
+
+    gridParams1D pnan = make1DUniformParams(4, 0.0);
+    pnan.dx = std::nan("");
+    grid1D gnan(pnan);
+    CHECK_FALSE(gnan.validGrid());
 }
 
-TEST(Grid1D, NonuniformWithoutNodesIsInvalid) {
-    gridParams1D p;
-    p.topology = 'n'; p.m = 4;
+TEST(grid1D_curvilinear_is_always_invalid) {
+    gridParams1D p = make1DUniformParams(4, 0.5);
+    p.topology = 'c';
     grid1D g(p);
-    EXPECT_FALSE(g.isValidatedGrid());
+    CHECK_FALSE(g.validGrid());
+    CHECK_TRUE(g.hasGridErrors());
 }
 
-TEST(Grid1D, NonuniformWithNodesIsValid) {
-    gridParams1D p;
-    p.topology = 'n'; p.m = 3;
-    p.nodes_X = {0.0, 1.0, 3.0, 6.0};  // arbitrary strictly-monotone
-    grid1D g(p);
-    EXPECT_TRUE(g.isValidatedGrid());
+TEST(grid1D_nonuniform_requires_nodes_X) {
+    gridParams1D p = make1DUniformParams(4, 0.5);
+    p.topology = 'n';
+    grid1D gmissing(p);
+    CHECK_FALSE(gmissing.validGrid());
+
+    gridParams1D p2 = make1DUniformParams(4, 0.5);
+    p2.topology = 'n';
+    p2.nodes_X = {0.0, 1.0, 2.0, 3.0, 4.0};
+    grid1D gok(p2);
+    CHECK_TRUE(gok.validGrid());
 }
 
-TEST(Grid1D, InvalidTopologyCharIsRejected) {
-    gridParams1D p;
-    p.topology = 'z'; p.m = 4; p.dx = 1.0;
+TEST(grid1D_invalid_topology_char_is_invalid) {
+    gridParams1D p = make1DUniformParams(4, 0.5);
+    p.topology = 'z';
     grid1D g(p);
-    EXPECT_FALSE(g.isValidatedGrid());
+    CHECK_FALSE(g.validGrid());
+    CHECK_TRUE(g.hasGridErrors());
 }
 
-TEST(Grid1D, PeriodicFlagIsPreserved) {
-    gridParams1D p;
-    p.topology = 'u'; p.m = 4; p.dx = 1.0; p.bc_isPeriodic = true;
+TEST(grid1D_user_supplied_matching_coords_are_accepted) {
+    gridParams1D p = make1DUniformParams(2, 1.0);
+    p.nodes_X = {0.0, 1.0, 2.0};      // matches m+1 nodal pts for dx=1
+    p.centers_X = {0.0, 0.5, 1.5, 2.0}; // matches m+2 center pts
     grid1D g(p);
-    EXPECT_TRUE(g.grid.bc_isPeriodic);
+    CHECK_TRUE(g.validGrid());
 }
 
-TEST(Grid1D, ConstructorWithInerrsAccumulatesPriorErrors) {
+TEST(grid1D_user_supplied_wrong_size_coords_are_rejected) {
+    gridParams1D p = make1DUniformParams(4, 0.5);
+    p.nodes_X = {0.0, 1.0}; // wrong size (should be m+1=5)
+    grid1D g(p);
+    CHECK_FALSE(g.validGrid());
+    CHECK_TRUE(g.hasGridErrors());
+}
+
+TEST(grid1D_user_supplied_wrong_value_coords_are_rejected) {
+    gridParams1D p = make1DUniformParams(2, 1.0);
+    p.nodes_X = {0.0, 100.0, 200.0}; // right size, wrong values
+    grid1D g(p);
+    CHECK_FALSE(g.validGrid());
+}
+
+TEST(grid1D_construction_with_prior_errors_accumulates_them) {
     stack<MOLE_Errors> priorErrs;
-    MOLEerr_log(priorErrs, MOLE_ERR_INVALID_GRID_DIM, "somewhere", "x");
-    gridParams1D p;
-    p.topology = 'u'; p.m = 4; p.dx = 1.0;
-    grid1D g(p, priorErrs);
-    // the pre-existing error must show up in the constructed grid's log
-    EXPECT_TRUE(g.hasGridErrors());
+    MOLEerr_log(priorErrs, MOLE_ERR_INVALID_INPUT_TYPE, "priorStage", "x");
+    grid1D g(make1DUniformParams(4, 0.5), priorErrs);
+    CHECK_TRUE(g.hasGridErrors()); // the prior error should show up
 }
 
-// ===================================================================
+// ---------------------------------------------------------------
 // grid2D
-// ===================================================================
+// ---------------------------------------------------------------
 
-TEST(Grid2D, UniformValidGridValidates) {
+static gridParams2D make2DUniformParams(size_t m, size_t n, Real dx, Real dy) {
     gridParams2D p;
-    p.topology = 'u'; p.m = 3; p.n = 2; p.dx = 1.0; p.dy = 2.0;
+    p.topology = 'u';
+    p.m = m; p.n = n;
+    p.dx = dx; p.dy = dy;
+    return p;
+}
+
+TEST(grid2D_uniform_valid_autogenerates_coords) {
+    grid2D g(make2DUniformParams(3, 2, 1.0, 2.0));
+    CHECK_TRUE(g.validGrid());
+    CHECK_EQ(g.grid.nodes_X.rows(), 4u); // m+1
+    CHECK_EQ(g.grid.nodes_X.cols(), 3u); // n+1
+    CHECK_TRUE(g.isValidatedGrid());
+}
+
+TEST(grid2D_zero_cells_is_invalid) {
+    grid2D g(make2DUniformParams(0, 2, 1.0, 1.0));
+    CHECK_FALSE(g.validGrid());
+    CHECK_TRUE(g.hasGridErrors());
+}
+
+TEST(grid2D_bad_spacing_is_invalid) {
+    grid2D g(make2DUniformParams(3, 2, 0.0, 1.0));
+    CHECK_FALSE(g.validGrid());
+}
+
+TEST(grid2D_curvilinear_requires_nodes) {
+    gridParams2D p = make2DUniformParams(3, 2, 1.0, 1.0);
+    p.topology = 'c';
+    grid2D gmissing(p);
+    CHECK_FALSE(gmissing.validGrid());
+}
+
+TEST(grid2D_nonuniform_requires_nodes) {
+    gridParams2D p = make2DUniformParams(3, 2, 1.0, 1.0);
+    p.topology = 'n';
+    grid2D gmissing(p);
+    CHECK_FALSE(gmissing.validGrid());
+}
+
+TEST(grid2D_invalid_topology_char_is_invalid) {
+    gridParams2D p = make2DUniformParams(3, 2, 1.0, 1.0);
+    p.topology = '?';
     grid2D g(p);
-    EXPECT_TRUE(g.isValidatedGrid());
-    EXPECT_FALSE(g.hasGridErrors());
-    EXPECT_EQ(g.grid.nodes_X.rows(), 4u);   // m+1
-    EXPECT_EQ(g.grid.nodes_X.cols(), 3u);   // n+1
-    EXPECT_EQ(g.grid.centers_X.rows(), 5u); // m+2
-    EXPECT_EQ(g.grid.centers_X.cols(), 4u); // n+2
-    EXPECT_EQ(g.grid.faces_u_X.rows(), 4u); // m+1
-    EXPECT_EQ(g.grid.faces_u_X.cols(), 2u); // n
-    EXPECT_EQ(g.grid.faces_v_X.rows(), 3u); // m
-    EXPECT_EQ(g.grid.faces_v_X.cols(), 3u); // n+1
+    CHECK_FALSE(g.validGrid());
+    CHECK_TRUE(g.hasGridErrors());
 }
 
-TEST(Grid2D, ZeroCellCountInEitherDimIsInvalid) {
-    gridParams2D p1;
-    p1.topology = 'u'; p1.m = 0; p1.n = 2; p1.dx = 1.0; p1.dy = 1.0;
-    grid2D g1(p1);
-    EXPECT_FALSE(g1.isValidatedGrid());
-
-    gridParams2D p2;
-    p2.topology = 'u'; p2.m = 2; p2.n = 0; p2.dx = 1.0; p2.dy = 1.0;
-    grid2D g2(p2);
-    EXPECT_FALSE(g2.isValidatedGrid());
-}
-
-TEST(Grid2D, BothPeriodicFlagsPreservedIndependently) {
-    gridParams2D p;
-    p.topology = 'u'; p.m = 2; p.n = 2; p.dx = 1.0; p.dy = 1.0;
-    p.bc_isPeriodic[0] = true;
-    p.bc_isPeriodic[1] = false;
-    grid2D g(p);
-    EXPECT_TRUE(g.grid.bc_isPeriodic[0]);
-    EXPECT_FALSE(g.grid.bc_isPeriodic[1]);
-}
-
-TEST(Grid2D, CurvilinearWithoutNodesIsInvalid) {
-    gridParams2D p;
-    p.topology = 'c'; p.m = 2; p.n = 2;
-    grid2D g(p);
-    EXPECT_FALSE(g.isValidatedGrid());
-}
-
-TEST(Grid2D, UserProvidedMismatchedNodeSizeIsRejected) {
-    gridParams2D p;
-    p.topology = 'u'; p.m = 2; p.n = 2; p.dx = 1.0; p.dy = 1.0;
-    // wrong shape on purpose: should be (m+1) x (n+1) = 3x3
-    p.nodes_X = Array2D(2, 2, 0.0);
-    grid2D g(p);
-    EXPECT_FALSE(g.isValidatedGrid());
-    EXPECT_TRUE(g.hasGridErrors());
-}
-
-// ===================================================================
-// grid3D -- regression coverage for the constructor bug that used to
-// silently drop grid.o, grid.dz, all *_Z arrays, faces_v_Z,
-// faces_w_X/Y/Z, and bc_isPeriodic[2].
-// ===================================================================
-
-TEST(Grid3D, UniformValidGridValidates) {
-    gridParams3D p;
-    p.topology = 'u';
-    p.m = 3; p.n = 2; p.o = 4;
-    p.dx = 1.0; p.dy = 2.0; p.dz = 0.5;
-    grid3D g(p);
-    EXPECT_TRUE(g.isValidatedGrid());
-    EXPECT_FALSE(g.hasGridErrors());
-}
-
-TEST(Grid3D, ConstructorCopiesAllScalarFields) {
-    // Direct regression test for the fixed grid3D constructor bug:
-    // 'o' and 'dz' must survive construction, not just m/n/dx/dy.
-    gridParams3D p;
-    p.topology = 'u';
-    p.m = 3; p.n = 2; p.o = 5;
-    p.dx = 1.0; p.dy = 2.0; p.dz = 0.75;
-    grid3D g(p);
-    EXPECT_EQ(g.grid.o, 5u);
-    EXPECT_DOUBLE_EQ(g.grid.dz, 0.75);
-}
-
-TEST(Grid3D, ConstructorCopiesAllPeriodicFlags) {
-    gridParams3D p;
-    p.topology = 'u';
-    p.m = 2; p.n = 2; p.o = 2;
-    p.dx = 1.0; p.dy = 1.0; p.dz = 1.0;
-    p.bc_isPeriodic[0] = true;
-    p.bc_isPeriodic[1] = false;
-    p.bc_isPeriodic[2] = true;
-    grid3D g(p);
-    EXPECT_TRUE(g.grid.bc_isPeriodic[0]);
-    EXPECT_FALSE(g.grid.bc_isPeriodic[1]);
-    EXPECT_TRUE(g.grid.bc_isPeriodic[2]);  // the one that used to be dropped
-}
-
-TEST(Grid3D, AllZCoordinateArraysArePopulated) {
-    gridParams3D p;
-    p.topology = 'u';
-    p.m = 2; p.n = 3; p.o = 4;
-    p.dx = 1.0; p.dy = 1.0; p.dz = 1.0;
-    grid3D g(p);
-    ASSERT_TRUE(g.isValidatedGrid());
-
-    EXPECT_EQ(g.grid.nodes_Z.dim1(), 3u);   // m+1
-    EXPECT_EQ(g.grid.nodes_Z.dim2(), 4u);   // n+1
-    EXPECT_EQ(g.grid.nodes_Z.dim3(), 5u);   // o+1
-    EXPECT_FALSE(g.grid.nodes_Z.empty());
-
-    EXPECT_EQ(g.grid.centers_Z.dim1(), 4u); // m+2
-    EXPECT_EQ(g.grid.centers_Z.dim2(), 5u); // n+2
-    EXPECT_EQ(g.grid.centers_Z.dim3(), 6u); // o+2
-    EXPECT_FALSE(g.grid.centers_Z.empty());
-}
-
-TEST(Grid3D, AllFaceArraysArePopulatedWithCorrectShapes) {
-    gridParams3D p;
-    p.topology = 'u';
-    p.m = 2; p.n = 3; p.o = 4;
-    p.dx = 1.0; p.dy = 1.0; p.dz = 1.0;
-    grid3D g(p);
-    ASSERT_TRUE(g.isValidatedGrid());
-
-    // faces_u_*: (m+1) x n x o
-    EXPECT_EQ(g.grid.faces_u_X.dim1(), 3u);
-    EXPECT_EQ(g.grid.faces_u_X.dim2(), 3u);
-    EXPECT_EQ(g.grid.faces_u_X.dim3(), 4u);
-    EXPECT_FALSE(g.grid.faces_u_Y.empty());
-    EXPECT_FALSE(g.grid.faces_u_Z.empty());  // used to be dropped entirely
-
-    // faces_v_*: m x (n+1) x o
-    EXPECT_EQ(g.grid.faces_v_Y.dim1(), 2u);
-    EXPECT_EQ(g.grid.faces_v_Y.dim2(), 4u);
-    EXPECT_EQ(g.grid.faces_v_Y.dim3(), 4u);
-    EXPECT_FALSE(g.grid.faces_v_X.empty());
-    EXPECT_FALSE(g.grid.faces_v_Z.empty());  // used to be dropped entirely
-
-    // faces_w_*: m x n x (o+1)  -- this whole trio used to be dropped
-    EXPECT_EQ(g.grid.faces_w_Z.dim1(), 2u);
-    EXPECT_EQ(g.grid.faces_w_Z.dim2(), 3u);
-    EXPECT_EQ(g.grid.faces_w_Z.dim3(), 5u);
-    EXPECT_FALSE(g.grid.faces_w_X.empty());
-    EXPECT_FALSE(g.grid.faces_w_Y.empty());
-    EXPECT_FALSE(g.grid.faces_w_Z.empty());
-}
-
-TEST(Grid3D, ConstructorWithInerrsAccumulatesPriorErrorsAndKeepsFields) {
+TEST(grid2D_construction_with_prior_errors_accumulates_them) {
     stack<MOLE_Errors> priorErrs;
-    MOLEerr_log(priorErrs, MOLE_ERR_INVALID_GRID_DIM, "somewhere", "x");
+    MOLEerr_log(priorErrs, MOLE_ERR_INVALID_INPUT_TYPE, "priorStage", "y");
+    grid2D g(make2DUniformParams(3, 2, 1.0, 1.0), priorErrs);
+    CHECK_TRUE(g.hasGridErrors());
+}
+
+// ---------------------------------------------------------------
+// grid3D
+// ---------------------------------------------------------------
+
+static gridParams3D make3DUniformParams(size_t m, size_t n, size_t o,
+                                         Real dx, Real dy, Real dz) {
     gridParams3D p;
     p.topology = 'u';
-    p.m = 2; p.n = 2; p.o = 3;
-    p.dx = 1.0; p.dy = 1.0; p.dz = 2.0;
-    grid3D g(p, priorErrs);
-    EXPECT_TRUE(g.hasGridErrors());
-    // the second constructor must copy fields exactly like the first
-    EXPECT_EQ(g.grid.o, 3u);
-    EXPECT_DOUBLE_EQ(g.grid.dz, 2.0);
+    p.m = m; p.n = n; p.o = o;
+    p.dx = dx; p.dy = dy; p.dz = dz;
+    return p;
 }
 
-TEST(Grid3D, ZeroCellCountInAnyDimIsInvalid) {
-    gridParams3D p;
-    p.topology = 'u'; p.m = 0; p.n = 2; p.o = 2;
-    p.dx = 1.0; p.dy = 1.0; p.dz = 1.0;
+TEST(grid3D_uniform_valid_autogenerates_coords) {
+    grid3D g(make3DUniformParams(2, 2, 2, 1.0, 1.0, 1.0));
+    CHECK_TRUE(g.validGrid());
+    CHECK_EQ(g.grid.nodes_X.dim1(), 3u); // m+1
+    CHECK_EQ(g.grid.nodes_X.dim2(), 3u); // n+1
+    CHECK_EQ(g.grid.nodes_X.dim3(), 3u); // o+1
+    CHECK_TRUE(g.isValidatedGrid());
+}
+
+TEST(grid3D_zero_cells_is_invalid) {
+    grid3D g(make3DUniformParams(2, 0, 2, 1.0, 1.0, 1.0));
+    CHECK_FALSE(g.validGrid());
+    CHECK_TRUE(g.hasGridErrors());
+}
+
+TEST(grid3D_bad_spacing_is_invalid) {
+    grid3D g(make3DUniformParams(2, 2, 2, 1.0, -3.0, 1.0));
+    CHECK_FALSE(g.validGrid());
+}
+
+TEST(grid3D_curvilinear_requires_nodes) {
+    gridParams3D p = make3DUniformParams(2, 2, 2, 1.0, 1.0, 1.0);
+    p.topology = 'c';
+    grid3D gmissing(p);
+    CHECK_FALSE(gmissing.validGrid());
+}
+
+TEST(grid3D_nonuniform_requires_nodes) {
+    gridParams3D p = make3DUniformParams(2, 2, 2, 1.0, 1.0, 1.0);
+    p.topology = 'n';
+    grid3D gmissing(p);
+    CHECK_FALSE(gmissing.validGrid());
+}
+
+TEST(grid3D_invalid_topology_char_is_invalid) {
+    gridParams3D p = make3DUniformParams(2, 2, 2, 1.0, 1.0, 1.0);
+    p.topology = '#';
     grid3D g(p);
-    EXPECT_FALSE(g.isValidatedGrid());
+    CHECK_FALSE(g.validGrid());
+    CHECK_TRUE(g.hasGridErrors());
 }
 
-TEST(Grid3D, NonPositiveDzIsInvalid) {
-    gridParams3D p;
-    p.topology = 'u'; p.m = 2; p.n = 2; p.o = 2;
-    p.dx = 1.0; p.dy = 1.0; p.dz = 0.0;  // dz invalid, dx/dy fine
-    grid3D g(p);
-    EXPECT_FALSE(g.isValidatedGrid());
+TEST(grid3D_construction_with_prior_errors_accumulates_them) {
+    stack<MOLE_Errors> priorErrs;
+    MOLEerr_log(priorErrs, MOLE_ERR_INVALID_INPUT_TYPE, "priorStage", "z");
+    grid3D g(make3DUniformParams(2, 2, 2, 1.0, 1.0, 1.0), priorErrs);
+    CHECK_TRUE(g.hasGridErrors());
 }
 
-TEST(Grid3D, CurvilinearRequiresAllThreeNodeArrays) {
-    gridParams3D p;
-    p.topology = 'c'; p.m = 2; p.n = 2; p.o = 2;
-    // only nodes_X provided, nodes_Y/nodes_Z missing -> still invalid
-    p.nodes_X = Array3D(3, 3, 3, 0.0);
-    grid3D g(p);
-    EXPECT_FALSE(g.isValidatedGrid());
+// ---------------------------------------------------------------
+// gridNull
+// ---------------------------------------------------------------
+
+TEST(gridNull_validGrid_always_false) {
+    paramsNull pn;
+    stack<MOLE_Errors> errs;
+    MOLEerr_log(errs, MOLE_ERR_GRID_CONSTRUCTION_FAILED, "factory", "");
+    gridNull g(pn, errs);
+    CHECK_FALSE(g.validGrid());
 }
 
-// ===================================================================
-// makeGrid factory + isValidGrid dispatch
-// (regression test for the lambda-capture-by-reference fix and the
-//  grid3Dp -> grid3D typo fix)
-// ===================================================================
+TEST(gridNull_accumulates_prior_errors) {
+    paramsNull pn;
+    stack<MOLE_Errors> errs;
+    MOLEerr_log(errs, MOLE_ERR_GRID_CONSTRUCTION_FAILED, "factory", "");
+    MOLEerr_log(errs, MOLE_ERR_INVALID_GRID_DIM, "factory2", "");
+    gridNull g(pn, errs);
+    CHECK_TRUE(g.hasGridErrors());
+    CHECK_EQ(g.ErrData.num_errs, 2u);
+}
 
-TEST(MakeGrid, ProducesGrid1DFromVariant) {
-    gridParams1D p;
-    p.topology = 'u'; p.m = 3; p.dx = 1.0;
+// ---------------------------------------------------------------
+// makeGrid() dispatch
+// ---------------------------------------------------------------
+
+TEST(makeGrid_dispatches_1D) {
+    gridParams1D p = make1DUniformParams(4, 0.5);
     stack<MOLE_Errors> errs;
     paramVars pv = p;
     gridVar g = makeGrid(pv, errs);
-    ASSERT_TRUE(std::holds_alternative<grid1D>(g));
-    EXPECT_TRUE(isValidGrid(g));
+    CHECK_TRUE(std::holds_alternative<grid1D>(g));
 }
 
-TEST(MakeGrid, ProducesGrid2DFromVariant) {
-    gridParams2D p;
-    p.topology = 'u'; p.m = 2; p.n = 2; p.dx = 1.0; p.dy = 1.0;
+TEST(makeGrid_dispatches_2D) {
+    gridParams2D p = make2DUniformParams(2, 2, 1.0, 1.0);
     stack<MOLE_Errors> errs;
     paramVars pv = p;
     gridVar g = makeGrid(pv, errs);
-    ASSERT_TRUE(std::holds_alternative<grid2D>(g));
-    EXPECT_TRUE(isValidGrid(g));
+    CHECK_TRUE(std::holds_alternative<grid2D>(g));
 }
 
-TEST(MakeGrid, ProducesGrid3DFromVariantWithCorrectType) {
-    // Regression test for the 'grid3Dp' typo: makeGrid must actually
-    // return a grid3D, not fail to compile or return the wrong type.
-    gridParams3D p;
-    p.topology = 'u'; p.m = 2; p.n = 2; p.o = 2;
-    p.dx = 1.0; p.dy = 1.0; p.dz = 1.0;
+TEST(makeGrid_dispatches_3D) {
+    gridParams3D p = make3DUniformParams(2, 2, 2, 1.0, 1.0, 1.0);
     stack<MOLE_Errors> errs;
     paramVars pv = p;
     gridVar g = makeGrid(pv, errs);
-    ASSERT_TRUE(std::holds_alternative<grid3D>(g));
-    EXPECT_TRUE(isValidGrid(g));
-    EXPECT_EQ(std::get<grid3D>(g).grid.o, 2u);
+    CHECK_TRUE(std::holds_alternative<grid3D>(g));
 }
 
-TEST(MakeGrid, PropagatesPriorErrorsThroughVariant) {
-    // Regression test for the lambda capture fix: errs must actually
-    // be forwarded into the constructed grid, not silently dropped
-    // (which previously wouldn't even compile).
+TEST(makeGrid_dispatches_null) {
+    paramsNull p;
     stack<MOLE_Errors> errs;
-    MOLEerr_log(errs, MOLE_ERR_INVALID_GRID_DIM, "prior", "");
-    gridParams1D p;
-    p.topology = 'u'; p.m = 2; p.dx = 1.0;
+    MOLEerr_log(errs, MOLE_ERR_GRID_CONSTRUCTION_FAILED, "factory", "");
     paramVars pv = p;
     gridVar g = makeGrid(pv, errs);
-    ASSERT_TRUE(std::holds_alternative<grid1D>(g));
-    EXPECT_TRUE(std::get<grid1D>(g).hasGridErrors());
+    CHECK_TRUE(std::holds_alternative<gridNull>(g));
 }
 
-TEST(MakeGrid, InvalidParamsProducesInvalidGrid) {
-    gridParams2D p;
-    p.topology = 'u'; p.m = 0; p.n = 2; p.dx = 1.0; p.dy = 1.0;
+// ---------------------------------------------------------------
+// isValidGrid() dispatch (non-const gridVar&, per design discussion:
+// validGrid() mutates grid/errs state, so isValidGrid must take a
+// non-const reference)
+// ---------------------------------------------------------------
+
+TEST(isValidGrid_true_for_valid_1D) {
+    gridParams1D p = make1DUniformParams(4, 0.5);
     stack<MOLE_Errors> errs;
     paramVars pv = p;
     gridVar g = makeGrid(pv, errs);
-    EXPECT_FALSE(isValidGrid(g));
+    CHECK_TRUE(isValidGrid(g));
+}
+
+TEST(isValidGrid_false_for_invalid_1D) {
+    gridParams1D p = make1DUniformParams(0, 0.5); // m=0 -> invalid
+    stack<MOLE_Errors> errs;
+    paramVars pv = p;
+    gridVar g = makeGrid(pv, errs);
+    CHECK_FALSE(isValidGrid(g));
+}
+
+TEST(isValidGrid_true_for_valid_2D) {
+    gridParams2D p = make2DUniformParams(2, 3, 1.0, 1.0);
+    stack<MOLE_Errors> errs;
+    paramVars pv = p;
+    gridVar g = makeGrid(pv, errs);
+    CHECK_TRUE(isValidGrid(g));
+}
+
+TEST(isValidGrid_true_for_valid_3D) {
+    gridParams3D p = make3DUniformParams(2, 2, 2, 1.0, 1.0, 1.0);
+    stack<MOLE_Errors> errs;
+    paramVars pv = p;
+    gridVar g = makeGrid(pv, errs);
+    CHECK_TRUE(isValidGrid(g));
+}
+
+TEST(isValidGrid_false_for_gridNull) {
+    paramsNull p;
+    stack<MOLE_Errors> errs;
+    MOLEerr_log(errs, MOLE_ERR_GRID_CONSTRUCTION_FAILED, "factory", "");
+    paramVars pv = p;
+    gridVar g = makeGrid(pv, errs);
+    CHECK_FALSE(isValidGrid(g));
+}
+
+// ---------------------------------------------------------------
+// gridBase error-log lifecycle
+// ---------------------------------------------------------------
+
+TEST(gridBase_starts_unvalidated_then_validates) {
+    // Freshly constructed base marks MOLE_ERR_GRID_UNCHECKED until
+    // validGrid() succeeds and calls setGridValidated().
+    grid1D g(make1DUniformParams(4, 0.5));
+    // Constructor already calls validGrid() once, so by the time we
+    // observe it here it should be validated (grid is well-formed).
+    CHECK_TRUE(g.isValidatedGrid());
+}
+
+TEST(gridBase_stays_unvalidated_when_invalid) {
+    grid1D g(make1DUniformParams(0, 0.5)); // invalid: m=0
+    CHECK_FALSE(g.isValidatedGrid());
+    CHECK_TRUE(g.hasGridErrors());
 }

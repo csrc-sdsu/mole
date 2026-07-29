@@ -66,6 +66,23 @@ bool valid_indeces(size_t i, size_t j, size_t vrows, size_t vcols){
     return i<vrows && j <vcols;
 }
 
+//
+// safeArraySize2D computes rows*cols and reports (via return value)
+// whether the multiplication overflows size_t. On overflow, outSize 
+// is left at 0 and the caller is expected to log the MOLE error
+// MOLE_ERR_ARRAY_SIZE_OVERFLOW.
+//
+static bool safeArraySize2D(size_t rows, size_t cols, size_t& outSize) {
+    if (rows == 0 || cols == 0) {
+        outSize = 0;
+        return true; // a 0 x N or N x 0 array is valid (just empty)
+    }
+    outSize = rows * cols;
+    // if the multiplication wrapped around, dividing back out won't
+    // reproduce the original operand
+    return (outSize / rows) == cols;
+}
+
 // -------------
 //
 // flat2DArray member function and operator implementations
@@ -75,12 +92,29 @@ bool valid_indeces(size_t i, size_t j, size_t vrows, size_t vcols){
 // 
 // flat2DArray::flat2DArray constructor
 //
-flat2DArray::flat2DArray(size_t rows, size_t cols, Real fillVal)
-    : rows_(rows), cols_(cols), data_(rows * cols, fillVal){}
+// This constructor uses an overflow guard which logs an error
+// MOLE_ERR_ARRAY_SIZE_OVERFLOW + leaves the array empty (rows()==0,
+// cols()==0) instead of constructing an inconsistent object. It
+// does not throw a C++ exception 
+//
+flat2DArray::flat2DArray(size_t rows, size_t cols, Real fillVal) {
+    size_t total = 0;
+    if (!safeArraySize2D(rows, cols, total)) {
+        string wparams = "#rows = ";
+        wparams += to_string(rows) + " , #cols = " + to_string(cols);
+        logArr2DErr(MOLE_ERR_ARRAY_SIZE_OVERFLOW,
+                "Flat2DArray Construction", wparams);
+        return;
+    }
+    rows_ = rows;
+    cols_ = cols;
+    data_.assign(total, fillVal);
+}
 
 //
-// flat2DArray::operator() - returns flat2DArray(i,j)
-// 
+// flat2DArray::operator() - returns flat2DArray(i,j) if i & j are 
+// within the row and column bounds, else returns a nan
+//
 Real& flat2DArray::operator()(size_t i, size_t j) {
     if (valid_indeces(i, j, rows_, cols_)) {
         return data_[i * cols_ + j];
@@ -91,13 +125,15 @@ Real& flat2DArray::operator()(size_t i, size_t j) {
         wparams += to_string(i) + ", j = " + to_string(j);
         logArr2DErr(MOLE_ERR_INVALID_ARRAY_INDEX, 
                 "Flat2DArray Operation", wparams);
-        static Real dnan = nan("");
+        static thread_local Real dnan;
+        dnan = nan("");
         return dnan;
     }
 }
 
 //
-// const flat2DArray::operator() - returns flat2DArray(i,j)
+// const flat2DArray::operator() - returns flat2DArray(i,j) if i & j 
+// are within the row and column bounds, else returns a nan
 // 
 const Real& flat2DArray::operator()(size_t i, size_t j) const {
     if (valid_indeces(i, j, rows_, cols_)) {
@@ -132,33 +168,36 @@ bool flat2DArray::operator!=(const flat2DArray& other) const {
 }
 
 //
-// flat2DArray::resize class method to resize a falt2DArray
-// 
+// flat2DArray::resize class method to resize a flat2DArray
+//
+// This methods guards this operation against an overflow. If an 
+// overflow occurs, an error is logged + the array is left UNCHANGED
+// (the resize is simply rejected) rather than throwing or producing 
+// a mismatched rows_/cols_ vs. data_ state.
+//
 void flat2DArray::resize(size_t rows, size_t cols, Real fillVal) {
-    if (rows < 0 || cols < 0){
-        // log an error for invalid size for flat2DArray
+    size_t total = 0;
+    if (!safeArraySize2D(rows, cols, total)) {
         string wparams = "#rows = ";
         wparams += to_string(rows) + " , #cols = " + to_string(cols);
-        logArr2DErr(MOLE_ERR_INVALID_ARRAY_SIZE, 
-                "Flat2DArray Resize", wparams);  
-    } 
-    else {
-        size_t tsize =  static_cast<size_t>(rows) * 
-                        static_cast<size_t>(cols);
-        // Guard against overflow: rows*cols shouldn't wrap around
-        if (cols != 0 && ( tsize / static_cast<size_t>(cols) != 
-                            static_cast<size_t>(rows))) {
-        // log an error for overflow
-        string wparams = "#rows = ";
-        wparams += to_string(rows) + " , #cols = " + to_string(cols);
-        logArr2DErr(MOLE_ERR_ARRAY_SIZE_OVERFLOW, 
-                "Flat2DArray Resize", wparams);   
-        }
-        else{
-            rows_ = rows;
-            cols_ = cols;
-            data_.assign(rows * cols, fillVal);
-        }
+        logArr2DErr(MOLE_ERR_ARRAY_SIZE_OVERFLOW,
+                "Flat2DArray Resize", wparams);
+        return; // reject the resize; array left as it was
+    }
+    rows_ = rows;
+    cols_ = cols;
+    data_.assign(total, fillVal);
+}
+//
+// has_size checks whether a 2D array has the expected size. When it
+// is called after a creation of allocation, it guards from overflows
+// that fail to allocate the array
+//
+bool flat2DArray::has_size(const size_t e_rows, const size_t e_cols){
+    if (rows() == e_rows && cols() == e_cols){
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -170,7 +209,7 @@ Real* flat2DArray::row(size_t i) {
         return data_.data() + i * cols_;
     } 
     else {
-    // logs an error for invalid row index and returns a NaN
+    // logs an error for invalid row index and returns a nullptr
         string wparams = "row index: i = ";
         wparams += to_string(i) + " >= " + to_string(rows_) + "rows";
         logArr2DErr(MOLE_ERR_INVALID_ARRAY_INDEX, 

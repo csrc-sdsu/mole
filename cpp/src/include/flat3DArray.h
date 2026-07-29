@@ -26,25 +26,32 @@ using Real = double;
 #include "MOLE_Errors.h"
 
 class flat3DArray {
-    mutable std::stack<MOLE_Errors> a_errs; // for error detection+backtracking
+    mutable std::stack<MOLE_Errors> a_errs; //error detection+tracking
 public:
     flat3DArray() = default;
-    // constructor for syntax flat3DArray A(dim1, dim2, dim3, fillval)
+    // constructor for flat3DArray A(dim1, dim2, dim3, fillval), with
+    // a guard for memory overflow
     flat3DArray(size_t dim1, size_t dim2, size_t dim3, 
-                Real fillVal = 0.0)
-        : dim1_(dim1), dim2_(dim2), dim3_(dim3),
-          data_(dim1 * dim2 * dim3, fillVal) {}
+                Real fillVal = 0.0);
 
-    // Element access
+    // Single 3D array element access (A(i, j, k))
     Real& operator()(size_t i, size_t j, size_t k);
     const Real& operator()(size_t i, size_t j, size_t k) const;
   
     // Array equality comparison (checks data + dimensions)
     bool operator==(const flat3DArray& other) const;
+
+    // Array inequality (different memory locations)
     bool operator!=(const flat3DArray& other) const;
 
+    // resize a 3D array + check successful mem reallocation
+    // guards for memory overflow
     void resize(size_t dim1, size_t dim2, size_t dim3, 
         Real fillVal = 0.0);
+
+    // checks whether a 3D array has size e_dim1 x e_dim2 x e_dim3
+    bool has_size(const size_t e_dim1, const size_t dim2, 
+                  const size_t dim3);
 
     // returns flat3DArray dimensions dim1, dim2 or dim3
     size_t dim1() const { return dim1_; }

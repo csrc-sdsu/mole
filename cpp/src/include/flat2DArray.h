@@ -25,27 +25,38 @@ using Real = double;
 
 #include "MOLE_Errors.h"
 
+// flat2DArray is class designed to perform better than the 2D nested
+// vectors in C++, which stores everything by rows of elements. These
+// flat array implementations uses a memory heap to store all the 
+// elements of the two dimensional array. It also records errors
+// during memory allocation.
 class flat2DArray {
 protected:
-    mutable stack<MOLE_Errors> a_errs; // for error detection+backtracking
+    mutable stack<MOLE_Errors> a_errs; // err detection+backtracking
 public:
     flat2DArray() = default;
     // constructor for syntax Flat2DArray A(rows, cols, fillval)
     flat2DArray(size_t rows, size_t cols, Real fillVal = 0.0);
  
-    // Element access
+    // Single 2D array element access v(i,j)
     Real& operator()(size_t i, size_t j); 
     const Real& operator()(size_t i, size_t j) const;
     
     // Array equality comparison (checks data + dimensions)
     bool operator==(const flat2DArray& other) const;
+    // Array inequality (stored at different memory locations)
     bool operator!=(const flat2DArray& other) const;    
 
+    // resize a 2D array + check successful mem reallocation
     void resize(size_t rows, size_t cols, Real fillVal= 0.0);
+
+    // checks whether a 2D array has size e_rows x e_cols
+    bool has_size(const size_t e_rows, const size_t e_cols);
 
     // returns flat2DArray dimensions rows or cols
     size_t rows() const { return rows_; }
     size_t cols() const { return cols_; }
+
     // returns flat2DArray data values (flat)
     Real* data() { return data_.data(); }
     const Real* data() const { return data_.data(); }

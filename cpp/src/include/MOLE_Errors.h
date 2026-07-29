@@ -56,14 +56,16 @@ using namespace std;
 #define MOLE_ERR_INVALID_ARRAY_INDEX 115 // invalid array indexing
 #define MOLE_ERR_INVALID_NODAL_COORDINATES 116 // invalid user coords
 #define MOLE_ERR_INVALID_CENTER_COORDINATES 117 // invalid user coords
-#define MOLE_ERR_INVALID_NORMAL_FACE_COORDINATES 118 // invalid coords
+#define MOLE_ERR_INVALID_NORMAL_FACE_COORDS 118 // invalid coords
 
 //
 // Flat array defition Errors. sError codes 200-299
 //
 #define MOLE_ERR_INVALID_ARRAY_SIZE 200 //invalid array sizes
 #define MOLE_ERR_ARRAY_SIZE_OVERFLOW 201 // array allocation overflow
-#define MOLE_ERR_ARRAY_INDEX_OUTBOUNDS 202 // array index out of bounds
+#define MOLE_ERR_ARRAY_INDEX_OUTBOUNDS 202 //array index out of bounds
+#define MOLE_ERR_FAILED_ARRAY_ALLOC 203 // array alloc failed
+#define MOLE_ERR_FAILED_ARRAY_RESIZE 204 // array resize failed
 
 //
 // Dictionary of error codes and their corresponding messages 
@@ -145,7 +147,7 @@ static unordered_map<int, string> MOLE_errors_messages = {
     "User-provided center coordinates do not agree with other "
     "uniform grid parameters passed"},
     // 118
-    {MOLE_ERR_INVALID_NORMAL_FACE_COORDINATES,
+    {MOLE_ERR_INVALID_NORMAL_FACE_COORDS,
     "User-provided normal face coordinates do not agree with "
     "other uniform grid parameters passed"},
     // 200
@@ -157,6 +159,10 @@ static unordered_map<int, string> MOLE_errors_messages = {
     // 202
     {MOLE_ERR_ARRAY_INDEX_OUTBOUNDS,
     "Array index is out of bounds." },
+    // 203
+    {MOLE_ERR_FAILED_ARRAY_ALLOC, "Array allocation failed."},
+    // 204
+    {MOLE_ERR_FAILED_ARRAY_RESIZE, "Array resize operation failed."},
 };
 
 // MOLE errors are stored in a stack to allow tracking and 

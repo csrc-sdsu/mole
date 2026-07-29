@@ -453,28 +453,40 @@ bool grid2D::validGrid() {
             break;
         }
         // Generate grid or validate user-provided coordinates
-        Array1D xn(grid.m + 1), yn(grid.n + 1);
-        Array2D X(grid.m + 1, grid.n + 1, 0.0), 
-                Y(grid.m + 1, grid.n + 1, 0.0);
 
         // Computing or verifying nodal coordinates
         // xn = (0:m) * dx and and yn = (0:n) * dy
+        Array1D xn(grid.m + 1), yn(grid.n + 1);
         generateNodalPts(grid.m, grid.dx, xn);
         generateNodalPts(grid.n, grid.dy, yn);
-        // [grid.nodes_X, grid.nodes_Y] = nd2Dgrid(xn, yn)
-        nd2DGrid(xn, yn, X, Y);
-        if (!valid2DCoordinates(grid.nodes_X, X, grid.dx, grid.dy,
-                                grid.m+1, grid.n+1,  
+        Array2D X(grid.m + 1, grid.n + 1, 0.0), 
+                Y(grid.m + 1, grid.n + 1, 0.0);
+        if (X.has_size(grid.m+1, grid.n+1) &&
+            Y.has_size(grid.m+1, grid.n+1)){
+   
+            // [grid.nodes_X, grid.nodes_Y] = nd2Dgrid(xn, yn)
+            nd2DGrid(xn, yn, X, Y);
+            if (!valid2DCoordinates(grid.nodes_X, X, grid.dx, 
+                                grid.dy, grid.m+1, grid.n+1,  
                                 MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
                                 MOLE_ERR_INVALID_NODAL_COORDINATES)){
                 isValid = false;
             }
-        if (!valid2DCoordinates(grid.nodes_Y, Y, grid.dx, grid.dy, 
-                                grid.m+1, grid.n+1, 
+            if (!valid2DCoordinates(grid.nodes_Y, Y, grid.dx,  
+                                grid.dy, grid.m+1, grid.n+1, 
                                 MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_NODAL_COORDINATES )){
+                                MOLE_ERR_INVALID_NODAL_COORDINATES)){
                 isValid = false;
             }
+        } else {
+            string errmsg = "dim1 = ";
+            errmsg += to_string(grid.m+1) + " X dim2 = ";
+            errmsg += to_string(grid.n+1);
+            logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC, 
+                "grid2D[construct] Nodal Coordinates", errmsg);
+            isValid = false;
+        }
+
         // Computing or verifying cell center coordinates                        
         // xc = [0, (0.5:m-0.5) * dx, m*dx]  and 
         // yc = [0, (0.5:n-0.5) * dy, n*dy] 
@@ -484,20 +496,31 @@ bool grid2D::validGrid() {
         // [grid.centers_X, grid.centers_Y] = nd2Dgrid(xc, yc)
         X.resize(grid.m + 2, grid.n + 2);
         Y.resize(grid.m + 2, grid.n + 2);
-        nd2DGrid(xc, yc, X, Y);
+        if (X.has_size(grid.m+2, grid.n+2) &&
+            Y.has_size(grid.m+2, grid.n+2)){
+            nd2DGrid(xc, yc, X, Y);
 
-        if (!valid2DCoordinates(grid.centers_X, X, grid.dx, grid.dy,
-                                grid.m+2, grid.n+2,  
+            if (!valid2DCoordinates(grid.centers_X, X, grid.dx, 
+                                grid.dy, grid.m+2, grid.n+2,  
                                 MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
                                 MOLE_ERR_INVALID_NODAL_COORDINATES)){
                 isValid = false;
-        }
-        if (!valid2DCoordinates(grid.centers_Y, Y, grid.dx, grid.dy, 
-                                grid.m+2, grid.n+2, 
+            }
+            if (!valid2DCoordinates(grid.centers_Y, Y, grid.dx,  
+                                grid.dy, grid.m+2, grid.n+2, 
                                 MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
                                 MOLE_ERR_INVALID_NODAL_COORDINATES )){
                 isValid = false;
+            }   
+        } else {
+            string errmsg = "dim1 = ";
+            errmsg += to_string(grid.m+1) + " X dim2 = ";
+            errmsg += to_string(grid.n+1);
+            logGridErr(MOLE_ERR_FAILED_ARRAY_RESIZE,
+                "grid2D[construct] Center Coordinates", errmsg);
+            isValid = false;    
         }
+        
         // Computing and validating normal faces 
         // yu = (0.5:n-0.5) * dy; and xv = (0.5:m-0.5) * dx; 
         Array1D yu(grid.n), xv(grid.m); 
@@ -508,34 +531,54 @@ bool grid2D::validGrid() {
         // [grid.faces_u_X, grid.faces_u_Y] = ndgrid(xu=xn, yu);
         X.resize(grid.m + 1, grid.n);
         Y.resize(grid.m + 1, grid.n);
-        nd2DGrid(xn, yu, X, Y);
-        if (!valid2DCoordinates(grid.faces_u_X, X, grid.dx, grid.dy,
-                                grid.m+1, grid.n, 
+        if (X.has_size(grid.m+1, grid.n) &&
+            Y.has_size(grid.m+1, grid.n)){
+            nd2DGrid(xn, yu, X, Y);
+            if (!valid2DCoordinates(grid.faces_u_X, X, grid.dx, 
+                                grid.dy, grid.m+1, grid.n, 
                                 MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
                                 MOLE_ERR_INVALID_NODAL_COORDINATES)){
-            isValid = false;
-        }
-        if (!valid2DCoordinates(grid.faces_u_Y, Y, grid.dx, grid.dy,
-                                grid.m+1, grid.n,
+                isValid = false;
+            }
+            if (!valid2DCoordinates(grid.faces_u_Y, Y, grid.dx, 
+                                grid.dy, grid.m+1, grid.n,
                                 MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
                                 MOLE_ERR_INVALID_CENTER_COORDINATES)){
-            isValid = false;                    
-        }
-        // [grid.faces_v_X, grid.faces_v_Y] = ndgrid(xv, yv=yn);
+                isValid = false;                    
+            }
+        } else {
+            string errmsg = "dim1 = ";
+            errmsg += to_string(grid.m+1) + " X dim2 = ";
+            errmsg += to_string(grid.n);
+            logGridErr(MOLE_ERR_FAILED_ARRAY_RESIZE,
+                "grid2D[construct] Faces_u Coordinates", errmsg);
+            isValid = false;    
+        }        // [grid.faces_v_X, grid.faces_v_Y] = ndgrid(xv, yv=yn);
         X.resize(grid.m, grid.n + 1);
         Y.resize(grid.m, grid.n + 1);
-        nd2DGrid(xv, yn, X, Y);
-        if (!valid2DCoordinates(grid.faces_v_X, X, grid.dx, grid.dy,
-                                grid.m, grid.n+1, 
+        if (X.has_size(grid.m, grid.n + 1) &&
+            Y.has_size(grid.m, grid.n + 1)){
+            nd2DGrid(xv, yn, X, Y);
+            if (!valid2DCoordinates(grid.faces_v_X, X, grid.dx, 
+                                grid.dy, grid.m, grid.n+1, 
                                 MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
                                 MOLE_ERR_INVALID_NODAL_COORDINATES)){
-            isValid = false;
-        }
-        if (!valid2DCoordinates(grid.faces_v_Y, Y, grid.dx, grid.dy,
-                                grid.m, grid.n+1,
+                isValid = false;
+            }
+            if (!valid2DCoordinates(grid.faces_v_Y, Y, grid.dx, 
+                                grid.dy, grid.m, grid.n+1,
                                 MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
                                 MOLE_ERR_INVALID_CENTER_COORDINATES)){
-            isValid = false;                    
+                isValid = false;                    
+            }
+        }
+        else {
+            string errmsg = "dim1 = ";
+            errmsg += to_string(grid.m) + " X dim2 = ";
+            errmsg += to_string(grid.n+1);
+            logGridErr(MOLE_ERR_FAILED_ARRAY_RESIZE,
+                "grid2D[construct] Faces_v Coordinates", errmsg);
+            isValid = false;    
         }
         break;
     }
@@ -772,28 +815,40 @@ bool grid3D::validGrid() {
         generateNodalPts(grid.m, grid.dx, xn);
         generateNodalPts(grid.n, grid.dy, yn);
         generateNodalPts(grid.o, grid.dz, zn);
-        // [grid.nodes_X,grid.nodes_Y,grid.nodes_Z] = 
-        //      nd3Dgrid(xn, yn, zn)
-        nd3DGrid(xn, yn, zn, X, Y, Z);
-        if (!valid3DCoordinates(grid.nodes_X, X, grid.dx, grid.dy,
+        if (X.has_size(grid.m + 1, grid.n + 1, grid.o + 1) &&
+            Y.has_size(grid.m + 1, grid.n + 1, grid.o + 1) &&
+            Z.has_size(grid.m + 1, grid.n + 1, grid.o + 1)){
+            // [grid.nodes_X,grid.nodes_Y,grid.nodes_Z] = 
+            //      nd3Dgrid(xn, yn, zn)
+            nd3DGrid(xn, yn, zn, X, Y, Z);
+            if (!valid3DCoordinates(grid.nodes_X, X, grid.dx, grid.dy,
                             grid.dz, grid.m+1, grid.n+1, grid.o+1,  
                             MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
                             MOLE_ERR_INVALID_NODAL_COORDINATES)){
-            isValid = false;
-        }
-        if (!valid3DCoordinates(grid.nodes_Y, Y, grid.dx, grid.dy, 
+                isValid = false;
+            }
+            if (!valid3DCoordinates(grid.nodes_Y, Y, grid.dx, grid.dy, 
                             grid.dz, grid.m+1, grid.n+1, grid.o+1, 
                             MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
                             MOLE_ERR_INVALID_NODAL_COORDINATES)){
-            isValid = false;
-        }
-        if (!valid3DCoordinates(grid.nodes_Z, Z, grid.dx, grid.dy, 
+                isValid = false;
+            }
+            if (!valid3DCoordinates(grid.nodes_Z, Z, grid.dx, grid.dy, 
                             grid.dz, grid.m+1, grid.n+1, grid.o+1, 
                             MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
                             MOLE_ERR_INVALID_NODAL_COORDINATES)){
+                isValid = false;
+            }
+        } else {
+            string errmsg = "dim1 = ";
+            errmsg += to_string(grid.m + 1) + " X dim2 = ";
+            errmsg += to_string(grid.n + 1) + " X dim3 = ";
+            errmsg += to_string(grid.o + 1);
+            logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC, 
+                "grid3D[construct] Nodal Coordinates", errmsg);
             isValid = false;
-        }                       
-                 
+        }
+                                     
         // Computing or verifying cell center coordinates
         // xc = [0, (0.5:m-0.5) * dx, m*dx],  
         // yc = [0, (0.5:n-0.5) * dy, n*dy], and 
@@ -808,26 +863,39 @@ bool grid3D::validGrid() {
         X.resize(grid.m + 2, grid.n + 2, grid.o + 2);
         Y.resize(grid.m + 2, grid.n + 2, grid.o + 2);
         Z.resize(grid.m + 2, grid.n + 2, grid.o + 2);
-        nd3DGrid(xc, yc, zc, X, Y, Z);
+        if (X.has_size(grid.m + 2, grid.n + 2, grid.o + 2) &&
+            Y.has_size(grid.m + 2, grid.n + 2, grid.o + 2) &&
+            Z.has_size(grid.m + 2, grid.n + 2, grid.o + 2)){
+            nd3DGrid(xc, yc, zc, X, Y, Z);
 
-        if (!valid3DCoordinates(grid.centers_X, X, grid.dx, grid.dy,
-                            grid.dz, grid.m+2, grid.n+2, grid.o+2, 
-                            MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
-                            MOLE_ERR_INVALID_NODAL_COORDINATES)){
+            if (!valid3DCoordinates(grid.centers_X, X, grid.dx, 
+                        grid.dy, grid.dz, grid.m+2, grid.n+2, 
+                        grid.o+2, MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
+                        MOLE_ERR_INVALID_NODAL_COORDINATES)){
                 isValid = false;
-        }
-        if (!valid3DCoordinates(grid.centers_Y, Y, grid.dx, grid.dy, 
-                            grid.dz, grid.m+2, grid.n+2, grid.o+2, 
-                            MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
-                            MOLE_ERR_INVALID_NODAL_COORDINATES )){
+            }
+            if (!valid3DCoordinates(grid.centers_Y, Y, grid.dx,  
+                        grid.dy, grid.dz, grid.m+2, grid.n+2,  
+                        grid.o+2, MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
+                        MOLE_ERR_INVALID_NODAL_COORDINATES)){
                 isValid = false;
-        }
-        if (!valid3DCoordinates(grid.centers_Z, Z, grid.dx, grid.dy, 
-                            grid.dz, grid.m+2, grid.n+2, grid.o+2, 
-                            MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
-                            MOLE_ERR_INVALID_NODAL_COORDINATES )){
+            }
+            if (!valid3DCoordinates(grid.centers_Z, Z, grid.dx, 
+                        grid.dy, grid.dz, grid.m+2, grid.n+2, 
+                        grid.o+2,MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
+                        MOLE_ERR_INVALID_NODAL_COORDINATES )){
                 isValid = false;
+            }
+        } else {
+            string errmsg = "dim1 = ";
+            errmsg += to_string(grid.m + 2) + " X dim2 = ";
+            errmsg += to_string(grid.n + 2) + " X dim3 = ";
+            errmsg += to_string(grid.o + 2);
+            logGridErr(MOLE_ERR_FAILED_ARRAY_RESIZE, 
+                "grid3D[construct] Center Coordinates", errmsg);
+            isValid = false;
         }
+        
         // Computing and validating normal faces 
         // xv=(0.5:m-0.5)*dx yu=(0.5:n-0.5)*dy and zu=(0.5:o-0.5)*dz; 
         // xu = xn, yv = yn, zw = zn, xw = xv, yw = yu, zv=zu
@@ -845,73 +913,110 @@ bool grid3D::validGrid() {
         X.resize(grid.m+1, grid.n, grid.o);
         Y.resize(grid.m+1, grid.n, grid.o);
         Z.resize(grid.m+1, grid.n, grid.o);
-        nd3DGrid(xn, yu, zu, X, Y, Z);
-        if (!valid3DCoordinates(grid.faces_u_X, X, grid.dx, grid.dy,
-                                grid.dz, grid.m+1, grid.n, grid.o, 
-                                MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_NODAL_COORDINATES)){
-            isValid = false;
-        }
-        if (!valid3DCoordinates(grid.faces_u_Y, Y, grid.dx, grid.dy,
-                                grid.dz, grid.m+1, grid.n, grid.o, 
-                                MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
+        if (X.has_size(grid.m + 1, grid.n, grid.o) &&
+            Y.has_size(grid.m + 1, grid.n, grid.o) &&
+            Z.has_size(grid.m + 1, grid.n, grid.o)){
+            nd3DGrid(xn, yu, zu, X, Y, Z);
+            if (!valid3DCoordinates(grid.faces_u_X, X, grid.dx, 
+                            grid.dy, grid.dz, grid.m+1, grid.n, 
+                            grid.o, MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
+                            MOLE_ERR_INVALID_CENTER_COORDINATES)){
+                isValid = false;
+            }
+            if (!valid3DCoordinates(grid.faces_u_Y, Y, grid.dx, 
+                            grid.dy, grid.dz, grid.m+1, grid.n, 
+                            grid.o, MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
+                            MOLE_ERR_INVALID_CENTER_COORDINATES)){
+                isValid = false;                    
+            }
+            if (!valid3DCoordinates(grid.faces_u_Z, Z, grid.dx, 
+                            grid.dy, grid.dz, grid.m+1, grid.n, 
+                            grid.o, MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
                                 MOLE_ERR_INVALID_CENTER_COORDINATES)){
-            isValid = false;                    
-        }
-        if (!valid3DCoordinates(grid.faces_u_Z, Z, grid.dx, grid.dy,
-                                grid.dz, grid.m+1, grid.n, grid.o, 
-                                MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_CENTER_COORDINATES)){
-            isValid = false;                    
+                isValid = false;                    
+            }
+        } else {
+            string errmsg = "dim1 = ";
+            errmsg += to_string(grid.m + 1) + " X dim2 = ";
+            errmsg += to_string(grid.n) + " X dim3 = ";
+            errmsg += to_string(grid.o);
+            logGridErr(MOLE_ERR_FAILED_ARRAY_RESIZE, 
+                "grid3D[construct] Faces_u Coordinates", errmsg);
+            isValid = false;    
         }
         // [grid.faces_v_X, grid.faces_v_Y, grid.faces_v_Z] = 
         // nd3grid(xv, yv=yn, zv=zu);
         X.resize(grid.m, grid.n+1, grid.o);
         Y.resize(grid.m, grid.n+1, grid.o);
         Z.resize(grid.m, grid.n+1, grid.o);
-        nd3DGrid(xv, yn, zu, X, Y, Z);
-        if (!valid3DCoordinates(grid.faces_v_X, X, grid.dx, grid.dy,
-                                grid.dz, grid.m, grid.n+1, grid.o, 
-                                MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_NODAL_COORDINATES)){
-            isValid = false;
+        if (X.has_size(grid.m, grid.n+1, grid.o) &&
+            Y.has_size(grid.m, grid.n+1, grid.o) &&
+            Z.has_size(grid.m, grid.n+1, grid.o)){
+            nd3DGrid(xv, yn, zu, X, Y, Z);
+            if (!valid3DCoordinates(grid.faces_v_X, X, grid.dx, 
+                            grid.dy, grid.dz, grid.m, grid.n+1, 
+                            grid.o, MOLE_ERR_GRID_FACES_SZ_MISMATCH,
+                            MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
+                isValid = false;
+            }
+            if (!valid3DCoordinates(grid.faces_v_Y, Y, grid.dx, 
+                            grid.dy, grid.dz, grid.m, grid.n+1, 
+                            grid.o, MOLE_ERR_GRID_FACES_SZ_MISMATCH,
+                            MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
+                isValid = false;                    
+            }
+            if (!valid3DCoordinates(grid.faces_v_Z, Z, grid.dx, 
+                            grid.dy, grid.dz, grid.m, grid.n+1, 
+                            grid.o, MOLE_ERR_GRID_FACES_SZ_MISMATCH,
+                            MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
+                isValid = false;                    
+            }
+        } else {
+            string errmsg = "dim1 = ";
+            errmsg += to_string(grid.m) + " X dim2 = ";
+            errmsg += to_string(grid.n + 1) + " X dim3 = ";
+            errmsg += to_string(grid.o);
+            logGridErr(MOLE_ERR_FAILED_ARRAY_RESIZE, 
+                "grid3D[construct] Faces_v Coordinates", errmsg);
+            isValid = false;    
         }
-        if (!valid3DCoordinates(grid.faces_v_Y, Y, grid.dx, grid.dy,
-                                grid.dz, grid.m, grid.n+1, grid.o,
-                                MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_CENTER_COORDINATES)){
-            isValid = false;                    
-        }
-       if (!valid3DCoordinates(grid.faces_v_Z, Z, grid.dx, grid.dy,
-                                grid.dz, grid.m, grid.n+1, grid.o,
-                                MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_CENTER_COORDINATES)){
-            isValid = false;                    
-        }
+  
         // [grid.faces_w_X, grid.faces_w_Y, grid.faces_w_Z] = 
         // nd3grid(xw=xv, yw=yu, zw=zn);
         X.resize(grid.m, grid.n, grid.o+1);
         Y.resize(grid.m, grid.n, grid.o+1);
         Z.resize(grid.m, grid.n, grid.o+1);
-        nd3DGrid(xv, yu, zn, X, Y, Z);
-        if (!valid3DCoordinates(grid.faces_w_X, X, grid.dx, grid.dy,
-                                grid.dz, grid.m, grid.n, grid.o+1, 
-                                MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_NODAL_COORDINATES)){
-            isValid = false;
-        }
-        if (!valid3DCoordinates(grid.faces_w_Y, Y, grid.dx, grid.dy,
-                                grid.dz, grid.m, grid.n, grid.o+1,
-                                MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_CENTER_COORDINATES)){
-            isValid = false;                    
-        }
-       if (!valid3DCoordinates(grid.faces_w_Z, Z, grid.dx, grid.dy,
-                                grid.dz, grid.m, grid.n, grid.o+1,
-                                MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_CENTER_COORDINATES)){
-            isValid = false;                    
-        }
+        if (X.has_size(grid.m, grid.n, grid.o+1) &&
+            Y.has_size(grid.m, grid.n, grid.o+1) &&
+            Z.has_size(grid.m, grid.n, grid.o+1)){
+            nd3DGrid(xv, yu, zn, X, Y, Z);
+            if (!valid3DCoordinates(grid.faces_w_X, X, grid.dx, 
+                            grid.dy, grid.dz, grid.m, grid.n, 
+                            grid.o+1, MOLE_ERR_GRID_FACES_SZ_MISMATCH,
+                            MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
+                isValid = false;
+            }
+            if (!valid3DCoordinates(grid.faces_w_Y, Y, grid.dx, 
+                            grid.dy, grid.dz, grid.m, grid.n, 
+                            grid.o+1, MOLE_ERR_GRID_FACES_SZ_MISMATCH,
+                            MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
+                isValid = false;                    
+            }
+            if (!valid3DCoordinates(grid.faces_w_Z, Z, grid.dx, 
+                            grid.dy, grid.dz, grid.m, grid.n, 
+                            grid.o+1, MOLE_ERR_GRID_FACES_SZ_MISMATCH,
+                            MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
+                isValid = false;                    
+            }
+            } else {
+                string errmsg = "dim1 = ";
+                errmsg += to_string(grid.m) + " X dim2 = ";
+                errmsg += to_string(grid.n) + " X dim3 = ";
+                errmsg += to_string(grid.o+1);
+                logGridErr(MOLE_ERR_FAILED_ARRAY_RESIZE, 
+                  "grid3D[construct] Faces_w Coordinates", errmsg);
+                isValid = false;    
+            }
         break;
     }
     case 'c':  // User must provide at least nodal coordinates
@@ -1075,7 +1180,7 @@ grid3D::grid3D(gridParams3D p3,
 //
 // gridNull sole constructor requires a paramsNull struct and errors
 //
-gridNull::gridNull(paramsNull in_p, 
+gridNull::gridNull(const paramsNull in_p, 
                 const stack<MOLE_Errors>& inerrs): gridBase(0){
     // scan the error log for previous errors
     stack<MOLE_Errors> tmp_stk = inerrs;
@@ -1084,6 +1189,7 @@ gridNull::gridNull(paramsNull in_p,
                     tmp_stk.top().paramError);
         tmp_stk.pop();
     }
+    ErrData.num_errs = in_p.num_errs;
     if(ErrData.num_errs == 0){
         ErrData.num_errs  = inerrs.size();
     } else {
