@@ -1,0 +1,6 @@
+Checks: >
+  -*,
+  bugprone-*,
+  readability-*,
+  performance-*
+HeaderFilterRegex: 'src/include/.*'
