@@ -1,0 +1,11 @@
+url_path,views_total,views_unique
+/csrc-sdsu/mole,66,20
+/csrc-sdsu/mole/pulls,34,11
+/csrc-sdsu/mole/issues,25,8
+/csrc-sdsu/mole/pull/429,13,5
+/csrc-sdsu/mole/issues/378,10,5
+/csrc-sdsu/mole/pull/411,9,4
+/csrc-sdsu/mole/pull/432,7,3
+/csrc-sdsu/mole/blob/main/examples/matlab_octave/lock_exchange.m,6,4
+/csrc-sdsu/mole/tree/main/julia/MOLE.jl,6,3
+/csrc-sdsu/mole/tree/main/doc,5,5
