@@ -8,6 +8,9 @@ int main() {
     p.m = 3; p.n = 3;
     p.dx = 1.0; p.dy = 1.0;
 
+    cout << "===================================================== " << endl;
+    cout << "Attempt to create GRID #1 (fails on invalid topology) "<< endl;
+    cout << "===================================================== " << endl;
     // This grid has an invalid topology
     grid2D g(p);
     if (!g.validGrid()) {
@@ -18,6 +21,9 @@ int main() {
         << "\n";
     }
     
+    cout << "===================================================== " << endl;
+    cout << "Attempt to create GRID #2 (fails on invalid spacing) "<< endl;
+    cout << "===================================================== " << endl;
 
     // This second grid has an invalid dx
     p.topology = 'u';
@@ -31,6 +37,9 @@ int main() {
         << "\n";
     } 
     
+    cout << "======================================================= " << endl;
+    cout << "Attempt to create GRID #3 (success - grid instantiated!) "<< endl;
+    cout << "======================================================= " << endl;
     // This third attempt the grid has valid parameters
     p.topology = 'u';
     p.dx = 1.0;
