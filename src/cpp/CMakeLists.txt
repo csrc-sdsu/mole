@@ -2,10 +2,10 @@
 
 add_library(mole_C++
   addscalarbc.cpp
-  divergence.cpp
-  gradient.cpp
+  "${PROJECT_SOURCE_DIR}/cpp/src/operators/divergence.cpp"
+  "${PROJECT_SOURCE_DIR}/cpp/src/operators/gradient.cpp"
   interpol.cpp
-  laplacian.cpp
+  "${PROJECT_SOURCE_DIR}/cpp/src/operators/laplacian.cpp"
   mixedbc.cpp
   robinbc.cpp
   utils.cpp
@@ -14,7 +14,7 @@ add_library(mole_C++
   interpolFtoC.cpp
   interpolNtoC.cpp
 )
-target_include_directories(mole_C++ PUBLIC ${ARMADILLO_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${OpenBLAS_INCLUDE_DIRS} ${SUPERLU_INCLUDE_DIR})
+target_include_directories(mole_C++ PUBLIC ${PROJECT_SOURCE_DIR}/cpp/src/include ${ARMADILLO_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${OpenBLAS_INCLUDE_DIRS} ${SUPERLU_INCLUDE_DIR})
 target_link_libraries(mole_C++ PUBLIC ${LINK_LIBS})
 
 # Installation for mole library
