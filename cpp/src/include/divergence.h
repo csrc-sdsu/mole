@@ -12,6 +12,7 @@
  *
  * @date 2024/10/15
  * Last Modified: 2026/03/31
+ * New Implementation for MOLE 2.0 Last Modified 2026/07/22
  */
 
 #ifndef DIVERGENCE_H

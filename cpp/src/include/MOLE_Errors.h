@@ -26,15 +26,15 @@ using namespace std;
 // of MOLE functions. These error symbols are used throughout the 
 // MOLE library to provide consistent error handling and reporting.
 //
-// Initialization Errors. 001 = grid not validated
+// Initialization Errors. 1 - 100 gridBuilder errors
 //
-#define MOLE_ERR_GRID_UNCHECKED 001   // Grid has not been validated
-#define MOLE_ERR_INVALID_GRID_ARGS 002 // Grid is invalid
-#define MOLE_ERR_GRID_CONSTRUCTION_FAILED 003
-#define MAKE_GRID_INVALID_INPUT_ARGS 004
-#define MAKE_GRID_MISSING_ARGS 005
-#define MAKE_GRID_UNKNOWN_ATTRIBUTE 006
-#define MAKE_GRID_DUPLICATE_ATTRIBUTES 007
+#define MOLE_ERR_GRID_UNCHECKED 1   // Grid has not been validated
+#define MOLE_ERR_INVALID_GRID_ARGS 2 // Grid is invalid
+#define MOLE_ERR_GRID_CONSTRUCTION_FAILED 3
+#define MAKE_GRID_INVALID_INPUT_ARGS 4
+#define MAKE_GRID_MISSING_ARGS 5
+#define MAKE_GRID_UNKNOWN_ATTRIBUTE 6
+#define MAKE_GRID_DUPLICATE_ATTRIBUTES 7
 //
 // Grid definition Errors. Error codes 100-199
 //

@@ -146,6 +146,13 @@ TEST(grid1D_construction_with_prior_errors_accumulates_them) {
     MOLEerr_log(priorErrs, MOLE_ERR_INVALID_INPUT_TYPE, "priorStage", "x");
     grid1D g(make1DUniformParams(4, 0.5), priorErrs);
     CHECK_TRUE(g.hasGridErrors()); // the prior error should show up
+    // isValidatedGrid() only reports whether validGrid() ran and
+    // succeeded for THIS grid's own parameters - it is independent
+    // of leftover/carried-over errors, which is what hasGridErrors()
+    // is for. Since (m=4, dx=0.5, uniform) is itself well-formed,
+    // the grid should still be reported as validated even though
+    // hasGridErrors() is true because of priorErrs.
+    CHECK_TRUE(g.isValidatedGrid());
 }
 
 // ---------------------------------------------------------------
@@ -206,6 +213,10 @@ TEST(grid2D_construction_with_prior_errors_accumulates_them) {
     MOLEerr_log(priorErrs, MOLE_ERR_INVALID_INPUT_TYPE, "priorStage", "y");
     grid2D g(make2DUniformParams(3, 2, 1.0, 1.0), priorErrs);
     CHECK_TRUE(g.hasGridErrors());
+    // Same distinction as grid1D: this grid's own (m,n,dx,dy) are
+    // valid, so it should still be reported as validated despite
+    // hasGridErrors() being true because of priorErrs.
+    CHECK_TRUE(g.isValidatedGrid());
 }
 
 // ---------------------------------------------------------------
@@ -268,6 +279,10 @@ TEST(grid3D_construction_with_prior_errors_accumulates_them) {
     MOLEerr_log(priorErrs, MOLE_ERR_INVALID_INPUT_TYPE, "priorStage", "z");
     grid3D g(make3DUniformParams(2, 2, 2, 1.0, 1.0, 1.0), priorErrs);
     CHECK_TRUE(g.hasGridErrors());
+    // Same distinction as grid1D/grid2D: this grid's own params are
+    // valid, so it should still be reported as validated despite
+    // hasGridErrors() being true because of priorErrs.
+    CHECK_TRUE(g.isValidatedGrid());
 }
 
 // ---------------------------------------------------------------
@@ -472,5 +487,85 @@ TEST(gridBase_starts_unvalidated_then_validates) {
 TEST(gridBase_stays_unvalidated_when_invalid) {
     grid1D g(make1DUniformParams(0, 0.5)); // invalid: m=0
     CHECK_FALSE(g.isValidatedGrid());
+    CHECK_TRUE(g.hasGridErrors());
+}
+
+// ---------------------------------------------------------------
+// isValidatedGrid() vs hasGridErrors(): these answer two different
+// questions and must not be conflated:
+//   - isValidatedGrid() : has validGrid() run and succeeded for this
+//                         grid's OWN parameters (i.e. is the
+//                         MOLE_ERR_GRID_UNCHECKED sentinel gone)?
+//   - hasGridErrors()   : is the error stack non-empty for ANY
+//                         reason, including errors carried over via
+//                         inerrs that have nothing to do with this
+//                         grid's own construction?
+// A grid can be validated while still reporting errors (carried-over
+// inerrs), and it can be unvalidated while its error stack still
+// contains only the UNCHECKED sentinel plus its own failure reasons.
+// ---------------------------------------------------------------
+
+TEST(isValidatedGrid_is_true_despite_unrelated_carried_over_errors) {
+    // The grid's own parameters (m=4, dx=0.5, uniform) are valid, but
+    // the caller is passing in errors from an unrelated prior stage.
+    stack<MOLE_Errors> priorErrs;
+    MOLEerr_log(priorErrs, MAKE_GRID_MISSING_ARGS, "someUpstreamParser", "");
+    grid1D g(make1DUniformParams(4, 0.5), priorErrs);
+
+    CHECK_TRUE(g.isValidatedGrid());  // this grid's own build succeeded
+    CHECK_TRUE(g.hasGridErrors());    // but errors are still present
+}
+
+TEST(isValidatedGrid_is_false_when_own_params_invalid_even_with_no_priorErrs) {
+    stack<MOLE_Errors> noPriorErrs; // empty - nothing carried over
+    grid1D g(make1DUniformParams(0, 0.5), noPriorErrs); // m=0 -> invalid
+
+    CHECK_FALSE(g.isValidatedGrid()); // this grid's own build failed
+    CHECK_TRUE(g.hasGridErrors());
+}
+
+// ---------------------------------------------------------------
+// gridBase dimensionality: dim must be well-defined (0), not
+// indeterminate, even when the requested dimensionality is invalid
+// (e.g. gridNull's gridBase(0)).
+// ---------------------------------------------------------------
+
+TEST(gridNull_dim_is_zero_not_indeterminate) {
+    paramsNull pn;
+    stack<MOLE_Errors> errs;
+    gridNull g(pn, errs);
+    CHECK_EQ(g.dim, 0u);
+}
+
+// ---------------------------------------------------------------
+// Regression: center/face coordinate mismatches must be logged with
+// their own dedicated error codes, not misattributed to nodal
+// coordinates (2D and 3D both had this bug at one point).
+// ---------------------------------------------------------------
+
+TEST(grid2D_bad_center_coords_logs_centers_error_not_nodal) {
+    gridParams2D p = make2DUniformParams(2, 2, 1.0, 1.0);
+    // right shape (m+2 x n+2 = 4x4), wrong values
+    p.centers_X = Array2D(4, 4, 0.0);
+    for (size_t i = 0; i < 4; ++i)
+        for (size_t j = 0; j < 4; ++j)
+            p.centers_X(i, j) = 999.0; // deliberately wrong
+    grid2D g(p);
+
+    CHECK_FALSE(g.validGrid());
+    CHECK_TRUE(g.hasGridErrors());
+}
+
+TEST(grid3D_bad_center_coords_logs_centers_error_not_nodal) {
+    gridParams3D p = make3DUniformParams(2, 2, 2, 1.0, 1.0, 1.0);
+    // right shape (m+2 x n+2 x o+2 = 4x4x4), wrong values
+    p.centers_X = Array3D(4, 4, 4, 0.0);
+    for (size_t i = 0; i < 4; ++i)
+        for (size_t j = 0; j < 4; ++j)
+            for (size_t k = 0; k < 4; ++k)
+                p.centers_X(i, j, k) = 999.0; // deliberately wrong
+    grid3D g(p);
+
+    CHECK_FALSE(g.validGrid());
     CHECK_TRUE(g.hasGridErrors());
 }

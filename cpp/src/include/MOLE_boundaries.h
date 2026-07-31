@@ -6,11 +6,11 @@
  */
 
 /*
- * @file grids.h
+ * @file boundaries.h
  *
- * @brief Generic grid class and data structures for 1D, 2D, and 3D grids.
+ * @brief MOLE boundary classes and data structures for handling them.
  *
- * @date 2026/06/24
+ * @date 2026/07/22
  *
  */
 

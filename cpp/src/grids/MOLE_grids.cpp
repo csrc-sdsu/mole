@@ -39,11 +39,8 @@ bool gridBase::hasGridErrors(){
 // gridBase::isValidatedGrid checks if a grid has been validated.
 //
 bool gridBase::isValidatedGrid(){ 
-    if (!errs.empty() || 
-         MOLEerr_contains(errs, MOLE_ERR_GRID_UNCHECKED)) {
-         return false; // Grid has not been validated
-    }
-    return true; // Grid has been validated
+    // Only checks whether validGrid() has been previously called
+    return !MOLEerr_contains(errs, MOLE_ERR_GRID_UNCHECKED);
 } 
 
 //
@@ -114,7 +111,7 @@ void generateCenterPts(size_t npts, Real delta, Array1D& out_array){
 // an array can differ by x < factor * machine precision (eps)
 // This function works also for flat2DArrays and flat3DArrays
 //
-bool numEqualArray(const Array1D& a1, Array1D& a2, 
+bool numEqualArray(const Array1D& a1, const Array1D& a2, 
                 double tolFactor = 4.0){// multiples of machine eps
     // checking elements and abs|a1(i)-a2(i)| < eps*tolFactor
     const double eps = std::numeric_limits<double>::epsilon();
@@ -187,7 +184,6 @@ string string_topology (char topology){
 gridBase::gridBase(size_t idim){
     MOLEerr_init(errs); // initialized the stack of errors
     MOLE_Errors err;
-    errs = stack<MOLE_Errors>(); // Clear the stack
     err.errCode = MOLE_ERR_GRID_UNCHECKED; // push error to grid stack
     err.errLocation = "<Grid Construction>";
     err.paramError = "";
@@ -195,7 +191,8 @@ gridBase::gridBase(size_t idim){
     if (idim >= 1 && idim <= 3){ // validate grid dimensionality
         dim = idim;
     } else {
-        MOLEerr_log(errs, MOLE_ERR_INVALID_GRID_DIM,
+        dim = 0;
+        logGridErr(MOLE_ERR_INVALID_GRID_DIM,
                     "gridBase declaration", to_string(idim));
     }
 }
@@ -259,19 +256,30 @@ bool grid1D::validGrid() {
             isValid = false;
             break;
         }
+
         Array1D xn(grid.m + 1), xc(grid.m + 2);
-        generateNodalPts(grid.m, grid.dx, xn);
-        generateCenterPts(grid.m, grid.dx, xc);
+        // check for proper allocation of arrays (safety)
+        if (xn.size() == grid.m+1 && xc.size() == grid.m+2){
+            generateNodalPts(grid.m, grid.dx, xn);
+            generateCenterPts(grid.m, grid.dx, xc);
+            if (!valid1DCoordinates(grid.nodes_X, xn, grid.dx, 
+                        grid.m, MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
+                        MOLE_ERR_INVALID_NODAL_COORDINATES))
+                isValid = false;
 
-        if (!valid1DCoordinates(grid.nodes_X, xn, grid.dx, grid.m,
-                                MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_NODAL_COORDINATES))
+            if (!valid1DCoordinates(grid.centers_X, xc, grid.dx, 
+                        grid.m, MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
+                        MOLE_ERR_INVALID_CENTER_COORDINATES))
+                isValid = false;
+            }
+        else{ // problems allocating one or both arrays (xn and cn)
+            string errmsg = "Either xn_dim = ";
+            errmsg += to_string(grid.m+1) + ", and xc_dim = ";
+            errmsg += to_string(grid.m+2) + "could not be allocated";
+            logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC, 
+                "grid1D[construct] generating coordinates", errmsg);
             isValid = false;
-
-        if (!valid1DCoordinates(grid.centers_X, xc, grid.dx, grid.m,
-                                MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_CENTER_COORDINATES))
-            isValid = false;
+        }
         break;
     }
     case 'c':   // 1D curvilinear grids are fundamentally undefined
@@ -293,7 +301,6 @@ bool grid1D::validGrid() {
         isValid = false;
         break;   
     }
-
     if (isValid) setGridValidated();
     return isValid;
 }
@@ -457,13 +464,23 @@ bool grid2D::validGrid() {
         // Computing or verifying nodal coordinates
         // xn = (0:m) * dx and and yn = (0:n) * dy
         Array1D xn(grid.m + 1), yn(grid.n + 1);
-        generateNodalPts(grid.m, grid.dx, xn);
-        generateNodalPts(grid.n, grid.dy, yn);
+        // check for proper allocation of arrays (safety)
+        if (xn.size() == grid.m+1 && yn.size() == grid.n+1){
+            generateNodalPts(grid.m, grid.dx, xn);
+            generateNodalPts(grid.n, grid.dy, yn);
+        } else{// problems allocating one or both arrays (xn and cn)
+            string errmsg = "Either xn_dim = ";
+            errmsg += to_string(grid.m+1) + ", and yn_dim = ";
+            errmsg += to_string(grid.n+1) + "could not be allocated";
+            logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC, 
+                "grid2D[construct] nodal coordinates", errmsg);
+            isValid = false;
+        }
         Array2D X(grid.m + 1, grid.n + 1, 0.0), 
                 Y(grid.m + 1, grid.n + 1, 0.0);
         if (X.has_size(grid.m+1, grid.n+1) &&
-            Y.has_size(grid.m+1, grid.n+1)){
-   
+            Y.has_size(grid.m+1, grid.n+1) &&
+            xn.size() == grid.m+1 && yn.size()==grid.n+1){
             // [grid.nodes_X, grid.nodes_Y] = nd2Dgrid(xn, yn)
             nd2DGrid(xn, yn, X, Y);
             if (!valid2DCoordinates(grid.nodes_X, X, grid.dx, 
@@ -491,25 +508,37 @@ bool grid2D::validGrid() {
         // xc = [0, (0.5:m-0.5) * dx, m*dx]  and 
         // yc = [0, (0.5:n-0.5) * dy, n*dy] 
         Array1D xc(grid.m + 2), yc(grid.n + 2);
-        generateCenterPts(grid.m, grid.dx, xc);
-        generateCenterPts(grid.n, grid.dy, yc);
-        // [grid.centers_X, grid.centers_Y] = nd2Dgrid(xc, yc)
+        // check for proper allocation of arrays (safety)
+        if (xc.size() == grid.m+2 && yc.size() == grid.n+2){
+            generateCenterPts(grid.m, grid.dx, xc);
+            generateCenterPts(grid.n, grid.dy, yc);
+        } else {// problems allocating one or both arrays (xn and cn)
+            string errmsg = "Either xc_dim = ";
+            errmsg += to_string(grid.m+2) + ", and yc_dim = ";
+            errmsg += to_string(grid.n+2) + "could not be allocated";
+            logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC, 
+                "grid2D[construct] center coordinates", errmsg);
+            isValid = false;
+        }
+
+         // [grid.centers_X, grid.centers_Y] = nd2Dgrid(xc, yc)
         X.resize(grid.m + 2, grid.n + 2);
         Y.resize(grid.m + 2, grid.n + 2);
         if (X.has_size(grid.m+2, grid.n+2) &&
-            Y.has_size(grid.m+2, grid.n+2)){
+            Y.has_size(grid.m+2, grid.n+2) &&
+            xc.size() == grid.m+2 && yc.size() == grid.n+2){
             nd2DGrid(xc, yc, X, Y);
 
             if (!valid2DCoordinates(grid.centers_X, X, grid.dx, 
                                 grid.dy, grid.m+2, grid.n+2,  
-                                MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_NODAL_COORDINATES)){
+                                MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
+                                MOLE_ERR_INVALID_CENTER_COORDINATES)){
                 isValid = false;
             }
             if (!valid2DCoordinates(grid.centers_Y, Y, grid.dx,  
                                 grid.dy, grid.m+2, grid.n+2, 
-                                MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_NODAL_COORDINATES )){
+                                MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
+                                MOLE_ERR_INVALID_CENTER_COORDINATES )){
                 isValid = false;
             }   
         } else {
@@ -524,26 +553,38 @@ bool grid2D::validGrid() {
         // Computing and validating normal faces 
         // yu = (0.5:n-0.5) * dy; and xv = (0.5:m-0.5) * dx; 
         Array1D yu(grid.n), xv(grid.m); 
-
-        // xv = xc[1:m], yu = yc[1:n]
-        std::copy(xc.begin() + 1, xc.begin() + grid.m+1, xv.begin());
-        std::copy(yc.begin() + 1, yc.begin() + grid.n+1, yu.begin());
+        // check for proper allocation of arrays (safety)
+        if (xv.size() == grid.m && yu.size() == grid.n){
+            // xv = xc[1:m], yu = yc[1:n]
+            std::copy(xc.begin() + 1, xc.begin() + grid.m+1, 
+                    xv.begin());
+            std::copy(yc.begin() + 1, yc.begin() + grid.n+1, 
+                    yu.begin());
+        } else{ // problems allocating one or both arrays (xv and yu)
+            string errmsg = "Either xv_dim = ";
+            errmsg += to_string(grid.m) + ", and yu_dim = ";
+            errmsg += to_string(grid.n) + "could not be allocated";
+            logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC, 
+                "grid2D[constrct] normal faces coordinates", errmsg);
+            isValid = false;
+        }
         // [grid.faces_u_X, grid.faces_u_Y] = ndgrid(xu=xn, yu);
         X.resize(grid.m + 1, grid.n);
         Y.resize(grid.m + 1, grid.n);
         if (X.has_size(grid.m+1, grid.n) &&
-            Y.has_size(grid.m+1, grid.n)){
+            Y.has_size(grid.m+1, grid.n) &&
+            xn.size() == grid.m + 1 && yu.size() == grid.n){
             nd2DGrid(xn, yu, X, Y);
             if (!valid2DCoordinates(grid.faces_u_X, X, grid.dx, 
                                 grid.dy, grid.m+1, grid.n, 
-                                MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_NODAL_COORDINATES)){
+                                MOLE_ERR_GRID_FACES_SZ_MISMATCH,
+                                MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
                 isValid = false;
             }
             if (!valid2DCoordinates(grid.faces_u_Y, Y, grid.dx, 
                                 grid.dy, grid.m+1, grid.n,
-                                MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_CENTER_COORDINATES)){
+                                MOLE_ERR_GRID_FACES_SZ_MISMATCH,
+                                MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
                 isValid = false;                    
             }
         } else {
@@ -554,21 +595,23 @@ bool grid2D::validGrid() {
                 "grid2D[construct] Faces_u Coordinates", errmsg);
             isValid = false;    
         }        // [grid.faces_v_X, grid.faces_v_Y] = ndgrid(xv, yv=yn);
+        
         X.resize(grid.m, grid.n + 1);
         Y.resize(grid.m, grid.n + 1);
         if (X.has_size(grid.m, grid.n + 1) &&
-            Y.has_size(grid.m, grid.n + 1)){
+            Y.has_size(grid.m, grid.n + 1) &&
+            xv.size() == grid.m && yn.size() == grid.n + 1){
             nd2DGrid(xv, yn, X, Y);
             if (!valid2DCoordinates(grid.faces_v_X, X, grid.dx, 
                                 grid.dy, grid.m, grid.n+1, 
-                                MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_NODAL_COORDINATES)){
+                                MOLE_ERR_GRID_FACES_SZ_MISMATCH,
+                                MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
                 isValid = false;
             }
             if (!valid2DCoordinates(grid.faces_v_Y, Y, grid.dx, 
                                 grid.dy, grid.m, grid.n+1,
-                                MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_CENTER_COORDINATES)){
+                                MOLE_ERR_GRID_FACES_SZ_MISMATCH,
+                                MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
                 isValid = false;                    
             }
         }
@@ -806,18 +849,33 @@ bool grid3D::validGrid() {
 
         // Generate grid or validate user-provided coordinates
         Array1D xn(grid.m + 1), yn(grid.n + 1), zn(grid.o + 1);
+        
+        // check for proper allocation of arrays (safety)
+        if (xn.size() == grid.m+1 && yn.size() == grid.n+1
+            && zn.size() == grid.o+1){
+            // Computing or verifying nodal coordinates
+            // xn = (0:m)*dx; and yn = (0:n)*dy and zn = (0:o)*dz
+            generateNodalPts(grid.m, grid.dx, xn);
+            generateNodalPts(grid.n, grid.dy, yn);
+            generateNodalPts(grid.o, grid.dz, zn);
+        } else{// problems allocating one of the arrays (xn, yn, zn)
+            string errmsg = "Either xn_dim = ";
+            errmsg += to_string(grid.m+1) + ", yn_dim = ";
+            errmsg += to_string(grid.n+1) + ", or zn_dim = ";
+            errmsg += to_string(grid.o+1) + "could not be allocated";
+            logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC, 
+                "grid3D[construct] nodal coordinates", errmsg);
+            isValid = false;
+        }
         Array3D X(grid.m + 1, grid.n + 1, grid.o + 1, 0.0), 
                 Y(grid.m + 1, grid.n + 1, grid.o + 1, 0.0),
                 Z(grid.m + 1, grid.n + 1, grid.o + 1, 0.0);
 
-        // Computing or verifying nodal coordinates
-        // xn = (0:m) * dx; and yn = (0:n) * dy and zn = (0:o) * dz
-        generateNodalPts(grid.m, grid.dx, xn);
-        generateNodalPts(grid.n, grid.dy, yn);
-        generateNodalPts(grid.o, grid.dz, zn);
         if (X.has_size(grid.m + 1, grid.n + 1, grid.o + 1) &&
             Y.has_size(grid.m + 1, grid.n + 1, grid.o + 1) &&
-            Z.has_size(grid.m + 1, grid.n + 1, grid.o + 1)){
+            Z.has_size(grid.m + 1, grid.n + 1, grid.o + 1) &&
+            xn.size() == grid.m+1 && yn.size() == grid.n+1
+            && zn.size() == grid.o+1){
             // [grid.nodes_X,grid.nodes_Y,grid.nodes_Z] = 
             //      nd3Dgrid(xn, yn, zn)
             nd3DGrid(xn, yn, zn, X, Y, Z);
@@ -856,34 +914,51 @@ bool grid3D::validGrid() {
         // [grid.centers_X, grid.centers_Y, grid.center_Z] = 
         //          nd2Dgrid(xc, yc, zc); 
         Array1D xc(grid.m + 2), yc(grid.n + 2), zc(grid.o + 2);
-        generateCenterPts(grid.m, grid.dx, xc);
-        generateCenterPts(grid.n, grid.dy, yc);
-        generateCenterPts(grid.o, grid.dz, zc);
+
+        // check for proper allocation of arrays (safety)
+        if (xc.size() == grid.m + 2 && yc.size() == grid.n + 2
+            && zc.size() == grid.o + 2){
+            // Computing or verifying nodal coordinates
+            // xn = (0:m)*dx; and yn = (0:n)*dy and zn = (0:o)*dz
+            generateCenterPts(grid.m, grid.dx, xc);
+            generateCenterPts(grid.n, grid.dy, yc);
+            generateCenterPts(grid.o, grid.dz, zc);
+        } else{// problems allocating one of the arrays (xc, yc, zc)
+            string errmsg = "Either xc_dim = ";
+            errmsg += to_string(grid.m+2) + ", yc_dim = ";
+            errmsg += to_string(grid.n+2) + ", or zc_dim = ";
+            errmsg += to_string(grid.o+2) + "could not be allocated";
+            logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC, 
+                "grid3D[construct] center coordinates", errmsg);
+            isValid = false;
+        }
 
         X.resize(grid.m + 2, grid.n + 2, grid.o + 2);
         Y.resize(grid.m + 2, grid.n + 2, grid.o + 2);
         Z.resize(grid.m + 2, grid.n + 2, grid.o + 2);
         if (X.has_size(grid.m + 2, grid.n + 2, grid.o + 2) &&
             Y.has_size(grid.m + 2, grid.n + 2, grid.o + 2) &&
-            Z.has_size(grid.m + 2, grid.n + 2, grid.o + 2)){
+            Z.has_size(grid.m + 2, grid.n + 2, grid.o + 2) &&
+            (xc.size() == grid.m + 2 && yc.size() == grid.n + 2
+            && zc.size() == grid.o + 2)){
             nd3DGrid(xc, yc, zc, X, Y, Z);
 
             if (!valid3DCoordinates(grid.centers_X, X, grid.dx, 
                         grid.dy, grid.dz, grid.m+2, grid.n+2, 
-                        grid.o+2, MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
-                        MOLE_ERR_INVALID_NODAL_COORDINATES)){
+                        grid.o+2, MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
+                        MOLE_ERR_INVALID_CENTER_COORDINATES)){
                 isValid = false;
             }
             if (!valid3DCoordinates(grid.centers_Y, Y, grid.dx,  
                         grid.dy, grid.dz, grid.m+2, grid.n+2,  
-                        grid.o+2, MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
-                        MOLE_ERR_INVALID_NODAL_COORDINATES)){
+                        grid.o+2, MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
+                        MOLE_ERR_INVALID_CENTER_COORDINATES)){
                 isValid = false;
             }
             if (!valid3DCoordinates(grid.centers_Z, Z, grid.dx, 
                         grid.dy, grid.dz, grid.m+2, grid.n+2, 
-                        grid.o+2,MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
-                        MOLE_ERR_INVALID_NODAL_COORDINATES )){
+                        grid.o+2, MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
+                        MOLE_ERR_INVALID_CENTER_COORDINATES)){
                 isValid = false;
             }
         } else {
@@ -903,10 +978,25 @@ bool grid3D::validGrid() {
         // ndgrid(xv, yn, zv); dimension m x (n+1) x o
         // ndgrid(xw, yw, zn); dimension m x n x (o+1)
         Array1D yu(grid.n), xv(grid.m), zu(grid.o); 
-        // xv = xc[1:m], yu = yc[1:n]. zu = zc[1:o]
-        std::copy(xc.begin() + 1, xc.begin() + grid.m+1, xv.begin());
-        std::copy(yc.begin() + 1, yc.begin() + grid.n+1, yu.begin());
-        std::copy(zc.begin() + 1, zc.begin() + grid.o+1, zu.begin());
+        // check for successful allocation
+        if (xv.size() == grid.m && yu.size() == grid.n &&
+             zu.size() == grid.o){
+            // xv = xc[1:m], yu = yc[1:n]. zu = zc[1:o]
+            std::copy(xc.begin() + 1, xc.begin() + grid.m+1, 
+                    xv.begin());
+            std::copy(yc.begin() + 1, yc.begin() + grid.n+1, 
+                    yu.begin());
+            std::copy(zc.begin() + 1, zc.begin() + grid.o+1, 
+                    zu.begin());
+        } else {// problems allocating one of the arrays (xv, yu, zu)
+            string errmsg = "Either xv_dim = ";
+            errmsg += to_string(grid.m) + ", yu_dim = ";
+            errmsg += to_string(grid.n) + ", or zu_dim = ";
+            errmsg += to_string(grid.o) + "could not be allocated";
+            logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC, 
+                "grid3D[construct] center coordinates", errmsg);
+            isValid = false; 
+        }
 
         // [grid.faces_u_X, grid.faces_u_Y, grid.faces_u_Z] = 
         // nd3grid(xu=xn, yu, zu);
@@ -915,24 +1005,27 @@ bool grid3D::validGrid() {
         Z.resize(grid.m+1, grid.n, grid.o);
         if (X.has_size(grid.m + 1, grid.n, grid.o) &&
             Y.has_size(grid.m + 1, grid.n, grid.o) &&
-            Z.has_size(grid.m + 1, grid.n, grid.o)){
+            Z.has_size(grid.m + 1, grid.n, grid.o) &&
+            xn.size() == grid.m + 1 && yu.size() == grid.n &&
+            zu.size() == grid.o){
+            
             nd3DGrid(xn, yu, zu, X, Y, Z);
             if (!valid3DCoordinates(grid.faces_u_X, X, grid.dx, 
                             grid.dy, grid.dz, grid.m+1, grid.n, 
-                            grid.o, MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
-                            MOLE_ERR_INVALID_CENTER_COORDINATES)){
+                            grid.o, MOLE_ERR_GRID_FACES_SZ_MISMATCH,
+                            MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
                 isValid = false;
             }
             if (!valid3DCoordinates(grid.faces_u_Y, Y, grid.dx, 
                             grid.dy, grid.dz, grid.m+1, grid.n, 
-                            grid.o, MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
-                            MOLE_ERR_INVALID_CENTER_COORDINATES)){
+                            grid.o, MOLE_ERR_GRID_FACES_SZ_MISMATCH,
+                            MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
                 isValid = false;                    
             }
             if (!valid3DCoordinates(grid.faces_u_Z, Z, grid.dx, 
                             grid.dy, grid.dz, grid.m+1, grid.n, 
-                            grid.o, MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_CENTER_COORDINATES)){
+                            grid.o, MOLE_ERR_GRID_FACES_SZ_MISMATCH,
+                            MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
                 isValid = false;                    
             }
         } else {
@@ -951,7 +1044,9 @@ bool grid3D::validGrid() {
         Z.resize(grid.m, grid.n+1, grid.o);
         if (X.has_size(grid.m, grid.n+1, grid.o) &&
             Y.has_size(grid.m, grid.n+1, grid.o) &&
-            Z.has_size(grid.m, grid.n+1, grid.o)){
+            Z.has_size(grid.m, grid.n+1, grid.o) &&
+            xv.size() == grid.m && yn.size() == grid.n + 1 &&
+            zu.size() == grid.o){
             nd3DGrid(xv, yn, zu, X, Y, Z);
             if (!valid3DCoordinates(grid.faces_v_X, X, grid.dx, 
                             grid.dy, grid.dz, grid.m, grid.n+1, 
@@ -983,12 +1078,14 @@ bool grid3D::validGrid() {
   
         // [grid.faces_w_X, grid.faces_w_Y, grid.faces_w_Z] = 
         // nd3grid(xw=xv, yw=yu, zw=zn);
-        X.resize(grid.m, grid.n, grid.o+1);
-        Y.resize(grid.m, grid.n, grid.o+1);
-        Z.resize(grid.m, grid.n, grid.o+1);
-        if (X.has_size(grid.m, grid.n, grid.o+1) &&
-            Y.has_size(grid.m, grid.n, grid.o+1) &&
-            Z.has_size(grid.m, grid.n, grid.o+1)){
+        X.resize(grid.m, grid.n, grid.o + 1);
+        Y.resize(grid.m, grid.n, grid.o + 1);
+        Z.resize(grid.m, grid.n, grid.o + 1);
+        if (X.has_size(grid.m, grid.n, grid.o + 1) &&
+            Y.has_size(grid.m, grid.n, grid.o + 1) &&
+            Z.has_size(grid.m, grid.n, grid.o + 1) &&
+            xv.size() == grid.m && yu.size() == grid.n &&
+            zn.size() == grid.o + 1){
             nd3DGrid(xv, yu, zn, X, Y, Z);
             if (!valid3DCoordinates(grid.faces_w_X, X, grid.dx, 
                             grid.dy, grid.dz, grid.m, grid.n, 
