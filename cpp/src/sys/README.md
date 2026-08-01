@@ -1,6 +1,6 @@
 <!--
 ====================================================================
-=                       MOLE 2.0 - C++                         =
+=                         MOLE 2.0 - C++                           =
 ====================================================================
  SPDX-License-Identifier: GPL-3.0-or-later
  Copyright (c) 2008-2024 San Diego State University Research 
@@ -23,5 +23,6 @@ computational support like the error handling mechanisms.
 
 ## List of Files in This Subdirectory (in alphabetical order)
 
-+ **MOLE_Erros.cpp**: a C++ implementation of flat 2D array class
++ **MOLE_Erros.cpp**: a C++ implementation of MOLE's error handling
+and tracking mechanisms
 + **README.md**: (this file)
