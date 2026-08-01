@@ -1,6 +1,6 @@
 <!--
 ====================================================================
-=                       MOLE v 2.0.0 - C++                         =
+=                       MOLE 2.0 - C++                         =
 ====================================================================
  SPDX-License-Identifier: GPL-3.0-or-later
  Copyright (c) 2008-2024 San Diego State University Research 
@@ -13,42 +13,23 @@ File created: 06-24-2026
 
  -->
 
-# Include subdirectory for MOLE v2.0.0 C++ files
+# Subdirectory for MOLE 2.0 C++ grid examples
 
-Subdirectory and Pathname: **mole/cpp**
+Subdirectory and Pathname: **mole/cpp/examples/grids/**
 
 ## Purpose
 
-Top subdirectory for the MOLE v2.0.0 C++ implementation.
-It contains the top CMakefile.list.
+Subdirectory containing examples of MOLE grid declarations and
+generation using MOLE grid classes and the MOLE gridBuilder
 
-## MOLE C++ v2.0.0 Directory structure
+## List of Files in This Subdirectory
 
-```text
-mole/
-├── cpp/
-|   │── cmake/
-|   │── docs/
-|   │── examples
-|   |── src/
-|   │   ├── boundaries
-|   │   └── grids
-|   │   └── include
-|   │   └── operators
-|   │   └── sys
-|   │   └── utils
-|   |── tests
-
-:
-: __Other MOLE v2.0.0 and v1.2.0 files, including other language__
-: __implementations__
-:
-├── .gitignore
-└── README.md
-```
-
-## Other MOLE v.2.0.0 C++ Files in this directory
-
-+ CMakeLists.txt which builds the MOLE 2.0.0 C++ library and its
-functional modules
-+ README.md (this file)
++ **CMakeLists.txt**: support the building of MOLE 2.0 C++ examples of
+MOLE grids
++ **err_grid2D_basic.cpp**: a C++ example of how the MOLE error log
+mechanisms works in the context of grids
++ **grid1D_basic.cpp**: a C++ example of a 1D grid declaration and
+instantiation (checking for errors)
++ **grid2D_basic.cpp**:a C++ example of a 1D grid declaration and
+instantiation (checking for errors)
++ **README.md**: (this file)

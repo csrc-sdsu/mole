@@ -1,6 +1,6 @@
 <!--
 ====================================================================
-=                       MOLE v 2.0.0 - C++                         =
+=                           MOLE 2.0 - C++                         =
 ====================================================================
  SPDX-License-Identifier: GPL-3.0-or-later
  Copyright (c) 2008-2024 San Diego State University Research 
@@ -13,43 +13,35 @@ File created: 06-24-2026
 
  -->
 
-# Subdirectory of Use Examples for the MOLE v2.0.0 C++ Implementation
+# Subdirectory of Use Examples for the MOLE 2.0 C++ Implementation
 
 Subdirectory and Pathname: **mole/cpp/examples**
 
 ## Purpose
 
-This is the top subdirectory for the MOLE v2.0.0 C++ example
+This is the top subdirectory for the MOLE 2.0 C++ example
 implementations. Examples are organized by the different modules
-contain in the MOLE Library
+contained in the MOLE Library
 
-## Structure of the MOLE C++ v2.0.0 Subdirectory of Examples
+## Structure of the MOLE C++ 2.0 Subdirectory of Examples
 
 ```text
 mole/
 ├── cpp/
-|   │── cmake/
-|   │── docs/
 |   │── examples
-|   |── src/
 |   │   ├── boundaries
 |   │   └── grids
-|   │   └── include
 |   │   └── operators
 |   │   └── sys
+|   |   └── time_integrators
 |   │   └── utils
-|   |── tests
-
-:
-: __Other MOLE v2.0.0 and v1.2.0 files, including other language__
-: __implementations__
-:
-├── .gitignore
-└── README.md
 ```
 
-## Other MOLE v.2.0.0 C++ Files in this directory
+## MOLE 2.0 C++ Files and Subdirectories in this subdirectory
 
-+ CMakeLists.txt which builds the MOLE 2.0.0 C++ library and its
-functional modules
-+ README.md (this file)
++ subdirectory **grids**: contains examples on how to declare and
+ construct MOLE grids 
++ subdirectory **sys**: contains examples on how to use MOLE v2.0
+ error handling mechanisms
++ file **CMakeList.txt** builds everything under this subdirectory
++ file **README.md** this file
