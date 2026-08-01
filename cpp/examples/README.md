@@ -9,8 +9,6 @@
 --------------------------------------------------------------------
 File created: 06-24-2026
 ====================================================================
-
-
  -->
 
 # Subdirectory of Use Cases/Examples for the MOLE 2.0 Implementation
@@ -40,7 +38,7 @@ mole/
 ## MOLE 2.0 C++ Files and Subdirectories in this subdirectory
 
 + subdirectory **grids**: contains examples on how to declare and
- construct MOLE grids 
+ construct MOLE grids
 + subdirectory **sys**: contains examples on how to use MOLE v2.0
  error handling mechanisms
 + file **CMakeList.txt** builds everything under this subdirectory

@@ -10,9 +10,7 @@
 --------------------------------------------------------------------
 File created: 06-24-2026
 ====================================================================
-
-
- -->
+-->
 
 # Subdirectory for MOLE 2.0 C++ grid classes and their functionality
 
@@ -29,6 +27,6 @@ construction of multidimensional arrays using the C++ vector class.
 + **flat2DArray.cpp**: a C++ implementation of flat 2D array class
 + **flat3DArray.cpp**: a C++ implementation of flat 3D array class
 + **MOLE_grids.cpp**: C++ implementation of MOLE 1D, 2D, and 3D grid
-classes. It also contains data structures that support the classes, 
+classes. It also contains data structures that support the classes,
 and custom wrappers to the MOLE error handling mechanisms.
 + **README.md**: (this file)

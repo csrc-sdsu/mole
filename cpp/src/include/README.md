@@ -10,8 +10,6 @@
 --------------------------------------------------------------------
 File created: 06-24-2026
 ====================================================================
-
-
  -->
 
 # Include subdirectory for MOLE 2.0.0 C++ support system files
@@ -20,11 +18,9 @@ Subdirectory and Pathname: **mole/cpp/src/sys**
 
 ## Purpose
 
-All header files (.h) for the different MOLE 2.0 C++ functionality
-are contain in this directory. MOLE examples and tests have their own
-include subdirectories.
-Header files contain public declarations of the MOLE C++ API, which
-is the MOLE collection of functionalities available to MOLE users.
+C++ implementations in this subdirectory are for functionalities that
+support the MOLE classes and the library's numerical calculations
+(i.e., MOLE's error handling mechanism).
 
 ## MOLE Modules and Header Files (alphabetical order)
 

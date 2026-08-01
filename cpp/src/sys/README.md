@@ -10,25 +10,18 @@
 --------------------------------------------------------------------
 File created: 06-24-2026
 ====================================================================
-
-
- -->
+-->
 
 # Subdirectory for MOLE 2.0 C++ grid examples
 
-Subdirectory and Pathname: **mole/cpp/src/grids/**
+Subdirectory and Pathname: **mole/cpp/src/sys/**
 
 ## Purpose
 
-Subdirectory containing source implementations of MOLE grid classes
-and member functions, also flat 2D and 3D arrays to avoid the
-construction of multidimensional arrays using the C++ vector class.
+This subdirectory contains functional implementations of MOLE's
+computational support like the error handling mechanisms.
 
-## List of Files in This Subdirectory
+## List of Files in This Subdirectory (in alphabetical order)
 
-+ **flat2DArray.cpp**: a C++ implementation of flat 2D array class
-+ **flat3DArray.cpp**: a C++ implementation of flat 3D array class
-+ **MOLE_grids.cpp**: C++ implementation of MOLE 1D, 2D, and 3D grid
-classes. It also contains data structures that support the classes, 
-and custom wrappers to the MOLE error handling mechanisms.
++ **MOLE_Erros.cpp**: a C++ implementation of flat 2D array class
 + **README.md**: (this file)
