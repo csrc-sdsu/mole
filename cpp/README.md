@@ -11,7 +11,7 @@ File created: 06-24-2026
 ====================================================================
 -->
 
-# Include subdirectory for MOLE 2.0 C++ files
+# Top subdirectory for MOLE 2.0 C++ files
 
 Subdirectory and Pathname: **mole/cpp**
 
