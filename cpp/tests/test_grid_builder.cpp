@@ -17,13 +17,6 @@
 
 #include <variant>
 
-// errCount counts entries in a copy of the error stack.
-static int errCount(stack<MOLE_Errors> s) {
-  //  int n = 0;
-  //  while (!s.empty()) { ++n; s.pop(); }
-  //  return n;
-  return s.size();
-}
 
 // makeRaw builds a gridRaw carrying only the counts a test sets;
 // every unset field keeps its header default.

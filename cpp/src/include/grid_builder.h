@@ -11,10 +11,10 @@
 // Grid3D object. MOLE grid objects are created and validated during
 // construction.
 // The wrapper performs only these parse-time checks:
-//   1. invalid key            -> MAKE_GRID_UNKNOWN_ATTRIBUTE   (006)
-//   2. dimension consistency  -> MOLE_ERR_INVALID_CELL_COUNT   (109)
-//   3. invalid dimensionality -> MOLE_ERR_INVALID_GRID_DIM     (100)
-//   4. invalid topology       -> MOLE_ERR_INVALID_GRID_TOPOLOGY(101)
+//   1. invalid key            -> MAKE_GRID_UNKNOWN_ATTRIBUTE   
+//   2. dimension consistency  -> MOLE_ERR_INVALID_CELL_COUNT   
+//   3. invalid dimensionality -> MOLE_ERR_INVALID_GRID_DIM     
+//   4. invalid topology       -> MOLE_ERR_INVALID_GRID_TOPOLOGY
 //
 // Users need to input the grid's dimensionaly and topology. Thus, 
 // these are not inferred nor defaulted. This utility uses MOLE's 
