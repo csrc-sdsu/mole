@@ -37,10 +37,12 @@ option(BUILD_SHARED_LIBS "Build MOLE as a shared library" OFF)
 # unless a person deliberately adds it to this list below.
 #
 # When you add a new source file to the library, add its path here.
-# ---------------------------------------------------------------
+# --------------------------------------------------------------
+
 set(MOLE_SOURCES
     src/grids/flat2DArray.cpp
     src/grids/flat3DArray.cpp
+    src/grids/grid_builder.cpp
     src/grids/MOLE_grids.cpp
     src/sys/MOLE_Errors.cpp
 )
@@ -157,6 +159,6 @@ if(MOLE_BUILD_EXAMPLES AND MOLE_IS_TOP_LEVEL)
 #    add_subdirectory(examples/boundaries)
     add_subdirectory(examples/grids)
 #    add_subdirectory(examples/operators)
-    add_subdirectory(examples/sys)
+#    add_subdirectory(examples/sys)
 #    add_subdirectory(examples/utils)
 endif()

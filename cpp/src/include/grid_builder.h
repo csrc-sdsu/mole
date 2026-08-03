@@ -1,0 +1,116 @@
+#ifndef MOLE_GRID_BUILDER_H
+#define MOLE_GRID_BUILDER_H
+
+// grid_builder.h
+//
+// MOLE Grid Utility: parses a user's <key, value> input into 
+// an internal gridRaw, then narrows gridRaw into a dimensionality
+// specific gridParams[1D][2D][3D] used inside MOLE 2.0 to construct
+// grids. Grid builder will instantiate a temporaty gridRaw structure
+// which will be used in the construction of a Grid1D, Grid2D or 
+// Grid3D object. MOLE grid objects are created and validated during
+// construction.
+// The wrapper performs only these parse-time checks:
+//   1. invalid key            -> MAKE_GRID_UNKNOWN_ATTRIBUTE   (006)
+//   2. dimension consistency  -> MOLE_ERR_INVALID_CELL_COUNT   (109)
+//   3. invalid dimensionality -> MOLE_ERR_INVALID_GRID_DIM     (100)
+//   4. invalid topology       -> MOLE_ERR_INVALID_GRID_TOPOLOGY(101)
+//
+// Users need to input the grid's dimensionaly and topology. Thus, 
+// these are not inferred nor defaulted. This utility uses MOLE's 
+// error reporting and tracking mechanism.
+//
+// SYNTAX:
+// ------------------------------------------------------------------
+// auto* g = gridBuilder(va_arg);
+// where va_arg is a list of pairs of the form: 
+//              <grid-attribute, grid-attribute-value>
+// Example:
+// auto* g=gridBuilder("dim", 1, "m", 20, "dx", 0.2, "topology",'u');
+// ------------------------------------------------------------------
+// Note I: callers who know the dimension at compile time can call 
+// the MOLE grid constructors directly by using the corresponding 
+// gridParams1D/2D/3D directly, and invoking the corresponding grid 
+// constructor, Grid1D/2D/3D, respectively.
+//
+// Note II: there are not type-checking for va_arg at compile time,
+// users need to be aware of the correct data types:
+//                          ATTRIBUTE                              //
+//   TYPE:                  Name:             Valid C++ Input Type //
+// -----------------------:------------------:---------------------//
+//   counters               m, n, o, dim      const int ()
+//   cell spacing           dx, dy, dz        const double      
+//   grid topology          topology          const char 
+//   grid coordinates       Nodal, Centers,   const vector (doubles)
+//                          Normal faces      const &flatNDArray
+//   grid periodicity       isPeriodic        const bool* (bool[dim])
+// 
+// -------------------------------------------------------------------------
+
+#include <array>
+#include <stack>
+
+#include "flat2DArray.h"
+#include "flat3DArray.h"
+#include "MOLE_grids.h"
+
+// The variadic list, va_arg, needs to end with a nullptr. A va_arg
+// without an nullptr at end fails. Therefore, gridBuilder is 
+// designed as a macro that always appends a nullpointer sentinel,
+#define gridBuilder(...) \
+    ::gridBuilder_impl(__VA_ARGS__, static_cast<const char*>(nullptr))
+
+// gridRaw is the gridBuilder's generic structure. 
+struct gridRaw {
+    int  dim      = -1;      // required; -1 means the user omitted it
+    char topology = '\0';    // 'u'|'c'|'n'; required, no default
+
+    int m = -1;
+    int n = -1;
+    int o = -1;
+
+    Real dx = 0.0;
+    Real dy = 0.0;
+    Real dz = 0.0;
+
+    std::array<bool, 3> isPeriodic = {false, false, false};
+
+    const bool* isPeriodicSrc = nullptr;
+
+    const void* nodesX   = nullptr;
+    const void* nodesY   = nullptr;
+    const void* nodesZ   = nullptr;
+    const void* centersX = nullptr;
+    const void* centersY = nullptr;
+    const void* centersZ = nullptr;
+    const void* facesuX  = nullptr;
+    const void* facesuY  = nullptr;
+    const void* facesuZ  = nullptr;
+    const void* facesvX  = nullptr;
+    const void* facesvY  = nullptr;
+    const void* facesvZ  = nullptr;
+    const void* faceswX  = nullptr;
+    const void* faceswY  = nullptr;
+    const void* faceswZ  = nullptr;
+};
+
+// runChecks runs the four parse-time validations, and logs failures
+// to errs. It also returns the grid dimensionality, or a 0 whenever
+// the dim attribute is missing or <= 0 or > 3.
+int runChecks(std::stack<MOLE_Errors>& errs, const gridRaw& g);
+
+// gridBuilder_impl is the entry point behind the gridBuilder macro: 
+// it parses, checks for errors, and instantiates the gridParams. It
+// calls MOLE's makeGrid and returns an instant of a MOLE gridVar a
+// c++ variant for the MOLE classes Grid[1D][2D][3D]. When a grid
+// cannot be constructed it returns a gridNull, built via
+// makeGrid(paramsNull, errs) (user checks errors). In MOLE_grids.h:
+// using gridVar = std::variant<grid1D, grid2D, grid3D, gridNull>;
+gridVar gridBuilder_impl(const char* firstName, ...);
+
+// makeGrid (the factory that turns a paramVars into a gridVar) is
+// declared in MOLE_grids.h; gridBuilder_impl calls it for both the
+// success path (gridParams1D/2D/3D) and the failure path
+// (paramsNull -> gridNull).
+
+#endif // MOLE_GRID_BUILDER_H
