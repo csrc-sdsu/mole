@@ -19,9 +19,10 @@
 
 // errCount counts entries in a copy of the error stack.
 static int errCount(stack<MOLE_Errors> s) {
-    int n = 0;
-    while (!s.empty()) { ++n; s.pop(); }
-    return n;
+  //  int n = 0;
+  //  while (!s.empty()) { ++n; s.pop(); }
+  //  return n;
+  return s.size();
 }
 
 // makeRaw builds a gridRaw carrying only the counts a test sets;
@@ -166,7 +167,7 @@ TEST(runChecks_accumulates_multiple_errors) {
         MOLEerr_contains(errs, MOLE_ERR_INVALID_CELL_COUNT));
     CHECK_TRUE(
         MOLEerr_contains(errs, MOLE_ERR_INVALID_GRID_TOPOLOGY));
-    CHECK_EQ(errCount(errs), 4); // missing m,n,o (3) + bad topo (1)
+    CHECK_EQ(errs.size(), 4); // missing m,n,o (3) + bad topo (1)
 }
 
 // ---------------------------------------------------------------
