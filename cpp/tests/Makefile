@@ -7,6 +7,8 @@ SRC = test_main.cpp \
       test_flat3DArray.cpp \
       test_MOLE_Errors.cpp \
       test_MOLE_grids.cpp \
+      test_grid_builder.cpp \
+      ../src/grids/grid_builder.cpp \
       ../src/grids/flat2DArray.cpp \
       ../src/grids/flat3DArray.cpp \
       ../src/grids/MOLE_grids.cpp \
