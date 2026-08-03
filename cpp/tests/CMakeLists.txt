@@ -11,6 +11,7 @@ set(MOLE_TEST_SOURCES
     test_flat3DArray.cpp
     test_MOLE_Errors.cpp
     test_MOLE_grids.cpp
+    test_grid_builder.cpp
 )
 
 foreach(_mole_test_src IN LISTS MOLE_TEST_SOURCES)
