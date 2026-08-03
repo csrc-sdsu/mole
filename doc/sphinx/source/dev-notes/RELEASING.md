@@ -190,3 +190,21 @@ After a successful release:
 2. **Monitor for issues**: Watch for bug reports related to the new release
 3. **Update documentation**: Ensure all documentation reflects the latest release
 4. **Community engagement**: Announce the release through appropriate channels
+
+## MOLE.jl Release
+
+The `version` of the `MOLE.jl` package needs to be updated in the [`Project.toml`](https://github.com/csrc-sdsu/mole/blob/main/julia/MOLE.jl/Project.toml) file, located in `mole/julia/MOLE.jl`.
+
+This should be done in a separate, atomic PR.
+
+Once the PR is merged into the `main` branch, comment under the specific commit in `main` (not in the PR conversation) and invoke the `@juliaRegistrator` bot, like in this [commit](https://github.com/csrc-sdsu/mole/commit/ed37aa4dbdfc4485875f6c14553ffc7290e62ef9). The key words and markdown formatted text to be added in the comment are the following:
+
+```
+@JuliaRegistrator register branch=main subdir=julia/MOLE.jl
+
+Release notes:
+
+## Breaking changes
+
+- Describe changes here
+```
