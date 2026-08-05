@@ -26,7 +26,7 @@ class TestLaplacian:
 
         n = len(grid.x)
 
-        assert L.shape == (n + 1, n)
+        assert L.shape == (n + 1, n + 1)
 
     def test_2d_matrix_shape(self):
         grid = Grid.generate([0.0, 0.0], [3.0, 2.0], shape=[7, 6])
@@ -51,12 +51,9 @@ class TestLaplacian:
 
     def test_1d_constant_field(self):
         grid = Grid.generate(0.0, 1.0, shape=7)
-
         L = Laplacian(grid).matrix
-
-        u = np.ones(len(grid.x))
+        u = np.ones(len(grid.x) + 1)
         Lu = L @ u
-
         assert np.allclose(Lu, 0.0, atol=1e-12)
 
     def test_2d_constant_field(self):

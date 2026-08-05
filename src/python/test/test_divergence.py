@@ -25,7 +25,7 @@ class TestDivergence:
         with pytest.raises(ValueError):
             Divergence(
                 grid,
-                accuracy_order=4,
+                accuracy_order=6,
             )
 
     def test_grid_too_small_1d(self):
@@ -39,7 +39,7 @@ class TestDivergence:
         with pytest.raises(ValueError):
             Divergence(
                 grid,
-                2,
+                4,
             )
 
     def test_grid_too_small_2d(self):

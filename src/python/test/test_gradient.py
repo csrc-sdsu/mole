@@ -219,7 +219,6 @@ class TestGradient:
         xSq = x ** 2
         dx = x[1] - x[0]
         expected_grad_xSq = np.gradient(xSq, dx)
-        dx = grid.x[1] - grid.x[0]
 
         Gx = Gradient(
             grid,
@@ -227,8 +226,11 @@ class TestGradient:
         ).matrix
 
         xSq = np.append(xSq,xSq[-1]+dx)
-
+        
         grad_xSq = Gx @ xSq
+
+        print(grad_xSq[:-1])
+        print(expected_grad_xSq[:-1])
 
         assert np.allclose(
             grad_xSq[:-1],
