@@ -74,7 +74,7 @@ class TestLaplacian:
 
         L = Laplacian(grid).matrix
         x = grid.x
-
+        x = np.append(x, x[-1] + grid.spacing) 
         u = x**2
         Lu = L @ u
 
