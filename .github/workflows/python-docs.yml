@@ -43,6 +43,9 @@ jobs:
 
       - name: Build documentation
         run: |
+          pwd
+          cd python
+          pwd
           sphinx-build -W --keep-going -b html docs docs/_build/html
 
       - name: Deploy documentation
