@@ -1,7 +1,7 @@
-mole
-====
+Documentation for pymole, the Python MOLE module 
+================================================
 
-Welcome to the mole documentation.
+Welcome to the pymole documentation.
 
 .. toctree::
    :maxdepth: 2
