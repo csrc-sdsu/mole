@@ -29,12 +29,13 @@ jobs:
         with:
           python-version: '3.12'
           cache: 'pip'
-
+          
       - name: Install dependencies
         run: |
-          cd python/src
           python -m pip install --upgrade pip
-          pip install -e .
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install pytest numpy scipy
+          python -m pip install -e ./python
           pip install -r docs/requirements.txt
 
       - name: Build documentation
