@@ -51,7 +51,7 @@ struct gridParams1D {
     // Faces_X is always identical to nodes_X in 1D. The attribute
     // is provided for consistency with 2D and 3D grids. Make sure
     // to call it as a function in 1D cases.
-    array1D Faces_X(){return nodes_X;} // In 1D same as nodes_X 
+    array1D& Faces_X(){return nodes_X;} // In 1D same as nodes_X
     const array1D& Faces_X() const { return nodes_X; }
     bool bc_isPeriodic = false; // whether the grid has periodic bcs
 };
@@ -299,9 +299,18 @@ bool validSpacing(Real dh);  // checks for valid dx, dy, or dz
 void generateNodalPts(size_t npts, Real delta, array1D& out_array);
 void generateCenterPts(size_t npts, Real delta, array1D& out_array);
 
+//
+// nd2DGrid/nd3DGrid: GNU Octave ndgrid analogs that build 2D
+// and 3D coordinates.
+//
+void nd2DGrid(const array1D& x, const array1D& y,
+              array2D& OutX, array2D& OutY);
+void nd3DGrid(const array1D& x, const array1D& y, const array1D& z,
+              array3D& OutX, array3D& OutY, array3D& OutZ);
+
 // gridVar makeGrid is a factory function that works for any of the 3
 // grid dimensionalities, intended for cases when the users need to
-// define the dimensionality at runtime. 
+// define the dimensionality at runtime.
 gridVar makeGrid(paramVars params, const stack<MOLE_Errors>& errs);
 
 #endif // MOLE_GRIDS_H

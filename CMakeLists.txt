@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(TopLevelProject VERSION 1.0 LANGUAGES CXX)
 
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Display the detected C++ compiler ID
@@ -147,10 +147,9 @@ set(LINK_LIBS ${ARMADILLO_LIBRARIES}
               ${LAPACK_LIBRARY})
 
 # Add subdirectories
-add_subdirectory(src/cpp)
-add_subdirectory(tests/cpp)
-add_subdirectory(tests/matlab_octave)
-add_subdirectory(examples/cpp)
+add_subdirectory(src)
+add_subdirectory(tests)
+add_subdirectory(examples)
 
 # Custom target to build everything
 add_custom_target(all_build DEPENDS mole_C++ tests_C++ examples_C++ tests_matlab_octave)
