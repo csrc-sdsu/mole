@@ -308,4 +308,4 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest
+          pytest python/tests
