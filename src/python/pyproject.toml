@@ -1,9 +1,0 @@
-[tool.ruff]
-src = ["."]
-fix = true
-
-[tool.ruff.lint]
-extend-select = ["I"]
-
-[tool.ruff.lint.isort]
-known-first-party = ["pymole"]
