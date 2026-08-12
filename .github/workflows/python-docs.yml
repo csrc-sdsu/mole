@@ -2,9 +2,11 @@ name: Python Documentation
 
 on:
   pull_request:
+    branches:
+      - '**'     
   push:
     branches:
-      - main
+      - '**' 
     tags: '*'
 
 permissions:
