@@ -36,6 +36,7 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           pip install pytest numpy scipy
           python -m pip install -e ./python
+          pwd
           pip install -r docs/requirements.txt
 
       - name: Build documentation
