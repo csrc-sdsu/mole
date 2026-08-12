@@ -1,0 +1,48 @@
+name: Python Documentation
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    tags: '*'
+
+permissions:
+  contents: write
+  pull-requests: read
+  statuses: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docbuild:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          cd python/MOLE
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install -r docs/requirements.txt
+
+      - name: Build documentation
+        run: |
+          cd python/MOLE
+          sphinx-build -W --keep-going -b html docs docs/_build/html
+
+      - name: Deploy documentation
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: python/MOLE/docs/_build/html
