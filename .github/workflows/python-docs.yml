@@ -37,7 +37,9 @@ jobs:
           pip install pytest numpy scipy
           python -m pip install -e ./python
           pwd
-          pip install -r docs/requirements.txt
+          cd python
+          pwd
+          if [ -f docs/requirements.txt ]; then pip install -r docs/requirements.txt; fi
 
       - name: Build documentation
         run: |
