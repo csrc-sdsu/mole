@@ -8,6 +8,7 @@
  * @file utils.h
  * @brief Helpers for sparse operations and MATLAB/Octave analogs
  * @date 2024/10/15
+ * New Implementation for MOLE 2.0 Last Modified 2026/07/22
  *
  */
 
@@ -17,6 +18,7 @@
 #define UTILS_H
 
 #include <armadillo>
+#include "MOLE_errors.h"
 
 using Real = double;
 using namespace arma;
@@ -26,6 +28,8 @@ using namespace arma;
  *
  */
 class Utils {
+protected:
+  std::stack<MOLE_Errors> errs;
 public:
   
   /**
@@ -84,7 +88,7 @@ public:
   * @param Y a sparse matrix, will be filled by the function
   *
   */  
-  void meshgrid(const vec &x, const vec &y, mat &X, mat &Y);
+  void mesh2Dgrid(const vec &x, const vec &y, mat &X, mat &Y);
 
   /**
   * @brief An analog to the MATLAB/Octave 3D meshgrid operation
@@ -101,7 +105,7 @@ public:
   * @param Z a sparse matrix, will be filled by the function
   *
   */
-  void meshgrid(const vec &x, const vec &y, const vec &z, cube &X, cube &Y,
+  void mesh3Dgrid(const vec &x, const vec &y, const vec &z, cube &X, cube &Y,
                 cube &Z);
   /**
   * @brief Implements the trapezoidal rule for 1D numerical integration
@@ -113,26 +117,13 @@ public:
   * @param y Vector of y-values at corresponding x
   * @return Estimated area under the curve
   */
-  static double trapz(const vec &x, const vec &y);
+  double trapz(const vec &x, const vec &y);
+
+  bool hasErrors();
+  void print_ErrorLog();
+  void write_ErrorLog();
+  void read_ErrorLog(int ErrorCode, std::string &location, 
+                      std::string &arrayName);
 };
-
-namespace mole {
-
-/**
- * @brief Validate a cell-spacing argument.
- *
- * Throws std::invalid_argument if @p h is zero, negative, NaN, or Inf.
- * Called at the top of every operator constructor and AddScalarBC free
- * function that takes a dx / dy / dz argument, so validation is active
- * in both Debug and Release builds (unlike assert(), which vanishes
- * under NDEBUG).
- *
- * @param h    Spacing value to check.
- * @param name Parameter name for the error message (e.g. "dx").
- * @throws std::invalid_argument if h is not a positive finite number.
- */
-void check_spacing(Real h, const char* name);
-
-} // namespace mole
 
 #endif // UTILS_H
