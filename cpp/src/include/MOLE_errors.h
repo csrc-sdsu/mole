@@ -28,6 +28,44 @@ using namespace std;
 // concatenation of parameters).
 #include <stack> // Using std stack class
 
+// 
+// MOLE DEBUGGING MODES
+//
+// We will define the following MOLE library debug modes. 
+// The MOLE library has been designed in a way that it does not 
+// break the execution of a user code, instead it creates and 
+// maintains an error logging mechanism that allows users to 
+// check for possible errors after a MOLE operation. In addition, 
+// the logged errors can be reported to std output or to a file.
+
+// 1. DEBUG_DEFAULT_MD (default behaviour - returns a grid 
+// that has errors)
+// <MOLEObject>.hasError (e.g., hasGridErrors()) 
+// Users and application builders are responsible for checking
+//  for errors and implementing their error corrections.
+// What support does a user get from the MOLE library at this point?
+//  A user can call MOLE functions to either:
+// A: print the errors to standard output
+// B: print errors to a file
+
+// 2. DEBUG_REPORTS_STDOUT_MD (has to be passed to the MOLE API - 
+// returns an object that has errors )
+// The MOLE library will report errors to standard output and return 
+// control to the users. What support does a user get from the MOLE 
+// library at this point?
+// A user can call MOLE functions to either:
+// A: print the errors to standard output
+// B: print errors to a file
+
+// 3. DEBUG_AND_ABORT_MD (Report, then abort so a debugger stops at
+// that particular failure point, the difference is that this one 
+// aborts execution). The MOLE library will report errors to standard
+// output and abort the execution (e.g., code exits).
+
+#define DEBUG_DEFAULT_MD 0
+#define DEBUG_REPORTS_STDOUT_MD 1
+#define DEBUG_AND_ABORT_MD 2
+
 // Predefined error codes for the MOLE library. These codes are used
 // to identify specific errors that may occur during the execution 
 // of MOLE functions. These error symbols are used throughout the 

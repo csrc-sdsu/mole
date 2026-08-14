@@ -154,6 +154,70 @@ class gridBase{
         void setGridValidated();
         void print_ErrorLog();
         void write_ErrorLog();
+        // ----------------------------------------------------------
+        // The following member function are used as helpers for the
+        // MOLE grid classes (grid1D, grid2D, grid3D) to avoid code
+        // duplication. These are used for grid validatation and 
+        // automatic generation, where the different coordinates need
+        // to "allocate coordinate array -> build mesh -> propagate 
+        // errors -> validate".
+        // ----------------------------------------------------------
+
+        // 
+        // 1) drainArrayErrors propagates errors logged onto an array
+        // or a different MOLE object up to the corresponding grid's 
+        // error stack.
+        //
+        template <typename ArrayT>
+        void drainArrayErrors(ArrayT& a) {
+            while (a.hasArrayErrors()) {
+                int errCode;
+                string location, msgparam;
+                a.read_ErrorLog(errCode, location, msgparam);
+                logGridErr(errCode, location, msgparam);
+            }
+        }
+
+        //
+        // 2) mergeErrors combines a previously-logged error stack 
+        // (inerrs) into a grid's error stack. 
+        //
+        void mergeErrors(const stack<MOLE_Errors>& inerrs);
+
+        //
+        // 3) buildOrCheck2DCoords builds or validates a user-supplied
+        // 2D coordinate (nodal, cell-centers, or normal faces). When
+        // building the coordinates, outX and outY will have the 
+        // output coordinate arrays. However, when validating, the
+        // user-supplied coordinates are passed in outX and outY
+        // and validated against the expected coordinates (using
+        // a tolerance value for floating point comparisons).
+        //
+        bool buildOrCheck2DCoords(array2D& outX, array2D& outY,
+                                const array1D& xcoord,
+                                const array1D& ycoord, Real dx, 
+                                Real dy, size_t m, size_t n,
+                                int sizeMismatchErr, 
+                                int badCoordsErr);
+
+        //
+        // 4) buildOrCheck3DCoords builds or validates a user-supplied
+        // 3D coordinate (nodal, cell-centers, or normal faces). When
+        // building the coordinates, outX, outY, and outZ will have the 
+        // output coordinate arrays. However, when validating, the
+        // user-supplied coordinates are passed in outX, outY, and outZ
+        // and validated against the expected coordinates (using
+        // a tolerance value for floating point comparisons).
+        //
+        bool buildOrCheck3DCoords(array3D& outX, array3D& outY,
+                                    array3D& outZ,
+                                    const array1D& xcoord,
+                                    const array1D& ycoord,
+                                    const array1D& zcoord,
+                                    Real dx, Real dy, Real dz,
+                                    size_t m, size_t n, size_t o,
+                                    int sizeMismatchErr, 
+                                    int badCoordsErr);
 };
 
 // 1D grid class

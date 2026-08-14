@@ -64,14 +64,14 @@ array2D::array2D(size_t rows, size_t cols, Real fillVal) {
 // It also records errors during memory allocation or other vector
 // operations.
 //
-array3D::array3D(size_t dim1, size_t dim2, size_t dim3, Real fillVal) {
+array3D::array3D(size_t rows, size_t cols, size_t slices, Real fillVal) {
     try {
-        data_.set_size(dim1, dim2, dim3);
+        data_.set_size(rows, cols, slices);
         data_.fill(fillVal);
     } catch (std::bad_alloc& e) {
-        string wparams = "dim1 = " + to_string(dim1); 
-        wparams += ", dim2 = " + to_string(dim2);
-        wparams += ", dim3 = " + to_string(dim3);
+        string wparams = "rows = " + to_string(rows); 
+        wparams += ", cols = " + to_string(cols);
+        wparams += ", slices = " + to_string(slices);
         logArrayError(MOLE_ERR_FAILED_ARRAY_ALLOC, 
                         "array3D Construction", wparams);
     }

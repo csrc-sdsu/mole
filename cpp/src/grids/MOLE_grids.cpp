@@ -68,6 +68,19 @@ void gridBase::write_ErrorLog(){
     MOLEerr_dumpErrLog(errs, "MOLEGridErrors");
 }
 
+//
+// gridBase::mergeErrors propagates previously-logged errors into 
+// a grid's error log stack. 
+//
+void gridBase::mergeErrors(const stack<MOLE_Errors>& inerrs) {
+    stack<MOLE_Errors> tmp_stk = inerrs;
+    while (!tmp_stk.empty()) {
+        logGridErr(tmp_stk.top().errCode, tmp_stk.top().errLocation,
+                    tmp_stk.top().paramError);
+        tmp_stk.pop();
+    }
+}
+
 // ----------
 // Set of Auxiliar functions that check for consistency 
 // in the grid parameters. These are not particular to a grid
@@ -142,12 +155,6 @@ gridBase::gridBase(size_t idim){
     }
 }
 
-// ------------------------------------------------------------------
-//
-// MOLE 1D Grid Class methods (declarations in MOLE_grid.h)
-//
-// ------------------------------------------------------------------
-
 //
 // valid1DCoordinates validates a user-supplied coordinate array 
 // against an expected valid grid coordinate one. If the user did not
@@ -175,6 +182,180 @@ bool gridBase::valid1DCoordinates(array1D& userInput,
         return false;
     }
     return true;
+}
+
+//
+// valid2DCoordinates validates a user-supplied coordinate array 
+// against an expected valid grid coordinate one. If users did not
+// provide an array of coordinates, and the grid is uniform, the
+// grid is auto-generated.
+//
+bool gridBase::valid2DCoordinates(array2D& userInput, 
+                                const array2D& expected,
+                                Real dx, Real dy, size_t m, size_t n,
+                                int sizeMismatchErr,
+                                int badCoordsErr) {
+    if (userInput.data_.is_empty()) {
+        userInput = expected;   // auto-generate
+        return true;
+    }
+    if (userInput.data_.n_rows != expected.data_.n_rows ||
+        userInput.data_.n_cols != expected.data_.n_cols) {
+        string sparams = "m = " + to_string(m);
+        sparams += ", n = " + to_string(n) + ", dx = ";
+        sparams += to_string(dx) + ", dy = " + to_string(dy);
+        logGridErr(sizeMismatchErr, "grid2D[construct]", sparams);
+        return false;
+    }
+    if (!numEqualArray(expected, userInput, 4.0)) {//eps*4.0 precision 
+        string sparams = "m = " + to_string(m);
+        sparams += ", n = " + to_string(n) + ", dx = ";
+        sparams += to_string(dx) + ", dy = " + to_string(dy);
+        logGridErr(badCoordsErr, "grid2D[construct]", sparams);
+        return false;
+    }
+    return true;
+}
+
+//
+// buildOrCheck2DCoords implementation (see MOLE_grids.h for details).
+//
+bool gridBase::buildOrCheck2DCoords(array2D& outX, array2D& outY,
+                                    const array1D& xcoord,
+                                    const array1D& ycoord, Real dx, 
+                                    Real dy, size_t m, size_t n,
+                                    int sizeMismatchErr, 
+                                    int badCoordsErr) {
+    array2D X(xcoord.data_.n_elem, ycoord.data_.n_elem, 0.0);
+    array2D Y(xcoord.data_.n_elem, ycoord.data_.n_elem, 0.0);
+
+    if (X.data_.n_rows != xcoord.data_.n_elem ||
+        X.data_.n_cols != ycoord.data_.n_elem ||
+        Y.data_.n_rows != xcoord.data_.n_elem ||
+        Y.data_.n_cols != ycoord.data_.n_elem) {
+        string errmsg = "dim1 = " + to_string(xcoord.data_.n_elem);
+        errmsg += " X dim2 = " + to_string(ycoord.data_.n_elem);
+        logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC,
+            "gridBase[buildOrCheck2DCoords]", errmsg);
+        return false;
+    }
+
+    nd2DGrid(xcoord, ycoord, X, Y);
+    if (X.hasArrayErrors() || Y.hasArrayErrors()) {
+        drainArrayErrors(X);
+        drainArrayErrors(Y);
+        return false;
+    }
+
+    bool okX = valid2DCoordinates(outX, X, dx, dy, m, n,
+                                sizeMismatchErr, badCoordsErr);
+    bool okY = valid2DCoordinates(outY, Y, dx, dy, m, n,
+                                sizeMismatchErr, badCoordsErr);
+    return okX && okY;
+}
+
+//
+// valid3DCoordinates validates a user-supplied coordinate array 
+// against an expected valid grid coordinate one. If the user did not
+// provide an array of coordinates, and the grid is uniform, the
+// expected value is assigned.
+//
+bool gridBase::valid3DCoordinates(array3D& userInput, 
+                                const array3D& expected,
+                                Real dx, Real dy, Real dz, 
+                                size_t m, size_t n, size_t o,
+                                int sizeMismatchErr,
+                                int badCoordsErr) {
+    if (userInput.data_.is_empty()) {
+        userInput = expected;   // auto-generate
+        return true;
+    }
+    if (userInput.data_.n_rows != expected.data_.n_rows || 
+        userInput.data_.n_cols != expected.data_.n_cols || 
+        userInput.data_.n_slices != expected.data_.n_slices) {
+        string sparams = "m = " + to_string(m) + ", n = ";
+        sparams += to_string(n) + ", o = " + to_string(o) + ", dx = ";
+        sparams += to_string(dx) + ", dy = " + to_string(dy);
+        sparams += ", dz = " + to_string(dz);
+        logGridErr(sizeMismatchErr, "grid3D[construct]", sparams);
+        return false;
+    }
+    if (!numEqualArray(expected, userInput, 4.0)) {//eps*4.0 precision
+        string sparams = "m = " + to_string(m);
+        sparams += ", n = " + to_string(n) + ", o = ";
+        sparams += to_string(o) + ", dx = " + to_string(dx);
+        sparams += ", dy = " + to_string(dy) + ", dz = ";
+        sparams += to_string(dz);
+        logGridErr(badCoordsErr, "grid3D[construct]", sparams);
+        return false;
+    }
+    return true;
+}
+
+//
+// buildOrCheck3DCoords implementation (see MOLE_grids.h for details).
+//
+bool gridBase::buildOrCheck3DCoords(array3D& outX, array3D& outY,
+                                    array3D& outZ,
+                                    const array1D& xcoord,
+                                    const array1D& ycoord,
+                                    const array1D& zcoord,
+                                    Real dx, Real dy, Real dz,
+                                    size_t m, size_t n, size_t o,
+                                    int sizeMismatchErr, 
+                                    int badCoordsErr) {
+    size_t nx = xcoord.data_.n_elem, ny = ycoord.data_.n_elem,
+           nz = zcoord.data_.n_elem;
+    array3D X(nx, ny, nz, 0.0), Y(nx, ny, nz, 0.0), 
+            Z(nx, ny, nz, 0.0);
+
+    if (X.data_.n_rows   != nx || X.data_.n_cols   != ny || 
+        X.data_.n_slices != nz || Y.data_.n_rows   != nx || 
+        Y.data_.n_cols   != ny || Y.data_.n_slices != nz ||
+        Z.data_.n_rows   != nx || Z.data_.n_cols   != ny || 
+        Z.data_.n_slices != nz) {
+        string errmsg = "dim1 = " + to_string(nx) + " X dim2 = ";
+        errmsg += to_string(ny) + " X dim3 = " + to_string(nz);
+        logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC,
+            "gridBase[buildOrValidateLayer3D]", errmsg);
+        return false;
+    }
+
+    nd3DGrid(xcoord, ycoord, zcoord, X, Y, Z);
+    if (X.hasArrayErrors() || Y.hasArrayErrors() || 
+        Z.hasArrayErrors()) {
+        drainArrayErrors(X);
+        drainArrayErrors(Y);
+        drainArrayErrors(Z);
+        return false;
+    }
+
+    bool okX = valid3DCoordinates(outX, X, dx, dy, dz, m, n, o,
+                                sizeMismatchErr, badCoordsErr);
+    bool okY = valid3DCoordinates(outY, Y, dx, dy, dz, m, n, o,
+                                sizeMismatchErr, badCoordsErr);
+    bool okZ = valid3DCoordinates(outZ, Z, dx, dy, dz, m, n, o,
+                                sizeMismatchErr, badCoordsErr);
+    return okX && okY && okZ;
+}
+
+// ------------------------------------------------------------------
+//
+// MOLE 1D Grid Class methods (declarations in MOLE_grid.h)
+//
+// ------------------------------------------------------------------
+
+//
+// describeGrid1D generates a diagnostic string used when a grid
+// construction fails.
+//
+static string describeGrid1D(const gridParams1D& grid) {
+    string errmsg = "1D ";
+    errmsg += string_topology(grid.topology);
+    errmsg += "ncells = " + to_string(grid.m);
+    errmsg += ", dx = " + to_string(grid.dx) + ", Periodic = ";
+    errmsg += grid.bc_isPeriodic ? "YES." : "NO.";
+    return errmsg;
 }
 
 //
@@ -260,23 +441,11 @@ bool grid1D::validGrid() {
 // the grid has periodic boundary conditions (default = non-periodic)
 //
 grid1D::grid1D(const gridParams1D p1): gridBase(1) {
-    grid.m = p1.m; 
-    grid.topology = p1.topology;
-    grid.dx = p1.dx; 
-    grid.bc_isPeriodic = p1.bc_isPeriodic;
-    grid.nodes_X = p1.nodes_X;
-    grid.centers_X = p1.centers_X;
+    grid = p1; // copy the gridParams1D struct into the grid1D member
 
     if (!validGrid()){
-        // log an error because grid is not valid
-        string errmsg = "1D ";
-        errmsg += string_topology(grid.topology);
-        errmsg += "ncells = " + to_string(grid.m);
-        errmsg += ", dx = "+to_string(grid.dx)+", Periodic = ";
-        if (grid.bc_isPeriodic) errmsg += "YES.";
-        else errmsg +="NO.";
-        logGridErr(MOLE_ERR_GRID_CONSTRUCTION_FAILED, 
-                "grid1D[grid1D constructor]", errmsg);
+        logGridErr(MOLE_ERR_GRID_CONSTRUCTION_FAILED,
+                "grid1D[grid1D constructor]", describeGrid1D(grid));
     }
 }
 
@@ -288,31 +457,12 @@ grid1D::grid1D(const gridParams1D p1): gridBase(1) {
 //
 grid1D::grid1D(const gridParams1D p1, 
                 const stack<MOLE_Errors>& inerrs): gridBase(1) {
-    grid.m = p1.m; 
-    grid.topology = p1.topology;
-    grid.dx = p1.dx; 
-    grid.bc_isPeriodic = p1.bc_isPeriodic;
-    grid.nodes_X = p1.nodes_X;
-    grid.centers_X = p1.centers_X;
-
-    // scan the error log for previous errors
-    stack<MOLE_Errors> tmp_stk = inerrs;
-    while (!tmp_stk.empty()){
-        logGridErr(tmp_stk.top().errCode, tmp_stk.top().errLocation,
-                    tmp_stk.top().paramError);
-        tmp_stk.pop();
-    }
+    grid = p1;
+    mergeErrors(inerrs);
 
     if (!validGrid()){
-        // log an error because grid is not valid
-        string errmsg = "1D ";
-        errmsg += string_topology(grid.topology);
-        errmsg += "ncells = " + to_string(grid.m);
-        errmsg += ", dx = "+to_string(grid.dx)+", Periodic = ";
-        if (grid.bc_isPeriodic) errmsg += "YES.";
-        else errmsg +="NO.";
-        logGridErr(MOLE_ERR_GRID_CONSTRUCTION_FAILED, 
-                "grid1D[grid1D constructor]", errmsg);
+        logGridErr(MOLE_ERR_GRID_CONSTRUCTION_FAILED,
+                "grid1D[grid1D constructor]", describeGrid1D(grid));
     }
 }
 
@@ -325,6 +475,23 @@ grid1D::grid1D(const gridParams1D p1,
 // 
 // Functions that generate 2D Grid Coordinates
 //
+
+//
+// describeGrid2D generates a diagnostic string used when a grid
+// construction fails.
+//
+static string describeGrid2D(const gridParams2D& grid) {
+    string errmsg = "2D ";
+    errmsg += string_topology(grid.topology);
+    errmsg += ", m cells = " + to_string(grid.m);
+    errmsg += ", n cells = " + to_string(grid.n);
+    errmsg += ", dx = " + to_string(grid.dx);
+    errmsg += ", dy = " + to_string(grid.dy) + ", x-Periodic = ";
+    errmsg += grid.bc_isPeriodic[0] ? "YES" : "NO";
+    errmsg += ", y-Periodic = ";
+    errmsg += grid.bc_isPeriodic[1] ? "YES." : "NO.";
+    return errmsg;
+}
 
 //
 // n2DGrid creates a 2D rectangular grid from 2 input coordinate 
@@ -381,41 +548,8 @@ void nd2DGrid(const array1D& x, const array1D& y,
         }
     }
     return;
-    
 }
 
-//
-// valid2DCoordinates validates a user-supplied coordinate array 
-// against an expected valid grid coordinate one. If the user did not
-// provide an array of coordinates, and the grid is uniform, the
-// expected value is assigned.
-//
-bool gridBase::valid2DCoordinates(array2D& userInput, 
-                                const array2D& expected,
-                                Real dx, Real dy, size_t m, size_t n,
-                                int sizeMismatchErr,
-                                int badCoordsErr) {
-    if (userInput.data_.is_empty()) {
-        userInput = expected;   // auto-generate
-        return true;
-    }
-    if (userInput.data_.n_rows != expected.data_.n_rows ||
-        userInput.data_.n_cols != expected.data_.n_cols) {
-        string sparams = "m = " + to_string(m);
-        sparams += ", n = " + to_string(n) + ", dx = ";
-        sparams += to_string(dx) + ", dy = " + to_string(dy);
-        logGridErr(sizeMismatchErr, "grid2D[construct]", sparams);
-        return false;
-    }
-    if (!numEqualArray(expected, userInput, 4.0)) {//eps*4.0 precision 
-        string sparams = "m = " + to_string(m);
-        sparams += ", n = " + to_string(n) + ", dx = ";
-        sparams += to_string(dx) + ", dy = " + to_string(dy);
-        logGridErr(badCoordsErr, "grid2D[construct]", sparams);
-        return false;
-    }
-    return true;
-}
 //
 // Checks whether the member 2D grid is valid or not and reports all
 // errors found with the grid in its error stack. When the grid 
@@ -443,253 +577,63 @@ bool grid2D::validGrid() {
             isValid = false;
             break;
         }
-        // Generate grid or validate user-provided coordinates
-
-        // Computing or verifying nodal coordinates
-        // xn = (0:m) * dx and and yn = (0:n) * dy
+        // Generate the four 1D coordinate arrays used for computing
+        // nodal coordinates: xn = (0:m)*dx, yn = (0:n)*dy, center:
+        // xc = [0, (0.5:m-0.5)*dx, m*dx], yc likewise, and normal 
+        // faces xv = xc[1:m], yu = yc[1:n] (interior points only).
         array1D xn(grid.m + 1), yn(grid.n + 1);
-        // check for proper allocation of arrays (safety)
+        array1D xc(grid.m + 2), yc(grid.n + 2);
+        array1D xv(grid.m), yu(grid.n);
+
         if (xn.data_.n_elem == grid.m+1 && 
-            yn.data_.n_elem == grid.n+1){
+            yn.data_.n_elem == grid.n+1 &&
+            xc.data_.n_elem == grid.m+2 && 
+            yc.data_.n_elem == grid.n+2 &&
+            xv.data_.n_elem == grid.m   && 
+            yu.data_.n_elem == grid.n) {
             generateNodalPts(grid.m, grid.dx, xn);
             generateNodalPts(grid.n, grid.dy, yn);
-        } else{// problems allocating one or both arrays (xn and cn)
-            string errmsg = "Either xn_dim = ";
-            errmsg += to_string(grid.m+1) + ", and yn_dim = ";
-            errmsg += to_string(grid.n+1) + "could not be allocated";
-            logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC, 
-                "grid2D[construct] nodal coordinates", errmsg);
-            isValid = false;
-        }
-        array2D X(grid.m + 1, grid.n + 1, 0.0), 
-                Y(grid.m + 1, grid.n + 1, 0.0);
-        if (X.data_.n_rows == grid.m + 1 && 
-            X.data_.n_cols == grid.n + 1 &&
-            Y.data_.n_rows == grid.m + 1 && 
-            Y.data_.n_cols == grid.n + 1 &&
-            xn.data_.n_elem == grid.m + 1 && 
-            yn.data_.n_elem == grid.n + 1){
-            // [grid.nodes_X, grid.nodes_Y] = nd2Dgrid(xn, yn)
-            nd2DGrid(xn, yn, X, Y);
-            if (X.hasArrayErrors() || Y.hasArrayErrors()){
-                isValid = false;
-                while (X.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    X.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-                while (Y.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    Y.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-            } 
-            else {
-                if (!valid2DCoordinates(grid.nodes_X, X, grid.dx, 
-                                grid.dy, grid.m+1, grid.n+1,  
-                                MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_NODAL_COORDINATES)){
-                    isValid = false;
-                }
-                if (!valid2DCoordinates(grid.nodes_Y, Y, grid.dx,  
-                                grid.dy, grid.m+1, grid.n+1, 
-                                MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_NODAL_COORDINATES)){
-                    isValid = false;
-                }
-            }
-        } 
-        else { // Either X, Y, xc, or yc could not be allocated
-            string errmsg = "dim1 = ";
-            errmsg += to_string(grid.m+1) + " X dim2 = ";
-            errmsg += to_string(grid.n+1);
-            logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC, 
-                "grid2D[construct] Nodal Coordinates", errmsg);
-            isValid = false;
-        }
-
-        // Computing or verifying cell center coordinates                        
-        // xc = [0, (0.5:m-0.5) * dx, m*dx]  and 
-        // yc = [0, (0.5:n-0.5) * dy, n*dy] 
-        array1D xc(grid.m + 2), yc(grid.n + 2);
-        // check for proper allocation of arrays (safety)
-        if (xc.data_.n_elem == grid.m+2 && 
-            yc.data_.n_elem == grid.n+2){
             generateCenterPts(grid.m, grid.dx, xc);
             generateCenterPts(grid.n, grid.dy, yc);
-        } else {// problems allocating one or both arrays (xn and cn)
-            string errmsg = "Either xc_dim = ";
-            errmsg += to_string(grid.m+2) + ", and yc_dim = ";
-            errmsg += to_string(grid.n+2) + "could not be allocated";
-            logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC, 
-                "grid2D[construct] center coordinates", errmsg);
-            isValid = false;
-        }
-
-        // [grid.centers_X, grid.centers_Y] = nd2Dgrid(xc, yc)
-        X.data_.set_size(grid.m + 2, grid.n + 2);
-        Y.data_.set_size(grid.m + 2, grid.n + 2);
-        if (X.data_.n_rows == grid.m + 2 && 
-            X.data_.n_cols == grid.n + 2 &&
-            Y.data_.n_rows == grid.m + 2 && 
-            Y.data_.n_cols == grid.n + 2 &&
-            xc.data_.n_elem == grid.m + 2 && 
-            yc.data_.n_elem == grid.n + 2){
-            nd2DGrid(xc, yc, X, Y);
-            if (X.hasArrayErrors() || Y.hasArrayErrors()){
-                isValid = false;    
-                while (X.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    X.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-                while (Y.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    Y.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-            } 
-            else {
-                if (!valid2DCoordinates(grid.centers_X, X, grid.dx, 
-                                grid.dy, grid.m+2, grid.n+2,  
-                                MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_CENTER_COORDINATES)){
-                    isValid = false;
-                }
-                if (!valid2DCoordinates(grid.centers_Y, Y, grid.dx,  
-                                grid.dy, grid.m+2, grid.n+2, 
-                                MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_CENTER_COORDINATES )){
-                   isValid = false;
-                }   
-            }
-         } else {  // Either X, Y, xc, or yc could not be allocated
-            string errmsg = "dim1 = ";
-            errmsg += to_string(grid.m+2) + " X dim2 = ";
-            errmsg += to_string(grid.n+2);
-            logGridErr(MOLE_ERR_FAILED_ARRAY_RESIZE,
-                "grid2D[construct] Center Coordinates", errmsg);
-            isValid = false;    
-        }
-        
-        // Computing and validating normal faces 
-        // yu = (0.5:n-0.5) * dy; and xv = (0.5:m-0.5) * dx; 
-        array1D yu(grid.n), xv(grid.m); 
-        // check for proper allocation of arrays (safety)
-        if (xv.data_.n_elem == grid.m && yu.data_.n_elem == grid.n){
-            // xv = xc[1:m], yu = yc[1:n]
             xv.data_ = xc.data_.subvec(1, grid.m);
             yu.data_ = yc.data_.subvec(1, grid.n);
-        } else{ // problems allocating one or both arrays (xv and yu)
-            string errmsg = "Either xv_dim = ";
-            errmsg += to_string(grid.m) + ", and yu_dim = ";
-            errmsg += to_string(grid.n) + "could not be allocated";
-            logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC, 
-                "grid2D[constrct] normal faces coordinates", errmsg);
+        } else {
+            string errmsg = "one or more 1D coordinate arrays";
+            errmsg += " for m = " + to_string(grid.m) + ", n = ";
+            errmsg += to_string(grid.n) + " could not be allocated";
+            logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC,
+                "grid2D[construct] 1D coordinates", errmsg);
             isValid = false;
+            break;
         }
-        // [grid.faces_u_X, grid.faces_u_Y] = ndgrid(xu=xn, yu);
-        X.data_.set_size(grid.m + 1, grid.n);
-        Y.data_.set_size(grid.m + 1, grid.n);
 
-        if (X.data_.n_rows  == grid.m + 1 && 
-            X.data_.n_cols  == grid.n &&
-            Y.data_.n_rows  == grid.m + 1 && 
-            Y.data_.n_cols  == grid.n &&
-            xn.data_.n_elem == grid.m + 1 &&
-            yu.data_.n_elem == grid.n){
-            nd2DGrid(xn, yu, X, Y);
-            if (X.hasArrayErrors() || Y.hasArrayErrors()){
-                isValid = false;    
-                while (X.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    X.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-                while (Y.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    Y.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-            } 
-            else {
-                if (!valid2DCoordinates(grid.faces_u_X, X, grid.dx, 
-                                grid.dy, grid.m+1, grid.n, 
-                                MOLE_ERR_GRID_FACES_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
-                    isValid = false;
-                }
-                if (!valid2DCoordinates(grid.faces_u_Y, Y, grid.dx, 
-                                grid.dy, grid.m+1, grid.n,
-                                MOLE_ERR_GRID_FACES_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
-                    isValid = false;                    
-                }
-            } 
-        }   
-        else {                  // X, Y, xn, or yu allocation failed 
-            string errmsg = "dim1 = ";
-            errmsg += to_string(grid.m+1) + " X dim2 = ";
-            errmsg += to_string(grid.n);
-            logGridErr(MOLE_ERR_FAILED_ARRAY_RESIZE,
-                "grid2D[construct] Faces_u Coordinates", errmsg);
-            isValid = false;    
-        }        
-        // [grid.faces_v_X, grid.faces_v_Y] = ndgrid(xv, yv=yn);
-        
-        X.data_.set_size(grid.m, grid.n + 1);
-        Y.data_.set_size(grid.m, grid.n + 1);
-        if (X.data_.n_rows  == grid.m && 
-            X.data_.n_cols  == grid.n + 1 &&
-            Y.data_.n_rows  == grid.m && 
-            Y.data_.n_cols  == grid.n + 1 &&
-            xv.data_.n_elem == grid.m && 
-            yn.data_.n_elem == grid.n + 1){
-            nd2DGrid(xv, yn, X, Y);
-            if (X.hasArrayErrors() || Y.hasArrayErrors()){
-                isValid = false;    
-                while (X.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    X.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-                while (Y.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    Y.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-            } 
-            else {
-                if (!valid2DCoordinates(grid.faces_v_X, X, grid.dx, 
-                                grid.dy, grid.m, grid.n+1, 
-                                MOLE_ERR_GRID_FACES_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
-                    isValid = false;
-                }
-                if (!valid2DCoordinates(grid.faces_v_Y, Y, grid.dx, 
-                                grid.dy, grid.m, grid.n+1,
-                                MOLE_ERR_GRID_FACES_SZ_MISMATCH,
-                                MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
-                    isValid = false;                    
-                }
-            }
-        }
-        else {            // X, Y, xv, or yn allocation failed  
-            string errmsg = "dim1 = ";
-            errmsg += to_string(grid.m) + " X dim2 = ";
-            errmsg += to_string(grid.n+1);
-            logGridErr(MOLE_ERR_FAILED_ARRAY_RESIZE,
-                "grid2D[construct] Faces_v Coordinates", errmsg);
-            isValid = false;    
-        }
+        // Build/validate nodal coordinates 
+        if (!buildOrCheck2DCoords(grid.nodes_X, grid.nodes_Y, xn, yn,
+                grid.dx, grid.dy, grid.m+1, grid.n+1,
+                MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
+                MOLE_ERR_INVALID_NODAL_COORDINATES))
+            isValid = false;
+
+        // Build/validate cell center coordinates 
+        if (!buildOrCheck2DCoords(grid.centers_X, grid.centers_Y, xc, 
+                yc, grid.dx, grid.dy, grid.m+2, grid.n+2,
+                MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
+                MOLE_ERR_INVALID_CENTER_COORDINATES))
+            isValid = false;
+
+        // Build/validate normal face coordinates 
+        if (!buildOrCheck2DCoords(grid.faces_u_X, grid.faces_u_Y, xn, 
+                yu, grid.dx, grid.dy, grid.m+1, grid.n,
+                MOLE_ERR_GRID_FACES_SZ_MISMATCH,
+                MOLE_ERR_INVALID_NORMAL_FACE_COORDS))
+            isValid = false;
+
+        if (!buildOrCheck2DCoords(grid.faces_v_X, grid.faces_v_Y, xv, 
+                yn, grid.dx, grid.dy, grid.m, grid.n+1,
+                MOLE_ERR_GRID_FACES_SZ_MISMATCH,
+                MOLE_ERR_INVALID_NORMAL_FACE_COORDS))
+            isValid = false;
+
         break;
     }
     case 'c':  // User must provide at least nodal coordinates
@@ -730,37 +674,11 @@ bool grid2D::validGrid() {
 // nodal grid information
 //
 grid2D::grid2D(gridParams2D p2): gridBase(2) {
-    grid.m = p2.m; 
-    grid.n = p2.n;
-    grid.topology = p2.topology;
-    grid.dx = p2.dx; 
-    grid.dy = p2.dy;
-    grid.bc_isPeriodic[0] = p2.bc_isPeriodic[0];
-    grid.bc_isPeriodic[1] = p2.bc_isPeriodic[1]; 
-    grid.nodes_X = p2.nodes_X;
-    grid.nodes_Y = p2.nodes_Y;
-    grid.centers_X = p2.centers_X;
-    grid.centers_Y = p2.centers_Y;
-    grid.faces_u_X = p2.faces_u_X;
-    grid.faces_u_Y = p2.faces_u_Y; 
-    grid.faces_v_X = p2.faces_v_X;
-    grid.faces_v_Y = p2.faces_v_Y;
-
+    grid = p2;   // memberwise assignement of the gridParams2D struct
+   
     if (!validGrid()){
-        // log error that grid was not generated
-        string errmsg = "2D ";
-        errmsg += string_topology(grid.topology);
-        errmsg += ", m cells = " + to_string(grid.m);
-        errmsg += ", n cells = " + to_string(grid.n);
-        errmsg += ", dx = "+to_string(grid.dx);
-        errmsg += ", dy = "+to_string(grid.dy)+", x-Periodic = ";
-        if (grid.bc_isPeriodic[0]) errmsg += "YES";
-        else errmsg +="NO";
-        errmsg += ", y-Periodic = ";
-        if (grid.bc_isPeriodic[1]) errmsg += "YES.";
-        else errmsg +="NO."; 
-        logGridErr(MOLE_ERR_GRID_CONSTRUCTION_FAILED, 
-                "grid2D[grid2D constructor]", errmsg);
+        logGridErr(MOLE_ERR_GRID_CONSTRUCTION_FAILED,
+                "grid2D[grid2D constructor]", describeGrid2D(grid));
     }
 }
 
@@ -772,48 +690,15 @@ grid2D::grid2D(gridParams2D p2): gridBase(2) {
 //
 grid2D::grid2D(gridParams2D p2, 
                 const stack<MOLE_Errors>& inerrs): gridBase(2) {
-    grid.m = p2.m; 
-    grid.n = p2.n;
-    grid.topology = p2.topology;
-    grid.dx = p2.dx; 
-    grid.dy = p2.dy;
-    grid.bc_isPeriodic[0] = p2.bc_isPeriodic[0];
-    grid.bc_isPeriodic[1] = p2.bc_isPeriodic[1]; 
-    grid.nodes_X = p2.nodes_X;
-    grid.nodes_Y = p2.nodes_Y;
-    grid.centers_X = p2.centers_X;
-    grid.centers_Y = p2.centers_Y;
-    grid.faces_u_X = p2.faces_u_X;
-    grid.faces_u_Y = p2.faces_u_Y; 
-    grid.faces_v_X = p2.faces_v_X;
-    grid.faces_v_Y = p2.faces_v_Y;
+    grid = p2;    //memberwise assignement of the gridParams2D struct
     
-    // scan the error log for previous errors
-    stack<MOLE_Errors> tmp_stk = inerrs;
-    while (!tmp_stk.empty()){
-        logGridErr(tmp_stk.top().errCode, tmp_stk.top().errLocation,
-                    tmp_stk.top().paramError);
-        tmp_stk.pop();
-    }
+     mergeErrors(inerrs);
 
     if (!validGrid()){
-        // log error that grid was not generated
-        string errmsg = "2D ";
-        errmsg += string_topology(grid.topology);
-        errmsg += ", m cells = " + to_string(grid.m);
-        errmsg += ", n cells = " + to_string(grid.n);
-        errmsg += ", dx = "+to_string(grid.dx);
-        errmsg += ", dy = "+to_string(grid.dy)+", x-Periodic = ";
-        if (grid.bc_isPeriodic[0]) errmsg += "YES";
-        else errmsg +="NO";
-        errmsg += ", y-Periodic = ";
-        if (grid.bc_isPeriodic[1]) errmsg += "YES.";
-        else errmsg +="NO."; 
-        logGridErr(MOLE_ERR_GRID_CONSTRUCTION_FAILED, 
-                "grid2D[grid2D constructor]", errmsg);
+        logGridErr(MOLE_ERR_GRID_CONSTRUCTION_FAILED,
+                "grid2D[grid2D constructor]", describeGrid2D(grid));
     }
 }
-
 
 // ------------------------------------------------------------------
 //
@@ -824,6 +709,27 @@ grid2D::grid2D(gridParams2D p2,
 // 
 // Functions that generate 3D Grid Coordinates
 //
+
+//
+// describeGrid3D generates a diagnostic string used when a grid
+// construction fails.
+//
+static string describeGrid3D(const gridParams3D& grid) {
+    string errmsg = "3D ";
+    errmsg += string_topology(grid.topology);
+    errmsg += ", m cells = " + to_string(grid.m);
+    errmsg += ", n cells = " + to_string(grid.n);
+    errmsg += ", o cells = " + to_string(grid.o);
+    errmsg += ", dx = " + to_string(grid.dx);
+    errmsg += ", dy = " + to_string(grid.dy);
+    errmsg += ", dz = " + to_string(grid.dz) + ", x-Periodic = ";
+    errmsg += grid.bc_isPeriodic[0] ? "YES" : "NO";
+    errmsg += ", y-Periodic = ";
+    errmsg += grid.bc_isPeriodic[1] ? "YES" : "NO";
+    errmsg += ", z-Periodic = ";
+    errmsg += grid.bc_isPeriodic[2] ? "YES." : "NO.";
+    return errmsg;
+}
 
 //
 // n3DGrid creates a 3D grid from 3 input coordinate vectors x, y, 
@@ -913,43 +819,7 @@ void nd3DGrid(const array1D& x, const array1D& y, const array1D& z,
     }
 }
 
-//
-// valid3DCoordinates validates a user-supplied coordinate array 
-// against an expected valid grid coordinate one. If the user did not
-// provide an array of coordinates, and the grid is uniform, the
-// expected value is assigned.
-//
-bool gridBase::valid3DCoordinates(array3D& userInput, 
-                                const array3D& expected,
-                                Real dx, Real dy, Real dz, 
-                                size_t m, size_t n, size_t o,
-                                int sizeMismatchErr,
-                                int badCoordsErr) {
-    if (userInput.data_.is_empty()) {
-        userInput = expected;   // auto-generate
-        return true;
-    }
-    if (userInput.data_.n_rows != expected.data_.n_rows || 
-        userInput.data_.n_cols != expected.data_.n_cols || 
-        userInput.data_.n_slices != expected.data_.n_slices) {
-        string sparams = "m = " + to_string(m) + ", n = ";
-        sparams += to_string(n) + ", o = " + to_string(o) + ", dx = ";
-        sparams += to_string(dx) + ", dy = " + to_string(dy);
-        sparams += ", dz = " + to_string(dz);
-        logGridErr(sizeMismatchErr, "grid3D[construct]", sparams);
-        return false;
-    }
-    if (!numEqualArray(expected, userInput, 4.0)) {//eps*4.0 precision
-        string sparams = "m = " + to_string(m);
-        sparams += ", n = " + to_string(n) + ", o = ";
-        sparams += to_string(o) + ", dx = " + to_string(dx);
-        sparams += ", dy = " + to_string(dy) + ", dz = ";
-        sparams += to_string(dz);
-        logGridErr(badCoordsErr, "grid3D[construct]", sparams);
-        return false;
-    }
-    return true;
-}
+
 
 //
 // Checks whether the member 3D grid is valid or not, and reports all
@@ -980,434 +850,81 @@ bool grid3D::validGrid() {
             break;
         }
 
-        // Generate grid or validate user-provided coordinates
+        // Generate the 1D coordinate arrays used for computing
+        // nodal coordinates (xn, yn, zn), cell centers (xc, yc, zc)
+        // and normal faces (xv, yu, zu). The latter 3 arrays are
+        // the interior points of the center arrays.
         array1D xn(grid.m + 1), yn(grid.n + 1), zn(grid.o + 1);
-        
-        // check for proper allocation of arrays (safety)
-        if (xn.data_.n_elem == grid.m + 1 && 
-            yn.data_.n_elem == grid.n + 1 &&
-            zn.data_.n_elem == grid.o + 1){
-           
-            // Computing or verifying nodal coordinates
-            // xn = (0:m)*dx; and yn = (0:n)*dy and zn = (0:o)*dz
+        array1D xc(grid.m + 2), yc(grid.n + 2), zc(grid.o + 2);
+        array1D xv(grid.m), yu(grid.n), zu(grid.o);
+
+        if (xn.data_.n_elem == grid.m+1 && 
+            yn.data_.n_elem == grid.n+1 &&
+            zn.data_.n_elem == grid.o+1 &&
+            xc.data_.n_elem == grid.m+2 && 
+            yc.data_.n_elem == grid.n+2 &&
+            zc.data_.n_elem == grid.o+2 &&
+            xv.data_.n_elem == grid.m   && 
+            yu.data_.n_elem == grid.n   &&
+            zu.data_.n_elem == grid.o) {
             generateNodalPts(grid.m, grid.dx, xn);
             generateNodalPts(grid.n, grid.dy, yn);
             generateNodalPts(grid.o, grid.dz, zn);
-        } 
-        else{               // problems allocating one of xn, yn, zn
-            string errmsg = "Either xn_dim = ";
-            errmsg += to_string(grid.m+1) + ", yn_dim = ";
-            errmsg += to_string(grid.n+1) + ", or zn_dim = ";
-            errmsg += to_string(grid.o+1) + "could not be allocated";
-            logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC, 
-                "grid3D[construct] nodal coordinates", errmsg);
-            isValid = false;
-        }
-        array3D X(grid.m + 1, grid.n + 1, grid.o + 1, 0.0), 
-                Y(grid.m + 1, grid.n + 1, grid.o + 1, 0.0),
-                Z(grid.m + 1, grid.n + 1, grid.o + 1, 0.0);
-
-        if (X.data_.n_rows   == grid.m + 1 && 
-            X.data_.n_cols   == grid.n + 1 && 
-            X.data_.n_slices == grid.o + 1 &&
-            Y.data_.n_rows   == grid.m + 1 && 
-            Y.data_.n_cols   == grid.n + 1 && 
-            Y.data_.n_slices == grid.o + 1 &&
-            Z.data_.n_rows   == grid.m + 1 && 
-            Z.data_.n_cols   == grid.n + 1 && 
-            Z.data_.n_slices == grid.o + 1 &&
-            xn.data_.n_elem  == grid.m + 1 && 
-            yn.data_.n_elem  == grid.n + 1 &&
-            zn.data_.n_elem  == grid.o + 1){
-            // [grid.nodes_X,grid.nodes_Y,grid.nodes_Z] = 
-            //      nd3Dgrid(xn, yn, zn)
-            nd3DGrid(xn, yn, zn, X, Y, Z);
-            if (X.hasArrayErrors() || Y.hasArrayErrors() || 
-                Z.hasArrayErrors()){
-                isValid = false;    
-                while (X.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    X.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-                while (Y.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    Y.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-                while (Z.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    Z.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-            } 
-            else {
-                if (!valid3DCoordinates(grid.nodes_X, X, grid.dx, 
-                        grid.dy, grid.dz, grid.m + 1, grid.n + 1, 
-                        grid.o + 1, MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
-                        MOLE_ERR_INVALID_NODAL_COORDINATES)){
-                    isValid = false;
-                }
-                if (!valid3DCoordinates(grid.nodes_Y, Y, grid.dx,  
-                        grid.dy, grid.dz, grid.m + 1, grid.n + 1,
-                        grid.o + 1, MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
-                        MOLE_ERR_INVALID_NODAL_COORDINATES)){
-                    isValid = false;
-                }
-                if (!valid3DCoordinates(grid.nodes_Z, Z, grid.dx, 
-                        grid.dy, grid.dz, grid.m + 1, grid.n + 1, 
-                        grid.o + 1, MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
-                        MOLE_ERR_INVALID_NODAL_COORDINATES)){
-                    isValid = false;
-                }
-            } 
-        } else {        // X, Y, Z, xn, yn, or zn was not be allocated
-            string errmsg = "dim1 = ";
-            errmsg += to_string(grid.m + 1) + " X dim2 = ";
-            errmsg += to_string(grid.n + 1) + " X dim3 = ";
-            errmsg += to_string(grid.o + 1);
-            logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC, 
-                "grid3D[construct] Nodal Coordinates", errmsg);
-            isValid = false;
-        }
-                                     
-        // Computing or verifying cell center coordinates
-        // xc = [0, (0.5:m-0.5) * dx, m*dx],  
-        // yc = [0, (0.5:n-0.5) * dy, n*dy], and 
-        // zc = [0, (0.5:o-0.5) * dz, o*dz];
-        // [grid.centers_X, grid.centers_Y, grid.center_Z] = 
-        //          nd2Dgrid(xc, yc, zc); 
-        array1D xc(grid.m + 2), yc(grid.n + 2), zc(grid.o + 2);
-
-        // check for proper allocation of arrays (for safety)
-        if (xc.data_.n_elem == grid.m + 2 && 
-            yc.data_.n_elem == grid.n + 2 && 
-            zc.data_.n_elem == grid.o + 2){
-            // Computing or verifying nodal coordinates
-            // xn = (0:m)*dx; and yn = (0:n)*dy and zn = (0:o)*dz
             generateCenterPts(grid.m, grid.dx, xc);
             generateCenterPts(grid.n, grid.dy, yc);
             generateCenterPts(grid.o, grid.dz, zc);
-        } else {   // problems allocating either array xc, yc, zc
-            string errmsg = "Either xc_dim = ";
-            errmsg += to_string(grid.m+2) + ", yc_dim = ";
-            errmsg += to_string(grid.n+2) + ", or zc_dim = ";
-            errmsg += to_string(grid.o+2) + "could not be allocated";
-            logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC, 
-                "grid3D[construct] center coordinates", errmsg);
+            xv.data_ = xc.data_.subvec(1, grid.m);
+            yu.data_ = yc.data_.subvec(1, grid.n);
+            zu.data_ = zc.data_.subvec(1, grid.o);
+        } else {
+            string errmsg = "one or more 1D coordinate arrays for";
+            errmsg += " m = " + to_string(grid.m) + ", n = ";
+            errmsg += to_string(grid.n) + ", o = ";
+            errmsg += to_string(grid.o) + " could not be allocated";
+            logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC,
+                "grid3D[construct] 1D coordinates", errmsg);
             isValid = false;
+            break;
         }
 
-        X.data_.set_size(grid.m + 2, grid.n + 2, grid.o + 2);
-        Y.data_.set_size(grid.m + 2, grid.n + 2, grid.o + 2);
-        Z.data_.set_size(grid.m + 2, grid.n + 2, grid.o + 2);
-        if (X.data_.n_rows   == grid.m + 2 && 
-            X.data_.n_cols   == grid.n + 2 && 
-            X.data_.n_slices == grid.o + 2 &&
-            Y.data_.n_rows   == grid.m + 2 && 
-            Y.data_.n_cols   == grid.n + 2 && 
-            Y.data_.n_slices == grid.o + 2 &&
-            Z.data_.n_rows   == grid.m + 2 && 
-            Z.data_.n_cols   == grid.n + 2 && 
-            Z.data_.n_slices == grid.o + 2 &&
-            xc.data_.n_elem  == grid.m + 2 && 
-            yc.data_.n_elem  == grid.n + 2 &&
-            zc.data_.n_elem  == grid.o + 2){
-            nd3DGrid(xc, yc, zc, X, Y, Z);
-
-            if (X.hasArrayErrors() || Y.hasArrayErrors() || 
-                Z.hasArrayErrors()){
-                isValid = false;    
-                while (X.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    X.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-                while (Y.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    Y.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-                while (Z.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    Z.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-            } 
-            else {
-                if (!valid3DCoordinates(grid.centers_X, X, grid.dx, 
-                        grid.dy, grid.dz, grid.m + 2, grid.n + 2, 
-                        grid.o + 2, MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
-                        MOLE_ERR_INVALID_CENTER_COORDINATES)){
-                    isValid = false;
-                }
-                if (!valid3DCoordinates(grid.centers_Y, Y, grid.dx,  
-                        grid.dy, grid.dz, grid.m + 2, grid.n + 2,  
-                        grid.o + 2, MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
-                        MOLE_ERR_INVALID_CENTER_COORDINATES)){
-                    isValid = false;
-                }
-                if (!valid3DCoordinates(grid.centers_Z, Z, grid.dx, 
-                        grid.dy, grid.dz, grid.m + 2, grid.n + 2, 
-                        grid.o + 2, MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
-                        MOLE_ERR_INVALID_CENTER_COORDINATES)){
-                    isValid = false;
-                }
-            }
-        } 
-        else {         // X, Y, Z, xc, yc, or zc was not be allocated
-            string errmsg = "dim1 = ";
-            errmsg += to_string(grid.m + 2) + " X dim2 = ";
-            errmsg += to_string(grid.n + 2) + " X dim3 = ";
-            errmsg += to_string(grid.o + 2);
-            logGridErr(MOLE_ERR_FAILED_ARRAY_RESIZE, 
-                "grid3D[construct] Center Coordinates", errmsg);
+        // Build/validate nodal coordinates 
+        if (!buildOrCheck3DCoords(grid.nodes_X, grid.nodes_Y, grid.nodes_Z,
+                xn, yn, zn, grid.dx, grid.dy, grid.dz,
+                grid.m+1, grid.n+1, grid.o+1,
+                MOLE_ERR_GRID_NODAL_SZ_MISMATCH,
+                MOLE_ERR_INVALID_NODAL_COORDINATES))
             isValid = false;
-        }
-        
-        // Computing and validating normal faces 
-        // xv=(0.5:m-0.5)*dx yu=(0.5:n-0.5)*dy and zu=(0.5:o-0.5)*dz; 
-        // xu = xn, yv = yn, zw = zn, xw = xv, yw = yu, zv=zu
-        // ndgrid(xn, yu, zu); dimension (m+1) x n x o
-        // ndgrid(xv, yn, zv); dimension m x (n+1) x o
-        // ndgrid(xw, yw, zn); dimension m x n x (o+1)
-        array1D yu(grid.n), xv(grid.m), zu(grid.o); 
-        // check for successful allocation
-        if (xv.data_.n_elem == grid.m && yu.data_.n_elem == grid.n &&
-            zu.data_.n_elem == grid.o){
-                // xv = xc[1:m], yu = yc[1:n]. zu = zc[1:o]
-                xv.data_ = xc.data_.subvec(1, grid.m);
-                yu.data_ = yc.data_.subvec(1, grid.n);
-                zu.data_ = zc.data_.subvec(1, grid.o);
-            } 
-        else { // problems allocating one of the arrays (xv, yu, zu)
-            string errmsg = "Either xv_dim = ";
-            errmsg += to_string(grid.m) + ", yu_dim = ";
-            errmsg += to_string(grid.n) + ", or zu_dim = ";
-            errmsg += to_string(grid.o) + "could not be allocated";
-            logGridErr(MOLE_ERR_FAILED_ARRAY_ALLOC, 
-                "grid3D[construct] center coordinates", errmsg);
-            isValid = false; 
-        }
 
-        // [grid.faces_u_X, grid.faces_u_Y, grid.faces_u_Z] = 
-        // nd3grid(xu=xn, yu, zu);
-        X.data_.set_size(grid.m+1, grid.n, grid.o);
-        Y.data_.set_size(grid.m+1, grid.n, grid.o);
-        Z.data_.set_size(grid.m+1, grid.n, grid.o);
-        if (X.data_.n_rows   == grid.m + 1 && 
-            X.data_.n_cols   == grid.n && 
-            X.data_.n_slices == grid.o &&
-            Y.data_.n_rows   == grid.m + 1 && 
-            Y.data_.n_cols   == grid.n && 
-            Y.data_.n_slices == grid.o &&
-            Z.data_.n_rows   == grid.m + 1 && 
-            Z.data_.n_cols   == grid.n && 
-            Z.data_.n_slices == grid.o &&
-            xn.data_.n_elem  == grid.m + 1 && 
-            yu.data_.n_elem  == grid.n &&
-            zu.data_.n_elem  == grid.o){
-            
-            nd3DGrid(xn, yu, zu, X, Y, Z);
-            if (X.hasArrayErrors() || Y.hasArrayErrors() || 
-                Z.hasArrayErrors()){
-                isValid = false;    
-                while (X.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    X.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-                while (Y.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    Y.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-                while (Z.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    Z.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-            } 
-            else {
-                if (!valid3DCoordinates(grid.faces_u_X, X, grid.dx,
-                            grid.dy, grid.dz, grid.m + 1, grid.n, 
-                            grid.o, MOLE_ERR_GRID_FACES_SZ_MISMATCH,
-                            MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
-                    isValid = false;
-                }
-                if (!valid3DCoordinates(grid.faces_u_Y, Y, grid.dx, 
-                            grid.dy, grid.dz, grid.m + 1, grid.n, 
-                            grid.o, MOLE_ERR_GRID_FACES_SZ_MISMATCH,
-                            MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
-                    isValid = false;                    
-                }
-                if (!valid3DCoordinates(grid.faces_u_Z, Z, grid.dx, 
-                            grid.dy, grid.dz, grid.m +  1, grid.n, 
-                            grid.o, MOLE_ERR_GRID_FACES_SZ_MISMATCH,
-                            MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
-                    isValid = false;                    
-                }
-            } 
-        }
-        else {
-            string errmsg = "dim1 = ";
-            errmsg += to_string(grid.m + 1) + " X dim2 = ";
-            errmsg += to_string(grid.n) + " X dim3 = ";
-            errmsg += to_string(grid.o);
-            logGridErr(MOLE_ERR_FAILED_ARRAY_RESIZE, 
-                "grid3D[construct] Faces_u Coordinates", errmsg);
-            isValid = false;    
-        }
-        // [grid.faces_v_X, grid.faces_v_Y, grid.faces_v_Z] = 
-        // nd3grid(xv, yv=yn, zv=zu);
-        X.data_.set_size(grid.m, grid.n + 1, grid.o);
-        Y.data_.set_size(grid.m, grid.n + 1, grid.o);
-        Z.data_.set_size(grid.m, grid.n + 1, grid.o);
-        if (X.data_.n_rows   == grid.m && 
-            X.data_.n_cols   == grid.n + 1 && 
-            X.data_.n_slices == grid.o &&
-            Y.data_.n_rows   == grid.m && 
-            Y.data_.n_cols   == grid.n + 1 && 
-            Y.data_.n_slices == grid.o &&
-            Z.data_.n_rows   == grid.m && 
-            Z.data_.n_cols   == grid.n + 1 && 
-            Z.data_.n_slices == grid.o &&
-            xv.data_.n_elem == grid.m && 
-            yn.data_.n_elem == grid.n + 1 &&
-            zu.data_.n_elem == grid.o){
-            nd3DGrid(xv, yn, zu, X, Y, Z);
-            if (X.hasArrayErrors() || Y.hasArrayErrors() || 
-                Z.hasArrayErrors()){
-                isValid = false;    
-                while (X.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    X.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-                while (Y.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    Y.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-                while (Z.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    Z.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-            } 
-            else {
-                if (!valid3DCoordinates(grid.faces_v_X, X, grid.dx, 
-                            grid.dy, grid.dz, grid.m, grid.n + 1, 
-                            grid.o, MOLE_ERR_GRID_FACES_SZ_MISMATCH,
-                            MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
-                    isValid = false;
-                }
-                if (!valid3DCoordinates(grid.faces_v_Y, Y, grid.dx, 
-                            grid.dy, grid.dz, grid.m, grid.n + 1, 
-                            grid.o, MOLE_ERR_GRID_FACES_SZ_MISMATCH,
-                            MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
-                    isValid = false;                    
-                }
-                if (!valid3DCoordinates(grid.faces_v_Z, Z, grid.dx, 
-                            grid.dy, grid.dz, grid.m, grid.n + 1, 
-                            grid.o, MOLE_ERR_GRID_FACES_SZ_MISMATCH,
-                            MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
-                    isValid = false;                    
-                }
-            }
-        } 
-        else {
-            string errmsg = "dim1 = ";
-            errmsg += to_string(grid.m) + " X dim2 = ";
-            errmsg += to_string(grid.n + 1) + " X dim3 = ";
-            errmsg += to_string(grid.o);
-            logGridErr(MOLE_ERR_FAILED_ARRAY_RESIZE, 
-                "grid3D[construct] Faces_v Coordinates", errmsg);
-            isValid = false;    
-        }
-  
-        // [grid.faces_w_X, grid.faces_w_Y, grid.faces_w_Z] = 
-        // nd3grid(xw=xv, yw=yu, zw=zn);
-        X.data_.set_size(grid.m, grid.n, grid.o + 1);
-        Y.data_.set_size(grid.m, grid.n, grid.o + 1);
-        Z.data_.set_size(grid.m, grid.n, grid.o + 1);
-        if (X.data_.n_rows   == grid.m && 
-            X.data_.n_cols   == grid.n && 
-            X.data_.n_slices == grid.o + 1 &&
-            Y.data_.n_rows   == grid.m && 
-            Y.data_.n_cols   == grid.n && 
-            Y.data_.n_slices == grid.o + 1 &&
-            Z.data_.n_rows   == grid.m && 
-            Z.data_.n_cols   == grid.n && 
-            Z.data_.n_slices == grid.o + 1 &&
-            xv.data_.n_elem  == grid.m && 
-            yu.data_.n_elem  == grid.n &&
-            zn.data_.n_elem  == grid.o + 1){
-            nd3DGrid(xv, yu, zn, X, Y, Z);
-            if (X.hasArrayErrors() || Y.hasArrayErrors() || 
-                Z.hasArrayErrors()){
-                isValid = false;    
-                while (X.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    X.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-                while (Y.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    Y.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-                while (Z.hasArrayErrors()){
-                    int errCode;                  // propagate errors
-                    string location, msgparam;
-                    Z.read_ErrorLog(errCode, location, msgparam);
-                    logGridErr(errCode, location, msgparam);
-                }
-            } 
-            else {
-                if (!valid3DCoordinates(grid.faces_w_X, X, grid.dx, 
-                            grid.dy, grid.dz, grid.m, grid.n, 
-                            grid.o+1, MOLE_ERR_GRID_FACES_SZ_MISMATCH,
-                            MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
-                    isValid = false;
-                }
-                if (!valid3DCoordinates(grid.faces_w_Y, Y, grid.dx, 
-                            grid.dy, grid.dz, grid.m, grid.n, 
-                            grid.o+1, MOLE_ERR_GRID_FACES_SZ_MISMATCH,
-                            MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
-                    isValid = false;                    
-                }
-                if (!valid3DCoordinates(grid.faces_w_Z, Z, grid.dx, 
-                            grid.dy, grid.dz, grid.m, grid.n, 
-                            grid.o+1, MOLE_ERR_GRID_FACES_SZ_MISMATCH,
-                            MOLE_ERR_INVALID_NORMAL_FACE_COORDS)){
-                    isValid = false;                    
-                }
-            }
-        } 
-        else {
-            string errmsg = "dim1 = ";
-            errmsg += to_string(grid.m) + " X dim2 = ";
-            errmsg += to_string(grid.n) + " X dim3 = ";
-            errmsg += to_string(grid.o+1);
-            logGridErr(MOLE_ERR_FAILED_ARRAY_RESIZE, 
-            "grid3D[construct] Faces_w Coordinates", errmsg);
-            isValid = false;    
-        }
+        // Build/validate cell center coordinates
+        if (!buildOrCheck3DCoords(grid.centers_X, grid.centers_Y, grid.centers_Z,
+                xc, yc, zc, grid.dx, grid.dy, grid.dz,
+                grid.m+2, grid.n+2, grid.o+2,
+                MOLE_ERR_GRID_CENTERS_SZ_MISMATCH,
+                MOLE_ERR_INVALID_CENTER_COORDINATES))
+            isValid = false;
+
+        // Build/validate normal face coordinates
+            if (!buildOrCheck3DCoords(grid.faces_u_X, grid.faces_u_Y, grid.faces_u_Z,
+                xn, yu, zu, grid.dx, grid.dy, grid.dz,
+                grid.m+1, grid.n, grid.o,
+                MOLE_ERR_GRID_FACES_SZ_MISMATCH,
+                MOLE_ERR_INVALID_NORMAL_FACE_COORDS))
+            isValid = false;
+
+            if (!buildOrCheck3DCoords(grid.faces_v_X, grid.faces_v_Y, grid.faces_v_Z,
+                xv, yn, zu, grid.dx, grid.dy, grid.dz,
+                grid.m, grid.n+1, grid.o,
+                MOLE_ERR_GRID_FACES_SZ_MISMATCH,
+                MOLE_ERR_INVALID_NORMAL_FACE_COORDS))
+            isValid = false;
+
+        if (!buildOrCheck3DCoords(grid.faces_w_X, grid.faces_w_Y, grid.faces_w_Z,
+                xv, yu, zn, grid.dx, grid.dy, grid.dz,
+                grid.m, grid.n, grid.o+1,
+                MOLE_ERR_GRID_FACES_SZ_MISMATCH,
+                MOLE_ERR_INVALID_NORMAL_FACE_COORDS))
+            isValid = false;
+
         break;
     }
     case 'c':  // User must provide at least nodal coordinates
@@ -1450,52 +967,11 @@ bool grid3D::validGrid() {
 // users need to providal nodal grid information
 //
 grid3D::grid3D(gridParams3D p3): gridBase(3) {
-    grid.m = p3.m; 
-    grid.n = p3.n;
-    grid.o = p3.o;
-    grid.topology = p3.topology;
-    grid.dx = p3.dx; 
-    grid.dy = p3.dy;
-    grid.dz = p3.dz;
-    grid.bc_isPeriodic[0] = p3.bc_isPeriodic[0];
-    grid.bc_isPeriodic[1] = p3.bc_isPeriodic[1]; 
-    grid.bc_isPeriodic[2] = p3.bc_isPeriodic[2];
-    grid.nodes_X = p3.nodes_X;
-    grid.nodes_Y = p3.nodes_Y;
-    grid.nodes_Z = p3.nodes_Z;
-    grid.centers_X = p3.centers_X;
-    grid.centers_Y = p3.centers_Y;
-    grid.centers_Z = p3.centers_Z;
-    grid.faces_u_X = p3.faces_u_X;
-    grid.faces_u_Y = p3.faces_u_Y; 
-    grid.faces_u_Z = p3.faces_u_Z;
-    grid.faces_v_X = p3.faces_v_X;
-    grid.faces_v_Y = p3.faces_v_Y;
-    grid.faces_v_Z = p3.faces_v_Z;
-    grid.faces_w_X = p3.faces_w_X;
-    grid.faces_w_Y = p3.faces_w_Y;
-    grid.faces_w_Z = p3.faces_w_Z;
+    grid = p3; // memberwise assignement of the gridParams2D struct 
 
-    if (!validGrid()){
-        // log error that grid was not generated
-        string errmsg = "3D ";
-        errmsg += string_topology(grid.topology);
-        errmsg += ", m cells = " + to_string(grid.m);
-        errmsg += ", n cells = " + to_string(grid.n);
-        errmsg += ", o cells = " + to_string(grid.o);
-        errmsg += ", dx = "+to_string(grid.dx);
-        errmsg += ", dy = "+to_string(grid.dy);
-        errmsg += ", dz = "+to_string(grid.dz)+", x-Periodic = ";
-        if (grid.bc_isPeriodic[0]) errmsg += "YES";
-        else errmsg +="NO";
-        errmsg += ", y-Periodic = ";
-        if (grid.bc_isPeriodic[1]) errmsg += "YES";
-        else errmsg +="NO"; 
-        errmsg += ", z-Periodic = ";
-        if (grid.bc_isPeriodic[2]) errmsg += "YES.";
-        else errmsg +="NO.";
-        logGridErr(MOLE_ERR_GRID_CONSTRUCTION_FAILED, 
-                "grid3D[grid3D constructor]", errmsg);
+     if (!validGrid()){
+        logGridErr(MOLE_ERR_GRID_CONSTRUCTION_FAILED,
+                "grid3D[grid3D constructor]", describeGrid3D(grid));
     }
 }
 
@@ -1507,79 +983,27 @@ grid3D::grid3D(gridParams3D p3): gridBase(3) {
 //
 grid3D::grid3D(gridParams3D p3, 
                 const stack<MOLE_Errors>& inerrs): gridBase(3) {
-    grid.m = p3.m; 
-    grid.n = p3.n;
-    grid.o = p3.o;
-    grid.topology = p3.topology;
-    grid.dx = p3.dx; 
-    grid.dy = p3.dy;
-    grid.dz = p3.dz;
-    grid.bc_isPeriodic[0] = p3.bc_isPeriodic[0];
-    grid.bc_isPeriodic[1] = p3.bc_isPeriodic[1]; 
-    grid.bc_isPeriodic[2] = p3.bc_isPeriodic[2];
-    grid.nodes_X = p3.nodes_X;
-    grid.nodes_Y = p3.nodes_Y;
-    grid.nodes_Z = p3.nodes_Z;
-    grid.centers_X = p3.centers_X;
-    grid.centers_Y = p3.centers_Y;
-    grid.centers_Z = p3.centers_Z;
-    grid.faces_u_X = p3.faces_u_X;
-    grid.faces_u_Y = p3.faces_u_Y; 
-    grid.faces_u_Z = p3.faces_u_Z;
-    grid.faces_v_X = p3.faces_v_X;
-    grid.faces_v_Y = p3.faces_v_Y;
-    grid.faces_v_Z = p3.faces_v_Z;
-    grid.faces_w_X = p3.faces_w_X;
-    grid.faces_w_Y = p3.faces_w_Y;
-    grid.faces_w_Z = p3.faces_w_Z;
-
-    // scan the error log for previous errors
-    stack<MOLE_Errors> tmp_stk = inerrs;
-    while (!tmp_stk.empty()){
-        logGridErr(tmp_stk.top().errCode, tmp_stk.top().errLocation,
-                    tmp_stk.top().paramError);
-        tmp_stk.pop();
-    }
+    grid = p3;  // memberwise assignement of the gridParams2D struct 
+    mergeErrors(inerrs);
 
     if (!validGrid()){
-        // log error that grid was not generated
-        string errmsg = "3D ";
-        errmsg += string_topology(grid.topology);
-        errmsg += ", m cells = " + to_string(grid.m);
-        errmsg += ", n cells = " + to_string(grid.n);
-        errmsg += ", o cells = " + to_string(grid.o);
-        errmsg += ", dx = "+to_string(grid.dx);
-        errmsg += ", dy = "+to_string(grid.dy);
-        errmsg += ", dz = "+to_string(grid.dz)+", x-Periodic = ";
-        if (grid.bc_isPeriodic[0]) errmsg += "YES";
-        else errmsg +="NO";
-        errmsg += ", y-Periodic = ";
-        if (grid.bc_isPeriodic[1]) errmsg += "YES";
-        else errmsg +="NO"; 
-        errmsg += ", z-Periodic = ";
-        if (grid.bc_isPeriodic[2]) errmsg += "YES.";
-        else errmsg +="NO.";
-        logGridErr(MOLE_ERR_GRID_CONSTRUCTION_FAILED, 
-                "grid3D[grid3D constructor]", errmsg);
+        logGridErr(MOLE_ERR_GRID_CONSTRUCTION_FAILED,
+                "grid3D[grid3D constructor]", describeGrid3D(grid));
     }
 }
+
 // ------------------------------------------------------------------
 //
 // MOLE gridNull Class methods (declarations in MOLE_grid.h)
 //
 // ------------------------------------------------------------------
+
 //
 // gridNull sole constructor requires a paramsNull struct and errors
 //
 gridNull::gridNull(const paramsNull in_p, 
                 const stack<MOLE_Errors>& inerrs): gridBase(0){
-    // scan the error log for previous errors
-    stack<MOLE_Errors> tmp_stk = inerrs;
-    while (!tmp_stk.empty()){
-        logGridErr(tmp_stk.top().errCode, tmp_stk.top().errLocation,
-                    tmp_stk.top().paramError);
-        tmp_stk.pop();
-    }
+    mergeErrors(inerrs);
     ErrData.num_errs = in_p.num_errs;
     if(ErrData.num_errs == 0){
         ErrData.num_errs  = inerrs.size();
@@ -1588,6 +1012,7 @@ gridNull::gridNull(const paramsNull in_p,
     }
     ErrData.type_errs.push("MOLE Grid");
 }
+
 // ----------------------------------------------------------------
 // 
 // gridVar makeGrid is a factory function that works for any of the 3 

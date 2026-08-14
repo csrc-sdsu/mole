@@ -139,7 +139,6 @@ public:
 // small floating-point differences due to computation.
 //
 template <typename ArrayType>
-
 bool numEqualArray(const ArrayType& a1, const ArrayType& a2,
                     double tolFactor) { 
     // the array type is checked at compile time only
