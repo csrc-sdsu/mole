@@ -5,7 +5,8 @@
  SPDX-License-Identifier: GPL-3.0-or-later
  Copyright (c) 2008-2024 San Diego State University Research 
  Foundation (SDSURF).
- See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+ See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for 
+ details.
 --------------------------------------------------------------------
 File created: 06-24-2026
 ====================================================================
@@ -13,12 +14,11 @@ File created: 06-24-2026
 
 # Top subdirectory for MOLE 2.0 C++ files
 
-Subdirectory and Pathname: **mole/cpp**
+Subdirectory and Pathname: **mole/cpp/tests**
 
 ## Purpose
 
-Top subdirectory for the MOLE 2.0 C++ implementation.
-It contains the top CMakefile.list.
+MOLE 2.0 C++ Top subdirectory for the test suite (regression testing)
 
 ## MOLE C++ 2.0 Directory structure
 
@@ -29,24 +29,15 @@ mole/
 |   │── doc/
 |   │── examples
 |   |── src/
-|   │   ├── boundaries
-|   │   └── grids
-|   │   └── include
-|   │   └── operators
-|   │   └── sys
-|   │   └── utils
 |   |── tests
-
-:
-: __Other MOLE 2.0 and v1.2.0 files, including other language__
-: __implementations__
-:
-├── .gitignore
-└── README.md
+|   |   ├── arrays
+|   │   └── errors   
+|   │   └── grids
+|   │   └── support
+|   │   └── utils
 ```
 
 ## Other MOLE 2.0 C++ Files in this directory
 
-+ CMakeLists.txt which builds a MOLE 2.0 C++ version of the library
-and all its functional modules
++ CMakeLists.txt which builds tests for MOLE 2.0 C++
 + README.md (this file)
