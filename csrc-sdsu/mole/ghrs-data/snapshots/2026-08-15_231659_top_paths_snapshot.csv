@@ -1,0 +1,11 @@
+url_path,views_total,views_unique
+/csrc-sdsu/mole,91,33
+/csrc-sdsu/mole/actions,43,2
+/csrc-sdsu/mole/issues,25,11
+/csrc-sdsu/mole/pulls,24,10
+/csrc-sdsu/mole/blob/pymole-feature-add-1d-operators/.github/workflows/python-docs.yml,18,2
+/csrc-sdsu/mole/tree/feat_dev/mole_2.0,17,3
+/csrc-sdsu/mole/tree/feat_dev/mole_2.0/cpp,13,2
+/csrc-sdsu/mole/tree/cpp_dev/mole2_0_grid_implementation,11,1
+/csrc-sdsu/mole/tree/pymole-feature-add-1d-operators,10,3
+/csrc-sdsu/mole/blob/pymole-feature-add-1d-operators/.github/workflows/ci.yml,10,2
