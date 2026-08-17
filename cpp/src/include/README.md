@@ -35,7 +35,7 @@ mechanism for the library. Users have full control on how to handle
 exceptions, the MOLE library only reports them and does not cause an
 application's execution to stop.
 + **MOLE_grids.h**: MOLE grid classes implementation, including error
-handling and reportingo
+handling and reporting
 + **README.md**: (this file)
 + **utilis.h**: header file for all MOLE utility functions, which
 include implementations that support the MOLE library operations.
