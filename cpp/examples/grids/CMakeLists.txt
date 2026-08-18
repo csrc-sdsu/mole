@@ -5,9 +5,13 @@ cmake_minimum_required(VERSION 3.14)
 # the use of the MOLE Library
 # ---------------------------------------------------------------
 set(MOLE_EXAMPLE_SOURCES
-    grid1D_basic.cpp        # basic 1D grid generation
-    grid2D_basic.cpp        # basic 2D grid generation
-    err_grid2D_basic.cpp        # basic 2D grid generation
+    grid1D_basic.cpp                # basic 1D grid generation
+    grid2D_basic.cpp                # basic 2D grid generation
+    err_grid2D_basic.cpp            # basic 2D grid generation
+    gridBuilder1D_basic.cpp         # 1D grid through gridBuilder
+    gridBuilder2D_basic.cpp         # 2D grid with periodicity
+    gridBuilder_arg_order.cpp       # attribute order independence
+    gridBuilder_error_handling.cpp  # parse-time error reporting
 )
 
 # Builds all the examples listed in MOLE_EXAMPLE_SOURCES
@@ -19,14 +23,11 @@ foreach(_mole_example_src IN LISTS MOLE_EXAMPLE_SOURCES)
             "MOLE example source listed in examples/CMakeLists.txt "
             "is missing: ${_mole_example_src}")
     endif()
-
     get_filename_component(_mole_example_name
                             ${_mole_example_src} NAME_WE)
-
     add_executable(${_mole_example_name} ${_mole_example_src})
     target_link_libraries(${_mole_example_name} PRIVATE MOLE::mole)
     target_compile_options(${_mole_example_name} PRIVATE -Wall -Wextra)
-
     # Group all example binaries under a single "examples" target so
     # `cmake --build . --target examples` builds just these, without
     # also building the (potentially much larger) test suite.
