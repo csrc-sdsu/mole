@@ -2,10 +2,11 @@ cmake_minimum_required(VERSION 3.14)
 
 # ---------------------------------------------------------------
 # The MOLE library itself: grids, arrays, error handling, utils.
-# ---------------------------------------------------------------
+# --------------------------------------------------------------
 add_library(mole
     grids/MOLE_arrays.cpp
     grids/MOLE_grids.cpp
+    grids/grid_builder.cpp
     sys/MOLE_Errors.cpp
     utils/utils.cpp
 )
