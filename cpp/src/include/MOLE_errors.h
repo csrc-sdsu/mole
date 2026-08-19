@@ -219,7 +219,7 @@ static unordered_map<int, string> MOLE_errors_messages = {
     // 300
     {MOLE_ERR_DIVISION_BY_ZERO, "Division by zero."},
     // 301
-    {MOLE_ERR_INF_VALUE, "Infinite value detected."},
+    {MOLE_ERR_INF_VALUE, "Infinity value detected."},
     // 302
     {MOLE_ERR_NAN_VALUE, "NaN value detected."},
 };
