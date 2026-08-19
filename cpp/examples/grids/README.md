@@ -31,4 +31,12 @@ mechanisms works in the context of grids
 instantiation (checking for errors)
 + **grid2D_basic.cpp**:a C++ example of a 1D grid declaration and
 instantiation (checking for errors)
++ **gridBuilder_arg_order.cpp**: gridBuilder examples with calls that
+pass arguments in different orders and create 2D grids
++ **gridBuilder_error_handling.cpp**: creates 5 unsuccesful examples
+of grid declarations through gridBuilder that results in errors
++ **gridBuilder1D_basic.cpp**: simple example of building a MOLE 1D
+grid using the gridBuilder with a variable length and order arguments
++ **gridBuilder2D_basic.cpp**: simple example of building a MOLE 2D
+grid using the gridBuilder with a variable length and order arguments
 + **README.md**: (this file)

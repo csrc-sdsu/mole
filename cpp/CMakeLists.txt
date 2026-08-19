@@ -154,6 +154,7 @@ set(LINK_LIBS ${ARMADILLO_LIBRARIES}
 add_subdirectory(src)
 add_subdirectory(tests)
 add_subdirectory(examples/grids)
+add_subdirectory(examples/sys)
 
 # Custom target to build everything
 add_custom_target(all_build DEPENDS mole_C++ tests_C++ examples_C++ tests_matlab_octave)
