@@ -208,15 +208,12 @@ static unordered_map<int, string> MOLE_errors_messages = {
     {MOLE_ERR_FAILED_ARRAY_ALLOC, "Array allocation failed."},
     // 204
     {MOLE_ERR_FAILED_ARRAY_RESIZE, "Array resize operation failed."},
-<<<<<<< HEAD
     // 300
     {MOLE_ERR_DIVISION_BY_ZERO, "Division by zero."},
     // 301
     {MOLE_ERR_INF_VALUE, "Infinity value detected."},
     // 302
     {MOLE_ERR_NAN_VALUE, "NaN value detected."},
-=======
->>>>>>> parent of 6416cb43 (updated README.md files + more examples)
 };
 
 struct MOLE_Errors {
