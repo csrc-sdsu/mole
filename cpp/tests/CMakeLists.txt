@@ -18,6 +18,7 @@ set(MOLE_TEST_SOURCES
     grids/test_grid3D.cpp
     grids/test_makeGrid.cpp
     grids/test_grid_builder.cpp
+    grids/test_debug_modes.cpp
 )
 
 add_custom_target(mole_tests)
