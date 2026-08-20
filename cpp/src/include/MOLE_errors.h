@@ -7,7 +7,7 @@
  */
 
 /*
- * @file MOLE_Errors.h
+ * @file MOLE_errors.h
  *
  * @brief Error handling for the MOLE library.
  *
@@ -63,6 +63,10 @@ using namespace std;
 // aborts execution). The MOLE library will report errors to standard
 // output and abort the execution (e.g., code exits).
 
+// A debug mode governs only what happens to a MOLE object that
+// failed validation. An object that validated is unaffected by the
+// mode it was built with. The mode is not a property of the object;
+// it is applied once, at construction, and is not stored.
 #define DEBUG_DEFAULT_MD 0
 #define DEBUG_REPORTS_STDOUT_MD 1
 #define DEBUG_AND_ABORT_MD 2
@@ -72,7 +76,7 @@ using namespace std;
 // of MOLE functions. These error symbols are used throughout the 
 // MOLE library to provide consistent error handling and reporting.
 //
-// Initialization Errors. 10 - 100 gridBuilder errors
+// Initialization Errors. 10 - 99 gridBuilder errors
 //
 #define MOLE_ERR_GRID_UNCHECKED 11   // Grid has not been validated
 #define MOLE_ERR_INVALID_GRID_ARGS 12 // Grid is invalid
@@ -125,23 +129,28 @@ using namespace std;
 // for printing error messages in the MOLE library.
 //
 static unordered_map<int, string> MOLE_errors_messages = {
-    // 001
+    // 011
     {MOLE_ERR_GRID_UNCHECKED, 
     "Grid has not been validated, call validateGrid() first"},
-     // 002
+     // 012
     {MOLE_ERR_INVALID_GRID_ARGS, 
     "Error(s) in input parameters, resulting MOLE grid is invalid."},
-     // 003
+     // 013
     {MOLE_ERR_GRID_CONSTRUCTION_FAILED,
     "Grid construction failed, review the list of errors"},
-     // 004
-    {MAKE_GRID_INVALID_INPUT_ARGS, ""},
-    // 005
-    {MAKE_GRID_MISSING_ARGS,""},
-    // 006 
-    {MAKE_GRID_UNKNOWN_ATTRIBUTE,""},
-    // 007
-    {MAKE_GRID_DUPLICATE_ATTRIBUTES,""},
+     // 014
+    {MAKE_GRID_INVALID_INPUT_ARGS, 
+    "Grid attribute value has the wrong type for that attribute"},
+    // 015
+    {MAKE_GRID_MISSING_ARGS,
+    "A required grid attribute was not supplied"},
+    // 016 
+    {MAKE_GRID_UNKNOWN_ATTRIBUTE,
+    "Not a MOLE grid attribute name. Parsing stops here, because "
+    "the type of the value following an unknown name is unknown"},
+    // 017
+    {MAKE_GRID_DUPLICATE_ATTRIBUTES,
+    "Grid attribute supplied more than once"},
     // 100
     {MOLE_ERR_INVALID_GRID_DIM, 
     "Invalid grid dimension entered. Valid values are 1, 2, or 3"},
@@ -241,7 +250,12 @@ void MOLEerr_log(stack<MOLE_Errors>& errorStack, int errCode,
 // 3. Checks whether the error stack contains a specific error code
 bool MOLEerr_contains(const stack<MOLE_Errors>& errorStack, int targetCode);
 
-// 4. Checks whether there are any errors in the stack
+// 4. Checks whether there are any errors in the stack. A grid's
+// stack carries MOLE_ERR_GRID_UNCHECKED from construction until
+// validation removes it, so this reports true on a grid that has
+// not been validated yet, and on a valid grid that merged errors
+// from an upstream MOLE object. Use isValidatedGrid() to ask
+// whether the object itself is usable.
 bool MOLEerr_haserrors(const stack<MOLE_Errors>& errorStack);
 
 // 5. Removes a specific error from the stack
