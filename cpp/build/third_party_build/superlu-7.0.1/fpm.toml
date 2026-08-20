@@ -1,4 +1,0 @@
-name = "SuperLU"
-
-[install]
-library = true

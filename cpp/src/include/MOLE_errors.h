@@ -1,9 +1,8 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-or-later
- * Copyright (c) 2008-2024 San Diego State University Research 
- * Foundation (SDSURF).
- * See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html 
- * for details.
+ * Copyright (c) 2008-2024 San Diego State University Research Foundation
+ * (SDSURF).
+ * See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
  */
 
 /*
@@ -72,15 +71,15 @@ using namespace std;
 // of MOLE functions. These error symbols are used throughout the 
 // MOLE library to provide consistent error handling and reporting.
 //
-// Initialization Errors. 10 - 100 gridBuilder errors
+// Initialization Errors. 1 - 100 gridBuilder errors
 //
-#define MOLE_ERR_GRID_UNCHECKED 11   // Grid has not been validated
-#define MOLE_ERR_INVALID_GRID_ARGS 12 // Grid is invalid
-#define MOLE_ERR_GRID_CONSTRUCTION_FAILED 13
-#define MAKE_GRID_INVALID_INPUT_ARGS 14
-#define MAKE_GRID_MISSING_ARGS 15
-#define MAKE_GRID_UNKNOWN_ATTRIBUTE 16
-#define MAKE_GRID_DUPLICATE_ATTRIBUTES 17
+#define MOLE_ERR_GRID_UNCHECKED 1   // Grid has not been validated
+#define MOLE_ERR_INVALID_GRID_ARGS 2 // Grid is invalid
+#define MOLE_ERR_GRID_CONSTRUCTION_FAILED 3
+#define MAKE_GRID_INVALID_INPUT_ARGS 4
+#define MAKE_GRID_MISSING_ARGS 5
+#define MAKE_GRID_UNKNOWN_ATTRIBUTE 6
+#define MAKE_GRID_DUPLICATE_ATTRIBUTES 7
 //
 // Grid definition Errors. Error codes 100-199
 //
@@ -105,20 +104,13 @@ using namespace std;
 #define MOLE_ERR_INVALID_NORMAL_FACE_COORDS 118 // invalid coords
 
 //
-// Flat array defition Errors. Error codes 200-299
+// Flat array defition Errors. sError codes 200-299
 //
 #define MOLE_ERR_INVALID_ARRAY_SIZE 200 //invalid array sizes
 #define MOLE_ERR_ARRAY_SIZE_OVERFLOW 201 // array allocation overflow
 #define MOLE_ERR_ARRAY_INDEX_OUTBOUNDS 202 //array index out of bounds
 #define MOLE_ERR_FAILED_ARRAY_ALLOC 203 // array alloc failed
 #define MOLE_ERR_FAILED_ARRAY_RESIZE 204 // array resize failed
-
-//
-// MD Operators and Numerical Errors codes 300 - 600
-//
-#define MOLE_ERR_DIVISION_BY_ZERO 300
-#define MOLE_ERR_INF_VALUE 301
-#define MOLE_ERR_NAN_VALUE 302
 
 //
 // Dictionary of error codes and their corresponding messages 
@@ -216,12 +208,15 @@ static unordered_map<int, string> MOLE_errors_messages = {
     {MOLE_ERR_FAILED_ARRAY_ALLOC, "Array allocation failed."},
     // 204
     {MOLE_ERR_FAILED_ARRAY_RESIZE, "Array resize operation failed."},
+<<<<<<< HEAD
     // 300
     {MOLE_ERR_DIVISION_BY_ZERO, "Division by zero."},
     // 301
     {MOLE_ERR_INF_VALUE, "Infinity value detected."},
     // 302
     {MOLE_ERR_NAN_VALUE, "NaN value detected."},
+=======
+>>>>>>> parent of 6416cb43 (updated README.md files + more examples)
 };
 
 struct MOLE_Errors {

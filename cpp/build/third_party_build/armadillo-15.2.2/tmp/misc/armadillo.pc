@@ -1,9 +1,0 @@
-libdir=/Users/drummond/Documents/SDSU/GitHub/mole/cpp/build/third_party_install/armadillo-15.2.2/lib
-includedir=/Users/drummond/Documents/SDSU/GitHub/mole/cpp/build/third_party_install/armadillo-15.2.2/include
-
-Name: armadillo
-Description: C++ library for linear algebra and scientific computing with MATLAB-like syntax
-URL: https://arma.sourceforge.net
-Version: 15.2.2
-Cflags: -I${includedir}
-Libs: -L${libdir} -larmadillo

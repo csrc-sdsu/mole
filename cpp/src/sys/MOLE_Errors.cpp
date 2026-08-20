@@ -82,7 +82,7 @@ void MOLEerr_remove(stack<MOLE_Errors>& errorStack, int targetCode) {
 // in the error stack. It is used inside MOLEerr_print.
 void MOLEerr_print_args(const string& strargx) {
     if (!strargx.empty()) {
-        cout << " with arg value(s): " << strargx << endl;
+        cout << "with arg value(s): " << strargx << endl;
     } else {
         cout << endl;
     }
@@ -93,7 +93,7 @@ void writeErrtoStdOut(int errNum, int errCode, string errLocation,
                       string errParams, const std::string& errMsg) {
     cout << "Error #" << errNum << ": MOLE Error code [" << 
           errCode << "] - "<< errMsg << endl;
-    cout << "occurred inside: " << errLocation;
+    cout << "occurred inside:" << errLocation;
           MOLEerr_print_args(errParams);
 }
 
@@ -112,7 +112,7 @@ std::string getDateTimeString() {
 void MOLEerr_write_args(std::ofstream& ofile, 
                         const string& strargx) {
     if (!strargx.empty()) {
-        ofile << " with arg value(s): " << strargx << endl;
+        ofile << "with arg value(s): " << strargx << endl;
     } else {
         ofile << endl;
     }
@@ -124,7 +124,7 @@ void writeErrtoFile(std::ofstream& ofile, int errNum, int errCode,
                   const std::string& errMsg) {
     ofile << "Error #" << errNum << ": MOLE Error code [" << 
           errCode << "] - "<< errMsg << endl;
-    ofile << " occurred inside: " << errLocation;
+    ofile << "occurred inside:" << errLocation;
           MOLEerr_write_args(ofile, errParams);
 }
 
@@ -157,7 +157,7 @@ void MOLEerr_print(const stack<MOLE_Errors>& errorStack){
                             err.paramError, errMsg->second);
         } else {
             cout << "Error #" << i << ": Invalid MOLE Error code [" 
-                 << err.errCode << "] - "<< "occurred inside: " 
+                 << err.errCode << "] - "<< "occurred inside:" 
                  << err.errLocation;
             MOLEerr_print_args(err.paramError);
         }
