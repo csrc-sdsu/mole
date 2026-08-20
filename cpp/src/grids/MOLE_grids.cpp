@@ -5,7 +5,7 @@
 */
  
 /*
- * @file MOLE_grid.cpp
+ * @file MOLE_grids.cpp
  * 
  * @brief MOLE Grid Implementations
  * 
@@ -14,6 +14,8 @@
  */
 
 #include "MOLE_grids.h"
+
+#include <cstdlib> // abort() for DEBUG_AND_ABORT_MD
 
 // ------------------------------------------------------------------
 //                      gridBase Errors Implementation
@@ -380,7 +382,7 @@ bool gridBase::buildOrCheck3DCoords(array3D& outX, array3D& outY,
 
 // ------------------------------------------------------------------
 //
-// MOLE 1D Grid Class methods (declarations in MOLE_grid.h)
+// MOLE 1D Grid Class methods (declarations in MOLE_grids.h)
 //
 // ------------------------------------------------------------------
 
@@ -490,6 +492,16 @@ grid1D::grid1D(const gridParams1D p1): gridBase(1) {
 }
 
 //
+// Like the grid1D constructor above, and applies a MOLE debug mode
+// to the result. The delegated-to constructor has already run
+// validGrid() by the time the body executes.
+//
+grid1D::grid1D(const gridParams1D p1, size_t debug_mode)
+                : grid1D(p1) {
+    applyDebugMode(debug_mode);
+}
+
+//
 // Like the grid1D constructor, this constructor also creates and 
 // validates a user supplied grid. The similar minimum requirements
 // apply to a gridParams1D. The inners contains previously logged
@@ -506,9 +518,19 @@ grid1D::grid1D(const gridParams1D p1,
     }
 }
 
+//
+// Like the grid1D constructor above, and applies a MOLE debug mode
+// to the result.
+//
+grid1D::grid1D(const gridParams1D p1,
+                const stack<MOLE_Errors>& inerrs,
+                size_t debug_mode) : grid1D(p1, inerrs) {
+    applyDebugMode(debug_mode);
+}
+
 // ------------------------------------------------------------------
 //
-// MOLE 2D Grid Class methods (declarations in MOLE_grid.h)
+// MOLE 2D Grid Class methods (declarations in MOLE_grids.h)
 //
 // ------------------------------------------------------------------
 
@@ -724,6 +746,14 @@ grid2D::grid2D(gridParams2D p2): gridBase(2) {
 }
 
 //
+// Like the grid2D constructor above, and applies a MOLE debug mode
+// to the result.
+//
+grid2D::grid2D(gridParams2D p2, size_t debug_mode) : grid2D(p2) {
+    applyDebugMode(debug_mode);
+}
+
+//
 // Like the grid2D constructor, this constructor also creates and 
 // validates a user supplied grid. The similar minimum requirements
 // apply to a gridParams2D. The inners contains previously logged
@@ -741,9 +771,19 @@ grid2D::grid2D(gridParams2D p2,
     }
 }
 
+//
+// Like the grid2D constructor above, and applies a MOLE debug mode
+// to the result.
+//
+grid2D::grid2D(gridParams2D p2,
+                const stack<MOLE_Errors>& inerrs,
+                size_t debug_mode) : grid2D(p2, inerrs) {
+    applyDebugMode(debug_mode);
+}
+
 // ------------------------------------------------------------------
 //
-// MOLE 3D Grid Class methods (declarations in MOLE_grid.h)
+// MOLE 3D Grid Class methods (declarations in MOLE_grids.h)
 //
 // ------------------------------------------------------------------
 
@@ -1018,6 +1058,14 @@ grid3D::grid3D(gridParams3D p3): gridBase(3) {
 }
 
 //
+// Like the grid3D constructor above, and applies a MOLE debug mode
+// to the result.
+//
+grid3D::grid3D(gridParams3D p3, size_t debug_mode) : grid3D(p3) {
+    applyDebugMode(debug_mode);
+}
+
+//
 // Like the grid3D constructor, this constructor also creates and 
 // validates a user supplied grid. The similar minimum requirements
 // apply to a gridParams3D. The inners contains previously logged
@@ -1034,14 +1082,25 @@ grid3D::grid3D(gridParams3D p3,
     }
 }
 
+//
+// Like the grid3D constructor above, and applies a MOLE debug mode
+// to the result.
+//
+grid3D::grid3D(gridParams3D p3,
+                const stack<MOLE_Errors>& inerrs,
+                size_t debug_mode) : grid3D(p3, inerrs) {
+    applyDebugMode(debug_mode);
+}
+
 // ------------------------------------------------------------------
 //
-// MOLE gridNull Class methods (declarations in MOLE_grid.h)
+// MOLE gridNull Class methods (declarations in MOLE_grids.h)
 //
 // ------------------------------------------------------------------
 
 //
-// gridNull sole constructor requires a paramsNull struct and errors
+// gridNull sole constructor requires a paramsNull struct and errors.
+// It is private; makeGridNull is the only caller.
 //
 gridNull::gridNull(const paramsNull in_p, 
                 const stack<MOLE_Errors>& inerrs): gridBase(0){
@@ -1053,6 +1112,16 @@ gridNull::gridNull(const paramsNull in_p,
         ErrData.num_errs += inerrs.size();
     }
     ErrData.type_errs.push("MOLE Grid");
+}
+
+//
+// makeGridNull is the only entry point to the gridNull constructor.
+// It exists so that makeGrid can produce the failure case without
+// opening the constructor to users.
+//
+gridNull makeGridNull(const paramsNull in_p,
+                const stack<MOLE_Errors>& inerrs){
+    return gridNull(in_p, inerrs);
 }
 
 // ----------------------------------------------------------------
@@ -1076,7 +1145,7 @@ gridVar makeGrid(paramVars params, const stack<MOLE_Errors>& errs){
         } else if constexpr (std::is_same_v<T, gridParams3D>){
             return grid3D(p, errs);
         } else if constexpr (std::is_same_v<T, paramsNull>){
-            return gridNull(p, errs);
+            return makeGridNull(p, errs);
         }
         
     }, params);
@@ -1091,4 +1160,3 @@ bool isValidGrid(gridVar& g) {
     return std::visit([](auto&& gridObj) 
     { return gridObj.validGrid(); }, g);
 }
-
