@@ -22,6 +22,7 @@
 #include <cstdarg>
 #include <cstring>
 #include <string>
+#include <variant>
 #include <vector>
 
 namespace {
@@ -53,6 +54,11 @@ gridRaw parse_va_args(std::stack<MOLE_Errors>& errs,
             g.dy = va_arg(ap, double);
         else if (std::strcmp(name, "dz") == 0) 
             g.dz = va_arg(ap, double);
+
+        // The MOLE debug modes are integer macros. An unrecognized
+        // value is not rejected here; applyDebugMode reports it.
+        else if (std::strcmp(name, "debug") == 0)
+            g.debug = va_arg(ap, int);
 
         // char promotes to int through varargs; read int, store char.
         else if (std::strcmp(name, "topology") == 0)
@@ -270,6 +276,39 @@ gridParams3D narrow3D(const gridRaw& g) {
     return p;
 }
 
+// buildGrid runs the dispatch that turns a parsed gridRaw into a
+// gridVar. It is split out of gridBuilder_impl so that every path,
+// including the failure paths, funnels through a single point where
+// the debug mode is applied.
+gridVar buildGrid(std::stack<MOLE_Errors>& errs, const gridRaw& g,
+                    int dim) {
+    // A parse-time failure means the grid cannot be built. the error
+    // MOLE_ERR_INVALID_GRID_ARGS sits on top of the error log; the
+    // errors beneath it will provide the details. A paramsNull routes
+    // makeGrid to gridNull, carrying the whole error stack with it.
+    if (MOLEerr_haserrors(errs)) {
+        MOLEerr_log(errs, MOLE_ERR_INVALID_GRID_ARGS, kLoc, "");
+        return makeGrid(paramsNull{}, errs);
+    }
+
+    // makeGrid takes the params variant and the error stack (by const
+    // reference) and runs the grid1D/2D/3D constructor internally, so
+    // nothing is heap-allocated here.
+    switch (dim) {
+        case 1:
+            return makeGrid(narrow1D(g), errs);
+        case 2:
+            return makeGrid(narrow2D(g), errs);
+        case 3:
+            return makeGrid(narrow3D(g), errs);
+        default:
+            // invalid grid dimension found
+            MOLEerr_log(errs, MOLE_ERR_INVALID_GRID_DIM, kLoc,
+                        std::to_string(dim));
+            return makeGrid(paramsNull{}, errs);
+    }
+}
+
 } // namespace
 
 // gridBuilder_impl is called through the gridBuilder macro, which 
@@ -288,31 +327,14 @@ gridVar gridBuilder_impl(const char* firstName, ...) {
 
     const int dim = runChecks(errs, g);
 
-    // A parse-time failure means the grid cannot be built. the error
-    // MOLE_ERR_INVALID_GRID_ARGS sits on top of the error log; the 
-    // errors beneath it will provide the details. A paramsNull routes
-    // makeGrid to gridNull, carrying the whole error stack with it.
-    if (MOLEerr_haserrors(errs)) {
-        MOLEerr_log(errs, MOLE_ERR_INVALID_GRID_ARGS, kLoc, "");
-        return makeGrid(paramsNull{}, errs);
-    }
+    gridVar out = buildGrid(errs, g, dim);
 
-    // makeGrid takes the params variant and the error stack (by const
-    // reference) and runs the grid1D/2D/3D constructor internally, so
-    // nothing is heap-allocated here.
-    switch (dim) {
-        case 1: 
-            return makeGrid(narrow1D(g), errs);
-        case 2: 
-            return makeGrid(narrow2D(g), errs);
-        case 3: 
-            return makeGrid(narrow3D(g), errs);
-        default:
-            // invalid grid dimension found
-            MOLEerr_log(errs, MOLE_ERR_INVALID_GRID_DIM, kLoc, 
-                        std::to_string(dim));
-            return makeGrid(paramsNull{}, errs);
-    }
+    // The debug mode governs what gridBuilder reports, not what the
+    // grid holds: the error log is left intact in every mode, so a
+    // caller can still print it or write it to a file afterwards.
+    // A grid that validated ignores the mode.
+    const size_t dbg = static_cast<size_t>(g.debug);
+    std::visit([dbg](auto&& grid) { grid.applyDebugMode(dbg); }, out);
 
-
+    return out;
 }
