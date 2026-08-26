@@ -21,4 +21,4 @@ $$
 au + b\nabla u = g
 $$
 
-The MATLAB/ OCTAVE code uses the function `boundaryIdx2D` to find the correct locations for boundary condition weights in the nodal Laplacian. The code then sets the appropriate values to $0$ or $1$.
+The Octave code uses the function `boundaryIdx2D` to find the correct locations for boundary condition weights in the nodal Laplacian. The code then sets the appropriate values to $0$ or $1$.

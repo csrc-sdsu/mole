@@ -69,7 +69,7 @@ int main() {
 ```
 ::::
 
-::::{tab-item} MATLAB/Octave
+::::{tab-item} Octave
 ```matlab
 % elliptic1D.m - 1D Poisson's equation with Robin boundary conditions
 
@@ -110,12 +110,12 @@ plot(grid, exp(grid))
 
 For full examples, see:
 - C++: [transport1D.cpp](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/transport1D.cpp)
-- MATLAB: [elliptic1D.m](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1D.m)
+- Octave: [elliptic1D.m](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1D.m)
 
 ## Next Steps
 
 - Check out more C++ examples in the [examples/cpp/](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp) directory
-- Explore the MATLAB/Octave examples in the [examples/matlab_octave/](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave) directory
+- Explore the Octave examples in the [examples/matlab_octave/](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave) directory
 - Join our community and [contribute](https://github.com/csrc-sdsu/mole/blob/main/CONTRIBUTING.md)
 
 ```{include} ../../../../README.md

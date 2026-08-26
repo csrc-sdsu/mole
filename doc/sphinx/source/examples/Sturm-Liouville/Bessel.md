@@ -44,7 +44,7 @@ Boundary conditions are applied using `RobinBC`.
 
 This example is implemented in:
 
-- [MATLAB/OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/sturmLiouvilleBessel.m)
+- [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/sturmLiouvilleBessel.m)
 - [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/sturmLiouvilleBessel.cpp)
 
 ## Results

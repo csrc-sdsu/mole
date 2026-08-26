@@ -121,7 +121,7 @@ are perpendicular to the horizontal, vertical and in depth directions,
 respectively.
 
 There are several ways to generate uniform structured staggered grids
-(in MATLAB/Octave). What is important is to remember that we need to
+(in Octave). What is important is to remember that we need to
 store the coordinates for two different quantities.
 
 Suppose
@@ -162,7 +162,7 @@ $$
 ## Using the Operators
 
 Inside the \"**examples/matlab**\" folder you will find several
-MATLAB/Octave scripts that use MOLE to solve well known partial
+Octave scripts that use MOLE to solve well known partial
 differential equations.
 
 Our selection includes steady-state and time-dependent problems:

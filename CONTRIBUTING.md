@@ -23,7 +23,7 @@ Thank you for considering contributing to MOLE (Mimetic Operators Library Enhanc
 
 Before contributing, ensure you have:
 
-- **For MATLAB/Octave**: MATLAB R2016b+ or GNU Octave 4.0+
+- **For Octave**: MATLAB R2016b+ or GNU Octave 4.0+
 - **For C++**: CMake 3.10+, OpenBLAS, Eigen3, Armadillo
 - **For Documentation**: Python 3.7+, Sphinx, Doxygen
 
@@ -55,9 +55,9 @@ Core functionality includes mimetic operators, boundary conditions, and utility 
 
 ### Core API Structure
 
-The MOLE library follows a consistent structure across MATLAB and C++ implementations:
+The MOLE library follows a consistent structure across Octave and C++ implementations:
 
-#### MATLAB/Octave Core Functions
+#### Octave Core Functions
 
 Core functions are located in `src/matlab_octave/` and follow this pattern:
 
@@ -157,7 +157,7 @@ When contributing core functionality, identify which category your contribution 
 
 If adding a new operator, follow this checklist:
 
-1. **MATLAB Implementation** (`src/matlab_octave/newoperator.m`):
+1. **Octave Implementation** (`src/matlab_octave/newoperator.m`):
    ```matlab
    function OP = newoperator(k, m, dx)
    % Returns a new mimetic operator
@@ -195,7 +195,7 @@ Examples are organized by PDE type in the `examples/` directory:
 
 ```
 examples/
-├── matlab_octave/         # MATLAB/Octave examples
+├── matlab_octave/         # Octave examples
 │   ├── elliptic1D.m       # Basic examples
 │   ├── parabolic2D.m      # 2D examples
 │   └── compact_operators/ # Specialized examples
@@ -214,7 +214,7 @@ Organize your examples by PDE type:
 4. **Mixed**: Problems involving multiple PDE types
 5. **Specialized**: Navier-Stokes, Schrödinger, etc.
 
-### MATLAB/Octave Example Template
+### Octave Example Template
 
 ```matlab
 % Solves the [EQUATION NAME] with [BOUNDARY CONDITIONS]
@@ -404,7 +404,7 @@ $$
 ---
 
 This example is implemented in:
-- [MATLAB/Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/example_name.m)
+- [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/example_name.m)
 - [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/example_name.cpp) *(if available)*
 
 #### Variants
@@ -426,7 +426,7 @@ Additional variants with different boundary conditions or parameters:
 
 ## Code Standards and Guidelines
 
-### MATLAB/Octave Standards
+### Octave Standards
 
 1. **Function Names**: Use descriptive names following the existing convention
 2. **Variable Names**: Use clear, descriptive variable names
@@ -469,7 +469,7 @@ Additional variants with different boundary conditions or parameters:
 1. **Analytical Solutions**: Compare with known exact solutions
 2. **Convergence Studies**: Verify theoretical order of accuracy
 3. **Conservation Laws**: Check that operators preserve conservation properties
-4. **Cross-platform Testing**: Test on both MATLAB and Octave (for MATLAB code)
+4. **Cross-platform Testing**: Test on both MATLAB and Octave (for Octave code)
 
 ### Performance Considerations
 
