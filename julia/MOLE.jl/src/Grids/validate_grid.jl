@@ -119,13 +119,38 @@ function validateGrid(raw::AbstractDict{Symbol, <:Any}; allowPartial::Bool = fal
     end
 
     dim = get(raw, :dim, _infer_dim(raw))
-    topology = Symbol(get(raw, :topology, _infer_topology(raw)))
 
-    dim == 1 && return _normalize_1d(raw, bc_raw, topology; allowPartial = allowPartial)
-    dim == 2 && return _normalize_2d(raw, bc_raw, topology; allowPartial = allowPartial)
-    dim == 3 && return _normalize_3d(raw, bc_raw, topology; allowPartial = allowPartial)
+    dim in 1:3 ||
+        throw(ArgumentError("grid.dim must be 1, 2, or 3"))
 
-    throw(ArgumentError("grid.dim must be 1, 2, or 3"))
+    topology_explicit = haskey(raw, :topology)
+    topology = _validate_topology(raw, dim)
+
+    dim == 1 &&
+        return _normalize_1d(
+            raw,
+            bc_raw,
+            topology,
+            topology_explicit;
+            allowPartial,
+        )
+
+    dim == 2 &&
+        return _normalize_2d(
+            raw,
+            bc_raw,
+            topology,
+            topology_explicit;
+            allowPartial,
+        )
+
+    return _normalize_3d(
+        raw,
+        bc_raw,
+        topology,
+        topology_explicit;
+        allowPartial,
+    )
 end
 
 function _infer_dim(raw)
@@ -157,7 +182,13 @@ function _require(raw, names, allowPartial, msg)
     end
 end
 
-function _normalize_1d(raw, bc_raw, topology; allowPartial)
+function _normalize_1d(
+    raw,
+    bc_raw,
+    topology,
+    topology_explicit;
+    allowPartial,
+)
     _require(raw, (:m,), allowPartial, "validateGrid:MissingField1D")
 
     if haskey(raw, :m) && haskey(raw, :dx)
@@ -165,7 +196,20 @@ function _normalize_1d(raw, bc_raw, topology; allowPartial)
         dx = _validate_positive_spacing(raw[:dx], "grid.dx")
 
         bc = _normalize_bc(bc_raw, 2)
-        isperiodic = bc.hasData ? [all(bc.dc .^ 2 .+ bc.nc .^ 2 .== 0)] : [false]
+
+        isperiodic =
+            bc.hasData ?
+            [all(bc.dc .^ 2 .+ bc.nc .^ 2 .== 0)] :
+            [false]
+
+        grid_topology, isperiodic =
+            _resolve_cartesian_topology(
+                bc,
+                topology,
+                topology_explicit,
+                isperiodic,
+            )
+
         bc = BoundaryMetadata(
             dc = bc.dc,
             nc = bc.nc,
@@ -174,7 +218,6 @@ function _normalize_1d(raw, bc_raw, topology; allowPartial)
         )
 
         nodes, faces, centers = _coordinates_1d(m, dx)
-        grid_topology = only(bc.isPeriodic) ? :periodic : :uniform
 
         return Grid(
             dim = 1,
@@ -199,7 +242,12 @@ function _normalize_1d(raw, bc_raw, topology; allowPartial)
     return Grid{Float64}(dim = 1, topology = topology)
 end
 
-function _normalize_2d(raw, bc_raw, topology; allowPartial)
+function _normalize_2d(raw,
+    bc_raw,
+    topology,
+    topology_explicit;
+    allowPartial,
+)
     _require(raw, (:m, :n), allowPartial, "validateGrid:MissingField2D")
 
     if topology == :curvilinear
@@ -216,12 +264,22 @@ function _normalize_2d(raw, bc_raw, topology; allowPartial)
         dy = _validate_positive_spacing(raw[:dy], "grid.dy")
 
         bc = _normalize_bc(bc_raw, 4)
+
         isperiodic =
             bc.hasData ?
             [
                 all(bc.dc[1:2] .^ 2 .+ bc.nc[1:2] .^ 2 .== 0),
                 all(bc.dc[3:4] .^ 2 .+ bc.nc[3:4] .^ 2 .== 0),
-            ] : [false, false]
+            ] :
+            [false, false]
+
+        grid_topology, isperiodic =
+            _resolve_cartesian_topology(
+                bc,
+                topology,
+                topology_explicit,
+                isperiodic,
+            )
 
         bc = BoundaryMetadata(
             dc = bc.dc,
@@ -229,8 +287,8 @@ function _normalize_2d(raw, bc_raw, topology; allowPartial)
             isPeriodic = isperiodic,
             hasData = bc.hasData,
         )
+
         nodes, faces, centers = _coordinates_2d(m, n, dx, dy)
-        grid_topology = any(bc.isPeriodic) ? :periodic : :uniform
 
         return Grid(
             dim = 2,
@@ -257,7 +315,12 @@ function _normalize_2d(raw, bc_raw, topology; allowPartial)
     return Grid{Float64}(dim = 2, topology = topology)
 end
 
-function _normalize_3d(raw, bc_raw, topology; allowPartial)
+function _normalize_3d(raw,
+    bc_raw,
+    topology,
+    topology_explicit;
+    allowPartial,
+)
     _require(raw, (:m, :n, :o), allowPartial, "validateGrid:MissingField3D")
 
     if all(haskey(raw, k) for k in (:m, :n, :o, :dx, :dy, :dz))
@@ -270,13 +333,23 @@ function _normalize_3d(raw, bc_raw, topology; allowPartial)
         dz = _validate_positive_spacing(raw[:dz], "grid.dz")
 
         bc = _normalize_bc(bc_raw, 6)
+
         isperiodic =
             bc.hasData ?
             [
                 all(bc.dc[1:2] .^ 2 .+ bc.nc[1:2] .^ 2 .== 0),
                 all(bc.dc[3:4] .^ 2 .+ bc.nc[3:4] .^ 2 .== 0),
                 all(bc.dc[5:6] .^ 2 .+ bc.nc[5:6] .^ 2 .== 0),
-            ] : [false, false, false]
+            ] :
+            [false, false, false]
+
+        grid_topology, isperiodic =
+            _resolve_cartesian_topology(
+                bc,
+                topology,
+                topology_explicit,
+                isperiodic,
+            )
 
         bc = BoundaryMetadata(
             dc = bc.dc,
@@ -284,8 +357,8 @@ function _normalize_3d(raw, bc_raw, topology; allowPartial)
             isPeriodic = isperiodic,
             hasData = bc.hasData,
         )
+
         nodes, faces, centers = _coordinates_3d(m, n, o, dx, dy, dz)
-        grid_topology = any(bc.isPeriodic) ? :periodic : :uniform
 
         return Grid(
             dim = 3,
@@ -447,4 +520,62 @@ function _validate_positive_spacing(value, name)
     end
 
     return value
+end
+
+# Topology validation function
+function _validate_topology(raw, dim)
+    topology = get(raw, :topology, _infer_topology(raw))
+
+    topology isa Symbol ||
+        throw(ArgumentError("grid.topology must be a Symbol"))
+
+    allowed =
+        dim == 2 ?
+        (:uniform, :periodic, :nonuniform, :curvilinear) :
+        (:uniform, :periodic, :nonuniform)
+
+    topology in allowed ||
+        throw(
+            ArgumentError(
+                "unsupported grid.topology=$topology for a $(dim)-D grid; " *
+                "expected one of $(join(allowed, ", "))",
+            ),
+        )
+
+    return topology
+end
+
+function _resolve_cartesian_topology(
+    bc,
+    requested::Symbol,
+    topology_explicit::Bool,
+    periodic_directions::Vector{Bool},
+)
+    requested in (:uniform, :periodic) ||
+        throw(
+            ArgumentError(
+                "grid.topology=$requested is incompatible with scalar grid spacings",
+            ),
+        )
+
+    inferred = any(periodic_directions) ? :periodic : :uniform
+
+    if !topology_explicit
+        return inferred, periodic_directions
+    end
+
+    if bc.hasData && requested != inferred
+        throw(
+            ArgumentError(
+                "grid.topology=$requested conflicts with boundary metadata, " *
+                "which imply topology=$inferred",
+            ),
+        )
+    end
+
+    if !bc.hasData && requested == :periodic
+        periodic_directions = fill(true, length(periodic_directions))
+    end
+
+    return requested, periodic_directions
 end
