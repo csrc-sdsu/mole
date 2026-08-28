@@ -1,5 +1,23 @@
 using MOLE.Grids
 
+# auxiliary functions
+periodic2d = makeGrid(
+    m = 2,
+    n = 3,
+    dx = 0.5,
+    dy = 0.25,
+    topology = :periodic,
+)
+
+periodic3d = makeGrid(
+    m = 2,
+    n = 3,
+    o = 4,
+    dx = 0.5,
+    dy = 0.25,
+    dz = 0.1,
+    topology = :periodic,
+)
 @testset "validateGrid uniform 1D" begin
     grid = validateGrid(Dict(:m => 3, :dx => 0.1))
 
@@ -244,4 +262,53 @@ end
             nodes = bad_nodes_wrong_y_size,
         )
     end
+end
+
+@testset "explicit topology validation" begin
+    periodic = makeGrid(
+        m = 4,
+        dx = 0.1,
+        topology = :periodic,
+    )
+
+    @test periodic.topology == :periodic
+    @test periodic.bc.isPeriodic == [true]
+
+    @test_throws ArgumentError makeGrid(
+        m = 4;
+        topology = :unsupported,
+        allowPartial = true,
+    )
+
+    @test_throws ArgumentError makeGrid(
+        m = 4,
+        dx = 0.1,
+        topology = :uniform,
+        dc = 0.0,
+        nc = 0.0,
+    )
+
+    @test_throws ArgumentError makeGrid(
+        m = 4,
+        dx = 0.1,
+        topology = :periodic,
+        dc = 1.0,
+        nc = 1.0,
+    )
+
+    @test_throws ArgumentError makeGrid(
+        m = 4,
+        dx = 0.1,
+        topology = :nonuniform,
+    )
+end
+
+@testset "2D topology validation" begin
+    @test periodic2d.topology == :periodic
+    @test periodic2d.bc.isPeriodic == [true, true]
+end
+
+@testset "3D topology validation" begin
+    @test periodic3d.topology == :periodic
+    @test periodic3d.bc.isPeriodic == [true, true, true]
 end
