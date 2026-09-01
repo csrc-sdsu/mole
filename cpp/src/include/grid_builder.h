@@ -23,16 +23,16 @@
 //
 // SYNTAX:
 // ------------------------------------------------------------------
-// gridVar g = gridBuilder(va_arg);
+// auto* g = gridBuilder(va_arg);
 // where va_arg is a list of pairs of the form: 
 //              <grid-attribute, grid-attribute-value>
 // Example:
-// gridVar g=gridBuilder("dim",1, "m",20, "dx",0.2, "topology",'u');
+// auto* g=gridBuilder("dim", 1, "m", 20, "dx", 0.2, "topology",'u');
 //
 // isPeriodic takes the address of a vector<bool> holding one flag
 // per dimension. The vector must outlive the gridBuilder call:
 //   std::vector<bool> per = {true, false};
-//   gridVar g = gridBuilder("dim", 2, ..., "isPeriodic", &per);
+//   auto g = gridBuilder("dim", 2, ..., "isPeriodic", &per);
 // ------------------------------------------------------------------
 // Note I: callers who know the dimension at compile time can call 
 // the MOLE grid constructors directly by using the corresponding 
@@ -51,20 +51,6 @@
 //                          Normal faces      const &flatNDArray
 //   grid periodicity       isPeriodic        const vector<bool>*
 //                                            (size must equal dim)
-//   debugging mode         debug             const int
-//                                            (MOLE debug mode)
-//
-// Note III: the debug attribute takes one of the MOLE debug modes
-// declared in MOLE_errors.h (DEBUG_DEFAULT_MD,
-// DEBUG_REPORTS_STDOUT_MD, DEBUG_AND_ABORT_MD) and governs what
-// gridBuilder does with a grid that fails to build. Parsing stops
-// at an unrecognized attribute name, because the type of the value
-// after an unknown name is unknown too. A debug pair placed after
-// one is therefore never read, on exactly the calls that need it.
-// Pass debug as the first pair:
-//   gridVar g = gridBuilder("debug", DEBUG_REPORTS_STDOUT_MD,
-//                           "dim", 1, "m", 20, "dx", 0.2,
-//                           "topology", 'u');
 // 
 // -------------------------------------------------------------------------
 
@@ -90,10 +76,6 @@ struct gridRaw {
     Real dx = 0.0;
     Real dy = 0.0;
     Real dz = 0.0;
-
-    // MOLE debug mode applied to a grid that fails to build. See
-    // Note III above for why the debug pair has to come first.
-    int debug = DEBUG_DEFAULT_MD;
 
     // points at the caller's vector; null when not supplied. The
     // vector carries its own size, which runChecks compares with
@@ -129,9 +111,6 @@ int runChecks(std::stack<MOLE_Errors>& errs, const gridRaw& g);
 // cannot be constructed it returns a gridNull, built via
 // makeGrid(paramsNull, errs) (user checks errors). In MOLE_grids.h:
 // using gridVar = std::variant<grid1D, grid2D, grid3D, gridNull>;
-// Before returning, the debug mode is applied to the resulting
-// grid. The mode governs only what gridBuilder reports; the grid
-// keeps its full error log in every mode.
 gridVar gridBuilder_impl(const char* firstName, ...);
 
 // makeGrid (the factory that turns a paramVars into a gridVar) is
