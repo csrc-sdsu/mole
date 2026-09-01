@@ -23,7 +23,7 @@ Thank you for considering contributing to MOLE (Mimetic Operators Library Enhanc
 
 Before contributing, ensure you have:
 
-- **For Octave**: MATLAB R2016b+ or GNU Octave 4.0+
+- **For Octave**: GNU Octave 4.0+ (optional: MATLAB R2016b+)
 - **For C++**: CMake 3.10+, OpenBLAS, Eigen3, Armadillo
 - **For Documentation**: Python 3.7+, Sphinx, Doxygen
 
