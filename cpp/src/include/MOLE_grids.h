@@ -160,16 +160,11 @@ class gridBase{
 
         //
         // applyDebugMode implements the MOLE debug modes for grid
-        // objects. A grid that passed validation is left untouched;
-        // the mode governs only what happens to a grid that did not.
-        // The mode is applied once, by the constructor that received
-        // it, and is not stored on the grid.
-        //
-        // The test is the validation state rather than the presence
-        // of errors: a grid's stack carries MOLE_ERR_GRID_UNCHECKED
-        // until validation clears it, and mergeErrors folds upstream
-        // errors into the same stack, so a valid grid can hold
-        // errors it did not cause.
+        // objects. A grid whose error log is empty is left
+        // untouched; the mode governs only what happens to a grid
+        // that has errors. The mode is applied once, by the
+        // constructor that received it, and is not stored on the
+        // grid.
         //
         void applyDebugMode(size_t debug_mode);
 

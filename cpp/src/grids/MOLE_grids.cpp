@@ -83,15 +83,14 @@ void gridBase::mergeErrors(const stack<MOLE_Errors>& inerrs) {
     }
 }
 
-//
 // gridBase::applyDebugMode applies a MOLE debug mode to a grid that
-// failed validation. A grid that validated is left untouched. The
-// modes are declared in MOLE_errors.h. An unrecognized mode falls
-// back to reporting, which is the behaviour that loses the least
-// information without ending the user's program.
+// has errors in its log. A grid with no errors is left untouched.
+// The modes are declared in MOLE_errors.h. An unrecognized mode
+// falls back to reporting, which is the behaviour that loses the
+// least information without ending the user's program.
 //
 void gridBase::applyDebugMode(size_t debug_mode){
-    if (isValidatedGrid()) return;
+    if (!hasGridErrors()) return;
 
     switch (debug_mode) {
     case DEBUG_DEFAULT_MD:

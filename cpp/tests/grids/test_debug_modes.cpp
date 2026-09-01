@@ -157,19 +157,24 @@ TEST_CASE("a valid grid ignores DEBUG_AND_ABORT_MD") {
         "a validated grid should produce no output, got: " << out);
 }
 
-TEST_CASE("a valid grid carrying upstream errors ignores "
-          "DEBUG_AND_ABORT_MD") {
+TEST_CASE("a valid grid carrying upstream errors is reported, "
+          "because the trigger is hasGridErrors()") {
+    // mergeErrors folds an incoming stack into the grid's own, so a
+    // grid that passed its own validation can still hold errors it
+    // did not cause. hasGridErrors() counts those, so this grid is
+    // reported. DEBUG_AND_ABORT_MD would abort it. Not reachable
+    // through gridBuilder, which routes a non-empty stack to
+    // gridNull before any grid is built.
     std::stack<MOLE_Errors> inerrs;
     MOLEerr_init(inerrs);
     MOLEerr_log(inerrs, MOLE_ERR_INVALID_INPUT_TYPE, "upstream", "");
 
     std::string out = capture([&]{
-        grid1D g(goodParams1D(), inerrs, DEBUG_AND_ABORT_MD);
+        grid1D g(goodParams1D(), inerrs, DEBUG_REPORTS_STDOUT_MD);
         CHECK(g.isValidatedGrid());
-        // the upstream error is still on the grid's stack
         CHECK(g.hasGridErrors());
     });
-    CHECK(out.empty());
+    CHECK(out.find("upstream") != std::string::npos);
 }
 
 TEST_CASE("the inerrs constructor applies the mode to an invalid "
@@ -305,6 +310,40 @@ TEST_CASE("NOTE: a debug pair placed after an unknown attribute is "
     });
     CHECK_MSG(out.empty(),
         "a trailing debug pair was read; the parser changed");
+}
+
+TEST_CASE("the debug constructor keeps the user's parameters") {
+    gridParams1D p = goodParams1D();
+    grid1D g(p, DEBUG_DEFAULT_MD);
+
+    CHECK(g.grid.m == 5);
+    CHECK(g.grid.topology == 'u');
+    CHECK(g.grid.dx == 0.5);
+    // validGrid() generates these; empty means it never ran
+    CHECK(g.grid.nodes_X.data_.n_elem == 6);
+    CHECK(g.grid.centers_X.data_.n_elem == 7);
+    CHECK(g.isValidatedGrid());
+}
+
+TEST_CASE("the debug constructor keeps the incoming error stack") {
+    std::stack<MOLE_Errors> inerrs;
+    MOLEerr_init(inerrs);
+    MOLEerr_log(inerrs, MOLE_ERR_INVALID_INPUT_TYPE, "upstream", "");
+
+    gridParams1D p = goodParams1D();
+
+    grid1D plain(p, inerrs);
+    grid1D dbg(p, inerrs, DEBUG_DEFAULT_MD);
+
+    CHECK(dbg.grid.m == 5);
+    CHECK(dbg.grid.nodes_X.data_.n_elem == 6);
+    CHECK(dbg.hasGridErrors());
+
+    std::string a = capture([&]{ plain.print_ErrorLog(); });
+    std::string b = capture([&]{ dbg.print_ErrorLog(); });
+    CHECK_MSG(a == b,
+        "the debug constructor produced a different object than "
+        "the constructor it delegates to");
 }
 
 MOLE_TEST_MAIN()
