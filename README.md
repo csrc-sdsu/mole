@@ -4,11 +4,12 @@
 [![MATLAB File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/124870-mole)
 [![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Build Status](https://github.com/csrc-sdsu/mole/actions/workflows/ci.yml/badge.svg)](https://github.com/csrc-sdsu/mole/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/csrc-sdsu/mole/branch/main/graph/badge.svg)](https://codecov.io/gh/csrc-sdsu/mole)
 [![Documentation](https://readthedocs.org/projects/mole-docs/badge/?version=main)](https://mole-docs.readthedocs.io/en/main/)
 
 ## Description
 
-MOLE is a high-quality (C++ & MATLAB/Octave) library that implements
+MOLE is a high-quality (C++, MATLAB/Octave, and Julia) library that implements
 high-order mimetic operators to solve partial differential equations.
 It provides discrete analogs of the most common vector calculus operators:
 Gradient, Divergence, Laplacian, Bilaplacian, and Curl. These operators (highly sparse matrices) act
@@ -138,11 +139,15 @@ and on Windows downlaoding and running the file from [here](https://sourceforge.
 
 ### C++
 
-Four self-contained, well-documented examples demonstrating typical PDE solutions. These are automatically built with `make` and serve as an excellent starting point for C++ users.
+There are several self-contained, well-documented examples demonstrating typical PDE solutions. These are automatically built with `make` and serve as an excellent starting point for C++ users.
 
 ### MATLAB/Octave Examples
 
 A collection of over 30 examples showcasing various PDE solutions, from simple linear one-dimensional problems to complex nonlinear multidimensional scenarios.
+
+### Julia Examples
+
+Several self-contained, well-documented examples demostrate the MOLE.jl use. Their documentation can be found in the [MOLE.jl Documentation website Examples section](https://www.mole-ose.org/MOLE.jl-docs/dev/examples/).
 
 ## Documentation
 
@@ -150,6 +155,7 @@ MOLE comes with comprehensive documentation:
 
 - **API Reference & User Guide**: Access our online [Documentation](https://mole-docs.readthedocs.io/en/latest/)
 - **Building Documentation**: To build documentation locally, follow our [Documentation Guide](https://github.com/csrc-sdsu/mole/blob/main/doc/sphinx/README.md).
+- **MOLE.jl Documentation**: Access the [MOLE.jl Documentation](https://www.mole-ose.org/MOLE.jl-docs/dev/) for the description of the MOLE Julia language implementation.
 
 > **Important Note:** Performing non-unary operations involving operands constructed over different grids may lead to unexpected results. While MOLE allows such operations without throwing errors, users must exercise caution when manipulating operators across different grids.
 
@@ -204,20 +210,23 @@ The archival copy of the MOLE User Manual is maintained on [Zenodo](https://zeno
                   Hellmers, Joe and
                   Ilaty, Arshia and
                   Kaviani, Katayoon and
+                  Loschen, Marc and
                   Nzerem, Oluchi and
                   Pagallo, Giulia and
                   Paolini, Christopher and
+                  Rathi, Jiya and
                   Rosano, Valentina and
                   Srinivas, Aneesh Murthy and
                   Srinivasan, Janani Priyadharshini and
-                  Valera, Manuel},
-   title        = {{MOLE User Manual}},
-   month        = aug,
-   year         = 2025,
-   publisher    = {Zenodo},
-   version      = {1.1.0},
-   doi          = {10.5281/zenodo.16898575},
-   url          = {https://doi.org/10.5281/zenodo.16898575},
+                  Valera, Manuel and
+                  Wagner, Ben and
+                  Zade, Deepanshu},
+  title        = {MOLE User Manual},
+  month        = may,
+  year         = 2026,
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.20128874},
+  url          = {https://doi.org/10.5281/zenodo.20128874},
 }
 ```
 

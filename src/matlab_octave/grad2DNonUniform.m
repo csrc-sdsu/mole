@@ -1,11 +1,17 @@
 function G = grad2DNonUniform(k, xticks, yticks)
+% PURPOSE
 % Returns a two-dimensional non-uniform mimetic gradient operator
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                xticks : Centers' ticks (x-axis)
 %                yticks : Centers' ticks (y-axis)
 %                         (including the boundaries!)
+%
+% SYNTAX
+% G = grad2DNonUniform(k, xticks, yticks)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

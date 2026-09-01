@@ -1,8 +1,10 @@
 function L = lap3D(k, m, dx, n, dy, o, dz, dc, nc)
+% PURPOSE
 % Returns a three-dimensional mimetic Laplacian operator depending on whether
 % or not the operator will contain a periodic boundary condition type
 %                              a0 U + b0 dU/dn = g,
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                m : Number of cells along x-axis
@@ -13,6 +15,10 @@ function L = lap3D(k, m, dx, n, dy, o, dz, dc, nc)
 %               dz : Step size along z-axis
 %    (optional) dc : a0 (6x1 vector for left, right, bottom, top, front, back boundary types, resp.)
 %    (optional) nc : b0 (6x1 vector for left, right, bottom, top, front, back boundary types, resp.)
+%
+% SYNTAX
+% L = lap3D(k, m, dx, n, dy, o, dz)
+% L = lap3D(k, m, dx, n, dy, o, dz, dc, nc)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later

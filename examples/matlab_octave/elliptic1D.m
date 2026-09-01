@@ -3,7 +3,7 @@
 clc
 close all
 
-addpath('../../src/matlab_octave')
+addpath(genpath('../../src/matlab_octave'))
 
 west = 0;  % Domain's limits
 east = 1;

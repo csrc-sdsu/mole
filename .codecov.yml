@@ -1,0 +1,46 @@
+codecov:
+  branch: main
+
+comment:
+  layout: "header, diff, flags, files"
+  behavior: default
+  require_changes: false
+
+ignore:
+  - "docs/**"
+  - "doc/**"
+  - "examples/**"
+  - "**/examples/**"
+  - "**/test/**"
+  - "**/tests/**"
+  - "julia/MOLE.jl/docs/**"
+  - "julia/MOLE.jl/examples/**"
+
+coverage:
+  precision: 2
+  round: down
+  range: "60...90"
+
+  status:
+    project:
+      default: off
+
+      julia:
+        flags:
+          - julia
+        target: auto
+        threshold: 1%
+
+    patch:
+      default: off
+
+      julia:
+        flags:
+          - julia
+        target: 80%
+        threshold: 5%
+
+flags:
+  julia:
+    paths:
+      - julia/MOLE.jl/src/

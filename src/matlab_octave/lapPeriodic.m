@@ -1,10 +1,15 @@
 function L = lapPeriodic(k, m, dx)
+% PURPOSE
 % Returns a m by m one-dimensional mimetic laplacian operator
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                m : Number of cells
 %               dx : Step size
+%
+% SYNTAX
+% L = lapPeriodic(k, m, dx)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later

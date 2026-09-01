@@ -1,10 +1,15 @@
 function D = divNonPeriodic(k, m, dx)
+% PURPOSE
 % Returns a m+2 by m+1 one-dimensional mimetic divergence operator
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                m : Number of cells
 %               dx : Step size
+%
+% SYNTAX
+% D = divNonPeriodic(k, m, dx)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later

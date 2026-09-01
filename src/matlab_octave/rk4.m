@@ -1,6 +1,8 @@
 function [t, y] = rk4(func, tspan, dt, y0)
+% PURPOSE
 % Explicit Runge-Kutta 4th-order method
 %
+% DESCRIPTION
 % Returns: t (evaluation points) and y (solutions) of the specified ODE
 %
 % Parameters:
@@ -8,6 +10,10 @@ function [t, y] = rk4(func, tspan, dt, y0)
 %               tspan : [t0 tf]
 %                  dt : Step size
 %                  y0 : Initial conditions
+%
+% SYNTAX
+% [t, y] = rk4(func, tspan, dt, y0)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

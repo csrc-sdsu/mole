@@ -1,12 +1,18 @@
 function P = weightsP2D(k, m, dx, n, dy)
+% PURPOSE
 % Returns the 2mn+m+n weights of P in 2-D
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                m : Number of cells along x-axis
 %               dx : Step size along x-axis
 %                n : Number of cells along y-axis
 %               dy : Step size along y-axis
+%
+% SYNTAX
+% P = weightsP2D(k, m, dx, n, dy)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

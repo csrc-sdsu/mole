@@ -1,14 +1,20 @@
 function D = div(k, m, dx, dc, nc)
+% PURPOSE
 % Returns a one-dimensional mimetic divergence operator depending on whether
 % or not the operator will contain a periodic boundary condition type
 %                              a0 U + b0 dU/dn = g,
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                m : Number of cells
 %               dx : Step size
 %    (optional) dc : a0 (2x1 vector for left and right vertices, resp.)
 %    (optional) nc : b0 (2x1 vector for left and right vertices, resp.)
+%
+% SYNTAX
+% D = div(k, m, dx)
+% D = div(k, m, dx, dc, nc)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later

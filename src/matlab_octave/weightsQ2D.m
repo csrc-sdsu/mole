@@ -1,12 +1,17 @@
 function Q = weightsQ2D(m, n, d)
+% PURPOSE
 % Returns the (m+2)(n+2) weights of Q in 2-D
+% Only works for 2nd-order 2-D Mimetic divergence operator
 %
+% DESCRIPTION
 % Parameters:
 %                m : Number of cells along x-axis
 %                n : Number of cells along y-axis
 %                d : Step size (assuming d = dx = dy)
 %
-% Only works for 2nd-order 2-D Mimetic divergence operator
+% SYNTAX
+% Q = weightsQ2D(m, n, d)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

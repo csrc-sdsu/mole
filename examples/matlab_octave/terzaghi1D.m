@@ -48,7 +48,7 @@
 clc;
 close all;
 
-addpath('../../src/matlab_octave');  % MOLE operator path
+addpath(genpath('../../src/matlab_octave'));  % MOLE operator path
 
 %% Parameters
 P0 = 10e6;         % Face load in Pascals

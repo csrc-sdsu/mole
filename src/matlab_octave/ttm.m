@@ -1,13 +1,19 @@
 % https://www.sciencedirect.com/science/article/pii/0022247X78902172?via%3Dihub
 function [X, Y] = ttm(grid_name, m, n, iters, plot_grid)
+% PURPOSE
 % Returns X and Y which are both m by n matrices that contains the physical
 % coordinates
 %
+% DESCRIPTION
 % Parameters:
 %        grid_name : String with the name of the grid folder
 %                m : Number of nodes along the horizontal axis
 %                n : Number of nodes along the vertical axis
 %        plot_grid : If defined -> grid will be plotted
+%
+% SYNTAX
+% [X, Y] = ttm(grid_name, m, n, iters, plot_grid)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

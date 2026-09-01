@@ -1,4 +1,11 @@
 function I = DI2(m, n, type)
+% PURPOSE
+%
+% DESCRIPTION
+%
+% SYNTAX
+% I = DI2(m, n, type)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

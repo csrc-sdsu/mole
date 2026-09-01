@@ -1,7 +1,16 @@
 function I = interpolFacesToCentersG1D(k, m)
+% PURPOSE
 % 1D interpolation from faces to centers
+%
+% DESCRIPTION
 % centers logical coordinates [1,1.5:m-0.5,m]
-% m is the number of cells in the logical x-axis
+%
+% Parameters:
+%                 m: Number of cells in the logical x-axis
+%
+% SYNTAX
+% I = interpolFacesToCentersG1D(k, m)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

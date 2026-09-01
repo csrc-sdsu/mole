@@ -1,13 +1,19 @@
 function [X, Y] = gridGen(method, grid_name, m, n, plot_grid, varargin)
+% PURPOSE
 % Returns X and Y which are both m by n matrices that contains the physical
 % coordinates
 %
+% DESCRIPTION
 % Parameters:
 %        grid_name : String with the name of the grid folder
 %                m : Number of nodes along the horizontal axis
 %                n : Number of nodes along the vertical axis
 %        plot_grid : If true -> plot the grid
 %         varargin : Maximum number of iterations (Required for TTM)
+%
+% SYNTAX
+% [X, Y] = gridGen(method, grid_name, m, n, plot_grid, varargin)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

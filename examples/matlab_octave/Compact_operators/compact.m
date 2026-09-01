@@ -9,7 +9,7 @@
 close all
 format rat
 
-addpath('../../src/matlab_octave')
+addpath(genpath('../../src/matlab_octave'))
 
 k = 4;
 m = 2*k+1;

@@ -28,12 +28,16 @@ authors:
   given-names: Arshia
 - family-names: Kaviani
   given-names: Katayoon
+- family-names: Loschen
+  given-names: Marc
 - family-names: Nzerem
   given-names: Oluchi
 - family-names: Pagallo
   given-names: Giulia
 - family-names: Paolini
   given-names: Christopher
+- family-names: Rathi
+  given-names: Jiya Santosh
 - family-names: Rosano
   given-names: Valentina
 - family-names: Srinivas
@@ -42,9 +46,13 @@ authors:
   given-names: Janani Priyadharshini
 - family-names: Valera
   given-names: Manuel
-doi: https://zenodo.org/records/16898575
-version: "1.1.0"
-date-released: "2025-08-13"
+- family-names: Wagner
+  given-names: Ben
+- family-names: Zade
+  given-names: Deepanshu
+doi: https://zenodo.org/records/20128874
+version: "1.2.0"
+date-released: "2026-05-08"
 url: https://mole-docs.readthedocs.io/en/main/
 repository: https://github.com/csrc-sdsu/mole
 preferred-citation:

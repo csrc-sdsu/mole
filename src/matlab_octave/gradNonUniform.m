@@ -1,11 +1,17 @@
 function G = gradNonUniform(k, ticks)
+% PURPOSE
 % Returns a m+1 by m+2 one-dimensional non-uniform mimetic gradient
 % operator
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                ticks : Centers' ticks e.g. [0 0.5 1 3 5 7 8 9 9.5 10]
 %                        (including the boundaries!)
+%
+% SYNTAX
+% G = gradNonUniform(k, ticks)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

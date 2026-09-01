@@ -1,9 +1,17 @@
 function I = interpol2D(m, n, c1, c2)
+% PURPOSE
 % Returns a two-dimensional interpolator of 2nd-order
+%
+% DESCRIPTION
+% Parameters:
 %                m : Number of cells along x-axis
 %                n : Number of cells along y-axis
 %               c1 : Left interpolation coeff.
 %               c2 : Bottom interpolation coeff.
+%
+% SYNTAX
+% I = interpol2D(m, n, c1, c2)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

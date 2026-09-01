@@ -1,7 +1,9 @@
 function b = addScalarBC1Drhs(b, v, vec)
+% PURPOSE
 % This function uses the non-periodic boundary condition type of each vertex 
 % and the rhs b values associated to left, and right vertices to modify the rhs vector b.
 %
+% DESCRIPTION
 % Parameters:
 % output
 %         b : Right hand side with boundary conditions added
@@ -10,6 +12,9 @@ function b = addScalarBC1Drhs(b, v, vec)
 %         b : Right hand side without boundary conditions added
 %         v : value (2x1 vector for left and right vertices, resp.)
 %       vec : vector with indices of rhs associated to bc
+%
+% SYNTAX
+% b = addScalarBC1Drhs(b, v, vec)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later

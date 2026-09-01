@@ -1,6 +1,8 @@
 function BC = mixedBC2D(k, m, dx, n, dy, left, coeffs_left, right, coeffs_right, bottom, coeffs_bottom, top, coeffs_top)
+% PURPOSE
 % Constructs a 2D mimetic mixed boundary conditions operator
 %
+% DESCRIPTION
 % Parameters:
 %    k             : Order of accuracy
 %    m             : Number of cells in x-direction
@@ -15,6 +17,10 @@ function BC = mixedBC2D(k, m, dx, n, dy, left, coeffs_left, right, coeffs_right,
 %    coeffs_bottom : Coefficients for the bottom boundary condition (a, b for Robin, otherwise coeff. for Dirichlet or Neumann)
 %    top           : Type of boundary condition at the top boundary ('Dirichlet', 'Neumann', 'Robin')
 %    coeffs_top    : Coefficients for the top boundary condition (a, b for Robin, otherwise coeff. for Dirichlet or Neumann)
+%
+% SYNTAX
+% BC = mixedBC2D(k, m, dx, n, dy, left, coeffs_left, right, coeffs_right, bottom, coeffs_bottom, top, coeffs_top)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

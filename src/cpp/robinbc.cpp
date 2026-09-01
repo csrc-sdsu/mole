@@ -14,6 +14,7 @@
 #include "robinbc.h"
 
 RobinBC::RobinBC(u16 k, u32 m, Real dx, Real a, Real b) {
+  mole::check_spacing(dx, "dx");
   sp_mat A(m + 2, m + 2);
   sp_mat BG(m + 2, m + 2);
 
@@ -30,6 +31,8 @@ RobinBC::RobinBC(u16 k, u32 m, Real dx, Real a, Real b) {
 
 
 RobinBC::RobinBC(u16 k, u32 m, Real dx, u32 n, Real dy, Real a, Real b) {
+  mole::check_spacing(dx, "dx");
+  mole::check_spacing(dy, "dy");
   RobinBC Bm(k, m, dx, a, b);
   RobinBC Bn(k, n, dy, a, b);
 
@@ -48,6 +51,9 @@ RobinBC::RobinBC(u16 k, u32 m, Real dx, u32 n, Real dy, Real a, Real b) {
 
 RobinBC::RobinBC(u16 k, u32 m, Real dx, u32 n, Real dy, u32 o, Real dz, Real a,
                  Real b) {
+  mole::check_spacing(dx, "dx");
+  mole::check_spacing(dy, "dy");
+  mole::check_spacing(dz, "dz");
   RobinBC Bm(k, m, dx, a, b);
   RobinBC Bn(k, n, dy, a, b);
   RobinBC Bo(k, o, dz, a, b);

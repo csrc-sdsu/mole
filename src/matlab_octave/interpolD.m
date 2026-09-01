@@ -1,9 +1,15 @@
 function I = interpolD(m, c)
+% PURPOSE
 % Returns a m+2 by m+1 one-dimensional interpolator of 2nd-order
 %
+% DESCRIPTION
 % Parameters:
 %               m : Number of cells
 %               c : Left interpolation coeff.
+%
+% SYNTAX
+% I = interpolD(m, c)
+%
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).

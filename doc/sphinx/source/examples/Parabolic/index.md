@@ -7,4 +7,5 @@ Parabolic PDEs describe diffusion processes where initial discontinuities are im
 :caption: Contents
 
 1D/index
+2D/index
 ``` 

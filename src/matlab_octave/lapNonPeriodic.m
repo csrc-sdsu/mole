@@ -1,10 +1,15 @@
 function L = lapNonPeriodic(k, m, dx)
+% PURPOSE
 % Returns a m+2 by m+2 one-dimensional mimetic laplacian operator
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                m : Number of cells
 %               dx : Step size
+%
+% SYNTAX
+% L = lapNonPeriodic(k, m, dx)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later

@@ -1,10 +1,15 @@
 function G = gradNonPeriodic(k, m, dx)
+% PURPOSE
 % Returns a m+1 by m+2 one-dimensional mimetic gradient operator
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                m : Number of cells
 %               dx : Step size
+%
+% SYNTAX
+% G = gradNonPeriodic(k, m, dx)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later

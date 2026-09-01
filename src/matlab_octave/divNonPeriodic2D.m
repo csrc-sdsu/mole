@@ -1,12 +1,17 @@
 function D = divNonPeriodic2D(k, m, dx, n, dy)
+% PURPOSE
 % Returns a two-dimensional mimetic divergence operator
 %
+% DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
 %                m : Number of cells along x-axis
 %               dx : Step size along x-axis
 %                n : Number of cells along y-axis
 %               dy : Step size along y-axis
+%
+% SYNTAX
+% D = divNonPeriodic2D(k, m, dx, n, dy)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later

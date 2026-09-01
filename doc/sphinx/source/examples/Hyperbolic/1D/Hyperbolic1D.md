@@ -42,7 +42,7 @@ $$
 
 This example is implemented in:
 - [MATLAB/ OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/hyperbolic1D.m)
-
+- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/hyperbolic1D.cpp)
 Additional MATLAB/ OCTAVE variants:
 - [Upwind Scheme](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/hyperbolic1D_upwind.m)
 - [Lax-Friedrichs Scheme](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/hyperbolic1D_lax_friedrichs.m)
