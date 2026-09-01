@@ -66,12 +66,12 @@ function _scalarbc1d_lhs(
     Ar = spzeros(T, n, n)
 
     if dc[1] != zero(T)
-        ;
-        Al[1, 1] = dc[1];
+
+        Al[1, 1] = dc[1]
     end
     if dc[2] != zero(T)
-        ;
-        Ar[end, end] = dc[2];
+
+        Ar[end, end] = dc[2]
     end
 
     Bl = spzeros(T, n, m + 1)
@@ -81,12 +81,12 @@ function _scalarbc1d_lhs(
     Gr = grad(k, m, dx)
 
     if nc[1] != zero(T)
-        ;
-        Bl[1, 1] = -nc[1];
+
+        Bl[1, 1] = -nc[1]
     end
     if nc[2] != zero(T)
-        ;
-        Br[end, end] = nc[2];
+
+        Br[end, end] = nc[2]
     end
 
     return Al + Bl * Gl, Ar + Br * Gr

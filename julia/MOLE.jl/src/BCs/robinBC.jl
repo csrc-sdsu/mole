@@ -29,7 +29,7 @@ function robinBC(k::Int, m::Int, dx, a, b)
 
     G = Operators.grad(k, m, dx)
 
-    BC = A + B*G;
+    BC = A + B*G
 end
 
 """
@@ -70,5 +70,5 @@ end
 Alias of robinBC2D
 """
 function robinBC(k::Int, m::Int, dx, n::Int, dy, a, b)
-    return robinBC2D(k, m, dx, n, dy, a, b);
+    return robinBC2D(k, m, dx, n, dy, a, b)
 end
