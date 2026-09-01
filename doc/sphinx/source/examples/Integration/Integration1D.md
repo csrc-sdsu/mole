@@ -88,8 +88,8 @@ $$
 3. Approximate the integral weights Q
 4. Set the boundary conditions at the ends
 5. Multiply weights * f to get estimate of the integral
-6. Compare to MATLAB trapz and integral functions
+6. Compare to Octave trapz and integral functions
 
 
 This example is implemented in:
-- [MATLAB/OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/integration1D.m)
+- [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/integration1D.m)

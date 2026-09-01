@@ -37,7 +37,7 @@ The explicit scheme requires a sufficiently small time step for stability.
 ---
 
 This example is implemented in:
-- [MATLAB/OCTAVE](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/parabolic2D.m)
+- [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/parabolic2D.m)
 - [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/parabolic2D.cpp)
 
 ## Results

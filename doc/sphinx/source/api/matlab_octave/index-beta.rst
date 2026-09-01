@@ -1,15 +1,15 @@
 =========================================
-MATLAB/Octave
+Octave
 =========================================
 
-This section documents the MATLAB/Octave implementation of the MOLE toolkit.
-The documentation is generated automatically from the docstrings in the MATLAB/Octave source files.
+This section documents the Octave implementation of the MOLE toolkit.
+The documentation is generated automatically from the docstrings in the Octave source files.
 
 .. only:: html
 
     .. graphviz::
 
-        digraph "MOLE MATLAB Functions" {
+        digraph "MOLE Octave Functions" {
             rankdir=LR;
             compound=true;
             node [shape=box, style=filled, fontname="Arial", fontsize=10, margin="0.3,0.1"];
@@ -124,7 +124,7 @@ The documentation is generated automatically from the docstrings in the MATLAB/O
     Function Categories
     -------------------------
 
-    The MOLE MATLAB/Octave API consists of several main categories:
+    The MOLE Octave API consists of several main categories:
 
     * **Differential Operators**: Core operators for gradient, divergence, curl, and Laplacian calculations
     * **Interpolation Operators**: Functions for interpolating values between different grid locations
