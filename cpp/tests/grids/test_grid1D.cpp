@@ -131,4 +131,16 @@ TEST_CASE("grid1D: constructor with inbound errors merges them in") {
     CHECK(g.hasGridErrors());
 }
 
+TEST_CASE("grid1D: constructor with inbound errors check for grid status error") {
+
+    gridParams1D p;
+    p.topology = 'u';
+    p.m = 4;
+    p.dx = 0.0;
+    grid1D g(p);
+
+    g.print_ErrorLog(); // not asserted on; just confirm it doesn't crash
+    CHECK(!g.isValidatedGrid());
+}
+
 MOLE_TEST_MAIN()

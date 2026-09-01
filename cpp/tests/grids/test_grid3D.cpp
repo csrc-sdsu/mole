@@ -107,4 +107,14 @@ TEST_CASE("grid3D: constructor with inbound errors merges them in") {
     CHECK(g.hasGridErrors());
 }
 
+TEST_CASE("grid3D: invalid spacing is rejected - printing errors") {
+    gridParams3D p;
+    p.topology = 'u';
+    p.m = 2; p.n = 2; p.o = 2;
+    p.dx = 1.0; p.dy = -1.0; p.dz = 1.0;
+    grid3D g(p);
+    g.print_ErrorLog(); // not asserted on; just confirm it doesn't crash
+    CHECK(!g.isValidatedGrid());
+}
+
 MOLE_TEST_MAIN()

@@ -152,6 +152,7 @@ class gridBase{
         bool hasGridErrors();
         bool isValidatedGrid();
         void setGridValidated();
+        void setCheckedWithErrors(const string location);
         void print_ErrorLog();
         void write_ErrorLog();
         // ----------------------------------------------------------

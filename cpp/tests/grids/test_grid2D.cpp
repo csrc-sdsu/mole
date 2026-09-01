@@ -142,4 +142,15 @@ TEST_CASE("grid2D: periodic BC flags round-trip through the grid") {
     CHECK(g.grid.bc_isPeriodic[1] == false);
 }
 
+TEST_CASE("grid2D: invalid (zero) spacing is rejected - printing errors") {
+
+    gridParams2D p;
+    p.topology = 'u';
+    p.m = 3; p.n = 3;
+    p.dx = 0.0; p.dy = 1.0;
+    grid2D g(p);
+    g.print_ErrorLog(); // not asserted on; just confirm it doesn't crash
+    CHECK(!g.isValidatedGrid());
+}
+
 MOLE_TEST_MAIN()

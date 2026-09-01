@@ -69,7 +69,8 @@ using namespace std;
 // it is applied once, at construction, and is not stored.
 #define DEBUG_DEFAULT_MD 0
 #define DEBUG_REPORTS_STDOUT_MD 1
-#define DEBUG_AND_ABORT_MD 2
+#define DEBUG_AND_SIGTRAP_MD  2
+#define DEBUG_AND_ABORT_MD   3
 
 // Predefined error codes for the MOLE library. These codes are used
 // to identify specific errors that may occur during the execution 
@@ -79,12 +80,13 @@ using namespace std;
 // Initialization Errors. 10 - 99 gridBuilder errors
 //
 #define MOLE_ERR_GRID_UNCHECKED 11   // Grid has not been validated
-#define MOLE_ERR_INVALID_GRID_ARGS 12 // Grid is invalid
-#define MOLE_ERR_GRID_CONSTRUCTION_FAILED 13
-#define MAKE_GRID_INVALID_INPUT_ARGS 14
-#define MAKE_GRID_MISSING_ARGS 15
-#define MAKE_GRID_UNKNOWN_ATTRIBUTE 16
-#define MAKE_GRID_DUPLICATE_ATTRIBUTES 17
+#define MOLE_ERR_GRID_FLAGGED_W_ERRS 12 // Grid flagged with errors
+#define MOLE_ERR_INVALID_GRID_ARGS 13 // Grid is invalid
+#define MOLE_ERR_GRID_CONSTRUCTION_FAILED 14
+#define MAKE_GRID_INVALID_INPUT_ARGS 15
+#define MAKE_GRID_MISSING_ARGS 16
+#define MAKE_GRID_UNKNOWN_ATTRIBUTE 17
+#define MAKE_GRID_DUPLICATE_ATTRIBUTES 18
 //
 // Grid definition Errors. Error codes 100-199
 //
@@ -132,23 +134,26 @@ static unordered_map<int, string> MOLE_errors_messages = {
     // 011
     {MOLE_ERR_GRID_UNCHECKED, 
     "Grid has not been validated, call validateGrid() first"},
-     // 012
+    // 012
+    {MOLE_ERR_GRID_FLAGGED_W_ERRS,
+    "Grid has errors and is flagged as invalid"},
+     // 013
     {MOLE_ERR_INVALID_GRID_ARGS, 
     "Error(s) in input parameters, resulting MOLE grid is invalid."},
-     // 013
+     // 014
     {MOLE_ERR_GRID_CONSTRUCTION_FAILED,
     "Grid construction failed, review the list of errors"},
-     // 014
-    {MAKE_GRID_INVALID_INPUT_ARGS, 
+     // 015
+    {MAKE_GRID_INVALID_INPUT_ARGS,
     "Grid attribute value has the wrong type for that attribute"},
-    // 015
+    // 016
     {MAKE_GRID_MISSING_ARGS,
     "A required grid attribute was not supplied"},
-    // 016 
+    // 017
     {MAKE_GRID_UNKNOWN_ATTRIBUTE,
     "Not a MOLE grid attribute name. Parsing stops here, because "
     "the type of the value following an unknown name is unknown"},
-    // 017
+    // 018
     {MAKE_GRID_DUPLICATE_ATTRIBUTES,
     "Grid attribute supplied more than once"},
     // 100

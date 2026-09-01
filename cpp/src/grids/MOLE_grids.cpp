@@ -40,16 +40,29 @@ bool gridBase::hasGridErrors(){
 //
 bool gridBase::isValidatedGrid(){ 
     // Only checks whether validGrid() has been previously called
-    return !MOLEerr_contains(errs, MOLE_ERR_GRID_UNCHECKED);
+    return  (!MOLEerr_contains(errs, MOLE_ERR_GRID_UNCHECKED) && 
+             !MOLEerr_contains(errs, MOLE_ERR_GRID_FLAGGED_W_ERRS));
 } 
 
 //
-// gridBase::setGridValidated is called afer a grid has been 
-// throroughly validated and sets internal flags with the results.
+// gridBase::setGridValidated is called after a grid has been
+// throroughly validated and no errors were found during the 
+// validation process.
 // 
 void gridBase::setGridValidated(){
     MOLEerr_remove(errs, MOLE_ERR_GRID_UNCHECKED);
 }
+//
+// gridBase::setCheckedWithErrors is called after a grid has been 
+// throroughly validated and errors have been found in the grid.
+// Grids with errors, including a MOLE_ERR_GRID_FLAGGED_W_ERRS 
+// will not be usefull for any MOLE operations.
+// 
+void gridBase::setCheckedWithErrors(const string location){
+    MOLEerr_remove(errs, MOLE_ERR_GRID_UNCHECKED);
+    MOLEerr_log(errs, MOLE_ERR_GRID_FLAGGED_W_ERRS, location);
+}
+
 
 //
 // gridBase::print_ErrorLog outputs the contents of a grid's 
@@ -429,6 +442,7 @@ bool grid1D::validGrid() {
         break;   
     }
     if (isValid) setGridValidated();
+    else setCheckedWithErrors("grid1D[construct]");
     return isValid;
 }
 
@@ -661,6 +675,7 @@ bool grid2D::validGrid() {
     }
 
     if (isValid) setGridValidated();
+    else setCheckedWithErrors("grid2D[construct]");
     return isValid;
 }
 
@@ -954,6 +969,7 @@ bool grid3D::validGrid() {
     }
 
     if (isValid) setGridValidated();
+    else setCheckedWithErrors("grid3D[construct]");
     return isValid;
 }
 
@@ -967,7 +983,7 @@ bool grid3D::validGrid() {
 // users need to providal nodal grid information
 //
 grid3D::grid3D(gridParams3D p3): gridBase(3) {
-    grid = p3; // memberwise assignement of the gridParams2D struct 
+    grid = p3; // memberwise assignement of the gridParams3D struct 
 
      if (!validGrid()){
         logGridErr(MOLE_ERR_GRID_CONSTRUCTION_FAILED,
