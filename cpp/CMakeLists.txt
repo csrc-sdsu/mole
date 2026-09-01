@@ -1,9 +1,13 @@
 cmake_minimum_required(VERSION 3.10)
-project(TopLevelProject VERSION 1.0 LANGUAGES CXX)
-
+project(MOLE
+    VERSION 2.0.0
+    DESCRIPTION "Mimetic Operators Library Enhanced (MOLE) - C++ implementation"
+    LANGUAGES CXX
+)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Display the detected C++ compiler ID
 message(STATUS "Detected CXX Compiler ID: ${CMAKE_CXX_COMPILER_ID}")
@@ -147,13 +151,20 @@ set(LINK_LIBS ${ARMADILLO_LIBRARIES}
               ${LAPACK_LIBRARY})
 
 # Add subdirectories
-#add_subdirectory(src/cpp)
-##add_subdirectory(tests/cpp)
-#add_subdirectory(tests/matlab_octave)
-#add_subdirectory(examples/cpp)
-add_subdirectory(cpp)
+add_subdirectory(src)
+add_subdirectory(tests)
+add_subdirectory(examples/grids)
 
 # Custom target to build everything
 add_custom_target(all_build DEPENDS mole_C++ tests_C++ examples_C++ tests_matlab_octave)
-
+# ---------------------------------------------------------------
+# Summary printed at configure time
+# ---------------------------------------------------------------
+message(STATUS "")
+message(STATUS "MOLE ${PROJECT_VERSION} configuration summary:")
+message(STATUS "  Build type:        ${CMAKE_BUILD_TYPE}")
+message(STATUS "  Armadillo version: ${ARMADILLO_VERSION_STRING}")
+message(STATUS "  Build examples:    ${MOLE_BUILD_EXAMPLES}")
+message(STATUS "  Build tests:       ${MOLE_BUILD_TESTS}")
+message(STATUS "")
 
