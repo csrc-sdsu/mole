@@ -155,6 +155,18 @@ class gridBase{
         void setCheckedWithErrors(const string location);
         void print_ErrorLog();
         void write_ErrorLog();
+
+
+        //
+        // applyDebugMode implements the MOLE debug modes for grid
+        // objects. A grid whose error log is empty is left
+        // untouched; the mode governs only what happens to a grid
+        // that has errors. The mode is applied once, by the
+        // constructor that received it, and is not stored on the
+        // grid.
+        //
+        void applyDebugMode(size_t debug_mode);
+
         // ----------------------------------------------------------
         // The following member function are used as helpers for the
         // MOLE grid classes (grid1D, grid2D, grid3D) to avoid code

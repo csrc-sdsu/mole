@@ -94,6 +94,32 @@ void gridBase::mergeErrors(const stack<MOLE_Errors>& inerrs) {
     }
 }
 
+// gridBase::applyDebugMode applies a MOLE debug mode to a grid that
+// has errors in its log. A grid with no errors is left untouched.
+// The modes are declared in MOLE_errors.h. An unrecognized mode
+// falls back to reporting, which is the behaviour that loses the
+// least information without ending the user's program.
+//
+void gridBase::applyDebugMode(size_t debug_mode){
+    if (!hasGridErrors()) return;
+
+    switch (debug_mode) {
+    case DEBUG_DEFAULT_MD:
+        return;
+    case DEBUG_REPORTS_STDOUT_MD:
+        print_ErrorLog();
+        return;
+    case DEBUG_AND_ABORT_MD:
+        print_ErrorLog();
+        abort();
+    default:
+        cout << "Unrecognized MOLE debug mode [" << debug_mode
+             << "], reporting to standard output." << endl;
+        print_ErrorLog();
+        return;
+    }
+}
+
 // ----------
 // Set of Auxiliar functions that check for consistency 
 // in the grid parameters. These are not particular to a grid
