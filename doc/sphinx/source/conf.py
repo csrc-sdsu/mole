@@ -68,7 +68,7 @@ extensions = [
     'myst_parser',            # Markdown support
     
     # Octave documentation
-    'sphinxcontrib.octave',   # Octave domain support
+    'sphinxcontrib.matlab',   # Octave domain support
     
     # Custom extensions
     'octave_doc_filter',      # Filter license info from Octave docstrings
@@ -178,10 +178,10 @@ except Exception as e:
 # print(f"Python version: {sys.version}")
 # print(f"Sphinx version: {pkg_resources.get_distribution('sphinx').version}")
 try:
-    # print(f"sphinxcontrib-octave').version}")
+   # print(f"sphinxcontrib-matlab version: {pkg_resources.get_distribution('sphinxcontrib-matlab').version}")
     pass # Placeholder
 except Exception as e:
-    # print(f"Error getting sphinxcontrib-octave version: {e}")
+    # print(f"Error getting sphinxcontrib-matlab version: {e}")
     pass # Placeholder
 
 # Add Octave directory to Python path if it exists
@@ -189,24 +189,24 @@ if os.path.exists(octave_src_dir):
     sys.path.insert(0, octave_src_dir)
     # print(f"\nAdded existing Octave directory to Python path: {octave_src_dir}")
 
-# For octavedomain, we need to treat Octave files as modules
+# For matlabdomain, we need to treat Octave files as modules
 primary_domain = 'mat'  # Make Octave the primary domain for .m files
 
-# Octave documentation style settings
-octave_keep_package_prefix = False
-octave_short_links = True
-octave_auto_link = "basic"  # Auto-link known Octave code elements
-octave_show_property_default_value = False
-octave_show_property_specs = False
+# MATLAB documentation style settings
+matlab_keep_package_prefix = False
+matlab_short_links = True
+matlab_auto_link = "basic"  # Auto-link known MATLAB code elements
+matlab_show_property_default_value = False
+matlab_show_property_specs = False
 
-# Octave documentation filtering options
-octave_filter_options = {
+# MATLAB documentation filtering options
+matlab_filter_options = {
     'remove_license': True,
     'm2html_style': True,
 }
 
 # Reduce Octave domain verbosity
-octave_suppress_warnings = True
+matlab_suppress_warnings = True
 
 # Add Octave to intersphinx mapping if needed
 intersphinx_mapping = {
@@ -350,14 +350,14 @@ suppress_warnings = [
     'app.add_source_parser',
     'autosectionlabel.*',
     'autosummary',
-    'octave.duplicate_object'
+    'matlab.duplicate_object'
 ]
 
 # Set logging level to reduce verbosity
 import logging
 logging.getLogger('sphinx').setLevel(logging.WARNING)
 logging.getLogger('myst_parser').setLevel(logging.WARNING)
-logging.getLogger('sphinxcontrib.octave').setLevel(logging.WARNING)
+logging.getLogger('sphinxcontrib.matlab').setLevel(logging.WARNING)
 
 def fix_math_environments(app, docname, source):
     """Fix problematic math environments in markdown source."""
