@@ -16,7 +16,7 @@
 %
 clear all; close all; clc
 
-addpath(genpath('../../src/matlab_octave'))
+addpath(genpath('../../src/octave'))
 
 % some other parameters
 c = 2;

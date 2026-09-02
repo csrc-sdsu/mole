@@ -5,7 +5,7 @@
 clc
 close all
 
-addpath(genpath('../../src/matlab_octave'))
+addpath(genpath('../../src/octave'))
 
 k = 2; % Order of accuracy
 m = 5; % -> 7

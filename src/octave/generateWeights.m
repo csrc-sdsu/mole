@@ -11,7 +11,7 @@
 %   None
 %
 % SYNTAX
-%   From MATLAB or GNU Octave, change the current working directory to the
+%   From GNU Octave, change the current working directory to the
 %   directory containing `generateWeights.m`, then run:
 %
 %       generateWeights

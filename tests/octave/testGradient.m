@@ -3,7 +3,7 @@ classdef testGradient < matlab.unittest.TestCase
         function testNullityofGradient(testCase)
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/matlab_octave'))
+            addpath(genpath('../../src/octave'))
             
             ks=[2,4,6,8];
             tol = 1e-10;

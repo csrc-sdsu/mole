@@ -162,11 +162,11 @@ tbody tr:nth-child(odd) {
   box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
-/* ===== MATLAB SPECIFIC STYLING ===== */
+/* ===== Octave SPECIFIC STYLING ===== */
 
-/* MATLAB code blocks */
-.highlight-matlab pre,
-.matlab-code {
+/* Octave code blocks */
+.highlight-octave pre,
+.octave-code {
   background-color: #f5f5f5;
   border-left: 3px solid #0076a8;
 }
@@ -185,7 +185,7 @@ tbody tr:nth-child(odd) {
     color: #f39c12;
 }
 
-.matlab-icon {
+.octave-icon {
     color: #0076a8;
 }
 

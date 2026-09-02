@@ -10,7 +10,7 @@
  * This example demonstrates how to use addScalarBC to apply
  * Dirichlet boundary conditions to a discrete Laplacian operator.
  *
- * Based on MATLAB example: elliptic2D.m
+ * Based on Octave (MATLAB) example: elliptic2D.m
  */
 
 #include "mole.h"

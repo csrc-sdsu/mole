@@ -3,7 +3,7 @@ classdef testGradPolynomial < matlab.unittest.TestCase
         function testGradOfPolynomial1D(testCase)
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/matlab_octave'))
+            addpath(genpath('../../src/octave'))
             
             ks = [2, 4, 6, 8];  % Different orders of accuracy
             tol = 1e-11;
@@ -32,7 +32,7 @@ classdef testGradPolynomial < matlab.unittest.TestCase
         function testGradOfPolynomial2D(testCase)
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/matlab_octave'))
+            addpath(genpath('../../src/octave'))
             
             ks = [2, 4, 6, 8];  % Different orders of accuracy
             tol = 1e-11;
@@ -82,7 +82,7 @@ classdef testGradPolynomial < matlab.unittest.TestCase
         function testGradOfPolynomial3D(testCase)
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/matlab_octave'))
+            addpath(genpath('../../src/octave'))
             
             ks = [2, 4, 6, 8];  % Different orders of accuracy
             tol = 1e-11;

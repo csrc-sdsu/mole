@@ -20,7 +20,7 @@
 % 
 % Current Implementation:
 %   - Nodal Jacobian derivatives
-%   - MATLAB interpolation (2nd order)
+%   - Octave interpolation (2nd order)
 %   - Hard to understand implementation (DI2 and GI2 functions: It is 
 %       obvious what they are doing, but not how they are doing it.)
 %   - Cannot handle periodic domains

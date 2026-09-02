@@ -4,7 +4,7 @@ classdef testBCConsistency < matlab.unittest.TestCase
             % 1D Boundary Conditions Consistency Test
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/matlab_octave'));
+            addpath(genpath('../../src/octave'));
             
             k = 4;  % Order of accuracy
             m = 50; % Number of cells
@@ -39,7 +39,7 @@ classdef testBCConsistency < matlab.unittest.TestCase
             % 2D Boundary Conditions Consistency Test
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/matlab_octave'));
+            addpath(genpath('../../src/octave'));
             
             k = 4;  % Order of accuracy
             m = 50; % Number of cells (x-direction)
@@ -57,7 +57,7 @@ classdef testBCConsistency < matlab.unittest.TestCase
             % 3D Boundary Conditions Consistency Test
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/matlab_octave'));
+            addpath(genpath('../../src/octave'));
             
             k = 4;  % Order of accuracy
             m = 50; % Number of cells (x-direction)

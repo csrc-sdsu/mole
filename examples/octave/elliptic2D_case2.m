@@ -2,7 +2,7 @@
 clc
 close all
 
-addpath(genpath('../../src/matlab_octave'))
+addpath(genpath('../../src/octave'))
 
 % Parameters
 e = 1; % Controls "rectangularity" of the grid, e = 0 -> completely rectangular

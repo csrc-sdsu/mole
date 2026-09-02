@@ -3,7 +3,7 @@
 clc
 close all
 
-addpath(genpath('../../src/matlab_octave'))
+addpath(genpath('../../src/octave'))
 
 is_Octave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
 

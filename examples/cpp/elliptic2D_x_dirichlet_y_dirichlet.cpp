@@ -18,7 +18,7 @@
  * - Solving the resulting linear system
  * - Computing solution error
  *
- * Based on MATLAB example: elliptic2DXDirichletYDirichlet.m
+ * Based on Octave (MATLAB) example: elliptic2DXDirichletYDirichlet.m
  */
 
 #include "mole.h"

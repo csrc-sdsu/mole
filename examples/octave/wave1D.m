@@ -3,7 +3,7 @@
 clc
 close all
 
-addpath(genpath('../../src/matlab_octave'))
+addpath(genpath('../../src/octave'))
 
 % Spatial discretization
 k = 2;         % Order of accuracy (spatial)

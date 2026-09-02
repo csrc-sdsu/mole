@@ -1,7 +1,7 @@
 % Solution to 1D Maxwell's equations using mimetic operators and leapfrog
 clear; clc; close all;
 
-addpath(genpath('../../src/matlab_octave'));
+addpath(genpath('../../src/octave'));
 
 nt = 150;         % number of time steps
 m = 100;          % number of cells

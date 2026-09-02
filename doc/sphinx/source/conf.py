@@ -67,12 +67,12 @@ extensions = [
     'breathe',                # Doxygen integration
     'myst_parser',            # Markdown support
     
-    # MATLAB documentation
-    'sphinxcontrib.matlab',   # MATLAB domain support
+    # Octave documentation
+    'sphinxcontrib.octave',   # Octave domain support
     
     # Custom extensions
-    'matlab_doc_filter',      # Filter license info from MATLAB docstrings
-    'matlab_args_fix',        # Fix MATLAB function argument warnings
+    'octave_doc_filter',      # Filter license info from Octave docstrings
+    'octave_args_fix',        # Fix Octave function argument warnings
     'generate_sitemap',       # Generate sitemap.xml for SEO
     'github_contributors',    # Display GitHub contributors
 ]
@@ -151,23 +151,23 @@ graphviz_dot_args = [
 ]
 
 #------------------------------------------------------------------------------
-# MATLAB/Octave domain configuration
+# Octave domain configuration
 #------------------------------------------------------------------------------
-# Path to MATLAB/Octave source directory for cross-reference functionality
-matlab_src_dir = os.path.abspath(os.path.join(ROOT_DIR, 'src', 'matlab_octave'))
+# Path to Octave source directory for cross-reference functionality
+octave_src_dir = os.path.abspath(os.path.join(ROOT_DIR, 'src', 'octave'))
 
 # Enhanced debug logging
-# print("\nDEBUG: Enhanced MATLAB Configuration:")
+# print("\nDEBUG: Enhanced Octave Configuration:")
 # print(f"Current working directory: {os.getcwd()}")
 # print(f"ROOT_DIR value: {ROOT_DIR}")
-# print(f"MATLAB source directory: {matlab_src_dir}")
-# print(f"Directory exists: {os.path.exists(matlab_src_dir)}")
+# print(f"Octave source directory: {octave_src_dir}")
+# print(f"Directory exists: {os.path.exists(octave_src_dir)}")
 try:
-    if os.path.exists(os.path.dirname(matlab_src_dir)):
-        # print(f"Parent directory contents: {os.listdir(os.path.dirname(matlab_src_dir))}")
+    if os.path.exists(os.path.dirname(octave_src_dir)):
+        # print(f"Parent directory contents: {os.listdir(os.path.dirname(octave_src_dir))}")
         pass # Placeholder if you remove the print statement
     else:
-        # print(f"Parent directory {os.path.dirname(matlab_src_dir)} does not exist")
+        # print(f"Parent directory {os.path.dirname(octave_src_dir)} does not exist")
         pass # Placeholder
 except Exception as e:
     # print(f"Error listing parent directory: {e}")
@@ -178,37 +178,37 @@ except Exception as e:
 # print(f"Python version: {sys.version}")
 # print(f"Sphinx version: {pkg_resources.get_distribution('sphinx').version}")
 try:
-    # print(f"sphinxcontrib-matlab version: {pkg_resources.get_distribution('sphinxcontrib-matlab').version}")
+    # print(f"sphinxcontrib-octave').version}")
     pass # Placeholder
 except Exception as e:
-    # print(f"Error getting sphinxcontrib-matlab version: {e}")
+    # print(f"Error getting sphinxcontrib-octave version: {e}")
     pass # Placeholder
 
-# Add MATLAB/Octave directory to Python path if it exists
-if os.path.exists(matlab_src_dir):
-    sys.path.insert(0, matlab_src_dir)
-    # print(f"\nAdded existing MATLAB/Octave directory to Python path: {matlab_src_dir}")
+# Add Octave directory to Python path if it exists
+if os.path.exists(octave_src_dir):
+    sys.path.insert(0, octave_src_dir)
+    # print(f"\nAdded existing Octave directory to Python path: {octave_src_dir}")
 
-# For matlabdomain, we need to treat MATLAB files as modules
-primary_domain = 'mat'  # Make MATLAB the primary domain for .m files
+# For octavedomain, we need to treat Octave files as modules
+primary_domain = 'mat'  # Make Octave the primary domain for .m files
 
-# MATLAB documentation style settings
-matlab_keep_package_prefix = False
-matlab_short_links = True
-matlab_auto_link = "basic"  # Auto-link known MATLAB code elements
-matlab_show_property_default_value = False
-matlab_show_property_specs = False
+# Octave documentation style settings
+octave_keep_package_prefix = False
+octave_short_links = True
+octave_auto_link = "basic"  # Auto-link known Octave code elements
+octave_show_property_default_value = False
+octave_show_property_specs = False
 
-# MATLAB documentation filtering options
-matlab_filter_options = {
+# Octave documentation filtering options
+octave_filter_options = {
     'remove_license': True,
     'm2html_style': True,
 }
 
-# Reduce MATLAB domain verbosity
-matlab_suppress_warnings = True
+# Reduce Octave domain verbosity
+octave_suppress_warnings = True
 
-# Add MATLAB to intersphinx mapping if needed
+# Add Octave to intersphinx mapping if needed
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
     'numpy': ('https://numpy.org/doc/stable', None),
@@ -350,14 +350,14 @@ suppress_warnings = [
     'app.add_source_parser',
     'autosectionlabel.*',
     'autosummary',
-    'matlab.duplicate_object'
+    'octave.duplicate_object'
 ]
 
 # Set logging level to reduce verbosity
 import logging
 logging.getLogger('sphinx').setLevel(logging.WARNING)
 logging.getLogger('myst_parser').setLevel(logging.WARNING)
-logging.getLogger('sphinxcontrib.matlab').setLevel(logging.WARNING)
+logging.getLogger('sphinxcontrib.octave').setLevel(logging.WARNING)
 
 def fix_math_environments(app, docname, source):
     """Fix problematic math environments in markdown source."""
@@ -853,7 +853,7 @@ example_dest = str(ROOT_DIR / "doc/sphinx/source/examples")
 # readme_files = [
 #     os.path.join(example_dest, "README.md"),
 #     os.path.join(example_dest, "cpp/README.md"),
-#     os.path.join(example_dest, "matlab/compact_operators/README.md")
+#     os.path.join(example_dest, "octave/compact_operators/README.md")
 # ]
 # 
 # for readme_file in readme_files:
@@ -871,8 +871,8 @@ example_dest = str(ROOT_DIR / "doc/sphinx/source/examples")
 #             title = "C++ Examples"
 #             content = "This folder contains C++ examples for MOLE."
 #         elif basename == "compact_operators":
-#             title = "MATLAB Compact Operators"
-#             content = "This folder contains MATLAB examples for compact operators."
+#             title = "Octave Compact Operators"
+#             content = "This folder contains Octave examples for compact operators."
 #         
 #         with open(readme_file, 'w') as f:
 #             f.write(f"# {title}\n\n{content}\n")
@@ -904,7 +904,7 @@ html_use_opensearch = ''
 
 # Additional meta tags for all pages
 html_meta = {
-    'keywords': 'mimetic operators, computational science, PDE solver, numerical methods, scientific computing, MATLAB, C++',
+    'keywords': 'mimetic operators, computational science, PDE solver, numerical methods, scientific computing, Octave, C++',
     'description': 'MOLE: Mimetic Operators Library Enhanced - A high-order mimetic differential operators library for solving PDEs',
     'author': 'CSRC SDSU',
     'viewport': 'width=device-width, initial-scale=1',
@@ -957,7 +957,7 @@ html_theme_options.update({
             "icon": "fab fa-github",
         },
         {
-            "name": "MATLAB",
+            "name": "Octave",
             "url": "https://www.mathworks.com/matlabcentral/fileexchange/124870-mole",
             "icon": "fas fa-cube",
         },

@@ -83,7 +83,7 @@
 %     transient incompressible flow solver in a compact way.
 
 close all; clear; clc;
-addpath(genpath('../../src/matlab_octave'))
+addpath(genpath('../../src/octave'))
 
 %% Settings (match C++)
 Re    = 200;     % C++: 200

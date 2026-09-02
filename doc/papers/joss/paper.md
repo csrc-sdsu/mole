@@ -47,10 +47,10 @@ A previous library [@MTK] was developed to implement the mimetic operators prese
 
 # The library
 
-MOLE was designed to be an intuitive software package to construct mimetic operators based on the method of @Corbino. MOLE is implemented in C++ and in MATLAB (these are two independent flavors) and every function in MOLE returns a sparse matrix of the requested mimetic operator. For information on the installation or usage of the library, please read the [documentation](https://github.com/csrc-sdsu/mole/blob/main/README.md) included in the repository.
+MOLE was designed to be an intuitive software package to construct mimetic operators based on the method of @Corbino. MOLE is implemented in C++ and in GNU Octave (these are two independent flavors, and Octave is fully compatible with MATLAB) and every function in MOLE returns a sparse matrix of the requested mimetic operator. For information on the installation or usage of the library, please read the [documentation](https://github.com/csrc-sdsu/mole/blob/main/README.md) included in the repository.
 
 Mimetic operators can be easily used to build codes to solve PDEs with a few lines of code. For example, if the user wants to get a one-dimensional *k*-order mimetic Laplacian, they just need to invoke:
-```matlab
+```octave
 lap(k, m, dx);
 ```
 where **k** is the desired order of accuracy, **m** is the number of cell centers (of the spatial grid), and **dx** is the distance between consecutive cell centers. All functions in MOLE are quite consistent with this syntax, and more information regarding the signature of the function can be accessed via the ```help``` command. The C++ version of the library depends on [*Armadillo*](http://arma.sourceforge.net/), which is an open-source package for dense and sparse linear algebra [@Arma], [*SuperLU*](https://portal.nersc.gov/project/sparse/superlu) for LU factorization [@SLU], and [*OpenBLAS*](https://www.openblas.net/) for parallel matrix-vector and matrix-matrix operations [@OBLAS].
@@ -58,9 +58,9 @@ where **k** is the desired order of accuracy, **m** is the number of cell center
 It is important to mention that MOLE's main role is the construction of matrices that represent spatial derivative operators and boundary conditions; other components such as solvers and time steppers are only provided via self-contained examples.
 
 The following code snippet shows how easy is to solve a 1D Poisson problem (with Robin's boundary conditions) through MOLE:
-```matlab
+```octave
 % File: elliptic1D.m
-addpath('../srs/matlab')  % Add path to library
+addpath('../srs/octave')  % Add path to library
 
 west = 0;  % Domain's limits
 east = 1;
@@ -97,7 +97,7 @@ ylabel('u(x)')
 
 # Concluding remarks
 
-In this short article we introduced MOLE, an open-source library that implements the mimetic operators from @Corbino. For conciseness purposes, we showed a one-dimensional Poisson problem as an example. However, MOLE includes over 30 examples that span a wide range of applications, from the one-way wave equation to highly nonlinear and computationally demanding problems, including the Navier-Stokes equation for fluid dynamics and Richard's equation for unsaturated flow in porous media. The user can find such examples in the [Examples](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab) folder.
+In this short article we introduced MOLE, an open-source library that implements the mimetic operators from @Corbino. For conciseness purposes, we showed a one-dimensional Poisson problem as an example. However, MOLE includes over 30 examples that span a wide range of applications, from the one-way wave equation to highly nonlinear and computationally demanding problems, including the Navier-Stokes equation for fluid dynamics and Richard's equation for unsaturated flow in porous media. The user can find such examples in the [Examples](https://github.com/csrc-sdsu/mole/blob/main/examples/octave) folder.
 
 # Acknowledgements
 

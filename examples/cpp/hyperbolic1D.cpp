@@ -33,7 +33,7 @@
  *
  *      -a*dt*2*D*I
  *
- *   matching the MATLAB staggered-grid structure.
+ *   matching the Octave (MATLAB) staggered-grid structure.
  *
  * Time Integration:
  *   One startup step is computed using Explicit Euler, then the solution

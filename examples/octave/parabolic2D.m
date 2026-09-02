@@ -11,8 +11,8 @@
 clc
 close all
 
-% Add paths to lap2D and addScalarBC2D in the src/matlab_octave
-addpath(genpath('../../src/matlab_octave'))
+% Add paths to lap2D and addScalarBC2D in the src/octave
+addpath(genpath('../../src/octave'))
 
 % Parameters
 method = "implicit";

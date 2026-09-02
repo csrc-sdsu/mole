@@ -7,6 +7,7 @@
  * Reference:
  * Problem based on "Example 10.1" from:
  * Mathews, J. H., & Fink, K. D. (2004). Numerical methods using MATLAB (4th ed.).
+ * 
  * Pearson Prentice Hall.
  *
  * Context:

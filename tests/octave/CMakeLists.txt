@@ -1,10 +1,10 @@
-# Find all MATLAB/Octave test files (test*.m)
+# Find all Octave test files (test*.m)
 file(GLOB TEST_SOURCES test*.m)
 
 # Enable testing
 enable_testing()
 
-# Loop through all MATLAB/Octave test files and register them as tests
+# Loop through all Octave test files and register them as tests
 foreach(TEST_SOURCE ${TEST_SOURCES})
     get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
 
@@ -13,13 +13,13 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
         COMMAND matlab
           -nojvm
           -batch
-          "addpath('${CMAKE_CURRENT_SOURCE_DIR}'); addpath('${CMAKE_SOURCE_DIR}/src/matlab_octave'); assertSuccess(runtests('${TEST_NAME}'))"
+          "addpath('${CMAKE_CURRENT_SOURCE_DIR}'); addpath('${CMAKE_SOURCE_DIR}/src/octave'); assertSuccess(runtests('${TEST_NAME}'))"
     )
 endforeach()
 
-# Custom target to run all MATLAB/Octave tests using CTest
-add_custom_target(run_matlab_octave_tests
+# Custom target to run all Octave tests using CTest
+add_custom_target(run_octave_tests
     COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
-    COMMENT "Running all MATLAB/Octave unit tests..."
+    COMMENT "Running all Octave unit tests..."
 )
 

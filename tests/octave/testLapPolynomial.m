@@ -3,7 +3,7 @@ classdef testLapPolynomial < matlab.unittest.TestCase
         function testLapOfPolynomial1D(testCase)
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/matlab_octave'))
+            addpath(genpath('../../src/octave'))
             
             ks = [2, 4, 6, 8];  % Different orders of accuracy
             tol = 1e-10;
@@ -32,7 +32,7 @@ classdef testLapPolynomial < matlab.unittest.TestCase
         function testLapOfPolynomial2D(testCase)
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/matlab_octave'))
+            addpath(genpath('../../src/octave'))
             
             ks = [2, 4, 6, 8];  % Different orders of accuracy
             tol = 1e-10;
@@ -79,7 +79,7 @@ classdef testLapPolynomial < matlab.unittest.TestCase
         function testLapOfPolynomial3D(testCase)
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/matlab_octave'))
+            addpath(genpath('../../src/octave'))
             
             ks = [2, 4, 6, 8];  % Different orders of accuracy
             tol = 1e-10;

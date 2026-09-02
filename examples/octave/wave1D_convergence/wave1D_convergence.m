@@ -51,7 +51,7 @@
 % =========================================================================
 clear; clc; close all;
 
-addpath(genpath('../../../src/matlab_octave'));
+addpath(genpath('../../../src/octave'));
 
 fprintf('Running Comparative Convergence Test (Mimetic vs FD)\n');
 fprintf('--------------------------------------------------\n');

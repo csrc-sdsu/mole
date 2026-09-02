@@ -6,7 +6,7 @@ function richards
     clc
     close all
 
-    addpath(genpath('../../src/matlab_octave'));
+    addpath(genpath('../../src/octave'));
 
     % Spatial and temporal discretization
     k = 4;

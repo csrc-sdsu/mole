@@ -4,7 +4,7 @@ clc
 close all
 format short
 
-addpath(genpath('../../src/matlab_octave'))
+addpath(genpath('../../src/octave'))
 
 % Mimetic operator's parameters
 k = 2;

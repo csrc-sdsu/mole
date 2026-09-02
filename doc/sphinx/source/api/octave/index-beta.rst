@@ -146,6 +146,6 @@ The documentation is generated automatically from the docstrings in the Octave s
    :caption: Contents:
    :hidden:
 
-   Function Index <matlab_index>
+   Function Index <octave_index>
    API <api>
    

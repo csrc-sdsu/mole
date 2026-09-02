@@ -161,7 +161,7 @@ $$
 
 ## Using the Operators
 
-Inside the \"**examples/matlab**\" folder you will find several
+Inside the \"**examples/octave**\" folder you will find several
 Octave scripts that use MOLE to solve well known partial
 differential equations.
 
@@ -177,7 +177,7 @@ Our selection includes steady-state and time-dependent problems:
 
 -   Etc.
 
-Each script in the \"**examples/matlab**\" folder is adequately
+Each script in the \"**examples/octave**\" folder is adequately
 commented.
 
 You may notice that all programs have the same taxonomy:

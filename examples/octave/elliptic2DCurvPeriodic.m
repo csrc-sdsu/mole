@@ -1,5 +1,5 @@
 clear; clc; close all;
-addpath("../../src/matlab_octave/")
+addpath("../../src/octave/")
 % 
 % ∆u = 0
 % 

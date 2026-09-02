@@ -5,7 +5,7 @@
 clc
 close all
 
-addpath(genpath('../../src/matlab_octave'))
+addpath(genpath('../../src/octave'))
 
 west = -15; % Domain's limits
 east = 15;
