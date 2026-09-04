@@ -160,14 +160,14 @@ matlab_src_dir = os.path.abspath(os.path.join(ROOT_DIR, 'src', 'octave'))
 # print("\nDEBUG: Enhanced GNU Octave Configuration:")
 # print(f"Current working directory: {os.getcwd()}")
 # print(f"ROOT_DIR value: {ROOT_DIR}")
-# print(f"GNU Octave source directory: {octave_src_dir}")
-# print(f"Directory exists: {os.path.exists(octave_src_dir)}")
+# print(f"GNU Octave source directory: {matlab_src_dir}")
+# print(f"Directory exists: {os.path.exists(matlab_src_dir)}")
 try:
-    if os.path.exists(os.path.dirname(octave_src_dir)):
-        # print(f"Parent directory contents: {os.listdir(os.path.dirname(octave_src_dir))}")
+    if os.path.exists(os.path.dirname(matlab_src_dir)):
+        # print(f"Parent directory contents: {os.listdir(os.path.dirname(matlab_src_dir))}")
         pass # Placeholder if you remove the print statement
     else:
-        # print(f"Parent directory {os.path.dirname(octave_src_dir)} does not exist")
+        # print(f"Parent directory {os.path.dirname(matlab_src_dir)} does not exist")
         pass # Placeholder
 except Exception as e:
     # print(f"Error listing parent directory: {e}")
@@ -185,9 +185,9 @@ except Exception as e:
     pass # Placeholder
 
 # Add Octave (MATLAB) directory to Python path if it exists
-if os.path.exists(octave_src_dir):
-    sys.path.insert(0, octave_src_dir)
-    # print(f"\nAdded existing Octave (MATLAB) directory to Python path: {octave_src_dir}")
+if os.path.exists(matlab_src_dir):
+    sys.path.insert(0, matlab_src_dir)
+    # print(f"\nAdded existing Octave (MATLAB) directory to Python path: {matlab_src_dir}")
 
 # For matlabdomain, we need to treat Octave files as modules
 primary_domain = 'mat'  # Make Octave the primary domain for .m files

@@ -21,23 +21,23 @@ function advection_hyperbolic(u0, a, grid, T, k, m, dx)
     t     : time interval
     =#
     #CFL condition for explicit schemes
-    dt = dx/abs(a);
+    dt = dx/abs(a)
 
     #Create stepsize for time with given T
     t = collect(0.0:dt:T)
 
     #Use of MOLE Operators
-    D = Operators.div(k, m, dx);
-    I = Operators.interpol(m, 0.5);
+    D = Operators.div(k, m, dx)
+    I = Operators.interpol(m, 0.5)
 
     #Periodic Boundary Conditions imposed on Divergence Operator
-    D[1, 2] = 1/(2*dx);
-    D[1, end - 1] = -1/(2*dx);
-    D[end, 2] = 1/(2*dx);
-    D[end, end - 1] = -1/(2*dx);
+    D[1, 2] = 1/(2*dx)
+    D[1, end - 1] = -1/(2*dx)
+    D[end, 2] = 1/(2*dx)
+    D[end, end - 1] = -1/(2*dx)
 
     #Premultiply out of time loop (does not change)
-    D = -a * dt * 2 * D * I;
+    D = -a * dt * 2 * D * I
 
     #Create an array that holds solution at each time step
     U = zeros(length(t)+2, length(grid))
@@ -46,10 +46,10 @@ function advection_hyperbolic(u0, a, grid, T, k, m, dx)
     U[1, :] .= u0.(grid)
 
     #Leapfrog scheme requires two steps, hence we would use Euler's step
-    U[2, :] .= U[1, :] + D/2*U[1, :];
+    U[2, :] .= U[1, :] + D/2*U[1, :]
 
     for k in eachindex(t)
-        U[k + 2, :] .= U[k, :] + D * U[k + 1, :];
+        U[k + 2, :] .= U[k, :] + D * U[k + 1, :]
     end
 
     return t, U

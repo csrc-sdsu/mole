@@ -30,7 +30,7 @@ function lap(
     D = div(k, m, dx, dc = dc, nc = nc)
     G = grad(k, m, dx, dc = dc, nc = nc)
 
-    L = D*G;
+    L = D*G
 end
 
 
