@@ -42,7 +42,7 @@ Time step constraints include:
 ---
 
 This example is implemented in:
-- [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/convection_diffusion3D.m)
+- [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/convection_diffusion3D.m)
 - [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/convection_diffusion3D.cpp)
 
 ## Results
