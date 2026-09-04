@@ -102,7 +102,7 @@ function divNonPeriodic(k::Int, m::Int, dx)
             2689/107520 -36527/35840 4259/5120 6497/15360 -475/1024 1541/5120 -639/5120 1087/35840 -59/17920;
             -59/17920 1175/21504 -1165/1024 1135/1024 25/3072 -251/5120 25/1024 -45/7168 5/7168
         ]
-        D[2:4, 1:9] = A;
+        D[2:4, 1:9] = A
         D[2:4, 1:9] = A
         D[(m - 1):(m + 1), (m - 7):(m + 1)] = -rot180(A)
         for i in 5:(m - 2)
@@ -110,7 +110,7 @@ function divNonPeriodic(k::Int, m::Int, dx)
                 [5/7168 -49/5120 245/3072 -1225/1024 1225/1024 -245/3072 49/5120 -5/7168]
         end
     end
-    D = (1/dx)*D;
+    D = (1/dx)*D
 end
 
 
@@ -126,7 +126,7 @@ Returns a m by m periodic mimetic divergence operator.
 """
 function divPeriodic(k::Int, m::Int, dx)
 
-    D = - gradPeriodic(k, m, dx)';
+    D = - gradPeriodic(k, m, dx)'
 
 end
 
@@ -155,7 +155,7 @@ function divNonUniform(k::Int, ticks::AbstractVector)
     D = J * D
     D[1, :] .= 0
     D[end, :] .= 0
-    return D;
+    return D
 
 end
 
@@ -213,7 +213,7 @@ function div(
     Sx = kron(In, Dx)
     Sy = kron(Dy, Im)
 
-    D = [Sx Sy];
+    D = [Sx Sy]
 
 end
 

@@ -99,7 +99,7 @@ function gradNonPeriodic(k::Int, m::Int, dx)
     elseif k == 6
         A = [-13016/3465 693/128 -385/128 693/320 -495/448 385/1152 -63/1408;
             496/3465 -811/640 449/384 -29/960 -11/448 13/1152 -37/21120;
-            -8/385 179/1920 -153/128 381/320 -101/1344 1/128 -3/7040];
+            -8/385 179/1920 -153/128 381/320 -101/1344 1/128 -3/7040]
         G[1:3, 1:7] = A
         G[(m - 1):(m + 1), (m - 4):(m + 2)] = -rot180(A)
         for i in 4:(m - 2)
@@ -119,7 +119,7 @@ function gradNonPeriodic(k::Int, m::Int, dx)
                 [5/7168 -49/5120 245/3072 -1225/1024 1225/1024 -245/3072 49/5120 -5/7168]
         end
     end
-    G = (1/dx)*G;
+    G = (1/dx)*G
 end
 
 
@@ -174,7 +174,7 @@ function gradPeriodic(k::Int, m::Int, dx)
     end
 
     G = V[1, idx]
-    G = G ./ dx;
+    G = G ./ dx
 
 end
 
@@ -256,7 +256,7 @@ function grad(
     Sx = kron(In, Gx)
     Sy = kron(Gy, Im)
 
-    G = [Sx; Sy];
+    G = [Sx; Sy]
 
 end
 
@@ -302,7 +302,7 @@ function gradNonPeriodic(k::Int, m::Int, dx, n::Int, dy)
     Sx = kron(In, Gx)
     Sy = kron(Gy, Im)
 
-    G = [Sx; Sy];
+    G = [Sx; Sy]
 
 end
 
@@ -330,7 +330,7 @@ function gradPeriodic(k::Int, m::Int, dx, n::Int, dy)
     Sx = kron(In, Gx)
     Sy = kron(Gy, Im)
 
-    G = [Sx; Sy];
+    G = [Sx; Sy]
 
 end
 
