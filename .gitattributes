@@ -1,8 +1,8 @@
 # Auto detect text files and perform LF normalization
 * text=auto
-examples_octave/* linguist-documentation
-doc_octave/* linguist-documentation
-doc_C++/* linguist-documentation
+examples/octave/* linguist-documentation
+doc/sphinx/octave/* linguist-documentation
+doc/doxygen/cpp/* linguist-documentation
 *.html linguist-detectable=false
 *.htm linguist-detectable=false
 *.css linguist-detectable=false
