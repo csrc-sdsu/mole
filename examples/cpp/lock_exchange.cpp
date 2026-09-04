@@ -161,7 +161,7 @@ int main() {
 
     // -- Pressure Solve --
     // Flatten the predicted velocities into vectors.
-    // Use transpose to match MATLAB's column-major order during vectorization
+    // Use transpose to match GNU Octave's column-major order during vectorization
     vec u_vec = vectorise(u_star.t());
     vec v_vec = vectorise(v_star.t());
     vec R = (rho_middle / dt) * join_cols(u_vec, v_vec);
@@ -182,7 +182,7 @@ int main() {
     p = reshape(p_vec, m + 2, n + 2).t();
 
     // -- Corrector Step --
-    // Update velocities by adding the pressure gradient, similar to MATLAB's u
+    // Update velocities by adding the pressure gradient, similar to GNU Octave's u
     // = u_s+G(1:u_length, :)*p;
     int tot_u = u_vec.n_elem;
     vec p_grad = G * p_vec;

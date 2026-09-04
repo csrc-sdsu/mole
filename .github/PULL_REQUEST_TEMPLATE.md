@@ -6,7 +6,7 @@
      - ✅ Provide tests for your changes.
      - 📝 Use descriptive commit messages.
      - 📗 Update any related documentation and include any relevant screenshots.
-     - 📝 Add license information in the appropriate place. See MATLAB or C++ code for reference.
+     - 📝 Add license information in the appropriate place. See GNU Octave or C++ code for reference.
       
           SPDX-License-Identifier: GPL-3.0-or-later
           © 2008-2024 San Diego State University Research Foundation (SDSURF).

@@ -1,5 +1,5 @@
 """
-Sphinx extension to filter out license headers from MATLAB docstrings
+Sphinx extension to filter out license headers from Octave docstrings
 and format them in an M2HTML-like style.
 """
 import re
@@ -16,36 +16,36 @@ _function_dependency_graph = {}
 # Flag to track if we've analyzed the code
 _analyzed_code = False
 
-def analyze_matlab_code(matlab_src_dir):
+def analyze_octave_code(octave_src_dir):
     """
-    Analyze MATLAB code to build a call graph.
+    Analyze Octave (MATLAB) code to build a call graph.
     
-    This function parses all MATLAB files in the source directory to identify
+    This function parses all Octave *.m files in the source directory to identify
     function calls and builds call graphs for both directions (calls and called by).
     
     Args:
-        matlab_src_dir: Directory containing MATLAB source files
+        octave_src_dir: Directory containing Octave source files
     """
     global _function_calls_graph, _function_dependency_graph, _analyzed_code
     
     if _analyzed_code:
         return  # Only analyze once
     
-    print(f"Analyzing MATLAB code in {matlab_src_dir}")
+    print(f"Analyzing Octave code in {octave_src_dir}")
     
     # Reset graphs
     _function_calls_graph = {}
     _function_dependency_graph = {}
     
-    # Get all MATLAB files
-    matlab_files = glob.glob(os.path.join(matlab_src_dir, "*.m"))
+    # Get all Octave files
+    octave_files = glob.glob(os.path.join(octave_src_dir, "*.m"))
     
     # Map of lowercase function names to their original case
     case_map = {}
     
     # First pass: get all function names (without extensions)
     function_names = []
-    for filepath in matlab_files:
+    for filepath in octave_files:
         function_name = os.path.splitext(os.path.basename(filepath))[0]
         # Store the mapping between lowercase and original case
         case_map[function_name.lower()] = function_name
@@ -55,7 +55,7 @@ def analyze_matlab_code(matlab_src_dir):
         _function_dependency_graph[function_name] = set()
     
     # Second pass: analyze function calls
-    for filepath in matlab_files:
+    for filepath in octave_files:
         function_name = os.path.splitext(os.path.basename(filepath))[0]
         
         try:
@@ -87,7 +87,7 @@ def analyze_matlab_code(matlab_src_dir):
             print(f"Error analyzing {filepath}: {e}")
     
     # Print some stats for debugging
-    print(f"Analyzed {len(matlab_files)} MATLAB files")
+    print(f"Analyzed {len(octave_files)} Octave files")
     total_calls = sum(len(calls) for calls in _function_calls_graph.values())
     print(f"Found {total_calls} function calls")
     
@@ -104,14 +104,14 @@ def analyze_matlab_code(matlab_src_dir):
     
     _analyzed_code = True
 
-def get_function_description(func_name, matlab_src_dir):
+def get_function_description(func_name, octave_src_dir):
     """
-    Get the PURPOSE block description of a MATLAB function.
-    
+    Get the PURPOSE block description of an Octave function.
+
     Args:
         func_name: The name of the function
-        matlab_src_dir: The directory containing MATLAB source files
-        
+        octave_src_dir: The directory containing Octave source files
+
     Returns:
         The PURPOSE block text if found, empty string otherwise
     """
@@ -125,11 +125,11 @@ def get_function_description(func_name, matlab_src_dir):
         func_file = func_name
         func_name = func_name[:-2]  # Remove .m
 
-    # Look for the file in the MATLAB source directory
-    filepath = os.path.join(matlab_src_dir, func_file)
+    # Look for the file in the Octave source directory
+    filepath = os.path.join(octave_src_dir, func_file)
     if not os.path.exists(filepath):
         # Try finding it with case-insensitive search
-        all_files = glob.glob(os.path.join(matlab_src_dir, "*.m"))
+        all_files = glob.glob(os.path.join(octave_src_dir, "*.m"))
         for file in all_files:
             if os.path.basename(file).lower() == func_file.lower():
                 filepath = file
@@ -194,7 +194,7 @@ def get_function_description(func_name, matlab_src_dir):
 
 def m2html_style_formatter(app, what, name, obj, options, lines):
     """
-    Process MATLAB docstrings to create M2HTML-like output.
+    Process Octave docstrings to create M2HTML-like output.
     
     This transforms the docstrings to have clear sections like:
     - PURPOSE
@@ -206,16 +206,16 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
         return
         
     # Get configuration options
-    matlab_filter_options = getattr(app.config, 'matlab_filter_options', {})
-    remove_license = matlab_filter_options.get('remove_license', True)
-    m2html_style = matlab_filter_options.get('m2html_style', True)
+    octave_filter_options = getattr(app.config, 'octave_filter_options', {})
+    remove_license = octave_filter_options.get('remove_license', True)
+    m2html_style = octave_filter_options.get('m2html_style', True)
     
-    # Get MATLAB source directory from configuration
-    matlab_src_dir = getattr(app.config, 'matlab_src_dir', '')
+    # Get Octave source directory from configuration
+    octave_src_dir = getattr(app.config, 'octave_src_dir', '')
     
-    # Analyze the MATLAB code to build call graphs
-    if matlab_src_dir and not _analyzed_code:
-        analyze_matlab_code(matlab_src_dir)
+    # Analyze the Octave code to build call graphs
+    if octave_src_dir and not _analyzed_code:
+        analyze_octave_code(octave_src_dir)
     
     # Store extracted tagged content
     first_desc_line = ""
@@ -465,7 +465,7 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
                 for i, func in enumerate(calls_functions):
                     # Get description for the function
                     func_name = func.strip().split()[0] if func.strip() else func
-                    desc = get_function_description(func_name, matlab_src_dir)
+                    desc = get_function_description(func_name, octave_src_dir)
                     
                     # Clean up the description to remove dash sequences
                     if desc:
@@ -489,7 +489,7 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
                 for i, func in enumerate(called_by):
                     # Get description for the function
                     func_name = func.strip().split()[0] if func.strip() else func
-                    desc = get_function_description(func_name, matlab_src_dir)
+                    desc = get_function_description(func_name, octave_src_dir)
                     
                     # Clean up the description to remove dash sequences
                     if desc:
@@ -516,12 +516,12 @@ def setup(app):
     Set up the extension.
     """
     # Add default configuration
-    app.add_config_value('matlab_filter_options', {
+    app.add_config_value('octave_filter_options', {
         'remove_license': True,
         'm2html_style': True,
     }, 'env')
     
-    # Note: matlab_src_dir is already defined in conf.py
+    # Note: octave_src_dir is already defined in conf.py
     # Do not add it again to avoid the "Config value already present" error
     
     # Connect to the autodoc-process-docstring event

@@ -59,7 +59,7 @@ The MOLE library follows a consistent structure across Octave and C++ implementa
 
 #### Octave Core Functions
 
-Core functions are located in `src/matlab_octave/` and follow this pattern:
+Core functions are located in `src/octave/` and follow this pattern:
 
 ```matlab
 function OUTPUT = functionName(k, m, dx, ...)
@@ -157,7 +157,7 @@ When contributing core functionality, identify which category your contribution 
 
 If adding a new operator, follow this checklist:
 
-1. **Octave Implementation** (`src/matlab_octave/newoperator.m`):
+1. **Octave Implementation** (`src/octave/newoperator.m`):
    ```matlab
    function OP = newoperator(k, m, dx)
    % Returns a new mimetic operator
@@ -195,7 +195,7 @@ Examples are organized by PDE type in the `examples/` directory:
 
 ```
 examples/
-├── matlab_octave/         # Octave examples
+├── octave/         # Octave examples
 │   ├── elliptic1D.m       # Basic examples
 │   ├── parabolic2D.m      # 2D examples
 │   └── compact_operators/ # Specialized examples
@@ -223,7 +223,7 @@ Organize your examples by PDE type:
 clc
 close all
 
-addpath('../../src/matlab_octave')  % REQUIRED: Add path to MOLE library
+addpath('../../src/octave')  % REQUIRED: Add path to MOLE library
 
 %% Problem Parameters
 % [Describe each parameter with physical meaning]
@@ -404,7 +404,7 @@ $$
 ---
 
 This example is implemented in:
-- [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/example_name.m)
+- [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/example_name.m)
 - [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/example_name.cpp) *(if available)*
 
 #### Variants
