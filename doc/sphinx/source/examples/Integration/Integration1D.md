@@ -92,4 +92,4 @@ $$
 
 
 This example is implemented in:
-- [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/integration1D.m)
+- [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/integration1D.m)

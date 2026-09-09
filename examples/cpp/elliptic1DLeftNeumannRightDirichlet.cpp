@@ -16,7 +16,7 @@
  * - Solving the resulting linear system
  * - Computing solution error
  *
- * Based on MATLAB example: elliptic1DLeftNeumannRightDirichlet.m
+ * Based on Octave example: elliptic1DLeftNeumannRightDirichlet.m
  */
 
 #include "mole.h"

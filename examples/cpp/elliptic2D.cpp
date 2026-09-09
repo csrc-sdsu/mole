@@ -1,6 +1,6 @@
 /**
  * This example uses MOLE to solve a 2D BVP
- * It is the equivalent to examples_MATLAB/minimal_poisson2D.m
+ * It is the equivalent to examples_Octave/minimal_poisson2D.m
  * The output can be plotted via:
  * gnuplot> plot 'solution' matrix with image
  */

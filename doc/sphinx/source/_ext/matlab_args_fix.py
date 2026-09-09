@@ -1,5 +1,5 @@
 """
-Custom Sphinx extension to fix MATLAB function argument warnings.
+Custom Sphinx extension to fix Octave function argument warnings.
 """
 
 import warnings
@@ -8,9 +8,9 @@ from sphinx.util.logging import getLogger
 
 logger = getLogger(__name__)
 
-# Create a filter for MATLAB domain warnings
+# Create a filter for Octave domain warnings
 class MATLABWarningsFilter(logging.Filter):
-    """Filter to suppress specific MATLAB domain warnings."""
+    """Filter to suppress specific Octave domain warnings."""
     
     def filter(self, record):
         # Suppress warnings about formatting arguments
@@ -24,7 +24,7 @@ def setup(app):
     """
     Setup function for Sphinx extension.
     
-    This extension adds a filter to suppress MATLAB domain warnings.
+    This extension adds a filter to suppress Octave domain warnings.
     """
     # Add the filter to the Sphinx warning logger
     warning_logger = logging.getLogger('sphinx.domains.mat')
@@ -34,7 +34,7 @@ def setup(app):
     root_logger = logging.getLogger('sphinx')
     root_logger.addFilter(MATLABWarningsFilter())
     
-    logger.info("MATLAB argument warnings filter added")
+    logger.info("Octave argument warnings filter added")
     
     return {
         'version': '0.1',
