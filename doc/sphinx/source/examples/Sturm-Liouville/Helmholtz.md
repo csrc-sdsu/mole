@@ -46,12 +46,12 @@ Boundary conditions are applied using `RobinBC` or `MixedBC`.
 
 These examples are implemented in:
 
-- [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/sturmLiouvilleHelmholtzDirichletDirichlet.m)
+- [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/sturmLiouvilleHelmholtzDirichletDirichlet.m)
 - [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/sturmLiouvilleHelmholtzDirichletDirichlet.cpp)
-- [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/sturmLiouvilleHelmholtzDirichletRobin.m)
+- [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/sturmLiouvilleHelmholtzDirichletRobin.m)
 - [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/sturmLiouvilleHelmholtzDirichletRobin.cpp)
 Additional Octave and C++ variant:
-- [Octave Wifi](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/helmholtz2D_wifi.m)
+- [Octave Wifi](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/helmholtz2D_wifi.m)
 - [C++ Wifi](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/helmholtz2D_wifi.cpp)
 ## Results
 

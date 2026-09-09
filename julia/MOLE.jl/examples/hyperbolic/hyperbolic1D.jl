@@ -1,6 +1,6 @@
 #=
 Julia implementation of the 1D Advection equation with periodic boundary conditions
-from MATLAB MOLE example using the Leapfrog Scheme
+from Octave MOLE example using the Leapfrog Scheme
 =#
 
 using Plots

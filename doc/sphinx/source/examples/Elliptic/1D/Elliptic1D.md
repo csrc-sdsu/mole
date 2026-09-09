@@ -27,16 +27,16 @@ This corresponds to the call to robinBC1D of `robinBC1D(k, m, dx, a, b)`.
 ---
 
 This example is implemented in:
-- [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1D.m)
+- [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/elliptic1D.m)
 - [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/elliptic1D.cpp)
 
 Additional Octave variants of this example with different boundary conditions:
-- [Homogeneous Dirichlet](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DHomogeneousDirichlet.m)
-- [Non-Homogeneous Dirichlet](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DNonHomogeneousDirichlet.m)
-- [Left Neumann, Right Dirichlet](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DLeftNeumannRightDirichlet.m)
-- [Left Dirichlet, Right Robin](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DLeftDirichletRightRobin.m)
-- [Left Neumann, Right Neumann](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DLeftNeumannRightNeumann.m)
-- [Left Neumann, Right Robin](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DLeftNeumannRightRobin.m)
-- [Left Robin, Right Robin](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DLeftRobinRightRobin.m)
-- [Periodic Boundary Conditions](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DPeriodicBC.m)
-- [Non-Periodic Boundary Conditions](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/elliptic1DNonPeriodicBC.m)
+- [Homogeneous Dirichlet](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/elliptic1DHomogeneousDirichlet.m)
+- [Non-Homogeneous Dirichlet](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/elliptic1DNonHomogeneousDirichlet.m)
+- [Left Neumann, Right Dirichlet](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/elliptic1DLeftNeumannRightDirichlet.m)
+- [Left Dirichlet, Right Robin](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/elliptic1DLeftDirichletRightRobin.m)
+- [Left Neumann, Right Neumann](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/elliptic1DLeftNeumannRightNeumann.m)
+- [Left Neumann, Right Robin](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/elliptic1DLeftNeumannRightRobin.m)
+- [Left Robin, Right Robin](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/elliptic1DLeftRobinRightRobin.m)
+- [Periodic Boundary Conditions](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/elliptic1DPeriodicBC.m)
+- [Non-Periodic Boundary Conditions](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/elliptic1DNonPeriodicBC.m)
