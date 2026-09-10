@@ -5,6 +5,7 @@
 =#
 
 using LinearAlgebra
+using SparseArrays
 
 #-----------------------
 # 1-D Gradient Operators
@@ -80,7 +81,7 @@ function gradNonPeriodic(k::Int, m::Int, dx)
         throw(DomainError(m, "m must be >= 2*k"))
     end
 
-    G = zeros(m+1, m+2)
+    G = spzeros(m + 1, m + 2)
     if k == 2
         A = [-8/3 3 -1/3]
         G[1, 1:3] = A #[-8/3 3 -1/3]
@@ -147,34 +148,37 @@ function gradPeriodic(k::Int, m::Int, dx)
         throw(DomainError(m, "m must be >= 2*k"))
     end
 
-    V = zeros(1, m)
-    idx = fill(-1, m, m)
-    idx[:, 1] = 1:m
-    idx = cumsum(idx, dims = 2)
-    idx = mod.(idx .+ m, m) .+ 1
-
     if k == 2
-
-        V[1, 2:3] = [1, -1]
+        stencil_indices = [2, 3]
+        stencil_values = [1.0, -1.0]
 
     elseif k == 4
-
-        V[1, 1:4] = [-1/24, 9/8, -9/8, 1/24]
+        stencil_indices = [1, 2, 3, 4]
+        stencil_values = [-1 / 24, 9 / 8, -9 / 8, 1 / 24]
 
     elseif k == 6
-
-        V[1, 1:5] = [-25/384, 75/64, -75/64, 25/384, -3/640]
-        V[1, end] = 3/640
+        stencil_indices = [1, 2, 3, 4, 5, m]
+        stencil_values = [-25 / 384, 75 / 64, -75 / 64, 25 / 384, -3 / 640, 3 / 640]
 
     elseif k == 8
-
-        V[1, 1:6] = [-245/3072, 1225/1024, -1225/1024, 245/3072, -49/5120, 5/7168]
-        V[1, (end - 1):end] = [-5/7168, 49/5120]
+        stencil_indices = [1, 2, 3, 4, 5, 6, m - 1, m]
+        stencil_values = [
+            -245 / 3072,
+            1225 / 1024,
+            -1225 / 1024,
+            245 / 3072,
+            -49 / 5120,
+            5 / 7168,
+            -5 / 7168,
+            49 / 5120,
+        ]
 
     end
 
-    G = V[1, idx]
-    G = G ./ dx
+    rows = repeat(collect(1:m), inner = length(stencil_indices))
+    cols = [mod(row - index + 1, m) + 1 for row in 1:m for index in stencil_indices]
+    vals = repeat(stencil_values, m)
+    G = sparse(rows, cols, vals, m, m) / dx
 
 end
 
@@ -193,9 +197,9 @@ function gradNonUniform(k::Int, ticks::AbstractVector)
     G = grad(k, length(ticks) - 2, 1)
 
     if size(ticks, 1) == 1
-        J = diagm((G*ticks') .^ -1)
+        J = spdiagm(0 => vec((G * ticks') .^ -1))
     else
-        J = diagm((G*ticks) .^ -1)
+        J = spdiagm(0 => vec((G * ticks) .^ -1))
     end
 
     G = J * G
@@ -237,20 +241,20 @@ function grad(
 
     if hasbclr
         Gx = gradNonPeriodic(k, m, dx)
-        Im = Matrix(I, m + 2, m + 2)
+        Im = sparse(I, m + 2, m + 2)
         Im = Im[2:(end - 1), :]
     else
         Gx = gradPeriodic(k, m, dx)
-        Im = Matrix(I, m, m)
+        Im = sparse(I, m, m)
     end
 
     if hasbcbt
         Gy = gradNonPeriodic(k, n, dy)
-        In = Matrix(I, n + 2, n + 2)
+        In = sparse(I, n + 2, n + 2)
         In = In[2:(end - 1), :]
     else
         Gy = gradPeriodic(k, n, dy)
-        In = Matrix(I, n, n)
+        In = sparse(I, n, n)
     end
 
     Sx = kron(In, Gx)
@@ -293,8 +297,8 @@ function gradNonPeriodic(k::Int, m::Int, dx, n::Int, dy)
     Gx = gradNonPeriodic(k, m, dx)
     Gy = gradNonPeriodic(k, n, dy)
 
-    Im = Matrix(I, m + 2, m + 2)
-    In = Matrix(I, n + 2, n + 2)
+    Im = sparse(I, m + 2, m + 2)
+    In = sparse(I, n + 2, n + 2)
 
     Im = Im[2:(end - 1), :]
     In = In[2:(end - 1), :]
@@ -324,8 +328,8 @@ function gradPeriodic(k::Int, m::Int, dx, n::Int, dy)
     Gx = gradPeriodic(k, m, dx)
     Gy = gradPeriodic(k, n, dy)
 
-    Im = Matrix(I, m, m)
-    In = Matrix(I, n, n)
+    Im = sparse(I, m, m)
+    In = sparse(I, n, n)
 
     Sx = kron(In, Gx)
     Sy = kron(Gy, Im)
@@ -353,8 +357,8 @@ function gradNonUniform(k::Int, xticks::AbstractVector, yticks::AbstractVector)
     m = size(Gx, 2)
     n = size(Gy, 2)
 
-    Im = Matrix(I, m, m)
-    In = Matrix(I, n, n)
+    Im = sparse(I, m, m)
+    In = sparse(I, n, n)
 
     Im = Im[2:(end - 1), :]
     In = In[2:(end - 1), :]
