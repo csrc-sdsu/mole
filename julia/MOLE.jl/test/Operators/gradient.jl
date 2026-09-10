@@ -14,7 +14,7 @@ end
     dx = 1.0 / (m - 1)
     dc = (0.0, 0.0)
     nc = (0.0, 0.0)
-    G = Operators.grad(k, m, dx, dc = dc, nc = dc)
+    G = Operators.grad(k, m, dx, dc = dc, nc = nc)
     @test issparse(G)
     field = ones(m, 1)
     sol = G * field
