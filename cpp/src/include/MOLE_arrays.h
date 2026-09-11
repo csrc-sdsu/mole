@@ -59,7 +59,7 @@ public:
     bool hasArrayErrors() const;
     void print_ErrorLog() const;
     void write_ErrorLog() const;
-    void read_ErrorLog(int ErrorCode, std::string &location, 
+    void read_ErrorLog(int &ErrorCode, std::string &location, 
                       std::string &arrayName);
 };
 
@@ -92,7 +92,7 @@ public:
     bool hasArrayErrors() const;
     void print_ErrorLog() const;
     void write_ErrorLog() const;
-    void read_ErrorLog(int ErrorCode, std::string &location, 
+    void read_ErrorLog(int &ErrorCode, std::string &location, 
                       std::string &arrayName);
 };
 
@@ -124,7 +124,7 @@ public:
     bool hasArrayErrors() const;
     void print_ErrorLog() const;
     void write_ErrorLog() const;
-    void read_ErrorLog(int ErrorCode, std::string &location, 
+    void read_ErrorLog(int &ErrorCode, std::string &location, 
                       std::string &arrayName);
 };
 

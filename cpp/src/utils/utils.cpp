@@ -81,7 +81,7 @@ void Utils::write_ErrorLog() {
 //
 // read_ErrorLog reads the error on top of the stack
 //
-void Utils::read_ErrorLog(int ErrorCode, std::string &location, 
+void Utils::read_ErrorLog(int &ErrorCode, std::string &location, 
                           std::string &arrayName) {
   if (!errs.empty()) {
     MOLE_Errors topError = errs.top();

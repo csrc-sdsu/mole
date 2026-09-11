@@ -102,12 +102,7 @@ TEST_CASE("NOTE: isValidGrid re-runs validGrid() on an already-"
         ++count;
         pos += needle.size();
     }
-    CHECK_MSG(count == 2,
-        "expected the invalid-topology error to appear twice after "
-        "two validGrid() calls (once from the constructor, once from "
-        "isValidGrid()), got " << count << ". If this is now 1, "
-        "validGrid() has been made idempotent -- update this test "
-        "to CHECK(count == 1) and remove this NOTE.");
+    CHECK(count == 1);
 }
 
 MOLE_TEST_MAIN()
