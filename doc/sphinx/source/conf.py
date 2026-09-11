@@ -133,11 +133,11 @@ breathe_domain_by_extension = {
     ".c": "c",
 }
 breathe_default_members = ('members', 'undoc-members')
-
 # Run Doxygen if needed during build
 if not os.path.exists(str(ROOT_DIR / "doc/doxygen/cpp/xml/index.xml")):
     print("Doxygen XML not found. Running Doxygen...")
-    subprocess.call(["doxygen", "Doxyfile"], cwd=str(ROOT_DIR))
+    os.makedirs(str(ROOT_DIR / "doc/doxygen/cpp"), exist_ok=True)
+    subprocess.run(["doxygen", "Doxyfile"], cwd=str(ROOT_DIR), check=True)
 
 #------------------------------------------------------------------------------
 # GraphViz configuration
