@@ -39,9 +39,9 @@ makedocs(
                 "Overview" => "examples/Navier-Stokes/index.md",
                 "2D Navier-Stokes Problems" => [
                     "Overview" => "examples/Navier-Stokes/2D/index.md",
-                    "2D Navier-Stokes" => "examples/Navier-Stokes/2D/Channel-Flow-2D.md"
-                ]
-            ]
+                    "2D Navier-Stokes" => "examples/Navier-Stokes/2D/Channel-Flow-2D.md",
+                ],
+            ],
         ],
     ],
 )
