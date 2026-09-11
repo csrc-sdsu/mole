@@ -1,13 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
 
-# NOTE: project() is intentionally NOT called here. This file is
-# always add_subdirectory()'d from the root ../CMakeLists.txt, which
-# declares `project(MOLE VERSION 2.0.0 ...)` for the whole repo.
-# PROJECT_VERSION, PROJECT_VERSION_MAJOR, etc. used below are
-# inherited from that root project() call. Running `cmake` directly
-# inside cpp/ is no longer supported as a standalone entry point;
-# always configure from the repository root instead.
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS OFF)
