@@ -45,7 +45,7 @@ jobs:
         id: files
         run: |
           # list C/C++ source files tracked by git
-          echo "::set-output name=sources::$(git ls-files '*.c' '*.cc' '*.cpp' '*.cxx' '*.h' '*.hpp' '*.hh' | tr '\n' ' ')"
+          echo "sources=$(git ls-files '*.c' '*.cc' '*.cpp' '*.cxx' '*.h' '*.hpp' '*.hh' | tr '\n' ' ')" >> "$GITHUB_OUTPUT"
           
       - name: Configure with CMake (generate compile_commands.json)
         run: |
@@ -59,19 +59,47 @@ jobs:
           if [ -z "${{ steps.files.outputs.sources }}" ]; then
             echo "No C/C++ sources found — skipping clang-tidy."
           else
-            # Run clang-tidy using compile_commands.json. Collect output and fail if diagnostics are present.
-            # Note: clang-tidy often prints diagnostics to stdout/stderr; we capture and grep for "warning:" or "error:".
-            printf '%s\n' ${{ steps.files.outputs.sources }} > /tmp/clang_tidy_files.txt
-            set -o pipefail
-            perl -pi -e 's/-I(.*?)third_party_install/-isystem \1third_party_install/g' build/compile_commands.json
-            clang-tidy-20 --format-style='llvm' -p build $(cat /tmp/clang_tidy_files.txt) 2>&1 | tee clang-tidy.out || true
-            if grep -E "warning:|error:" clang-tidy.out >/dev/null; then
-              echo "clang-tidy reported warnings/errors — failing the job."
-              echo ""
-              tail -n +1 clang-tidy.out
-              exit 1
+            # Run clang-tidy using compile_commands.json. Collect output
+            # and fail if diagnostics are present.
+            # Note: clang-tidy often prints diagnostics to 
+            # stdout/stderr; we capture and grep for "warning:" 
+            # or "error:".
+            printf '%s\n' ${{ steps.files.outputs.sources }} > /tmp/clang_tidy_files_raw.txt
+
+            # Only keep files that actually have an entry in 
+            # compile_commands.json. This automatically drops files
+            # CMake never compiles) without needing to hardcode any 
+            # excluded paths here.
+            python3 -c "
+            import json, os
+            with open('build/compile_commands.json') as f:
+              compiled = {os.path.realpath(e['file']) for e in json.load(f)}
+            with open('/tmp/clang_tidy_files_raw.txt') as f:
+              candidates = [line.strip() for line in f if line.strip()]
+            kept = [c for c in candidates if os.path.realpath(c) in compiled]
+            skipped = [c for c in candidates if os.path.realpath(c) not in compiled]
+            if skipped:
+              print(f'Skipping {len(skipped)} file(s) not in compile_commands.json:')
+              for s in skipped:
+                print(f'  - {s}')
+            with open('/tmp/clang_tidy_files.txt', 'w') as f:
+              f.write('\n'.join(kept))
+            "
+
+            if [ ! -s /tmp/clang_tidy_files.txt ]; then
+              echo "No compiled sources to check — skipping clang-tidy."
             else
-              echo "clang-tidy: no warnings/errors detected."
+              set -o pipefail
+              perl -pi -e 's/-I(.*?)third_party_install/-isystem \1third_party_install/g' build/compile_commands.json
+              clang-tidy-20 --format-style='llvm' -p build $(cat /tmp/clang_tidy_files.txt) 2>&1 | tee clang-tidy.out || true
+              if grep -E "warning:|error:" clang-tidy.out >/dev/null; then
+                echo "clang-tidy reported warnings/errors — failing the job."
+                echo ""
+                tail -n +1 clang-tidy.out
+                exit 1
+              else
+                echo "clang-tidy: no warnings/errors detected."
+              fi
             fi
           fi
 
