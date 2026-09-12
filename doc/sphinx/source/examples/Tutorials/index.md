@@ -6,4 +6,5 @@ Tutorials for using the mimetic operators including comparison with other standa
 :maxdepth: 1
 :caption: Contents
 Two_Way_Wave_Equation/Two_Way_Wave_Equation
+Two_Way_Wave_Equation/Two_Way_Wave_Equation_With_Neumann_BC
 ``` 
