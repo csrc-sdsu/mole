@@ -1,6 +1,6 @@
 using MOLE
 using Test, LinearAlgebra, SparseArrays
-import MOLE: Operators, BCs
+import MOLE: Operators, BCs, Grids
 
 @testset "Testing MOLE operators" begin
     @testset "Testing 1D divergence" begin
@@ -25,4 +25,9 @@ end
     @testset "Test addScalarBC" begin
         include("BCs/scalarBC.jl")
     end
+end
+
+@testset "Testing Grids" begin
+    include("Grids/make_grid.jl")
+    include("Grids/validate_grid.jl")
 end
