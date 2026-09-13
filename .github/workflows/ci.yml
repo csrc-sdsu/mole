@@ -52,8 +52,7 @@ jobs:
           mkdir -p build
           ls -al /usr/share/eigen3/cmake
           cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DEigen3_DIR=/usr/share/eigen3/cmake
-          ls -la build/compile_commands.json
-    
+
       - name: clang-tidy (fail on warnings/errors)
         run: |
           if [ -z "${{ steps.files.outputs.sources }}" ]; then
