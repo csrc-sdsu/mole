@@ -223,6 +223,41 @@ function main()
     display(plt)
     savefig(plt, "cylinder_flow_2D.png")
 
+    # animations
+    animation = @animate for k in eachindex(steps)
+        plot_u = heatmap(
+            Uflat',
+            aspect_ratio = :equal,
+            colorbar = true,
+            xlabel = "x index",
+            ylabel = "y index",
+            title = "U at t = $(round(nsteps * dt, digits = 3))")
+    end
+    gif(animation, "U.gif", fps = 25, show_msg = false)
+
+    animation = @animate for k in eachindex(steps)
+        plot_v = heatmap(
+            Vfinal',
+            aspect_ratio = :equal,
+            colorbar = true,
+            xlabel = "x index",
+            ylabel = "y index",
+            title = "V at t = $(round(nsteps * dt, digits = 3))")
+    end
+    gif(animation, "V.gif", fps = 25, show_msg = false)
+
+    animation = @animate for k in eachindex(steps)
+        plot_p = heatmap(
+            p',
+            aspect_ratio = :equal,
+            colorbar = true,
+            xlabel = "x index",
+            ylabel = "y index",
+            title = "Pressure p",
+        )
+    end
+    gif(animation, "p.gif", fps = 25, show_msg = false)
+
     return Ufinal, Vfinal, pfinal
 end
 
