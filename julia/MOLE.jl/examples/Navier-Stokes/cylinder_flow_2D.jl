@@ -115,6 +115,10 @@ function main()
     Ap, bP0 = BCs.addScalarBC!(copy(L), zeros(Ncell), bcP, k, m, dx, n, dy)
     rowsbcP = modified_rows(Ap, L)
 
+    Au_fac = lu(Au)
+    Av_fac = lu(Av)
+    Ap_fac = lu(Ap)
+
     AdvU_prev = zeros(Ncell)
     AdvV_prev = zeros(Ncell)
 
@@ -140,8 +144,8 @@ function main()
         rhsU[rowsbcU] .= 0.0
         rhsV[rowsbcV] .= 0.0
 
-        Ustar = Au \ (rhsU + bU0)
-        Vstar = Av \ (rhsV + bV0)
+        Ustar = Au_fac \ (rhsU + bU0)
+        Vstar = Av_fac \ (rhsV + bV0)
 
         Ustar_mat = reshape(Ustar, m + 2, n + 2)
         Vstar_mat = reshape(Vstar, m + 2, n + 2)
@@ -161,7 +165,7 @@ function main()
 
         rhsP[rowsbcP] .= 0.0
 
-        p = Ap \ (rhsP + bP0)
+        p = Ap_fac \ (rhsP + bP0)
 
         UV = [Ustar; Vstar] - (dt / rho) * (Ifc * G * p)
 
