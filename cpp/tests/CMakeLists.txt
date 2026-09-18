@@ -35,3 +35,8 @@ foreach(_mole_test_src IN LISTS MOLE_TEST_SOURCES)
 
     add_dependencies(mole_tests ${_mole_test_bin})
 endforeach()
+
+   add_custom_target(run_tests
+       COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
+       DEPENDS mole_tests
+   )
