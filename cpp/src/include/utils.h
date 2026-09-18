@@ -122,7 +122,7 @@ public:
   bool hasErrors();
   void print_ErrorLog();
   void write_ErrorLog();
-  void read_ErrorLog(int ErrorCode, std::string &location, 
+  void read_ErrorLog(int &ErrorCode, std::string &location, 
                       std::string &arrayName);
 };
 
