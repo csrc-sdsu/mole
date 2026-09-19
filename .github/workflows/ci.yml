@@ -51,12 +51,6 @@ jobs:
         run: |
           mkdir -p build
           ls -al /usr/share/eigen3/cmake
-          echo "***"
-          pwd
-          ls -la src/cpp
-          find . -iname 'divergence.cpp'
-          git status
-          echo "***"
           cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DEigen3_DIR=/usr/share/eigen3/cmake
 
       - name: clang-tidy (fail on warnings/errors)
