@@ -24,7 +24,7 @@ Documentation Guide <intros/doc_readme_wrapper>
 :name: api-nav
 
 api/cpp/index
-api/matlab_octave/index-beta
+api/octave/index-beta
 api/julia/index
 ```
 

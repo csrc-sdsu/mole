@@ -8,6 +8,9 @@
 # 1-D Divergence Operators
 # ------------------------
 
+using LinearAlgebra
+using SparseArrays
+
 """
     div(k, m, dx; dc, nc)
 
@@ -76,7 +79,7 @@ function divNonPeriodic(k::Int, m::Int, dx)
         throw(DomainError(m, "m must be >= 2*k + 1"))
     end
 
-    D = zeros(m+2, m+1)
+    D = spzeros(m + 2, m + 1)
     if k == 2
         for i in 2:(m + 1)
             D[i, (i - 1):i] = [-1 1]
@@ -102,7 +105,7 @@ function divNonPeriodic(k::Int, m::Int, dx)
             2689/107520 -36527/35840 4259/5120 6497/15360 -475/1024 1541/5120 -639/5120 1087/35840 -59/17920;
             -59/17920 1175/21504 -1165/1024 1135/1024 25/3072 -251/5120 25/1024 -45/7168 5/7168
         ]
-        D[2:4, 1:9] = A;
+        D[2:4, 1:9] = A
         D[2:4, 1:9] = A
         D[(m - 1):(m + 1), (m - 7):(m + 1)] = -rot180(A)
         for i in 5:(m - 2)
@@ -110,7 +113,7 @@ function divNonPeriodic(k::Int, m::Int, dx)
                 [5/7168 -49/5120 245/3072 -1225/1024 1225/1024 -245/3072 49/5120 -5/7168]
         end
     end
-    D = (1/dx)*D;
+    D = (1/dx)*D
 end
 
 
@@ -126,7 +129,7 @@ Returns a m by m periodic mimetic divergence operator.
 """
 function divPeriodic(k::Int, m::Int, dx)
 
-    D = - gradPeriodic(k, m, dx)';
+    D = - gradPeriodic(k, m, dx)'
 
 end
 
@@ -147,15 +150,15 @@ function divNonUniform(k::Int, ticks::AbstractVector)
     m, _ = size(D)
 
     if size(ticks, 1) == 1
-        J = diagm((D * ticks') .^ -1)
+        J = spdiagm(0 => vec((D * ticks') .^ -1))
     else
-        J = diagm((D * ticks) .^ -1)
+        J = spdiagm(0 => vec((D * ticks) .^ -1))
     end
 
     D = J * D
     D[1, :] .= 0
     D[end, :] .= 0
-    return D;
+    return D
 
 end
 
@@ -194,26 +197,26 @@ function div(
 
     if hasbclr
         Dx = divNonPeriodic(k, m, dx)
-        Im = Matrix(I, m + 2, m + 2)
+        Im = sparse(I, m + 2, m + 2)
         Im = Im[:, 2:(end - 1)]
     else
         Dx = divPeriodic(k, m, dx)
-        Im = Matrix(I, m, m)
+        Im = sparse(I, m, m)
     end
 
     if hasbcbt
         Dy = divNonPeriodic(k, n, dy)
-        In = Matrix(I, n + 2, n + 2)
+        In = sparse(I, n + 2, n + 2)
         In = In[:, 2:(end - 1)]
     else
         Dy = divPeriodic(k, n, dy)
-        In = Matrix(I, n, n)
+        In = sparse(I, n, n)
     end
 
     Sx = kron(In, Dx)
     Sy = kron(Dy, Im)
 
-    D = [Sx Sy];
+    D = [Sx Sy]
 
 end
 
@@ -250,8 +253,8 @@ function div2DNonUniform(k::Int, xticks::AbstractVector, yticks::AbstractVector)
     m = size(Dx, 1) # Really m + 2, but makes for simpler augmented identity matrix constuction
     n = size(Dy, 1) # Really n + 2, but makes for simpler augmented identity matrix constuction
 
-    Im = Matrix(I, m, m)
-    In = Matrix(I, n, n)
+    Im = sparse(I, m, m)
+    In = sparse(I, n, n)
 
     Im = Im[:, 2:(end - 1)]
     In = In[:, 2:(end - 1)]

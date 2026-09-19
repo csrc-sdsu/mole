@@ -256,8 +256,8 @@ end
         bdry_v[1:length(v[3])] = v[3]
         midd = []
         for i in 1:length(v[1])
-            ;
-            midd = [midd; v[1][i]; v[2][i]];
+
+            midd = [midd; v[1][i]; v[2][i]]
         end
         bdry_v[(length(v[3]) + 1):length([v[1]; v[2]; v[3]])] = midd
         bdry_v[(end - length(v[4]) + 1):end] = v[4]
@@ -315,8 +315,8 @@ end
         bdry_v[1:length(v[3])] = v[3]
         midd = []
         for i in 1:length(v[1])
-            ;
-            midd = [midd; v[1][i]; v[2][i]];
+
+            midd = [midd; v[1][i]; v[2][i]]
         end
         bdry_v[(length(v[3]) + 1):length([v[1]; v[2]; v[3]])] = midd
         bdry_v[(end - length(v[4]) + 1):end] = v[4]

@@ -61,4 +61,4 @@ $$
   (D u_h)^{T} Q\, q_h = -\, u_h^{T} P\, (G q_h)
 $$
 
-The example [integration1D.m](https://github.com/csrc-sdsu/mole/blob/main/examples/matlab_octave/integration1D.m) illustrates how the weight matrix $Q$ can be used to approximate the integral of a Ricker wavelet.
+The example [integration1D.m](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/integration1D.m) illustrates how the weight matrix $Q$ can be used to approximate the integral of a Ricker wavelet.

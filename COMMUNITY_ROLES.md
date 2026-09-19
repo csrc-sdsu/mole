@@ -54,7 +54,7 @@ Users are all members from industry and academia who are using MOLE to implement
 
 ## MOLE OSE Curious
 
-Anyone with an interest in **_Mimetic Discretization_** and the fast prototyping of numerical solutions using MOLE from Matlab, C++ or Python. Individuals interested in knowing more about MOLE should sign up for our mailing lists, check the [MOLE website](https://mole-docs.readthedocs.io/) and [GitHub repository](https://github.com/csrc-sdsu/mole), where anyone can check MOLE forums.
+Anyone with an interest in **_Mimetic Discretization_** and the fast prototyping of numerical solutions using MOLE from Octave, C++ or Python. Individuals interested in knowing more about MOLE should sign up for our mailing lists, check the [MOLE website](https://mole-docs.readthedocs.io/) and [GitHub repository](https://github.com/csrc-sdsu/mole), where anyone can check MOLE forums.
 
 ---
 

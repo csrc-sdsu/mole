@@ -22,4 +22,4 @@ au + b\nabla u = g
 $$
 
 with $a=1$, $b=0$, and $g=0$, which is equivalent to Dirichlet conditions along each boundary.
-The MATLAB/ OCTAVE code uses the function `boundaryIdx2D` to find the correct locations for the weights of the boundary condition in the Laplacian node. The code then sets the appropriate values to $0$ or $1$.
+The Octave code uses the function `boundaryIdx2D` to find the correct locations for the weights of the boundary condition in the Laplacian node. The code then sets the appropriate values to $0$ or $1$.
