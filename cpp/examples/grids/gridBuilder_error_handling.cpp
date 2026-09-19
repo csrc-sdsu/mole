@@ -3,22 +3,27 @@
 // gridBuilder collects every error it can find rather than stopping
 // at the first, pushes MOLE_ERR_INVALID_GRID_ARGS on top of the
 // stack, and returns a gridNull carrying the whole log. The caller
-// checks isValidGrid and prints the log.
+// checks whether the grid has errors and prints the log.
 #include "grid_builder.h"
 #include <iostream>
 #include <vector>
 
 // report prints the outcome of one gridBuilder call.
 static void report(gridVar& g) {
-    if (isValidGrid(g)) {
-        std::visit([](auto&& grid) {
+    // Dispatch on whichever alternative gridBuilder actually
+    // produced (grid1D/grid2D/grid3D on success, gridNull on
+    // failure) instead of assuming grid2D, since std::get<T> on
+    // the wrong alternative throws std::bad_variant_access.
+    std::visit([](auto&& grid) {
+        if (!grid.hasGridErrors()) {
             std::cout << "grid built OK, dim = " << grid.dim << "\n";
-        }, g);
-        return;
-    }
-    std::cout << "holds gridNull: "
-              << std::holds_alternative<gridNull>(g) << "\n";
-    std::visit([](auto&& grid) { grid.print_ErrorLog(); }, g);
+            return;
+        }
+        std::cout << "holds gridNull: "
+                  << std::is_same_v<std::decay_t<decltype(grid)>, gridNull>
+                  << "\n";
+        grid.print_ErrorLog();
+    }, g);
 }
 
 int main() {

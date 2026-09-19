@@ -1055,14 +1055,3 @@ gridVar makeGrid(paramVars params, const stack<MOLE_Errors>& errs){
         
     }, params);
 }
-
-// ---------------------------------------------------------
-// Dispatch function which takes a gridVar (generic grid) and
-// validates it using the instantiated MOLE grid class (i.e.,
-// grid1D, grid2D or grid3D) for the actual grid validation
-// ---------------------------------------------------------
-bool isValidGrid(gridVar& g) {
-    return std::visit([](auto&& gridObj) 
-    { return gridObj.validGrid(); }, g);
-}
-

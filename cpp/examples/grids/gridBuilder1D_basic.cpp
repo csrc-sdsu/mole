@@ -10,7 +10,7 @@ int main() {
     gridVar g = gridBuilder("dim", 1, "m", 4, "dx", 0.5,
                             "topology", 'u');
 
-    if (!isValidGrid(g)) {
+    if (std::get<grid1D>(g).hasGridErrors()) {
         std::visit([](auto&& grid) { grid.print_ErrorLog(); }, g);
         return 1;
     }

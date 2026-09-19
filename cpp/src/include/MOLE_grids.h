@@ -294,8 +294,7 @@ using paramVars = std::variant<paramsNull, gridParams1D,
 using gridVar = std::variant<grid1D, grid2D, grid3D, gridNull>;
 
 // Auxiliar functions used by some MOLE grids
-  
-bool isValidGrid(gridVar& g); // validates a generic grid 
+   
 bool validSpacing(Real dh);  // checks for valid dx, dy, or dz
 void generateNodalPts(size_t npts, Real delta, array1D& out_array);
 void generateCenterPts(size_t npts, Real delta, array1D& out_array);

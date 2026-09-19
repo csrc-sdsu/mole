@@ -53,7 +53,9 @@ int main() {
                             "isPeriodic", &periodic,
                             "dim", 2);
 
-    if (!isValidGrid(a) || !isValidGrid(b) || !isValidGrid(c)) {
+    if (std::get<grid2D>(a).hasGridErrors() || 
+        std::get<grid2D>(b).hasGridErrors() || 
+        std::get<grid2D>(c).hasGridErrors()){
         std::cout << "at least one grid failed to build\n";
         return 1;
     }
