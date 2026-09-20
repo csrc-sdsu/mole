@@ -1,0 +1,69 @@
+function checkGridOrientation(J, caller)
+% PURPOSE
+% Warns when the Jacobian indicates a left-handed or tangled grid.
+%
+% DESCRIPTION
+% The curvilinear operators read the grid as [n, m] = size(X), i.e. rows are
+% eta and columns are xi.  A grid supplied with the axes the other way round
+% is still a perfectly good grid, and grad/div built from it are still
+% self-consistent -- J flips sign, the cofactors flip with it, and gradients
+% still come out exact.  Nothing fails, so nothing complains.
+%
+% It stops being harmless as soon as anything downstream assumes a fixed
+% physical orientation: a buoyancy term, a volume weighting, a sqrt(J).
+% Transposing two axes is an odd permutation, so handedness inverts and the
+% whole domain is silently mirrored.
+%
+% A uniformly negative J is the signature.  The most common cause is passing
+% gridGen output straight in: gridGen returns X with xi-nodes as ROWS, which
+% is the opposite of what the operators read.
+%
+% A mixed-sign J means something worse -- the mapping folds over itself
+% somewhere and is not invertible there.  That is reported separately.
+%
+% Parameters:
+%         J : the Jacobian, as returned by jacobian2D
+%    caller : name used in the warning identifier
+%
+% SYNTAX
+% checkGridOrientation(J, caller)
+%
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
+    d = nonzeros(J);
+    if isempty(d)
+        return
+    end
+
+    npos = sum(d > 0);
+    nneg = sum(d < 0);
+
+    if nneg > 0 && npos == 0
+        warning([caller ':leftHandedGrid'], ...
+                ['The Jacobian is negative everywhere, so the grid is ' ...
+                 'left-handed and the domain is mirrored.\n' ...
+                 'The curvilinear operators read [n, m] = size(X): rows are ' ...
+                 'eta, columns are xi.\n' ...
+                 'If X and Y came from gridGen, they have xi-nodes as ROWS ' ...
+                 '-- pass X.'' and Y.'' instead.\n' ...
+                 'grad and div are self-consistent either way, so this will ' ...
+                 'not show up as an error; it matters\n' ...
+                 'for anything that assumes a physical orientation ' ...
+                 '(buoyancy, volume weights, sqrt(J)).\n' ...
+                 'Silence with: warning(''off'', ''%s:leftHandedGrid'')'], ...
+                caller);
+    elseif npos > 0 && nneg > 0
+        warning([caller ':tangledGrid'], ...
+                ['The Jacobian changes sign across the mesh (%d positive, ' ...
+                 '%d negative entries).\n' ...
+                 'The mapping folds over itself somewhere and is not ' ...
+                 'invertible there. This is a grid\n' ...
+                 'generation problem, not an orientation one -- the ' ...
+                 'operators cannot be trusted on it.\n' ...
+                 'Silence with: warning(''off'', ''%s:tangledGrid'')'], ...
+                npos, nneg, caller);
+    end
+end

@@ -30,6 +30,7 @@ function [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y, dc, nc)
               "jacobian2D expects 3 or 5 arguments")
     elseif nargin == 3
         [J,Xe,Xn,Ye,Yn] = jacobian2DLegacy(k,X,Y);
+        checkGridOrientation(J, 'jacobian2D');
         return;
     end
 
@@ -89,5 +90,7 @@ function [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y, dc, nc)
     Yn = metrics(1+numC:end,2);
 
     J = Xe .* Yn - Xn .* Ye;
+
+    checkGridOrientation(J, 'jacobian2D');
 
 end
