@@ -8,9 +8,6 @@ import sys
 import shutil
 import matplotlib.pyplot as plt
 
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent)+'/src/python')
 from pymole import Grid, Gradient, Divergence, Laplacian, RobinBoundaryCondition
 
 west = 0   # Domain's limits
