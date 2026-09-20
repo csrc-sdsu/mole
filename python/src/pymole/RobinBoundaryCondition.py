@@ -8,9 +8,14 @@ from scipy import sparse
 
 from .BoundaryCondition import BoundaryCondition
 
-
 class RobinBoundaryCondition(BoundaryCondition):
-    def __init__(self, grid, accuracy_order: int = 2, dirichlet_coefficient: float = 1.0, neumann_coefficient: float = 1.0):
+    def __init__(
+        self, 
+        grid, 
+        accuracy_order: int = 2, 
+        dirichlet_coefficient: float = 1.0, 
+        neumann_coefficient: float = 1.0,
+        ):
         self.dirichlet_coefficient = dirichlet_coefficient
         self.neumann_coefficient = neumann_coefficient
         super().__init__(grid, accuracy_order)
