@@ -154,7 +154,7 @@ graphviz_dot_args = [
 # Octave (MATLAB)domain configuration
 #------------------------------------------------------------------------------
 # Path to Octave (MATLAB) source directory for cross-reference functionality
-matlab_src_dir = os.path.abspath(os.path.join(ROOT_DIR, 'src', 'octave'))
+matlab_src_dir = os.path.abspath(os.path.join(ROOT_DIR, 'octave', 'src'))
 
 # Enhanced debug logging
 # print("\nDEBUG: Enhanced GNU Octave Configuration:")
