@@ -31,6 +31,7 @@ function [J, Xe, Xn, Xk, Ye, Yn, Yk, Ze, Zn, Zk] = jacobian3D(k, X, Y, Z, dc, nc
               "jacobian3D expects 4 or 6 arguments")
     elseif nargin == 4
         [J, Xe, Xn, Xk, Ye, Yn, Yk, Ze, Zn, Zk] = jacobian3DLegacy(k, X, Y, Z);
+        checkGridOrientation(J, 'jacobian3D');
         return;
     end
 
@@ -110,5 +111,7 @@ function [J, Xe, Xn, Xk, Ye, Yn, Yk, Ze, Zn, Zk] = jacobian3D(k, X, Y, Z, dc, nc
     Zk = metrics(1+2*numC:end, 3);
 
     J = Xe .* (Yn .* Zk - Yk .* Zn) - Xn .* (Ye .* Zk - Yk .* Ze) + Xk .* (Ye .* Zn - Yn .* Ze);
+
+    checkGridOrientation(J, 'jacobian3D');
 
 end
