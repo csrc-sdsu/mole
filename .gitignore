@@ -3,10 +3,8 @@
 /bin/
 /lib/
 /dist/
-/src/mole_C++/*.o
-/src/mole_C++/*.a
-/src/cpp/*.o
-/src/cpp/*.a
+/cpp/src/grids/*.o
+/cpp/src/grids/*.a
 
 # CMake generated files
 CMakeCache.txt
