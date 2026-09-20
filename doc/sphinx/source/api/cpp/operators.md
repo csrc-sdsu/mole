@@ -69,21 +69,21 @@ The Interpol class performs interpolation operations in the MOLE library.
 ## Usage Examples
 
 ### Transport Example (Gradient & Divergence)
-```{literalinclude} ../../../../../examples/cpp/transport1D.cpp
+```{literalinclude} ../../../../../cpp/examples/old_version/transport1D.cpp
 :language: cpp
 :linenos:
 :caption: Transport 1D Example using Gradient and Divergence (examples/cpp/transport1D.cpp)
 ```
 
 ### Elliptic Example (Laplacian)
-```{literalinclude} ../../../../../examples/cpp/elliptic2D.cpp
+```{literalinclude} ../../../../../cpp/examples/old_version/elliptic2D.cpp
 :language: cpp
 :linenos:
 :caption: Elliptic 2D Example using Laplacian (examples/cpp/elliptic2D.cpp)
 ```
 
 ### Schrödinger Example (Complex Operators)
-```{literalinclude} ../../../../../examples/cpp/schrodinger1D.cpp
+```{literalinclude} ../../../../../cpp/examples/old_version/schrodinger1D.cpp
 :language: cpp
 :linenos:
 :caption: Schrödinger 1D Example (examples/cpp/schrodinger1D.cpp)

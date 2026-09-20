@@ -51,7 +51,7 @@
 % =========================================================================
 clear; clc; close all;
 
-addpath(genpath('../../../src/octave'));
+addpath(genpath('../../../src/old_version'));
 
 fprintf('Running Comparative Convergence Test (Mimetic vs FD)\n');
 fprintf('--------------------------------------------------\n');

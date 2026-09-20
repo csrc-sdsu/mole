@@ -93,7 +93,7 @@ clc
 close all
 clear
 
-addpath(genpath('../../../../src/octave'));
+addpath(genpath('../../../src/old_version'));
 
 %% Problem definition - These values aremimicked in the FD and MD functions
 k    = 2;        % Mimetic Order of Accuracy, can change to 4,6,8

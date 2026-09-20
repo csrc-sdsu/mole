@@ -6,7 +6,7 @@ function richards
     clc
     close all
 
-    addpath(genpath('../../src/octave'));
+    addpath(genpath('../../src/old_version'));
 
     % Spatial and temporal discretization
     k = 4;

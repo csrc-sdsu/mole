@@ -16,7 +16,7 @@
 %
 clear all; close all; clc
 
-addpath(genpath('../../src/octave'))
+addpath(genpath('../../src/old_version'))
 
 % some other parameters
 c = 2;

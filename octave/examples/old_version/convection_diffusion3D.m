@@ -4,7 +4,7 @@ clc
 close all
 format short
 
-addpath(genpath('../../src/octave'))
+addpath(genpath('../../src/old_version'))
 
 % Mimetic operator's parameters
 k = 2;

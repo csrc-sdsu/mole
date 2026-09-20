@@ -3,7 +3,7 @@
 clc
 close all
 
-addpath(genpath('../../src/octave'))
+addpath(genpath('../../src/old_version'))
 
 k = 2; % Order of accuracy
 m = 5; % -> 7

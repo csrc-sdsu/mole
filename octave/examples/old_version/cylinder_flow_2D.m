@@ -83,7 +83,7 @@
 %     transient incompressible flow solver in a compact way.
 
 close all; clear; clc;
-addpath(genpath('../../src/octave'))
+addpath(genpath('../../src/old_version'))
 
 %% Settings (match C++)
 Re    = 200;     % C++: 200

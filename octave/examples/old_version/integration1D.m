@@ -8,7 +8,7 @@
 
 clc; close all;
 
-addpath(genpath('../../src/octave'));
+addpath(genpath('../../src/old_version'));
 
 % Domain limits
 west = -5;

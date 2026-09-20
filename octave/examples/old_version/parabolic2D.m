@@ -11,8 +11,8 @@
 clc
 close all
 
-% Add paths to lap2D and addScalarBC2D in the src/octave
-addpath(genpath('../../src/octave'))
+% Add paths to lap2D and addScalarBC2D in the mole/octave/src/old_version directory
+addpath(genpath('../../src/old_version'))
 
 % Parameters
 method = "implicit";

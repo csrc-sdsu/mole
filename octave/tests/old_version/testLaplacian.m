@@ -3,7 +3,7 @@ classdef testLaplacian < matlab.unittest.TestCase
         function testNullityofLaplacian(testCase)
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/octave'))
+            addpath(genpath('../../src/old_version'))
             
             ks=[2,4,6,8];
             tol = 1e-10;

@@ -3,7 +3,7 @@
 clc
 close all
 
-addpath(genpath('../../src/octave'))
+addpath(genpath('../../src/old_version'))
 
 % Spatial discretization
 k = 4;         % Order of accuracy (spatial)

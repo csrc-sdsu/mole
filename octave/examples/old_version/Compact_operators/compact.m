@@ -9,7 +9,7 @@
 close all
 format rat
 
-addpath(genpath('../../src/octave'))
+addpath(genpath('../../../src/old_version'))
 
 k = 4;
 m = 2*k+1;

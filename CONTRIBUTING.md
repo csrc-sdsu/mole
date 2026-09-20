@@ -59,32 +59,42 @@ The MOLE library follows a consistent structure across Octave and C++ implementa
 
 #### Octave Core Functions
 
-Core functions are located in `src/octave/` and follow this pattern:
+Core functions are located in `mole/octave/src` and follow this pattern:
 
 ```matlab
 function OUTPUT = functionName(k, m, dx, ...)
-% BRIEF_DESCRIPTION
+% Use these three comment tags to organize your documentation:
+% PURPOSE, SYNTAX, and DESCRIPTION.  Each identifies a different
+% section in the documentation.
 %
-% Parameters:
-%                k : Order of accuracy
-%                m : Number of cells (along x-axis for multidimensional)
-%               dx : Step size (along x-axis for multidimensional)
-%    (additional parameters as needed)
+% PURPOSE
+% In this sectino write a brief description of the function (can be 
+% a few lines long). Everything before the next comment tag (i.e., 
+% SYNTAX or DESCRPTION) is considered part of the PURPOSE section
 %
-% Returns:
-%          OUTPUT : Sparse matrix representing the operator
+% SYNTAX
+% OUPUT = functionName(parameters). If the function can be overlaoded
+% include the syntax for all possible cases.  For example:
+%   G = grad(k, m, dx)
+%   G = grad(k, m, dx, dc, nc)
+% are two ways of calling the create the gradient operator
 %
-% ----------------------------------------------------------------------------
-% SPDX-License-Identifier: GPL-3.0-or-later
-% © 2008-2024 San Diego State University Research Foundation (SDSURF).
-% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
-% ----------------------------------------------------------------------------
+% DESCRIPTION
+% In this section write a more complete description of the input
+% parameters and the output.   For instance, for the gradient above:
+%
+% Returns a one-dimensional mimetic gradient operator depending on whether
+% or not the operator will contain a periodic boundary condition type
+% a0 U + b0 dU/dn = g,
+%
+%               k : Order of accuracy
+%               m : Number of cells
+%              dx : Step size
+%   (optional) dc : a0 (2x1 vector for left and right vertices, resp.)
+%   (optional) nc : b0 (2x1 vector for left and right vertices, resp.)
+%          OUTPUT : Sparse matrix representing the gradient operator
+%
 
-    % Input validation
-    assert(k >= 2, 'Order of accuracy k must be >= 2');
-    assert(mod(k, 2) == 0, 'Order of accuracy k must be even');
-    assert(m >= 2*k+1, ['Number of cells m must be >= ' num2str(2*k+1) ' for k = ' num2str(k)]);
-    
     % Implementation
     % ...
     
@@ -93,14 +103,9 @@ end
 
 #### C++ Core Classes
 
-C++ implementations are in `src/cpp/` and follow this pattern:
+C++ implementations are in `mole/cpp/src` and follow this pattern:
 
 ```cpp
-/*
- * SPDX-License-Identifier: GPL-3.0-or-later
- * © 2008-2024 San Diego State University Research Foundation (SDSURF).
- * See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
- */
 
 /**
  * @file classname.h
@@ -157,7 +162,7 @@ When contributing core functionality, identify which category your contribution 
 
 If adding a new operator, follow this checklist:
 
-1. **Octave Implementation** (`src/octave/newoperator.m`):
+1. **Octave Implementation** (`octave/src/operators/newoperator.m`):
    ```matlab
    function OP = newoperator(k, m, dx)
    % Returns a new mimetic operator
@@ -179,7 +184,8 @@ If adding a new operator, follow this checklist:
    end
    ```
 
-2. **C++ Implementation** (`src/cpp/newoperator.h` and `src/cpp/newoperator.cpp`)
+2. **C++ Implementation** ( `cpp/src/include/newoperator.h` and
+                            `cpp/src/operators/newoperator.cpp`)
 3. **Add to API Documentation** (`doc/sphinx/source/api/`)
 4. **Create Test Examples** (see Examples section)
 
@@ -193,15 +199,17 @@ Examples demonstrate how to use MOLE to solve specific PDEs and are crucial for 
 
 Examples are organized by PDE type in the `examples/` directory:
 
-```
-examples/
-├── octave/         # Octave examples
-│   ├── elliptic1D.m       # Basic examples
-│   ├── parabolic2D.m      # 2D examples
-│   └── compact_operators/ # Specialized examples
-└── cpp/                   # C++ examples
-    ├── elliptic1D.cpp
-    └── transport1D.cpp
+``` MOLE Examples for Octave (fully compatible with MATLAB) and CPP
+mole/
+├── octave/ 
+|   |── examples       # Octave examples
+│       ├── elliptic1D.m        # Basic examples
+│       ├── parabolic2D.m       # 2D examples
+│       └── compact_operators/  # Specialized examples
+└── cpp/                        # C++ examples
+    ├── examples        # C++ examples
+        ├── elliptic1D.cpp
+        └── transport1D.cpp
 ```
 
 ### Example Categories
@@ -223,7 +231,7 @@ Organize your examples by PDE type:
 clc
 close all
 
-addpath('../../src/octave')  % REQUIRED: Add path to MOLE library
+addpath('mole/octave/src')  % REQUIRED: Add path to MOLE library
 
 %% Problem Parameters
 % [Describe each parameter with physical meaning]

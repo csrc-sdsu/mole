@@ -7,7 +7,7 @@
 %
 close all; clc;
 
-addpath(genpath('../../src/octave'));
+addpath(genpath('../../src/old_version'));
 
 k = 2;
 bvp = 5; 

@@ -1,6 +1,6 @@
-% Solves a second order ODE using our implementation of RK4 (src/octave/rk4.m)
+% Solves a second order ODE using our implementation of RK4 (mole/octave/src/old_version/rk4.m)
 
-addpath(genpath('../../src/octave'))
+addpath(genpath('../../src/old_version'))
 
 % OCTAVE does not have VanDerPol equation, so here it is with Mu=1
 vdpl = @(t,y) [y(2); (1 - y(1)^2) * y(2) - y(1)];

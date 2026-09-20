@@ -2,7 +2,7 @@
 clc
 close all
 
-addpath(genpath('../../src/octave'))
+addpath(genpath('../../src/old_version'))
 
 % Parameters
 Lxy = 1;              % Length of box in x and y

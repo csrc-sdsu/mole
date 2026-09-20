@@ -5,7 +5,7 @@
 clc
 close all
 
-addpath(genpath('../../src/octave'))
+addpath(genpath('../../src/old_version'))
 
 west = -15; % Domain's limits
 east = 15;

@@ -2,7 +2,7 @@
 clc
 close all
 
-addpath(genpath('../../src/octave'))
+addpath(genpath('../../src/old_version'))
 
 % Parameters
 e = 1; % Controls "rectangularity" of the grid, e = 0 -> completely rectangular

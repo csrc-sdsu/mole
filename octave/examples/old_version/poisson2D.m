@@ -3,7 +3,7 @@
 clc
 close all
 
-addpath(genpath('../../src/octave'))
+addpath(genpath('../../src/old_version'))
 
 k = 2; % Order of accuracy
 m = 5; % Vertical resolution - minimal number of grid points required for the operator

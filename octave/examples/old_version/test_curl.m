@@ -12,7 +12,7 @@ clc
 close all
 clear
 
-addpath(genpath('../../src/octave'))
+addpath(genpath('../../src/old_version'))
 
 % This P and Q will produce a scalar curl = 2
 P = @(~, Y) -Y;   % U(x,y) = -y

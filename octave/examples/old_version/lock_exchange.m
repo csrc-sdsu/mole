@@ -8,7 +8,7 @@ clc
 close all
 
 %% MOLE'S path so mimetic methods can be used
-addpath(genpath('../../src/octave'))
+addpath(genpath('../../src/old_version'))
 
 tic  % Start the timer
 %--------------------------------------------------------------------------

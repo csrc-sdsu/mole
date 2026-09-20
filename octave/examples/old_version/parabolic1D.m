@@ -3,7 +3,7 @@
 clc
 close all
 
-addpath(genpath('../../src/octave'))
+addpath(genpath('../../src/old_version'))
 
 is_Octave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
 
