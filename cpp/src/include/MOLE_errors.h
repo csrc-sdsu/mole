@@ -58,10 +58,10 @@ using namespace std;
 // A: print the errors to standard output
 // B: print errors to a file
 
-// 3. DEBUG_AND_ABORT_MD (Report, then abort so a debugger stops at
-// that particular failure point, the difference is that this one 
-// aborts execution). The MOLE library will report errors to standard
-// output and abort the execution (e.g., code exits).
+// 3. DEBUG_AND_ABORT_MD (Report, then raise SIGTRAP so a debugger
+// stops at that particular failure point). The MOLE library will
+// report errors to standard output and raise SIGTRAP. Without a
+// debugger or signal handler attached, the process terminates.
 
 // A debug mode governs only what happens to a MOLE object that
 // failed validation. An object that validated is unaffected by the

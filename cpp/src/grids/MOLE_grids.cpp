@@ -15,7 +15,8 @@
 
 #include "MOLE_grids.h"
 
-#include <cstdlib> // abort() for DEBUG_AND_ABORT_MD
+#include <csignal>  // raise(SIGTRAP) for DEBUG_AND_ABORT_MD
+#include <cstdlib>  // abort() fallback where SIGTRAP is not defined
 
 // ------------------------------------------------------------------
 //                      gridBase Errors Implementation
@@ -96,11 +97,15 @@ void gridBase::mergeErrors(const stack<MOLE_Errors>& inerrs) {
     }
 }
 
+//
 // gridBase::applyDebugMode applies a MOLE debug mode to a grid that
 // has errors in its log. A grid with no errors is left untouched.
-// The modes are declared in MOLE_errors.h. An unrecognized mode
-// falls back to reporting, which is the behaviour that loses the
-// least information without ending the user's program.
+// The modes are declared in MOLE_errors.h. DEBUG_AND_ABORT_MD prints
+// the error log and raises SIGTRAP, which stops an attached debugger
+// at the failing grid so the program can be inspected or continued.
+// An unrecognized mode falls back to reporting, which is the
+// behaviour that loses the least information without ending the
+// user's program.
 //
 void gridBase::applyDebugMode(size_t debug_mode){
     if (!hasGridErrors()) return;
@@ -113,7 +118,13 @@ void gridBase::applyDebugMode(size_t debug_mode){
         return;
     case DEBUG_AND_ABORT_MD:
         print_ErrorLog();
-        abort();
+        cout.flush();
+#ifdef SIGTRAP
+        raise(SIGTRAP);
+#else
+        abort();    // SIGTRAP is POSIX-only (not defined on MSVC)
+#endif
+        return;     // reached if a debugger or handler resumes
     default:
         cout << "Unrecognized MOLE debug mode [" << debug_mode
              << "], reporting to standard output." << endl;
