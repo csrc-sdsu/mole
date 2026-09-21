@@ -191,7 +191,7 @@ void array3D::write_ErrorLog() const {
 // user facing class like grids or operators. Users can also print the
 // errors to standard output or write them to a file.
 //
-void array1D::read_ErrorLog(int ErrorCode, std::string &location, 
+void array1D::read_ErrorLog(int &ErrorCode, std::string &location, 
                           std::string &arrayName) {
   if (!a_errs.empty()) {
     MOLE_Errors topError = a_errs.top();
@@ -202,7 +202,7 @@ void array1D::read_ErrorLog(int ErrorCode, std::string &location,
   }
 }
 
-void array2D::read_ErrorLog(int ErrorCode, std::string &location, 
+void array2D::read_ErrorLog(int &ErrorCode, std::string &location, 
                           std::string &arrayName) {
   if (!a_errs.empty()) {
     MOLE_Errors topError = a_errs.top();
@@ -213,7 +213,7 @@ void array2D::read_ErrorLog(int ErrorCode, std::string &location,
   }
 }
 
-void array3D::read_ErrorLog(int ErrorCode, std::string &location, 
+void array3D::read_ErrorLog(int &ErrorCode, std::string &location, 
                           std::string &arrayName) {
   if (!a_errs.empty()) {
     MOLE_Errors topError = a_errs.top();

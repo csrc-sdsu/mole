@@ -19,7 +19,7 @@ int main() {
                             "topology", 'u',
                             "isPeriodic", &periodic);
 
-    if (!isValidGrid(g)) {
+    if (std::get<grid2D>(g).hasGridErrors()) {
         std::visit([](auto&& grid) { grid.print_ErrorLog(); }, g);
         return 1;
     }

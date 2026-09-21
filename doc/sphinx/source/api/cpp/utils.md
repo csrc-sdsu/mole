@@ -18,7 +18,7 @@ MOLE provides a set of utility functions and classes to simplify common tasks wh
 
 Here's an example using utility functions in a parabolic equation:
 
-```{literalinclude} ../../../../../examples/cpp/parabolic1D.cpp
+```{literalinclude} ../../../../../cpp/examples/old_version/parabolic1D.cpp
 :language: cpp
 :linenos:
 :caption: Parabolic 1D Example (examples/cpp/parabolic1D.cpp)

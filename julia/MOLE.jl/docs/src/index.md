@@ -144,3 +144,6 @@ Currently, the following examples are available in the MOLE Julia package.
 - Parabolic Problems
   - 2D Examples
     - ```parabolic2D```: A script that solves the 2D heat equation, $u_t = \nu \nabla^2 u$, with Dirichlet boundary conditions in $x$ and $y$ using mimetic operators.
+- Navier-Stokes Problems
+  - 2D Navier-Stokes Examples
+    - ```cylinder_flow_2D.jl```: A script that solves the 2D incompressible Navier-Stokes equations in a channel with a solid cylindrical obstacle.
