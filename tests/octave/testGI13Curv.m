@@ -33,7 +33,7 @@ classdef testGI13Curv < matlab.unittest.TestCase
             % Feed GI13 a field whose values encode their own (i,j,k) and
             % check every output reads from the correct zeta-plane.
             origPath = path; cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/matlab_octave'))
+            addpath(genpath('../../src/octave'))
 
             m = 4; n = 3; o = 3;
             [I, J, K] = ndgrid(1:m, 1:n+1, 1:o);
@@ -60,7 +60,7 @@ classdef testGI13Curv < matlab.unittest.TestCase
             % All six shifts must have the right shape and map a constant
             % field to a constant field.  Weak, but cheap.
             origPath = path; cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/matlab_octave'))
+            addpath(genpath('../../src/octave'))
 
             m = 5; n = 4; o = 3;
             ty  = {'Gn','Gc','Ge','Gcy','Gee','Gnn'};
@@ -81,7 +81,7 @@ classdef testGI13Curv < matlab.unittest.TestCase
             % Guards against a "fix" that trades curvilinear accuracy for
             % Cartesian accuracy.
             origPath = path; cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/matlab_octave'))
+            addpath(genpath('../../src/octave'))
 
             for N = [11 17 25]
                 [X, Y, Z, xc, yc, zc] = testGI13Curv.sineGrid(N, 0.0);
@@ -99,7 +99,7 @@ classdef testGI13Curv < matlab.unittest.TestCase
             % operator gave rms 0.39 at distortion 0.10; anything near that
             % means the face shift is wrong again.
             origPath = path; cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/matlab_octave'))
+            addpath(genpath('../../src/octave'))
 
             N = 21;
             for amp = [0.05 0.10]
@@ -118,7 +118,7 @@ classdef testGI13Curv < matlab.unittest.TestCase
             % the stock operator misses by a wide margin and the corrected one
             % clears at ~2.1.
             origPath = path; cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/matlab_octave'))
+            addpath(genpath('../../src/octave'))
 
             amp = 0.10; Ns = [13 21 33]; errs = zeros(size(Ns));
             for i = 1:numel(Ns)
