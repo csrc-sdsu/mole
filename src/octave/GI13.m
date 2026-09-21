@@ -59,8 +59,11 @@ end
 
 function A = P(N)
 % centre -> node: N values on centres -> N+1 values on nodes.  Midpoint average
-% in the interior, linear extrapolation at the two ends.
+% in the interior; at the two ends the three-point row [1, .5, -.5], which is
+% the boundary row GI2 uses once Q's 0.5 weights are factored out.  Both this
+% and plain linear extrapolation [1.5, -.5] are exact for linear fields and
+% second order; this one keeps the 2-D and 3-D operators consistent.
     A = spdiags(0.5*ones(N+1, 2), [-1 0], N+1, N);
-    A(1, 1) = 1.5;    A(1, 2) = -0.5;
-    A(N+1, N) = 1.5;  A(N+1, N-1) = -0.5;
+    A(1, 1) = 1;      A(1, 2) = 0.5;      A(1, 3) = -0.5;
+    A(N+1, N) = 1;    A(N+1, N-1) = 0.5;  A(N+1, N-2) = -0.5;
 end
