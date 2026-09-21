@@ -23,6 +23,16 @@ function animation_limits(frames)
     return (lower, upper)
 end
 
+"""Write one captured Plots.jl animation to GIF and three movie formats."""
+function save_animation_formats(animation, basename; fps)
+    gif(animation, "$(basename).gif", fps = fps, show_msg = false)
+    mp4(animation, "$(basename).mp4", fps = fps, show_msg = false)
+    webm(animation, "$(basename).webm", fps = fps, show_msg = false)
+    mov(animation, "$(basename).mov", fps = fps, show_msg = false)
+
+    return nothing
+end
+
 function main()
     k = 2
     Re = 200.0
@@ -243,7 +253,7 @@ function main()
         aspect_ratio = :equal,
         colorbar = true,
         xlabel = "x",
-        ylabel = "y",
+        ylabel = "y ",
         title = "V at t = $(round(final_time, digits = 3))",
     )
 
@@ -269,12 +279,12 @@ function main()
             aspect_ratio = :equal,
             colorbar = true,
             clims = u_limits,
-            xlabel = "x index",
-            ylabel = "y index",
+            xlabel = "x",
+            ylabel = "y",
             title = "U at t = $(round(frame_times[frame_index], digits = 3))",
         )
     end
-    gif(anim_u, "U.gif", fps = fps, show_msg = false)
+    save_animation_formats(anim_u, "U"; fps = fps)
 
     anim_v = @animate for frame_index in eachindex(frame_times)
         heatmap(
@@ -282,12 +292,12 @@ function main()
             aspect_ratio = :equal,
             colorbar = true,
             clims = v_limits,
-            xlabel = "x index",
-            ylabel = "y index",
+            xlabel = "x",
+            ylabel = "y",
             title = "V at t = $(round(frame_times[frame_index], digits = 3))",
         )
     end
-    gif(anim_v, "V.gif", fps = fps, show_msg = false)
+    save_animation_formats(anim_v, "V"; fps = fps)
 
     anim_p = @animate for frame_index in eachindex(frame_times)
         heatmap(
@@ -295,14 +305,17 @@ function main()
             aspect_ratio = :equal,
             colorbar = true,
             clims = p_limits,
-            xlabel = "x index",
-            ylabel = "y index",
+            xlabel = "x",
+            ylabel = "y",
             title = "Pressure p at t = $(round(frame_times[frame_index], digits = 3))",
         )
     end
-    gif(anim_p, "p.gif", fps = fps, show_msg = false)
+    save_animation_formats(anim_p, "p"; fps = fps)
 
-    println("Saved cylinder_flow_2D.png, U.gif, V.gif, and p.gif")
+    println(
+        "Saved cylinder_flow_2D.png and GIF, MP4, WebM, and MOV animations ",
+        "for U, V, and p",
+    )
 
     return Ufinal, Vfinal, pfinal
 end
