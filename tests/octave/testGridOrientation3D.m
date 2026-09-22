@@ -23,14 +23,16 @@ classdef testGridOrientation3D < matlab.unittest.TestCase
     methods(Test)
 
         function testRightHanded3DIsSilent(testCase)
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/octave'))
             [X, Y, Z] = testGridOrientation3D.sineGrid3(13, 0.08);
             testCase.verifyWarningFree(@() jacobian3D(2, X, Y, Z));
         end
 
         function testSwappedAxesWarn(testCase)
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/octave'))
             [X, Y, Z] = testGridOrientation3D.sineGrid3(13, 0.08);
             p = @(A) permute(A, [2 1 3]);
@@ -40,7 +42,8 @@ classdef testGridOrientation3D < matlab.unittest.TestCase
 
         function testMirroredAxisWarns(testCase)
             % Reversing one axis is also an odd permutation.
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/octave'))
             [X, Y, Z] = testGridOrientation3D.sineGrid3(13, 0.08);
             f = @(A) A(end:-1:1, :, :);
@@ -49,7 +52,8 @@ classdef testGridOrientation3D < matlab.unittest.TestCase
         end
 
         function testWarningReaches3DOperatorUsers(testCase)
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/octave'))
             [X, Y, Z] = testGridOrientation3D.sineGrid3(13, 0.08);
             p = @(A) permute(A, [2 1 3]);
@@ -63,7 +67,8 @@ classdef testGridOrientation3D < matlab.unittest.TestCase
             % Three identical columns make the central difference across the
             % middle one exactly zero, so those cells are degenerate. The sign
             % checks cannot see this: zero is neither positive nor negative.
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/octave'))
             N = 21;
             [X, Y] = meshgrid(linspace(0,1,N), linspace(0,1,N));
@@ -76,7 +81,8 @@ classdef testGridOrientation3D < matlab.unittest.TestCase
         end
 
         function testHealthyGridHasNoVanishingWarning(testCase)
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/octave'))
             N = 21;
             [X, Y] = meshgrid(linspace(0,1,N), linspace(0,1,N));
