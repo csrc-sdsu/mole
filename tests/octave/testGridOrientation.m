@@ -19,14 +19,16 @@ classdef testGridOrientation < matlab.unittest.TestCase
     methods(Test)
 
         function testRightHandedIsSilent(testCase)
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/octave'))
             [X, Y] = testGridOrientation.sineGrid(21, 0.10);
             testCase.verifyWarningFree(@() jacobian2D(2, X, Y));
         end
 
         function testTransposedWarns(testCase)
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/octave'))
             [X, Y] = testGridOrientation.sineGrid(21, 0.10);
             testCase.verifyWarning(@() jacobian2D(2, X.', Y.'), ...
@@ -37,8 +39,10 @@ classdef testGridOrientation < matlab.unittest.TestCase
             % The reported case: gridGen returns xi-nodes as ROWS, which is the
             % opposite of what the operators read, so passing its output
             % straight in yields a globally left-handed grid.
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
-            origDir = pwd; cleanupDir = onCleanup(@() cd(origDir));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
+            origDir = pwd;
+            cleanupDir = onCleanup(@() cd(origDir));
             addpath(genpath('../../src/octave'))
             cd('../../src/octave/grids')
             [X, Y] = gridGen('TFI', 'swan', 39, 99, false);
@@ -50,7 +54,8 @@ classdef testGridOrientation < matlab.unittest.TestCase
         function testMagnitudesAreIdentical(testCase)
             % Documents the symptom that makes this hard to notice: same grid,
             % same |J| to the last bit, opposite sign.
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/octave'))
             [X, Y] = testGridOrientation.sineGrid(21, 0.10);
             warning('off', 'jacobian2D:leftHandedGrid');
@@ -63,7 +68,8 @@ classdef testGridOrientation < matlab.unittest.TestCase
         function testTangledGridWarns(testCase)
             % A mesh that folds over itself has mixed-sign J.  Different
             % problem, different warning.
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/octave'))
             [X, Y] = meshgrid(linspace(0,1,15), linspace(0,1,15));
             X(6:10, 6:10) = X(6:10, 6:10) - 0.45;
@@ -74,7 +80,8 @@ classdef testGridOrientation < matlab.unittest.TestCase
         function testWarningReachesOperatorUsers(testCase)
             % grad2DCurv and div2DCurv both route through jacobian2D, so users
             % who never call it directly still get told.
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/octave'))
             [X, Y] = testGridOrientation.sineGrid(21, 0.10);
             testCase.verifyWarning(@() grad2DCurv(2, X.', Y.'), ...
@@ -86,10 +93,14 @@ classdef testGridOrientation < matlab.unittest.TestCase
         function testFiveArgPath(testCase)
             % jacobian2D has two entry paths: 3 arguments dispatches to
             % jacobian2DLegacy, 5 arguments computes inline.  Both are checked.
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/octave'))
-            N = 21; dc = [1;1;1;1]; nc = [0;0;0;0];
-            s = linspace(0,1,N); s = [0, s(1:end-1)+0.5/(N-1), 1];
+            N = 21;
+            dc = [1;1;1;1];
+            nc = [0;0;0;0];
+            s = linspace(0,1,N);
+            s = [0, s(1:end-1)+0.5/(N-1), 1];
             [X, Y] = meshgrid(s, s);
             X = X + 0.08*sin(2*pi*Y);
             Y = Y + 0.08*sin(2*pi*X);
