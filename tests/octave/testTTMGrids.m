@@ -34,8 +34,10 @@ classdef testTTMGrids < matlab.unittest.TestCase
         function testShippedGridsAreNotFolded(testCase)
             % chevron and horseshoe are clean under TFI, so there is no excuse
             % for the elliptic generator to fold them.
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
-            origDir = pwd; cleanupDir = onCleanup(@() cd(origDir));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
+            origDir = pwd;
+            cleanupDir = onCleanup(@() cd(origDir));
             addpath(genpath('../../src/octave'))
             cd('../../src/octave')
 
@@ -52,8 +54,10 @@ classdef testTTMGrids < matlab.unittest.TestCase
             % swan is folded under TFI itself (113 negative entries).  Repairing
             % that is exactly what an elliptic generator is for, and with a
             % sensible initial guess ttm does it.
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
-            origDir = pwd; cleanupDir = onCleanup(@() cd(origDir));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
+            origDir = pwd;
+            cleanupDir = onCleanup(@() cd(origDir));
             addpath(genpath('../../src/octave'))
             cd('../../src/octave')
 
@@ -71,8 +75,10 @@ classdef testTTMGrids < matlab.unittest.TestCase
         function testFewIterationsDoNotFold(testCase)
             % The failure was not slow degradation from over-iteration -- the
             % stock version was folded within 5 sweeps.  Check the low end.
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
-            origDir = pwd; cleanupDir = onCleanup(@() cd(origDir));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
+            origDir = pwd;
+            cleanupDir = onCleanup(@() cd(origDir));
             addpath(genpath('../../src/octave'))
             cd('../../src/octave')
 
@@ -88,12 +94,15 @@ classdef testTTMGrids < matlab.unittest.TestCase
         function testBoundariesAreUnchanged(testCase)
             % The initial guess must only touch the interior.  Boundary nodes
             % come from the curve definitions and must survive untouched.
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
-            origDir = pwd; cleanupDir = onCleanup(@() cd(origDir));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
+            origDir = pwd;
+            cleanupDir = onCleanup(@() cd(origDir));
             addpath(genpath('../../src/octave'))
             cd('../../src/octave')
 
-            m = 39; n = 99;
+            m = 39;
+            n = 99;
             [X, Y] = ttm('chevron', m, n, 50, false);
             [Xt, Yt] = tfi('chevron', m, n, false);
 
