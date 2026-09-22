@@ -13,10 +13,12 @@
 //
 //   1. a mode changes only what is written to standard output; the
 //      grid's error log is identical afterwards in every mode
-//   2. a grid that passed validation ignores the mode entirely,
-//      even when it carries errors merged from upstream
+//   2. the mode is triggered by hasGridErrors(): a grid with an
+//      empty error stack ignores the mode, and a grid with any
+//      error on its stack, including errors merged from upstream,
+//      is reported
 //
-// DEBUG_AND_ABORT_MD is only exercised on grids that validated,
+// DEBUG_AND_ABORT_MD is only exercised on grids with no errors,
 // since a real abort would end the test binary. If property 2
 // regresses, these cases abort and ctest reports the failure.
 #include "MOLE_grids.h"
@@ -67,7 +69,7 @@ static gridParams1D goodParams1D() {
 TEST_CASE("DEBUG_DEFAULT_MD writes nothing for an invalid grid") {
     std::string out = capture([]{
         grid1D g(badParams1D(), DEBUG_DEFAULT_MD);
-        CHECK(!g.isValidatedGrid());
+        CHECK(g.hasGridErrors());
     });
     CHECK_MSG(out.empty(),
         "expected no output in the default mode, got: " << out);
@@ -79,7 +81,7 @@ TEST_CASE("DEBUG_REPORTS_STDOUT_MD writes the log for an invalid "
     std::string out = capture([&]{
         grid1D g(badParams1D(), DEBUG_REPORTS_STDOUT_MD);
         reached_next_line = true;
-        CHECK(!g.isValidatedGrid());
+        CHECK(g.hasGridErrors());
     });
     CHECK(reached_next_line);
     CHECK(out.find("MOLE Error code") != std::string::npos);
@@ -88,7 +90,7 @@ TEST_CASE("DEBUG_REPORTS_STDOUT_MD writes the log for an invalid "
 TEST_CASE("an unrecognized debug mode falls back to reporting") {
     std::string out = capture([]{
         grid1D g(badParams1D(), 99);
-        CHECK(!g.isValidatedGrid());
+        CHECK(g.hasGridErrors());
     });
     CHECK(out.find("Unrecognized MOLE debug mode")
           != std::string::npos);
@@ -98,11 +100,11 @@ TEST_CASE("an unrecognized debug mode falls back to reporting") {
 // ---------------------------------------------------------------
 // A mode must not consume the error log
 //
-// Reporting has to be non-destructive. The validation flag lives in
-// the same stack as the errors (MOLE_ERR_GRID_UNCHECKED), so a mode
-// that drained the stack would leave an invalid grid claiming to be
-// validated. It would also break the promise that a user can still
-// print or write the log after the library has reported it.
+// Reporting has to be non-destructive. hasGridErrors() reads the
+// same stack the mode prints, so a mode that drained the stack would
+// leave an invalid grid reporting no errors. It would also break the
+// promise that a user can still print or write the log after the
+// library has reported it.
 // ---------------------------------------------------------------
 
 TEST_CASE("reporting leaves the same error log behind as the "
@@ -134,34 +136,35 @@ TEST_CASE("a grid can still be asked for its log after the mode "
     CHECK(!first.empty());
     CHECK_MSG(first == second,
         "print_ErrorLog is not repeatable");
-    CHECK(!g.isValidatedGrid());
+    CHECK(g.hasGridErrors());
 }
 
 // ---------------------------------------------------------------
-// A validated grid ignores the mode
+// The trigger is hasGridErrors()
 //
-// These are the regression tests for using isValidatedGrid() rather
-// than hasGridErrors() as the trigger. A freshly built grid always
-// has MOLE_ERR_GRID_UNCHECKED on its stack until validation clears
-// it, and mergeErrors folds upstream errors into the same stack, so
-// hasGridErrors() is true for grids that are perfectly usable.
-// Under DEBUG_AND_ABORT_MD the wrong trigger ends the process.
+// applyDebugMode returns immediately when hasGridErrors() is false
+// and applies the mode otherwise. validGrid() clears
+// MOLE_ERR_GRID_UNCHECKED when the parameters are valid, so a grid
+// built from valid parameters with no incoming errors has an empty
+// stack and ignores the mode. mergeErrors folds upstream errors into
+// the same stack, so a grid built from valid parameters that inherits
+// errors is reported, and under DEBUG_AND_ABORT_MD it aborts.
 // ---------------------------------------------------------------
 
-TEST_CASE("a valid grid ignores DEBUG_AND_ABORT_MD") {
+TEST_CASE("a grid with no errors ignores DEBUG_AND_ABORT_MD") {
     std::string out = capture([]{
         grid1D g(goodParams1D(), DEBUG_AND_ABORT_MD);
-        CHECK(g.isValidatedGrid());
+        CHECK(!g.hasGridErrors());
     });
     CHECK_MSG(out.empty(),
-        "a validated grid should produce no output, got: " << out);
+        "a grid with no errors should produce no output, got: " << out);
 }
 
-TEST_CASE("a valid grid carrying upstream errors is reported, "
-          "because the trigger is hasGridErrors()") {
+TEST_CASE("a grid built from valid parameters that carries upstream "
+          "errors is reported, because the trigger is hasGridErrors()") {
     // mergeErrors folds an incoming stack into the grid's own, so a
-    // grid that passed its own validation can still hold errors it
-    // did not cause. hasGridErrors() counts those, so this grid is
+    // grid built from valid parameters can still hold errors it did
+    // not cause. hasGridErrors() counts those, so this grid is
     // reported. DEBUG_AND_ABORT_MD would abort it. Not reachable
     // through gridBuilder, which routes a non-empty stack to
     // gridNull before any grid is built.
@@ -171,7 +174,6 @@ TEST_CASE("a valid grid carrying upstream errors is reported, "
 
     std::string out = capture([&]{
         grid1D g(goodParams1D(), inerrs, DEBUG_REPORTS_STDOUT_MD);
-        CHECK(g.isValidatedGrid());
         CHECK(g.hasGridErrors());
     });
     CHECK(out.find("upstream") != std::string::npos);
@@ -185,7 +187,7 @@ TEST_CASE("the inerrs constructor applies the mode to an invalid "
 
     std::string out = capture([&]{
         grid1D g(badParams1D(), inerrs, DEBUG_REPORTS_STDOUT_MD);
-        CHECK(!g.isValidatedGrid());
+        CHECK(g.hasGridErrors());
     });
     CHECK(out.find("MOLE Error code") != std::string::npos);
     // the upstream error travelled into the report
@@ -211,7 +213,7 @@ TEST_CASE("grid2D honours the debug modes") {
     good.m = 3; good.n = 3; good.dx = 1.0; good.dy = 1.0;
     CHECK(capture([&]{
         grid2D g(good, DEBUG_AND_ABORT_MD);
-        CHECK(g.isValidatedGrid());
+        CHECK(!g.hasGridErrors());
     }).empty());
 }
 
@@ -232,7 +234,7 @@ TEST_CASE("grid3D honours the debug modes") {
     good.dx = 1.0; good.dy = 1.0; good.dz = 1.0;
     CHECK(capture([&]{
         grid3D g(good, DEBUG_AND_ABORT_MD);
-        CHECK(g.isValidatedGrid());
+        CHECK(!g.hasGridErrors());
     }).empty());
 }
 
@@ -268,7 +270,7 @@ TEST_CASE("gridBuilder stays quiet when the grid builds, whatever "
                                 "dim", 1, "m", 5, "dx", 0.2,
                                 "topology", 'u');
         REQUIRE(std::holds_alternative<grid1D>(g));
-        CHECK(std::get<grid1D>(g).isValidatedGrid());
+        CHECK(!std::get<grid1D>(g).hasGridErrors());
     });
     CHECK_MSG(out.empty(),
         "a grid that built should produce no output, got: " << out);
@@ -322,7 +324,7 @@ TEST_CASE("the debug constructor keeps the user's parameters") {
     // validGrid() generates these; empty means it never ran
     CHECK(g.grid.nodes_X.data_.n_elem == 6);
     CHECK(g.grid.centers_X.data_.n_elem == 7);
-    CHECK(g.isValidatedGrid());
+    CHECK(!g.hasGridErrors());
 }
 
 TEST_CASE("the debug constructor keeps the incoming error stack") {
