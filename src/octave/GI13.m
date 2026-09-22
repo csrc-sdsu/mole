@@ -40,13 +40,32 @@ function I = GI13(M, m, n, o, type)
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
     switch type
-        case 'Gn',  Ax = P(m); Ay = Q(n); Az = speye(o);
-        case 'Gc',  Ax = P(m); Ay = speye(n); Az = Q(o);
-        case 'Ge',  Ax = Q(m); Ay = P(n); Az = speye(o);
-        case 'Gcy', Ax = speye(m); Ay = P(n); Az = Q(o);
-        case 'Gee', Ax = Q(m); Ay = speye(n); Az = P(o);
-        case 'Gnn', Ax = speye(m); Ay = Q(n); Az = P(o);
-        otherwise,  error('GI13:BadType', 'unknown type "%s"', type);
+        case 'Gn'
+            Ax = P(m);
+            Ay = Q(n);
+            Az = speye(o);
+        case 'Gc'
+            Ax = P(m);
+            Ay = speye(n);
+            Az = Q(o);
+        case 'Ge'
+            Ax = Q(m);
+            Ay = P(n);
+            Az = speye(o);
+        case 'Gcy'
+            Ax = speye(m);
+            Ay = P(n);
+            Az = Q(o);
+        case 'Gee'
+            Ax = Q(m);
+            Ay = speye(n);
+            Az = P(o);
+        case 'Gnn'
+            Ax = speye(m);
+            Ay = Q(n);
+            Az = P(o);
+        otherwise
+            error('GI13:BadType', 'unknown type "%s"', type);
     end
 
     I = kron(Az, kron(Ay, Ax)) * M;
@@ -64,6 +83,10 @@ function A = P(N)
 % and plain linear extrapolation [1.5, -.5] are exact for linear fields and
 % second order; this one keeps the 2-D and 3-D operators consistent.
     A = spdiags(0.5*ones(N+1, 2), [-1 0], N+1, N);
-    A(1, 1) = 1;      A(1, 2) = 0.5;      A(1, 3) = -0.5;
-    A(N+1, N) = 1;    A(N+1, N-1) = 0.5;  A(N+1, N-2) = -0.5;
+    A(1, 1) = 1;
+    A(1, 2) = 0.5;
+    A(1, 3) = -0.5;
+    A(N+1, N) = 1;
+    A(N+1, N-1) = 0.5;
+    A(N+1, N-2) = -0.5;
 end

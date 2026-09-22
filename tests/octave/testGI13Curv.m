@@ -19,7 +19,8 @@ classdef testGI13Curv < matlab.unittest.TestCase
             X = a + amp*sin(2*pi*b);
             Y = b + amp*sin(2*pi*a);
             Z = c + 0.5*amp*sin(2*pi*a).*sin(2*pi*b);
-            s = linspace(0,1,N); s = [0, s(1:end-1)+0.5/(N-1), 1];
+            s = linspace(0,1,N);
+            s = [0, s(1:end-1)+0.5/(N-1), 1];
             [p, q, t] = meshgrid(s, s, s);
             xc = p + amp*sin(2*pi*q);
             yc = q + amp*sin(2*pi*p);
@@ -32,10 +33,13 @@ classdef testGI13Curv < matlab.unittest.TestCase
         function testIndexMap(testCase)
             % Feed GI13 a field whose values encode their own (i,j,k) and
             % check every output reads from the correct zeta-plane.
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/octave'))
 
-            m = 4; n = 3; o = 3;
+            m = 4;
+            n = 3;
+            o = 3;
             [I, J, K] = ndgrid(1:m, 1:n+1, 1:o);
             v = I(:) + 100*J(:) + 10000*K(:);
             W = reshape(GI13(speye(m*(n+1)*o), m, n, o, 'Gn')*v, m+1, n, o);
@@ -45,9 +49,13 @@ classdef testGI13Curv < matlab.unittest.TestCase
                 for j = 1:n
                     for i = 1:m+1
                         val = W(i,j,k);
-                        if val == 0, continue; end
+                        if val == 0
+                            continue;
+                        end
                         kk = floor(val/10000);
-                        if kk ~= k, bad = bad + 1; end
+                        if kk ~= k
+                            bad = bad + 1;
+                        end
                     end
                 end
             end
@@ -59,10 +67,13 @@ classdef testGI13Curv < matlab.unittest.TestCase
         function testShapesAndConstants(testCase)
             % All six shifts must have the right shape and map a constant
             % field to a constant field.  Weak, but cheap.
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/octave'))
 
-            m = 5; n = 4; o = 3;
+            m = 5;
+            n = 4;
+            o = 3;
             ty  = {'Gn','Gc','Ge','Gcy','Gee','Gnn'};
             src = [m*(n+1)*o, m*n*(o+1), (m+1)*n*o, m*n*(o+1), (m+1)*n*o, m*(n+1)*o];
             tgt = [(m+1)*n*o, (m+1)*n*o, m*(n+1)*o, m*(n+1)*o, m*n*(o+1), m*n*(o+1)];
@@ -80,7 +91,8 @@ classdef testGI13Curv < matlab.unittest.TestCase
             % On an undistorted grid the composition must be exact to roundoff.
             % Guards against a "fix" that trades curvilinear accuracy for
             % Cartesian accuracy.
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/octave'))
 
             for N = [11 17 25]
@@ -88,7 +100,8 @@ classdef testGI13Curv < matlab.unittest.TestCase
                 f = reshape(permute(xc.^2 + yc.^2 + zc.^2, [2 1 3]), [], 1);
                 L = div3DCurv(2, X, Y, Z)*grad3DCurv(2, X, Y, Z);
                 v = reshape(L*f, N+1, N+1, N+1);
-                d = v(3:end-2, 3:end-2, 3:end-2); d = d(:) - 6;
+                d = v(3:end-2, 3:end-2, 3:end-2);
+                d = d(:) - 6;
                 testCase.verifyLessThan(sqrt(mean(d.^2)), 1e-9, ...
                     sprintf('Cartesian L=D*G not exact at n=%d', N));
             end
@@ -98,7 +111,8 @@ classdef testGI13Curv < matlab.unittest.TestCase
             % The gradient of f = x + 2y + 3z is a constant.  The stock
             % operator gave rms 0.39 at distortion 0.10; anything near that
             % means the face shift is wrong again.
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/octave'))
 
             N = 21;
@@ -117,16 +131,20 @@ classdef testGI13Curv < matlab.unittest.TestCase
             % no convergence at all.  Require better than first order, which
             % the stock operator misses by a wide margin and the corrected one
             % clears at ~2.1.
-            origPath = path; cleanupObj = onCleanup(@() path(origPath));
+            origPath = path;
+            cleanupObj = onCleanup(@() path(origPath));
             addpath(genpath('../../src/octave'))
 
-            amp = 0.10; Ns = [13 21 33]; errs = zeros(size(Ns));
+            amp = 0.10;
+            Ns = [13 21 33];
+            errs = zeros(size(Ns));
             for i = 1:numel(Ns)
                 N = Ns(i);
                 [X, Y, Z, xc, yc, zc] = testGI13Curv.sineGrid(N, amp);
                 f = reshape(permute(xc.^2 + yc.^2 + zc.^2, [2 1 3]), [], 1);
                 T = grad3DCurv(2, X, Y, Z)*f;
-                cx = linspace(0,1,N); cx = cx(1:end-1) + 0.5/(N-1);
+                cx = linspace(0,1,N);
+                cx = cx(1:end-1) + 0.5/(N-1);
                 [aa, bb, ~] = meshgrid(linspace(0,1,N), cx, cx);
                 xf = aa + amp*sin(2*pi*bb);
                 gx = T(1:N*(N-1)*(N-1));
