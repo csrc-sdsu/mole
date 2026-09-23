@@ -263,10 +263,10 @@ function main()
         colorbar = true,
         xlabel = "x",
         ylabel = "y",
-        title = "Pressure p at t = $(round(final_time, digits = 3))",
+        title = "p at t = $(round(final_time, digits = 3))",
     )
 
-    plt = plot(plot_u, plot_v, plot_p, layout = (3, 1), size = (1200, 1000))
+    plt = plot(plot_u, plot_v, plot_p, layout = (3, 1), size = (1200, 1000),guidefontsize = 12,tickfontsize = 12)
     savefig(plt, "cylinder_flow_2D.png")
 
     u_limits = animation_limits(Uframes)
