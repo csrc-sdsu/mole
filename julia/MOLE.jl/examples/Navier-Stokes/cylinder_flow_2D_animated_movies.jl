@@ -281,7 +281,8 @@ function main()
             clims = u_limits,
             xlabel = "x",
             ylabel = "y",
-            title = "U at t = $(round(frame_times[frame_index], digits = 3))",
+            # title = "U at t = $(round(frame_times[frame_index], digits = 3))",
+            title = "U",
         )
     end
     save_animation_formats(anim_u, "U"; fps = fps)
@@ -294,7 +295,8 @@ function main()
             clims = v_limits,
             xlabel = "x",
             ylabel = "y",
-            title = "V at t = $(round(frame_times[frame_index], digits = 3))",
+            # title = "V at t = $(round(frame_times[frame_index], digits = 3))",
+            title = "V",
         )
     end
     save_animation_formats(anim_v, "V"; fps = fps)
@@ -307,7 +309,8 @@ function main()
             clims = p_limits,
             xlabel = "x",
             ylabel = "y",
-            title = "Pressure p at t = $(round(frame_times[frame_index], digits = 3))",
+            # title = "Pressure p at t = $(round(frame_times[frame_index], digits = 3))",
+            title = "p",
         )
     end
     save_animation_formats(anim_p, "p"; fps = fps)
