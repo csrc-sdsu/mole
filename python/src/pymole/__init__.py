@@ -3,8 +3,8 @@ from .curl import Curl
 from .divergence import Divergence
 from .gradient import Gradient
 from .laplacian import Laplacian
-from .BoundaryCondition import BoundaryCondition
-from .RobinBoundaryCondition import RobinBoundaryCondition
+from .boundary_condition import BoundaryCondition
+from .robin_boundary_condition import RobinBoundaryCondition
 
 __version__ = "0.1.1"
 __all__ = [
