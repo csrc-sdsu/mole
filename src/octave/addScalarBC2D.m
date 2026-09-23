@@ -115,13 +115,14 @@ function [A, b] = addScalarBC2D(A, b, k, m, dx, n, dy, dc, nc, v)
         rr = unique(rr);
         % remove rows of A associated to boundary
         Abc1 = Abcl + Abcr;
-        [rowsbc1,~,~] = find(Abc1);
-        [rows1,cols1,s1] = find(A(rowsbc1,:));
+        [rows1,cols1,~] = find(Abc1);
+        [~,~,s1] = find(A(rows1,cols1));
+        if size(s1, 1) == 0; s1 = zeros(size(rows1)); end
         A = A - sparse(rows1, cols1, s1, size(A,1), size(A,2));
         % update matrix A with boundary information
         A = A + Abc1;    
         % remove b entries associated to bcs
-        b(rowsbc1) = 0;    
+        b(rows1) = 0;    
     end
 
     if ~isempty(qbt)
@@ -131,13 +132,14 @@ function [A, b] = addScalarBC2D(A, b, k, m, dx, n, dy, dc, nc, v)
         rt = unique(rt);
         % remove rows of A associated to boundary
         Abc2 = Abct + Abcb;
-        [rowsbc2,~,~] = find(Abc2);
-        [rows2,cols2,s2] = find(A(rowsbc2,:));
+        [rows2,cols2,~] = find(Abc2);
+        [~,~,s2] = find(A(rows2,cols2));
+        if size(s2, 1) == 0; s2 = zeros(size(rows2)); end
         A = A - sparse(rows2, cols2, s2, size(A,1), size(A,2));
         % update matrix A with boundary information
         A = A + Abc2;
         % remove b entries associated to bcs
-        b(rowsbc2) = 0;    
+        b(rows2) = 0;    
     end
 
     % update b with boundary information
