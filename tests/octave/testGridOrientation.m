@@ -39,13 +39,27 @@ classdef testGridOrientation < matlab.unittest.TestCase
             % The reported case: gridGen returns xi-nodes as ROWS, which is the
             % opposite of what the operators read, so passing its output
             % straight in yields a globally left-handed grid.
+            %
+            % tfi does addpath(['grids/' grid_name]) RELATIVE TO THE CURRENT
+            % DIRECTORY, so the working directory has to be src/octave, not
+            % src/octave/grids. And the path is added non-recursively on
+            % purpose: genpath would put every grid folder on the path at once,
+            % and the curve functions (right.m, top.m, ...) share names across
+            % grids, so another grid would silently answer for this one.
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
             origDir = pwd;
             cleanupDir = onCleanup(@() cd(origDir));
-            addpath(genpath('../../src/octave'))
-            cd('../../src/octave/grids')
-            [X, Y] = gridGen('TFI', 'swan', 39, 99, false);
+            srcDir = fullfile(pwd, '..', '..', 'src', 'octave');
+            addpath(srcDir)
+            cd(srcDir)
+
+            % chevron, not swan: swan is itself tangled (mixed-sign Jacobian
+            % either way round), which is the other warning. See
+            % testTangledGridWarns.
+            [X, Y] = gridGen('TFI', 'chevron', 39, 99, false);
+            testCase.verifyNotEmpty(strfind(which('right'), 'chevron'), ...
+                'the chevron curves are not the ones on the path');
             testCase.verifyWarning(@() jacobian2D(2, X, Y), ...
                                    'jacobian2D:leftHandedGrid');
             testCase.verifyWarningFree(@() jacobian2D(2, X.', Y.'));
