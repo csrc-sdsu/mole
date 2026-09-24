@@ -126,6 +126,13 @@ function validateGrid(raw::AbstractDict{Symbol, <:Any}; allowPartial::Bool = fal
     topology_explicit = haskey(raw, :topology)
     topology = _validate_topology(raw, dim)
 
+    topology == :nonuniform &&
+        throw(
+            ArgumentError(
+                "nonuniform grids are not supported until coordinate storage is implemented",
+            ),
+        )
+
     dim == 1 &&
         return _normalize_1d(
             raw,
@@ -239,7 +246,10 @@ function _normalize_1d(
         )
     end
 
-    return Grid{Float64}(dim = 1, topology = topology)
+    m = haskey(raw, :m) ? _validate_positive_int(raw[:m], "grid.m") : nothing
+    dx = haskey(raw, :dx) ? _validate_positive_spacing(raw[:dx], "grid.dx") : nothing
+    bc = _normalize_partial_bc(bc_raw, 2)
+    return Grid{Float64}(dim = 1, topology = topology, m = m, dx = dx, bc = bc)
 end
 
 function _normalize_2d(raw,
@@ -252,9 +262,16 @@ function _normalize_2d(raw,
 
     if topology == :curvilinear
         if haskey(raw, :m) && haskey(raw, :n)
-            return _normalize_curvilinear_2d(raw, bc_raw)
+            return _normalize_curvilinear_2d(raw, bc_raw; allowPartial)
         end
-        return Grid(dim = 2, topology = :curvilinear)
+        bc = _normalize_partial_bc(bc_raw, 4)
+        return Grid{Float64}(
+            dim = 2,
+            topology = :curvilinear,
+            m = haskey(raw, :m) ? _validate_positive_int(raw[:m], "grid.m") : nothing,
+            n = haskey(raw, :n) ? _validate_positive_int(raw[:n], "grid.n") : nothing,
+            bc = bc,
+        )
     end
 
     if all(haskey(raw, k) for k in (:m, :n, :dx, :dy))
@@ -312,7 +329,20 @@ function _normalize_2d(raw,
         )
     end
 
-    return Grid{Float64}(dim = 2, topology = topology)
+    m = haskey(raw, :m) ? _validate_positive_int(raw[:m], "grid.m") : nothing
+    n = haskey(raw, :n) ? _validate_positive_int(raw[:n], "grid.n") : nothing
+    dx = haskey(raw, :dx) ? _validate_positive_spacing(raw[:dx], "grid.dx") : nothing
+    dy = haskey(raw, :dy) ? _validate_positive_spacing(raw[:dy], "grid.dy") : nothing
+    bc = _normalize_partial_bc(bc_raw, 4)
+    return Grid{Float64}(
+        dim = 2,
+        topology = topology,
+        m = m,
+        n = n,
+        dx = dx,
+        dy = dy,
+        bc = bc,
+    )
 end
 
 function _normalize_3d(raw,
@@ -384,14 +414,34 @@ function _normalize_3d(raw,
         )
     end
 
-    return Grid{Float64}(dim = 3, topology = topology)
+    m = haskey(raw, :m) ? _validate_positive_int(raw[:m], "grid.m") : nothing
+    n = haskey(raw, :n) ? _validate_positive_int(raw[:n], "grid.n") : nothing
+    o = haskey(raw, :o) ? _validate_positive_int(raw[:o], "grid.o") : nothing
+    dx = haskey(raw, :dx) ? _validate_positive_spacing(raw[:dx], "grid.dx") : nothing
+    dy = haskey(raw, :dy) ? _validate_positive_spacing(raw[:dy], "grid.dy") : nothing
+    dz = haskey(raw, :dz) ? _validate_positive_spacing(raw[:dz], "grid.dz") : nothing
+    bc = _normalize_partial_bc(bc_raw, 6)
+    return Grid{Float64}(
+        dim = 3,
+        topology = topology,
+        m = m,
+        n = n,
+        o = o,
+        dx = dx,
+        dy = dy,
+        dz = dz,
+        bc = bc,
+    )
 end
 
-function _normalize_curvilinear_2d(raw, bc_raw)
+function _normalize_curvilinear_2d(raw, bc_raw; allowPartial = false)
     m = _validate_positive_int(raw[:m], "grid.m")
     n = _validate_positive_int(raw[:n], "grid.n")
 
     if !haskey(raw, :nodes)
+        bc = _normalize_partial_bc(bc_raw, 4)
+        allowPartial &&
+            return Grid{Float64}(dim = 2, topology = :curvilinear, m = m, n = n, bc = bc)
         throw(
             ArgumentError(
                 "validateGrid:CurvilinearMissingNodes: curvilinear grid requires nodes.X and nodes.Y",
@@ -421,6 +471,19 @@ function _normalize_curvilinear_2d(raw, bc_raw)
 
     faces, centers = _coordinates_curvilinear_2d(nodes)
     bc = _normalize_bc(bc_raw, 4)
+    isperiodic =
+        bc.hasData ?
+        [
+            all(bc.dc[1:2] .^ 2 .+ bc.nc[1:2] .^ 2 .== 0),
+            all(bc.dc[3:4] .^ 2 .+ bc.nc[3:4] .^ 2 .== 0),
+        ] :
+        [false, false]
+    bc = BoundaryMetadata(
+        dc = bc.dc,
+        nc = bc.nc,
+        isPeriodic = isperiodic,
+        hasData = bc.hasData,
+    )
 
     return Grid(
         dim = 2,
@@ -477,6 +540,24 @@ function _normalize_bc_vector(values, expected, name)
     return vals
 end
 
+function _normalize_partial_bc(bc_raw, expected)
+    bc = _normalize_bc(bc_raw, expected)
+    if !bc.hasData
+        return bc
+    end
+
+    periodic = [
+        all(bc.dc[2i - 1:2i] .^ 2 .+ bc.nc[2i - 1:2i] .^ 2 .== 0) for
+        i in 1:(expected ÷ 2)
+    ]
+    return BoundaryMetadata(
+        dc = bc.dc,
+        nc = bc.nc,
+        isPeriodic = periodic,
+        hasData = true,
+    )
+end
+
 _has_bc_field(bc::BoundaryMetadata, name::Symbol) = !isempty(getfield(bc, name))
 _has_bc_field(bc::AbstractDict, name::Symbol) = haskey(bc, name)
 _has_bc_field(bc::NamedTuple, name::Symbol) = haskey(bc, name)
@@ -515,7 +596,7 @@ end
 function _validate_positive_spacing(value, name)
     value = float(value)
 
-    if value <= 0
+    if !isfinite(value) || value <= 0
         throw(ArgumentError("$name must be positive"))
     end
 
