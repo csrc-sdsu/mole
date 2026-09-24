@@ -6,7 +6,7 @@
 
 from scipy import sparse
 
-from .BoundaryCondition import BoundaryCondition
+from .boundary_condition import BoundaryCondition
 
 class RobinBoundaryCondition(BoundaryCondition):
     def __init__(
