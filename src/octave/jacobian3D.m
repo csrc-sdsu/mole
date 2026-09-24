@@ -30,8 +30,7 @@ function [J, Xe, Xn, Xk, Ye, Yn, Yk, Ze, Zn, Zk] = jacobian3D(k, X, Y, Z, dc, nc
         error("jacobian3D:InvalidNumArgs", ...
               "jacobian3D expects 4 or 6 arguments")
     elseif nargin == 4
-        [J, Xe, Xn, Xk, Ye, Yn, Yk, Ze, Zn, Zk] = jacobian3DLegacy(k, X, Y, Z);
-        checkGridOrientation(J, 'jacobian3D');
+        [J, Xe, Xn, Xk, Ye, Yn, Yk, Ze, Zn, Zk] = jacobian3DLegacy(k, X, Y, Z, 'jacobian3D');
         return;
     end
 

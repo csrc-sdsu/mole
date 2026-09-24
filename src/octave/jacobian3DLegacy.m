@@ -1,4 +1,4 @@
-function [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3DLegacy(k, X, Y, Z)
+function [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3DLegacy(k, X, Y, Z, caller)
 % 
 % ----------------------------------------------------------------------------
 %                  !!! WARNING: DEPRECATED BY jacobian3D.m !!!
@@ -13,9 +13,13 @@ function [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3DLegacy(k, X, Y, Z)
 %                X : x-coordinates (physical) of meshgrid nodes
 %                Y : y-coordinates (physical) of meshgrid nodes
 %                Z : z-coordinates (physical) of meshgrid nodes
+%           caller : Optional. Name used in the warning identifier
+%                    when the grid orientation check fires.
+%                    Defaults to 'jacobian3DLegacy'.
 % 
 % SYNTAX
 % [J, Xe, Xn, Xk, Ye, Yn, Yk, Ze, Zn, Zk] = jacobian3DLegacy(k, X, Y, Z)
+% [J, Xe, Xn, Xk, Ye, Yn, Yk, Ze, Zn, Zk] = jacobian3DLegacy(k, X, Y, Z, caller)
 % 
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
@@ -23,6 +27,10 @@ function [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3DLegacy(k, X, Y, Z)
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
     
+    if nargin < 5
+        caller = 'jacobian3DLegacy';
+    end
+
     [n, m, o] = size(X);
     
     X = reshape(permute(X, [2, 1, 3]), [], 1);
@@ -48,4 +56,6 @@ function [J, Xe, Xn, Xc, Ye, Yn, Yc, Ze, Zn, Zc] = jacobian3DLegacy(k, X, Y, Z)
     Zc = Z(2*mno+1:end);
     
     J = Xe.*(Yn.*Zc-Yc.*Zn)-Ye.*(Xn.*Zc-Xc.*Zn)+Ze.*(Xn.*Yc-Xc.*Yn);
+
+    checkGridOrientation(J, caller);
 end

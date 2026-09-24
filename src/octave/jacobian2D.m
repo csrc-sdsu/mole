@@ -29,8 +29,7 @@ function [J, Xe, Xn, Ye, Yn] = jacobian2D(k, X, Y, dc, nc)
         error("jacobian2D:InvalidNumArgs", ...
               "jacobian2D expects 3 or 5 arguments")
     elseif nargin == 3
-        [J,Xe,Xn,Ye,Yn] = jacobian2DLegacy(k,X,Y);
-        checkGridOrientation(J, 'jacobian2D');
+        [J,Xe,Xn,Ye,Yn] = jacobian2DLegacy(k,X,Y,'jacobian2D');
         return;
     end
 
