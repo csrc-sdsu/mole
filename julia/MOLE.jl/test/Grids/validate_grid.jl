@@ -140,14 +140,24 @@ end
         grid1 = makeGrid(m = 10; allowPartial = true)
         @test grid1.dim == 1
         @test grid1.topology == :uniform
+        @test grid1.m == 10
+
+        partial_bc = makeGrid(m = 10, dc = 0.0, nc = 0.0; allowPartial = true)
+        @test partial_bc.bc.hasData
+        @test partial_bc.bc.isPeriodic == [true]
 
         grid2 = makeGrid(m = 10, n = 20; allowPartial = true)
         @test grid2.dim == 2
         @test grid2.topology == :uniform
+        @test grid2.m == 10
+        @test grid2.n == 20
 
         grid3 = makeGrid(m = 10, n = 20, o = 30; allowPartial = true)
         @test grid3.dim == 3
         @test grid3.topology == :uniform
+        @test grid3.m == 10
+        @test grid3.n == 20
+        @test grid3.o == 30
     end
 
     @testset "missing uniform spacing errors" begin
@@ -168,6 +178,8 @@ end
         @test_throws ArgumentError makeGrid(m = -4, dx = 0.1)
         @test_throws ArgumentError makeGrid(m = 4, dx = 0.0)
         @test_throws ArgumentError makeGrid(m = 4, dx = -0.1)
+        @test_throws ArgumentError makeGrid(m = 4, dx = NaN)
+        @test_throws ArgumentError makeGrid(m = 4, dx = Inf)
 
         @test_throws ArgumentError makeGrid(m = 4, n = 0, dx = 0.1, dy = 0.1)
         @test_throws ArgumentError makeGrid(m = 4, n = 4, dx = 0.1, dy = 0.0)
@@ -195,8 +207,10 @@ end
     end
 
     @testset "topology inference" begin
-        grid = validateGrid(Dict(:x => [0.0, 0.5, 1.0]); allowPartial = true)
-        @test grid.topology == :nonuniform
+        @test_throws ArgumentError validateGrid(
+            Dict(:x => [0.0, 0.5, 1.0]);
+            allowPartial = true,
+        )
 
         X = zeros(3, 4)
         Y = zeros(3, 4)
@@ -261,6 +275,21 @@ end
             topology = :curvilinear,
             nodes = bad_nodes_wrong_y_size,
         )
+    end
+
+    @testset "curvilinear partial and boundary metadata" begin
+        partial = makeGrid(m = 4, n = 4, topology = :curvilinear; allowPartial = true)
+        @test partial.m == 4
+        @test partial.n == 4
+
+        grid = makeGrid(
+            m = 2,
+            n = 2,
+            topology = :curvilinear,
+            nodes = (; X = zeros(3, 3), Y = zeros(3, 3)),
+            bc = (dc = zeros(4), nc = zeros(4)),
+        )
+        @test grid.bc.isPeriodic == [true, true]
     end
 end
 
