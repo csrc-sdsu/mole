@@ -10,8 +10,8 @@ classdef testAddScalarBC < matlab.unittest.TestCase
             m = 8;
             tol = 1e-10;
 
-            A = (1/13)*reshape(1:(m+2)^2, m+2, m+2);
-            b = (1/7)*(1:m+2)';
+            A = rand(m + 2);
+            b = rand(m + 2, 1);
 
             v = [7; 8];
 
@@ -79,8 +79,8 @@ classdef testAddScalarBC < matlab.unittest.TestCase
             n = m + 2;
             tol = 1e-10;
 
-            A = 2*ones((m+2)*(n+2));
-            b = 3*ones((m+2)*(n+2),1);
+            A = rand((m+2)*(n+2));
+            b = rand((m+2)*(n+2),1);
 
             bclr = 4*ones(n,1);
             bcbt = 5*ones(m+2,1);
@@ -101,8 +101,8 @@ classdef testAddScalarBC < matlab.unittest.TestCase
 
             % Second test case: with boundary conditions
 
-            A = zeros((m+2)*(n+2));
-            b = zeros((m+2)*(n+2), 1);
+            A = rand((m+2)*(n+2));
+            b = rand((m+2)*(n+2), 1);
 
             dc1 = [2; 3; 4; 5];
             nc1 = [6; 7; 8; 9];
@@ -130,6 +130,7 @@ classdef testAddScalarBC < matlab.unittest.TestCase
             Al = Al + Bl*Gx;
             Ar = Ar + Br*Gx;
             Abclr = kron(In, Al + Ar);
+            [bcrowslr,~,~] = find(Abclr);
 
             Gy = grad(k, n, dy);
             Im = eye(m + 2);
@@ -147,6 +148,10 @@ classdef testAddScalarBC < matlab.unittest.TestCase
             Ab = Ab + Bb*Gy;
             At = At + Bt*Gy;
             Abcbt = kron(Ab + At, Im);
+            [bcrowsbt,~,~] = find(Abcbt);
+
+            bcrows = unique([bcrowslr; bcrowsbt]);
+            A_ref(bcrows, :) = zeros(numel(bcrows), size(A_ref, 2));
 
             A_ref = A_ref + Abclr + Abcbt;
 
@@ -179,8 +184,8 @@ classdef testAddScalarBC < matlab.unittest.TestCase
             o = n + 2;
             tol = 1e-10;
 
-            A = 2*ones((m+2)*(n+2)*(o+2));
-            b = 3*ones((m+2)*(n+2)*(o+2),1);
+            A = rand((m+2)*(n+2)*(o+2));
+            b = rand((m+2)*(n+2)*(o+2),1);
 
             bclr = 4*ones(n*o,1);
             bcbt = 5*ones((m+2)*o,1);
@@ -202,8 +207,8 @@ classdef testAddScalarBC < matlab.unittest.TestCase
 
             % Second test case: with boundary conditions
             
-            A = zeros((m+2)*(n+2)*(o+2));
-            b = zeros((m+2)*(n+2)*(o+2), 1);
+            A = rand((m+2)*(n+2)*(o+2));
+            b = rand((m+2)*(n+2)*(o+2), 1);
             
             dc1 = [2; 3; 4; 5; 6; 7];
             nc1 = [8; 9; 10; 11; 12; 13];
@@ -241,6 +246,7 @@ classdef testAddScalarBC < matlab.unittest.TestCase
             Ar = Ar + Br*Gx;
             
             Abclr = kron(kron(Io, In), Al+Ar);
+            [bcrowslr, ~, ~] = find(Abclr);
             
             Ab = zeros(n + 2, n + 2);
             Ab(1,1) = dc1(3);
@@ -256,6 +262,7 @@ classdef testAddScalarBC < matlab.unittest.TestCase
             At = At + Bt*Gy;
             
             Abcbt = kron(kron(Io, Ab+At), Im);
+            [bcrowsbt, ~, ~] = find(Abcbt);
             
             Af = zeros(o + 2, o + 2);
             Af(1,1) = dc1(5);
@@ -272,6 +279,10 @@ classdef testAddScalarBC < matlab.unittest.TestCase
             In(1,1) = 1;
             In(end,end) = 1;
             Abcfz = kron(kron(Af+Az, In), Im);
+            [bcrowsfz, ~, ~] = find(Abcfz);
+
+            bcrows = unique([bcrowslr; bcrowsbt; bcrowsfz]);
+            A_ref(bcrows, :) = zeros(numel(bcrows), size(A_ref, 2));
             
             A_ref = A_ref + Abclr + Abcbt + Abcfz;
 
