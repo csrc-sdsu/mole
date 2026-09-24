@@ -20,19 +20,26 @@ lam = -1.0
 alpha = -np.exp(lam)
 beta = (np.exp(lam)-1)/lam
 
-# x grid
+# Generate the discrete operator first
+grid = Grid.generate(west, east, shape=m + 1)
+#print(grid.spacing)
+L = Laplacian(grid, accuracy_order=k).matrix
+
+B = RobinBoundaryCondition(grid, k, dirichlet_coefficient=alpha, neumann_coefficient=beta)
+L_BC = -L + B.matrix
+A = L_BC.toarray()
+
+# Number of interior cell centers required by the matrix
+n = A.shape[0] - 2
+h = (east - west) / n
+
+# Staggered grid
 #
-n = m - 2
-if n <= 0:
-    raise ValueError("n must be positive")
-
-h = 1.0 / n
-
 # Cell centers: h/2, 3h/2, ..., 1-h/2
-x_internal = (np.arange(n) + 0.5) * h
+x_internal = west + (np.arange(n) + 0.5) * h
 
 # Include the two boundary points
-x = np.concatenate(([0.0], x_internal, [1.0]))
+x = np.concatenate(([west], x_internal, [east]))
 
 # Exact solution
 #
@@ -45,81 +52,34 @@ C2 = (
         - exp_lam / expm1_lam
         - expm1_lam * C1
     ) / (lam * exp_lam)
-f = (
+f_exact = (
         np.exp(lam * x) / (lam * expm1_lam)
         + C1 * x
         + C2
     )
 
+F_internal = (
+    -lam
+    * np.exp(lam * x_internal)
+    / np.expm1(lam)
+)
+
 b = np.concatenate((
     [-1.0],
-    -lam * np.exp(lam * x) / np.expm1(lam),
+    F_internal,
     [0.0]
 ))
 
-#F = (-lambda_val * np.exp(lambda_val*x))/(np.exp(lambda_val)-1)
-
-print(b.shape)
-#print(L_BC.toarray().shape)
-
-
-grid = Grid.generate(west, east, shape=m + 1)
-print(grid.spacing)
-L = Laplacian(grid, accuracy_order=k).matrix
+# Solve without explicitly forming the matrix inverse
+f_approx = np.linalg.solve(A, b)
 
 terminal_width, _ = shutil.get_terminal_size()
 np.set_printoptions(linewidth=terminal_width, suppress=True)
 
-B = RobinBoundaryCondition(grid, k, dirichlet_coefficient=alpha, neumann_coefficient=beta)
-L_BC = L + B.matrix
-
-print(L_BC.toarray())
-
-#RHS = [-1,0]
-
-#x = np.r_[
-#    RHS[0],
-#    np.arange(
-#        RHS[0] + grid.spacing / 2,
-#        RHS[1] + grid.spacing / 2 + grid.spacing / 2,
-#        grid.spacing,
-#    ),
-#    RHS[1],
-#]
-#x_internal = (np.arange(m) + 0.5) * grid.spacing
-#x = np.r_[
-#    RHS[0],
-#    x_internal,
-#    RHS[1],
-#]
-
-#print(RHS[0] + grid.spacing / 2)
-#print(RHS[1] + grid.spacing / 2 + grid.spacing / 2)
-#print(grid.spacing)
-
-#
-#print(x)
-#print(x.shape)
-
-
-
-U = np.linalg.inv(L_BC.toarray()) @ -b
-
-
-print(U.shape)
-print(x.shape)
-"""
-
-U[0] = 0  # West BC
-U[-1] = 2 * np.exp(1)  # East BC
-U = np.linalg.inv(L_BC.toarray()) @ U
-
-
-plt.plot(x, U, "o", label="Approximated")
-#plt.plot(x, np.exp(x), label="Analytical")
+plt.plot(x, f_approx, "o", label="Approximated")
+plt.plot(x, f_exact, label="Analytical")
 plt.legend(loc="upper left")
-plt.title("The Model Problem")
+plt.title(fr"The Model Problem ($\lambda$ = {lam})")
 plt.xlabel("x")
-plt.ylabel("u(x)")
+plt.ylabel("f(x)")
 plt.show()
-#"""
