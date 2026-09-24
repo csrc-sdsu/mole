@@ -547,7 +547,7 @@ function _normalize_partial_bc(bc_raw, expected)
     end
 
     periodic = [
-        all(bc.dc[2i - 1:2i] .^ 2 .+ bc.nc[2i - 1:2i] .^ 2 .== 0) for
+        all(bc.dc[(2i - 1):2i] .^ 2 .+ bc.nc[(2i - 1):2i] .^ 2 .== 0) for
         i in 1:(expected ÷ 2)
     ]
     return BoundaryMetadata(
