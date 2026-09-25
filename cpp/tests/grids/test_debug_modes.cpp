@@ -11,16 +11,14 @@
 // gridBase::applyDebugMode, which the grid constructors and
 // gridBuilder call. Two properties are under test:
 //
-//   1. a mode changes only what is written to standard output; the
-//      grid's error log is identical afterwards in every mode
-//   2. the mode is triggered by hasGridErrors(): a grid with an
-//      empty error stack ignores the mode, and a grid with any
-//      error on its stack, including errors merged from upstream,
-//      is reported
+//   1. DEBUG MODE (mode) allows users to control how errors are
+//      reported to standard output. The default mode does not
+//      write anything to standard output but still records errors
+//      in the grid's error log.
+//   2. If hasGridErrors() is true means that there is at least one
+//      error in the grid's error log.  The mode will determine
+//      how that error is reported to standard output.
 //
-// DEBUG_AND_ABORT_MD is only exercised on grids with no errors,
-// since a real abort would end the test binary. If property 2
-// regresses, these cases abort and ctest reports the failure.
 #include "MOLE_grids.h"
 #include "grid_builder.h"
 #include "mole_test.h"
@@ -30,7 +28,7 @@
 #include <string>
 #include <variant>
 
-// capture redirects standard output for the duration of fn and
+// capture: redirects standard output for the duration of fn and
 // returns whatever was written. The grid error reporting goes to
 // cout; mole_test.h writes failures to cerr, so assertion output is
 // not swallowed.
@@ -98,7 +96,7 @@ TEST_CASE("an unrecognized debug mode falls back to reporting") {
 }
 
 // ---------------------------------------------------------------
-// A mode must not consume the error log
+// A mode must not destroy the error log
 //
 // Reporting has to be non-destructive. hasGridErrors() reads the
 // same stack the mode prints, so a mode that drained the stack would

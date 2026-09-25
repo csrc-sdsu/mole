@@ -238,6 +238,8 @@ static unordered_map<int, string> MOLE_errors_messages = {
     {MOLE_ERR_NAN_VALUE, "NaN value detected."},
 };
 
+// MOLE_Error basic structure a stack of this structure is used to
+// keep track of errors that occur within the MOLE framework.
 struct MOLE_Errors {
     int errCode; // Logged error codes
     string errLocation; // Report location where the error occurred 
@@ -255,12 +257,7 @@ void MOLEerr_log(stack<MOLE_Errors>& errorStack, int errCode,
 // 3. Checks whether the error stack contains a specific error code
 bool MOLEerr_contains(const stack<MOLE_Errors>& errorStack, int targetCode);
 
-// 4. Checks whether there are any errors in the stack. A grid's
-// stack carries MOLE_ERR_GRID_UNCHECKED from construction until
-// validation removes it, so this reports true on a grid that has
-// not been validated yet, and on a valid grid that merged errors
-// from an upstream MOLE object. Use isValidatedGrid() to ask
-// whether the object itself is usable.
+// 4. Checks whether there are any errors in the stack. 
 bool MOLEerr_haserrors(const stack<MOLE_Errors>& errorStack);
 
 // 5. Removes a specific error from the stack
@@ -274,8 +271,8 @@ void MOLEerr_print(const stack<MOLE_Errors>& errorStack);
 void MOLEerr_dumpErrLog(stack<MOLE_Errors>& errorStack, string logType);
 
 // ParamsNull is a struct used for reporting errors with any
-// MOLE objects (classes). The structure can accumulate errors from
-// other MOLE classes (i.e, grids, boundaries, etc)in type_errs
+// MOLE Grid Objects whenever the grid dimensionality has not been
+// determined, and errors are occurring.
 struct paramsNull {
     size_t num_errs = 0; // Number of errors
     stack<string> type_errs; // Types of MOLE errors 
