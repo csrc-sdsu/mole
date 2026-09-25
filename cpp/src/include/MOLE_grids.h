@@ -6,7 +6,7 @@
  */
 
 /*
- * @file grids.h
+ * @file MOLE_grids.h
  *
  * @brief Generic grid class and data structures for 1D, 2D, and 3D grids.
  *
@@ -118,17 +118,20 @@ struct gridParams3D {
 // class can also be used for errors that occur prematurally when a
 // grid is created.
 //
+// gridBase is internal to MOLE. Its constructor is protected, so it
+// can only be reached through grid1D, grid2D, grid3D, or gridNull.
+//
 // ----------------------------------------------------------------//
 // The error stack is member of this superclass and protected (i.e 
 // can only be access by member functions in a grid class)
 class gridBase{
     protected:
         stack<MOLE_Errors> errs; // for error detection+backtracking
+        gridBase(size_t idim);
     public:
         // gridBase shell members for all grids
         size_t dim; // explict declaration of dimensionality in grid
         virtual ~gridBase() = default;
-        gridBase(size_t idim);
         // validates user-provided coordinates for uniform grids only
         bool valid1DCoordinates(array1D& userInput, 
                                 const array1D& expected,
@@ -155,6 +158,17 @@ class gridBase{
         void setCheckedWithErrors(const string location);
         void print_ErrorLog();
         void write_ErrorLog();
+
+        //
+        // applyDebugMode implements the MOLE debug modes for grid
+        // objects. A grid whose error log is empty is left
+        // untouched; the mode governs only what happens to a grid
+        // that has errors. The mode is applied once, by the
+        // constructor that received it, and is not stored on the
+        // grid.
+        //
+        void applyDebugMode(size_t debug_mode);
+
         // ----------------------------------------------------------
         // The following member function are used as helpers for the
         // MOLE grid classes (grid1D, grid2D, grid3D) to avoid code
@@ -221,6 +235,14 @@ class gridBase{
                                     int badCoordsErr);
 };
 
+// ----------------------------------------------------------------
+// Each grid class offers four constructors. The two that take a
+// debug_mode delegate to the matching constructor without one, then
+// apply the mode to the result. Valid modes are declared in
+// MOLE_errors.h: DEBUG_DEFAULT_MD, DEBUG_REPORTS_STDOUT_MD, and
+// DEBUG_AND_ABORT_MD.
+// ----------------------------------------------------------------
+
 // 1D grid class
 class grid1D : public gridBase{
     public:
@@ -229,10 +251,16 @@ class grid1D : public gridBase{
         // grid1D(<struct>) constructor, users pass a structure with
         // the 1D parameters (gridParams1D).
         grid1D(const gridParams1D p1);
+        // like grid1D but applies a MOLE debug mode to the result
+        grid1D(const gridParams1D p1, size_t debug_mode);
         // like grid1D but also takes an MOLE error object containing
         // errors that may have occur prior to the grid construction
         grid1D(const gridParams1D p1, 
                 const stack<MOLE_Errors>& inerrs);
+        // like the constructor above but applies a MOLE debug mode
+        grid1D(const gridParams1D p1,
+                const stack<MOLE_Errors>& inerrs,
+                size_t debug_mode);
         bool validGrid();
 };
 
@@ -244,10 +272,16 @@ class grid2D : public gridBase{
         // grid2D(<struct>) constructor, users pass a structure with
         // the 2D parameters (gridParams2D).
         grid2D(const gridParams2D p2D);
+        // like grid2D but applies a MOLE debug mode to the result
+        grid2D(const gridParams2D p2D, size_t debug_mode);
         // like grid2D but also takes an MOLE error object containing
         // errors that may have occur prior to the grid construction
         grid2D(const gridParams2D p2, 
                 const stack<MOLE_Errors>& inerrs);
+        // like the constructor above but applies a MOLE debug mode
+        grid2D(const gridParams2D p2,
+                const stack<MOLE_Errors>& inerrs,
+                size_t debug_mode);
         // checks if the grid params are valid
         bool validGrid();
 };
@@ -260,23 +294,44 @@ class grid3D : public gridBase{
         // grid3D(<struct>) constructor, users pass a structure with
         // the 3D parameters (gridParams2D).
         grid3D(const gridParams3D p3D);
+        // like grid3D but applies a MOLE debug mode to the result
+        grid3D(const gridParams3D p3D, size_t debug_mode);
         // like grid3D but also takes an MOLE error object containing
         // errors that may have occur prior to the grid construction
         grid3D(const gridParams3D p3, 
                 const stack<MOLE_Errors>& inerrs);
+        // like the constructor above but applies a MOLE debug mode
+        grid3D(const gridParams3D p3,
+                const stack<MOLE_Errors>& inerrs,
+                size_t debug_mode);
         // checks if the grid params are valid
         bool validGrid();
 };
 
 // Grid Null Class - This grid object is return when errors are found
 // with the grid specifications and the grid could not be built.
+//
+// gridNull is internal to MOLE. Its constructor is private and only
+// makeGridNull can reach it, so a user cannot fabricate one. Copy
+// and move stay public because gridVar holds a gridNull alternative
+// and has to be copyable.
 class gridNull: public gridBase{
+    private:
+        gridNull(const paramsNull in_p,
+                    const stack<MOLE_Errors>& inerrs);
+        friend gridNull makeGridNull(const paramsNull in_p,
+                    const stack<MOLE_Errors>& inerrs);
     public:
         paramsNull ErrData;
         ~gridNull() = default;
-        gridNull(const paramsNull in_p, const stack<MOLE_Errors>& inerrs);
         bool validGrid(){return false;}
 };
+
+// makeGridNull is the only way to build a gridNull. It exists so
+// that makeGrid can produce the failure case without opening the
+// gridNull constructor to users.
+gridNull makeGridNull(const paramsNull in_p,
+                    const stack<MOLE_Errors>& inerrs);
 
 // ----------------------------------------------------------------
 //                VARIANT STRUCTURES AND CLASSES

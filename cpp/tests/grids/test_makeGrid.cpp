@@ -1,4 +1,15 @@
 // Regression tests for makeGrid(), and gridNull.
+//
+// makeGrid exists for gridBuilder. It takes a paramVars variant and
+// returns the matching gridVar, which is what lets gridBuilder choose
+// the grid's dimensionality at runtime from the attributes it is
+// given. makeGrid is not meant to be called on its own in user code;
+// these tests call it directly only to validate that it builds the
+// right grid for each parameter type.
+//
+// The error stack is an input parameter of makeGrid, so every test
+// has to pass one. It is empty in every case except the propagation
+// test, which seeds it to check that incoming errors reach the grid.
 #include "MOLE_grids.h"
 #include "mole_test.h"
 #include <sstream>
