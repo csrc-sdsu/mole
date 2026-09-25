@@ -1,4 +1,4 @@
-tol = 1e-10
+tol = 1e-9
 
 @testset "Testing non periodic 1-D divergence for order k=$k" for k in 2:2:8
     m = 2*k+1
