@@ -3,12 +3,17 @@
 This example solves the Helmholtz differential equation, which is a classic Sturm-Liouville problem:
 
 $$ u'' + u = 0, \quad 0 < x < 3 $$
+
 or
+
 $$ u'' + \mu^2 u = 0, \quad 0 < x < 1 $$
 
 with boundary conditions:
+
 $$ u(0) = 0, \quad u(3) = \sin(3) $$
+
 or
+
 $$ u'(0) = 0, \quad u(1) + u'(1) = \cos(\mu) - \mu \sin(\mu) $$
 
 The exact solution to this problem is $\sin(x)$ or $\cos(\mu x)$.
@@ -46,13 +51,16 @@ Boundary conditions are applied using `RobinBC` or `MixedBC`.
 
 These examples are implemented in:
 
-- [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/sturmLiouvilleHelmholtzDirichletDirichlet.m)
-- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/sturmLiouvilleHelmholtzDirichletDirichlet.cpp)
-- [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/sturmLiouvilleHelmholtzDirichletRobin.m)
-- [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/sturmLiouvilleHelmholtzDirichletRobin.cpp)
+- [Octave (Dirichlet–Dirichlet)](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/sturmLiouvilleHelmholtzDirichletDirichlet.m)
+- [C++ (Dirichlet–Dirichlet)](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/sturmLiouvilleHelmholtzDirichletDirichlet.cpp)
+- [Octave (Dirichlet–Robin)](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/sturmLiouvilleHelmholtzDirichletRobin.m)
+- [C++ (Dirichlet–Robin)](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/sturmLiouvilleHelmholtzDirichletRobin.cpp)
+
 Additional Octave and C++ variant:
+
 - [Octave Wifi](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/helmholtz2D_wifi.m)
 - [C++ Wifi](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/helmholtz2D_wifi.cpp)
+
 ## Results
 
 The numerical solutions closely match the exact solutions, which are $\sin(x)$ or $\cos(\mu x)$.
