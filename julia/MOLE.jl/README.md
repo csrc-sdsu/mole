@@ -6,7 +6,7 @@ This is an implementation written in Julia for the MOLE package. The source file
 
 ## Installation
 
-MOLE.jl is available from the Julia package manager. In Julia, run `using Pkg; Pkg.add("MOLE")` to install it.
+MOLE.jl is available from the Julia package manager. In Julia, run `using Pkg; Pkg.add("MOLE")` to install it. Alternatively, enter Julia's package mode by pressing `]` and run `add MOLE`.
 
 ## Using MOLE.jl
 
