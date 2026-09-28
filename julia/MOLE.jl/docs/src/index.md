@@ -6,7 +6,7 @@ More information can be found on the [main documentation site](https://mole-docs
 
 ## Getting Started
 
-MOLE.jl is not yet available in the Julia's package manager. For now, this repository needs to be cloned locally in order to use the library.
+MOLE.jl is available from the Julia package manager. In Julia, run `using Pkg; Pkg.add("MOLE")` to install it.
 
 ## Using MOLE.jl
 
