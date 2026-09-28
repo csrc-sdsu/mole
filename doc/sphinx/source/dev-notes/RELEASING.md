@@ -149,6 +149,7 @@ Before creating a release:
 After creating a release:
 
 - [ ] GitHub release created with proper notes
+- [ ] `doc/sphinx/source/conf.py` file updated with new `release` field
 - [ ] Zenodo record updated (if applicable)
 - [ ] DOI updated in repository files
 - [ ] Community notified (if appropriate)
