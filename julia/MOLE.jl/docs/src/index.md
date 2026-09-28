@@ -4,27 +4,47 @@ MOLE is a library that implements high-order mimetic operators to solve partial 
 This site provides documentation for the Julia implementation of MOLE.
 More information can be found on the [main documentation site](https://mole-docs.readthedocs.io/en/main/) and the [GitHub repository](https://github.com/csrc-sdsu/mole).
 
-## Getting Started
+## Installation
 
 MOLE.jl is available from the Julia package manager. In Julia, run `using Pkg; Pkg.add("MOLE")` to install it.
 
 ## Using MOLE.jl
 
-In order to use the MOLE.jl library, first navigate to the location where the repository has been cloned to. Then, go to the `mole/julia/MOLE.jl` sub-directory. From here, you can access the library via the REPL or the command line.
+Once installed, load the library in Julia with:
 
-### From the REPL
+```julia
+using MOLE
+```
 
-In `mole/julia/MOLE.jl`, start Julia using the command `julia --project=.`. Next, the package library needs to be instantiated and pre-compiled. Enter the `pkg` mode by pressing `]`, then type the commands `instantiate` and `precompile` (one at a time). This should activate the MOLE.jl package and install the necessary dependencies.
-
-Then, to run a script such as myScript.jl, you can use the following command in the REPL:
+Then, to run a script such as `myScript.jl`, you can use the following command in the REPL:
 
 ```julia
 include("path/to/myScript.jl")
 ```
 
-### From the command line
+or run it from the command line:
 
-In `mole/julia/MOLE.jl`, use the following commands to instatiate and precompile the MOLE package:
+```sh
+julia path/to/myScript.jl
+```
+
+### Development and working from source
+
+If you are developing MOLE.jl or working directly from a cloned repository, navigate to the `mole/julia/MOLE.jl` sub-directory. From here, you can access the library via the REPL or the command line.
+
+#### From the REPL
+
+In `mole/julia/MOLE.jl`, start Julia using the command `julia --project=.`. Next, the package library needs to be instantiated and pre-compiled. Enter the `pkg` mode by pressing `]`, then type the commands `instantiate` and `precompile` (one at a time). This should activate the MOLE.jl package and install the necessary dependencies.
+
+Then, to run a script such as `myScript.jl`, you can use the following command in the REPL:
+
+```julia
+include("path/to/myScript.jl")
+```
+
+#### From the command line
+
+In `mole/julia/MOLE.jl`, use the following commands to instantiate and precompile the MOLE package:
 
 ```sh
 julia --project=. -e 'using Pkg; Pkg.instantiate()'
