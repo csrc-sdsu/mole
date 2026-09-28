@@ -198,7 +198,7 @@ The archival copy of the MOLE User Manual is maintained on [Zenodo](https://zeno
 
 ```bibtex
 @misc{MOLE_user_manual,
-   author       = {Barra, Valeria and
+  author       = {Barra, Valeria and
                   Boada, Angel and
                   Brzenski, Jared and
                   Castillo, Jose and
@@ -207,6 +207,7 @@ The archival copy of the MOLE User Manual is maintained on [Zenodo](https://zeno
                   Corbino, Johnny Delgado and
                   Drummond, Tony and
                   Dumett, Miguel and
+                  Gala, Mokshit and
                   Hellmers, Joe and
                   Ilaty, Arshia and
                   Kaviani, Katayoon and
@@ -222,11 +223,12 @@ The archival copy of the MOLE User Manual is maintained on [Zenodo](https://zeno
                   Wagner, Ben and
                   Zade, Deepanshu},
   title        = {MOLE User Manual},
-  month        = may,
+  month        = sep,
   year         = 2026,
   publisher    = {Zenodo},
-  doi          = {10.5281/zenodo.20128874},
-  url          = {https://doi.org/10.5281/zenodo.20128874},
+  version      = {1.3.0},
+  doi          = {10.5281/zenodo.23023730},
+  url          = {https://doi.org/10.5281/zenodo.23023730},
 }
 ```
 
