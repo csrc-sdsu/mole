@@ -1,5 +1,7 @@
 # Helmholtz Sturm-Liouville Problem
 
+This example is adapted from the [WiFi Propagation example](https://doc.freefem.org/tutorials/wifiPropagation.html) in the [FreeFEM library](https://freefem.org/).
+
 This example solves the Helmholtz differential equation, which is a classic Sturm-Liouville problem:
 
 $$ u'' + u = 0, \quad 0 < x < 3 $$
