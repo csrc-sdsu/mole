@@ -8,5 +8,6 @@ module MOLE
 
 include("Operators/Operators.jl")
 include("BCs/BCs.jl")
+include("Grids/Grids.jl")
 
 end # module MOLE
