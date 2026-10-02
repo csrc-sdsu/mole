@@ -54,6 +54,16 @@ function [X, Y] = ttm(grid_name, m, n, iters, plot_grid)
         Y(end, j) = XY(2);
     end
     
+    % Initial guess: transfinite interpolation of the same boundary curves.
+    % Without this the interior starts at zeros(m,n) -- every interior node at
+    % the origin -- so the first sweeps compute alpha, beta and gamma from a
+    % maximally degenerate grid and the iteration has to untangle itself from
+    % a fold it created.  On mild geometries it gets away with it; on a tall
+    % seamount it does not.
+    [X0, Y0] = tfi(grid_name, m, n, false);
+    X(2:m-1, 2:n-1) = X0(2:m-1, 2:n-1);
+    Y(2:m-1, 2:n-1) = Y0(2:m-1, 2:n-1);
+
     newX = X;
     newY = Y;
     
