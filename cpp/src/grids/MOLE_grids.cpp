@@ -1126,9 +1126,10 @@ gridNull::gridNull(const paramsNull in_p,
 }
 
 //
-// makeGridNull is the only entry point to the gridNull constructor.
-// It exists so that makeGrid can produce the failure case without
-// opening the constructor to users.
+// makeGridNull is used when one needs to generate log errors before
+// the grid dimensionality is determined at runtime. This is only 
+// functional attribute that can construct a gridNull. And used in the
+// context of GridBuilder
 //
 gridNull makeGridNull(const paramsNull in_p,
                 const stack<MOLE_Errors>& inerrs){

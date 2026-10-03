@@ -21,7 +21,7 @@ classdef testGridOrientation < matlab.unittest.TestCase
         function testRightHandedIsSilent(testCase)
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/octave'))
+            addpath(genpath('../../src/old_version'))
             [X, Y] = testGridOrientation.sineGrid(21, 0.10);
             testCase.verifyWarningFree(@() jacobian2D(2, X, Y));
         end
@@ -29,7 +29,7 @@ classdef testGridOrientation < matlab.unittest.TestCase
         function testTransposedWarns(testCase)
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/octave'))
+            addpath(genpath('../../src/old_version'))
             [X, Y] = testGridOrientation.sineGrid(21, 0.10);
             testCase.verifyWarning(@() jacobian2D(2, X.', Y.'), ...
                                    'jacobian2D:leftHandedGrid');
@@ -41,8 +41,8 @@ classdef testGridOrientation < matlab.unittest.TestCase
             % straight in yields a globally left-handed grid.
             %
             % tfi does addpath(['grids/' grid_name]) RELATIVE TO THE CURRENT
-            % DIRECTORY, so the working directory has to be src/octave, not
-            % src/octave/grids. And the path is added non-recursively on
+            % DIRECTORY, so the working directory has to be octave/src/, not
+            % octave/src/grids. And the path is added non-recursively on
             % purpose: genpath would put every grid folder on the path at once,
             % and the curve functions (right.m, top.m, ...) share names across
             % grids, so another grid would silently answer for this one.
@@ -50,7 +50,7 @@ classdef testGridOrientation < matlab.unittest.TestCase
             cleanupObj = onCleanup(@() path(origPath));
             origDir = pwd;
             cleanupDir = onCleanup(@() cd(origDir));
-            srcDir = fullfile(pwd, '..', '..', 'src', 'octave');
+            srcDir = fullfile(pwd, '..', '..', 'src', 'old_version');
             addpath(srcDir)
             cd(srcDir)
 
@@ -70,7 +70,7 @@ classdef testGridOrientation < matlab.unittest.TestCase
             % same |J| to the last bit, opposite sign.
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/octave'))
+            addpath(genpath('../../src/old_version'))
             [X, Y] = testGridOrientation.sineGrid(21, 0.10);
             warning('off', 'jacobian2D:leftHandedGrid');
             restoreWarn = onCleanup(@() warning('on', 'jacobian2D:leftHandedGrid'));
@@ -84,7 +84,7 @@ classdef testGridOrientation < matlab.unittest.TestCase
             % problem, different warning.
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/octave'))
+            addpath(genpath('../../src/old_version'))
             [X, Y] = meshgrid(linspace(0,1,15), linspace(0,1,15));
             X(6:10, 6:10) = X(6:10, 6:10) - 0.45;
             testCase.verifyWarning(@() jacobian2D(2, X, Y), ...
@@ -96,7 +96,7 @@ classdef testGridOrientation < matlab.unittest.TestCase
             % who never call it directly still get told.
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/octave'))
+            addpath(genpath('../../src/old_version'))
             [X, Y] = testGridOrientation.sineGrid(21, 0.10);
             testCase.verifyWarning(@() grad2DCurv(2, X.', Y.'), ...
                                    'jacobian2D:leftHandedGrid');
@@ -109,7 +109,7 @@ classdef testGridOrientation < matlab.unittest.TestCase
             % jacobian2DLegacy, 5 arguments computes inline.  Both are checked.
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/octave'))
+            addpath(genpath('../../src/old_version'))
             N = 21;
             dc = [1;1;1;1];
             nc = [0;0;0;0];

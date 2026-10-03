@@ -35,7 +35,7 @@ classdef testGI13Curv < matlab.unittest.TestCase
             % check every output reads from the correct zeta-plane.
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/octave'))
+            addpath(genpath('../../src/old_version'))
 
             m = 4;
             n = 3;
@@ -69,7 +69,7 @@ classdef testGI13Curv < matlab.unittest.TestCase
             % field to a constant field.  Weak, but cheap.
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/octave'))
+            addpath(genpath('../../src/old_version'))
 
             m = 5;
             n = 4;
@@ -93,7 +93,7 @@ classdef testGI13Curv < matlab.unittest.TestCase
             % Cartesian accuracy.
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/octave'))
+            addpath(genpath('../../src/old_version'))
 
             for N = [11 17 25]
                 [X, Y, Z, xc, yc, zc] = testGI13Curv.sineGrid(N, 0.0);
@@ -113,7 +113,7 @@ classdef testGI13Curv < matlab.unittest.TestCase
             % means the face shift is wrong again.
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/octave'))
+            addpath(genpath('../../src/old_version'))
 
             N = 21;
             for amp = [0.05 0.10]
@@ -133,7 +133,7 @@ classdef testGI13Curv < matlab.unittest.TestCase
             % clears at ~2.1.
             origPath = path;
             cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/octave'))
+            addpath(genpath('../../src/old_version'))
 
             amp = 0.10;
             Ns = [13 21 33];

@@ -7,7 +7,7 @@ add_library(mole
     grids/MOLE_arrays.cpp
     grids/MOLE_grids.cpp
     grids/grid_builder.cpp
-    sys/MOLE_Errors.cpp
+    sys/MOLE_errors.cpp
     utils/utils.cpp
 )
 add_library(MOLE::mole ALIAS mole)
