@@ -38,8 +38,8 @@ classdef testTTMGrids < matlab.unittest.TestCase
             cleanupObj = onCleanup(@() path(origPath));
             origDir = pwd;
             cleanupDir = onCleanup(@() cd(origDir));
-            addpath(genpath('../../src/octave'))
-            cd('../../src/octave')
+            addpath(genpath('../../src/old_version'))
+            cd('../../src/old_version')
 
             for g = {'chevron', 'horseshoe'}
                 [X, Y] = ttm(g{1}, 39, 99, 500, false);
@@ -58,8 +58,8 @@ classdef testTTMGrids < matlab.unittest.TestCase
             cleanupObj = onCleanup(@() path(origPath));
             origDir = pwd;
             cleanupDir = onCleanup(@() cd(origDir));
-            addpath(genpath('../../src/octave'))
-            cd('../../src/octave')
+            addpath(genpath('../../src/old_version'))
+            cd('../../src/old_version')
 
             [Xt, Yt] = tfi('swan', 39, 99, false);
             [~, nnegTFI] = testTTMGrids.jacobianSigns(Xt, Yt);
@@ -79,8 +79,8 @@ classdef testTTMGrids < matlab.unittest.TestCase
             cleanupObj = onCleanup(@() path(origPath));
             origDir = pwd;
             cleanupDir = onCleanup(@() cd(origDir));
-            addpath(genpath('../../src/octave'))
-            cd('../../src/octave')
+            addpath(genpath('../../src/old_version'))
+            cd('../../src/old_version')
 
             for it = [5 25 100]
                 [X, Y] = ttm('chevron', 39, 99, it, false);
@@ -98,8 +98,8 @@ classdef testTTMGrids < matlab.unittest.TestCase
             cleanupObj = onCleanup(@() path(origPath));
             origDir = pwd;
             cleanupDir = onCleanup(@() cd(origDir));
-            addpath(genpath('../../src/octave'))
-            cd('../../src/octave')
+            addpath(genpath('../../src/old_version'))
+            cd('../../src/old_version')
 
             m = 39;
             n = 99;
