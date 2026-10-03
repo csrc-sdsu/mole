@@ -50,7 +50,7 @@ classdef testGridOrientation < matlab.unittest.TestCase
             cleanupObj = onCleanup(@() path(origPath));
             origDir = pwd;
             cleanupDir = onCleanup(@() cd(origDir));
-            srcDir = fullfile(pwd, '..', '..', 'src', 'octave');
+            srcDir = fullfile(pwd, '..', '..', 'src', 'old_version');
             addpath(srcDir)
             cd(srcDir)
 
