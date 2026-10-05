@@ -158,6 +158,9 @@ class gridBase{
         void setCheckedWithErrors(const string location);
         void print_ErrorLog();
         void write_ErrorLog();
+        // Appends this grid's logged errors, in their original
+        // order, onto the destination stack.
+        void addGridErrs2Stack(stack<MOLE_Errors>& dest) const;
 
         //
         // applyDebugMode implements the MOLE debug modes for grid

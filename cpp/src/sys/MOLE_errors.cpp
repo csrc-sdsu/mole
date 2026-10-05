@@ -179,6 +179,7 @@ void MOLEerr_dumpErrLog(stack<MOLE_Errors>& errorStack,
     // Dump the logged errors to an output file
     if (tempStack.empty()) {
         outFile << "No errors logged." << endl;
+        outFile.close(); 
         return;
     } 
     else {

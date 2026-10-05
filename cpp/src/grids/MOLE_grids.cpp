@@ -24,6 +24,25 @@
 //  the gridBase class private error stack
 // ------------------------------------------------------------------ 
 //
+// appendStackInOrder appends the errors in src onto dest, preserving
+// their original order (oldest pushed first). 
+//
+static void appendStackInOrder(const stack<MOLE_Errors>& src,
+                               stack<MOLE_Errors>& dest) {
+    stack<MOLE_Errors> tmp = src;   // copy; stack can't be iterated
+    stack<MOLE_Errors> reversed;
+
+    while (!tmp.empty()) {
+        reversed.push(tmp.top());
+        tmp.pop();
+    }
+    while (!reversed.empty()) {
+        dest.push(reversed.top());
+        reversed.pop();
+    }
+}
+
+//
 // gridBase::logGridErr logs errors for all Grid classes 
 //
 void gridBase::logGridErr(size_t errCode, string errLoc, 
@@ -86,15 +105,18 @@ void gridBase::write_ErrorLog(){
 
 //
 // gridBase::mergeErrors propagates previously-logged errors into 
-// a grid's error log stack. 
+// a grid's error log stack, preserving their original order.
 //
 void gridBase::mergeErrors(const stack<MOLE_Errors>& inerrs) {
-    stack<MOLE_Errors> tmp_stk = inerrs;
-    while (!tmp_stk.empty()) {
-        logGridErr(tmp_stk.top().errCode, tmp_stk.top().errLocation,
-                    tmp_stk.top().paramError);
-        tmp_stk.pop();
-    }
+    appendStackInOrder(inerrs, errs);
+}
+
+//
+// gridBase::appendErrsTo appends this grid's errors to the dest 
+// stack, preserving their original order (oldest pushed first).
+//
+void gridBase::addGridErrs2Stack(stack<MOLE_Errors>& dest) const {
+    appendStackInOrder(errs, dest);
 }
 
 //
