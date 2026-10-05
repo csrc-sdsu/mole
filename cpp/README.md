@@ -26,7 +26,6 @@ It contains the top CMakefile.list.
 mole/
 ├── cpp/
 |   │── cmake/
-|   │── doc/
 |   │── examples
 |   |── src/
 |   │   ├── boundaries

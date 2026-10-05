@@ -27,6 +27,7 @@ is the MOLE collection of functionalities available to MOLE users.
 
 ## MOLE Modules and Header Files (alphabetical order)
 
++ **grid_builder.h**: User support utily for building C++ grids.
 + **MOLE_arrays.h**: MOLE arrays that interface with data structures
 from other numerical libraries. The current implementation works with
 Armadillo's matrices, vectors and cubes.

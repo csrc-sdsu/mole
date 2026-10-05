@@ -24,6 +24,10 @@ construction of multidimensional arrays using the C++ vector class.
 
 ## List of Files in This Subdirectory (in alphabetical order)
 
++ **grid_builder.cpp**: C++ grid utility that enables users to define
+grid attributes by pasing a set of parameters pairs (e.g., "dx",1/m,
+"dim", 1, etc).  This add an alternative to users directly creating
+a C++ gridParams1D/2D/3D structure.
 + **MOLE_arrays.cpp**: C++ implementation of MOLE 1D, 2D, and 3D
 array classes, which are wrappers to data classes in other numerical
 libraries. It also contains functionality that support the classes,

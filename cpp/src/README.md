@@ -39,6 +39,8 @@ mole/
 ## MOLE 2.0 C++ Files and Subdirectories in this subdirectory
 
 + **CMakeLists.txt**: CMake file for MOLE sources
++ subdirectory **boundaries**: contains functional implementations of
+boundaries handled by the MOLE library
 + subdirectory **grids**: contains functional implementations of the
   MOLE grid classes and required data structures.
 + subdirectory **operators**: contains functional implementations of
