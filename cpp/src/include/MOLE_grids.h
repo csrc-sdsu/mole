@@ -152,7 +152,7 @@ class gridBase{
         // Error handling member functions/methods
         void logGridErr(size_t errCode, string errLoc, 
                         string errParm);
-        bool hasGridErrors();
+        bool hasGridErrors() const;
         bool isValidatedGrid();
         void setGridValidated();
         void setCheckedWithErrors(const string location);

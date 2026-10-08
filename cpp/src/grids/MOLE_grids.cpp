@@ -53,7 +53,7 @@ void gridBase::logGridErr(size_t errCode, string errLoc,
 //
 // gridBase::reportErrors prints out all generated errors 
 //
-bool gridBase::hasGridErrors(){
+bool gridBase::hasGridErrors() const {
     return MOLEerr_haserrors(errs);
 }
 
