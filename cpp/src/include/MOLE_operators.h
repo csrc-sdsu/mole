@@ -32,11 +32,28 @@
 class mdOperator{
     protected:
         stack<MOLE_Errors> o_errs; // for error detection+backtracking
+
+        //
+        // drainArrayErrors moves the errors logged on a MOLE array
+        // (array1D, array2D, array3D) used inside an operator onto
+        // the operator's error stack. The array's own error stack is
+        // left empty.
+        //
+        template <typename ArrayT>
+        void drainArrayErrors(ArrayT& a) {
+            while (a.hasArrayErrors()) {
+                int errCode;
+                string location, msgparam;
+                a.read_ErrorLog(errCode, location, msgparam);
+                logOpErr(errCode, location, msgparam);
+            }
+        }
     public:
         virtual ~mdOperator() = default;
         void logOpErr(size_t errCode, string errLoc, 
                         string errParm);
         bool hasOpErrors() const;
+        void printOpErrors() const;
         void print_ErrorLog() const;
         void write_ErrorLog();
         void copyGridErrs(const gridBase& grid);

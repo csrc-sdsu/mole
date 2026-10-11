@@ -30,7 +30,8 @@
 //
 void mdOperator::logOpErr(size_t errCode, string errLoc, 
                               string errParm) {
-    MOLEerr_log(o_errs, errCode, errLoc, errParm);
+    // MOLE error codes are stored as int (MOLE_Errors::errCode)
+    MOLEerr_log(o_errs, static_cast<int>(errCode), errLoc, errParm);
 }
 
 //
@@ -39,6 +40,14 @@ void mdOperator::logOpErr(size_t errCode, string errLoc,
 //
 bool mdOperator::hasOpErrors() const{
     return MOLEerr_haserrors(o_errs);
+}
+
+//
+// mdOperator::printOpErrors prints the errors logged on the
+// mdOperator to standard output
+//
+void mdOperator::printOpErrors() const {
+    MOLEerr_print(o_errs);
 }
 
 //

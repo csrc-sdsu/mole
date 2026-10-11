@@ -125,6 +125,14 @@ using namespace std;
 #define MOLE_ERR_DIVISION_BY_ZERO 300
 #define MOLE_ERR_INF_VALUE 301
 #define MOLE_ERR_NAN_VALUE 302
+// PROVISIONAL: names, numbers and messages for 303-308 are pending
+// sign-off.
+#define MOLE_ERR_OP_INVALID_ORDER 303 // k is not 2, 4, 6 or 8
+#define MOLE_ERR_OP_GRID_HAS_ERRORS 304 // input grid has errors
+#define MOLE_ERR_OP_INSUFFICIENT_CELLS 305 // cells < 2k along an axis
+#define MOLE_ERR_OP_UNSUPPORTED_TOPOLOGY 306 // grid is not uniform
+#define MOLE_ERR_OP_INPUT_SIZE_MISMATCH 307 // apply() input size wrong
+#define MOLE_ERR_OP_NOT_BUILT 308 // operator not built from a grid
 
 //
 // Dictionary of error codes and their corresponding messages 
@@ -236,6 +244,19 @@ static unordered_map<int, string> MOLE_errors_messages = {
     {MOLE_ERR_INF_VALUE, "Infinity value detected."},
     // 302
     {MOLE_ERR_NAN_VALUE, "NaN value detected."},
+    // 303 - 308 (PROVISIONAL, pending sign-off)
+    {MOLE_ERR_OP_INVALID_ORDER,
+    "Operator order k must be 2, 4, 6 or 8."},
+    {MOLE_ERR_OP_GRID_HAS_ERRORS,
+    "Operator cannot be built because the input grid has errors."},
+    {MOLE_ERR_OP_INSUFFICIENT_CELLS,
+    "Number of cells along an axis must be at least 2k."},
+    {MOLE_ERR_OP_UNSUPPORTED_TOPOLOGY,
+    "Operator supports uniform grids only."},
+    {MOLE_ERR_OP_INPUT_SIZE_MISMATCH,
+    "Input array size does not match the operator."},
+    {MOLE_ERR_OP_NOT_BUILT,
+    "Operator was not built from a grid."},
 };
 
 // MOLE_Error basic structure a stack of this structure is used to

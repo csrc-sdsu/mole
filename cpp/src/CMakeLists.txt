@@ -7,6 +7,8 @@ add_library(mole
     grids/MOLE_arrays.cpp
     grids/MOLE_grids.cpp
     grids/grid_builder.cpp
+    operators/MOLE_operators.cpp
+    operators/gradient.cpp
     sys/MOLE_errors.cpp
     utils/utils.cpp
 )
@@ -20,6 +22,11 @@ target_include_directories(mole
 
 # target_link_libraries(mole PUBLIC ${ARMADILLO_LIBRARIES})
 # target_include_directories(mole PUBLIC ${ARMADILLO_INCLUDE_DIRS})
+
+# Armadillo is used with ARMA_DONT_USE_WRAPPER, so code that multiplies
+# matrices (the operators) calls BLAS/LAPACK directly. PUBLIC passes
+# them on to everything that links MOLE::mole.
+target_link_libraries(mole PUBLIC ${OpenBLAS_LIBRARIES} ${LAPACK_LIBRARY})
 
 if(MOLE_ENABLE_WARNINGS)
     target_compile_options(mole PRIVATE -Wall -Wextra)
