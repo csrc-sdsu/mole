@@ -58,23 +58,33 @@ classdef MOLE.errors < handle
     endproperties 
 
     methods (Access = private)
-        function push(obj, moleError)
+        function push(obj, errorStruct)
             #This funciton pushes a value onto the stack and checks its a struct object 
-            if ~isstruct(val)
-                error('Stack:type', 'Stack values should be structs')
+            if ~isError(errorStruct)
+                error('Stack:type', 'Error structure should be a structure with attribute code, location, and param error');
             endif
-            obj.errorStack{end+1} = moleError; 
+            obj.errorStack{end+1} = errorStruct; 
         endfunction 
-        function isError(obj,error)
 
+        
+        function tf = validateErrorStruct(obj, errorStruct)
+            #This function validates an error structure for types the fields and if its a valid key in our key code mapping
+            containsFields = isField(errorStruct, "errorCode") && isField(errorStruct, "errorLocation") && isField(errorStruct, "paramError");
+            typeFields = isInteger(errorStruct.errCode) && ischar(errorStruct.errCode) && ischar(errorStruct.paramError);
+            tf = isstruct(errorStruct) && typeFields && isKey(obj.Mole_Errors, errorStruct.errCode)
+            
         end
-        function val = pop(obj)
+        fuction tf = isInteger(num)
+            tf = (isnumeric(=num) && isscalar(num) && isreal(num) &&  isfinite(num) && x == fix(x))
+        end
+        
+        function error = pop(obj)
             #This function pops the top element of the stack 
             if obj.isEmpty()
                 error('Stack:empty', 'Cannot pop from an empty stack');
             endif
             #Get top element and set the last element as empty 
-            val = obj.errorStack{end}; 
+            error = obj.errorStack{end}; 
             obj.errorStack(end) = []; 
         endfunction 
 
@@ -86,7 +96,6 @@ classdef MOLE.errors < handle
             moleError = obj.errorStack{end}; 
         endfunction 
 
-        
         function tf = isEmpty(obj)
             #Check if stack is empty 
             tf = isempty(obj.errorStack); 
@@ -106,7 +115,34 @@ classdef MOLE.errors < handle
             e.errLocation, e.paramError); 
         endfunction
     endmethods
-endclassde
+
+
+    methods
+        function MOLEerr_log(obj, errCode, location, inputParms = "")
+            %Create erro log structure from parameters and push it onto the error stack
+            errorStruct = struct("errorCode",errCode, "errorLocation", location, "paramError", inputPrams)
+            obj.errorStack.push(errorStruct)
+        endfunction
+
+        function tf = MOLEerr_contains(obj, targetCode)
+            %Check if error contains error with target code
+            tf = false
+            for i = 1:obj.size()
+                currError = obj.errorStack{i}
+                if currError.errCode == targetCode
+                    tf = true;
+                    return;
+            endfor
+        endfunction
+        function tf = MOLEerr_haserrors(obj)
+            #Checks to see if there are error in the error stack
+            tf = ~obj.errorStack.isEmpty()
+        endfunction
+        
+    endmethods
+
+
+endclassdef
 classdef Mole_Errors < handle
     properties (Access)
 
