@@ -4,17 +4,17 @@ This are tests for our LIFO octave stack class
 
 classdef test_errors < matlab.unittest.TestCase
     properties
-        TestStack
+        TestError
     end
     methods(TestMethodSetup)
         #Initial stack setup with empty stack on each test case
         function createEmptyStack(testCase)
-            testCase.TestStack = Stack()
+            testCase.TestError = MOLE_errors()
         end
     end
     methods(Test)
 
-        function testEmptyStackConstruction(testCase)
+        function testEmptyErrorConstruction(testCase)
             #Test for empty construciton of stack
             testCase.verifyEqual(testCase.TestStack.size(), 0)
         end
@@ -32,21 +32,24 @@ classdef test_errors < matlab.unittest.TestCase
 
         function testPush(testCase):
             #Test for pushing onto stack
+            testCase.verifyEqual(testCase.TestError.getNumErrors(),0)
+            params = "numelem = 5 "
+            testCase.TestError.MOLEerr_log(200, "array1D Construction", params)
+            testCase.verifyEqual(testCase.TestError.getNumErrors(),1)
+            params = "original numelem = 5, requested resize = "
+            testCase.TestError.MOLEerr_log("MOLE_ERR_FAILED_ARRAY_RESIZE", "array1D Resize", params)
+            
+            testCase.verifyEqual(testCase.TestError.getNumErrors(),2)
+
+            
+            params = "original numelem = 5, requested resize = "
+            testCase.TestError.MOLEerr_log(204, "gripBuilder", params)
+            
+
             testCase.TestStack.push({20})
             testCase.verifyEqual(testCase.TestStack.size(),1)
             testCase.verifyEqual((testCase.TestStack.top())(1),20)
 
-            testCase.TestStack.push({22})
-            testCase.verifyEqual(testCase.TestStack.size(),2)
-            testCase.verifyEqual((testCase.TestStack.top())(1),22)
-
-            testCase.TestStack.push({24})
-            testCase.verifyEqual(testCase.TestStack.size(),3)
-            testCase.verifyEqual((testCase.TestStack.top())(1),24)
-
-            testCase.TestStack.push({26})
-            testCase.verifyEqual(testCase.TestStack.size(),4)
-            testCase.verifyEqual((testCase.TestStack.top())(1),26)
         end
 
         function testPop(testCase):

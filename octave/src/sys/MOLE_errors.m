@@ -1,4 +1,4 @@
-classdef MOLE.errors < handle
+classdef MOLE_errors < handle
     properties (Constant = true)
         % MOLE error codes supported by the Octave interface.
         % The source table's C++-only debugging entries (codes 000-010) are omitted.
@@ -75,6 +75,7 @@ classdef MOLE.errors < handle
             
         end
         fuction tf = isInteger(num)
+        %This function check if a num input is an integer even with a decimal point like 12.
             tf = (isnumeric(=num) && isscalar(num) && isreal(num) &&  isfinite(num) && x == fix(x))
         end
         
@@ -89,7 +90,7 @@ classdef MOLE.errors < handle
         endfunction 
 
         function moleError = top(obj) 
-            #Peak at the top and return the top elements fo stack
+            #Peak at the top and return the top elements of stack
             if obj.isEmpty()    #Check stack is not empty
                 error('Stack:empty', 'Cannot peek an empty stack');
             endif
@@ -118,9 +119,11 @@ classdef MOLE.errors < handle
 
 
     methods
-        function MOLEerr_log(obj, errCode, location, inputParms = "")
+        function MOLEerr_log(obj, errorName, location, inputParms = "")
             %Create erro log structure from parameters and push it onto the error stack
-            errorStruct = struct("errorCode",errCode, "errorLocation", location, "paramError", inputPrams)
+            if ischar(errorDescriptor) && isKey(obj.Mole_Errors, errName):
+                errCode = obj.Mole_Errors(errName).("Code")
+            errorStruct = struct("errorCode", errCode, "errorLocation", location, "paramError", inputPrams)
             obj.errorStack.push(errorStruct)
         endfunction
 
@@ -134,11 +137,28 @@ classdef MOLE.errors < handle
                     return;
             endfor
         endfunction
+
         function tf = MOLEerr_haserrors(obj)
             #Checks to see if there are error in the error stack
             tf = ~obj.errorStack.isEmpty()
         endfunction
-        
+
+        function MOLEerr_remove(obj, targeCode)
+            #Remove error with target code out of the stack
+            for i = 1:obj.size()
+                currError = obj.errorStack{i}
+                if currError.errCode == targetCode
+                    obj.errorStack(i) = []; 
+                    return;
+            endfor
+        endfunction
+        function date = getDateTimeString()
+            date = datestr(now, 'yyyy-mm-dd HH:MM:SS')
+        endfunction
+        function num = getNumErrors(obj)
+            num = obj.size()
+
+        endfunction
     endmethods
 
 
