@@ -120,12 +120,12 @@ classdef MOLE_errors < handle
             obj.errorStack.push(errorStruct)
         endfunction
 
-        function tf = MOLEerr_contains(obj, targetCode)
+        function tf = MOLEerr_contains(obj, errorName)
             %Check if error contains error with target code
             tf = false
             for i = 1:obj.size()
                 currError = obj.errorStack{i}
-                if currError.errCode == targetCode
+                if currError.errCode == errorName
                     tf = true;
                     return;
             endfor

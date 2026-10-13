@@ -27,14 +27,27 @@ classdef test_errors < matlab.unittest.TestCase
 
             
             params = "original numelem = 5, requested resize = "
-            testCase.TestError.MOLEerr_log("MOLE_ERR_FAILED_ARRAY_RESIZ", "gripBuilder", params)
+            testCase.TestError.MOLEerr_log("MOLE_ERR_INVALID_GRID_SPACING", "grid1D[construct]", params)
             
             testCase.verifyEqual(testCase.TestError.getNumErrors(),3)
 
         end
 
+        function testMoleErrorContains(testCase)
+            #Test for mole error contains
+            assert(~testCase.TestError.MOLEerr_contains("MOLE_ERR_GRID_UNCHECKED"))
+            params = ""
+            testCase.TestError.MOLEerr_log("MOLE_ERR_GRID_UNCHECKED", "<Grid Construction", params)
+            assert(testCase.TestError.MOLEerr_contains("MOLE_ERR_GRID_UNCHECKED"))
 
-        function testSize(testCase):
+            params = "original numelem = 5, requested resize = "
+            testCase.TestError.MOLEerr_log("MOLE_ERR_FAILED_ARRAY_RESIZE", "array1D Resize", params)
+            assert(testCase.TestError.MOLEerr_contains("MOLE_ERR_FAILED_ARRAY_RESIZE"))
+
+            assert(~testCase.TestError.MOLEerr_contains("MOLE_ERR_INVALID_GRID_SPACING"))
+
+        endfunction
+        function testGetNumErrors(testCase):
             #Test for checking the size of the stack
             testCase.verifyEqual(testCase.TestStack.size(), 0)
             testCase.TestStack.push({20})
