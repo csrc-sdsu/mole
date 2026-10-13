@@ -89,13 +89,6 @@ classdef MOLE_errors < handle
             obj.errorStack(end) = []; 
         endfunction 
 
-        function moleError = top(obj) 
-            #Peak at the top and return the top elements of stack
-            if obj.isEmpty()    #Check stack is not empty
-                error('Stack:empty', 'Cannot peek an empty stack');
-            endif
-            moleError = obj.errorStack{end}; 
-        endfunction 
 
         function tf = isEmpty(obj)
             #Check if stack is empty 
