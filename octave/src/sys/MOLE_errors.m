@@ -136,13 +136,12 @@ classdef MOLE_errors < handle
             tf = ~obj.errorStack.isEmpty()
         endfunction
 
-        function MOLEerr_remove(obj, targeCode)
+        function MOLEerr_remove(obj, errName)
             #Remove error with target code out of the stack
             for i = 1:obj.size()
                 currError = obj.errorStack{i}
-                if currError.errCode == targetCode
-                    obj.errorStack(i) = []; 
-                    return;
+                if currError.errCode == errName
+                    obj.errorStack(i) = [];
             endfor
         endfunction
         function date = getDateTimeString()
