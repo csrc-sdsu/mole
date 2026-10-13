@@ -100,8 +100,8 @@ classdef MOLE_errors < handle
             n = numel(obj.erroStack); 
         endfunction 
 
-        function print(obj) 
-        %There are some formatting erors here that need fixing
+        function print(obj, errorStruct) 
+            %There are some formatting erors here that need fixing
             fprintf('Stack with %d error(s):\n', obj.size()); 
             for i = numel(obj.Data):-1:1 e = obj.Data{i}; 
             fprintf(' [%d] Code=%d Location=%s
@@ -113,9 +113,8 @@ classdef MOLE_errors < handle
 
     methods
         function MOLEerr_log(obj, errorName, location, inputParms = "")
-            %Create erro log structure from parameters and push it onto the error stack
-            if ischar(errorDescriptor) && isKey(obj.Mole_Errors, errName):
-                errCode = obj.Mole_Errors(errName).("Code")
+            %Create error log structure from parameters and push it onto the error stack
+            errCode = obj.Mole_Errors(errName).("Code")
             errorStruct = struct("errorCode", errCode, "errorLocation", location, "paramError", inputPrams)
             obj.errorStack.push(errorStruct)
         endfunction
@@ -144,6 +143,23 @@ classdef MOLE_errors < handle
                     obj.errorStack(i) = [];
             endfor
         endfunction
+
+        function MOLEerr_print(obj)
+            if obj.isEmpty()
+                output = "No errors logged."
+                printf("%s", output)
+            endif
+            startLogStr = "========================================\n
+                    Backtracing all logged MOLE Errors \n
+                    ======================================== \n"
+            printf("%s", startLogStr)
+            for i = 1:obj.size()
+                currError = obj.errorStack{i}
+                if currError.errCode == errName
+                    obj.errorStack(i) = [];
+            endfor
+        endfunction
+
         function date = getDateTimeString()
             date = datestr(now, 'yyyy-mm-dd HH:MM:SS')
         endfunction
