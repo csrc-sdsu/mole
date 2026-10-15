@@ -67,7 +67,7 @@ classdef MOLE_errors < handle
             
         end
         fuction tf = isInteger(num)
-        %This function check if a num input is an integer even with a decimal point like 12.
+        	#This function check if a num input is an integer even with a decimal point like 12.
             tf = (isnumeric(=num) && isscalar(num) && isreal(num) &&  isfinite(num) && x == fix(x))
         end
         
@@ -82,6 +82,8 @@ classdef MOLE_errors < handle
         endfunction 
 
         function constErrorMessage(obj, errorStruct, constMessage)
+        	#This function creates a messge string with the error struct attributes
+            #Constant messge is extra informtion added to this messge from caller
             outputStr = constMessage + obj.Mole_Errors(errName).("Message")
             outputStr += "Error: " + errorStruct.errorName + "\n"
             outputStr += "Code: " + errorStruct.errCode + " \n"
@@ -102,7 +104,7 @@ classdef MOLE_errors < handle
             errorStruct = struct("ErrorName", errorName, "errorCode", errCode, "errorLocation", location, "paramError", params)
             obj.validateErrorStruct(errorStruct)
             errorMessage = constErrorMessage(constMessage)
-            obj.numErrors += 1
+            obj.numErrors += 1 		#Add the logged error to our accumulated errors
             if errorType == 0
                 error(errorMessage)
             else
@@ -111,6 +113,8 @@ classdef MOLE_errors < handle
         endfunction
 
         function MOLEerr_print(obj, errorStruct, errorMessage)
+        	#This function takes in an error struct as specified above 
+        	# It also takes in an error messages to print corresponding to the error code 
             if obj.isEmpty()
                 output = "No errors logged."
                 printf("%s", output)
