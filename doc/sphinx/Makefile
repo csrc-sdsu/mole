@@ -44,6 +44,7 @@ help:
 # Doxygen documentation
 doc-doxygen:
 	@echo "Generating Doxygen documentation..."
+	@mkdir -p $(DOXYDIR)
 	@cd ../.. && doxygen Doxyfile
 	@if [ ! -d "$(DOXYXML)" ]; then \
 		echo "Error: Doxygen XML output directory not found at $(DOXYXML)"; \

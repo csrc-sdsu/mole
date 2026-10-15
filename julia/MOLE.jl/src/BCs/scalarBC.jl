@@ -18,7 +18,7 @@ abstract type AbstractScalarBC{D} end
 """
     Concrete scalar BC description for 1D.
 
-    Fields mirror the MATLAB function:
+    Fields mirror the Octave function:
     - dc: Dirichlet coefficients (left,right)
     - nc: Neumann/Robin coefficients (left,right)
     - v:  prescribed boundary value g (left,right)
@@ -33,7 +33,7 @@ end
 """
     Concrete scalar BC description for 2D.
 
-    Fields mirror the MATLAB function:
+    Fields mirror the Octave function:
     - dc: Dirichlet coefficients (left, right, bottom, top)
     - nc: Neumann/Robin coefficients (left, right, bottom, top)
     - vc: prescribed boundary value g (left, right, bottom, top)
@@ -66,12 +66,12 @@ function _scalarbc1d_lhs(
     Ar = spzeros(T, n, n)
 
     if dc[1] != zero(T)
-        ;
-        Al[1, 1] = dc[1];
+
+        Al[1, 1] = dc[1]
     end
     if dc[2] != zero(T)
-        ;
-        Ar[end, end] = dc[2];
+
+        Ar[end, end] = dc[2]
     end
 
     Bl = spzeros(T, n, m + 1)
@@ -81,12 +81,12 @@ function _scalarbc1d_lhs(
     Gr = grad(k, m, dx)
 
     if nc[1] != zero(T)
-        ;
-        Bl[1, 1] = -nc[1];
+
+        Bl[1, 1] = -nc[1]
     end
     if nc[2] != zero(T)
-        ;
-        Br[end, end] = nc[2];
+
+        Br[end, end] = nc[2]
     end
 
     return Al + Bl * Gl, Ar + Br * Gr
@@ -102,7 +102,7 @@ end
 end
 
 """
-    1D BC applicator. Mirrors MATLAB addScalarBC1D.
+    1D BC applicator. Mirrors Octave addScalarBC1D.
     Signature keeps the discretization params (`k,m,dx`) separate from `bc`.
 """
 function addScalarBC!(A::SparseMatrixCSC, b::AbstractVector, bc::ScalarBC1D{T},
@@ -110,7 +110,7 @@ function addScalarBC!(A::SparseMatrixCSC, b::AbstractVector, bc::ScalarBC1D{T},
 
     dc, nc, v = bc.dc, bc.nc, bc.v
 
-    # Equivalent of MATLAB: q = find(dc.^2 + nc.^2, 1)
+    # Equivalent of Octave: q = find(dc.^2 + nc.^2, 1)
     hasbc =
         (dc[1] != zero(T)) || (dc[2] != zero(T)) || (nc[1] != zero(T)) || (nc[2] != zero(T))
     if !hasbc
@@ -242,7 +242,7 @@ end
 end
 
 """
-    2D BC applicator. Mirrors MATLAB addScalarBC2D.
+    2D BC applicator. Mirrors Octave addScalarBC2D.
     Signature keeps the discretization params (`k,m,dx,n,dy`) separate from `bc`.
 """
 function addScalarBC!(A::SparseMatrixCSC, b::AbstractVector, bc::ScalarBC2D{T},

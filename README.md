@@ -9,7 +9,7 @@
 
 ## Description
 
-MOLE is a high-quality (C++, MATLAB/Octave, and Julia) library that implements
+MOLE is a high-quality (C++, Octave, and Julia) library that implements
 high-order mimetic operators to solve partial differential equations.
 It provides discrete analogs of the most common vector calculus operators:
 Gradient, Divergence, Laplacian, Bilaplacian, and Curl. These operators (highly sparse matrices) act
@@ -121,12 +121,12 @@ A suite of four automatic tests that verify MOLE's installation and dependencies
 make run_tests
 ```
 
-### MATLAB/Octave
+### Octave
 
-MATLAB/Octave equivalent of the C++ test suite. We recommend running these tests before using MOLE to ensure proper setup.
+Octave equivalent of the C++ test suite. We recommend running these tests before using MOLE to ensure proper setup.
 
 ```matlab
-make run_matlab_octave_tests
+make run_octave_tests
 ```
 
 ## Examples
@@ -141,7 +141,7 @@ and on Windows downlaoding and running the file from [here](https://sourceforge.
 
 There are several self-contained, well-documented examples demonstrating typical PDE solutions. These are automatically built with `make` and serve as an excellent starting point for C++ users.
 
-### MATLAB/Octave Examples
+### Octave Examples
 
 A collection of over 30 examples showcasing various PDE solutions, from simple linear one-dimensional problems to complex nonlinear multidimensional scenarios.
 
@@ -198,7 +198,7 @@ The archival copy of the MOLE User Manual is maintained on [Zenodo](https://zeno
 
 ```bibtex
 @misc{MOLE_user_manual,
-   author       = {Barra, Valeria and
+  author       = {Barra, Valeria and
                   Boada, Angel and
                   Brzenski, Jared and
                   Castillo, Jose and
@@ -207,6 +207,7 @@ The archival copy of the MOLE User Manual is maintained on [Zenodo](https://zeno
                   Corbino, Johnny Delgado and
                   Drummond, Tony and
                   Dumett, Miguel and
+                  Gala, Mokshit and
                   Hellmers, Joe and
                   Ilaty, Arshia and
                   Kaviani, Katayoon and
@@ -222,11 +223,12 @@ The archival copy of the MOLE User Manual is maintained on [Zenodo](https://zeno
                   Wagner, Ben and
                   Zade, Deepanshu},
   title        = {MOLE User Manual},
-  month        = may,
+  month        = sep,
   year         = 2026,
   publisher    = {Zenodo},
-  doi          = {10.5281/zenodo.20128874},
-  url          = {https://doi.org/10.5281/zenodo.20128874},
+  version      = {1.3.0},
+  doi          = {10.5281/zenodo.23023730},
+  url          = {https://doi.org/10.5281/zenodo.23023730},
 }
 ```
 

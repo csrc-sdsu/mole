@@ -22,7 +22,7 @@ function upwind_burgers(u0, xgrid, T, k, m, dx)
     t     : time interval
     =#
     #CFL Condition for explicit schemes
-    dt = dx;
+    dt = dx
 
     #Create stepsize for time with given T
     t = collect(0.0:dt:T)
@@ -41,7 +41,7 @@ function upwind_burgers(u0, xgrid, T, k, m, dx)
     U[1, :] .= u0.(xgrid)
 
     for k in eachindex(t)
-        U[k + 1, :] .= U[k, :] + D * U[k, :] .^ 2;
+        U[k + 1, :] .= U[k, :] + D * U[k, :] .^ 2
     end
 
     return t, U

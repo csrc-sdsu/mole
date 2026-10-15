@@ -106,7 +106,7 @@ During the pressure Poisson step,
 
 A projection method is used to enforce incompressibility.
 
-This is the same overall time-stepping strategy used in both the MATLAB/Octave and C++ implementations.
+This is the same overall time-stepping strategy used in both the Octave and C++ implementations.
 
 ### Time Integration
 
@@ -187,9 +187,9 @@ cd <mole-repo>/examples/cpp
 ../../build/examples/cpp/cylinder_flow_2D
 ```
 
-## MATLAB and C++ Versions
+## Octave and C++ Versions
 
-MATLAB/Octave and C++ versions of this example are provided with the same problem setup and the same overall projection-method structure. In particular, both versions use
+Octave and C++ versions of this example are provided with the same problem setup and the same overall projection-method structure. In particular, both versions use
 
 - AB2 for the convective term
 - AB1 at the first step
@@ -204,6 +204,6 @@ This makes it easier to compare the two implementations and to see how the same 
 
 ![C++ final fields](figures/cylinder_flow_2D_plot_cpp.png)
 
-### MATLAB result
+### Octave result
 
-![MATLAB final fields](figures/cylinder_flow_2D_plot_matlab.png)
+![Octave final fields](figures/cylinder_flow_2D_plot_matlab.png)

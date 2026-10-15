@@ -26,7 +26,7 @@ While doing this, gather a couple sentences for key features to highlight on [Gi
 
 1. **Testing**: Ensure all tests pass on supported platforms:
    - Run `make run_tests` for C++ tests
-   - Run `make run_matlab_octave_tests` for MATLAB/Octave tests
+   - Run `make run_octave_tests` for Octave tests
    - Verify CI passes on all platforms (Ubuntu, macOS)
 
 2. **Documentation**: Ensure documentation builds successfully:
@@ -149,6 +149,7 @@ Before creating a release:
 After creating a release:
 
 - [ ] GitHub release created with proper notes
+- [ ] `doc/sphinx/source/conf.py` file updated with new `release` field
 - [ ] Zenodo record updated (if applicable)
 - [ ] DOI updated in repository files
 - [ ] Community notified (if appropriate)

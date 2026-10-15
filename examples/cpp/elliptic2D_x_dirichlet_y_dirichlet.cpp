@@ -18,7 +18,7 @@
  * - Solving the resulting linear system
  * - Computing solution error
  *
- * Based on MATLAB example: elliptic2DXDirichletYDirichlet.m
+ * Based on Octave example: elliptic2DXDirichletYDirichlet.m
  */
 
 #include "mole.h"
@@ -180,7 +180,7 @@ int main() {
     cout << endl;
 
     cout << "Note: For visualization of the solution, export the data to" << endl;
-    cout << "      a file and use tools like ParaView, VisIt, or MATLAB/Python." << endl;
+    cout << "      a file and use tools like ParaView, VisIt, or Octave/Python." << endl;
     cout << endl;
 
     return 0;
