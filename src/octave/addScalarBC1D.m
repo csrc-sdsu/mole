@@ -55,6 +55,9 @@ function [A, b] = addScalarBC1D(A, b, k, m, dx, dc, nc, v)
 % SYNTAX
 % [A, b] = addScalarBC1D(A, b, k, m, dx, dc, nc, v)
 %
+% NOTE: This is for implicit time solvers. Explicit formulations need
+% additional considerations. See
+% examples/octave/two_way_wave_tutorial/mimetic_diff_two_way_wave_eq_neumann.m
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
