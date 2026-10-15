@@ -54,18 +54,10 @@ classdef MOLE_errors < handle
     end
 
     properties (Access = private)
-        errorStack = {} % Try implementation if it doents work combine stack with error struct
+        numErrors = 0
     endproperties 
 
     methods (Access = private)
-        function push(obj, errorStruct)
-            #This funciton pushes a value onto the stack and checks its a struct object 
-            if ~isError(errorStruct)
-                error('Stack:type', 'Error structure should be a structure with attribute code, location, and param error');
-            endif
-            obj.errorStack{end+1} = errorStruct; 
-        endfunction 
-
         
         function tf = validateErrorStruct(obj, errorStruct)
             #This function validates an error structure for types the fields and if its a valid key in our key code mapping
@@ -79,99 +71,58 @@ classdef MOLE_errors < handle
             tf = (isnumeric(=num) && isscalar(num) && isreal(num) &&  isfinite(num) && x == fix(x))
         end
         
-        function error = pop(obj)
-            #This function pops the top element of the stack 
-            if obj.isEmpty()
-                error('Stack:empty', 'Cannot pop from an empty stack');
-            endif
-            #Get top element and set the last element as empty 
-            error = obj.errorStack{end}; 
-            obj.errorStack(end) = []; 
-        endfunction 
-
-
         function tf = isEmpty(obj)
             #Check if stack is empty 
-            tf = isempty(obj.errorStack); 
+            tf = obj.numErrors == 0; 
         endfunction 
 
         function n = size(obj)
             #Get the stack size 
-            n = numel(obj.erroStack); 
+            n = obj.numErrors; 
         endfunction 
 
-        function print(obj, errorStruct) 
-            %There are some formatting erors here that need fixing
-            fprintf('Stack with %d error(s):\n', obj.size()); 
-            for i = numel(obj.Data):-1:1 e = obj.Data{i}; 
-            fprintf(' [%d] Code=%d Location=%s
-            Param=%s\n', ... i, e.errCode,
-            e.errLocation, e.paramError); 
+        function constErrorMessage(obj, errorStruct, constMessage)
+            outputStr = constMessage + obj.Mole_Errors(errName).("Message")
+            outputStr += "Error: " + errorStruct.errorName + "\n"
+            outputStr += "Code: " + errorStruct.errCode + " \n"
+            outputStr += "Params: " + errorStruct.params + " \n"
+            outputStr += "Locations: " + errorStruct.errorLocation + " \n"
+            outputStr += "Message: " + obj.Mole_Errors(errName).("Message") + " \n"
+            return outputStr
         endfunction
     endmethods
 
 
     methods
-        function MOLEerr_log(obj, errorName, location, inputParms = "")
-            %Create error log structure from parameters and push it onto the error stack
+        function log_error(obj, errorName, location, errorType, params="", constMessage = " \n")
+            #This function logs an error and decides wether it will stop and error and print
+            # the error error name, error code, error location, and error params which would stop execution. Otherwise it prints the error 
+            # Error type 0 are errors that stop execution and 0 are errors that keep going with exection
             errCode = obj.Mole_Errors(errName).("Code")
-            errorStruct = struct("errorCode", errCode, "errorLocation", location, "paramError", inputPrams)
-            obj.errorStack.push(errorStruct)
+            errorStruct = struct("ErrorName", errorName, "errorCode", errCode, "errorLocation", location, "paramError", params)
+            obj.validateErrorStruct(errorStruct)
+            errorMessage = constErrorMessage(constMessage)
+            obj.numErrors += 1
+            if errorType == 0
+                error(errorMessage)
+            else
+                MOLEerr_print(errorStruct, errorMessage)
+            endif
         endfunction
 
-        function tf = MOLEerr_contains(obj, errorName)
-            %Check if error contains error with target code
-            tf = false
-            for i = 1:obj.size()
-                currError = obj.errorStack{i}
-                if currError.errCode == errorName
-                    tf = true;
-                    return;
-            endfor
-        endfunction
-
-        function tf = MOLEerr_haserrors(obj)
-            #Checks to see if there are error in the error stack
-            tf = ~obj.errorStack.isEmpty()
-        endfunction
-
-        function MOLEerr_remove(obj, errName)
-            #Remove error with target code out of the stack
-            for i = 1:obj.size()
-                currError = obj.errorStack{i}
-                if currError.errCode == errName
-                    obj.errorStack(i) = [];
-            endfor
-        endfunction
-
-        function MOLEerr_print(obj)
+        function MOLEerr_print(obj, errorStruct, errorMessage)
             if obj.isEmpty()
                 output = "No errors logged."
                 printf("%s", output)
             endif
             startLogStr = "========================================\n
-                    Backtracing all logged MOLE Errors \n
-                    ======================================== \n"
+                            Logged MOLE Error \n
+                            ======================================== \n"
             printf("%s", startLogStr)
-            for i = 1:obj.size()
-                currError = obj.errorStack{i}
-                if currError.errCode == errName
-                    obj.errorStack(i) = [];
-            endfor
-        endfunction
-
-        function date = getDateTimeString()
-            date = datestr(now, 'yyyy-mm-dd HH:MM:SS')
-        endfunction
-        function num = getNumErrors(obj)
-            num = obj.size()
-
+            printf("%s", errorMessage)
+           
         endfunction
     endmethods
 
 
 endclassdef
-classdef Mole_Errors < handle
-    properties (Access)
-
-    end
