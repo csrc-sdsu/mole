@@ -98,12 +98,17 @@ for cell_index = 1 : numel(num_cells)
     nc = [1; 1];
     v  = [0; 0];
     
-    [L,U0_md] = addScalarBC1D(L,U0_md,k,m,dx,dc,nc,v);
+    [L_bc,b_bc] = addScalarBC1D(L,U0_md,k,m,dx,dc,nc,v);
+    
     L = r2_md * L;
 
 
     U1_md = U0_md + (0.5 * L * U0_md); % First step, Euler
 
+    % Solve boundaries implicitly
+    U1_md(1)   = (b_bc(1)   - L_bc(1,   2:end)   * U1_md(2:end))   / L_bc(1,1);
+    U1_md(end) = (b_bc(end) - L_bc(end, 1:end-1) * U1_md(1:end-1)) / L_bc(end,end);    
+    
     U2_md = U1_md; % Increment time step
 
     %% Loop over time values
@@ -112,6 +117,9 @@ for cell_index = 1 : numel(num_cells)
     for i = 1 : t
         U2_md = (2.0 * U1_md) + (L * U1_md) - U0_md;
 
+	% Implicit solve for the boundary conditions, two points
+        U2_md(1)   = (b_bc(1)   - L_bc(1,   2:end)   * U2_md(2:end))   / L_bc(1,1);
+        U2_md(end) = (b_bc(end) - L_bc(end, 1:end-1) * U2_md(1:end-1)) / L_bc(end,end);
 
         %% Plot it
         %t_now = (i + 1) * dt;
@@ -129,7 +137,6 @@ for cell_index = 1 : numel(num_cells)
         %grid on;
         %ylim([0 1.1]);
         %drawnow;
-
 
         % Shift everyone back for leapfrog scheme
         U0_md = U1_md;
