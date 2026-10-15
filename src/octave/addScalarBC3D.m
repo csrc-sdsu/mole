@@ -74,9 +74,11 @@ function [A, b] = addScalarBC3D(A, b, k, m, dx, n, dy, o, dz, dc, nc, v)
 % SYNTAX
 % [A, b] = addScalarBC3D(A, b, k, m, dx, n, dy, o, dz, dc, nc, v)
 %
-% NOTE: This is for implicit time solvers. Explicit formulations need
-% additional considerations. See
-% examples/octave/two_way_wave_tutorial/mimetic_diff_two_way_wave_eq_neumann.m
+% NOTE: This builds the boundary rows into A*u = b for an implicit solve
+% (steady-state or implicit time-stepping). Explicit time-stepping schemes
+% cannot apply these rows directly — the boundary unknowns must be solved
+% for separately after each explicit interior step. See
+% examples/matlab_octave/tutorials/two_way_wave_equation/mimetic_diff_two_way_wave_eq_neumann.m
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
