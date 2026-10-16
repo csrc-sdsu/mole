@@ -96,7 +96,7 @@ classdef MOLE_errors < handle
 
 
     methods
-        function log_error(obj, errorName, location, errorType, params="", constMessage = " \n")
+        function log_error(obj, errorName, location, errorType, params= "", constMessage = " \n")
             #This function logs an error and decides wether it will stop and error and print
             # the error error name, error code, error location, and error params which would stop execution. Otherwise it prints the error 
             # Error type 0 are errors that stop execution and 0 are errors that keep going with exection
