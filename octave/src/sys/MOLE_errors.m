@@ -81,10 +81,10 @@ classdef MOLE_errors < handle
             n = obj.numErrors; 
         endfunction 
 
-        function constErrorMessage(obj, errorStruct, constMessage)
+        function constErrorMessage(obj, errorStruct)
         	#This function creates a messge string with the error struct attributes
             #Constant messge is extra informtion added to this messge from caller
-            outputStr = constMessage + obj.Mole_Errors(errName).("Message")
+            outputStr = obj.Mole_Errors(errName).("Message")
             outputStr += "Error: " + errorStruct.errorName + "\n"
             outputStr += "Code: " + errorStruct.errCode + " \n"
             outputStr += "Params: " + errorStruct.params + " \n"
@@ -96,16 +96,16 @@ classdef MOLE_errors < handle
 
 
     methods
-        function log_error(obj, errorName, location, errorType, params="", constMessage = " \n")
-            #This function logs an error and decides wether it will stop and error and print
+        function log_error(obj, errorName, location, onErrorAbort=false, params="")
+            # This function logs an error and decides wether it will stop and error and print
             # the error error name, error code, error location, and error params which would stop execution. Otherwise it prints the error 
-            # Error type 0 are errors that stop execution and 0 are errors that keep going with exection
+            # onErrorAbort true means that its an error that stops execution and false are errors that keep going with exection even though and error occured
             errCode = obj.Mole_Errors(errName).("Code")
             errorStruct = struct("ErrorName", errorName, "errorCode", errCode, "errorLocation", location, "paramError", params)
             obj.validateErrorStruct(errorStruct)
             errorMessage = constErrorMessage(constMessage)
             obj.numErrors += 1 		#Add the logged error to our accumulated errors
-            if errorType == 0
+            if onErrorAbort
                 error(errorMessage)
             else
                 MOLEerr_print(errorStruct, errorMessage)
