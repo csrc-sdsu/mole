@@ -32,7 +32,7 @@ classdef MOLE_errors < handle
         MOLE_errors('MOLE_ERR_INVALID_CURVILINEAR_GRID') = struct("Code", 112, "Message", "Curvilinear grids need user-provided nodal grid coordinates");
         MOLE_errors('MOLE_ERR_INVALID_1D_CURVILINEAR') = struct("Code", 113, "Message", "Curvilinear grids cannot be one dimensional");
         MOLE_errors('MOLE_ERR_INVALID_NONUNIFORM_GRID') = struct("Code", 114, "Message", "Nonuniform grids need user-provided nodal grid coordinates");
-        MOLE_errors('MOLE_ERR_INVALID_ARRAY_INDEX') = struct("Code", 115, "Message", "One or more indices to the array are not valid, check arrays sizes");
+        MOLE_errors('MOLE_ERR_IN IVALID_ARRAY_INDEX') = struct("Code", 115, "Message", "One or more indices to the array are not valid, check arrays sizes");
         MOLE_errors('MOLE_ERR_INVALID_NODAL_COORDINATES') = struct("Code", 116, "Message", "User-provided nodal coordinates do not agree with other uniform grid parameters");
         MOLE_errors('MOLE_ERR_INVALID_CENTER_COORDINATES') = struct("Code", 117, "Message", "User-provided cell center coordinates do not agree with other uniform grid parameters");
         MOLE_errors('MOLE_ERR_INVALID_NORMAL_FACE_COORDS') = struct("Code", 118, "Message", "User-provided normal face coordinates do not agree with other uniform grid parameters");
@@ -83,7 +83,6 @@ classdef MOLE_errors < handle
 
         function constErrorMessage(obj, errorStruct)
         	#This function creates a messge string with the error struct attributes
-            #Constant messge is extra informtion added to this messge from caller
             outputStr = obj.Mole_Errors(errName).("Message")
             outputStr += "Error: " + errorStruct.errorName + "\n"
             outputStr += "Code: " + errorStruct.errCode + " \n"

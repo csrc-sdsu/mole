@@ -15,8 +15,7 @@ function grid = makeGrid_impl(varargin)
             	grid.(char(name)) = value;
             else
             	params = sprintf('Name: %s , Value: %s ', name, value)
-                message = 'Grid field names must be character vectors or strings'
-            	errorObj.log_error('MOLE_ERR_INVALID_GRID_ARGS', 'makeGrid_impl', 0, params, message)
+            	errorObj.log_error('MOLE_ERR_INVALID_GRID_ARGS', 'makeGrid_impl', true, params, message)
             endif
         end
     end
@@ -29,8 +28,7 @@ function validateNumArgs(nargin, errorObj)
     #stops execution
 	if mod(nargin, 2) == 0
     	params = "number of argumebts: " + int2str(nargin);
-        messge = 'makeGrid expects a struct or name-value pairs'
-    	errorObj.log_error('MOLE_ERR_INVALID_GRID_ARGS', 'makeGrid_impl', 0, params, message );
+    	errorObj.log_error( 'MAKE_GRID_INVALID_INPUT_ARGS' , 'makeGrid_impl', true, params);
     else
 		return;
     endif
