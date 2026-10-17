@@ -25,4 +25,9 @@ The name for Octave, C++, and Julia will be the same (i.e., the files `elliptic1
 - [2D Parabolic Problems](Parabolic/2D/index.md)
   - [Parabolic2D](Parabolic/2D/Parabolic2D.md)
 
+## Navier-Stokes Problems
+
+- [2D Navier-Stokes Problems](Navier-Stokes/2D/index.md)
+  - [2D Channel Flow with a Cylinder](Navier-Stokes/2D/Channel-Flow-2D.md)
+
   More examples will be added in the future.
