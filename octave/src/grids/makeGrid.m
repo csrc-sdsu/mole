@@ -15,7 +15,7 @@ function grid = makeGrid_impl(varargin)
             	grid.(char(name)) = value;
             else
             	params = sprintf('Name: %s , Value: %s ', name, value)
-            	errorObj.log_error('MOLE_ERR_INVALID_GRID_ARGS', 'makeGrid_impl', true, params, message)
+            	errorObj.log_error('MOLE_ERR_INVALID_GRID_ARGS', 'makeGrid', true, params, message)
             endif
         end
     end
@@ -27,8 +27,8 @@ function validateNumArgs(nargin, errorObj)
 	#This function vaildates that the number of arguments are pairs if not it logs
     #stops execution
 	if mod(nargin, 2) == 0
-    	params = "number of argumebts: " + int2str(nargin);
-    	errorObj.log_error( 'MAKE_GRID_INVALID_INPUT_ARGS' , 'makeGrid_impl', true, params);
+    	params = "number of arguments: " + int2str(nargin);
+    	errorObj.log_error('MAKE_GRID_INVALID_INPUT_ARGS', 'makeGrid', true, params);
     else
 		return;
     endif

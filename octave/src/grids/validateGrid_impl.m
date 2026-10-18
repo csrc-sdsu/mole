@@ -27,7 +27,7 @@ function grid = validateGrid_impl(grid, allowPartial)
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
-
+    errorObj = MOLE_errors() #Instantiate error object
     if nargin < 2
         allowPartial = false;
     end
@@ -55,9 +55,9 @@ function grid = validateGrid_impl(grid, allowPartial)
         % raises validateGrid:InvalidDim.
         inferredDim = localInferDim(grid);
         if grid.dim ~= inferredDim
-            error('validateGrid:DimMismatch', ...
-                  'grid.dim is %d, but present fields imply a %d-D grid.', ...
-                  grid.dim, inferredDim);
+            #Inferred dimension logged error
+            params = "grid Dimension: " + int2str(grid.dim) + ", Inferred Dimension: " + int2str(inferredDim);
+            errorObj.log_error("MOLE_ERR_INVALID_GRID_DIM", "validate_grid", false, params)
         end
     end
 
