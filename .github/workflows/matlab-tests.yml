@@ -54,3 +54,22 @@ jobs:
         with:
           name: matlab-code-coverage
           path: code-coverage/coverage.xml
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # Full git history is needed to get a proper
+          # list of changed files within `super-linter`
+          fetch-depth: 0
+
+      - name: Install system deps
+        run: |
+          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+          sudo add-apt-repository "deb http://apt.llvm.org/noble/ llvm-toolchain-noble-20 main"
+          sudo apt-get update
+          sudo apt-get install -y octave
+
+      - name: Run Octave tests
+        run: |
+          cd tests
+          octave --quiet --eval "oruntests('octave')"
