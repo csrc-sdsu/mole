@@ -71,5 +71,5 @@ jobs:
 
       - name: Run Octave tests
         run: |
-          cd tests
-          octave --quiet --eval "oruntests('octave')"
+          cd tests/octave
+          octave --quiet --eval "oruntests('.')"
