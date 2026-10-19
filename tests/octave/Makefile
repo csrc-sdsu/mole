@@ -5,5 +5,6 @@ run_octave_tests:
 	octave --quiet --eval "addpath(pwd()); test('testAddScalarBC')"
 	octave --quiet --eval "addpath(pwd()); test('testBCConsistency')"
 	octave --quiet --eval "addpath(pwd()); test('testDivPolynomial')"
+	octave --quiet --eval "addpath(pwd()); test('testEnergy')"
 
 
