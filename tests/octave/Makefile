@@ -8,7 +8,8 @@ run_octave_tests:
 		testDivPolynomial \
 		testEnergy \
 		testGI13Curv \
-		testGradPolynomial; do \
+		testGradPolynomial \
+		testGridOrientation3D; do \
 		octave --quiet --eval "addpath(pwd()); test('$$test_name')" || exit 1; \
 	done
 
