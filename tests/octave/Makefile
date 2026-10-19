@@ -1,11 +1,14 @@
 run_octave_tests:
-	octave --quiet --eval "addpath(pwd()); test('testGradient')"
-	octave --quiet --eval "addpath(pwd()); test('testDivergence')"
-	octave --quiet --eval "addpath(pwd()); test('testLaplacian')"
-	octave --quiet --eval "addpath(pwd()); test('testAddScalarBC')"
-	octave --quiet --eval "addpath(pwd()); test('testBCConsistency')"
-	octave --quiet --eval "addpath(pwd()); test('testDivPolynomial')"
-	octave --quiet --eval "addpath(pwd()); test('testEnergy')"
-	octave --quiet --eval "addpath(pwd()); test('testGI13Curv')"
-
+	for test_name in \
+		testGradient \
+		testDivergence \
+		testLaplacian \
+		testAddScalarBC \
+		testBCConsistency \
+		testDivPolynomial \
+		testEnergy \
+		testGI13Curv \
+		testGradPolynomial; do \
+		octave --quiet --eval "addpath(pwd()); test('$$test_name')" || exit 1; \
+	done
 

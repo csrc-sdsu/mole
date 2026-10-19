@@ -34,7 +34,7 @@ jobs:
           test-results-junit: test-results/results.xml
           code-coverage-cobertura: code-coverage/coverage.xml
           source-folder: src/octave
-          select-by-folder: tests/octave
+          select-by-folder: tests/matlab
           strict: false
           use-parallel: false
           generate-summary: true
