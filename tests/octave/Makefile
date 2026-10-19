@@ -11,7 +11,8 @@ run_octave_tests:
 		testGradPolynomial \
 		testGridOrientation3D \
 		testGridOrientation \
-		testLapPolynomial; do \
+		testLapPolynomial \
+		testPoissonAccuracy; do \
 		octave --quiet --eval "addpath(pwd()); test('$$test_name')" || exit 1; \
 	done
 
