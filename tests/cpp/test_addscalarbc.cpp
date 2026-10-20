@@ -122,11 +122,13 @@ void test_1D_dirichlet() {
   const u32  m  = 10;    // number of interior points (ghost points add +2 in this codebase)
   const Real dx = 0.1;   // grid spacing
 
-  Laplacian L(k, m, dx);
-  sp_mat A = sp_mat(L);
+  const uword ncenters = m + 2;
+  const Real density = 0.1;
+
+  sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
 
-  vec b(m + 2, fill::ones);
+  vec b(ncenters, fill::ones);
   vec b_orig = b;
 
   BC1D bc;
@@ -165,11 +167,13 @@ void test_1D_neumann() {
   const u32  m  = 10;
   const Real dx = 0.1;
 
-  Laplacian L(k, m, dx);
-  sp_mat A = sp_mat(L);
+  const uword ncenters = m + 2;
+  const Real density = 0.1;
+
+  sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
 
-  vec b(m + 2, fill::ones);
+  vec b(ncenters, fill::ones);
 
   BC1D bc;
   bc.dc = {0.0, 0.0};    // no Dirichlet component
@@ -206,11 +210,13 @@ void test_1D_mixed_dirichlet_neumann() {
   const u32  m  = 10;
   const Real dx = 0.1;
 
-  Laplacian L(k, m, dx);
-  sp_mat A = sp_mat(L);
+  const uword ncenters = m + 2;
+  const Real density = 0.1;
+
+  sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
 
-  vec b(m + 2, fill::ones);
+  vec b(ncenters, fill::ones);
 
   BC1D bc;
   bc.dc = {1.0, 0.0};   // Dirichlet on left only
@@ -246,11 +252,13 @@ void test_1D_mixed_neumann_dirichlet() {
   const u32  m  = 10;
   const Real dx = 0.1;
 
-  Laplacian L(k, m, dx);
-  sp_mat A = sp_mat(L);
+  const uword ncenters = m + 2;
+  const Real density = 0.1;
+
+  sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
 
-  vec b(m + 2, fill::ones);
+  vec b(ncenters, fill::ones);
 
   BC1D bc;
   bc.dc = {0.0, 1.0};   // Dirichlet on right only
@@ -292,11 +300,13 @@ void test_1D_robin() {
   const u32  m  = 10;
   const Real dx = 0.1;
 
-  Laplacian L(k, m, dx);
-  sp_mat A = sp_mat(L);
+  const uword ncenters = m + 2;
+  const Real density = 0.1;
+
+  sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
 
-  vec b(m + 2, fill::ones);
+  vec b(ncenters, fill::ones);
 
   BC1D bc;
   bc.dc = {2.0, 3.0};     // value term weights
@@ -336,11 +346,13 @@ void test_2D_dirichlet_all() {
   const Real dx = 0.1;
   const Real dy = 0.2;
 
-  Laplacian L(k, m, n, dx, dy);
-  sp_mat A = sp_mat(L);
+  const uword ncenters = (m + 2) * (n + 2);
+  const Real density = 0.1;
+
+  sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
 
-  vec b((m + 2) * (n + 2), fill::ones);
+  vec b(ncenters, fill::ones);
 
   BC2D bc;
   bc.dc = {1.0, 1.0, 1.0, 1.0}; // Left, Right, Bottom, Top => Dirichlet
@@ -378,11 +390,13 @@ void test_2D_neumann_all() {
   const Real dx = 0.1;
   const Real dy = 0.2;
 
-  Laplacian L(k, m, n, dx, dy);
-  sp_mat A = sp_mat(L);
+  const uword ncenters = (m + 2) * (n + 2);
+  const Real density = 0.1;
+
+  sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
 
-  vec b((m + 2) * (n + 2), fill::ones);
+  vec b(ncenters, fill::ones);
 
   BC2D bc;
   bc.dc = {0.0, 0.0, 0.0, 0.0};
@@ -419,11 +433,13 @@ void test_2D_mixed() {
   const Real dx = 0.1;
   const Real dy = 0.1;
 
-  Laplacian L(k, m, n, dx, dy);
-  sp_mat A = sp_mat(L);
+  const uword ncenters = (m + 2) * (n + 2);
+  const Real density = 0.1;
+
+  sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
 
-  vec b((m + 2) * (n + 2), fill::ones);
+  vec b(ncenters, fill::ones);
 
   BC2D bc;
   bc.dc = {1.0, 1.0, 0.0, 0.0};  // Dirichlet L/R
@@ -463,11 +479,13 @@ void test_3D_dirichlet_all() {
   const Real dy = 0.1;
   const Real dz = 0.1;
 
-  Laplacian L(k, m, n, o, dx, dy, dz);
-  sp_mat A = sp_mat(L);
+  const uword ncenters = (m + 2) * (n + 2) * (o + 2);
+  const Real density = 0.1;
+
+  sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
 
-  vec b((m + 2) * (n + 2) * (o + 2), fill::ones);
+  vec b(ncenters, fill::ones);
 
   BC3D bc;
   bc.dc = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
@@ -508,11 +526,13 @@ void test_3D_neumann_all() {
   const Real dy = 0.1;
   const Real dz = 0.1;
 
-  Laplacian L(k, m, n, o, dx, dy, dz);
-  sp_mat A = sp_mat(L);
+  const uword ncenters = (m + 2) * (n + 2) * (o + 2);
+  const Real density = 0.1;
+
+  sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
 
-  vec b((m + 2) * (n + 2) * (o + 2), fill::ones);
+  vec b(ncenters, fill::ones);
 
   BC3D bc;
   bc.dc = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
@@ -550,11 +570,13 @@ void test_3D_mixed() {
   const Real dy = 0.1;
   const Real dz = 0.1;
 
-  Laplacian L(k, m, n, o, dx, dy, dz);
-  sp_mat A = sp_mat(L);
+  const uword ncenters = (m + 2) * (n + 2) * (o + 2);
+  const Real density = 0.1;
+
+  sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
 
-  vec b((m + 2) * (n + 2) * (o + 2), fill::ones);
+  vec b(ncenters, fill::ones);
 
   BC3D bc;
   bc.dc = {1.0, 1.0, 0.0, 0.0, 0.0, 0.0};  // Dirichlet on x faces
@@ -596,11 +618,13 @@ void test_periodic_1D_do_nothing() {
   const u32  m  = 10;
   const Real dx = 0.1;
 
-  Laplacian L(k, m, dx);
-  sp_mat A_orig = sp_mat(L);
+  const uword ncenters = m;
+  const Real density = 0.1;
+
+  sp_mat A_orig = sprandn(ncenters, ncenters, density);
   sp_mat A = A_orig;
 
-  vec b_orig(m + 2, fill::ones);
+  vec b_orig(ncenters, fill::ones);
   vec b = b_orig;
 
   BC1D bc;
