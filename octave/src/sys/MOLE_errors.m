@@ -1,131 +1,146 @@
 classdef MOLE_errors < handle
-    properties (Constant = true)
-        % MOLE error codes supported by the Octave interface.
-        % The source table's C++-only debugging entries (codes 000-010) are omitted.
-        % Octave does not accept 'struct' as a containers.Map ValueType.  'any' is
-        % required here because each map value is a scalar struct.
-        MOLE_errors = containers.Map('KeyType', 'char', 'ValueType', 'any');
-
-        % Codes 011-099: input user parameter errors.
-        MOLE_errors('MOLE_ERR_GRID_UNCHECKED') = struct("Code", 11, "Message", "Grid has not been validated or checked for operations. All grids are initialized with this error until they are validated.");
-        MOLE_errors('MOLE_ERR_GRID_FLAGGED_W_ERRS') = struct("Code", 12, "Message", "Grid failed to be validated and it has been flagged with ERRORS");
-        MOLE_errors('MOLE_ERR_INVALID_GRID_ARGS') = struct("Code", 13, "Message", "Error(s) in input parameters, resulting grid is invalid.");
-        MOLE_errors('MOLE_ERR_GRID_CONSTRUCTION_FAILED') = struct("Code", 14, "Message", "Grid construction failed, see full list of errors");
-        MOLE_errors('MAKE_GRID_INVALID_INPUT_ARGS') = struct("Code", 15, "Message", "Invalid number of arguments passed during grid creation, valid inputs are pairs of the form <grid_attribute, value>");
-        MOLE_errors('MAKE_GRID_MISSING_ARGS') = struct("Code", 16, "Message", "The number of arguments doesn't match the args actually passed.");
-        MOLE_errors('MAKE_GRID_UNKNOWN_ATTRIBUTE') = struct("Code", 17, "Message", "Unknown grid structure attribute name.");
-        MOLE_errors('MAKE_GRID_DUPLICATE_ATTRIBUTES') = struct("Code", 18, "Message", "Duplicate grid attribute passed");
-
-        % Codes 100-199: grid and vector errors.
-        MOLE_errors('MOLE_ERR_INVALID_GRID_DIM') = struct("Code", 100, "Message", "Invalid grid dimension");
-        MOLE_errors('MOLE_ERR_INVALID_GRID_TOPOLOGY') = struct("Code", 101, "Message", "Invalid grid topology");
-        MOLE_errors('MOLE_ERR_INVALID_GRID_SPACING') = struct("Code", 102, "Message", "Invalid grid spacing");
-        MOLE_errors('MOLE_ERR_INVALID_GRID_SIZE') = struct("Code", 103, "Message", "Invalid grid size");
-        MOLE_errors('MOLE_ERR_GRID_NODAL_SZ_MISMATCH') = struct("Code", 104, "Message", "Mismatch in the size of the nodal grid array(s)");
-        MOLE_errors('MOLE_ERR_GRID_CENTERS_SZ_MISMATCH') = struct("Code", 105, "Message", "Mismatch in the size of the grid centers array(s)");
-        MOLE_errors('MOLE_ERR_GRID_FACES_SZ_MISMATCH') = struct("Code", 106, "Message", "Mismatch in the size of the grid faces array(s)");
-        MOLE_errors('MOLE_ERR_INVALID_INPUT_TYPE') = struct("Code", 107, "Message", "Invalid input type for input name");
-        MOLE_errors('MOLE_ERR_ARRAY_HAS_NULL_POINTER') = struct("Code", 108, "Message", "Array has a null pointer either allocation failed or user passed a null pointer");
-        MOLE_errors('MOLE_ERR_INVALID_CELL_COUNT') = struct("Code", 109, "Message", "Non-positive cell count (m/n/o <= 0)");
-        MOLE_errors('MOLE_ERR_INVALID_ISPERIODIC_DIM') = struct("Code", 110, "Message", "Invalid dimension for the isPeriodic member");
-        MOLE_errors('MOLE_ERR_ISPERIODIC_TYPE') = struct("Code", 111, "Message", "isPeriodic is not boolean");
-        MOLE_errors('MOLE_ERR_INVALID_CURVILINEAR_GRID') = struct("Code", 112, "Message", "Curvilinear grids need user-provided nodal grid coordinates");
-        MOLE_errors('MOLE_ERR_INVALID_1D_CURVILINEAR') = struct("Code", 113, "Message", "Curvilinear grids cannot be one dimensional");
-        MOLE_errors('MOLE_ERR_INVALID_NONUNIFORM_GRID') = struct("Code", 114, "Message", "Nonuniform grids need user-provided nodal grid coordinates");
-        MOLE_errors('MOLE_ERR_IN IVALID_ARRAY_INDEX') = struct("Code", 115, "Message", "One or more indices to the array are not valid, check arrays sizes");
-        MOLE_errors('MOLE_ERR_INVALID_NODAL_COORDINATES') = struct("Code", 116, "Message", "User-provided nodal coordinates do not agree with other uniform grid parameters");
-        MOLE_errors('MOLE_ERR_INVALID_CENTER_COORDINATES') = struct("Code", 117, "Message", "User-provided cell center coordinates do not agree with other uniform grid parameters");
-        MOLE_errors('MOLE_ERR_INVALID_NORMAL_FACE_COORDS') = struct("Code", 118, "Message", "User-provided normal face coordinates do not agree with other uniform grid parameters");
-
-        % Codes 200-299: MOLE array errors.
-        MOLE_errors('MOLE_ERR_INVALID_ARRAY_SIZE') = struct("Code", 200, "Message", "Array dimensions need to be natural numbers >= 1");
-        MOLE_errors('MOLE_ERR_ARRAY_SIZE_OVERFLOW') = struct("Code", 201, "Message", "Array allocation overflow");
-        MOLE_errors('MOLE_ERR_ARRAY_INDEX_OUTBOUNDS') = struct("Code", 202, "Message", "The array index is out of bound.");
-        MOLE_errors('MOLE_ERR_FAILED_ARRAY_ALLOC') = struct("Code", 203, "Message", "Fail to allocate array <array name>");
-        MOLE_errors('MOLE_ERR_FAILED_ARRAY_RESIZE') = struct("Code", 204, "Message", "Fail to resize array <array name>");
-
-        % Codes 300-600: MOLE operator errors.
-        MOLE_errors('MOLE_ERR_DIVISION_BY_ZERO') = struct("Code", 300, "Message", "Division by zero");
-        MOLE_errors('MOLE_ERR_INF_VALUE') = struct("Code", 301, "Message", "Infinite value detected");
-        MOLE_errors('MOLE_ERR_NAN_VALUE') = struct("Code", 302, "Message", "NaN value detected");
-
-        % Codes 119, 303, and 304 are omitted because the source table does not
-        % provide complete code-symbol/message entries for those rows.
-    end
-
     properties (Access = private)
+        errorMap
         numErrors = 0
-    endproperties 
+    endproperties
 
     methods (Access = private)
-        
         function tf = validateErrorStruct(obj, errorStruct)
             #This function validates an error structure for types the fields and if its a valid key in our key code mapping
-            containsFields = isField(errorStruct, "errorCode") && isField(errorStruct, "errorLocation") && isField(errorStruct, "paramError");
-            typeFields = isInteger(errorStruct.errCode) && ischar(errorStruct.errCode) && ischar(errorStruct.paramError);
-            tf = isstruct(errorStruct) && typeFields && isKey(obj.Mole_Errors, errorStruct.errCode)
-            
-        end
-        fuction tf = isInteger(num)
-        	#This function check if a num input is an integer even with a decimal point like 12.
-            tf = (isnumeric(=num) && isscalar(num) && isreal(num) &&  isfinite(num) && x == fix(x))
-        end
-        
+            if ~isstruct(errorStruct) || ~isscalar(errorStruct)
+                tf = false;
+                return;
+            endif
+
+            containsFields = isfield(errorStruct, "errorName") && isfield(errorStruct, "errorCode") && isfield(errorStruct, "errorLocation") && isfield(errorStruct, "paramError");
+            if ~containsFields
+                tf = false;
+                return;
+            endif
+
+            typeFields = ischar(errorStruct.errorName) && obj.isInteger(errorStruct.errorCode) && ischar(errorStruct.errorLocation) && ischar(errorStruct.paramError);
+            if ~typeFields || ~isKey(obj.errorMap, errorStruct.errorName)
+                tf = false;
+                return;
+            endif
+
+            errorInfo = obj.errorMap(errorStruct.errorName);
+            tf = errorStruct.errorCode == errorInfo.Code;
+        endfunction
+
+        function tf = isInteger(obj, num)
+            #This function check if a num input is an integer even with a decimal point like 12.
+            tf = isnumeric(num) && isscalar(num) && isreal(num) && isfinite(num) && num == fix(num);
+        endfunction
+
         function tf = isEmpty(obj)
-            #Check if stack is empty 
-            tf = obj.numErrors == 0; 
-        endfunction 
+            #Check if stack is empty
+            tf = obj.numErrors == 0;
+        endfunction
 
         function n = size(obj)
-            #Get the stack size 
-            n = obj.numErrors; 
-        endfunction 
+            #Get the stack size
+            n = obj.numErrors;
+        endfunction
 
-        function constErrorMessage(obj, errorStruct)
-        	#This function creates a messge string with the error struct attributes
-            outputStr = obj.Mole_Errors(errName).("Message")
-            outputStr += "Error: " + errorStruct.errorName + "\n"
-            outputStr += "Code: " + errorStruct.errCode + " \n"
-            outputStr += "Params: " + errorStruct.params + " \n"
-            outputStr += "Locations: " + errorStruct.errorLocation + " \n"
-            outputStr += "Message: " + obj.Mole_Errors(errName).("Message") + " \n"
-            return outputStr
+        function outputStr = constErrorMessage(obj, errorStruct)
+            #This function creates a messge string with the error struct attributes
+            errorInfo = obj.errorMap(errorStruct.errorName);
+            outputStr = sprintf("Error: %s\nCode: %d\nParams: %s\nLocations: %s\nMessage: %s\n", errorStruct.errorName, errorStruct.errorCode, errorStruct.paramError, errorStruct.errorLocation, errorInfo.Message);
         endfunction
     endmethods
 
-
     methods
-        function log_error(obj, errorName, location, onErrorAbort=false, params="")
+        function obj = MOLE_errors()
+            obj.errorMap = containers.Map('KeyType', 'char', 'ValueType', 'any');
+
+            obj.errorMap('MOLE_ERR_GRID_UNCHECKED') = struct("Code", 11, "Message", "Grid has not been validated or checked for operations. All grids are initialized with this error until they are validated.");
+            obj.errorMap('MOLE_ERR_GRID_FLAGGED_W_ERRS') = struct("Code", 12, "Message", "Grid failed to be validated and it has been flagged with ERRORS");
+            obj.errorMap('MOLE_ERR_INVALID_GRID_ARGS') = struct("Code", 13, "Message", "Error(s) in input parameters, resulting grid is invalid.");
+            obj.errorMap('MOLE_ERR_GRID_CONSTRUCTION_FAILED') = struct("Code", 14, "Message", "Grid construction failed, see full list of errors");
+            obj.errorMap('MAKE_GRID_INVALID_INPUT_ARGS') = struct("Code", 15, "Message", "Invalid number of arguments passed during grid creation, valid inputs are pairs of the form <grid_attribute, value>");
+            obj.errorMap('MAKE_GRID_MISSING_ARGS') = struct("Code", 16, "Message", "The number of arguments doesn't match the args actually passed.");
+            obj.errorMap('MAKE_GRID_UNKNOWN_ATTRIBUTE') = struct("Code", 17, "Message", "Unknown grid structure attribute name.");
+            obj.errorMap('MAKE_GRID_DUPLICATE_ATTRIBUTES') = struct("Code", 18, "Message", "Duplicate grid attribute passed");
+
+            obj.errorMap('MOLE_ERR_INVALID_GRID_DIM') = struct("Code", 100, "Message", "Invalid grid dimension");
+            obj.errorMap('MOLE_ERR_INVALID_GRID_TOPOLOGY') = struct("Code", 101, "Message", "Invalid grid topology");
+            obj.errorMap('MOLE_ERR_INVALID_GRID_SPACING') = struct("Code", 102, "Message", "Invalid grid spacing");
+            obj.errorMap('MOLE_ERR_INVALID_GRID_SIZE') = struct("Code", 103, "Message", "Invalid grid size");
+            obj.errorMap('MOLE_ERR_GRID_NODAL_SZ_MISMATCH') = struct("Code", 104, "Message", "Mismatch in the size of the nodal grid array(s)");
+            obj.errorMap('MOLE_ERR_GRID_CENTERS_SZ_MISMATCH') = struct("Code", 105, "Message", "Mismatch in the size of the grid centers array(s)");
+            obj.errorMap('MOLE_ERR_GRID_FACES_SZ_MISMATCH') = struct("Code", 106, "Message", "Mismatch in the size of the grid faces array(s)");
+            obj.errorMap('MOLE_ERR_INVALID_INPUT_TYPE') = struct("Code", 107, "Message", "Invalid input type for input name");
+            obj.errorMap('MOLE_ERR_ARRAY_HAS_NULL_POINTER') = struct("Code", 108, "Message", "Array has a null pointer either allocation failed or user passed a null pointer");
+            obj.errorMap('MOLE_ERR_INVALID_CELL_COUNT') = struct("Code", 109, "Message", "Non-positive cell count (m/n/o <= 0)");
+            obj.errorMap('MOLE_ERR_INVALID_ISPERIODIC_DIM') = struct("Code", 110, "Message", "Invalid dimension for the isPeriodic member");
+            obj.errorMap('MOLE_ERR_ISPERIODIC_TYPE') = struct("Code", 111, "Message", "isPeriodic is not boolean");
+            obj.errorMap('MOLE_ERR_INVALID_CURVILINEAR_GRID') = struct("Code", 112, "Message", "Curvilinear grids need user-provided nodal grid coordinates");
+            obj.errorMap('MOLE_ERR_INVALID_1D_CURVILINEAR') = struct("Code", 113, "Message", "Curvilinear grids cannot be one dimensional");
+            obj.errorMap('MOLE_ERR_INVALID_NONUNIFORM_GRID') = struct("Code", 114, "Message", "Nonuniform grids need user-provided nodal grid coordinates");
+            obj.errorMap('MOLE_ERR_INVALID_ARRAY_INDEX') = struct("Code", 115, "Message", "One or more indices to the array are not valid, check arrays sizes");
+            obj.errorMap('MOLE_ERR_INVALID_NODAL_COORDINATES') = struct("Code", 116, "Message", "User-provided nodal coordinates do not agree with other uniform grid parameters");
+            obj.errorMap('MOLE_ERR_INVALID_CENTER_COORDINATES') = struct("Code", 117, "Message", "User-provided cell center coordinates do not agree with other uniform grid parameters");
+            obj.errorMap('MOLE_ERR_INVALID_NORMAL_FACE_COORDS') = struct("Code", 118, "Message", "User-provided normal face coordinates do not agree with other uniform grid parameters");
+
+            obj.errorMap('MOLE_ERR_INVALID_ARRAY_SIZE') = struct("Code", 200, "Message", "Array dimensions need to be natural numbers >= 1");
+            obj.errorMap('MOLE_ERR_ARRAY_SIZE_OVERFLOW') = struct("Code", 201, "Message", "Array allocation overflow");
+            obj.errorMap('MOLE_ERR_ARRAY_INDEX_OUTBOUNDS') = struct("Code", 202, "Message", "The array index is out of bound.");
+            obj.errorMap('MOLE_ERR_FAILED_ARRAY_ALLOC') = struct("Code", 203, "Message", "Fail to allocate array <array name>");
+            obj.errorMap('MOLE_ERR_FAILED_ARRAY_RESIZE') = struct("Code", 204, "Message", "Fail to resize array <array name>");
+
+            obj.errorMap('MOLE_ERR_DIVISION_BY_ZERO') = struct("Code", 300, "Message", "Division by zero");
+            obj.errorMap('MOLE_ERR_INF_VALUE') = struct("Code", 301, "Message", "Infinite value detected");
+            obj.errorMap('MOLE_ERR_NAN_VALUE') = struct("Code", 302, "Message", "NaN value detected");
+        endfunction
+
+        function log_error(obj, errorName, location, onErrorAbort = false, params = "")
             # This function logs an error and decides wether it will stop and error and print
-            # the error error name, error code, error location, and error params which would stop execution. Otherwise it prints the error 
+            # the error error name, error code, error location, and error params which would stop execution. Otherwise it prints the error
             # onErrorAbort true means that its an error that stops execution and false are errors that keep going with exection even though and error occured
-            errCode = obj.Mole_Errors(errName).("Code")
-            errorStruct = struct("ErrorName", errorName, "errorCode", errCode, "errorLocation", location, "paramError", params)
-            obj.validateErrorStruct(errorStruct)
-            errorMessage = constErrorMessage(constMessage)
-            obj.numErrors += 1 		#Add the logged error to our accumulated errors
+            if ~ischar(errorName)
+                error("MOLE error name must be a character array");
+            endif
+
+            if ~isKey(obj.errorMap, errorName)
+                error("Unknown MOLE error name: %s", errorName);
+            endif
+
+            if ~ischar(location) || ~ischar(params)
+                error("MOLE error location and params must be character arrays");
+            endif
+
+            if ~(isscalar(onErrorAbort) && (islogical(onErrorAbort) || isnumeric(onErrorAbort)) && (onErrorAbort == 0 || onErrorAbort == 1))
+                error("onErrorAbort must be true or false");
+            endif
+
+            errorInfo = obj.errorMap(errorName);
+            errCode = errorInfo.Code;
+            errorStruct = struct("errorName", errorName, "errorCode", errCode, "errorLocation", location, "paramError", params);
+
+            if ~obj.validateErrorStruct(errorStruct)
+                error("Invalid MOLE error structure");
+            endif
+
+            errorMessage = obj.constErrorMessage(errorStruct);
+            obj.numErrors += 1;
             if onErrorAbort
-                error(errorMessage)
+                error("%s", errorMessage);
             else
-                MOLEerr_print(errorStruct, errorMessage)
+                obj.MOLEerr_print(errorStruct, errorMessage);
             endif
         endfunction
 
         function MOLEerr_print(obj, errorStruct, errorMessage)
-        	#This function takes in an error struct as specified above 
-        	# It also takes in an error messages to print corresponding to the error code 
-            if obj.isEmpty()
-                output = "No errors logged."
-                printf("%s", output)
+            #This function takes in an error struct as specified above
+            # It also takes in an error messages to print corresponding to the error code
+            if ~obj.validateErrorStruct(errorStruct)
+                error("Invalid MOLE error structure");
             endif
-            startLogStr = "========================================\n
-                            Logged MOLE Error \n
-                            ======================================== \n"
-            printf("%s", startLogStr)
-            printf("%s", errorMessage)
-           
+
+            startLogStr = "========================================\nLogged MOLE Error\n========================================\n";
+            printf("%s", startLogStr);
+            printf("%s", errorMessage);
         endfunction
     endmethods
-
-
 endclassdef

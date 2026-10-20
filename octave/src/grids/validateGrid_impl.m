@@ -27,17 +27,21 @@ function grid = validateGrid_impl(grid, allowPartial)
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
-    errorObj = MOLE_errors() #Instantiate error object
+    errorObj = MOLE_errors(); #Instantiate error object
     if nargin < 2
         allowPartial = false;
     end
 
     if ~isstruct(grid) || ~isscalar(grid)
-        error('validateGrid:InvalidGrid', 'grid must be a scalar struct');
+        params = sprintf('grid must be a scalar struct; received class %s with size %s.', class(grid), mat2str(size(grid)));
+        errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'validateGrid', true, params);
     end
 
-    if ~isfield(grid, 'bc') || ~isstruct(grid.bc)
+    if ~isfield(grid, 'bc')
         grid.bc = struct();
+    elseif ~isstruct(grid.bc) || ~isscalar(grid.bc)
+        params = sprintf('grid.bc must be a scalar struct; received class %s with size %s.', class(grid.bc), mat2str(size(grid.bc)));
+        errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'validateGrid', true, params);
     end
 
     if isfield(grid, 'dc') && ~isfield(grid.bc, 'dc')
@@ -54,10 +58,10 @@ function grid = validateGrid_impl(grid, allowPartial)
         % present; anything else falls through to the switch below, which
         % raises validateGrid:InvalidDim.
         inferredDim = localInferDim(grid);
-        if grid.dim ~= inferredDim
+        if inferredDim > grid.dim
             #Inferred dimension logged error
-            params = "grid Dimension: " + int2str(grid.dim) + ", Inferred Dimension: " + int2str(inferredDim);
-            errorObj.log_error("MOLE_ERR_INVALID_GRID_DIM", "validate_grid", false, params)
+            params = sprintf('grid.dim is %d, but supplied fields imply at least %d dimensions.', grid.dim, inferredDim);
+            errorObj.log_error('MOLE_ERR_INVALID_GRID_DIM', 'validateGrid', true, params);
         end
     end
 
@@ -68,33 +72,34 @@ function grid = validateGrid_impl(grid, allowPartial)
             grid.topology = 'uniform';
         end
     elseif localHasCurvilinearEvidence(grid) && ~strcmpi(grid.topology, 'curvilinear')
-        error('validateGrid:TopologyMismatch', ...
-              'grid.X/Y/Z or grid.nodes.X/Y/Z coordinates imply a curvilinear grid, but grid.topology is ''%s''.', ...
-              grid.topology);
+        params = sprintf('Supplied coordinates imply a curvilinear grid, but grid.topology is %s.', grid.topology);
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_TOPOLOGY', 'validateGrid', true, params);
     end
 
     switch grid.dim
     case 1
-        localRequire(grid, {'m'}, allowPartial, 'validateGrid:MissingField1D');
-        localValidateCellCounts(grid, {'m'}, 'validateGrid:InvalidCellCount1D');
-        grid = localNormalizeIfUniform1D(grid, allowPartial);
+        localRequire(grid, {'m'}, allowPartial, 'MOLE_ERR_INVALID_GRID_SIZE', errorObj);
+        localValidateCellCounts(grid, {'m'}, errorObj);
+        grid = localNormalizeIfUniform1D(grid, allowPartial, errorObj);
     case 2
-        localRequire(grid, {'m', 'n'}, allowPartial, 'validateGrid:MissingField2D');
-        localValidateCellCounts(grid, {'m', 'n'}, 'validateGrid:InvalidCellCount2D');
-        grid = localNormalizeIfUniform2D(grid, allowPartial);
+        localRequire(grid, {'m', 'n'}, allowPartial, 'MOLE_ERR_INVALID_GRID_SIZE', errorObj);
+        localValidateCellCounts(grid, {'m', 'n'}, errorObj);
+        grid = localNormalizeIfUniform2D(grid, allowPartial, errorObj);
     case 3
-        localRequire(grid, {'m', 'n', 'o'}, allowPartial, 'validateGrid:MissingField3D');
-        localValidateCellCounts(grid, {'m', 'n', 'o'}, 'validateGrid:InvalidCellCount3D');
-        grid = localNormalizeIfUniform3D(grid, allowPartial);
+        localRequire(grid, {'m', 'n', 'o'}, allowPartial, 'MOLE_ERR_INVALID_GRID_SIZE', errorObj);
+        localValidateCellCounts(grid, {'m', 'n', 'o'}, errorObj);
+        grid = localNormalizeIfUniform3D(grid, allowPartial, errorObj);
     otherwise
-        error('validateGrid:InvalidDim', 'grid.dim must be 1, 2, or 3');
+        params = sprintf('grid.dim must be 1, 2, or 3; received class %s with size %s.', class(grid.dim), mat2str(size(grid.dim)));
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_DIM', 'validateGrid', true, params);
     end
 end
 
-function localRequire(grid, names, allowPartial, errId)
+function localRequire(grid, names, allowPartial, errName, errorObj)
     for i = 1:numel(names)
         if ~isfield(grid, names{i}) && ~allowPartial
-            error(errId, ['Missing required field grid.' names{i}]);
+            params = sprintf('Missing required field grid.%s during full validation.', names{i});
+            errorObj.log_error(errName, 'localRequire', true, params);
         end
     end
 end
@@ -110,7 +115,7 @@ function dim = localInferDim(grid)
 end
 
 function tf = localHasNodeField(grid, fieldName)
-    tf = isfield(grid, 'nodes') && isstruct(grid.nodes) && isfield(grid.nodes, fieldName);
+    tf = isfield(grid, 'nodes') && isstruct(grid.nodes) && isscalar(grid.nodes) && isfield(grid.nodes, fieldName);
 end
 
 function tf = localHasCurvilinearEvidence(grid)
@@ -125,7 +130,7 @@ function tf = localHasCurvilinearEvidence(grid)
     tf = hasLegacyFields || (hasRawNodes && ~hasGeneratedGeometry);
 end
 
-function localValidateCellCounts(grid, names, errId)
+function localValidateCellCounts(grid, names, errorObj)
 % Cell counts (m, n, o) must be positive, finite, integer-valued scalars.
     for i = 1:numel(names)
         name = names{i};
@@ -134,45 +139,53 @@ function localValidateCellCounts(grid, names, errId)
         end
         value = grid.(name);
         if ~isnumeric(value) || ~isscalar(value) || ~isreal(value)
-            error(errId, 'grid.%s must be a real numeric scalar', name);
+            params = sprintf('grid.%s must be a real numeric scalar.', name);
+            errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'localValidateCellCounts', true, params);
         elseif ~isfinite(value)
-            error(errId, 'grid.%s must be finite', name);
+            params = sprintf('grid.%s must be finite.', name);
+            errorObj.log_error('MOLE_ERR_INVALID_CELL_COUNT', 'localValidateCellCounts', true, params);
         elseif value <= 0 || value ~= round(value)
-            error(errId, 'grid.%s must be a positive integer', name);
+            params = sprintf('grid.%s must be a positive integer.', name);
+            errorObj.log_error('MOLE_ERR_INVALID_CELL_COUNT', 'localValidateCellCounts', true, params);
         end
     end
 end
 
-function localValidateSpacing(grid, names, errId)
+function localValidateSpacing(grid, names, errorObj)
 % Step sizes (dx, dy, dz) must be positive, finite, real numeric scalars.
     for i = 1:numel(names)
         name = names{i};
         value = grid.(name);
         if ~isnumeric(value) || ~isscalar(value) || ~isreal(value)
-            error(errId, 'grid.%s must be a real numeric scalar', name);
+            params = sprintf('grid.%s must be a real numeric scalar.', name);
+            errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'localValidateSpacing', true, params);
         elseif ~isfinite(value)
-            error(errId, 'grid.%s must be finite', name);
+            params = sprintf('grid.%s must be finite.', name);
+            errorObj.log_error('MOLE_ERR_INVALID_GRID_SPACING', 'localValidateSpacing', true, params);
         elseif value <= 0
-            error(errId, 'grid.%s must be positive', name);
+            params = sprintf('grid.%s must be positive.', name);
+            errorObj.log_error('MOLE_ERR_INVALID_GRID_SPACING', 'localValidateSpacing', true, params);
         end
     end
 end
 
-function grid = localNormalizeIfUniform1D(grid, allowPartial)
+function grid = localNormalizeIfUniform1D(grid, allowPartial, errorObj)
     hasUniform = isfield(grid, 'm') && isfield(grid, 'dx');
     if hasUniform
-        grid = localNormalizeGrid1D(grid);
+        grid = localNormalizeGrid1D(grid, errorObj);
     elseif ~allowPartial && strcmpi(grid.topology, 'uniform')
-        error('validateGrid:MissingUniform1D', ...
-              'Uniform 1-D grid requires grid.m and grid.dx');
+        params = 'Uniform 1-D grid requires grid.dx.';
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_SPACING', 'localNormalizeIfUniform1D', true, params);
     end
 end
 
-function grid = localNormalizeIfUniform2D(grid, allowPartial)
+function grid = localNormalizeIfUniform2D(grid, allowPartial, errorObj)
     % Curvilinear grids have their own normalisation path
     if strcmp(grid.topology, 'curvilinear')
-        if isfield(grid, 'm') && isfield(grid, 'n')
-            grid = localNormalizeCurvilinear2D(grid);
+        hasCounts = isfield(grid, 'm') && isfield(grid, 'n');
+        hasNodes = isfield(grid, 'nodes') && isstruct(grid.nodes) && isscalar(grid.nodes) && isfield(grid.nodes, 'X') && isfield(grid.nodes, 'Y');
+        if hasCounts && (hasNodes || ~allowPartial)
+            grid = localNormalizeCurvilinear2D(grid, errorObj);
         end
         return;
     end
@@ -180,18 +193,20 @@ function grid = localNormalizeIfUniform2D(grid, allowPartial)
     hasUniform = isfield(grid, 'm') && isfield(grid, 'n') && ...
                  isfield(grid, 'dx') && isfield(grid, 'dy');
     if hasUniform
-        grid = localNormalizeGrid2D(grid);
+        grid = localNormalizeGrid2D(grid, errorObj);
     elseif ~allowPartial && strcmpi(grid.topology, 'uniform')
-        error('validateGrid:MissingUniform2D', ...
-              'Uniform 2-D grid requires grid.m, grid.n, grid.dx, and grid.dy');
+        params = 'Uniform 2-D grid requires grid.dx and grid.dy.';
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_SPACING', 'localNormalizeIfUniform2D', true, params);
     end
 end
 
-function grid = localNormalizeIfUniform3D(grid, allowPartial)
+function grid = localNormalizeIfUniform3D(grid, allowPartial, errorObj)
     % Curvilinear grids have their own normalisation path
     if strcmp(grid.topology, 'curvilinear')
-        if isfield(grid, 'm') && isfield(grid, 'n') && isfield(grid, 'o')
-            grid = localNormalizeCurvilinear3D(grid);
+        hasCounts = isfield(grid, 'm') && isfield(grid, 'n') && isfield(grid, 'o');
+        hasNodes = isfield(grid, 'nodes') && isstruct(grid.nodes) && isscalar(grid.nodes) && isfield(grid.nodes, 'X') && isfield(grid.nodes, 'Y') && isfield(grid.nodes, 'Z');
+        if hasCounts && (hasNodes || ~allowPartial)
+            grid = localNormalizeCurvilinear3D(grid, errorObj);
         end
         return;
     end
@@ -199,24 +214,33 @@ function grid = localNormalizeIfUniform3D(grid, allowPartial)
     hasUniform = isfield(grid, 'm') && isfield(grid, 'n') && isfield(grid, 'o') && ...
                  isfield(grid, 'dx') && isfield(grid, 'dy') && isfield(grid, 'dz');
     if hasUniform
-        grid = localNormalizeGrid3D(grid);
+        grid = localNormalizeGrid3D(grid, errorObj);
     elseif ~allowPartial && strcmpi(grid.topology, 'uniform')
-        error('validateGrid:MissingUniform3D', ...
-              'Uniform 3-D grid requires grid.m, grid.n, grid.o, grid.dx, grid.dy, and grid.dz');
+        params = 'Uniform 3-D grid requires grid.dx, grid.dy, and grid.dz.';
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_SPACING', 'localNormalizeIfUniform3D', true, params);
     end
 end
 
-function grid = localNormalizeGrid1D(grid)
+function grid = localNormalizeGrid1D(grid, errorObj)
     if isfield(grid, 'dim')
-        assert(grid.dim == 1, 'grid.dim must be 1 for 1-D operators');
+        if grid.dim ~= 1
+            params = sprintf('grid.dim must be 1 for 1-D normalization; received %d.', grid.dim);
+            errorObj.log_error('MOLE_ERR_INVALID_GRID_DIM', 'localNormalizeGrid1D', true, params);
+        end
     else
         grid.dim = 1;
     end
 
-    assert(isfield(grid, 'm'), 'grid.m is required');
-    assert(isfield(grid, 'dx'), 'grid.dx is required for uniform 1-D operators');
+    if ~isfield(grid, 'm')
+        params = 'Missing required field grid.m.';
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_SIZE', 'localNormalizeGrid1D', true, params);
+    end
+    if ~isfield(grid, 'dx')
+        params = 'Missing required field grid.dx.';
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_SPACING', 'localNormalizeGrid1D', true, params);
+    end
 
-    localValidateSpacing(grid, {'dx'}, 'validateGrid:InvalidSpacing1D');
+    localValidateSpacing(grid, {'dx'}, errorObj);
 
     grid.m = double(grid.m);
     grid.dx = double(grid.dx);
@@ -234,7 +258,7 @@ function grid = localNormalizeGrid1D(grid)
         bc.nc = grid.nc;
     end
 
-    [bc.dc, bc.nc, bc.hasData] = localNormalizeBoundaryCoefficients(bc, 2, 'validateGrid:InvalidBC1D');
+    [bc.dc, bc.nc, bc.hasData] = localNormalizeBoundaryCoefficients(bc, 2, errorObj);
     if bc.hasData
         bc.isPeriodic = isempty(find(bc.dc .* bc.dc + bc.nc .* bc.nc, 1));
     else
@@ -251,19 +275,34 @@ function grid = localNormalizeGrid1D(grid)
     grid = localGenerateCoordinates1D(grid);
 end
 
-function grid = localNormalizeGrid2D(grid)
+function grid = localNormalizeGrid2D(grid, errorObj)
     if isfield(grid, 'dim')
-        assert(grid.dim == 2, 'grid.dim must be 2 for 2-D operators');
+        if grid.dim ~= 2
+            params = sprintf('grid.dim must be 2 for 2-D normalization; received %d.', grid.dim);
+            errorObj.log_error('MOLE_ERR_INVALID_GRID_DIM', 'localNormalizeGrid2D', true, params);
+        end
     else
         grid.dim = 2;
     end
 
-    assert(isfield(grid, 'm'), 'grid.m is required');
-    assert(isfield(grid, 'n'), 'grid.n is required');
-    assert(isfield(grid, 'dx'), 'grid.dx is required for uniform 2-D operators');
-    assert(isfield(grid, 'dy'), 'grid.dy is required for uniform 2-D operators');
+    if ~isfield(grid, 'm')
+        params = 'Missing required field grid.m.';
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_SIZE', 'localNormalizeGrid2D', true, params);
+    end
+    if ~isfield(grid, 'n')
+        params = 'Missing required field grid.n.';
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_SIZE', 'localNormalizeGrid2D', true, params);
+    end
+    if ~isfield(grid, 'dx')
+        params = 'Missing required field grid.dx.';
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_SPACING', 'localNormalizeGrid2D', true, params);
+    end
+    if ~isfield(grid, 'dy')
+        params = 'Missing required field grid.dy.';
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_SPACING', 'localNormalizeGrid2D', true, params);
+    end
 
-    localValidateSpacing(grid, {'dx', 'dy'}, 'validateGrid:InvalidSpacing2D');
+    localValidateSpacing(grid, {'dx', 'dy'}, errorObj);
 
     grid.m = double(grid.m);
     grid.n = double(grid.n);
@@ -283,7 +322,7 @@ function grid = localNormalizeGrid2D(grid)
         bc.nc = grid.nc;
     end
 
-    [bc.dc, bc.nc, bc.hasData] = localNormalizeBoundaryCoefficients(bc, 4, 'validateGrid:InvalidBC2D');
+    [bc.dc, bc.nc, bc.hasData] = localNormalizeBoundaryCoefficients(bc, 4, errorObj);
     if bc.hasData
         bc.isPeriodic = [isempty(find(bc.dc(1:2).^2 + bc.nc(1:2).^2, 1)); ...
                          isempty(find(bc.dc(3:4).^2 + bc.nc(3:4).^2, 1))];
@@ -301,21 +340,33 @@ function grid = localNormalizeGrid2D(grid)
     grid = localGenerateCoordinates2D(grid);
 end
 
-function grid = localNormalizeGrid3D(grid)
+function grid = localNormalizeGrid3D(grid, errorObj)
     if isfield(grid, 'dim')
-        assert(grid.dim == 3, 'grid.dim must be 3 for 3-D operators');
+        if grid.dim ~= 3
+            params = sprintf('grid.dim must be 3 for 3-D normalization; received %d.', grid.dim);
+            errorObj.log_error('MOLE_ERR_INVALID_GRID_DIM', 'localNormalizeGrid3D', true, params);
+        end
     else
         grid.dim = 3;
     end
 
-    assert(isfield(grid, 'm'), 'grid.m is required');
-    assert(isfield(grid, 'n'), 'grid.n is required');
-    assert(isfield(grid, 'o'), 'grid.o is required');
-    assert(isfield(grid, 'dx'), 'grid.dx is required for uniform 3-D operators');
-    assert(isfield(grid, 'dy'), 'grid.dy is required for uniform 3-D operators');
-    assert(isfield(grid, 'dz'), 'grid.dz is required for uniform 3-D operators');
+    countNames = {'m', 'n', 'o'};
+    for i = 1:numel(countNames)
+        if ~isfield(grid, countNames{i})
+            params = sprintf('Missing required field grid.%s.', countNames{i});
+            errorObj.log_error('MOLE_ERR_INVALID_GRID_SIZE', 'localNormalizeGrid3D', true, params);
+        end
+    end
 
-    localValidateSpacing(grid, {'dx', 'dy', 'dz'}, 'validateGrid:InvalidSpacing3D');
+    spacingNames = {'dx', 'dy', 'dz'};
+    for i = 1:numel(spacingNames)
+        if ~isfield(grid, spacingNames{i})
+            params = sprintf('Missing required field grid.%s.', spacingNames{i});
+            errorObj.log_error('MOLE_ERR_INVALID_GRID_SPACING', 'localNormalizeGrid3D', true, params);
+        end
+    end
+
+    localValidateSpacing(grid, {'dx', 'dy', 'dz'}, errorObj);
 
     grid.m = double(grid.m);
     grid.n = double(grid.n);
@@ -337,7 +388,7 @@ function grid = localNormalizeGrid3D(grid)
         bc.nc = grid.nc;
     end
 
-    [bc.dc, bc.nc, bc.hasData] = localNormalizeBoundaryCoefficients(bc, 6, 'validateGrid:InvalidBC3D');
+    [bc.dc, bc.nc, bc.hasData] = localNormalizeBoundaryCoefficients(bc, 6, errorObj);
     if bc.hasData
         bc.isPeriodic = [isempty(find(bc.dc(1:2).^2 + bc.nc(1:2).^2, 1)); ...
                          isempty(find(bc.dc(3:4).^2 + bc.nc(3:4).^2, 1)); ...
@@ -356,7 +407,7 @@ function grid = localNormalizeGrid3D(grid)
     grid = localGenerateCoordinates3D(grid);
 end
 
-function [dc, nc, hasData] = localNormalizeBoundaryCoefficients(bc, expectedCount, errId)
+function [dc, nc, hasData] = localNormalizeBoundaryCoefficients(bc, expectedCount, errorObj)
     hasDC = isfield(bc, 'dc');
     hasNC = isfield(bc, 'nc');
 
@@ -368,7 +419,8 @@ function [dc, nc, hasData] = localNormalizeBoundaryCoefficients(bc, expectedCoun
     end
 
     if hasDC ~= hasNC
-        error(errId, 'grid.bc.dc and grid.bc.nc must be provided together');
+        params = 'grid.bc.dc and grid.bc.nc must be provided together.';
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_ARGS', 'localNormalizeBoundaryCoefficients', true, params);
     end
 
     if isempty(bc.dc) && isempty(bc.nc)
@@ -379,23 +431,31 @@ function [dc, nc, hasData] = localNormalizeBoundaryCoefficients(bc, expectedCoun
     end
 
     if isempty(bc.dc) || isempty(bc.nc)
-        error(errId, 'grid.bc.dc and grid.bc.nc must both be empty or both be non-empty');
+        params = 'grid.bc.dc and grid.bc.nc must both be empty or both be non-empty.';
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_ARGS', 'localNormalizeBoundaryCoefficients', true, params);
     end
 
-    dc = localNormalizeBoundaryVector(bc.dc, expectedCount, 'grid.bc.dc', errId);
-    nc = localNormalizeBoundaryVector(bc.nc, expectedCount, 'grid.bc.nc', errId);
+    dc = localNormalizeBoundaryVector(bc.dc, expectedCount, 'grid.bc.dc', errorObj);
+    nc = localNormalizeBoundaryVector(bc.nc, expectedCount, 'grid.bc.nc', errorObj);
     hasData = true;
 end
 
-function values = localNormalizeBoundaryVector(values, expectedCount, fieldName, errId)
-    assert(isnumeric(values), [fieldName ' must be numeric']);
-    assert(isvector(values), [fieldName ' must be a scalar or vector']);
+function values = localNormalizeBoundaryVector(values, expectedCount, fieldName, errorObj)
+    if ~isnumeric(values)
+        params = sprintf('%s must be numeric.', fieldName);
+        errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'localNormalizeBoundaryVector', true, params);
+    end
+    if ~isvector(values)
+        params = sprintf('%s must be a scalar or vector.', fieldName);
+        errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'localNormalizeBoundaryVector', true, params);
+    end
 
     values = double(values(:));
     if numel(values) == 1
         values = repmat(values, expectedCount, 1);
     elseif numel(values) ~= expectedCount
-        error(errId, '%s must be a scalar or a %dx1 vector', fieldName, expectedCount);
+        params = sprintf('%s must be a scalar or a %dx1 vector.', fieldName, expectedCount);
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_ARGS', 'localNormalizeBoundaryVector', true, params);
     end
 end
 
@@ -450,31 +510,41 @@ function grid = localGenerateCoordinates3D(grid)
     [grid.faces.w.X, grid.faces.w.Y, grid.faces.w.Z] = ndgrid((0.5:m-0.5)*dx, (0.5:n-0.5)*dy, zn);
 end
 
-function grid = localNormalizeCurvilinear2D(grid)
+function grid = localNormalizeCurvilinear2D(grid, errorObj)
     if isfield(grid, 'dim')
-        assert(grid.dim == 2, 'grid.dim must be 2 for 2-D operators');
+        if grid.dim ~= 2
+            params = sprintf('grid.dim must be 2 for 2-D curvilinear normalization; received %d.', grid.dim);
+            errorObj.log_error('MOLE_ERR_INVALID_GRID_DIM', 'localNormalizeCurvilinear2D', true, params);
+        end
     else
         grid.dim = 2;
     end
     grid.m = double(grid.m);
     grid.n = double(grid.n);
-    grid = localValidateCurvilinearNodes2D(grid);
+    grid = localValidateCurvilinearNodes2D(grid, errorObj);
     grid = localDeriveCurvilinearCoordinates2D(grid);
 end
 
-function grid = localValidateCurvilinearNodes2D(grid)
+function grid = localValidateCurvilinearNodes2D(grid, errorObj)
     m = grid.m; n = grid.n;
-    if ~isfield(grid, 'nodes') || ~isfield(grid.nodes, 'X') || ~isfield(grid.nodes, 'Y')
-        error('validateGrid:CurvilinearMissingNodes', ...
-            'Curvilinear grid requires grid.nodes.X and grid.nodes.Y to be set before calling validateGrid.');
+    if ~isfield(grid, 'nodes')
+        params = 'Curvilinear grid requires grid.nodes.X and grid.nodes.Y before full validation.';
+        errorObj.log_error('MOLE_ERR_INVALID_CURVILINEAR_GRID', 'localValidateCurvilinearNodes2D', true, params);
+    end
+    if ~isstruct(grid.nodes) || ~isscalar(grid.nodes)
+        params = sprintf('grid.nodes must be a scalar struct; received class %s with size %s.', class(grid.nodes), mat2str(size(grid.nodes)));
+        errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'localValidateCurvilinearNodes2D', true, params);
+    end
+    if ~isfield(grid.nodes, 'X') || ~isfield(grid.nodes, 'Y')
+        params = 'Curvilinear grid requires grid.nodes.X and grid.nodes.Y before full validation.';
+        errorObj.log_error('MOLE_ERR_INVALID_CURVILINEAR_GRID', 'localValidateCurvilinearNodes2D', true, params);
     end
     expected = [m+1, n+1];
     if ~isequal(size(grid.nodes.X), expected) || ~isequal(size(grid.nodes.Y), expected)
-        error('validateGrid:SizeMismatch', ...
-            'Curvilinear grid.nodes.X/Y must be (%d x %d); got (%s) and (%s).', ...
-            m+1, n+1, mat2str(size(grid.nodes.X)), mat2str(size(grid.nodes.Y)));
+        params = sprintf('Curvilinear grid.nodes.X/Y must be (%d x %d); received sizes %s and %s.', m+1, n+1, mat2str(size(grid.nodes.X)), mat2str(size(grid.nodes.Y)));
+        errorObj.log_error('MOLE_ERR_GRID_NODAL_SZ_MISMATCH', 'localValidateCurvilinearNodes2D', true, params);
     end
-    localValidateCurvilinearNodeData(grid.nodes, {'X', 'Y'});
+    localValidateCurvilinearNodeData(grid.nodes, {'X', 'Y'}, errorObj);
 end
 
 function grid = localDeriveCurvilinearCoordinates2D(grid)
@@ -493,48 +563,57 @@ function grid = localDeriveCurvilinearCoordinates2D(grid)
                               NY(1:end-1, 2:end)   + NY(2:end, 2:end));
 end
 
-function grid = localNormalizeCurvilinear3D(grid)
+function grid = localNormalizeCurvilinear3D(grid, errorObj)
     if isfield(grid, 'dim')
-        assert(grid.dim == 3, 'grid.dim must be 3 for 3-D operators');
+        if grid.dim ~= 3
+            params = sprintf('grid.dim must be 3 for 3-D curvilinear normalization; received %d.', grid.dim);
+            errorObj.log_error('MOLE_ERR_INVALID_GRID_DIM', 'localNormalizeCurvilinear3D', true, params);
+        end
     else
         grid.dim = 3;
     end
     grid.m = double(grid.m);
     grid.n = double(grid.n);
     grid.o = double(grid.o);
-    grid = localValidateCurvilinearNodes3D(grid);
+    grid = localValidateCurvilinearNodes3D(grid, errorObj);
     grid = localDeriveCurvilinearCoordinates3D(grid);
 end
 
-function grid = localValidateCurvilinearNodes3D(grid)
+function grid = localValidateCurvilinearNodes3D(grid, errorObj)
     m = grid.m; n = grid.n; o = grid.o;
-    if ~isfield(grid, 'nodes') || ~isfield(grid.nodes, 'X') || ...
-       ~isfield(grid.nodes, 'Y') || ~isfield(grid.nodes, 'Z')
-        error('validateGrid:CurvilinearMissingNodes', ...
-            'Curvilinear grid requires grid.nodes.X, grid.nodes.Y, and grid.nodes.Z to be set before calling validateGrid.');
+    if ~isfield(grid, 'nodes')
+        params = 'Curvilinear grid requires grid.nodes.X, grid.nodes.Y, and grid.nodes.Z before full validation.';
+        errorObj.log_error('MOLE_ERR_INVALID_CURVILINEAR_GRID', 'localValidateCurvilinearNodes3D', true, params);
+    end
+    if ~isstruct(grid.nodes) || ~isscalar(grid.nodes)
+        params = sprintf('grid.nodes must be a scalar struct; received class %s with size %s.', class(grid.nodes), mat2str(size(grid.nodes)));
+        errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'localValidateCurvilinearNodes3D', true, params);
+    end
+    if ~isfield(grid.nodes, 'X') || ~isfield(grid.nodes, 'Y') || ~isfield(grid.nodes, 'Z')
+        params = 'Curvilinear grid requires grid.nodes.X, grid.nodes.Y, and grid.nodes.Z before full validation.';
+        errorObj.log_error('MOLE_ERR_INVALID_CURVILINEAR_GRID', 'localValidateCurvilinearNodes3D', true, params);
     end
     expected = [m+1, n+1, o+1];
     if ~isequal(size(grid.nodes.X), expected) || ~isequal(size(grid.nodes.Y), expected) || ...
        ~isequal(size(grid.nodes.Z), expected)
-        error('validateGrid:SizeMismatch', ...
-            'Curvilinear grid.nodes.X/Y/Z must be (%d x %d x %d); got X=(%s), Y=(%s), Z=(%s).', ...
-            m+1, n+1, o+1, mat2str(size(grid.nodes.X)), mat2str(size(grid.nodes.Y)), mat2str(size(grid.nodes.Z)));
+        params = sprintf('Curvilinear grid.nodes.X/Y/Z must be (%d x %d x %d); received X=%s, Y=%s, and Z=%s.', m+1, n+1, o+1, mat2str(size(grid.nodes.X)), mat2str(size(grid.nodes.Y)), mat2str(size(grid.nodes.Z)));
+        errorObj.log_error('MOLE_ERR_GRID_NODAL_SZ_MISMATCH', 'localValidateCurvilinearNodes3D', true, params);
     end
-    localValidateCurvilinearNodeData(grid.nodes, {'X', 'Y', 'Z'});
+    localValidateCurvilinearNodeData(grid.nodes, {'X', 'Y', 'Z'}, errorObj);
 end
 
-function localValidateCurvilinearNodeData(nodes, fieldNames)
+function localValidateCurvilinearNodeData(nodes, fieldNames, errorObj)
 % Curvilinear node coordinates must be real, finite numeric data -- correct
 % array shape alone doesn't guarantee they're safe to interpolate/derive from.
     for i = 1:numel(fieldNames)
         name = fieldNames{i};
         value = nodes.(name);
         if ~isnumeric(value) || ~isreal(value)
-            error('validateGrid:InvalidCurvilinearNodes', ...
-                'grid.nodes.%s must be real numeric data', name);
+            params = sprintf('grid.nodes.%s must contain real numeric data.', name);
+            errorObj.log_error('MOLE_ERR_INVALID_NODAL_COORDINATES', 'localValidateCurvilinearNodeData', true, params);
         elseif ~all(isfinite(value(:)))
-            error('validateGrid:InvalidCurvilinearNodes', ...
-                'grid.nodes.%s must contain only finite values', name);
+            params = sprintf('grid.nodes.%s must contain only finite values.', name);
+            errorObj.log_error('MOLE_ERR_INVALID_NODAL_COORDINATES', 'localValidateCurvilinearNodeData', true, params);
         end
     end
 end
