@@ -123,7 +123,7 @@ void test_1D_dirichlet() {
   const Real dx = 0.1;   // grid spacing
 
   const uword ncenters = m + 2;
-  const Real density = 0.1;
+  const Real density = 1.0 - 2.0 / static_cast<Real>(ncenters * ncenters) + 0.01;
 
   sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
@@ -168,7 +168,7 @@ void test_1D_neumann() {
   const Real dx = 0.1;
 
   const uword ncenters = m + 2;
-  const Real density = 0.1;
+  const Real density = 1.0 - 2.0 / static_cast<Real>(ncenters * ncenters) + 0.01;
 
   sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
@@ -211,7 +211,7 @@ void test_1D_mixed_dirichlet_neumann() {
   const Real dx = 0.1;
 
   const uword ncenters = m + 2;
-  const Real density = 0.1;
+  const Real density = 1.0 - 2.0 / static_cast<Real>(ncenters * ncenters) + 0.01;
 
   sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
@@ -253,7 +253,7 @@ void test_1D_mixed_neumann_dirichlet() {
   const Real dx = 0.1;
 
   const uword ncenters = m + 2;
-  const Real density = 0.1;
+  const Real density = 1.0 - 2.0 / static_cast<Real>(ncenters * ncenters) + 0.01;
 
   sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
@@ -301,7 +301,7 @@ void test_1D_robin() {
   const Real dx = 0.1;
 
   const uword ncenters = m + 2;
-  const Real density = 0.1;
+  const Real density = 1.0 - 2.0 / static_cast<Real>(ncenters * ncenters) + 0.01;
 
   sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
@@ -347,7 +347,7 @@ void test_2D_dirichlet_all() {
   const Real dy = 0.2;
 
   const uword ncenters = (m + 2) * (n + 2);
-  const Real density = 0.1;
+  const Real density = 1.0 - 2.0 / static_cast<Real>(ncenters * ncenters);
 
   sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
@@ -391,7 +391,7 @@ void test_2D_neumann_all() {
   const Real dy = 0.2;
 
   const uword ncenters = (m + 2) * (n + 2);
-  const Real density = 0.1;
+  const Real density = 1.0 - 2.0 / static_cast<Real>(ncenters * ncenters);
 
   sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
@@ -434,7 +434,7 @@ void test_2D_mixed() {
   const Real dy = 0.1;
 
   const uword ncenters = (m + 2) * (n + 2);
-  const Real density = 0.1;
+  const Real density = 1.0 - 2.0 / static_cast<Real>(ncenters * ncenters);
 
   sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
@@ -480,7 +480,7 @@ void test_3D_dirichlet_all() {
   const Real dz = 0.1;
 
   const uword ncenters = (m + 2) * (n + 2) * (o + 2);
-  const Real density = 0.1;
+  const Real density = 1.0 - 2.0 / static_cast<Real>(ncenters * ncenters);
 
   sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
@@ -527,7 +527,7 @@ void test_3D_neumann_all() {
   const Real dz = 0.1;
 
   const uword ncenters = (m + 2) * (n + 2) * (o + 2);
-  const Real density = 0.1;
+  const Real density = 1.0 - 2.0 / static_cast<Real>(ncenters * ncenters);
 
   sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
@@ -571,7 +571,7 @@ void test_3D_mixed() {
   const Real dz = 0.1;
 
   const uword ncenters = (m + 2) * (n + 2) * (o + 2);
-  const Real density = 0.1;
+  const Real density = 1.0 - 2.0 / static_cast<Real>(ncenters * ncenters);
 
   sp_mat A = sprandn(ncenters, ncenters, density);
   sp_mat A_orig = A;
@@ -619,7 +619,7 @@ void test_periodic_1D_do_nothing() {
   const Real dx = 0.1;
 
   const uword ncenters = m;
-  const Real density = 0.1;
+  const Real density = 1.0 - 2.0 / static_cast<Real>(ncenters * ncenters) + 0.01;
 
   sp_mat A_orig = sprandn(ncenters, ncenters, density);
   sp_mat A = A_orig;
