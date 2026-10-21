@@ -1,59 +1,18 @@
+ function outputStr = constErrorMessage(errorStruct)
+    #This function creates a messge string with the error struct attributes
+    outputStr = sprintf("Error: %s\nCode: %d\nParams: %s\nLocations: %s\nMessage: %s\n", errorStruct.errorName, errorStruct.errorCode, errorStruct.paramError, errorStruct.errorLocation, errorInfo.Message);
+endfunction
+
 classdef MOLE_errors < handle
     properties (Access = private)
         errorMap
         numErrors = 0
     endproperties
 
-    methods (Access = private)
-        function tf = validateErrorStruct(obj, errorStruct)
-            #This function validates an error structure for types the fields and if its a valid key in our key code mapping
-            if ~isstruct(errorStruct) || ~isscalar(errorStruct)
-                tf = false;
-                return;
-            endif
-
-            containsFields = isfield(errorStruct, "errorName") && isfield(errorStruct, "errorCode") && isfield(errorStruct, "errorLocation") && isfield(errorStruct, "paramError");
-            if ~containsFields
-                tf = false;
-                return;
-            endif
-
-            typeFields = ischar(errorStruct.errorName) && obj.isInteger(errorStruct.errorCode) && ischar(errorStruct.errorLocation) && ischar(errorStruct.paramError);
-            if ~typeFields || ~isKey(obj.errorMap, errorStruct.errorName)
-                tf = false;
-                return;
-            endif
-
-            errorInfo = obj.errorMap(errorStruct.errorName);
-            tf = errorStruct.errorCode == errorInfo.Code;
-        endfunction
-
-        function tf = isInteger(obj, num)
-            #This function check if a num input is an integer even with a decimal point like 12.
-            tf = isnumeric(num) && isscalar(num) && isreal(num) && isfinite(num) && num == fix(num);
-        endfunction
-
-        function tf = isEmpty(obj)
-            #Check if stack is empty
-            tf = obj.numErrors == 0;
-        endfunction
-
-        function n = size(obj)
-            #Get the stack size
-            n = obj.numErrors;
-        endfunction
-
-        function outputStr = constErrorMessage(obj, errorStruct)
-            #This function creates a messge string with the error struct attributes
-            errorInfo = obj.errorMap(errorStruct.errorName);
-            outputStr = sprintf("Error: %s\nCode: %d\nParams: %s\nLocations: %s\nMessage: %s\n", errorStruct.errorName, errorStruct.errorCode, errorStruct.paramError, errorStruct.errorLocation, errorInfo.Message);
-        endfunction
-    endmethods
 
     methods
         function obj = MOLE_errors()
             obj.errorMap = containers.Map('KeyType', 'char', 'ValueType', 'any');
-
             obj.errorMap('MOLE_ERR_GRID_UNCHECKED') = struct("Code", 11, "Message", "Grid has not been validated or checked for operations. All grids are initialized with this error until they are validated.");
             obj.errorMap('MOLE_ERR_GRID_FLAGGED_W_ERRS') = struct("Code", 12, "Message", "Grid failed to be validated and it has been flagged with ERRORS");
             obj.errorMap('MOLE_ERR_INVALID_GRID_ARGS') = struct("Code", 13, "Message", "Error(s) in input parameters, resulting grid is invalid.");
@@ -94,49 +53,48 @@ classdef MOLE_errors < handle
             obj.errorMap('MOLE_ERR_NAN_VALUE') = struct("Code", 302, "Message", "NaN value detected");
         endfunction
 
+        function tf = haveErrors(obj)
+            #Check if there are any errors
+            tf = obj.numErrors == 0;
+        endfunction
+
         function log_error(obj, errorName, location, onErrorAbort = false, params = "")
             # This function logs an error and decides wether it will stop and error and print
             # the error error name, error code, error location, and error params which would stop execution. Otherwise it prints the error
             # onErrorAbort true means that its an error that stops execution and false are errors that keep going with exection even though and error occured
-            if ~ischar(errorName)
-                error("MOLE error name must be a character array");
-            endif
 
             if ~isKey(obj.errorMap, errorName)
+                #print then return instead or rearreange if else print and return
                 error("Unknown MOLE error name: %s", errorName);
             endif
 
             if ~ischar(location) || ~ischar(params)
-                error("MOLE error location and params must be character arrays");
+                error("MOLE error location and params must be character arrays"); #print the error invalid args
             endif
 
-            if ~(isscalar(onErrorAbort) && (islogical(onErrorAbort) || isnumeric(onErrorAbort)) && (onErrorAbort == 0 || onErrorAbort == 1))
-                error("onErrorAbort must be true or false");
+            if ~(onErrorAbort )  #Check if its boolean
+                error("onErrorAbort must be true or false"); #print the errors instead
             endif
 
             errorInfo = obj.errorMap(errorName);
             errCode = errorInfo.Code;
             errorStruct = struct("errorName", errorName, "errorCode", errCode, "errorLocation", location, "paramError", params);
 
-            if ~obj.validateErrorStruct(errorStruct)
-                error("Invalid MOLE error structure");
-            endif
+            
 
             errorMessage = obj.constErrorMessage(errorStruct);
             obj.numErrors += 1;
             if onErrorAbort
                 error("%s", errorMessage);
             else
-                obj.MOLEerr_print(errorStruct, errorMessage);
+                obj.MOLEerr_print(errorMessage);
             endif
         endfunction
 
-        function MOLEerr_print(obj, errorStruct, errorMessage)
+        function MOLEerr_print(obj, errorMessage)
             #This function takes in an error struct as specified above
             # It also takes in an error messages to print corresponding to the error code
-            if ~obj.validateErrorStruct(errorStruct)
-                error("Invalid MOLE error structure");
-            endif
+
 
             startLogStr = "========================================\nLogged MOLE Error\n========================================\n";
             printf("%s", startLogStr);

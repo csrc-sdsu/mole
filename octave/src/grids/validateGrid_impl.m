@@ -1,4 +1,4 @@
-function grid = validateGrid_impl(grid, allowPartial)
+function grid = validateGrid_impl(grid, allowPartial, errorObj)
 % PURPOSE
 % Canonical implementation for validateGrid — normalizes and enriches a
 % grid struct with coordinate arrays for nodes, faces, and centers.
@@ -27,20 +27,22 @@ function grid = validateGrid_impl(grid, allowPartial)
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
-    errorObj = MOLE_errors(); #Instantiate error object
+    if nargin < 3
+        errorObj = MOLE_errors();
+    end
     if nargin < 2
         allowPartial = false;
     end
 
     if ~isstruct(grid) || ~isscalar(grid)
-        params = sprintf('grid must be a scalar struct; received class %s with size %s.', class(grid), mat2str(size(grid)));
+        params = sprintf('grid must be a scalar or a struct; received class %s with size %s.', class(grid), mat2str(size(grid)));
         errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'validateGrid', true, params);
     end
 
     if ~isfield(grid, 'bc')
         grid.bc = struct();
     elseif ~isstruct(grid.bc) || ~isscalar(grid.bc)
-        params = sprintf('grid.bc must be a scalar struct; received class %s with size %s.', class(grid.bc), mat2str(size(grid.bc)));
+        params = sprintf('grid.bc must be a scalar or a struct; received class %s with size %s.', class(grid.bc), mat2str(size(grid.bc)));
         errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'validateGrid', true, params);
     end
 

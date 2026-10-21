@@ -15,12 +15,12 @@ function grid = makeGrid_impl(varargin)
             	grid.(char(name)) = value;
             else
             	params = sprintf('Name: %s , Value: %s ', name, value)
-            	errorObj.log_error('MOLE_ERR_INVALID_GRID_ARGS', 'makeGrid', true, params, message)
+            	errorObj.log_error('MOLE_ERR_INVALID_GRID_ARGS', 'makeGrid', true, params)
             endif
         end
     end
 
-    grid = validateGrid(grid, true);
+    grid = validateGrid(grid, true, errorObj);
 end
 
 function validateNumArgs(nargin, errorObj)
