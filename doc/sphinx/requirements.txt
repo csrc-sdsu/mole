@@ -76,7 +76,7 @@ requests>=2.32.3
 
 # For PDF generation
 latexcodec==3.0.0
-pygments==2.19.1
+pygments>=2.20.0
 
 # Development tools
 jinja2==3.1.6
