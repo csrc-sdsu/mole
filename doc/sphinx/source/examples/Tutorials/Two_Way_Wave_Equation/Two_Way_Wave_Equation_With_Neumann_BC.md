@@ -136,14 +136,19 @@ ensuring energy and flux consistency at the discrete level. The mimetic library 
 Rearranging our equation for the unknown value $U^{k+1}$ leads us to:
 
 $$
-(I-(\frac{c^2\Delta t^2}{2})L)U^{k+1}_i = 2U^k_i - (I-(\frac{c^2\Delta t^2}{2})L)U^{k-1}_i
+U^{k+1}_i = 2U^k_i + c^2\Delta t^2LU^{k}_i - U^{k-1}_i
 $$
 
-Here, we can set A = $I-(\frac{c^2\Delta t^2}{2})L$ and b = $2U^k_i - (I-(\frac{c^2\Delta t^2}{2})L)U^{k-1}_i$, which rearranges our equation to:
-$$A U^{k+1}_i = b$$
+Now we can directly solve for our boundary condition with addScalarBC1D() and solve for $U^{i+1}$.
 
-Now we can add our boundary condition with addScalarBC1D() and solve for $U^{i+1}$.
+The boundary LHS are given by `addScalarBC`, and we can solve for the two endpoints (with n+1 points) $U(0)$ and $U(n)$. `addScalarBC` returns a modified LHS matrix (`L_bc`) and RHS vector (`b_bc`) in $AU=b$. Solving for only $U_0$ and $U_n$ with direct solves
 
+```MATLAB
+    U1_md(1)   = (b_bc(1)   - L_bc(1,   2:end)   * U1_md(2:end))   / L_bc(1,1);
+    U1_md(end) = (b_bc(end) - L_bc(end, 1:end-1) * U1_md(1:end-1)) / L_bc(end,end);  
+```
+
+completes the solution for a single time step.
 
 ### Outputs
 | Variable | Description |
