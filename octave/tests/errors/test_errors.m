@@ -14,93 +14,87 @@ classdef test_errors < matlab.unittest.TestCase
     end
     methods(Test)
 
-        function testMoleErrorLog(testCase):
+        function testMoleLogErrors(testCase):
             #Test for pushing onto stack
             testCase.verifyEqual(testCase.TestError.getNumErrors(),0)
             params = "numelem = 5 "
-            testCase.TestError.MOLEerr_log("MOLE_ERR_INVALID_ARRAY_SIZE", "array1D Construction", params)
-            testCase.verifyEqual(testCase.TestError.getNumErrors(),1)
+            testCase.TestError.log_error("MOLE_ERR_INVALID_ARRAY_SIZE", "array1D Construction", false, params)
+            testCase.verifyEqual(testCase.TestError.numErrors, 1)
             params = "original numelem = 5, requested resize = "
-            testCase.TestError.MOLEerr_log("MOLE_ERR_FAILED_ARRAY_RESIZE", "array1D Resize", params)
-            
-            testCase.verifyEqual(testCase.TestError.getNumErrors(),2)
-
+            testCase.TestError.log_error("MOLE_ERR_FAILED_ARRAY_RESIZE", "array1D Resize", false, params)
+            testCase.verifyEqual(testCase.TestError.numErrors, 2)
             
             params = "original numelem = 5, requested resize = "
-            testCase.TestError.MOLEerr_log("MOLE_ERR_INVALID_GRID_SPACING", "grid1D[construct]", params)
+            testCase.TestError.log_error("MOLE_ERR_INVALID_GRID_SPACING", "grid1D[construct]", params)
             
-            testCase.verifyEqual(testCase.TestError.getNumErrors(),3)
+            testCase.verifyEqual(testCase.TestError.numErrors, 3)
 
         end
 
-        function testMoleErrorContains(testCase)
-            #Test for mole error contains
-            assert(~testCase.TestError.MOLEerr_contains("MOLE_ERR_GRID_UNCHECKED"))
-            params = ""
-            testCase.TestError.MOLEerr_log("MOLE_ERR_GRID_UNCHECKED", "<Grid Construction", params)
-            assert(testCase.TestError.MOLEerr_contains("MOLE_ERR_GRID_UNCHECKED"))
+        function testMoleLogErrorOutput(testCase)
+            params = "numelem = 5 ";
+            output = evalc('testCase.TestError.log_error("MOLE_ERR_INVALID_ARRAY_SIZE", "array1D Construction", false, params);');
+            expectedOutput = sprintf("========================================\nLogged MOLE Error\n========================================\nError: MOLE_ERR_INVALID_ARRAY_SIZE\nCode: 200\nParams: numelem = 5 \nLocations: array1D Construction\nMessage: Array dimensions need to be natural numbers >= 1\n");
 
-            params = "original numelem = 5, requested resize = "
-            testCase.TestError.MOLEerr_log("MOLE_ERR_FAILED_ARRAY_RESIZE", "array1D Resize", params)
-            assert(testCase.TestError.MOLEerr_contains("MOLE_ERR_FAILED_ARRAY_RESIZE"))
-
-            assert(~testCase.TestError.MOLEerr_contains("MOLE_ERR_INVALID_GRID_SPACING"))
-
-        endfunction
-
-        function testMoleErrorsHasErrors(testCase)
-            #This functon tests moles has erorrs function on empty error object object with an error
-            assert(~testCase.TestError.MOLEerr_haserrors())
-            params = ""
-            testCase.TestError.MOLEerr_log("MOLE_ERR_GRID_UNCHECKED", "<Grid Construction", params)
-            assert(testCase.TestError.MOLEerr_haserrors())
-        endfunction
-
-        function testMoleErrorRemoveError(testCase)
-            #This test the remove error of a function by adding three errors and removing them each time checking the errors arent there
-            params = ""
-            testCase.TestError.MOLEerr_log("MOLE_ERR_GRID_UNCHECKED", "<Grid Construction", params)
-            testCase.TestError.MOLEerr_log("MOLE_ERR_GRID_UNCHECKED", "<Grid Construction", params)
-            testCase.TestError.MOLEerr_remove("MOLE_ERR_GRID_UNCHECKED")
-            assert(~testCase.TestError.MOLEerr_contains("MOLE_ERR_GRID_UNCHECKED"))
-            params = "numelem = 5 "
-            testCase.TestError.MOLEerr_log("MOLE_ERR_INVALID_ARRAY_SIZE", "array1D Construction", params)
-            params = "original numelem = 5, requested resize = "
-            testCase.TestError.MOLEerr_log("MOLE_ERR_FAILED_ARRAY_RESIZE", "array1D Resize", params)
-            params = "original numelem = 5, requested resize = "
-            testCase.TestError.MOLEerr_log("MOLE_ERR_INVALID_GRID_SPACING", "grid1D[construct]", params)
-            testCase.TestError.MOLEerr_remove("MOLE_ERR_INVALID_ARRAY_SIZE")
-            assert(~testCase.TestError.MOLEerr_contains("MOLE_ERR_INVALID_ARRAY_SIZE"))
-            assert(testCase.TestError.MOLEerr_contains("MOLE_ERR_FAILED_ARRAY_RESIZE"))
-            assert(testCase.TestError.MOLEerr_contains("MOLE_ERR_INVALID_GRID_SPACING"))
-
-            testCase.TestError.MOLEerr_remove("MOLE_ERR_FAILED_ARRAY_RESIZE")
-            assert(~testCase.TestError.MOLEerr_contains("MOLE_ERR_FAILED_ARRAY_RESIZE"))
-            assert(testCase.TestError.MOLEerr_contains("MOLE_ERR_INVALID_GRID_SPACING"))
-
-            testCase.TestError.MOLEerr_remove("MOLE_ERR_INVALID_GRID_SPACING")
-            assert(~testCase.TestError.MOLEerr_contains("MOLE_ERR_INVALID_GRID_SPACING"))
-        
-        endfunction
-
-        function testGetNumErrors(testCase):
-            #Test for checking the size of the stack
-            testCase.verifyEqual(testCase.TestStack.size(), 0)
-            testCase.TestStack.push({20})
-            testCase.TestStack.push({22})
-            testCase.verifyEqual(testCase.TestStack.size(),2)
+            testCase.verifyEqual(output, expectedOutput);
+            testCase.verifyEqual(testCase.TestError.getNumErrors(), 1);
         end
-        
-        function testIsEmpty(testCase):
-            #Test for function that tests if stack is empty
-            testCase.assertTrue(testCase.TestStack.isEmpty())
-            testCase.TestStack.push({20})
-            testCase.TestStack.push({22})
-            testCase.assertFalse(testCase.TestStack.isEmpty())
-            testCase.TestStack.pop()
-            testCase.TestStack.pop()
-            testCase.assertTrue(testCase.TestStack.isEmpty())
 
+       function testErrorStopExecution(testCase):
+            testCase.verifyEqual(testCase.TestError.getNumErrors(),0)
+            params = "numelem = 5 ";
+            testCase.verifyError(@() testCase.TestError.log_error("MOLE_ERR_INVALID_ARRAY_SIZE", "array1D Construction", true, params), 'Array dimensions need to be natural numbers >= 1');
+            params = "original numelem = 5, requested resize = ";
+            testCase.verifyError(@() testCase.TestError.log_error("MOLE_ERR_FAILED_ARRAY_RESIZE", "array1D Resize", true, params), 'Fail to resize array <array name>');
+       end
+       function testInvalidErrorNameType(testCase)
+            output = evalc('testCase.TestError.log_error(200, "array1D Construction", false, "numelem = 5");');
+            expectedOutput = sprintf("MOLE error name must be a character array\n");
+
+            testCase.verifyEqual(output, expectedOutput);
+            testCase.verifyEqual(testCase.TestError.getNumErrors(), 0);
         end
+
+        function testUnknownErrorName(testCase)
+            testCase.verifyError(@() testCase.TestError.log_error("MOLE_ERR_NOT_IN_MAP", "array1D Construction", false, "numelem = 5"), 'MOLE:UNKNOWN_ERROR_NAME');
+            testCase.verifyEqual(testCase.TestError.getNumErrors(), 0);
+        end
+
+        function testInvalidLocationAndParamsTypes(testCase)
+            locationOutput = evalc('testCase.TestError.log_error("MOLE_ERR_INVALID_ARRAY_SIZE", 25, false, "numelem = 5");');
+            paramsOutput = evalc('testCase.TestError.log_error("MOLE_ERR_INVALID_ARRAY_SIZE", "array1D Construction", false, 25);');
+            expectedOutput = sprintf("MOLE error location and params must be character arrays\n");
+
+            testCase.verifyEqual(locationOutput, expectedOutput);
+            testCase.verifyEqual(paramsOutput, expectedOutput);
+            testCase.verifyEqual(testCase.TestError.getNumErrors(), 0);
+        end
+
+        function testInvalidAbortFlag(testCase)
+            typeOutput = evalc('testCase.TestError.log_error("MOLE_ERR_INVALID_ARRAY_SIZE", "array1D Construction", 1, "numelem = 5");');
+            sizeOutput = evalc('testCase.TestError.log_error("MOLE_ERR_INVALID_ARRAY_SIZE", "array1D Construction", [true false], "numelem = 5");');
+            expectedOutput = sprintf("onErrorAbort must be true or false\n");
+
+            testCase.verifyEqual(typeOutput, expectedOutput);
+            testCase.verifyEqual(sizeOutput, expectedOutput);
+            testCase.verifyEqual(testCase.TestError.getNumErrors(), 0);
+        end
+
+        function testDefaultInputs(testCase)
+            output = evalc('testCase.TestError.log_error("MOLE_ERR_INVALID_ARRAY_SIZE", "array1D Construction");');
+            expectedOutput = sprintf("========================================\nLogged MOLE Error\n========================================\nError: MOLE_ERR_INVALID_ARRAY_SIZE\nCode: 200\nParams: \nLocations: array1D Construction\nMessage: Array dimensions need to be natural numbers >= 1\n");
+
+            testCase.verifyEqual(output, expectedOutput);
+            testCase.verifyEqual(testCase.TestError.getNumErrors(), 1);
+        end
+
+        function testHaveErrors(testCase)
+            testCase.verifyEqual(testCase.TestError.haveErrors(), false);
+            evalc('testCase.TestError.log_error("MOLE_ERR_INVALID_ARRAY_SIZE", "array1D Construction", false, "numelem = 5");');
+            testCase.verifyEqual(testCase.TestError.haveErrors(), true);
+        end
+
+
+     
 
 end
