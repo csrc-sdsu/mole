@@ -93,8 +93,4 @@ classdef test_errors < matlab.unittest.TestCase
             evalc('testCase.TestError.log_error("MOLE_ERR_INVALID_ARRAY_SIZE", "array1D Construction", false, "numelem = 5");');
             testCase.verifyEqual(testCase.TestError.haveErrors(), true);
         end
-
-
-     
-
 end

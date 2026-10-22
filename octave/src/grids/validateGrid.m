@@ -43,7 +43,7 @@ function grid = validateGrid_impl(grid, allowPartial, errorObj)
         grid.bc = struct();
     elseif ~isstruct(grid.bc) || ~isscalar(grid.bc)
         params = sprintf('grid.bc must be a scalar or a struct; received class %s with size %s.', class(grid.bc), mat2str(size(grid.bc)));
-        errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'validateGrid', true, params);
+        errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'validateGrid', false, params);
     end
 
     if isfield(grid, 'dc') && ~isfield(grid.bc, 'dc')
@@ -63,7 +63,7 @@ function grid = validateGrid_impl(grid, allowPartial, errorObj)
         if inferredDim > grid.dim
             #Inferred dimension logged error
             params = sprintf('grid.dim is %d, but supplied fields imply at least %d dimensions.', grid.dim, inferredDim);
-            errorObj.log_error('MOLE_ERR_INVALID_GRID_DIM', 'validateGrid', true, params);
+            errorObj.log_error('MOLE_ERR_INVALID_GRID_DIM', 'validateGrid', false, params);
         end
     end
 
@@ -75,7 +75,7 @@ function grid = validateGrid_impl(grid, allowPartial, errorObj)
         end
     elseif localHasCurvilinearEvidence(grid) && ~strcmpi(grid.topology, 'curvilinear')
         params = sprintf('Supplied coordinates imply a curvilinear grid, but grid.topology is %s.', grid.topology);
-        errorObj.log_error('MOLE_ERR_INVALID_GRID_TOPOLOGY', 'validateGrid', true, params);
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_TOPOLOGY', 'validateGrid', false, params);
     end
 
     switch grid.dim
@@ -93,7 +93,7 @@ function grid = validateGrid_impl(grid, allowPartial, errorObj)
         grid = localNormalizeIfUniform3D(grid, allowPartial, errorObj);
     otherwise
         params = sprintf('grid.dim must be 1, 2, or 3; received class %s with size %s.', class(grid.dim), mat2str(size(grid.dim)));
-        errorObj.log_error('MOLE_ERR_INVALID_GRID_DIM', 'validateGrid', true, params);
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_DIM', 'validateGrid', false, params);
     end
 end
 
