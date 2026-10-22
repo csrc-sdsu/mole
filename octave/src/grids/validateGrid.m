@@ -1,4 +1,4 @@
-function grid = validateGrid_impl(grid, allowPartial, errorObj)
+function grid = validateGrid(grid, allowPartial, errorObj)
 % PURPOSE
 % Canonical implementation for validateGrid — normalizes and enriches a
 % grid struct with coordinate arrays for nodes, faces, and centers.
@@ -449,7 +449,7 @@ function values = localNormalizeBoundaryVector(values, expectedCount, fieldName,
     end
     if ~isvector(values)
         params = sprintf('%s must be a scalar or vector.', fieldName);
-        errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'localNormalizeBoundaryVector', true, params);
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_ARGS', 'localNormalizeBoundaryVector', true, params);
     end
 
     values = double(values(:));
