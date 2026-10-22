@@ -1,6 +1,6 @@
  function outputStr = constErrorMessage(errorStruct)
     #This function creates a messge string with the error struct attributes
-    outputStr = sprintf("Error: %s\nCode: %d\nParams: %s\nLocations: %s\nMessage: %s\n", errorStruct.errorName, errorStruct.errorCode, errorStruct.paramError, errorStruct.errorLocation, errorInfo.Message);
+    outputStr = sprintf("Error: %s\nCode: %d\nParams: %s\nLocations: %s\nMessage: %s\n", errorStruct.errorName, errorStruct.errorCode, errorStruct.paramError, errorStruct.errorLocation, errorStruct.message);
 endfunction
 
 classdef MOLE_errors < handle
@@ -62,28 +62,29 @@ classdef MOLE_errors < handle
             # This function logs an error and decides wether it will stop and error and print
             # the error error name, error code, error location, and error params which would stop execution. Otherwise it prints the error
             # onErrorAbort true means that its an error that stops execution and false are errors that keep going with exection even though and error occured
-
             if ~isKey(obj.errorMap, errorName)
-                #print then return instead or rearreange if else print and return
+                #Check if error name exists in mapping
                 error("Unknown MOLE error name: %s", errorName);
             endif
 
             if ~ischar(location) || ~ischar(params)
-                error("MOLE error location and params must be character arrays"); #print the error invalid args
+                #Check if params an location sare strings
+                disp("MOLE error location and params must be character arrays")
+                return;
             endif
 
-            if ~(onErrorAbort )  #Check if its boolean
-                error("onErrorAbort must be true or false"); #print the errors instead
+            if (~(onErrorAbort == true) && ~(onErrorAbort == false) )
+                #Check if onErrorAbort is a boolean
+                disp("onErrorAbort must be true or false");
+                return;
             endif
-
+            #Get error information from mapping and create error structure
             errorInfo = obj.errorMap(errorName);
             errCode = errorInfo.Code;
-            errorStruct = struct("errorName", errorName, "errorCode", errCode, "errorLocation", location, "paramError", params);
-
-            
-
+            errorStruct = struct("errorName", errorName, "errorCode", errCode, "errorLocation", location, "paramError", params, "message", errorInfo.Message);
             errorMessage = obj.constErrorMessage(errorStruct);
             obj.numErrors += 1;
+            #Breaking error logic or proceed to print error only
             if onErrorAbort
                 error("%s", errorMessage);
             else
@@ -94,8 +95,6 @@ classdef MOLE_errors < handle
         function MOLEerr_print(obj, errorMessage)
             #This function takes in an error struct as specified above
             # It also takes in an error messages to print corresponding to the error code
-
-
             startLogStr = "========================================\nLogged MOLE Error\n========================================\n";
             printf("%s", startLogStr);
             printf("%s", errorMessage);
