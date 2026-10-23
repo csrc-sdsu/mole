@@ -6,8 +6,9 @@
  * Domain: - Spatial domain: [-2, 2]
  *         - N spatial points / dx spacing (user-defined)
  *         - Time integration: centered-in-time, centered-in-space (CTCS)
- * Boundary Conditions: du/dx(0,t) = 0, du/dx(M,t) = 0
- * Initial Condition: u(0,t) = cos(pi x/2)^2
+ * Boundary Conditions: du/dx(-2,t) = 0, du/dx(2,t) = 0
+ * Initial profile: smooth Gaussian f(x) = exp(-x^2 / 0.1), evenly reflected
+ *                  across the domain boundaries for the Neumann solution.
  *
  * Methods:
  *     1. mimetic_diff()
@@ -70,7 +71,6 @@
  *
  */
 
-
 #include "mole.h"
 #include <iostream>
 #include <cmath>
@@ -81,14 +81,22 @@ using namespace std;
 using namespace AddScalarBC;
 
 Real f(Real x) {
-    return std::pow(std::cos(M_PI * x / 2.0), 2.0);
+    return std::exp(-x * x / 0.1);
 }
 
-Real u_sol(Real x, Real t, Real c) {
-    return 0.5 * (f(x - c*t) + f(x + c*t));
+Real reflected_x(Real x, Real west, Real east) {
+    const Real interval = east - west;
+    Real position = std::fmod(x - west, 2.0 * interval);
+    if (position < 0.0) {
+        position += 2.0 * interval;
+    }
+    return west + interval - std::abs(position - interval);
 }
 
-
+Real u_sol(Real x, Real t, Real c, Real west, Real east) {
+    return 0.5 * (f(reflected_x(x - c * t, west, east))
+                + f(reflected_x(x + c * t, west, east)));
+}
 
 // Stores flops, time, and error
 struct Result {
@@ -118,7 +126,7 @@ Result mimetic_diff(u16 k, Real c, Real dt, vector<u32> num_cells, double west, 
         const u32 nx = m + 2;                                   //number of grid points
         const Real dx = (east - west) / static_cast<Real>(m);   // spacial discretization
         const u32 t = static_cast<u32>(std::ceil(1.0 / (c * dt)));
-        const Real alpha = std::pow(c * dt, 2.0) / 2.0;
+        const Real r2_md = std::pow(c * dt, 2.0);
 
         // MD grid, note the extra staggered (dx/2) step near the boundaries
         vec grid_md(nx, fill::zeros);
@@ -129,18 +137,16 @@ Result mimetic_diff(u16 k, Real c, Real dt, vector<u32> num_cells, double west, 
         }
         grid_md(m + 1) = east;
 
-        // Initial Displacement is cos curve
+        // Initial displacement is a Gaussian with a reflected extension for Neumann boundaries.
         vec U0_md(nx, fill::zeros);
-        vec U1_md(nx, fill::zeros);
         for (u32 i = 0; i < m+2; ++i) {
-            U0_md(i) = u_sol(grid_md(i), 0, c);
-            U1_md(i) = u_sol(grid_md(i), dt, c);
+            U0_md(i) = u_sol(grid_md(i), 0, c, west, east);
         }
 
         // The analytic solution, so we can check the error
         vec analytical_md(nx, fill::zeros);
         for (u32 i = 0; i < m+2; ++i) {
-            analytical_md(i) = u_sol(grid_md(i), (t + 1) * dt, c);
+            analytical_md(i) = u_sol(grid_md(i), (t + 1) * dt, c, west, east);
         }
 
         // Laplacian
@@ -149,36 +155,42 @@ Result mimetic_diff(u16 k, Real c, Real dt, vector<u32> num_cells, double west, 
 
         // Modify for BCs
         sp_mat Lbc = L_interior;
-        vec z(nx, fill::zeros);
-        addScalarBC(Lbc, z, k, m, dx, bc);
+        vec b_bc(nx, fill::zeros);
+        addScalarBC(Lbc, b_bc, k, m, dx, bc);
 
-        // (I - a L)U^(n+1) = 2 U^n - (I - a L)U^(n-1)
-        sp_mat A = speye<sp_mat>(nx, nx) - alpha * L_interior;
+        /* Solve for the boundary values.
+         * addScalarBC() modifies the matrix and adds a vector of boundary values, b_bc.
+         * It is meant for implicit schemes, but we can use it here to solve for just the
+         * boundary values, and use an explicit scheme for the interior points. Here is
+         * defined solve_boundary() which solves a single boundary, and solve_boundaries(),
+         * which solves both.
+         */
+        auto solve_boundary = [&](vec &u, uword boundary) {
+            Real rhs = b_bc(boundary);
+            for (sp_mat::const_row_iterator it = Lbc.begin_row(boundary);
+                 it != Lbc.end_row(boundary); ++it) {
+                if (it.col() != boundary) {
+                    rhs -= (*it) * u(it.col());
+                }
+            }
+            u(boundary) = rhs / Lbc(boundary, boundary);
+        };
+        auto solve_boundaries = [&](vec &u) {
+            solve_boundary(u, 0);
+            solve_boundary(u, nx - 1);
+        };
 
-        // Modify for BCs
-        A.row(0).zeros();
-        A.row(nx - 1).zeros();
-
-        for (sp_mat::const_row_iterator it = Lbc.begin_row(0); it != Lbc.end_row(0); ++it) {
-            A(0, it.col()) = (*it);
-        }
-        for (sp_mat::const_row_iterator it = Lbc.begin_row(nx - 1); it != Lbc.end_row(nx - 1); ++it) {
-            A(nx - 1, it.col()) = (*it);
-        }
+        vec U1_md = U0_md + 0.5 * r2_md * (L_interior * U0_md);
+        solve_boundaries(U1_md);
 
         U2_md = U1_md;
 
-        const uword nnz_md = A.n_nonzero;
+        const uword nnz_md = L_interior.n_nonzero;
         auto start = std::chrono::steady_clock::now();
 
-        for (u32 nstep = 3; nstep <= t + 2; ++nstep) {
-            vec b = 2.0 * U1_md - A * U0_md;
-
-            // BCs
-            b(0) = bc.v[0];
-            b(nx - 1) = bc.v[1];
-
-            U2_md = spsolve(A, b);
+        for (u32 nstep = 1; nstep <= t; ++nstep) {
+            U2_md = 2.0 * U1_md + r2_md * (L_interior * U1_md) - U0_md;
+            solve_boundaries(U2_md);
 
             U0_md = U1_md;
             U1_md = U2_md;
@@ -188,7 +200,7 @@ Result mimetic_diff(u16 k, Real c, Real dt, vector<u32> num_cells, double west, 
         std::chrono::duration<double> duration = end - start;
 
         // Store data for comparison
-        flops_md(cell_index) = static_cast<Real>((2 * nnz_md + U0_md.n_elem) * t);
+        flops_md(cell_index) = static_cast<Real>((2 * nnz_md + 3 * U0_md.n_elem) * t);
         walltime_md(cell_index) = duration.count();
         vec diff = U2_md-analytical_md;
         error_md(cell_index) = norm(diff) / norm(analytical_md);
@@ -217,10 +229,10 @@ Result finite_diff(Real c, Real dt, vector<u32> num_cells, double west, double e
         // FD grid
         vec grid_fd = linspace<vec>(west, east, nx);
 
-        // Initial Displacement is cos curve
+        // Initial displacement is a Gaussian with a reflected extension for Neumann boundaries.
         vec U0_fd(nx, fill::zeros);
         for (u32 i = 0; i < nx; ++i) {
-            U0_fd(i) = u_sol(grid_fd(i), 0.0, c);
+            U0_fd(i) = u_sol(grid_fd(i), 0.0, c, west, east);
         }
 
         U0_fd(0) = U0_fd(1);
@@ -229,7 +241,7 @@ Result finite_diff(Real c, Real dt, vector<u32> num_cells, double west, double e
         // The analytic solution, so we can check the error
         vec analytical_fd(nx, fill::zeros);
         for (u32 i = 0; i < nx; ++i) {
-            analytical_fd(i) = u_sol(grid_fd(i), (t + 1) * dt, c);
+            analytical_fd(i) = u_sol(grid_fd(i), (t + 1) * dt, c, west, east);
         }
 
         /* Centered Scheme Matrix L
@@ -282,10 +294,10 @@ Result finite_diff(Real c, Real dt, vector<u32> num_cells, double west, double e
         }
 
         auto end = std::chrono::steady_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        std::chrono::duration<double> duration = end - start;
 
         // Stores data for comparison
-        walltime_fd(cell_index) = static_cast<Real>(duration.count());
+        walltime_fd(cell_index) = duration.count();
         flops_fd(cell_index) = static_cast<Real>((2 * nnz_fd + U0_fd.n_elem) * t);
         vec diff = U2_fd - analytical_fd;
         error_fd(cell_index) = norm(diff) / norm(analytical_fd);
@@ -461,4 +473,3 @@ int main() {
 
     return 0;
 }
-
