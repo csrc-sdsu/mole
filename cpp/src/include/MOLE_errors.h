@@ -139,6 +139,12 @@ using namespace std;
 //
 #define MOLE_ERR_UTILS_INVALID_MESH_SIZE 500 // empty meshgrid input
 #define MOLE_ERR_UTILS_SIZE_MISMATCH 501 // trapz x, y sizes differ
+#define MOLE_ERR_UTILS_ROW_MISMATCH 502 // spjoin_rows A, B rows differ
+#define MOLE_ERR_UTILS_COL_MISMATCH 503 // spjoin_cols A, B cols differ
+#define MOLE_ERR_UTILS_NOT_SQUARE 504 // spsolve_eigen A not square
+#define MOLE_ERR_UTILS_RHS_ROW_MISMATCH 505 // spsolve_eigen A, b rows
+#define MOLE_ERR_UTILS_SINGULAR_MATRIX 506 // spsolve_eigen A singular
+#define MOLE_ERR_UTILS_TOO_FEW_POINTS 507 // trapz needs >= 2 points
 
 //
 // Dictionary of error codes and their corresponding messages 
@@ -269,6 +275,24 @@ static unordered_map<int, string> MOLE_errors_messages = {
     // 501
     {MOLE_ERR_UTILS_SIZE_MISMATCH,
     "Input vectors x and y must have the same number of elements."},
+    // 502
+    {MOLE_ERR_UTILS_ROW_MISMATCH,
+    "Matrices A and B must have the same number of rows."},
+    // 503
+    {MOLE_ERR_UTILS_COL_MISMATCH,
+    "Matrices A and B must have the same number of columns."},
+    // 504
+    {MOLE_ERR_UTILS_NOT_SQUARE,
+    "Matrix A must be square."},
+    // 505
+    {MOLE_ERR_UTILS_RHS_ROW_MISMATCH,
+    "The number of rows in A differs from the ones in rhs."},
+    // 506
+    {MOLE_ERR_UTILS_SINGULAR_MATRIX,
+    "Factorization error: Matrix is singular."},
+    // 507
+    {MOLE_ERR_UTILS_TOO_FEW_POINTS,
+    "Input vectors x and y must have at least two elements."},
 };
 
 // MOLE_Error basic structure a stack of this structure is used to

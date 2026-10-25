@@ -456,9 +456,10 @@ void Gradient::build2D(u16 k, const gridParams2D &p, const string &loc) {
   if (!hasOpErrors()) {
     // x-component: Gx along x for every y; y-component: Gy along y
     // for every x. Values are ordered with x varying fastest.
-    sp_mat G1 = Utils::spkron(Iy, Gx);
-    sp_mat G2 = Utils::spkron(Gy, Ix);
-    G = Utils::spjoin_cols(G1, G2);
+    sp_mat G1 = Utils::spkron(o_errs, Iy, Gx);
+    sp_mat G2 = Utils::spkron(o_errs, Gy, Ix);
+    if (!hasOpErrors())
+      G = Utils::spjoin_cols(o_errs, G1, G2);
   }
 }
 
@@ -487,10 +488,14 @@ void Gradient::build3D(u16 k, const gridParams3D &p, const string &loc) {
   if (!hasOpErrors()) {
     // Components along x, y and z; values ordered x fastest, then
     // y, then z.
-    sp_mat G1 = Utils::spkron(Utils::spkron(Iz, Iy), Gx);
-    sp_mat G2 = Utils::spkron(Utils::spkron(Iz, Gy), Ix);
-    sp_mat G3 = Utils::spkron(Utils::spkron(Gz, Iy), Ix);
-    G = Utils::spjoin_cols(Utils::spjoin_cols(G1, G2), G3);
+    sp_mat G1 = Utils::spkron(o_errs, Utils::spkron(o_errs, Iz, Iy), Gx);
+    sp_mat G2 = Utils::spkron(o_errs, Utils::spkron(o_errs, Iz, Gy), Ix);
+    sp_mat G3 = Utils::spkron(o_errs, Utils::spkron(o_errs, Gz, Iy), Ix);
+    if (!hasOpErrors()) {
+      sp_mat G12 = Utils::spjoin_cols(o_errs, G1, G2);
+      if (!hasOpErrors())
+        G = Utils::spjoin_cols(o_errs, G12, G3);
+    }
   }
 }
 
