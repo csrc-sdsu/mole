@@ -1,96 +1,123 @@
 %{
-This are tests for our LIFO octave stack class
+These are tests for our MOLE errors class.
+The runner adds octave/src/sys relative to this file and runs all tests.
 %}
 
-classdef test_errors < matlab.unittest.TestCase
-    properties
-        TestError
-    end
-    methods(TestMethodSetup)
-        #Initial stack setup with empty stack on each test case
-        function createEmptyStack(testCase)
-            testCase.TestError = MOLE_errors()
-        end
-    end
-    methods(Test)
+function [passed, total] = test_errors()
+    testDir = fileparts(mfilename('fullpath'));
+    addpath(fullfile(testDir, '..', '..', 'src', 'sys'));
+    [passed, total] = test(mfilename('fullpath'), 'verbose');
+    fprintf('\nPassed %d of %d tests.\n', passed, total);
+endfunction
 
-        function testMoleLogErrors(testCase):
-            #Test for pushing onto stack
-            testCase.verifyEqual(testCase.TestError.getNumErrors(),0)
-            params = "numelem = 5 "
-            testCase.TestError.log_error("MOLE_ERR_INVALID_ARRAY_SIZE", "array1D Construction", false, params)
-            testCase.verifyEqual(testCase.TestError.numErrors, 1)
-            params = "original numelem = 5, requested resize = "
-            testCase.TestError.log_error("MOLE_ERR_FAILED_ARRAY_RESIZE", "array1D Resize", false, params)
-            testCase.verifyEqual(testCase.TestError.numErrors, 2)
-            
-            params = "original numelem = 5, requested resize = "
-            testCase.TestError.log_error("MOLE_ERR_INVALID_GRID_SPACING", "grid1D[construct]", params)
-            
-            testCase.verifyEqual(testCase.TestError.numErrors, 3)
+%!test
+%! # testMoleLogErrors
+%! # A fresh error object replaces MATLAB's TestMethodSetup.
+%! TestError = MOLE_errors();
+%! assert(TestError.getNumErrors(), 0);
+%!
+%! params = 'numelem = 5 ';
+%! evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'', false, params);');
+%! assert(TestError.getNumErrors(), 1);
+%!
+%! params = 'original numelem = 5, requested resize = 10';
+%! evalc('TestError.log_error(''MOLE_ERR_FAILED_ARRAY_RESIZE'', ''array1D Resize'', false, params);');
+%! assert(TestError.getNumErrors(), 2);
+%!
+%! params = 'grid spacing = -1';
+%! evalc('TestError.log_error(''MOLE_ERR_INVALID_GRID_SPACING'', ''grid1D[construct]'', false, params);');
+%! assert(TestError.getNumErrors(), 3);
 
-        end
+%!test
+%! # testMoleLogErrorOutput
+%! TestError = MOLE_errors();
+%! params = 'numelem = 5 ';
+%! output = evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'', false, params);');
+%! expectedOutput = sprintf('========================================\nLogged MOLE Error\n========================================\nError: MOLE_ERR_INVALID_ARRAY_SIZE\nCode: 200\nParams: numelem = 5 \nLocations: array1D Construction\nMessage: Array dimensions need to be natural numbers >= 1\n');
+%!
+%! assert(output, expectedOutput);
+%! assert(TestError.getNumErrors(), 1);
 
-        function testMoleLogErrorOutput(testCase)
-            params = "numelem = 5 ";
-            output = evalc('testCase.TestError.log_error("MOLE_ERR_INVALID_ARRAY_SIZE", "array1D Construction", false, params);');
-            expectedOutput = sprintf("========================================\nLogged MOLE Error\n========================================\nError: MOLE_ERR_INVALID_ARRAY_SIZE\nCode: 200\nParams: numelem = 5 \nLocations: array1D Construction\nMessage: Array dimensions need to be natural numbers >= 1\n");
+%!test
+%! # testErrorStopExecution
+%! TestError = MOLE_errors();
+%! assert(TestError.getNumErrors(), 0);
+%!
+%! params = 'numelem = 5 ';
+%! caughtId = '';
+%! try
+%!     TestError.log_error('MOLE_ERR_INVALID_ARRAY_SIZE', 'array1D Construction', true, params);
+%! catch err
+%!     caughtId = err.identifier;
+%! end_try_catch
+%! assert(caughtId, 'MOLE:MOLE_ERR_INVALID_ARRAY_SIZE');
+%! assert(TestError.getNumErrors(), 1);
+%!
+%! params = 'original numelem = 5, requested resize = 10';
+%! caughtId = '';
+%! try
+%!     TestError.log_error('MOLE_ERR_FAILED_ARRAY_RESIZE', 'array1D Resize', true, params);
+%! catch err
+%!     caughtId = err.identifier;
+%! end_try_catch
+%! assert(caughtId, 'MOLE:MOLE_ERR_FAILED_ARRAY_RESIZE');
+%! assert(TestError.getNumErrors(), 2);
 
-            testCase.verifyEqual(output, expectedOutput);
-            testCase.verifyEqual(testCase.TestError.getNumErrors(), 1);
-        end
+%!test
+%! # testInvalidErrorNameType
+%! TestError = MOLE_errors();
+%! output = evalc('TestError.log_error(200, ''array1D Construction'', false, ''numelem = 5'');');
+%! expectedOutput = sprintf('MOLE error name must be a character array\n');
+%!
+%! assert(output, expectedOutput);
+%! assert(TestError.getNumErrors(), 0);
 
-       function testErrorStopExecution(testCase):
-            testCase.verifyEqual(testCase.TestError.getNumErrors(),0)
-            params = "numelem = 5 ";
-            testCase.verifyError(@() testCase.TestError.log_error("MOLE_ERR_INVALID_ARRAY_SIZE", "array1D Construction", true, params), 'Array dimensions need to be natural numbers >= 1');
-            params = "original numelem = 5, requested resize = ";
-            testCase.verifyError(@() testCase.TestError.log_error("MOLE_ERR_FAILED_ARRAY_RESIZE", "array1D Resize", true, params), 'Fail to resize array <array name>');
-       end
-       function testInvalidErrorNameType(testCase)
-            output = evalc('testCase.TestError.log_error(200, "array1D Construction", false, "numelem = 5");');
-            expectedOutput = sprintf("MOLE error name must be a character array\n");
+%!test
+%! # testUnknownErrorName
+%! TestError = MOLE_errors();
+%! caughtId = '';
+%! try
+%!     TestError.log_error('MOLE_ERR_NOT_IN_MAP', 'array1D Construction', false, 'numelem = 5');
+%! catch err
+%!     caughtId = err.identifier;
+%! end_try_catch
+%! assert(caughtId, 'MOLE:UNKNOWN_ERROR_NAME');
+%! assert(TestError.getNumErrors(), 0);
 
-            testCase.verifyEqual(output, expectedOutput);
-            testCase.verifyEqual(testCase.TestError.getNumErrors(), 0);
-        end
+%!test
+%! # testInvalidLocationAndParamsTypes
+%! TestError = MOLE_errors();
+%! locationOutput = evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', 25, false, ''numelem = 5'');');
+%! paramsOutput = evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'', false, 25);');
+%! expectedOutput = sprintf('MOLE error location and params must be character arrays\n');
+%!
+%! assert(locationOutput, expectedOutput);
+%! assert(paramsOutput, expectedOutput);
+%! assert(TestError.getNumErrors(), 0);
 
-        function testUnknownErrorName(testCase)
-            testCase.verifyError(@() testCase.TestError.log_error("MOLE_ERR_NOT_IN_MAP", "array1D Construction", false, "numelem = 5"), 'MOLE:UNKNOWN_ERROR_NAME');
-            testCase.verifyEqual(testCase.TestError.getNumErrors(), 0);
-        end
+%!test
+%! # testInvalidAbortFlag
+%! TestError = MOLE_errors();
+%! typeOutput = evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'', 1, ''numelem = 5'');');
+%! sizeOutput = evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'', [true false], ''numelem = 5'');');
+%! expectedOutput = sprintf('onErrorAbort must be true or false\n');
+%!
+%! assert(typeOutput, expectedOutput);
+%! assert(sizeOutput, expectedOutput);
+%! assert(TestError.getNumErrors(), 0);
 
-        function testInvalidLocationAndParamsTypes(testCase)
-            locationOutput = evalc('testCase.TestError.log_error("MOLE_ERR_INVALID_ARRAY_SIZE", 25, false, "numelem = 5");');
-            paramsOutput = evalc('testCase.TestError.log_error("MOLE_ERR_INVALID_ARRAY_SIZE", "array1D Construction", false, 25);');
-            expectedOutput = sprintf("MOLE error location and params must be character arrays\n");
+%!test
+%! # testDefaultInputs
+%! TestError = MOLE_errors();
+%! output = evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'');');
+%! expectedOutput = sprintf('========================================\nLogged MOLE Error\n========================================\nError: MOLE_ERR_INVALID_ARRAY_SIZE\nCode: 200\nParams: \nLocations: array1D Construction\nMessage: Array dimensions need to be natural numbers >= 1\n');
+%!
+%! assert(output, expectedOutput);
+%! assert(TestError.getNumErrors(), 1);
 
-            testCase.verifyEqual(locationOutput, expectedOutput);
-            testCase.verifyEqual(paramsOutput, expectedOutput);
-            testCase.verifyEqual(testCase.TestError.getNumErrors(), 0);
-        end
-
-        function testInvalidAbortFlag(testCase)
-            typeOutput = evalc('testCase.TestError.log_error("MOLE_ERR_INVALID_ARRAY_SIZE", "array1D Construction", 1, "numelem = 5");');
-            sizeOutput = evalc('testCase.TestError.log_error("MOLE_ERR_INVALID_ARRAY_SIZE", "array1D Construction", [true false], "numelem = 5");');
-            expectedOutput = sprintf("onErrorAbort must be true or false\n");
-
-            testCase.verifyEqual(typeOutput, expectedOutput);
-            testCase.verifyEqual(sizeOutput, expectedOutput);
-            testCase.verifyEqual(testCase.TestError.getNumErrors(), 0);
-        end
-
-        function testDefaultInputs(testCase)
-            output = evalc('testCase.TestError.log_error("MOLE_ERR_INVALID_ARRAY_SIZE", "array1D Construction");');
-            expectedOutput = sprintf("========================================\nLogged MOLE Error\n========================================\nError: MOLE_ERR_INVALID_ARRAY_SIZE\nCode: 200\nParams: \nLocations: array1D Construction\nMessage: Array dimensions need to be natural numbers >= 1\n");
-
-            testCase.verifyEqual(output, expectedOutput);
-            testCase.verifyEqual(testCase.TestError.getNumErrors(), 1);
-        end
-
-        function testHaveErrors(testCase)
-            testCase.verifyEqual(testCase.TestError.haveErrors(), false);
-            evalc('testCase.TestError.log_error("MOLE_ERR_INVALID_ARRAY_SIZE", "array1D Construction", false, "numelem = 5");');
-            testCase.verifyEqual(testCase.TestError.haveErrors(), true);
-        end
-end
+%!test
+%! # testHaveErrors
+%! TestError = MOLE_errors();
+%! assert(TestError.haveErrors(), false);
+%! evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'', false, ''numelem = 5'');');
+%! assert(TestError.haveErrors(), true);

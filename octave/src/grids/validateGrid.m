@@ -170,8 +170,23 @@ function localValidateSpacing(grid, names, errorObj)
         end
     end
 end
+function grid = localInferDefaultSpacing(grid, countNames, spacingNames)
+% Infer missing spacing from the number of cells.
+% User-provided spacing values are not changed.
+    for i = 1:numel(countNames)
+        countName = countNames{i};
+        spacingName = spacingNames{i};
+
+        % A missing spacing value defaults to 1 divided by its cell count.
+        if isfield(grid, countName) && ~isfield(grid, spacingName)
+            grid.(spacingName) = 1 / double(grid.(countName));
+        end
+    end
+end
 
 function grid = localNormalizeIfUniform1D(grid, allowPartial, errorObj)
+     % Infer dx = 1/m when dx was not provided
+    grid = localInferDefaultSpacing(grid, {'m'}, {'dx'});
     hasUniform = isfield(grid, 'm') && isfield(grid, 'dx');
     if hasUniform
         grid = localNormalizeGrid1D(grid, errorObj);
@@ -359,7 +374,7 @@ function grid = localNormalizeGrid3D(grid, errorObj)
             errorObj.log_error('MOLE_ERR_INVALID_GRID_SIZE', 'localNormalizeGrid3D', true, params);
         end
     end
-
+    
     spacingNames = {'dx', 'dy', 'dz'};
     for i = 1:numel(spacingNames)
         if ~isfield(grid, spacingNames{i})

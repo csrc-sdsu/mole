@@ -1,8 +1,3 @@
- function outputStr = constErrorMessage(errorStruct)
-    #This function creates a messge string with the error struct attributes
-    outputStr = sprintf("Error: %s\nCode: %d\nParams: %s\nLocations: %s\nMessage: %s\n", errorStruct.errorName, errorStruct.errorCode, errorStruct.paramError, errorStruct.errorLocation, errorStruct.message);
-endfunction
-
 classdef MOLE_errors < handle
     properties (Access = private)
         errorMap
@@ -54,8 +49,11 @@ classdef MOLE_errors < handle
         endfunction
 
         function tf = haveErrors(obj)
-            #Check if there are any errors
-            tf = obj.numErrors == 0;
+            # Check if any errors occured
+            tf = (obj.numErrors == 0);
+        endfunction
+        function num = getNumErrors(obj)
+            num = obj.numErrors;
         endfunction
 
         function log_error(obj, errorName, location, onErrorAbort = false, params = "")
@@ -73,16 +71,11 @@ classdef MOLE_errors < handle
                 return;
             endif
 
-            if (~(onErrorAbort == true) && ~(onErrorAbort == false) )
-                #Check if onErrorAbort is a boolean
-                disp("onErrorAbort must be true or false");
-                return;
-            endif
             #Get error information from mapping and create error structure
             errorInfo = obj.errorMap(errorName);
             errCode = errorInfo.Code;
             errorStruct = struct("errorName", errorName, "errorCode", errCode, "errorLocation", location, "paramError", params, "message", errorInfo.Message);
-            errorMessage = obj.constErrorMessage(errorStruct);
+            errorMessage = createErrorMessage(errorStruct);
             obj.numErrors += 1;
             #Breaking error logic or proceed to print error only
             if onErrorAbort
@@ -101,3 +94,11 @@ classdef MOLE_errors < handle
         endfunction
     endmethods
 endclassdef
+
+function outputStr = createErrorMessage(errorStruct)
+    #This function creates a messge string with the error struct attributes
+    outputStr = sprintf("Error: %s\nCode: %d\nParams: %s\nLocations: %s\nMessage: %s\n",
+        errorStruct.errorName, errorStruct.errorCode,
+        errorStruct.paramError, errorStruct.errorLocation,
+        errorStruct.message);
+endfunction
