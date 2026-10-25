@@ -223,14 +223,14 @@ void Utils::mesh2Dgrid(const vec &x, const vec &y, mat &X, mat &Y) {
    
   if (m <= 0){ // assert(m > 0)
     std::string errmsg = "m = " + std::to_string(m);
-    MOLEerr_log(errs, MOLE_ERR_INVALID_ARRAY_SIZE, "Utils::meshgrid",
-                errmsg);
+    MOLEerr_log(errs, MOLE_ERR_UTILS_INVALID_MESH_SIZE,
+                "Utils::mesh2Dgrid", errmsg);
     valid = false;
   }
   if (n <= 0) {// assert(n > 0);
     std::string errmsg = "n = " + std::to_string(n);
-    MOLEerr_log(errs, MOLE_ERR_INVALID_ARRAY_SIZE, "Utils::meshgrid",
-                errmsg);
+    MOLEerr_log(errs, MOLE_ERR_UTILS_INVALID_MESH_SIZE,
+                "Utils::mesh2Dgrid", errmsg);
     valid = false;
   }
 
@@ -267,20 +267,20 @@ void Utils::mesh3Dgrid(const vec &x, const vec &y, const vec &z,
   bool valid = true;
   if (m <= 0){ // assert(m > 0)
     std::string errmsg = "m = " + std::to_string(m);
-    MOLEerr_log(errs, MOLE_ERR_INVALID_ARRAY_SIZE, "Utils::meshgrid",
-                errmsg);
+    MOLEerr_log(errs, MOLE_ERR_UTILS_INVALID_MESH_SIZE,
+                "Utils::mesh3Dgrid", errmsg);
     valid = false;
   }
   if (n <= 0) {// assert(n > 0);
     std::string errmsg = "n = " + std::to_string(n);
-    MOLEerr_log(errs, MOLE_ERR_INVALID_ARRAY_SIZE, "Utils::meshgrid",
-                errmsg);
+    MOLEerr_log(errs, MOLE_ERR_UTILS_INVALID_MESH_SIZE,
+                "Utils::mesh3Dgrid", errmsg);
     valid = false;
   }
   if (o <= 0) {// assert(o > 0);
     std::string errmsg = "o = " + std::to_string(o);
-    MOLEerr_log(errs, MOLE_ERR_INVALID_ARRAY_SIZE, "Utils::meshgrid", 
-                errmsg);
+    MOLEerr_log(errs, MOLE_ERR_UTILS_INVALID_MESH_SIZE,
+                "Utils::mesh3Dgrid", errmsg);
     valid = false;
   }
 
@@ -331,10 +331,10 @@ double Utils::trapz(const vec &x, const vec &y) {
     }
     return 0.5 * sum;
   } else{
-      std::string errmsg = "x._n_elem = " + std::to_string(x.n_elem);
+      std::string errmsg = "x.n_elem = " + std::to_string(x.n_elem);
       errmsg += ", and y.n_elem = " + std::to_string(y.n_elem);
-      MOLEerr_log(errs, MOLE_ERR_INVALID_ARRAY_SIZE, "Utils::trapz", errmsg);
+      MOLEerr_log(errs, MOLE_ERR_UTILS_SIZE_MISMATCH, "Utils::trapz",
+                  errmsg);
       return std::nan("");
   }
 }
-

@@ -15,7 +15,6 @@
 #include "gradient.h"
 
 #include <new>
-#include <vector>
 
 // ============================================================================
 // Construction checks
@@ -384,8 +383,8 @@ Gradient::Gradient() {
 // Gradient(k, gridBase) checks k and the grid's error state, then
 // dispatches on the grid dimension. A grid with errors (including a
 // gridNull, whose parameters are not usable) stops construction after
-// its errors are copied, and the matrix is left 0 x 0. Any other
-// failure leaves an all-zero matrix of the operator's size.
+// its errors are copied. On any failure the matrix is left empty
+// (0 x 0); callers check hasOpErrors() before calling getMatrix().
 //
 Gradient::Gradient(u16 k, const gridBase &g) {
   const string loc = "Gradient(k, grid)";
@@ -397,16 +396,14 @@ Gradient::Gradient(u16 k, const gridBase &g) {
     return;
   }
 
-  const grid1D *g1 = dynamic_cast<const grid1D *>(&g);
-  const grid2D *g2 = dynamic_cast<const grid2D *>(&g);
-  const grid3D *g3 = dynamic_cast<const grid3D *>(&g);
-
-  if (g1)
-    build1D(k, g1->grid, loc);
-  else if (g2)
-    build2D(k, g2->grid, loc);
-  else if (g3)
-    build3D(k, g3->grid, loc);
+  // A grid without errors has dim set to 1, 2 or 3 by its
+  // constructor, so dim identifies its concrete type.
+  if (g.dim == 1)
+    build1D(k, static_cast<const grid1D &>(g).grid, loc);
+  else if (g.dim == 2)
+    build2D(k, static_cast<const grid2D &>(g).grid, loc);
+  else if (g.dim == 3)
+    build3D(k, static_cast<const grid3D &>(g).grid, loc);
   else
     logOpErr(MOLE_ERR_INVALID_GRID_DIM, loc,
              "dim = " + to_string(g.dim));
@@ -429,16 +426,14 @@ void Gradient::build1D(u16 k, const gridParams1D &p, const string &loc) {
   checkTopology(p.topology, loc);
   checkCellCount(k, p.m, "m", loc);
 
-  if (!hasOpErrors()) {
-    sp_mat Gx;
-    sp_mat Ix;
-    buildGradient(k, p.m, p.dx, p.bc_isPeriodic, Gx, Ix);
-    if (!hasOpErrors())
-      G = Gx;
-  }
-
   if (hasOpErrors())
-    setZeroMatrix({p.m}, {p.bc_isPeriodic});
+    return;
+
+  sp_mat Gx;
+  sp_mat Ix;
+  buildGradient(k, p.m, p.dx, p.bc_isPeriodic, Gx, Ix);
+  if (!hasOpErrors())
+    G = Gx;
 }
 
 void Gradient::build2D(u16 k, const gridParams2D &p, const string &loc) {
@@ -449,24 +444,22 @@ void Gradient::build2D(u16 k, const gridParams2D &p, const string &loc) {
   checkCellCount(k, p.m, "m", loc);
   checkCellCount(k, p.n, "n", loc);
 
-  if (!hasOpErrors()) {
-    sp_mat Gx;
-    sp_mat Ix;
-    sp_mat Gy;
-    sp_mat Iy;
-    buildGradient(k, p.m, p.dx, xPer, Gx, Ix);
-    buildGradient(k, p.n, p.dy, yPer, Gy, Iy);
-    if (!hasOpErrors()) {
-      // x-component: Gx along x for every y; y-component: Gy along y
-      // for every x. Values are ordered with x varying fastest.
-      sp_mat G1 = Utils::spkron(Iy, Gx);
-      sp_mat G2 = Utils::spkron(Gy, Ix);
-      G = Utils::spjoin_cols(G1, G2);
-    }
-  }
-
   if (hasOpErrors())
-    setZeroMatrix({p.m, p.n}, {xPer, yPer});
+    return;
+
+  sp_mat Gx;
+  sp_mat Ix;
+  sp_mat Gy;
+  sp_mat Iy;
+  buildGradient(k, p.m, p.dx, xPer, Gx, Ix);
+  buildGradient(k, p.n, p.dy, yPer, Gy, Iy);
+  if (!hasOpErrors()) {
+    // x-component: Gx along x for every y; y-component: Gy along y
+    // for every x. Values are ordered with x varying fastest.
+    sp_mat G1 = Utils::spkron(Iy, Gx);
+    sp_mat G2 = Utils::spkron(Gy, Ix);
+    G = Utils::spjoin_cols(G1, G2);
+  }
 }
 
 void Gradient::build3D(u16 k, const gridParams3D &p, const string &loc) {
@@ -479,56 +472,25 @@ void Gradient::build3D(u16 k, const gridParams3D &p, const string &loc) {
   checkCellCount(k, p.n, "n", loc);
   checkCellCount(k, p.o, "o", loc);
 
-  if (!hasOpErrors()) {
-    sp_mat Gx;
-    sp_mat Ix;
-    sp_mat Gy;
-    sp_mat Iy;
-    sp_mat Gz;
-    sp_mat Iz;
-    buildGradient(k, p.m, p.dx, xPer, Gx, Ix);
-    buildGradient(k, p.n, p.dy, yPer, Gy, Iy);
-    buildGradient(k, p.o, p.dz, zPer, Gz, Iz);
-    if (!hasOpErrors()) {
-      // Components along x, y and z; values ordered x fastest, then
-      // y, then z.
-      sp_mat G1 = Utils::spkron(Utils::spkron(Iz, Iy), Gx);
-      sp_mat G2 = Utils::spkron(Utils::spkron(Iz, Gy), Ix);
-      sp_mat G3 = Utils::spkron(Utils::spkron(Gz, Iy), Ix);
-      G = Utils::spjoin_cols(Utils::spjoin_cols(G1, G2), G3);
-    }
-  }
-
   if (hasOpErrors())
-    setZeroMatrix({p.m, p.n, p.o}, {xPer, yPer, zPer});
-}
+    return;
 
-//
-// setZeroMatrix sets G to an all-zero matrix with the size the
-// operator would have had. Along each axis there are m+1 faces and
-// m+2 input points, or m and m on a periodic axis; the component
-// along one axis has that axis's faces times the interior centers of
-// the other axes.
-//
-void Gradient::setZeroMatrix(const std::vector<size_t> &cells,
-                             const std::vector<bool> &periodic) {
-  uword rows = 0;
-  uword cols = 1;
-  for (size_t a = 0; a < cells.size(); ++a) {
-    uword component = periodic[a] ? cells[a] : cells[a] + 1;
-    for (size_t b = 0; b < cells.size(); ++b)
-      if (b != a)
-        component *= cells[b];
-    rows += component;
-    cols *= periodic[a] ? cells[a] : cells[a] + 2;
-  }
-
-  try {
-    G.zeros(rows, cols);
-  } catch (std::bad_alloc &e) {
-    logOpErr(MOLE_ERR_FAILED_ARRAY_ALLOC, "Gradient::setZeroMatrix",
-             "rows = " + to_string(rows) + ", cols = " + to_string(cols));
-    G.reset();
+  sp_mat Gx;
+  sp_mat Ix;
+  sp_mat Gy;
+  sp_mat Iy;
+  sp_mat Gz;
+  sp_mat Iz;
+  buildGradient(k, p.m, p.dx, xPer, Gx, Ix);
+  buildGradient(k, p.n, p.dy, yPer, Gy, Iy);
+  buildGradient(k, p.o, p.dz, zPer, Gz, Iz);
+  if (!hasOpErrors()) {
+    // Components along x, y and z; values ordered x fastest, then
+    // y, then z.
+    sp_mat G1 = Utils::spkron(Utils::spkron(Iz, Iy), Gx);
+    sp_mat G2 = Utils::spkron(Utils::spkron(Iz, Gy), Ix);
+    sp_mat G3 = Utils::spkron(Utils::spkron(Gz, Iy), Ix);
+    G = Utils::spjoin_cols(Utils::spjoin_cols(G1, G2), G3);
   }
 }
 

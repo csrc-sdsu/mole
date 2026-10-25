@@ -18,8 +18,6 @@
 #include "MOLE_operators.h"
 #include "utils.h"
 
-#include <vector>
-
 /**
  * @brief Mimetic Gradient operator for uniform grids.
  *
@@ -31,16 +29,13 @@
  * errors (if so, the grid's errors are copied onto the operator error
  * stack and construction stops), the grid topology, and the number of
  * cells along each axis. Errors are logged on the operator error
- * stack, and the matrix returned by getMatrix() is:
- *  - the operator G, if every check passed;
- *  - an all-zero matrix of the operator's size, if a check failed;
- *  - 0 x 0, if the grid has errors or the operator was default
- *    constructed (its size is not known).
+ * stack. The matrix returned by getMatrix() is the operator G only
+ * when hasOpErrors() is false; after any failure it is empty (0 x 0).
  *
  * Usage:
  *   Gradient G1(k, grid);
  *   if (!G1.hasOpErrors())
- *       Gm = G1.getMatrix();
+ *       G1.getMatrix().print("G");
  *   else
  *       G1.printOpErrors();
  *
@@ -78,7 +73,8 @@ public:
   /**
    * @brief Read-only access to the operator matrix.
    *
-   * See the class description for the matrix returned on failure.
+   * Valid only when hasOpErrors() is false; otherwise the matrix is
+   * empty (0 x 0).
    */
   const sp_mat &getMatrix() const;
 
@@ -95,10 +91,6 @@ private:
   void build1D(u16 k, const gridParams1D &p, const string &loc);
   void build2D(u16 k, const gridParams2D &p, const string &loc);
   void build3D(u16 k, const gridParams3D &p, const string &loc);
-
-  // Sets G to an all-zero matrix of the operator's size
-  void setZeroMatrix(const std::vector<size_t> &cells,
-                     const std::vector<bool> &periodic);
 
   // Builds the pieces for one axis:
   //   Gaxis : 1-D gradient along the axis

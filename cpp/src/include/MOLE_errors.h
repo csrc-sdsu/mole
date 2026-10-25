@@ -120,7 +120,7 @@ using namespace std;
 #define MOLE_ERR_FAILED_ARRAY_RESIZE 204 // array resize failed
 
 //
-// MD Operators and Numerical Errors codes 300 - 600
+// MD Operators and Numerical Errors codes 300 - 499
 //
 #define MOLE_ERR_DIVISION_BY_ZERO 300
 #define MOLE_ERR_INF_VALUE 301
@@ -133,6 +133,12 @@ using namespace std;
 #define MOLE_ERR_OP_UNSUPPORTED_TOPOLOGY 306 // grid is not uniform
 #define MOLE_ERR_OP_INPUT_SIZE_MISMATCH 307 // apply() input size wrong
 #define MOLE_ERR_OP_NOT_BUILT 308 // operator not built from a grid
+
+//
+// Utils Errors. Error codes 500 - 599
+//
+#define MOLE_ERR_UTILS_INVALID_MESH_SIZE 500 // empty meshgrid input
+#define MOLE_ERR_UTILS_SIZE_MISMATCH 501 // trapz x, y sizes differ
 
 //
 // Dictionary of error codes and their corresponding messages 
@@ -257,6 +263,12 @@ static unordered_map<int, string> MOLE_errors_messages = {
     "Input array size does not match the operator."},
     {MOLE_ERR_OP_NOT_BUILT,
     "Operator was not built from a grid."},
+    // 500
+    {MOLE_ERR_UTILS_INVALID_MESH_SIZE,
+    "Meshgrid input vectors must have at least one element."},
+    // 501
+    {MOLE_ERR_UTILS_SIZE_MISMATCH,
+    "Input vectors x and y must have the same number of elements."},
 };
 
 // MOLE_Error basic structure a stack of this structure is used to

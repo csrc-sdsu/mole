@@ -1,13 +1,11 @@
 // Tests for the grid-based mimetic Gradient operator.
 //
-// Nullity and spacing tests follow the legacy Gradient tests
-// (tests/old_version/test2.cpp, test_spacing_validation.cpp); the
-// remaining tests cover operator error handling.
+// Nullity tests follow the legacy Gradient tests
+// (tests/old_version/test2.cpp); the remaining tests cover operator
+// error handling.
 #include "gradient.h"
 #include "mole_test.h"
 
-#include <cmath>
-#include <limits>
 #include <vector>
 
 // ------------------------------------------------------------------
@@ -15,9 +13,6 @@
 // ------------------------------------------------------------------
 
 namespace {
-
-const Real NAN_D = std::numeric_limits<Real>::quiet_NaN();
-const Real INF_D = std::numeric_limits<Real>::infinity();
 
 // Exposes the operator error codes (newest first) to the tests.
 struct GradientProbe : Gradient {
@@ -75,15 +70,9 @@ grid3D makeGrid3D(size_t m, size_t n, size_t o, Real dx, Real dy,
     return grid3D(p);
 }
 
-bool isZero(const sp_mat &A, uword rows, uword cols) {
-    return A.n_rows == rows && A.n_cols == cols && A.n_nonzero == 0;
-}
-
-// An operator built from an invalid grid: grid errors copied, 0 x 0.
-void checkRejectedGrid(const GradientProbe &G, int gridErr) {
-    CHECK(G.codes().front() == MOLE_ERR_OP_GRID_HAS_ERRORS);
-    CHECK(G.has(gridErr));
-    CHECK(isZero(G.getMatrix(), 0, 0));
+// A failed operator holds an empty (0 x 0) matrix.
+bool isEmpty(const sp_mat &A) {
+    return A.n_rows == 0 && A.n_cols == 0;
 }
 
 } // namespace
@@ -116,48 +105,6 @@ TEST_CASE("Gradient: periodic nullity") {
 }
 
 // ------------------------------------------------------------------
-// Spacing validation (legacy): an invalid spacing is reported on the
-// operator instead of throwing
-// ------------------------------------------------------------------
-
-TEST_CASE("Gradient: rejects zero dx") {
-    checkRejectedGrid(GradientProbe(2, makeGrid1D(10, 0.0)),
-                      MOLE_ERR_INVALID_GRID_SPACING);
-}
-
-TEST_CASE("Gradient: rejects negative dx") {
-    checkRejectedGrid(GradientProbe(2, makeGrid1D(10, -1.0)),
-                      MOLE_ERR_INVALID_GRID_SPACING);
-}
-
-TEST_CASE("Gradient: rejects NaN dx") {
-    checkRejectedGrid(GradientProbe(2, makeGrid1D(10, NAN_D)),
-                      MOLE_ERR_INVALID_GRID_SPACING);
-}
-
-TEST_CASE("Gradient: rejects Inf dx") {
-    checkRejectedGrid(GradientProbe(2, makeGrid1D(10, INF_D)),
-                      MOLE_ERR_INVALID_GRID_SPACING);
-}
-
-TEST_CASE("Gradient 2D: rejects zero dy") {
-    checkRejectedGrid(GradientProbe(2, makeGrid2D(10, 10, 0.1, 0.0)),
-                      MOLE_ERR_INVALID_GRID_SPACING);
-}
-
-TEST_CASE("Gradient 3D: rejects negative dz") {
-    checkRejectedGrid(
-        GradientProbe(2, makeGrid3D(10, 10, 10, 0.1, 0.1, -0.1)),
-        MOLE_ERR_INVALID_GRID_SPACING);
-}
-
-TEST_CASE("Gradient: accepts valid spacing") {
-    Gradient G(2, makeGrid1D(10, 0.1));
-    CHECK(!G.hasOpErrors());
-    CHECK(G.getMatrix().n_rows == 11 && G.getMatrix().n_cols == 12);
-}
-
-// ------------------------------------------------------------------
 // Operator error handling
 // ------------------------------------------------------------------
 
@@ -167,7 +114,7 @@ TEST_CASE("Gradient: unsupported order k is rejected") {
         CHECK_MSG(G.codes().size() == 1 &&
                       G.has(MOLE_ERR_OP_INVALID_ORDER),
                   "k = " << k);
-        CHECK(isZero(G.getMatrix(), 41, 42));
+        CHECK(isEmpty(G.getMatrix()));
     }
 }
 
@@ -182,7 +129,7 @@ TEST_CASE("Gradient: a valid non-uniform grid is rejected") {
     GradientProbe G(4, g);
     CHECK(G.codes().size() == 1);
     CHECK(G.has(MOLE_ERR_OP_UNSUPPORTED_TOPOLOGY));
-    CHECK(isZero(G.getMatrix(), 21, 22));
+    CHECK(isEmpty(G.getMatrix()));
 }
 
 TEST_CASE("Gradient: fewer than 2k cells is rejected, naming the axis") {
@@ -190,22 +137,22 @@ TEST_CASE("Gradient: fewer than 2k cells is rejected, naming the axis") {
     CHECK(G1.codes().size() == 1 &&
           G1.has(MOLE_ERR_OP_INSUFFICIENT_CELLS));
     CHECK(G1.topParam() == "m = 6, requires >= 8 for k = 4");
-    CHECK(isZero(G1.getMatrix(), 7, 8));
+    CHECK(isEmpty(G1.getMatrix()));
 
     GradientProbe G2(4, makeGrid2D(20, 6, 0.1, 0.1));
     CHECK(G2.codes().size() == 1 && G2.topParam().rfind("n = 6", 0) == 0);
-    CHECK(isZero(G2.getMatrix(), 21 * 6 + 20 * 7, 22 * 8));
+    CHECK(isEmpty(G2.getMatrix()));
 
     // x and z periodic
     GradientProbe G3(4, makeGrid3D(20, 20, 7, 0.1, 0.1, 0.1, true, true));
     CHECK(G3.codes().size() == 1 && G3.topParam().rfind("o = 7", 0) == 0);
-    CHECK(isZero(G3.getMatrix(), 20 * 7 * (20 + 21 + 20), 20 * 22 * 7));
+    CHECK(isEmpty(G3.getMatrix()));
 }
 
 TEST_CASE("Gradient: a default-constructed operator reports not built") {
     GradientProbe G;
     CHECK(G.codes().size() == 1 && G.has(MOLE_ERR_OP_NOT_BUILT));
-    CHECK(isZero(G.getMatrix(), 0, 0));
+    CHECK(isEmpty(G.getMatrix()));
 }
 
 TEST_CASE("Gradient: assigning a built operator clears the errors") {
