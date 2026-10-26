@@ -1,13 +1,14 @@
 /**
- * @file mimetic_diff_two_way_wave_eq_neumann.cpp
+ * @file comparison_two_way_wave_md_vs_fd_neumann.cpp
  * @brief Solves the wave equation with neumann boundary conditions
  *
  * Equation: d^2u/dt^2 = c^2 * d^2u/dx^2
  * Domain: - Spatial domain: [-2, 2]
  *         - N spatial points / dx spacing (user-defined)
  *         - Time integration: centered-in-time, centered-in-space (CTCS)
- * Boundary Conditions: du/dx(0,t) = 0, du/dx(M,t) = 0
- * Initial Condition: u(0,t) = cos(pi x/2)^2
+ * Boundary Conditions: du/dx(-2,t) = 0, du/dx(2,t) = 0
+ * Initial profile: smooth Gaussian f(x) = exp(-x^2 / 0.1), evenly reflected
+ *                  across the domain boundaries for the Neumann solution.
  *
  * Methods:
  *     1. mimetic_diff()
@@ -59,7 +60,7 @@
  *
  *   The CTCS has a second order accurate time scheme, so it will never get >2
  *   convergence. The user can change the order of the mimetic scheme very easily
- *   in the mimetic_diff_two_way_wave_eq.m file (k=2), which shows how easy it is
+ *   on line 315 (k=2), which shows how easy it is
  *   to switch orders of the experiment, for very little cost.
  *
  * ----------------------------------------------------------------------------
@@ -70,115 +71,129 @@
  *
  */
 
-
 #include "mole.h"
-#include <iostream>
-#include <cmath>
+#include <algorithm>
 #include <chrono>
-
-using namespace arma;
-using namespace std;
-using namespace AddScalarBC;
+#include <cmath>
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
+#include <vector>
 
 Real f(Real x) {
-    return std::pow(std::cos(M_PI * x / 2.0), 2.0);
+    return std::exp(-x * x / 0.1);
 }
 
-Real u_sol(Real x, Real t, Real c) {
-    return 0.5 * (f(x - c*t) + f(x + c*t));
+Real reflected_x(Real x, Real west, Real east) {
+    const Real interval = east - west;
+    Real position = std::fmod(x - west, 2.0 * interval);
+    if (position < 0.0) {
+        position += 2.0 * interval;
+    }
+    return west + interval - std::abs(position - interval);
 }
 
-
+Real u_sol(Real x, Real t, Real c, Real west, Real east) {
+    return 0.5 * (f(reflected_x(x - c * t, west, east))
+                + f(reflected_x(x + c * t, west, east)));
+}
 
 // Stores flops, time, and error
 struct Result {
-    vec flops;
-    vec walltime;
-    vec error;
-    vec final;
+    arma::vec flops;
+    arma::vec walltime;
+    arma::vec error;
+    arma::vec final;
 };
 
-Result mimetic_diff(u16 k, Real c, Real dt, vector<u32> num_cells, double west, double east) {
+Result mimetic_diff(arma::u16 k, Real c, Real dt, const std::vector<arma::u32> &num_cells, Real west, Real east) {
     // Generic holders for loop info
-    vec error_md(num_cells.size(), fill::zeros);
-    vec walltime_md(num_cells.size(), fill::zeros);
-    vec flops_md(num_cells.size(), fill::zeros);
-    vec U2_md;
+    arma::vec error_md(num_cells.size(), arma::fill::zeros);
+    arma::vec walltime_md(num_cells.size(), arma::fill::zeros);
+    arma::vec flops_md(num_cells.size(), arma::fill::zeros);
+    arma::vec U2_md;
 
     // Boundary conditions
-    BC1D bc;
+    AddScalarBC::BC1D bc;
     bc.dc = {0.0, 0.0};
     bc.nc = {1.0, 1.0};
     bc.v  = {0.0, 0.0};
 
     // Loop through each cell size
-    for (u32 cell_index = 0; cell_index < num_cells.size(); ++cell_index) {
+    for (std::size_t cell_index = 0; cell_index < num_cells.size(); ++cell_index) {
         // Setup the domain
-        const u32 m = num_cells[cell_index];                    // Number of cells, mimetics uses 'cells'
-        const u32 nx = m + 2;                                   //number of grid points
-        const Real dx = (east - west) / static_cast<Real>(m);   // spacial discretization
-        const u32 t = static_cast<u32>(std::ceil(1.0 / (c * dt)));
-        const Real alpha = std::pow(c * dt, 2.0) / 2.0;
+        const arma::u32 m = num_cells[cell_index];              // Number of cells, mimetics uses 'cells'
+        const arma::u32 nx = m + 2;                             //number of grid points
+        const Real dx = (east - west) / static_cast<Real>(m);   // spatial discretization
+        const arma::u32 t = static_cast<arma::u32>(std::ceil(1.0 / (c * dt)));
+        const Real r2_md = std::pow(c * dt, 2.0);
 
         // MD grid, note the extra staggered (dx/2) step near the boundaries
-        vec grid_md(nx, fill::zeros);
+        arma::vec grid_md(nx, arma::fill::zeros);
         grid_md(0) = west;
         grid_md(1) = west + dx / 2.0;
-        for (u32 i = 2; i <= m; ++i) {
+        for (arma::u32 i = 2; i <= m; ++i) {
             grid_md(i) = grid_md(i - 1) + dx;
         }
         grid_md(m + 1) = east;
 
-        // Initial Displacement is cos curve
-        vec U0_md(nx, fill::zeros);
-        vec U1_md(nx, fill::zeros);
-        for (u32 i = 0; i < m+2; ++i) {
-            U0_md(i) = u_sol(grid_md(i), 0, c);
-            U1_md(i) = u_sol(grid_md(i), dt, c);
+        // Initial displacement is a Gaussian with a reflected extension for Neumann boundaries.
+        arma::vec U0_md(nx, arma::fill::zeros);
+        for (arma::u32 i = 0; i < m+2; ++i) {
+            U0_md(i) = u_sol(grid_md(i), 0, c, west, east);
         }
 
         // The analytic solution, so we can check the error
-        vec analytical_md(nx, fill::zeros);
-        for (u32 i = 0; i < m+2; ++i) {
-            analytical_md(i) = u_sol(grid_md(i), (t + 1) * dt, c);
+        arma::vec analytical_md(nx, arma::fill::zeros);
+        for (arma::u32 i = 0; i < m+2; ++i) {
+            analytical_md(i) = u_sol(grid_md(i), (t + 1) * dt, c, west, east);
         }
 
         // Laplacian
         Laplacian L(k, m, dx);
-        sp_mat L_interior = sp_mat(L);
+        arma::sp_mat L_interior = arma::sp_mat(L);
 
         // Modify for BCs
-        sp_mat Lbc = L_interior;
-        vec z(nx, fill::zeros);
-        addScalarBC(Lbc, z, k, m, dx, bc);
+        arma::sp_mat Lbc = L_interior;
+        arma::vec b_bc(nx, arma::fill::zeros);
+        AddScalarBC::addScalarBC(Lbc, b_bc, k, m, dx, bc);
 
-        // (I - a L)U^(n+1) = 2 U^n - (I - a L)U^(n-1)
-        sp_mat A = speye<sp_mat>(nx, nx) - alpha * L_interior;
+        /* Solve for the boundary values.
+         * addScalarBC() modifies the matrix and adds a vector of boundary values, b_bc.
+         * It is meant for implicit schemes, but we can use it here to solve for just the
+         * boundary values, and use an explicit scheme for the interior points. Here is
+         * defined solve_boundary() which solves a single boundary, and solve_boundaries(),
+         * which solves both.
+         */
+        auto solve_boundary = [&](arma::vec &u, arma::uword boundary) {
+            Real rhs = b_bc(boundary);
+            for (arma::sp_mat::const_row_iterator it = Lbc.begin_row(boundary);
+                 it != Lbc.end_row(boundary); ++it) {
+                if (it.col() != boundary) {
+                    rhs -= (*it) * u(it.col());
+                }
+            }
+            u(boundary) = rhs / Lbc(boundary, boundary);
+        };
+        auto solve_boundaries = [&](arma::vec &u) {
+            solve_boundary(u, 0);
+            solve_boundary(u, nx - 1);
+        };
 
-        // Modify for BCs
-        A.row(0).zeros();
-        A.row(nx - 1).zeros();
+        // Premultiply L_interior by r2_md, so we can use it in the time loop
+        L_interior *= r2_md;
 
-        for (sp_mat::const_row_iterator it = Lbc.begin_row(0); it != Lbc.end_row(0); ++it) {
-            A(0, it.col()) = (*it);
-        }
-        for (sp_mat::const_row_iterator it = Lbc.begin_row(nx - 1); it != Lbc.end_row(nx - 1); ++it) {
-            A(nx - 1, it.col()) = (*it);
-        }
+        arma::vec U1_md = U0_md + 0.5 * (L_interior * U0_md);
+        solve_boundaries(U1_md);
 
         U2_md = U1_md;
 
-        const uword nnz_md = A.n_nonzero;
+        const arma::uword nnz_md = L_interior.n_nonzero;
         auto start = std::chrono::steady_clock::now();
 
-        for (u32 nstep = 3; nstep <= t + 2; ++nstep) {
-            vec b = 2.0 * U1_md - A * U0_md;
-
-            // BCs
-            b(0) = bc.v[0];
-            b(nx - 1) = bc.v[1];
-
-            U2_md = spsolve(A, b);
+        for (arma::u32 nstep = 1; nstep <= t; ++nstep) {
+            U2_md = 2.0 * U1_md + (L_interior * U1_md) - U0_md;
+            solve_boundaries(U2_md);
 
             U0_md = U1_md;
             U1_md = U2_md;
@@ -188,56 +203,56 @@ Result mimetic_diff(u16 k, Real c, Real dt, vector<u32> num_cells, double west, 
         std::chrono::duration<double> duration = end - start;
 
         // Store data for comparison
-        flops_md(cell_index) = static_cast<Real>((2 * nnz_md + U0_md.n_elem) * t);
+        flops_md(cell_index) = static_cast<Real>((2 * nnz_md + 3 * U0_md.n_elem) * t);
         walltime_md(cell_index) = duration.count();
-        vec diff = U2_md-analytical_md;
-        error_md(cell_index) = norm(diff) / norm(analytical_md);
+        arma::vec diff = U2_md-analytical_md;
+        error_md(cell_index) = arma::norm(diff) / arma::norm(analytical_md);
     }
 
     return {flops_md, walltime_md, error_md, U2_md};
 }
 
-Result finite_diff(Real c, Real dt, vector<u32> num_cells, double west, double east) {
+Result finite_diff(Real c, Real dt, const std::vector<arma::u32> &num_cells, Real west, Real east) {
     // generic holders for metrics within the loops
-    vec error_fd(num_cells.size(), fill::zeros);
-    vec walltime_fd(num_cells.size(), fill::zeros);
-    vec flops_fd(num_cells.size(), fill::zeros);
+    arma::vec error_fd(num_cells.size(), arma::fill::zeros);
+    arma::vec walltime_fd(num_cells.size(), arma::fill::zeros);
+    arma::vec flops_fd(num_cells.size(), arma::fill::zeros);
 
-    vec U2_fd; // To store solution
+    arma::vec U2_fd; // To store solution
 
     // Loop through each cell size
-    for (u32 cell_index = 0; cell_index < num_cells.size(); ++cell_index) {
+    for (std::size_t cell_index = 0; cell_index < num_cells.size(); ++cell_index) {
         // Setup the domain
-        const u32 m = num_cells[cell_index];                        //Number of cells
-        const u32 nx = m + 1;                                       //number of grid points
+        const arma::u32 m = num_cells[cell_index];                  //Number of cells
+        const arma::u32 nx = m + 1;                                 //number of grid points
         const Real dx = (east - west) / static_cast<Real>(m);       // spatial discretization
         const Real r2_fd = c * c * (dt * dt / (dx * dx));           // Courant-like factor
-        const u32 t = static_cast<u32>(std::ceil(1.0 / (c * dt)));  // first step euler, so t is one less
+        const arma::u32 t = static_cast<arma::u32>(std::ceil(1.0 / (c * dt)));  // first step euler, so t is one less
 
         // FD grid
-        vec grid_fd = linspace<vec>(west, east, nx);
+        arma::vec grid_fd = arma::linspace<arma::vec>(west, east, nx);
 
-        // Initial Displacement is cos curve
-        vec U0_fd(nx, fill::zeros);
-        for (u32 i = 0; i < nx; ++i) {
-            U0_fd(i) = u_sol(grid_fd(i), 0.0, c);
+        // Initial displacement is a Gaussian with a reflected extension for Neumann boundaries.
+        arma::vec U0_fd(nx, arma::fill::zeros);
+        for (arma::u32 i = 0; i < nx; ++i) {
+            U0_fd(i) = u_sol(grid_fd(i), 0.0, c, west, east);
         }
 
         U0_fd(0) = U0_fd(1);
         U0_fd(nx - 1) = U0_fd(nx - 2);
 
         // The analytic solution, so we can check the error
-        vec analytical_fd(nx, fill::zeros);
-        for (u32 i = 0; i < nx; ++i) {
-            analytical_fd(i) = u_sol(grid_fd(i), (t + 1) * dt, c);
+        arma::vec analytical_fd(nx, arma::fill::zeros);
+        for (arma::u32 i = 0; i < nx; ++i) {
+            analytical_fd(i) = u_sol(grid_fd(i), (t + 1) * dt, c, west, east);
         }
 
         /* Centered Scheme Matrix L
-        L is (I + cD), a tridiagonal sparse matrix:
+        L is (2I + cD), a tridiagonal sparse matrix:
         L =
             [2-2c  c    0    0    0
             c   2-2c   c    0    0
-            0     α  2-2c   c    0
+            0     c  2-2c   c    0
             0     0    c  2-2c   c
             0     0    0    c  2-2c]
 
@@ -245,10 +260,10 @@ Result finite_diff(Real c, Real dt, vector<u32> num_cells, double west, double e
         */
         // For step 1
         // Make a vector of ones, this will be the -1, +1 diagonal of matrix LTCS
-        vec B = (r2_fd) * ones<vec>(nx);
-        vec A = (2.0 - (2.0 * r2_fd)) * ones<vec>(nx);
+        arma::vec B = (r2_fd) * arma::ones<arma::vec>(nx);
+        arma::vec A = (2.0 - (2.0 * r2_fd)) * arma::ones<arma::vec>(nx);
 
-        sp_mat LTCS(nx, nx);
+        arma::sp_mat LTCS(nx, nx);
         LTCS.diag(0) = A;
         LTCS.diag(-1) = B.subvec(1, nx - 1);
         LTCS.diag(1) = B.subvec(0, nx - 2);
@@ -259,7 +274,7 @@ Result finite_diff(Real c, Real dt, vector<u32> num_cells, double west, double e
         LTCS(nx - 1, nx - 1) = 1.0;
         LTCS(nx - 1, nx - 2) = -1.0;
 
-        vec U1_fd = 0.5 * (LTCS * U0_fd);
+        arma::vec U1_fd = 0.5 * (LTCS * U0_fd);
 
         U1_fd(0) = U1_fd(1);
         U1_fd(nx - 1) = U1_fd(nx - 2);
@@ -267,10 +282,10 @@ Result finite_diff(Real c, Real dt, vector<u32> num_cells, double west, double e
         U2_fd = U1_fd; //Increment time step
 
         auto start = std::chrono::steady_clock::now();
-        const uword nnz_fd = LTCS.n_nonzero;
+        const arma::uword nnz_fd = LTCS.n_nonzero;
 
         // Loop over time values
-        for (u32 nstep = 1; nstep <= t; ++nstep) {
+        for (arma::u32 nstep = 1; nstep <= t; ++nstep) {
             U2_fd = (LTCS * U1_fd) - U0_fd;
 
             U2_fd(0) = U2_fd(1);
@@ -282,13 +297,13 @@ Result finite_diff(Real c, Real dt, vector<u32> num_cells, double west, double e
         }
 
         auto end = std::chrono::steady_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        std::chrono::duration<double> duration = end - start;
 
         // Stores data for comparison
-        walltime_fd(cell_index) = static_cast<Real>(duration.count());
+        walltime_fd(cell_index) = duration.count();
         flops_fd(cell_index) = static_cast<Real>((2 * nnz_fd + U0_fd.n_elem) * t);
-        vec diff = U2_fd - analytical_fd;
-        error_fd(cell_index) = norm(diff) / norm(analytical_fd);
+        arma::vec diff = U2_fd - analytical_fd;
+        error_fd(cell_index) = arma::norm(diff) / arma::norm(analytical_fd);
     }
 
     return {flops_fd, walltime_fd, error_fd, U2_fd};
@@ -296,19 +311,19 @@ Result finite_diff(Real c, Real dt, vector<u32> num_cells, double west, double e
 
 int main() {
     // Problem definition
-    const std::vector<u32> num_cells = { 20, 40, 80, 160 }; // Number of cells to try, points is cells+1
-    const u32 k = 4;                                          // Mimetic Order of Accuracy, can change to 4,6,8
-    const double c = .1;                                      // Velocity, 1 makes FD scheme exact
-    const double dt = .001;                                   // Time Step
-    const double west = -2.0;                                 // Domain's leftmost limits
-    const double east =  2.0;                                 // Domain's rightmost limits
+    const std::vector<arma::u32> num_cells = { 20, 40, 80, 160 }; // Number of cells to try, points is cells+1
+    const arma::u16 k = 4;                                          // Mimetic Order of Accuracy, can change to 4,6,8
+    const Real c = .1;                                              // Velocity, 1 makes FD scheme exact
+    const Real dt = .001;                                           // Time Step
+    const Real west = -2.0;                                         // Domain's leftmost limits
+    const Real east =  2.0;                                         // Domain's rightmost limits
 
     // Store results
     Result md_result = mimetic_diff(k, c, dt, num_cells, west, east);
     Result fd_result = finite_diff(c, dt, num_cells, west, east);
 
-    std::cout << "Mimetic Results" << md_result.final << "\n";
-    std::cout << "Finite Results" << fd_result.final << "\n";
+    std::cout << "Mimetic Results \n" << md_result.final << "\n";
+    std::cout << "Finite Results \n" << fd_result.final << "\n";
 
     // Plot for FLOPs
     // Floating point operations needed for each method. The mimetic difference
@@ -328,13 +343,13 @@ int main() {
     << "'-' using 1:2 with lines title 'Mimetic'\n";
 
     // Plot fd flops
-    for (int i = 0; i < fd_result.flops.size(); ++i) {
+    for (arma::uword i = 0; i < fd_result.flops.n_elem; ++i) {
         plot_script_flops << num_cells[i] << " " << fd_result.flops(i) << "\n";
     }
     plot_script_flops << "e\n";
 
     // plot md flops
-    for (int i = 0; i < md_result.flops.size(); ++i) {
+    for (arma::uword i = 0; i < md_result.flops.n_elem; ++i) {
         plot_script_flops << num_cells[i] << " " << md_result.flops(i) << "\n";
     }
     plot_script_flops << "e\n";
@@ -345,11 +360,11 @@ int main() {
     // so we can capture the slope of the lines == the order of accuracy of the
     // spacial scheme.
 
-    int n = static_cast<int>(num_cells.size());
+    const arma::uword n = num_cells.size();
 
     arma::vec nc(n);
-    for (int i = 0; i < n; ++i) {
-        nc(i) = static_cast<double>(num_cells[i]);
+    for (arma::uword i = 0; i < n; ++i) {
+        nc(i) = static_cast<Real>(num_cells[i]);
     }
 
     arma::vec x_fit = arma::log(1.0 / nc);
@@ -362,11 +377,12 @@ int main() {
     arma::vec p_fd = arma::solve(X, y_fd);
     arma::vec p_md = arma::solve(X, y_md);
 
-    double slope_fd = p_fd(0);
-    double slope_md = p_md(0);
+    const Real slope_fd = p_fd(0);
+    const Real slope_md = p_md(0);
 
-    cout << "Finite Difference Error Convergence Slope:   " << slope_fd << endl;
-    cout << "Mimetic Difference Error Convergence Slope:  " << slope_md << endl;
+
+    std::cout << "Finite Difference Error Convergence Slope:   " << slope_fd << std::endl;
+    std::cout << "Mimetic Difference Error Convergence Slope:  " << slope_md << std::endl;
 
     std::ofstream plot_script_error("plot_error_dx.gnu");
     if (!plot_script_error) {
@@ -374,8 +390,8 @@ int main() {
         return 1;
     }
 
-    double xmin = 1.0 / static_cast<double>(num_cells.back());
-    double xmax = 1.0 / static_cast<double>(num_cells.front());
+    const Real xmin = 1.0 / static_cast<Real>(num_cells.back());
+    const Real xmax = 1.0 / static_cast<Real>(num_cells.front());
 
     plot_script_error << "set title 'Error: FD slope="
                       << slope_fd
@@ -391,21 +407,21 @@ int main() {
                       << "'-' using 1:2 with linespoints lw 2 title 'Mimetic'\n";
 
     // Plot fd error
-    for (size_t i = 0; i < num_cells.size(); ++i) {
-        double dx_plot = 1.0 / static_cast<double>(num_cells[i]);
+    for (std::size_t i = 0; i < num_cells.size(); ++i) {
+        const Real dx_plot = 1.0 / static_cast<Real>(num_cells[i]);
         plot_script_error << dx_plot << " " << fd_result.error(i) << "\n";
     }
     plot_script_error << "e\n";
 
     // Plot md error
-    for (size_t i = 0; i < num_cells.size(); ++i) {
-        double dx_plot = 1.0 / static_cast<double>(num_cells[i]);
+    for (std::size_t i = 0; i < num_cells.size(); ++i) {
+        const Real dx_plot = 1.0 / static_cast<Real>(num_cells[i]);
         plot_script_error << dx_plot << " " << md_result.error(i) << "\n";
     }
     plot_script_error << "e\n";
     plot_script_error.close();
 
-    /// Plot for walltime
+    // Plot for walltime
     std::ofstream plot_script_time("plot_time.gnu");
     if (!plot_script_time) {
         std::cerr << "Error: Failed to create GNUplot script.\n";
@@ -413,18 +429,18 @@ int main() {
     }
 
     plot_script_time << "set title 'Walltime, MD is order " << k << "'\n";
-    plot_script_time << "set xlabel 'num points'\n";
+    plot_script_time << "set xlabel 'num cells'\n";
     plot_script_time << "set ylabel 'walltime [s]'\n";
     plot_script_time << "set grid\n";
     plot_script_time << "set style line 1 lw 2\n";
     plot_script_time << "set style line 2 lw 2\n";
 
-    double xmin_err = num_cells.front();
-    double xmax_err = num_cells.back();
-    double ymin = std::min(fd_result.walltime.min(), md_result.walltime.min());
-    double ymax = std::max(fd_result.walltime.max(), md_result.walltime.max());
+    const Real xmin_time = static_cast<Real>(num_cells.front());
+    const Real xmax_time = static_cast<Real>(num_cells.back());
+    const Real ymin = std::min(fd_result.walltime.min(), md_result.walltime.min());
+    const Real ymax = std::max(fd_result.walltime.max(), md_result.walltime.max());
 
-    plot_script_time << "set xrange [" << xmin_err << ":" << xmax_err << "]\n";
+    plot_script_time << "set xrange [" << xmin_time << ":" << xmax_time << "]\n";
     plot_script_time << "set yrange [" << ymin << ":" << ymax << "]\n";
     plot_script_time << "set key left top\n";
     plot_script_time << "plot '-' using 1:2 with lines ls 1 title 'FD time', "
@@ -432,13 +448,13 @@ int main() {
 
 
     // fd time
-    for (size_t i = 0; i < num_cells.size(); ++i) {
+    for (std::size_t i = 0; i < num_cells.size(); ++i) {
         plot_script_time << num_cells[i] << " " << fd_result.walltime(i) << "\n";
     }
     plot_script_time << "e\n";
 
     // md time
-    for (size_t i = 0; i < num_cells.size(); ++i) {
+    for (std::size_t i = 0; i < num_cells.size(); ++i) {
         plot_script_time << num_cells[i] << " " << md_result.walltime(i) << "\n";
     }
     plot_script_time << "e\n";
@@ -446,19 +462,18 @@ int main() {
     plot_script_time.close();
 
     // Show all plots
-    if (system("gnuplot -persist plot_error_dx.gnu") != 0) {
+    if (std::system("gnuplot -persist plot_error_dx.gnu") != 0) {
         std::cerr << "Error: Failed to execute GNUplot.\n";
         return 1;
     }
-    if (system("gnuplot -persist plot_flops.gnu") != 0) {
+    if (std::system("gnuplot -persist plot_flops.gnu") != 0) {
         std::cerr << "Error: Failed to execute GNUplot.\n";
         return 1;
     }
-    if (system("gnuplot -persist plot_time.gnu") != 0) {
+    if (std::system("gnuplot -persist plot_time.gnu") != 0) {
         std::cerr << "Error: Failed to execute GNUplot.\n";
         return 1;
     }
 
     return 0;
 }
-
