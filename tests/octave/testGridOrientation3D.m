@@ -1,95 +1,138 @@
-classdef testGridOrientation3D < matlab.unittest.TestCase
-% Extends the 2D orientation guard to jacobian3D, and adds detection of
-% vanishing Jacobians in both dimensions.
-%
-% In 3D, swapping two axes is an odd permutation, so handedness inverts and J
-% goes uniformly negative -- the same failure as the 2D transpose, with one
-% more way to trigger it (mirroring a single axis does it too).
-%
-% A vanishing Jacobian is a different problem: the mapping is degenerate at
-% that cell and is not invertible there, and grad/div divide by J. It is not
-% caught by the sign checks, because zero is neither positive nor negative.
+function testGridOrientation3D ()
+endfunction
 
-    methods(Static)
-        function [X, Y, Z] = sineGrid3(N, amp)
-            [a, b, c] = meshgrid(linspace(0,1,N), linspace(0,1,N), ...
-                                 linspace(0,1,N));
-            X = a + amp*sin(2*pi*b);
-            Y = b + amp*sin(2*pi*a);
-            Z = c + 0.5*amp*sin(2*pi*a).*sin(2*pi*b);
-        end
-    end
 
-    methods(Test)
+%!function [X, Y, Z] = sineGrid3 (N, amp)
+%!  [a, b, c] = meshgrid ( ...
+%!      linspace (0, 1, N), ...
+%!      linspace (0, 1, N), ...
+%!      linspace (0, 1, N));
+%!
+%!  X = a + amp * sin (2 * pi * b);
+%!  Y = b + amp * sin (2 * pi * a);
+%!  Z = c + 0.5 * amp * sin (2 * pi * a) .* sin (2 * pi * b);
+%!endfunction
 
-        function testRightHanded3DIsSilent(testCase)
-            origPath = path;
-            cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/octave'))
-            [X, Y, Z] = testGridOrientation3D.sineGrid3(13, 0.08);
-            testCase.verifyWarningFree(@() jacobian3D(2, X, Y, Z));
-        end
 
-        function testSwappedAxesWarn(testCase)
-            origPath = path;
-            cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/octave'))
-            [X, Y, Z] = testGridOrientation3D.sineGrid3(13, 0.08);
-            p = @(A) permute(A, [2 1 3]);
-            testCase.verifyWarning(@() jacobian3D(2, p(X), p(Y), p(Z)), ...
-                                   'jacobian3D:leftHandedGrid');
-        end
+%!test
+%!  % A properly oriented grid should not produce a warning.
+%!  origPath = path ();
+%!  cleanupObj = onCleanup (@() path (origPath));
+%!  addpath (genpath ("../../src/octave"), "-begin");
+%!
+%!  [X, Y, Z] = sineGrid3 (13, 0.08);
+%!
+%!  lastwarn ("");
+%!  jacobian3D (2, X, Y, Z);
+%!  [warningMessage, warningId] = lastwarn ();
+%!
+%!  assert (isempty (warningMessage) && isempty (warningId), ...
+%!          "A right-handed grid generated an unexpected warning");
 
-        function testMirroredAxisWarns(testCase)
-            % Reversing one axis is also an odd permutation.
-            origPath = path;
-            cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/octave'))
-            [X, Y, Z] = testGridOrientation3D.sineGrid3(13, 0.08);
-            f = @(A) A(end:-1:1, :, :);
-            testCase.verifyWarning(@() jacobian3D(2, f(X), f(Y), f(Z)), ...
-                                   'jacobian3D:leftHandedGrid');
-        end
 
-        function testWarningReaches3DOperatorUsers(testCase)
-            origPath = path;
-            cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/octave'))
-            [X, Y, Z] = testGridOrientation3D.sineGrid3(13, 0.08);
-            p = @(A) permute(A, [2 1 3]);
-            testCase.verifyWarning(@() grad3DCurv(2, p(X), p(Y), p(Z)), ...
-                                   'jacobian3D:leftHandedGrid');
-            testCase.verifyWarning(@() div3DCurv(2, p(X), p(Y), p(Z)), ...
-                                   'jacobian3D:leftHandedGrid');
-        end
+%!test
+%!  % Swapping two axes should produce a left-handed-grid warning.
+%!  origPath = path ();
+%!  cleanupObj = onCleanup (@() path (origPath));
+%!  addpath (genpath ("../../src/octave"), "-begin");
+%!
+%!  [X, Y, Z] = sineGrid3 (13, 0.08);
+%!  Xp = permute (X, [2, 1, 3]);
+%!  Yp = permute (Y, [2, 1, 3]);
+%!  Zp = permute (Z, [2, 1, 3]);
+%!
+%!  lastwarn ("");
+%!  jacobian3D (2, Xp, Yp, Zp);
+%!  [warningMessage, warningId] = lastwarn ();
+%!
+%!  assert (strcmp (warningId, "jacobian3D:leftHandedGrid"), ...
+%!          sprintf ("Unexpected warning identifier: %s", warningId));
 
-        function testVanishingJacobianWarns(testCase)
-            % Three identical columns make the central difference across the
-            % middle one exactly zero, so those cells are degenerate. The sign
-            % checks cannot see this: zero is neither positive nor negative.
-            origPath = path;
-            cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/octave'))
-            N = 21;
-            [X, Y] = meshgrid(linspace(0,1,N), linspace(0,1,N));
-            X = X + 0.10*sin(2*pi*Y);
-            Y = Y + 0.10*sin(2*pi*X);
-            X(:, 9:11) = repmat(X(:, 10), 1, 3);
-            Y(:, 9:11) = repmat(Y(:, 10), 1, 3);
-            testCase.verifyWarning(@() jacobian2D(2, X, Y), ...
-                                   'jacobian2D:vanishingJacobian');
-        end
 
-        function testHealthyGridHasNoVanishingWarning(testCase)
-            origPath = path;
-            cleanupObj = onCleanup(@() path(origPath));
-            addpath(genpath('../../src/octave'))
-            N = 21;
-            [X, Y] = meshgrid(linspace(0,1,N), linspace(0,1,N));
-            X = X + 0.10*sin(2*pi*Y);
-            Y = Y + 0.10*sin(2*pi*X);
-            testCase.verifyWarningFree(@() jacobian2D(2, X, Y));
-        end
+%!test
+%!  % Reversing one axis should also produce a left-handed-grid warning.
+%!  origPath = path ();
+%!  cleanupObj = onCleanup (@() path (origPath));
+%!  addpath (genpath ("../../src/octave"), "-begin");
+%!
+%!  [X, Y, Z] = sineGrid3 (13, 0.08);
+%!
+%!  Xf = X (end:-1:1, :, :);
+%!  Yf = Y (end:-1:1, :, :);
+%!  Zf = Z (end:-1:1, :, :);
+%!
+%!  lastwarn ("");
+%!  jacobian3D (2, Xf, Yf, Zf);
+%!  [warningMessage, warningId] = lastwarn ();
+%!
+%!  assert (strcmp (warningId, "jacobian3D:leftHandedGrid"), ...
+%!          sprintf ("Unexpected warning identifier: %s", warningId));
 
-    end
-end
+
+%!test
+%!  % The warning should propagate through grad3DCurv and div3DCurv.
+%!  origPath = path ();
+%!  cleanupObj = onCleanup (@() path (origPath));
+%!  addpath (genpath ("../../src/octave"), "-begin");
+%!
+%!  [X, Y, Z] = sineGrid3 (13, 0.08);
+%!  Xp = permute (X, [2, 1, 3]);
+%!  Yp = permute (Y, [2, 1, 3]);
+%!  Zp = permute (Z, [2, 1, 3]);
+%!
+%!  lastwarn ("");
+%!  grad3DCurv (2, Xp, Yp, Zp);
+%!  [warningMessage, warningId] = lastwarn ();
+%!
+%!  assert (strcmp (warningId, "jacobian3D:leftHandedGrid"), ...
+%!          sprintf ("Unexpected gradient warning identifier: %s", warningId));
+%!
+%!  lastwarn ("");
+%!  div3DCurv (2, Xp, Yp, Zp);
+%!  [warningMessage, warningId] = lastwarn ();
+%!
+%!  assert (strcmp (warningId, "jacobian3D:leftHandedGrid"), ...
+%!          sprintf ("Unexpected divergence warning identifier: %s", warningId));
+
+
+%!test
+%!  % Three identical columns create vanishing Jacobians.
+%!  origPath = path ();
+%!  cleanupObj = onCleanup (@() path (origPath));
+%!  addpath (genpath ("../../src/octave"), "-begin");
+%!
+%!  N = 21;
+%!  [X, Y] = meshgrid (linspace (0, 1, N), linspace (0, 1, N));
+%!
+%!  X = X + 0.10 * sin (2 * pi * Y);
+%!  Y = Y + 0.10 * sin (2 * pi * X);
+%!
+%!  X (:, 9:11) = repmat (X (:, 10), 1, 3);
+%!  Y (:, 9:11) = repmat (Y (:, 10), 1, 3);
+%!
+%!  lastwarn ("");
+%!  jacobian2D (2, X, Y);
+%!  [warningMessage, warningId] = lastwarn ();
+%!
+%!  assert (strcmp (warningId, "jacobian2D:vanishingJacobian"), ...
+%!          sprintf ("Unexpected warning identifier: %s", warningId));
+
+
+%!test
+%!  % A healthy grid should not produce a vanishing-Jacobian warning.
+%!  origPath = path ();
+%!  cleanupObj = onCleanup (@() path (origPath));
+%!  addpath (genpath ("../../src/octave"), "-begin");
+%!
+%!  N = 21;
+%!  [X, Y] = meshgrid (linspace (0, 1, N), linspace (0, 1, N));
+%!
+%!  X = X + 0.10 * sin (2 * pi * Y);
+%!  Y = Y + 0.10 * sin (2 * pi * X);
+%!
+%!  lastwarn ("");
+%!  jacobian2D (2, X, Y);
+%!  [warningMessage, warningId] = lastwarn ();
+%!
+%!  assert (isempty (warningMessage) && isempty (warningId), ...
+%!          "A healthy grid generated an unexpected warning");
