@@ -1,6 +1,6 @@
 %{
 These are tests for our MOLE errors class.
-The runner adds octave/src/sys relative to this file and runs all tests.
+
 %}
 
 function [passed, total] = test_errors()
@@ -66,10 +66,12 @@ endfunction
 %!test
 %! # testInvalidErrorNameType
 %! TestError = MOLE_errors();
-%! output = evalc('TestError.log_error(200, ''array1D Construction'', false, ''numelem = 5'');');
-%! expectedOutput = sprintf('MOLE error name must be a character array\n');
-%!
-%! assert(output, expectedOutput);
+%! try
+%!    TestError.log_error(200, 'array1D Construction', false, 'numelem = 5');
+%!  catch err
+%!    caughtId = err.identifier;
+%!  end_try_catch
+%! assert(caughtId, 'MOLE:UNKNOWN_ERROR_NAME');
 %! assert(TestError.getNumErrors(), 0);
 
 %!test
@@ -98,7 +100,7 @@ endfunction
 %!test
 %! # testInvalidAbortFlag
 %! TestError = MOLE_errors();
-%! typeOutput = evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'', 1, ''numelem = 5'');');
+%! typeOutput = evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'', 5, ''numelem = 5'');');
 %! sizeOutput = evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'', [true false], ''numelem = 5'');');
 %! expectedOutput = sprintf('onErrorAbort must be true or false\n');
 %!
@@ -121,3 +123,47 @@ endfunction
 %! assert(TestError.haveErrors(), false);
 %! evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'', false, ''numelem = 5'');');
 %! assert(TestError.haveErrors(), true);
+
+%!test
+%! # testAdditionalInvalidAbortFlags
+%! TestError = MOLE_errors();
+%! invalidFlags = {0, 1, false(0, 0), true(2), [false; true]};
+%! expectedOutput = sprintf('onErrorAbort must be true or false\n');
+%! for index = 1:numel(invalidFlags)
+%!     flag = invalidFlags{index};
+%!     output = evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'', flag);');
+%!     assert(output, expectedOutput);
+%!     assert(TestError.getNumErrors(), 0);
+%!     assert(TestError.haveErrors(), false);
+%! endfor
+
+%!test
+%! # testIndependentErrorObjects
+%! first = MOLE_errors();
+%! second = MOLE_errors();
+%! evalc('first.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'');');
+%! assert(first.getNumErrors(), 1);
+%! assert(first.haveErrors(), true);
+%! assert(second.getNumErrors(), 0);
+%! assert(second.haveErrors(), false);
+
+%!test
+%! # testAbortMessage
+%! TestError = MOLE_errors();
+%! caughtId = '';
+%! caughtMessage = '';
+%! try
+%!     TestError.log_error('MOLE_ERR_INVALID_ARRAY_SIZE', 'array1D Construction', true, 'numelem = 5 ');
+%! catch err
+%!     caughtId = err.identifier;
+%!     caughtMessage = err.message;
+%! end_try_catch
+%! # Octave removes the terminal newline from the caught error message.
+%! expectedMessage = sprintf('Error: MOLE_ERR_INVALID_ARRAY_SIZE\nCode: 200\nParams: numelem = 5 \nLocations: array1D Construction\nMessage: Array dimensions need to be natural numbers >= 1');
+%! assert(caughtId, 'MOLE:MOLE_ERR_INVALID_ARRAY_SIZE');
+%! assert(caughtMessage, expectedMessage);
+%! assert(TestError.getNumErrors(), 1);
+%! assert(TestError.haveErrors(), true);
+
+
+

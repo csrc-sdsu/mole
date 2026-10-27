@@ -50,7 +50,7 @@ classdef MOLE_errors < handle
 
         function tf = haveErrors(obj)
             # Check if any errors occured
-            tf = (obj.numErrors == 0);
+            tf = ~(obj.numErrors == 0);
         endfunction
         function num = getNumErrors(obj)
             num = obj.numErrors;
@@ -62,15 +62,18 @@ classdef MOLE_errors < handle
             # onErrorAbort true means that its an error that stops execution and false are errors that keep going with exection even though and error occured
             if ~isKey(obj.errorMap, errorName)
                 #Check if error name exists in mapping
-                error("Unknown MOLE error name: %s", errorName);
+                error("MOLE:UNKNOWN_ERROR_NAME", "Unknown MOLE error name: %s", errorName);
             endif
 
             if ~ischar(location) || ~ischar(params)
                 #Check if params an location sare strings
-                disp("MOLE error location and params must be character arrays")
+                disp("MOLE error location and params must be character arrays");
                 return;
             endif
-
+            if ~islogical(onErrorAbort) || ~isscalar(onErrorAbort)
+              disp("onErrorAbort must be true or false");
+              return;
+            endif
             #Get error information from mapping and create error structure
             errorInfo = obj.errorMap(errorName);
             errCode = errorInfo.Code;
@@ -79,7 +82,7 @@ classdef MOLE_errors < handle
             obj.numErrors += 1;
             #Breaking error logic or proceed to print error only
             if onErrorAbort
-                error("%s", errorMessage);
+                error(["MOLE:" errorName], "%s", errorMessage);
             else
                 obj.MOLEerr_print(errorMessage);
             endif
