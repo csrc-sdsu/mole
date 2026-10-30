@@ -19,8 +19,8 @@ function grid = validateGrid(grid, allowPartial, errorObj)
 %                  errors during incremental construction
 %
 % SYNTAX
-% grid = validateGrid_impl(grid)
-% grid = validateGrid_impl(grid, allowPartial)
+% grid = validateGrid(grid)
+% grid = validateGrid(grid, allowPartial)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
