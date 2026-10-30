@@ -105,3 +105,14 @@ function outputStr = createErrorMessage(errorStruct)
         errorStruct.paramError, errorStruct.errorLocation,
         errorStruct.message);
 endfunction
+function entry = error_catalog (key)
+    persistent catalog;    
+    if (isempty (catalog))
+      filename = fullfile(fileparts (mfilename ("fullpath")), "errors.json");
+      catalog = jsondecode (fileread (filename));
+    endif      
+    if (! isfield (catalog, key))
+      error ("Unknown error key: %s", key);
+    endif      
+    entry = catalog.(key);
+endfunction

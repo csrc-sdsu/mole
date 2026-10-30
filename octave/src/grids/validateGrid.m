@@ -63,7 +63,7 @@ function grid = validateGrid(grid, allowPartial, errorObj)
         if inferredDim > grid.dim
             #Inferred dimension logged error
             params = sprintf('grid.dim is %d, but supplied fields imply at least %d dimensions.', grid.dim, inferredDim);
-            errorObj.log_error('MOLE_ERR_INVALID_GRID_DIM', 'validateGrid', false, params);
+            errorObj.log_error('MOLE_ERR_INVALID_GRID_DIM', 'validateGrid', true, params);
         end
     end
 
@@ -93,7 +93,7 @@ function grid = validateGrid(grid, allowPartial, errorObj)
         grid = localNormalizeIfUniform3D(grid, allowPartial, errorObj);
     otherwise
         params = sprintf('grid.dim must be 1, 2, or 3; received class %s with size %s.', class(grid.dim), mat2str(size(grid.dim)));
-        errorObj.log_error('MOLE_ERR_INVALID_GRID_DIM', 'validateGrid', false, params);
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_DIM', 'validateGrid', true, params);
     end
 end
 
