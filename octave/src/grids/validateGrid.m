@@ -200,7 +200,8 @@ function grid = localNormalizeIfUniform2D(grid, allowPartial, errorObj)
     % Curvilinear grids have their own normalisation path
     if strcmp(grid.topology, 'curvilinear')
         hasCounts = isfield(grid, 'm') && isfield(grid, 'n');
-        hasNodes = isfield(grid, 'nodes') && isstruct(grid.nodes) && isscalar(grid.nodes) && isfield(grid.nodes, 'X') && isfield(grid.nodes, 'Y');
+        hasNodes = isfield(grid, 'nodes') && isstruct(grid.nodes) && ...
+            isscalar(grid.nodes) && isfield(grid.nodes, 'X') && isfield(grid.nodes, 'Y');
         if hasCounts && (hasNodes || ~allowPartial)
             grid = localNormalizeCurvilinear2D(grid, errorObj);
         end
@@ -213,7 +214,8 @@ function grid = localNormalizeIfUniform2D(grid, allowPartial, errorObj)
         grid = localNormalizeGrid2D(grid, errorObj);
     elseif ~allowPartial && strcmpi(grid.topology, 'uniform')
         params = 'Uniform 2-D grid requires grid.dx and grid.dy.';
-        errorObj.log_error('MOLE_ERR_INVALID_GRID_SPACING', 'localNormalizeIfUniform2D', true, params);
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_SPACING', ...
+            'localNormalizeIfUniform2D', true, params);
     end
 end
 

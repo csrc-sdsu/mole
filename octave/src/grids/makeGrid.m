@@ -1,8 +1,8 @@
-addpath(“../sys”)
+addpath('../sys')
 
 function grid = makeGrid_impl(varargin)
 % Canonical implementation for makeGrid.
-	errorObj = MOLE_errors()
+	errorObj = MOLE_errors();
     if nargin == 1 && isstruct(varargin{1})
         grid = varargin{1};
     else
@@ -30,8 +30,8 @@ function validateNumArgs(nargin, errorObj)
     	params = "number of arguments: " + int2str(nargin);
     	errorObj.log_error('MAKE_GRID_INVALID_INPUT_ARGS', 'makeGrid', true, params);
     else
-		return;
+		  return;
     endif
 
-endfunction 
+endfunction
 

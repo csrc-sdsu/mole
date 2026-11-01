@@ -1,4 +1,25 @@
 classdef MOLE_errors < handle
+% PURPOSE
+% Canonical implementation for MOLE_errors class
+% it implements mole error logging for both errors that stop execution .
+% and errors that dont stop execution
+% DESCRIPTION
+% This error class implements error logging prints error messages and raises 
+% fatal errors that stop exuction and errors that stop execution defined by the user
+% input flag. 
+% Errors are implemented using a json file structure. Upon calling error_catalog(key)
+% function. The error structure is loaded into memory and remembered after for every
+% execution of the function. Thereby keeping the object loaded even after creating
+% new objects and calls to other functions.
+%
+% SYNTAX
+% errorObj = MOLE_errors()
+%
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
     properties (Access = private)
         numErrors = 0
     endproperties
@@ -53,7 +74,7 @@ classdef MOLE_errors < handle
             # It also takes in an error messages to print corresponding
             # to the error code
             startLogStr = ...
-            strcat("========================================\nLogged MOLE Error", ...
+            strcat("========================================\nMOLE Error", ...
             "\n========================================\n");
             printf("%s", startLogStr);
             printf("%s", errorMessage);

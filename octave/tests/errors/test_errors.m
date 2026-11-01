@@ -33,7 +33,7 @@ endfunction
 %! TestError = MOLE_errors();
 %! params = 'numelem = 5 ';
 %! output = evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'', false, params);');
-%! expectedOutput = sprintf('========================================\nLogged MOLE Error\n========================================\nError: MOLE_ERR_INVALID_ARRAY_SIZE\nCode: 200\nParams: numelem = 5 \nLocations: array1D Construction\nMessage: Array dimensions need to be natural numbers >= 1\n');
+%! expectedOutput = sprintf('========================================\nMOLE Error\n========================================\nError: MOLE_ERR_INVALID_ARRAY_SIZE\nCode: 200\nParams: numelem = 5 \nLocations: array1D Construction\nMessage: Array dimensions need to be natural numbers >= 1\n');
 %!
 %! assert(output, expectedOutput);
 %! assert(TestError.getNumErrors(), 1);
@@ -112,7 +112,7 @@ endfunction
 %! # testDefaultInputs
 %! TestError = MOLE_errors();
 %! output = evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'');');
-%! expectedOutput = sprintf('========================================\nLogged MOLE Error\n========================================\nError: MOLE_ERR_INVALID_ARRAY_SIZE\nCode: 200\nParams: \nLocations: array1D Construction\nMessage: Array dimensions need to be natural numbers >= 1\n');
+%! expectedOutput = sprintf('========================================\nMOLE Error\n========================================\nError: MOLE_ERR_INVALID_ARRAY_SIZE\nCode: 200\nParams: \nLocations: array1D Construction\nMessage: Array dimensions need to be natural numbers >= 1\n');
 %!
 %! assert(output, expectedOutput);
 %! assert(TestError.getNumErrors(), 1);
