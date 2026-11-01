@@ -35,7 +35,8 @@ function grid = validateGrid(grid, allowPartial, errorObj)
     end
 
     if ~isstruct(grid) || ~isscalar(grid)
-        params = sprintf('grid must be a scalar or a struct; received class %s with size %s.', class(grid), mat2str(size(grid)));
+        params = sprintf('grid must be a scalar or a struct; received class %s
+                with size %s.', class(grid), mat2str(size(grid)));
         errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'validateGrid', true, params);
     end
 
@@ -223,7 +224,9 @@ function grid = localNormalizeIfUniform3D(grid, allowPartial, errorObj)
     % Curvilinear grids have their own normalisation path
     if strcmp(grid.topology, 'curvilinear')
         hasCounts = isfield(grid, 'm') && isfield(grid, 'n') && isfield(grid, 'o');
-        hasNodes = isfield(grid, 'nodes') && isstruct(grid.nodes) && isscalar(grid.nodes) && isfield(grid.nodes, 'X') && isfield(grid.nodes, 'Y') && isfield(grid.nodes, 'Z');
+        hasNodes = isfield(grid, 'nodes') && isstruct(grid.nodes) && ...
+                    isscalar(grid.nodes) && isfield(grid.nodes, 'X') && ...
+                    isfield(grid.nodes, 'Y') && isfield(grid.nodes, 'Z');
         if hasCounts && (hasNodes || ~allowPartial)
             grid = localNormalizeCurvilinear3D(grid, errorObj);
         end
