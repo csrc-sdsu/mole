@@ -54,14 +54,9 @@
 //   debugging mode         debug             const int
 //                                            (MOLE debug mode)
 //
-// Note III: the debug attribute takes one of the MOLE debug modes
-// declared in MOLE_errors.h (DEBUG_DEFAULT_MD,
-// DEBUG_REPORTS_STDOUT_MD, DEBUG_AND_ABORT_MD) and governs what
-// gridBuilder does with a grid that fails to build. Parsing stops
-// at an unrecognized attribute name, because the type of the value
-// after an unknown name is unknown too. A debug pair placed after
-// one is therefore never read, on exactly the calls that need it.
-// Pass debug as the first pair:
+// Note III: debug takes a MOLE debug mode (MOLE_errors.h). It can
+// go anywhere in the list, except after an unrecognized attribute,
+// where parsing stops. Example:
 //   gridVar g = gridBuilder("debug", DEBUG_REPORTS_STDOUT_MD,
 //                           "dim", 1, "m", 20, "dx", 0.2,
 //                           "topology", 'u');
@@ -91,8 +86,8 @@ struct gridRaw {
     Real dy = 0.0;
     Real dz = 0.0;
 
-    // MOLE debug mode applied to a grid that fails to build. See
-    // Note III above for why the debug pair has to come first.
+    // MOLE debug mode applied to a grid that fails to build
+    // (see Note III)
     int debug = DEBUG_DEFAULT_MD;
 
     // points at the caller's vector; null when not supplied. The

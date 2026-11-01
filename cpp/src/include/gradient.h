@@ -70,6 +70,12 @@ public:
    */
   Gradient(u16 k, const gridVar &g);
 
+  /// @brief Like Gradient(k, g), then applies a MOLE debug mode.
+  Gradient(u16 k, const gridBase &g, size_t debug_mode);
+
+  /// @brief Like Gradient(k, g), then applies a MOLE debug mode.
+  Gradient(u16 k, const gridVar &g, size_t debug_mode);
+
   /**
    * @brief Read-only access to the operator matrix.
    *

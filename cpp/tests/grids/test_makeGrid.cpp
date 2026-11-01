@@ -69,4 +69,40 @@ TEST_CASE("makeGrid test: using a invalid 2D grid and passes a empty error stack
     CHECK(std::get<grid2D>(g).hasGridErrors());
 }
 
+// ---------------------------------------------------------------
+// gridNull
+// ---------------------------------------------------------------
+
+// gridNullErrs returns a copy of the errors held by a gridNull.
+static std::stack<MOLE_Errors> gridNullErrs(const gridVar& g) {
+    std::stack<MOLE_Errors> out;
+    std::get<gridNull>(g).addGridErrs2Stack(out);
+    return out;
+}
+
+TEST_CASE("gridNull carries the incoming errors without dimension "
+          "noise") {
+    std::stack<MOLE_Errors> errs;
+    MOLEerr_log(errs, MOLE_ERR_INVALID_INPUT_TYPE, "upstream", "");
+    gridVar g = makeGrid(paramsNull{}, errs);
+    REQUIRE(std::holds_alternative<gridNull>(g));
+
+    std::stack<MOLE_Errors> e = gridNullErrs(g);
+    CHECK(MOLEerr_contains(e, MOLE_ERR_INVALID_INPUT_TYPE));
+    CHECK(MOLEerr_contains(e, MOLE_ERR_GRID_FLAGGED_W_ERRS));
+    CHECK(!MOLEerr_contains(e, MOLE_ERR_INVALID_GRID_DIM));
+    CHECK(!MOLEerr_contains(e, MOLE_ERR_GRID_UNCHECKED));
+    CHECK(e.size() == 2);
+}
+
+TEST_CASE("gridNull has errors even when the incoming stack is "
+          "empty") {
+    std::stack<MOLE_Errors> errs;
+    gridVar g = makeGrid(paramsNull{}, errs);
+    REQUIRE(std::holds_alternative<gridNull>(g));
+    CHECK(std::get<gridNull>(g).hasGridErrors());
+    CHECK(MOLEerr_contains(gridNullErrs(g),
+                           MOLE_ERR_GRID_FLAGGED_W_ERRS));
+}
+
 MOLE_TEST_MAIN()

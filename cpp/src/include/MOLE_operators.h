@@ -48,6 +48,9 @@ class mdOperator{
                 logOpErr(errCode, location, msgparam);
             }
         }
+
+        // applies a MOLE debug mode to an operator with errors
+        void applyDebugMode(size_t debug_mode) const;
     public:
         virtual ~mdOperator() = default;
         void logOpErr(size_t errCode, string errLoc, 

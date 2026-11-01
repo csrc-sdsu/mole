@@ -77,3 +77,11 @@ void mdOperator::write_ErrorLog() {
 void mdOperator::copyGridErrs(const gridBase& grid) {
     grid.addGridErrs2Stack(o_errs);
 }
+
+//
+// mdOperator::applyDebugMode applies a MOLE debug mode to the
+// operator's error stack
+//
+void mdOperator::applyDebugMode(size_t debug_mode) const {
+    MOLEerr_applyDebugMode(o_errs, debug_mode);
+}

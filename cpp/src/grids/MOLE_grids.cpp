@@ -15,8 +15,6 @@
 
 #include "MOLE_grids.h"
 
-#include <csignal>  // raise(SIGTRAP) for DEBUG_AND_ABORT_MD
-#include <cstdlib>  // abort() fallback where SIGTRAP is not defined
 
 // ------------------------------------------------------------------
 //                      gridBase Errors Implementation
@@ -122,37 +120,9 @@ void gridBase::addGridErrs2Stack(stack<MOLE_Errors>& dest) const {
 //
 // gridBase::applyDebugMode applies a MOLE debug mode to a grid that
 // has errors in its log. A grid with no errors is left untouched.
-// The modes are declared in MOLE_errors.h. DEBUG_AND_ABORT_MD prints
-// the error log and raises SIGTRAP, which stops an attached debugger
-// at the failing grid so the program can be inspected or continued.
-// An unrecognized mode falls back to reporting, which is the
-// behaviour that loses the least information without ending the
-// user's program.
 //
 void gridBase::applyDebugMode(size_t debug_mode){
-    if (!hasGridErrors()) return;
-
-    switch (debug_mode) {
-    case DEBUG_DEFAULT_MD:
-        return;
-    case DEBUG_REPORTS_STDOUT_MD:
-        print_ErrorLog();
-        return;
-    case DEBUG_AND_ABORT_MD:
-        print_ErrorLog();
-        cout.flush();
-#ifdef SIGTRAP
-        raise(SIGTRAP);
-#else
-        abort();    // SIGTRAP is POSIX-only (not defined on MSVC)
-#endif
-        return;     // reached if a debugger or handler resumes
-    default:
-        cout << "Unrecognized MOLE debug mode [" << debug_mode
-             << "], reporting to standard output." << endl;
-        print_ErrorLog();
-        return;
-    }
+    MOLEerr_applyDebugMode(errs, debug_mode);
 }
 
 // ----------
@@ -220,7 +190,7 @@ gridBase::gridBase(size_t idim){
     err.errLocation = "<Grid Construction>";
     err.paramError = "";
     logGridErr(err.errCode, err.errLocation, err.paramError);
-    if (idim >= 1 && idim <= 3){ // validate grid dimensionality
+    if (idim <= 3){ // dim 0 is the gridNull shell
         dim = idim;
     } else {
         dim = 0;
@@ -1137,6 +1107,7 @@ grid3D::grid3D(gridParams3D p3,
 //
 gridNull::gridNull(const paramsNull in_p, 
                 const stack<MOLE_Errors>& inerrs): gridBase(0){
+    setCheckedWithErrors("gridNull"); // gridNull is never validated
     mergeErrors(inerrs);
     ErrData.num_errs = in_p.num_errs;
     if(ErrData.num_errs == 0){

@@ -9,7 +9,9 @@
 //
 // The modes are declared in MOLE_errors.h and applied by
 // gridBase::applyDebugMode, which the grid constructors and
-// gridBuilder call. Two properties are under test:
+// gridBuilder call. Modes 2 and 3 are tested only on objects
+// without errors, since they stop the test process. Two properties
+// are under test:
 //
 //   1. DEBUG MODE (mode) allows users to control how errors are
 //      reported to standard output. The default mode does not
@@ -20,6 +22,7 @@
 //      how that error is reported to standard output.
 //
 #include "MOLE_grids.h"
+#include "gradient.h"
 #include "grid_builder.h"
 #include "mole_test.h"
 
@@ -149,10 +152,13 @@ TEST_CASE("a grid can still be asked for its log after the mode "
 // errors is reported, and under DEBUG_AND_ABORT_MD it aborts.
 // ---------------------------------------------------------------
 
-TEST_CASE("a grid with no errors ignores DEBUG_AND_ABORT_MD") {
+TEST_CASE("a grid with no errors ignores DEBUG_AND_SIGTRAP_MD and "
+          "DEBUG_AND_ABORT_MD") {
     std::string out = capture([]{
-        grid1D g(goodParams1D(), DEBUG_AND_ABORT_MD);
-        CHECK(!g.hasGridErrors());
+        grid1D g2(goodParams1D(), DEBUG_AND_SIGTRAP_MD);
+        grid1D g3(goodParams1D(), DEBUG_AND_ABORT_MD);
+        CHECK(!g2.hasGridErrors());
+        CHECK(!g3.hasGridErrors());
     });
     CHECK_MSG(out.empty(),
         "a grid with no errors should produce no output, got: " << out);
@@ -300,8 +306,7 @@ TEST_CASE("NOTE: a debug pair placed after an unknown attribute is "
     // Parsing stops at the first name that is not a grid attribute,
     // because the type of the value following it is unknown. The
     // debug pair below is never reached, so the build falls back to
-    // DEBUG_DEFAULT_MD and reports nothing. This is the reason the
-    // debug pair has to come first.
+    // DEBUG_DEFAULT_MD and reports nothing.
     std::string out = capture([]{
         gridVar g = gridBuilder("dim", 1, "m", 5, "spacing", 0.2,
                                 "debug", DEBUG_REPORTS_STDOUT_MD,
@@ -310,6 +315,16 @@ TEST_CASE("NOTE: a debug pair placed after an unknown attribute is "
     });
     CHECK_MSG(out.empty(),
         "a trailing debug pair was read; the parser changed");
+}
+
+TEST_CASE("gridBuilder reads a debug pair that is not first") {
+    std::string out = capture([]{
+        gridVar g = gridBuilder("dim", 1, "m", 5, "dx", 0.2,
+                                "debug", DEBUG_REPORTS_STDOUT_MD,
+                                "topology", 'z');
+        CHECK(std::holds_alternative<gridNull>(g));
+    });
+    CHECK(out.find("MOLE Error code") != std::string::npos);
 }
 
 TEST_CASE("the debug constructor keeps the user's parameters") {
@@ -344,6 +359,49 @@ TEST_CASE("the debug constructor keeps the incoming error stack") {
     CHECK_MSG(a == b,
         "the debug constructor produced a different object than "
         "the constructor it delegates to");
+}
+
+// ---------------------------------------------------------------
+// Operators use the same modes
+// ---------------------------------------------------------------
+
+TEST_CASE("Gradient honours the debug modes") {
+    grid1D good(goodParams1D());
+    grid1D bad(badParams1D());
+
+    // a bad grid: quiet by default, reported in mode 1; both return
+    // an empty operator
+    CHECK(capture([&]{
+        Gradient G(2, bad, DEBUG_DEFAULT_MD);
+        CHECK(G.hasOpErrors());
+        CHECK(G.getMatrix().n_elem == 0);
+    }).empty());
+    std::string out = capture([&]{
+        Gradient G(2, bad, DEBUG_REPORTS_STDOUT_MD);
+        CHECK(G.hasOpErrors());
+        CHECK(G.getMatrix().n_elem == 0);
+    });
+    CHECK(out.find("MOLE Error code [" +
+                   std::to_string(MOLE_ERR_OP_GRID_HAS_ERRORS) + "]")
+          != std::string::npos);
+
+    // a good grid ignores every mode and gives the same matrix
+    Gradient plain(2, good);
+    REQUIRE(!plain.hasOpErrors());
+    CHECK(capture([&]{
+        Gradient G(2, good, DEBUG_AND_ABORT_MD);
+        CHECK(!G.hasOpErrors());
+        CHECK(approx_equal(mat(G.getMatrix()), mat(plain.getMatrix()),
+                           "absdiff", 0.0));
+    }).empty());
+
+    // the gridVar constructor takes the same path
+    gridVar gv = gridBuilder("dim", 1, "m", 5, "dx", 0.2,
+                             "topology", 'z');
+    CHECK(!capture([&]{
+        Gradient G(2, gv, DEBUG_REPORTS_STDOUT_MD);
+        CHECK(G.hasOpErrors());
+    }).empty());
 }
 
 MOLE_TEST_MAIN()

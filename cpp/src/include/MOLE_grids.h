@@ -162,14 +162,7 @@ class gridBase{
         // order, onto the destination stack.
         void addGridErrs2Stack(stack<MOLE_Errors>& dest) const;
 
-        //
-        // applyDebugMode implements the MOLE debug modes for grid
-        // objects. A grid whose error log is empty is left
-        // untouched; the mode governs only what happens to a grid
-        // that has errors. The mode is applied once, by the
-        // constructor that received it, and is not stored on the
-        // grid.
-        //
+        // applies a MOLE debug mode to a grid with errors
         void applyDebugMode(size_t debug_mode);
 
         // ----------------------------------------------------------
@@ -242,8 +235,8 @@ class gridBase{
 // Each grid class offers four constructors. The two that take a
 // debug_mode delegate to the matching constructor without one, then
 // apply the mode to the result. Valid modes are declared in
-// MOLE_errors.h: DEBUG_DEFAULT_MD, DEBUG_REPORTS_STDOUT_MD, and
-// DEBUG_AND_ABORT_MD.
+// MOLE_errors.h: DEBUG_DEFAULT_MD, DEBUG_REPORTS_STDOUT_MD,
+// DEBUG_AND_SIGTRAP_MD and DEBUG_AND_ABORT_MD.
 // ----------------------------------------------------------------
 
 // 1D grid class

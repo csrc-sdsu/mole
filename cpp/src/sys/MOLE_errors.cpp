@@ -14,6 +14,8 @@
  */
 
  #include "MOLE_errors.h"
+ #include <csignal>  // raise(SIGTRAP) for DEBUG_AND_SIGTRAP_MD
+ #include <cstdlib>  // abort() for DEBUG_AND_ABORT_MD
  #include <ctime>
  #include <fstream>
 
@@ -213,4 +215,37 @@ void MOLEerr_dumpErrLog(stack<MOLE_Errors>& errorStack,
         }
     }
     outFile.close(); 
+}
+
+// MOLEerr_applyDebugMode applies a debug mode to a stack with
+// errors. An unrecognized mode falls back to reporting.
+void MOLEerr_applyDebugMode(const stack<MOLE_Errors>& errorStack,
+                            size_t debug_mode){
+    if (!MOLEerr_haserrors(errorStack)) return;
+
+    switch (debug_mode) {
+    case DEBUG_DEFAULT_MD:
+        return;
+    case DEBUG_REPORTS_STDOUT_MD:
+        MOLEerr_print(errorStack);
+        return;
+    case DEBUG_AND_SIGTRAP_MD:
+        MOLEerr_print(errorStack);
+        cout.flush();
+#ifdef SIGTRAP
+        raise(SIGTRAP);
+#else
+        abort();    // SIGTRAP is POSIX-only (not defined on MSVC)
+#endif
+        return;     // reached if a debugger or handler resumes
+    case DEBUG_AND_ABORT_MD:
+        MOLEerr_print(errorStack);
+        cout.flush();
+        abort();
+    default:
+        cout << "Unrecognized MOLE debug mode [" << debug_mode
+             << "], reporting to standard output." << endl;
+        MOLEerr_print(errorStack);
+        return;
+    }
 }

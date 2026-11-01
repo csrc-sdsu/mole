@@ -418,6 +418,19 @@ Gradient::Gradient(u16 k, const gridVar &g)
                       [](const auto &gr) -> const gridBase & { return gr; },
                       g)) {}
 
+//
+// The debug-mode constructors delegate, then apply the mode.
+//
+Gradient::Gradient(u16 k, const gridBase &g, size_t debug_mode)
+    : Gradient(k, g) {
+  applyDebugMode(debug_mode);
+}
+
+Gradient::Gradient(u16 k, const gridVar &g, size_t debug_mode)
+    : Gradient(k, g) {
+  applyDebugMode(debug_mode);
+}
+
 // ============================================================================
 // Builders per dimension
 // ============================================================================

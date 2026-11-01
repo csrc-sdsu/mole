@@ -29,44 +29,9 @@ using namespace std;
 // concatenation of parameters).
 #include <stack> // Using std stack class
 
-// 
-// MOLE DEBUGGING MODES
-//
-// We will define the following MOLE library debug modes. 
-// The MOLE library has been designed in a way that it does not 
-// break the execution of a user code, instead it creates and 
-// maintains an error logging mechanism that allows users to 
-// check for possible errors after a MOLE operation. In addition, 
-// the logged errors can be reported to std output or to a file.
-
-// 1. DEBUG_DEFAULT_MD (default behaviour - returns a grid 
-// that has errors)
-// <MOLEObject>.hasError (e.g., hasGridErrors()) 
-// Users and application builders are responsible for checking
-//  for errors and implementing their error corrections.
-// What support does a user get from the MOLE library at this point?
-//  A user can call MOLE functions to either:
-// A: print the errors to standard output
-// B: print errors to a file
-
-// 2. DEBUG_REPORTS_STDOUT_MD (has to be passed to the MOLE API - 
-// returns an object that has errors )
-// The MOLE library will report errors to standard output and return 
-// control to the users. What support does a user get from the MOLE 
-// library at this point?
-// A user can call MOLE functions to either:
-// A: print the errors to standard output
-// B: print errors to a file
-
-// 3. DEBUG_AND_ABORT_MD (Report, then raise SIGTRAP so a debugger
-// stops at that particular failure point). The MOLE library will
-// report errors to standard output and raise SIGTRAP. Without a
-// debugger or signal handler attached, the process terminates.
-
-// A debug mode governs only what happens to a MOLE object that
-// failed validation. An object that validated is unaffected by the
-// mode it was built with. The mode is not a property of the object;
-// it is applied once, at construction, and is not stored.
+// MOLE debug modes: what happens when an object is built with
+// errors. 0 logs only, 1 also prints the log, 2 prints and raises
+// SIGTRAP, 3 prints and aborts.
 #define DEBUG_DEFAULT_MD 0
 #define DEBUG_REPORTS_STDOUT_MD 1
 #define DEBUG_AND_SIGTRAP_MD  2
@@ -326,6 +291,10 @@ void MOLEerr_print(const stack<MOLE_Errors>& errorStack);
 
 // 7. Writes error output to a log file (not implemented yet)
 void MOLEerr_dumpErrLog(stack<MOLE_Errors>& errorStack, string logType);
+
+// 8. Applies a MOLE debug mode to an error stack
+void MOLEerr_applyDebugMode(const stack<MOLE_Errors>& errorStack,
+                            size_t debug_mode);
 
 // ParamsNull is a struct used for reporting errors with any
 // MOLE Grid Objects whenever the grid dimensionality has not been
