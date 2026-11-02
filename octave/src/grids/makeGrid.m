@@ -1,12 +1,13 @@
-addpath('../sys')
 
-function grid = makeGrid_impl(varargin)
+
+function grid = makeGrid(varargin)
 % Canonical implementation for makeGrid.
+    addpath(fullfile(fileparts(mfilename('fullpath')), '..', 'sys'));
 	errorObj = MOLE_errors();
     if nargin == 1 && isstruct(varargin{1})
         grid = varargin{1};
     else
-        validateNumArgs(nargin)
+        validateNumArgs(nargin, errorObj)
         grid = struct();
         for i = 1:2:nargin
             name = varargin{i};
@@ -26,8 +27,8 @@ end
 function validateNumArgs(nargin, errorObj)
 	#This function vaildates that the number of arguments are pairs if not it logs
     #stops execution
-	if mod(nargin, 2) == 0
-    	params = "number of arguments: " + int2str(nargin);
+	if mod(nargin, 2) ~= 0
+    	params = sprintf('number of arguments: %d', nargin);
     	errorObj.log_error('MAKE_GRID_INVALID_INPUT_ARGS', 'makeGrid', true, params);
     else
 		  return;

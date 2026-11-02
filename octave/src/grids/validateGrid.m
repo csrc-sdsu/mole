@@ -35,8 +35,8 @@ function grid = validateGrid(grid, allowPartial, errorObj)
     end
 
     if ~isstruct(grid) || ~isscalar(grid)
-        params = sprintf('grid must be a scalar or a struct; received class %s
-                with size %s.', class(grid), mat2str(size(grid)));
+        params = sprintf(['grid must be a scalar or a struct; received class %s' ...
+                ' with size %s.'], class(grid), mat2str(size(grid)));
         errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'validateGrid', true, params);
     end
 
@@ -605,7 +605,11 @@ function grid = localValidateCurvilinearNodes3D(grid, errorObj)
     expected = [m+1, n+1, o+1];
     if ~isequal(size(grid.nodes.X), expected) || ~isequal(size(grid.nodes.Y), expected) || ...
        ~isequal(size(grid.nodes.Z), expected)
-        params = sprintf('Curvilinear grid.nodes.X/Y/Z must be (%d x %d x %d); received X=%s, Y=%s, and Z=%s.', m+1, n+1, o+1, mat2str(size(grid.nodes.X)), mat2str(size(grid.nodes.Y)), mat2str(size(grid.nodes.Z)));
+        params = sprintf(['Curvilinear grid.nodes.X/Y/Z must be' ...
+                        '(%d x %d x %d); received X=%s, Y=%s, and Z=%s.'], ...
+                        m+1, n+1, o+1, mat2str(size(grid.nodes.X)), ...
+                        mat2str(size(grid.nodes.Y)), ...
+                        mat2str(size(grid.nodes.Z)));
         errorObj.log_error('MOLE_ERR_GRID_NODAL_SZ_MISMATCH', 'localValidateCurvilinearNodes3D', true, params);
     end
     localValidateCurvilinearNodeData(grid.nodes, {'X', 'Y', 'Z'}, errorObj);
@@ -619,10 +623,12 @@ function localValidateCurvilinearNodeData(nodes, fieldNames, errorObj)
         value = nodes.(name);
         if ~isnumeric(value) || ~isreal(value)
             params = sprintf('grid.nodes.%s must contain real numeric data.', name);
-            errorObj.log_error('MOLE_ERR_INVALID_NODAL_COORDINATES', 'localValidateCurvilinearNodeData', true, params);
+            errorObj.log_error('MOLE_ERR_INVALID_NODAL_COORDINATES',    ...
+                        'localValidateCurvilinearNodeData', true, params);
         elseif ~all(isfinite(value(:)))
             params = sprintf('grid.nodes.%s must contain only finite values.', name);
-            errorObj.log_error('MOLE_ERR_INVALID_NODAL_COORDINATES', 'localValidateCurvilinearNodeData', true, params);
+            errorObj.log_error('MOLE_ERR_INVALID_NODAL_COORDINATES',    ...
+                     'localValidateCurvilinearNodeData', true, params);
         end
     end
 end
