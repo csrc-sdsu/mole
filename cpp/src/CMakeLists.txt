@@ -9,6 +9,7 @@ add_library(mole
     grids/grid_builder.cpp
     operators/MOLE_operators.cpp
     operators/gradient.cpp
+    operators/divergence.cpp
     sys/MOLE_errors.cpp
     utils/utils.cpp
 )
