@@ -440,6 +440,19 @@ function grid = localNormalizeGrid3D(grid, errorObj)
     grid.dy = double(grid.dy);
     grid.dz = double(grid.dz);
 
+    expectedSize = [grid.m + 1, grid.n + 1, grid.o + 1];
+    nodeNames = {'X', 'Y', 'Z'};
+    for i = 1:numel(nodeNames)
+        name = nodeNames{i};
+        if localHasNodeField(grid, name) && ...
+                ~isequal(size(grid.nodes.(name)), expectedSize)
+            params = sprintf('grid.nodes.%s must be (%d x %d x %d); received size %s.', ...
+                             name, expectedSize(1), expectedSize(2), expectedSize(3), ...
+                             mat2str(size(grid.nodes.(name))));
+            errorObj.log_error('MOLE_ERR_GRID_NODAL_SZ_MISMATCH', 'localNormalizeGrid3D', true, params);
+        end
+    end
+
     if isfield(grid, 'bc') && isstruct(grid.bc)
         bc = grid.bc;
     else
