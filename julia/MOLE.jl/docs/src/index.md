@@ -86,6 +86,31 @@ Once you have built the documentation (either from the REPL or the command line)
 
 ## Functions
 
+### Grids
+
+The `Grids` module provides the grid data structures. A grid stores dimensionality, topology, spacing, coordinates, and boundary metadata in one object.
+
+Example of usage:
+
+```julia
+using MOLE.Grids
+
+grid = makeGrid(m=64, n=64, dx=1/64, dy=1/64)
+
+grid.dim
+grid.topology
+grid.nodes
+grid.faces
+grid.centers
+```
+
+```@docs
+MOLE.Grids.makeGrid
+MOLE.Grids.validateGrid
+MOLE.Grids.Grid
+MOLE.Grids.BoundaryMetadata
+```
+
 ### Operators
 
 ```@docs
