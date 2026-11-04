@@ -378,7 +378,17 @@ function grid = localNormalizeGrid2D(grid, errorObj)
     end
 
     [bc.dc, bc.nc, bc.hasData] = localNormalizeBoundaryCoefficients(bc, 4, errorObj);
-    if bc.hasData
+    if isfield(bc, 'isPeriodic')
+        if ~islogical(bc.isPeriodic)
+            params = 'grid.bc.isPeriodic must be a logical vector.';
+            errorObj.log_error('MOLE_ERR_ISPERIODIC_TYPE', 'localNormalizeGrid2D', true, params);
+        end
+        if ~isvector(bc.isPeriodic) || numel(bc.isPeriodic) ~= 2
+            params = 'grid.bc.isPeriodic must contain two flags, one per dimension.';
+            errorObj.log_error('MOLE_ERR_INVALID_ISPERIODIC_DIM', 'localNormalizeGrid2D', true, params);
+        end
+        bc.isPeriodic = bc.isPeriodic(:);
+    elseif bc.hasData
         bc.isPeriodic = [isempty(find(bc.dc(1:2).^2 + bc.nc(1:2).^2, 1)); ...
                          isempty(find(bc.dc(3:4).^2 + bc.nc(3:4).^2, 1))];
     else
