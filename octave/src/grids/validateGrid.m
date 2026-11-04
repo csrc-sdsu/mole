@@ -74,15 +74,20 @@ function grid = validateGrid(grid, allowPartial, errorObj)
         else
             grid.topology = 'uniform';
         end
-    elseif localHasCurvilinearEvidence(grid) && ~strcmpi(grid.topology, 'curvilinear')
-        params = sprintf('Supplied coordinates imply a curvilinear grid, but grid.topology is %s.', grid.topology);
-        errorObj.log_error('MOLE_ERR_INVALID_GRID_TOPOLOGY', 'validateGrid', false, params);
+    elseif ~ischar(grid.topology) || ...
+                ~any(strcmpi(grid.topology, {'uniform', 'curvilinear', 'periodic'}))
+        params = 'grid.topology must be uniform, curvilinear, or periodic.';
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_TOPOLOGY', 'validateGrid', true, params);
     end
 
     switch grid.dim
     case 1
         localRequire(grid, {'m'}, allowPartial, 'MOLE_ERR_INVALID_GRID_SIZE', errorObj);
         localValidateCellCounts(grid, {'m'}, errorObj);
+        if strcmpi(grid.topology, 'curvilinear')
+            params = 'Curvilinear grids cannot be one dimensional.';
+            errorObj.log_error('MOLE_ERR_INVALID_1D_CURVILINEAR', 'validateGrid', true, params);
+    end
         grid = localNormalizeIfUniform1D(grid, allowPartial, errorObj);
     case 2
         localRequire(grid, {'m', 'n'}, allowPartial, 'MOLE_ERR_INVALID_GRID_SIZE', errorObj);
@@ -253,6 +258,13 @@ function grid = localNormalizeGrid1D(grid, errorObj)
 
     grid.m = double(grid.m);
     grid.dx = double(grid.dx);
+
+    if localHasNodeField(grid, 'X') && ... 
+                ~isequal(size(grid.nodes.X), [grid.m + 1, 1])
+        params = sprintf('grid.nodes.X must be (%d x 1); received size %s.', ...
+                        grid.m + 1, mat2str(size(grid.nodes.X)));
+        errorObj.log_error('MOLE_ERR_GRID_NODAL_SZ_MISMATCH', 'localNormalizeGrid1D', true, params);
+    end
 
     if isfield(grid, 'bc') && isstruct(grid.bc)
         bc = grid.bc;
