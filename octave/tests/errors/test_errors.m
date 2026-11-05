@@ -4,6 +4,20 @@ These are tests for our MOLE errors class.
 %}
 
 function [passed, total] = test_errors()
+    % PURPOSE
+    % Test MOLE error logging, validation, and abort behavior.
+    % SYNTAX
+    % [passed, total] = test_errors()
+    % DESCRIPTION
+    % Adds octave/src/sys relative to this file and runs the embedded BIST
+    % cases with a fresh logger per case. Checks console output, identifiers,
+    % error counts, and input rejection. Returns successful and executed case
+    % counts and prints a summary.
+    % ----------------------------------------------------------------------------
+    % SPDX-License-Identifier: GPL-3.0-or-later
+    % © 2008-2024 San Diego State University Research Foundation (SDSURF).
+    % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+    % ----------------------------------------------------------------------------
     testDir = fileparts(mfilename('fullpath'));
     addpath(fullfile(testDir, '..', '..', 'src', 'sys'));
     [passed, total] = test(mfilename('fullpath'), 'verbose');

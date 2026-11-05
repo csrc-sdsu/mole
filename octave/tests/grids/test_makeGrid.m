@@ -3,7 +3,15 @@ function [passed, total] = test_makeGrid()
 % Test grid construction from structs and name/value pairs.
 % SYNTAX
 % [passed, total] = test_makeGrid()
+% DESCRIPTION
+% Adds the grid sources, error logger, and test helpers to the Octave path.
+% Runs the embedded BIST cases with verbose output. passed is the number of
+% successful cases; total is the number of cases executed.
+% ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
     grid_test_setup();
     [passed, total] = test(mfilename('fullpath'), 'verbose');
 end
@@ -98,3 +106,4 @@ end
 %! # Reject an unknown topology supplied in a parameter struct.
 %! p = struct('topology','q','m',3,'n',3,'dx',1,'dy',1);
 %! expect_mole_error(@() makeGrid(p), 'MOLE_ERR_INVALID_GRID_TOPOLOGY');
+

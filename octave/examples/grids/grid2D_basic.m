@@ -1,8 +1,16 @@
-%% Uniform Two-Dimensional Grid
-%
 % Build a grid on 0 <= x <= 3 and 0 <= y <= 3. Coordinate arrays use
 % ndgrid layout: the first index follows x and the second follows y.
 % The u faces are normal to x; the v faces are normal to y.
+
+% Nodes satisfy x_i = i*dx, y_j = j*dy. Center arrays also include
+% domain endpoints. Boundary metadata defaults to nonperiodic.
+%
+% ----------------------------------------------------------------------------
+% SPDX-License-Identifier: GPL-3.0-or-later
+% © 2008-2024 San Diego State University Research Foundation (SDSURF).
+% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+% ----------------------------------------------------------------------------
+
 
 clear; clc;
 
