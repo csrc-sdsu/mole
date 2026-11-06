@@ -10,8 +10,9 @@
 % and the second follows theta. Validation derives face midpoints and
 % cell centers by averaging neighboring nodes.
 
-% Boundary metadata defaults to nonperiodic. The field x^2 - y^2 is
-% sampled at the derived centers; no differential operator is applied.
+% No boundary coefficients or periodic flags are supplied in this example.
+% The field x^2 - y^2 is sampled at the derived centers;
+% no differential operator is applied.
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
