@@ -259,12 +259,34 @@ function grid = localNormalizeGrid1D(grid, errorObj)
     grid.m = double(grid.m);
     grid.dx = double(grid.dx);
 
-    if localHasNodeField(grid, 'X') && ... 
-                ~isequal(size(grid.nodes.X), [grid.m + 1, 1])
+    if localHasNodeField(grid, 'X')
+    values = grid.nodes.X;
+
+    if ~isequal(size(values), [grid.m + 1, 1])
         params = sprintf('grid.nodes.X must be (%d x 1); received size %s.', ...
-                        grid.m + 1, mat2str(size(grid.nodes.X)));
+                         grid.m + 1, mat2str(size(values)));
         errorObj.log_error('MOLE_ERR_GRID_NODAL_SZ_MISMATCH', 'localNormalizeGrid1D', true, params);
     end
+
+    if ~isnumeric(values) || ~isreal(values) || ~all(isfinite(values(:)))
+        params = 'grid.nodes.X must contain real, finite numeric data.';
+        errorObj.log_error('MOLE_ERR_INVALID_NODAL_COORDINATES', 'localNormalizeGrid1D', true, params);
+    end
+
+    reference = (0:grid.m)' * grid.dx;
+    scale = max(abs(reference(:)));
+    if isa(values, 'single')
+        tolerance = 16 * double(eps(single(scale)));
+    else
+        tolerance = 16 * eps(scale);
+    end
+
+    difference = double(values) - reference;
+    if ~isfinite(tolerance) || any(abs(difference(:)) > tolerance)
+        params = 'grid.nodes.X does not match the uniform grid cell count and spacing.';
+        errorObj.log_error('MOLE_ERR_INVALID_NODAL_COORDINATES', 'localNormalizeGrid1D', true, params);
+    end
+end
 
     if isfield(grid, 'bc') && isstruct(grid.bc)
         bc = grid.bc;
@@ -431,7 +453,7 @@ function grid = localNormalizeGrid3D(grid, errorObj)
             errorObj.log_error('MOLE_ERR_INVALID_GRID_SIZE', 'localNormalizeGrid3D', true, params);
         end
     end
-    
+
     spacingNames = {'dx', 'dy', 'dz'};
     for i = 1:numel(spacingNames)
         if ~isfield(grid, spacingNames{i})
@@ -451,14 +473,45 @@ function grid = localNormalizeGrid3D(grid, errorObj)
 
     expectedSize = [grid.m + 1, grid.n + 1, grid.o + 1];
     nodeNames = {'X', 'Y', 'Z'};
-    for i = 1:numel(nodeNames)
-        name = nodeNames{i};
-        if localHasNodeField(grid, name) && ...
-                ~isequal(size(grid.nodes.(name)), expectedSize)
-            params = sprintf('grid.nodes.%s must be (%d x %d x %d); received size %s.', ...
-                             name, expectedSize(1), expectedSize(2), expectedSize(3), ...
-                             mat2str(size(grid.nodes.(name))));
-            errorObj.log_error('MOLE_ERR_GRID_NODAL_SZ_MISMATCH', 'localNormalizeGrid3D', true, params);
+    hasNodes = localHasNodeField(grid, 'X') || localHasNodeField(grid, 'Y') || ...
+               localHasNodeField(grid, 'Z');
+
+    if hasNodes
+        references = {(0:grid.m)' * grid.dx, (0:grid.n) * grid.dy, ...
+                      reshape((0:grid.o) * grid.dz, [1, 1, grid.o + 1])};
+
+        for i = 1:numel(nodeNames)
+            name = nodeNames{i};
+            if ~localHasNodeField(grid, name)
+                continue;
+            end
+
+            values = grid.nodes.(name);
+            if ~isequal(size(values), expectedSize)
+                params = sprintf('grid.nodes.%s must be (%d x %d x %d); received size %s.', ...
+                                 name, expectedSize(1), expectedSize(2), expectedSize(3), ...
+                                 mat2str(size(values)));
+                errorObj.log_error('MOLE_ERR_GRID_NODAL_SZ_MISMATCH', 'localNormalizeGrid3D', true, params);
+            end
+
+            if ~isnumeric(values) || ~isreal(values) || ~all(isfinite(values(:)))
+                params = sprintf('grid.nodes.%s must contain real, finite numeric data.', name);
+                errorObj.log_error('MOLE_ERR_INVALID_NODAL_COORDINATES', 'localNormalizeGrid3D', true, params);
+            end
+
+            reference = references{i};
+            scale = max(abs(reference(:)));
+            if isa(values, 'single')
+                tolerance = 16 * double(eps(single(scale)));
+            else
+                tolerance = 16 * eps(scale);
+            end
+
+            difference = bsxfun(@minus, double(values), reference);
+            if ~isfinite(tolerance) || any(abs(difference(:)) > tolerance)
+                params = sprintf('grid.nodes.%s does not match the uniform grid cell counts and spacing.', name);
+                errorObj.log_error('MOLE_ERR_INVALID_NODAL_COORDINATES', 'localNormalizeGrid3D', true, params);
+            end
         end
     end
 

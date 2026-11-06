@@ -81,3 +81,9 @@ end
 %! assert(errors.haveErrors(), true);
 %! assert(errors.getNumErrors(), 1);
 %! assert(~isempty(strfind(err.message, 'MOLE_ERR_INVALID_GRID_SPACING')));
+
+%!test
+%! # Reject supplied uniform nodes inconsistent with the cell spacing.
+%! p = struct('topology', 'uniform', 'm', 2, 'dx', 1);
+%! p.nodes.X = zeros(3, 1);
+%! expect_mole_error(@() validateGrid(p), 'MOLE_ERR_INVALID_NODAL_COORDINATES');

@@ -1,4 +1,4 @@
-function [passed, total] = test_grid_builder()
+function [passed, total] = test_grid_inferred()
 % PURPOSE
 % Test inferred grid attributes and boundary metadata.
 % SYNTAX
@@ -107,6 +107,7 @@ end
 %! p.bc.isPeriodic = true;
 %! g = validate_clean(p);
 %! assert(g.dim, 1);
+%! assert(g.bc.isPeriodic, true);
 
 
 %!test
@@ -115,6 +116,7 @@ end
 %! p.bc.isPeriodic = [true;false];
 %! g = validate_clean(p);
 %! assert(g.dim, 2);
+%! assert(g.bc.isPeriodic, [true; false]);
 
 
 %!test
@@ -123,6 +125,7 @@ end
 %! p.bc.isPeriodic = [true;false;true];
 %! g = validate_clean(p);
 %! assert(g.dim, 3);
+%! assert(g.bc.isPeriodic, [true; false; true]);
 
 
 %!test

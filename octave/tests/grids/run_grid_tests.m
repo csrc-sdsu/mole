@@ -31,7 +31,7 @@ function report = run_grid_tests(verbose)
     end
 
     names = {'test_grid1D', 'test_grid2D', 'test_grid3D', ...
-             'test_grid_inferred', 'test_makeGrid'};
+         'test_grid_inferred', 'test_makeGrid', 'testMakeGrid'};
     results = struct('name', {}, 'total', {}, 'passed', {}, 'failed', {}, ...
                      'blocked', {}, 'reason', {}, 'details', {});
     for i = 1:numel(names)
@@ -46,7 +46,7 @@ function report = run_grid_tests(verbose)
         if ~strcmp(names{i}, 'test_error_reporting') && ~report.preflight.validateGrid.ok
             reasons{end+1} = ['validateGrid: ' report.preflight.validateGrid.reason];
         end
-        if strcmp(names{i}, 'test_makeGrid') && ~report.preflight.makeGrid.ok
+        if any(strcmp(names{i}, {'test_makeGrid', 'testMakeGrid'})) && ~report.preflight.makeGrid.ok
             reasons{end+1} = ['makeGrid: ' report.preflight.makeGrid.reason];
         end
         if ~isempty(reasons)

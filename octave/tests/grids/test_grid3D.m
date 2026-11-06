@@ -73,3 +73,19 @@ end
 %! assert(errors.haveErrors(), true);
 %! assert(errors.getNumErrors(), 1);
 %! assert(~isempty(strfind(err.message, 'Code: 102')));
+
+%!test
+%! # Reject inconsistent supplied uniform coordinates on every axis.
+%! m = 2; n = 3; o = 2;
+%! [X, Y, Z] = ndgrid(0:m, 0:n, 0:o);
+%! p = struct('topology', 'uniform', 'm', m, 'n', n, 'o', o, ...
+%!            'dx', 1, 'dy', 1, 'dz', 1);
+%! p.nodes = struct('X', X, 'Y', Y, 'Z', Z);
+%! names = {'X', 'Y', 'Z'};
+%! for i = 1:numel(names)
+%!     q = p;
+%!     values = q.nodes.(names{i});
+%!     values(2, 2, 2) = 99;
+%!     q.nodes.(names{i}) = values;
+%!     expect_mole_error(@() validateGrid(q), 'MOLE_ERR_INVALID_NODAL_COORDINATES');
+%! end
