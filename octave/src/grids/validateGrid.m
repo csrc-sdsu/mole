@@ -40,11 +40,8 @@ function grid = validateGrid(grid, allowPartial, errorObj)
         errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'validateGrid', true, params);
     end
 
-    if ~isfield(grid, 'bc')
+    if ~isfield(grid, 'bc') || ~isstruct(grid.bc)
         grid.bc = struct();
-    elseif ~isstruct(grid.bc) || ~isscalar(grid.bc)
-        params = sprintf('grid.bc must be a scalar or a struct; received class %s with size %s.', class(grid.bc), mat2str(size(grid.bc)));
-        errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'validateGrid', false, params);
     end
 
     if isfield(grid, 'dc') && ~isfield(grid.bc, 'dc')
@@ -302,16 +299,7 @@ end
     end
 
     [bc.dc, bc.nc, bc.hasData] = localNormalizeBoundaryCoefficients(bc, 2, errorObj);
-    if isfield(bc, 'isPeriodic')
-        if ~islogical(bc.isPeriodic)
-            params = 'grid.bc.isPeriodic must be logical.';
-            errorObj.log_error('MOLE_ERR_ISPERIODIC_TYPE', 'localNormalizeGrid1D', true, params);
-        end
-        if ~isscalar(bc.isPeriodic)
-            params = 'grid.bc.isPeriodic must contain one flag for a 1-D grid.';
-            errorObj.log_error('MOLE_ERR_INVALID_ISPERIODIC_DIM', 'localNormalizeGrid1D', true, params);
-        end
-    elseif bc.hasData
+    if bc.hasData
         bc.isPeriodic = isempty(find(bc.dc .* bc.dc + bc.nc .* bc.nc, 1));
     else
         bc.isPeriodic = false;
@@ -409,17 +397,7 @@ function grid = localNormalizeGrid2D(grid, errorObj)
     end
 
     [bc.dc, bc.nc, bc.hasData] = localNormalizeBoundaryCoefficients(bc, 4, errorObj);
-    if isfield(bc, 'isPeriodic')
-        if ~islogical(bc.isPeriodic)
-            params = 'grid.bc.isPeriodic must be a logical vector.';
-            errorObj.log_error('MOLE_ERR_ISPERIODIC_TYPE', 'localNormalizeGrid2D', true, params);
-        end
-        if ~isvector(bc.isPeriodic) || numel(bc.isPeriodic) ~= 2
-            params = 'grid.bc.isPeriodic must contain two flags, one per dimension.';
-            errorObj.log_error('MOLE_ERR_INVALID_ISPERIODIC_DIM', 'localNormalizeGrid2D', true, params);
-        end
-        bc.isPeriodic = bc.isPeriodic(:);
-    elseif bc.hasData
+    if bc.hasData
         bc.isPeriodic = [isempty(find(bc.dc(1:2).^2 + bc.nc(1:2).^2, 1)); ...
                          isempty(find(bc.dc(3:4).^2 + bc.nc(3:4).^2, 1))];
     else
@@ -529,17 +507,7 @@ function grid = localNormalizeGrid3D(grid, errorObj)
     end
 
     [bc.dc, bc.nc, bc.hasData] = localNormalizeBoundaryCoefficients(bc, 6, errorObj);
-    if isfield(bc, 'isPeriodic')
-        if ~islogical(bc.isPeriodic)
-            params = 'grid.bc.isPeriodic must be a logical vector.';
-            errorObj.log_error('MOLE_ERR_ISPERIODIC_TYPE', 'localNormalizeGrid3D', true, params);
-        end
-        if ~isvector(bc.isPeriodic) || numel(bc.isPeriodic) ~= 3
-            params = 'grid.bc.isPeriodic must contain three flags, one per dimension.';
-            errorObj.log_error('MOLE_ERR_INVALID_ISPERIODIC_DIM', 'localNormalizeGrid3D', true, params);
-        end
-        bc.isPeriodic = bc.isPeriodic(:);
-    elseif bc.hasData
+    if bc.hasData
         bc.isPeriodic = [isempty(find(bc.dc(1:2).^2 + bc.nc(1:2).^2, 1)); ...
                          isempty(find(bc.dc(3:4).^2 + bc.nc(3:4).^2, 1)); ...
                          isempty(find(bc.dc(5:6).^2 + bc.nc(5:6).^2, 1))];

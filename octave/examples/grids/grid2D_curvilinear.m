@@ -46,7 +46,7 @@ grid = validateGrid(params);
 %% Evaluate a Scalar Function at Cell Centers
 u = grid.centers.X.^2 - grid.centers.Y.^2;
 
-%% Validation
+%% Validation (Needs to be changed to use mole errors)
 assert(grid.topology, 'curvilinear');
 assert(size(grid.nodes.X), [m + 1, n + 1]);
 assert(size(grid.centers.X), [m, n]);
