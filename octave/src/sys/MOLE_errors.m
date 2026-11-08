@@ -29,20 +29,73 @@ classdef MOLE_errors < handle
         endfunction
 
         function tf = haveErrors(obj)
-            # Check if any errors occured
+            % PURPOSE
+            % Check whether this object has recorded any MOLE errors.
+            %
+            % SYNTAX
+            % tf = obj.haveErrors()
+            %
+            % DESCRIPTION
+            %   obj : MOLE_errors object.
+            %    tf : Logical scalar. Returns true when the recorded error count
+            %         is greater than zero, and false otherwise.
+            %
+            % Recorded errors include both errors printed without aborting and
+            % errors raised as exceptions by log_error.
             tf = ~(obj.numErrors == 0);
         endfunction
         function num = getNumErrors(obj)
+            % PURPOSE
+            % Return the number of MOLE errors recorded by this object.
+            %
+            % SYNTAX
+            % num = obj.getNumErrors()
+            %
+            % DESCRIPTION
+            %   obj : MOLE_errors object.
+            %   num : Numeric scalar containing the cumulative recorded error count.
+            %         A newly constructed object has a count of zero.
+            %
+            % Each successfully logged error increases the count once, including
+            % errors raised as exceptions. Calls rejected before logging do not
+            % increase the count.
             num = obj.numErrors;
         endfunction
 
         function log_error(obj, errorName, location, onErrorAbort = false, params = "")
-            # This function logs an error and decides wether it will stop and error and print
-            # the error error name, error code, error location, and error
-            # params which would stop execution. Otherwise it prints the error
-            # onErrorAbort true means that its an error that stops execution
-            # and false are errors that keep going with exection even
-            # though and error occured
+            % PURPOSE
+            % Report a MOLE error, increment the error count, and optionally
+            % raise an exception.
+            %
+            % SYNTAX
+            % obj.log_error(errorName, location)
+            % obj.log_error(errorName, location, onErrorAbort)
+            % obj.log_error(errorName, location, onErrorAbort, params)
+            %
+            % DESCRIPTION
+            %            obj : MOLE_errors object receiving the recorded error.
+            %      errorName : Character array identifying an error in errors.json.
+            %       location : Character array describing where the error occurred.
+            %   onErrorAbort : Optional logical scalar. true raises an exception;
+            %                  false prints the error report. Defaults to false.
+            %         params : Optional character array describing the input values
+            %                  or circumstances associated with the error.
+            %                  Defaults to an empty character array.
+            %
+            % Retrieves the error code and message from the error catalog and
+            % formats them with the supplied name, location, and parameter text.
+            % The object's error count is incremented once before reporting.
+            %
+            % When onErrorAbort is false, prints the formatted report and returns.
+            % When true, raises an exception with identifier ['MOLE:' errorName].
+            % The recorded count remains incremented if the caller catches it.
+            %
+            % An unknown catalog key raises MOLE:UNKNOWN_ERROR_NAME without
+            % incrementing the count. For a recognized key, invalid location,
+            % params, or onErrorAbort inputs print a diagnostic and return without
+            % incrementing the count.
+            %
+            % This method returns no output.
             errorInfo = error_catalog(errorName);
 
             if ~ischar(location) || ~ischar(params)
