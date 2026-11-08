@@ -1,7 +1,45 @@
 
 
 function grid = makeGrid(varargin)
-% Canonical implementation for makeGrid.
+    % PURPOSE
+    % Construct a grid from name/value pairs or a parameter structure and
+    % pass it to validateGrid for partial validation and normalization.
+    %
+    % SYNTAX
+    % grid = makeGrid()
+    % grid = makeGrid(params)
+    % grid = makeGrid(name1, value1, name2, value2, ...)
+    %
+    % DESCRIPTION
+    %   params : Scalar structure containing grid parameters.
+    %    nameN : Grid field name supplied as a character array or string.
+    %   valueN : Value assigned to the corresponding grid field.
+    %     grid : Returned grid structure containing supplied parameters,
+    %            inferred metadata, and coordinates when enough information
+    %            is available.
+    %
+    % Common grid fields include dim, topology, cell counts m/n/o, uniform
+    % spacings dx/dy/dz, and supplied nodal coordinates in nodes.X/Y/Z.
+    % Coordinate arrays use ndgrid layout. Complete curvilinear geometry
+    % requires nodes.X and nodes.Y, together with nodes.Z in three dimensions.
+    %
+    % Name/value pairs may be supplied in any order. Repeated field names use
+    % the last value supplied. A structure input is passed directly to validation.
+    % Boundary conditions are handled by separate functions.
+    %
+    % Calls validateGrid with allowPartial = true. Missing fields may therefore
+    % produce a partial grid without generated coordinates. Calling makeGrid
+    % without arguments initializes a partial grid. Use validateGrid(grid)
+    % afterward when full validation is required.
+    %
+    % An unpaired name/value argument raises MOLE:MAKE_GRID_INVALID_INPUT_ARGS.
+    % Grid validation diagnostics are reported through MOLE_errors.
+    %
+    % ----------------------------------------------------------------------------
+    % SPDX-License-Identifier: GPL-3.0-or-later
+    % © 2008-2024 San Diego State University Research Foundation (SDSURF).
+    % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
+    % ----------------------------------------------------------------------------
     addpath(fullfile(fileparts(mfilename('fullpath')), '..', 'sys'));
 	errorObj = MOLE_errors();
     if nargin == 1 && isstruct(varargin{1})
