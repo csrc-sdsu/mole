@@ -22,6 +22,7 @@
 //      how that error is reported to standard output.
 //
 #include "MOLE_grids.h"
+#include "divergence.h"
 #include "gradient.h"
 #include "grid_builder.h"
 #include "mole_test.h"
@@ -401,6 +402,45 @@ TEST_CASE("Gradient honours the debug modes") {
     CHECK(!capture([&]{
         Gradient G(2, gv, DEBUG_REPORTS_STDOUT_MD);
         CHECK(G.hasOpErrors());
+    }).empty());
+}
+
+TEST_CASE("Divergence honours the debug modes") {
+    grid1D good(goodParams1D());
+    grid1D bad(badParams1D());
+
+    // a bad grid: quiet by default, reported in mode 1; both return
+    // an empty operator
+    CHECK(capture([&]{
+        Divergence D(2, bad, DEBUG_DEFAULT_MD);
+        CHECK(D.hasOpErrors());
+        CHECK(D.getMatrix().n_elem == 0);
+    }).empty());
+    std::string out = capture([&]{
+        Divergence D(2, bad, DEBUG_REPORTS_STDOUT_MD);
+        CHECK(D.hasOpErrors());
+        CHECK(D.getMatrix().n_elem == 0);
+    });
+    CHECK(out.find("MOLE Error code [" +
+                   std::to_string(MOLE_ERR_OP_GRID_HAS_ERRORS) + "]")
+          != std::string::npos);
+
+    // a good grid ignores every mode and gives the same matrix
+    Divergence plain(2, good);
+    REQUIRE(!plain.hasOpErrors());
+    CHECK(capture([&]{
+        Divergence D(2, good, DEBUG_AND_ABORT_MD);
+        CHECK(!D.hasOpErrors());
+        CHECK(approx_equal(mat(D.getMatrix()), mat(plain.getMatrix()),
+                           "absdiff", 0.0));
+    }).empty());
+
+    // the gridVar constructor takes the same path
+    gridVar gv = gridBuilder("dim", 1, "m", 5, "dx", 0.2,
+                             "topology", 'z');
+    CHECK(!capture([&]{
+        Divergence D(2, gv, DEBUG_REPORTS_STDOUT_MD);
+        CHECK(D.hasOpErrors());
     }).empty());
 }
 
