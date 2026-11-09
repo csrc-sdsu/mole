@@ -7,11 +7,6 @@ function [passed, total] = testMakeGrid()
 % Constructs a sheared grid from a parameter structure, revalidates it, and
 % checks its coordinates against the affine map x = xi + eta/4, y = eta.
 % Returns successful and executed BIST case counts with verbose output.
-% ----------------------------------------------------------------------------
-% SPDX-License-Identifier: GPL-3.0-or-later
-% © 2008-2024 San Diego State University Research Foundation (SDSURF).
-% See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
-% ----------------------------------------------------------------------------
     grid_test_setup();
     [passed, total] = test(mfilename('fullpath'), 'verbose');
 end
