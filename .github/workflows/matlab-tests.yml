@@ -72,4 +72,4 @@ jobs:
       - name: Run Octave tests
         run: |
           cd tests/octave
-          octave --quiet --eval "oruntests('.')"
+          octave --quiet --eval "files = dir('test*.m'); assert(!isempty(files)); for i = 1:numel(files); assert(test(files(i).name, 'verbose')); endfor"
