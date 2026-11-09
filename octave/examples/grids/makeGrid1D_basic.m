@@ -18,6 +18,9 @@ octaveDir = fileparts(fileparts(exampleDir));
 addpath(fullfile(octaveDir, 'src', 'grids'));
 addpath(fullfile(octaveDir, 'src', 'sys'));
 
+% Report unexpected results through the MOLE error catalog.
+exampleErrors = MOLE_errors();
+
 %% Problem Parameters
 % dim = 1 selects one dimension; m = 4 cells and dx = 0.5 span [0, 2].
 % Boundary metadata defaults to nonperiodic.

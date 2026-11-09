@@ -28,6 +28,9 @@ octaveDir = fileparts(fileparts(exampleDir));
 addpath(fullfile(octaveDir, 'src', 'grids'));
 addpath(fullfile(octaveDir, 'src', 'sys'));
 
+% Report unexpected results through the MOLE error catalog.
+exampleErrors = MOLE_errors();
+
 %% Problem Parameters
 m = 12;    % Number of radial cells between r = 1 and r = 2.
 n = 24;    % Number of angular cells between theta = 0 and pi.
@@ -47,11 +50,26 @@ grid = validateGrid(params);
 u = grid.centers.X.^2 - grid.centers.Y.^2;
 
 %% Validation (Needs to be changed to use mole errors)
-assert(grid.topology, 'curvilinear');
-assert(size(grid.nodes.X), [m + 1, n + 1]);
-assert(size(grid.centers.X), [m, n]);
-assert(size(grid.faces.u.X), [m + 1, n]);
-assert(size(grid.faces.v.X), [m, n + 1]);
+if ~(isequal(grid.topology, 'curvilinear'))
+    details = 'Expected topology ''curvilinear''.';
+    exampleErrors.log_error('MOLE_ERR_INVALID_GRID_TOPOLOGY', 'grid2D_curvilinear', true, details);
+end
+if ~(isequal(size(grid.nodes.X), [m + 1, n + 1]))
+    details = 'Nodal coordinate array dimensions or point count do not match the expected grid size.';
+    exampleErrors.log_error('MOLE_ERR_GRID_NODAL_SZ_MISMATCH', 'grid2D_curvilinear', true, details);
+end
+if ~(isequal(size(grid.centers.X), [m, n]))
+    details = 'Center coordinate array dimensions or point count do not match the expected grid size.';
+    exampleErrors.log_error('MOLE_ERR_GRID_CENTERS_SZ_MISMATCH', 'grid2D_curvilinear', true, details);
+end
+if ~(isequal(size(grid.faces.u.X), [m + 1, n]))
+    details = 'Face coordinate array dimensions do not match the expected grid dimensions.';
+    exampleErrors.log_error('MOLE_ERR_GRID_FACES_SZ_MISMATCH', 'grid2D_curvilinear', true, details);
+end
+if ~(isequal(size(grid.faces.v.X), [m, n + 1]))
+    details = 'Face coordinate array dimensions do not match the expected grid dimensions.';
+    exampleErrors.log_error('MOLE_ERR_GRID_FACES_SZ_MISMATCH', 'grid2D_curvilinear', true, details);
+end
 radiusError = max(abs(hypot(grid.nodes.X(:), grid.nodes.Y(:)) - R(:)));
 % Corner averaging places centers on chords of the polar mapping.
 [Rc, ThetaC] = ndgrid((r(1:end-1) + r(2:end))/2, ...
@@ -63,8 +81,14 @@ centerError = max(abs([grid.centers.X(:) - expectedX(:); ...
                       grid.centers.Y(:) - expectedY(:)]));
 % Allow roundoff from trigonometric evaluation and coordinate averaging.
 tolerance = 10*eps(2);
-assert(radiusError <= tolerance);
-assert(centerError <= tolerance);
+if ~(radiusError <= tolerance)
+    details = sprintf('Maximum nodal radius error %.3e exceeds tolerance %.3e or is nonfinite.', radiusError, tolerance);
+    exampleErrors.log_error('MOLE_ERR_INVALID_NODAL_COORDINATES', 'grid2D_curvilinear', true, details);
+end
+if ~(centerError <= tolerance)
+    details = sprintf('Maximum center coordinate error %.3e exceeds tolerance %.3e or is nonfinite.', centerError, tolerance);
+    exampleErrors.log_error('MOLE_ERR_INVALID_CENTER_COORDINATES', 'grid2D_curvilinear', true, details);
+end
 
 %% Results
 fprintf('Dimension: %d\n', grid.dim);

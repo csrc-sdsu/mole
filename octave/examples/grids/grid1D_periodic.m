@@ -20,6 +20,9 @@ octaveDir = fileparts(fileparts(exampleDir));
 addpath(fullfile(octaveDir, 'src', 'grids'));
 addpath(fullfile(octaveDir, 'src', 'sys'));
 
+% Report unexpected results through the MOLE error catalog.
+exampleErrors = MOLE_errors();
+
 %% Problem Parameters
 params = struct();
 params.m = 20;              % Number of cells in x.
@@ -32,14 +35,33 @@ grid = validateGrid(params);
 %% Sample a Periodic Function
 u = sin(2 * pi * grid.centers.X);
 
+
 %% Validation
-assert(grid.dim, 1);
-assert(grid.topology, 'periodic');
-assert(grid.bc.isPeriodic, true);
-assert(numel(grid.nodes.X), params.m + 1);
-assert(numel(grid.centers.X), params.m + 2);
+if ~(isequal(grid.dim, 1))
+    details = sprintf('Expected dimension %s; received %s.', mat2str(1), mat2str(grid.dim));
+    exampleErrors.log_error('MOLE_ERR_INVALID_GRID_DIM', 'grid1D_periodic', true, details);
+end
+if ~(isequal(grid.topology, 'periodic'))
+    details = 'Expected topology ''periodic''.';
+    exampleErrors.log_error('MOLE_ERR_INVALID_GRID_TOPOLOGY', 'grid1D_periodic', true, details);
+end
+if ~(isequal(grid.bc.isPeriodic, true))
+    details = 'Periodic boundary flags do not match the expected flags for this example.';
+    exampleErrors.log_error('MOLE_ERR_GRID_CONSTRUCTION_FAILED', 'grid1D_periodic', true, details);
+end
+if ~(isequal(numel(grid.nodes.X), params.m + 1))
+    details = 'Nodal coordinate array dimensions or point count do not match the expected grid size.';
+    exampleErrors.log_error('MOLE_ERR_GRID_NODAL_SZ_MISMATCH', 'grid1D_periodic', true, details);
+end
+if ~(isequal(numel(grid.centers.X), params.m + 2))
+    details = 'Center coordinate array dimensions or point count do not match the expected grid size.';
+    exampleErrors.log_error('MOLE_ERR_GRID_CENTERS_SZ_MISMATCH', 'grid1D_periodic', true, details);
+end
 % sin(2*pi*x) agrees at x = 0 and x = 1 to floating-point roundoff.
-assert(abs(u(1) - u(end)) <= 10*eps);
+if ~(abs(u(1) - u(end)) <= 10*eps)
+    details = sprintf('Periodic endpoint difference %.3e exceeds tolerance %.3e or is nonfinite.', abs(u(1)-u(end)), 10*eps);
+    exampleErrors.log_error('MOLE_ERR_GRID_CONSTRUCTION_FAILED', 'grid1D_periodic', true, details);
+end
 
 %% Results
 fprintf('Dimension: %d\n', grid.dim);

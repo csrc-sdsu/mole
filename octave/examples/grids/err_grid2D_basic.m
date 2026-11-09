@@ -43,8 +43,14 @@ catch err
     caught = true;
     fprintf('Caught %s\n%s\n', err.identifier, err.message);
 end
-assert(caught, 'Expected invalid spacing to raise a MOLE exception.');
-assert(errorObj.getNumErrors(), 1);
+if ~(caught)
+    details = 'Expected invalid spacing to raise a MOLE exception.';
+    exampleErrors.log_error('MOLE_ERR_GRID_CONSTRUCTION_FAILED', 'err_grid2D_basic', true, details);
+end
+if ~(isequal(errorObj.getNumErrors(), 1))
+    details = sprintf('Expected logger count %s; received %s.', mat2str(1), mat2str(errorObj.getNumErrors()));
+    exampleErrors.log_error('MOLE_ERR_GRID_CONSTRUCTION_FAILED', 'err_grid2D_basic', true, details);
+end
 fprintf('Recorded errors: %d\n\n', errorObj.getNumErrors());
 
 %% Corrected Spacing
@@ -52,11 +58,18 @@ fprintf('Attempt 2: dx = 1\n');
 params.dx = 1;
 errorObj = MOLE_errors();
 grid = validateGrid(params, false, errorObj);
-assert(size(grid.nodes.X), [4, 4]);
-if size(grid.nodes.X) != [4, 4]
-    
-assert(errorObj.getNumErrors(), 0);
-assert(errorObj.haveErrors(), false);
+if ~(isequal(size(grid.nodes.X), [4, 4]))
+    details = 'Nodal coordinate array dimensions or point count do not match the expected grid size.';
+    exampleErrors.log_error('MOLE_ERR_GRID_NODAL_SZ_MISMATCH', 'err_grid2D_basic', true, details);
+end
+if ~(isequal(errorObj.getNumErrors(), 0))
+    details = sprintf('Expected logger count %s; received %s.', mat2str(0), mat2str(errorObj.getNumErrors()));
+    exampleErrors.log_error('MOLE_ERR_GRID_CONSTRUCTION_FAILED', 'err_grid2D_basic', true, details);
+end
+if ~(isequal(errorObj.haveErrors(), false))
+    details = 'The logger error flag does not match the expected reporting state.';
+    exampleErrors.log_error('MOLE_ERR_GRID_CONSTRUCTION_FAILED', 'err_grid2D_basic', true, details);
+end
 fprintf('Grid built OK, nodes.X is %d x %d.\n', size(grid.nodes.X));
 fprintf('Recorded errors: %d\n', errorObj.getNumErrors());
 

@@ -18,6 +18,9 @@ octaveDir = fileparts(fileparts(exampleDir));
 addpath(fullfile(octaveDir, 'src', 'grids'));
 addpath(fullfile(octaveDir, 'src', 'sys'));
 
+% Report unexpected results through the MOLE error catalog.
+exampleErrors = MOLE_errors();
+
 %% Problem Parameters
 % dim = 2, m = n = 3 cells, and dx = dy = 1 give the domain [0, 3]^2.
 % dc and nc are ordered x-left, x-right, y-bottom, y-top. Zero pairs
@@ -39,9 +42,19 @@ c = makeGrid('topology', 'uniform', 'm', 3, 'dx', 1, ...
              'n', 3, 'dy', 1, 'bc', bc, 'dim', 2);
 
 %% Validation
-assert(isequal(a, b));
-assert(isequal(a, c));
-assert(a.bc.isPeriodic, [true; false]);
+
+if ~(isequal(a, b))
+    details = 'Changing the name/value pair order changed the constructed grid.';
+    exampleErrors.log_error('MOLE_ERR_GRID_CONSTRUCTION_FAILED', 'makeGrid_arg_order', true, details);
+end
+if ~(isequal(a, c))
+    details = 'Changing the name/value pair order changed the constructed grid.';
+    exampleErrors.log_error('MOLE_ERR_GRID_CONSTRUCTION_FAILED', 'makeGrid_arg_order', true, details);
+end
+if ~(isequal(a.bc.isPeriodic, [true; false]))
+    details = 'Periodic boundary flags do not match the expected flags for this example.';
+    exampleErrors.log_error('MOLE_ERR_GRID_CONSTRUCTION_FAILED', 'makeGrid_arg_order', true, details);
+end
 
 %% Results
 fprintf('Order B matches order A: %d\n', isequal(a, b));

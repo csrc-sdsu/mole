@@ -18,6 +18,9 @@ octaveDir = fileparts(fileparts(exampleDir));
 addpath(fullfile(octaveDir, 'src', 'grids'));
 addpath(fullfile(octaveDir, 'src', 'sys'));
 
+% Report unexpected results through the MOLE error catalog.
+exampleErrors = MOLE_errors();
+
 %% Problem Parameters
 % dim selects the number of axes; m, n, o are cell counts and dx, dy
 % are cell widths. The corrected input has m = n = 3 and dx = dy = 1,
@@ -35,7 +38,10 @@ catch err
     caught = true;
     fprintf('Caught %s\n%s\n', err.identifier, err.message);
 end
-assert(caught, 'Expected an incomplete-pair error.');
+if ~(caught)
+    details = 'Expected an incomplete-pair error.';
+    exampleErrors.log_error('MOLE_ERR_GRID_CONSTRUCTION_FAILED', 'makeGrid_error_handling', true, details);
+end
 
 %% Field Conflicting with the Dimension
 fprintf('Attempt 2: third-axis data in a two-dimensional grid\n');
@@ -50,7 +56,10 @@ catch err
     caught = true;
     fprintf('Caught %s\n%s\n', err.identifier, err.message);
 end
-assert(caught, 'Expected a conflicting-dimension error.');
+if ~(caught)
+    details = 'Expected a conflicting-dimension error.';
+    exampleErrors.log_error('MOLE_ERR_GRID_CONSTRUCTION_FAILED', 'makeGrid_error_handling', true, details);
+end
 
 %% Invalid Cell Count
 fprintf('Attempt 3: zero cells\n');
@@ -64,13 +73,22 @@ catch err
     caught = true;
     fprintf('Caught %s\n%s\n', err.identifier, err.message);
 end
-assert(caught, 'Expected an invalid-cell-count error.');
+if ~(caught)
+    details = 'Expected an invalid-cell-count error.';
+    exampleErrors.log_error('MOLE_ERR_GRID_CONSTRUCTION_FAILED', 'makeGrid_error_handling', true, details);
+end
 
 %% Valid Grid with Inferred Dimension
 fprintf('Attempt 4: valid two-dimensional parameters\n');
 grid = makeGrid('m', 3, 'n', 3, 'dx', 1, 'dy', 1, ...
                 'topology', 'uniform');
-assert(grid.dim, 2);
-assert(size(grid.nodes.X), [4, 4]);
+if ~(isequal(grid.dim, 2))
+    details = sprintf('Expected dimension %s; received %s.', mat2str(2), mat2str(grid.dim));
+    exampleErrors.log_error('MOLE_ERR_INVALID_GRID_DIM', 'makeGrid_error_handling', true, details);
+end
+if ~(isequal(size(grid.nodes.X), [4, 4]))
+    details = 'Nodal coordinate array dimensions or point count do not match the expected grid size.';
+    exampleErrors.log_error('MOLE_ERR_GRID_NODAL_SZ_MISMATCH', 'makeGrid_error_handling', true, details);
+end
 fprintf('Grid built OK, dimension = %d.\n', grid.dim);
 

@@ -25,6 +25,9 @@ octaveDir = fileparts(fileparts(exampleDir));
 addpath(fullfile(octaveDir, 'src', 'grids'));
 addpath(fullfile(octaveDir, 'src', 'sys'));
 
+% Report unexpected results through the MOLE error catalog.
+exampleErrors = MOLE_errors();
+
 %% Problem Parameters
 m = 4;              % Number of cells in the xi direction.
 n = 6;              % Number of cells in the eta direction.
@@ -58,17 +61,50 @@ centerError = max([max(abs(grid.centers.X(:) - expectedX(:))), ...
 tolerance = 16 * eps(1 + abs(amplitude));
 
 %% Validation
-assert(grid.dim == 3);
-assert(strcmp(grid.topology, 'curvilinear'));
-assert(isequal(grid.nodes.X, params.nodes.X));
-assert(isequal(grid.nodes.Y, params.nodes.Y));
-assert(isequal(grid.nodes.Z, params.nodes.Z));
-assert(isequal(size(grid.nodes.X), [m+1, n+1, o+1]));
-assert(isequal(size(grid.centers.X), [m, n, o]));
-assert(isequal(size(grid.faces.u.X), [m+1, n, o]));
-assert(isequal(size(grid.faces.v.Y), [m, n+1, o]));
-assert(isequal(size(grid.faces.w.Z), [m, n, o+1]));
-assert(centerError <= tolerance);
+if ~(grid.dim == 3)
+    details = sprintf('Expected dimension %s; received %s.', mat2str(3), mat2str(grid.dim));
+    exampleErrors.log_error('MOLE_ERR_INVALID_GRID_DIM', 'grid3D_curvilinear', true, details);
+end
+if ~(strcmp(grid.topology, 'curvilinear'))
+    details = 'Expected topology ''curvilinear''.';
+    exampleErrors.log_error('MOLE_ERR_INVALID_GRID_TOPOLOGY', 'grid3D_curvilinear', true, details);
+end
+if ~(isequal(grid.nodes.X, params.nodes.X))
+    details = 'Nodal coordinates do not match the expected values for this example.';
+    exampleErrors.log_error('MOLE_ERR_INVALID_NODAL_COORDINATES', 'grid3D_curvilinear', true, details);
+end
+if ~(isequal(grid.nodes.Y, params.nodes.Y))
+    details = 'Nodal coordinates do not match the expected values for this example.';
+    exampleErrors.log_error('MOLE_ERR_INVALID_NODAL_COORDINATES', 'grid3D_curvilinear', true, details);
+end
+if ~(isequal(grid.nodes.Z, params.nodes.Z))
+    details = 'Nodal coordinates do not match the expected values for this example.';
+    exampleErrors.log_error('MOLE_ERR_INVALID_NODAL_COORDINATES', 'grid3D_curvilinear', true, details);
+end
+if ~(isequal(size(grid.nodes.X), [m+1, n+1, o+1]))
+    details = 'Nodal coordinate array dimensions or point count do not match the expected grid size.';
+    exampleErrors.log_error('MOLE_ERR_GRID_NODAL_SZ_MISMATCH', 'grid3D_curvilinear', true, details);
+end
+if ~(isequal(size(grid.centers.X), [m, n, o]))
+    details = 'Center coordinate array dimensions or point count do not match the expected grid size.';
+    exampleErrors.log_error('MOLE_ERR_GRID_CENTERS_SZ_MISMATCH', 'grid3D_curvilinear', true, details);
+end
+if ~(isequal(size(grid.faces.u.X), [m+1, n, o]))
+    details = 'Face coordinate array dimensions do not match the expected grid dimensions.';
+    exampleErrors.log_error('MOLE_ERR_GRID_FACES_SZ_MISMATCH', 'grid3D_curvilinear', true, details);
+end
+if ~(isequal(size(grid.faces.v.Y), [m, n+1, o]))
+    details = 'Face coordinate array dimensions do not match the expected grid dimensions.';
+    exampleErrors.log_error('MOLE_ERR_GRID_FACES_SZ_MISMATCH', 'grid3D_curvilinear', true, details);
+end
+if ~(isequal(size(grid.faces.w.Z), [m, n, o+1]))
+    details = 'Face coordinate array dimensions do not match the expected grid dimensions.';
+    exampleErrors.log_error('MOLE_ERR_GRID_FACES_SZ_MISMATCH', 'grid3D_curvilinear', true, details);
+end
+if ~(centerError <= tolerance)
+    details = sprintf('Maximum center coordinate error %.3e exceeds tolerance %.3e or is nonfinite.', centerError, tolerance);
+    exampleErrors.log_error('MOLE_ERR_INVALID_CENTER_COORDINATES', 'grid3D_curvilinear', true, details);
+end
 
 %% Results
 fprintf('Dimension: %d\n', grid.dim);
