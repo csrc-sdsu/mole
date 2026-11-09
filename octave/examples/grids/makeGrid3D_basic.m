@@ -24,6 +24,9 @@ octaveDir = fileparts(fileparts(exampleDir));
 addpath(fullfile(octaveDir, 'src', 'grids'));
 addpath(fullfile(octaveDir, 'src', 'sys'));
 
+% Report unexpected results through the MOLE error catalog.
+exampleErrors = MOLE_errors();
+
 %% Problem Parameters
 m = 2;       % Number of cells in x.
 n = 3;       % Number of cells in y.
@@ -38,22 +41,64 @@ grid = makeGrid('m', m, 'n', n, 'o', o, ...
                 'dx', dx, 'dy', dy, 'dz', dz, 'topology', 'uniform');
 
 %% Validation
-assert(grid.dim == 3);
-assert(strcmp(grid.topology, 'uniform'));
-assert(isequal(grid.bc.isPeriodic, false(3, 1)));
-assert(isequal(size(grid.nodes.X), [m+1, n+1, o+1]));
-assert(isequal(size(grid.centers.X), [m+2, n+2, o+2]));
-assert(isequal(size(grid.faces.u.X), [m+1, n, o]));
-assert(isequal(size(grid.faces.v.Y), [m, n+1, o]));
-assert(isequal(size(grid.faces.w.Z), [m, n, o+1]));
+if ~(grid.dim == 3)
+    details = sprintf('Expected dimension %s; received %s.', mat2str(3), mat2str(grid.dim));
+    exampleErrors.log_error('MOLE_ERR_INVALID_GRID_DIM', 'makeGrid3D_basic', true, details);
+end
+if ~(strcmp(grid.topology, 'uniform'))
+    details = 'Expected topology ''uniform''.';
+    exampleErrors.log_error('MOLE_ERR_INVALID_GRID_TOPOLOGY', 'makeGrid3D_basic', true, details);
+end
+if ~(isequal(grid.bc.isPeriodic, false(3, 1)))
+    details = 'Periodic boundary flags do not match the expected flags for this example.';
+    exampleErrors.log_error('MOLE_ERR_GRID_CONSTRUCTION_FAILED', 'makeGrid3D_basic', true, details);
+end
+if ~(isequal(size(grid.nodes.X), [m+1, n+1, o+1]))
+    details = 'Nodal coordinate array dimensions or point count do not match the expected grid size.';
+    exampleErrors.log_error('MOLE_ERR_GRID_NODAL_SZ_MISMATCH', 'makeGrid3D_basic', true, details);
+end
+if ~(isequal(size(grid.centers.X), [m+2, n+2, o+2]))
+    details = 'Center coordinate array dimensions or point count do not match the expected grid size.';
+    exampleErrors.log_error('MOLE_ERR_GRID_CENTERS_SZ_MISMATCH', 'makeGrid3D_basic', true, details);
+end
+if ~(isequal(size(grid.faces.u.X), [m+1, n, o]))
+    details = 'Face coordinate array dimensions do not match the expected grid dimensions.';
+    exampleErrors.log_error('MOLE_ERR_GRID_FACES_SZ_MISMATCH', 'makeGrid3D_basic', true, details);
+end
+if ~(isequal(size(grid.faces.v.Y), [m, n+1, o]))
+    details = 'Face coordinate array dimensions do not match the expected grid dimensions.';
+    exampleErrors.log_error('MOLE_ERR_GRID_FACES_SZ_MISMATCH', 'makeGrid3D_basic', true, details);
+end
+if ~(isequal(size(grid.faces.w.Z), [m, n, o+1]))
+    details = 'Face coordinate array dimensions do not match the expected grid dimensions.';
+    exampleErrors.log_error('MOLE_ERR_GRID_FACES_SZ_MISMATCH', 'makeGrid3D_basic', true, details);
+end
 
 % Axis slices check coordinates without building extra full reference grids.
-assert(isequal(grid.nodes.X(:, 1, 1), (0:m)' * dx));
-assert(isequal(grid.nodes.Y(1, :, 1), (0:n) * dy));
-assert(isequal(reshape(grid.nodes.Z(1, 1, :), [], 1), (0:o)' * dz));
-assert(isequal(grid.centers.X(:, 1, 1), [0; 0.25; 0.75; 1]));
-assert(isequal(grid.centers.Y(1, :, 1), [0, 0.125, 0.375, 0.625, 0.75]));
-assert(isequal(reshape(grid.centers.Z(1, 1, :), [], 1), [0; 1; 3; 5; 7; 8]));
+if ~(isequal(grid.nodes.X(:, 1, 1), (0:m)' * dx))
+    details = 'Nodal coordinates do not match the expected values for this example.';
+    exampleErrors.log_error('MOLE_ERR_INVALID_NODAL_COORDINATES', 'makeGrid3D_basic', true, details);
+end
+if ~(isequal(grid.nodes.Y(1, :, 1), (0:n) * dy))
+    details = 'Nodal coordinates do not match the expected values for this example.';
+    exampleErrors.log_error('MOLE_ERR_INVALID_NODAL_COORDINATES', 'makeGrid3D_basic', true, details);
+end
+if ~(isequal(reshape(grid.nodes.Z(1, 1, :), [], 1), (0:o)' * dz))
+    details = 'Nodal coordinates do not match the expected values for this example.';
+    exampleErrors.log_error('MOLE_ERR_INVALID_NODAL_COORDINATES', 'makeGrid3D_basic', true, details);
+end
+if ~(isequal(grid.centers.X(:, 1, 1), [0; 0.25; 0.75; 1]))
+    details = 'Center coordinates do not match the expected values for this example.';
+    exampleErrors.log_error('MOLE_ERR_INVALID_CENTER_COORDINATES', 'makeGrid3D_basic', true, details);
+end
+if ~(isequal(grid.centers.Y(1, :, 1), [0, 0.125, 0.375, 0.625, 0.75]))
+    details = 'Center coordinates do not match the expected values for this example.';
+    exampleErrors.log_error('MOLE_ERR_INVALID_CENTER_COORDINATES', 'makeGrid3D_basic', true, details);
+end
+if ~(isequal(reshape(grid.centers.Z(1, 1, :), [], 1), [0; 1; 3; 5; 7; 8]))
+    details = 'Center coordinates do not match the expected values for this example.';
+    exampleErrors.log_error('MOLE_ERR_INVALID_CENTER_COORDINATES', 'makeGrid3D_basic', true, details);
+end
 
 %% Results
 fprintf('Dimension: %d\n', grid.dim);

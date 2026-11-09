@@ -29,11 +29,26 @@ grid = makeGrid('dim', 1, 'm', 4, 'dx', 0.5, 'topology', 'uniform');
 grid = validateGrid(grid);
 
 %% Validation
-assert(grid.dim, 1);
-assert(grid.topology, 'uniform');
-assert(grid.nodes.X, [0; 0.5; 1; 1.5; 2]);
-assert(grid.centers.X, [0; 0.25; 0.75; 1.25; 1.75; 2]);
-assert(grid.bc.isPeriodic, false);
+if ~(isequal(grid.dim, 1))
+    details = sprintf('Expected dimension %s; received %s.', mat2str(1), mat2str(grid.dim));
+    exampleErrors.log_error('MOLE_ERR_INVALID_GRID_DIM', 'makeGrid1D_basic', true, details);
+end
+if ~(isequal(grid.topology, 'uniform'))
+    details = 'Expected topology ''uniform''.';
+    exampleErrors.log_error('MOLE_ERR_INVALID_GRID_TOPOLOGY', 'makeGrid1D_basic', true, details);
+end
+if ~(isequal(grid.nodes.X, [0; 0.5; 1; 1.5; 2]))
+    details = 'Nodal coordinates do not match the expected values for this example.';
+    exampleErrors.log_error('MOLE_ERR_INVALID_NODAL_COORDINATES', 'makeGrid1D_basic', true, details);
+end
+if ~(isequal(grid.centers.X, [0; 0.25; 0.75; 1.25; 1.75; 2]))
+    details = 'Center coordinates do not match the expected values for this example.';
+    exampleErrors.log_error('MOLE_ERR_INVALID_CENTER_COORDINATES', 'makeGrid1D_basic', true, details);
+end
+if ~(isequal(grid.bc.isPeriodic, false))
+    details = 'Periodic boundary flags do not match the expected flags for this example.';
+    exampleErrors.log_error('MOLE_ERR_GRID_CONSTRUCTION_FAILED', 'makeGrid1D_basic', true, details);
+end
 
 %% Results
 fprintf('Grid built OK, %d nodal points.\n', numel(grid.nodes.X));

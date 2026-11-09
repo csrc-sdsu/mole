@@ -17,6 +17,12 @@ octaveDir = fileparts(fileparts(exampleDir));
 addpath(fullfile(octaveDir, 'src', 'grids'));
 addpath(fullfile(octaveDir, 'src', 'sys'));
 
+%% Error Reporting
+% Report unexpected results through the MOLE error catalog.
+exampleErrors = MOLE_errors();
+
+%% Problem Parameters
+
 %% Problem Parameters
 % m = n = 3 are the cell counts. dy = 1 is the y cell width.
 % dx = 0 is intentionally invalid; dx = 1 gives the domain [0, 3]^2.
@@ -47,6 +53,8 @@ params.dx = 1;
 errorObj = MOLE_errors();
 grid = validateGrid(params, false, errorObj);
 assert(size(grid.nodes.X), [4, 4]);
+if size(grid.nodes.X) != [4, 4]
+    
 assert(errorObj.getNumErrors(), 0);
 assert(errorObj.haveErrors(), false);
 fprintf('Grid built OK, nodes.X is %d x %d.\n', size(grid.nodes.X));

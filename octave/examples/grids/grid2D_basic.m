@@ -21,6 +21,10 @@ octaveDir = fileparts(fileparts(exampleDir));
 addpath(fullfile(octaveDir, 'src', 'grids'));
 addpath(fullfile(octaveDir, 'src', 'sys'));
 
+
+% Report unexpected results through the MOLE error catalog.
+exampleErrors = MOLE_errors();
+
 %% Problem Parameters
 params = struct();
 params.topology = 'uniform';
@@ -34,12 +38,32 @@ grid = validateGrid(params);
 
 %% Validation
 [expectedX, expectedY] = ndgrid(0:3, 0:3);
-assert(grid.nodes.X, expectedX);
-assert(grid.nodes.Y, expectedY);
-assert(size(grid.centers.X), [5, 5]);
-assert(size(grid.faces.u.X), [4, 3]);
-assert(size(grid.faces.v.X), [3, 4]);
-assert(grid.bc.isPeriodic, [false; false]);
+
+
+if ~(isequal(grid.nodes.X, expectedX))
+    details = 'Nodal coordinates do not match the expected values for this example.';
+    exampleErrors.log_error('MOLE_ERR_INVALID_NODAL_COORDINATES', 'grid2D_basic', true, details);
+end
+if ~(isequal(grid.nodes.Y, expectedY))
+    details = 'Nodal coordinates do not match the expected values for this example.';
+    exampleErrors.log_error('MOLE_ERR_INVALID_NODAL_COORDINATES', 'grid2D_basic', true, details);
+end
+if ~(isequal(size(grid.centers.X), [5, 5]))
+    details = 'Center coordinate array dimensions or point count do not match the expected grid size.';
+    exampleErrors.log_error('MOLE_ERR_GRID_CENTERS_SZ_MISMATCH', 'grid2D_basic', true, details);
+end
+if ~(isequal(size(grid.faces.u.X), [4, 3]))
+    details = 'Face coordinate array dimensions do not match the expected grid dimensions.';
+    exampleErrors.log_error('MOLE_ERR_GRID_FACES_SZ_MISMATCH', 'grid2D_basic', true, details);
+end
+if ~(isequal(size(grid.faces.v.X), [3, 4]))
+    details = 'Face coordinate array dimensions do not match the expected grid dimensions.';
+    exampleErrors.log_error('MOLE_ERR_GRID_FACES_SZ_MISMATCH', 'grid2D_basic', true, details);
+end
+if ~(isequal(grid.bc.isPeriodic, [false; false]))
+    details = 'Periodic boundary flags do not match the expected flags for this example.';
+    exampleErrors.log_error('MOLE_ERR_GRID_CONSTRUCTION_FAILED', 'grid2D_basic', true, details);
+end
 
 %% Results
 fprintf('Grid built OK, nodes.X is %d x %d.\n', size(grid.nodes.X));
