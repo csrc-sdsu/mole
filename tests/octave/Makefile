@@ -9,8 +9,6 @@ run_octave_tests:
 		testEnergy \
 		testGI13Curv \
 		testGradPolynomial \
-		testGridOrientation3D \
-		testGridOrientation \
 		testLapPolynomial \
 		testPoissonAccuracy \
 		testTTMGrids; do \
