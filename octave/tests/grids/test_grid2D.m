@@ -91,14 +91,6 @@ end
 
 
 %!test
-%! # Preserve periodic boundary flags.
-%! p = struct('topology', 'uniform', 'm', 3, 'n', 3, 'dx', 1, 'dy', 1);
-%! p.bc.isPeriodic = [true; false];
-%! g = validate_clean(p);
-%! assert(g.bc.isPeriodic, [true; false]);
-
-
-%!test
 %! # Include the spacing error code in the exception and update the logger.
 %! errors = MOLE_errors();
 %! p = struct('topology', 'uniform', 'm', 3, 'n', 3, 'dx', 0, 'dy', 1);

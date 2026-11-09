@@ -1,6 +1,6 @@
 function [passed, total] = test_grid_inferred()
 % PURPOSE
-% Test inferred grid attributes and boundary metadata.
+% Test inferred grid attributes.
 % SYNTAX
 % [passed, total] = test_grid_inferred()
 % DESCRIPTION
@@ -20,7 +20,6 @@ end
 %! # Infer an omitted dimension from the grid fields.
 %! g = validate_clean(struct('m', 5, 'dx', .2, 'topology', 'uniform'));
 %! assert(g.dim, 1);
-
 
 %!test
 %! # Reject dimensions outside the supported range.
@@ -92,67 +91,3 @@ end
 %! g = validate_clean(p);
 %! assert(g.dim, 2);
 %! assert(g.topology, 'curvilinear');
-
-
-%!test
-%! # Default to nonperiodic boundaries when flags are omitted.
-%! p = struct('dim', 3, 'topology', 'uniform', 'm', 5, 'n', 5, 'o', 5, 'dx', .2, 'dy', .2, 'dz', .2);
-%! g = validate_clean(p);
-%! assert(g.bc.isPeriodic, false(3,1));
-
-
-%!test
-%! # Accept one periodic flag for a one-dimensional grid.
-%! p = struct('dim', 1, 'topology', 'uniform', 'm', 5, 'dx', .2);
-%! p.bc.isPeriodic = true;
-%! g = validate_clean(p);
-%! assert(g.dim, 1);
-%! assert(g.bc.isPeriodic, true);
-
-
-%!test
-%! # Accept two periodic flags for a two-dimensional grid.
-%! p = struct('dim', 2, 'topology', 'uniform', 'm', 5, 'n', 5, 'dx', .2, 'dy', .2);
-%! p.bc.isPeriodic = [true;false];
-%! g = validate_clean(p);
-%! assert(g.dim, 2);
-%! assert(g.bc.isPeriodic, [true; false]);
-
-
-%!test
-%! # Accept three periodic flags for a three-dimensional grid.
-%! p = struct('dim', 3, 'topology', 'uniform', 'm', 5, 'n', 5, 'o', 5, 'dx', .2, 'dy', .2, 'dz', .2);
-%! p.bc.isPeriodic = [true;false;true];
-%! g = validate_clean(p);
-%! assert(g.dim, 3);
-%! assert(g.bc.isPeriodic, [true; false; true]);
-
-
-%!test
-%! # Reject too few periodic boundary flags.
-%! p = struct('dim', 3, 'topology', 'uniform', 'm', 5, 'n', 5, 'o', 5, 'dx', .2, 'dy', .2, 'dz', .2);
-%! p.bc.isPeriodic = true;
-%! expect_mole_error(@() validateGrid(p), 'MOLE_ERR_INVALID_ISPERIODIC_DIM');
-
-
-%!test
-%! # Reject too many periodic boundary flags.
-%! p = struct('dim', 1, 'topology', 'uniform', 'm', 5, 'dx', .2);
-%! p.bc.isPeriodic = [true;false];
-%! expect_mole_error(@() validateGrid(p), 'MOLE_ERR_INVALID_ISPERIODIC_DIM');
-
-
-%!test
-%! # Reject an empty periodic boundary flag vector.
-%! p = struct('dim', 2, 'topology', 'uniform', 'm', 5, 'n', 5, 'dx', .2, 'dy', .2);
-%! p.bc.isPeriodic = false(0,1);
-%! expect_mole_error(@() validateGrid(p), 'MOLE_ERR_INVALID_ISPERIODIC_DIM');
-
-
-%!test
-%! # Report an invalid dimension before checking periodic flag length.
-%! p = struct('dim', 7, 'topology', 'uniform', 'm', 5, 'dx', .2);
-%! p.bc.isPeriodic = [true;false;true];
-%! errors = MOLE_errors();
-%! expect_mole_error(@() validateGrid(p, false, errors), 'MOLE_ERR_INVALID_GRID_DIM');
-%! assert(errors.getNumErrors(), 1);

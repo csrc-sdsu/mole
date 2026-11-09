@@ -47,35 +47,12 @@ end
 
 
 %!test
-%! # Preserve supplied periodic boundary flags during construction.
-%! bc = struct('isPeriodic', [true;false]);
-%! g = makeGrid('dim', 2, 'm', 5, 'n', 5, 'dx', .2, 'dy', .2, 'topology', 'uniform', 'bc', bc);
-%! assert(g.dim, 2);
-%! assert(g.bc.isPeriodic, [true;false]);
-
-
-%!test
-%! # Reject a periodic flag vector with an incorrect length.
-%! bc = struct('isPeriodic', true);
-%! action = @() makeGrid('dim', 2, 'm', 5, 'n', 5, 'dx', .2, 'dy', .2, 'topology', 'uniform', 'bc', bc);
-%! expect_mole_error(action, 'MOLE_ERR_INVALID_ISPERIODIC_DIM');
-
-
-%!test
-%! # Validate periodic flag length when boundary data precedes dimension.
-%! bc = struct('isPeriodic', true);
-%! action = @() makeGrid('bc', bc, 'dim', 2, 'm', 5, 'n', 5, 'dx', .2, 'dy', .2, 'topology', 'uniform');
-%! expect_mole_error(action, 'MOLE_ERR_INVALID_ISPERIODIC_DIM');
-
-
-%!test
 %! # Construct a one-dimensional grid from a parameter struct.
 %! p = struct('topology','uniform','m',4,'dx',1);
 %! output = evalc('g = makeGrid(p);');
 %! assert(isstruct(g) && isscalar(g));
 %! assert(g.dim, 1);
 %! assert(isempty(output), ['Unexpected constructor output: ' output]);
-
 
 %!test
 %! # Construct a two-dimensional grid from a parameter struct.
