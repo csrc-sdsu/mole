@@ -11,9 +11,7 @@ on:
 
 jobs:
   lint-new-code:
-    # Pinned: apt.llvm.org has no llvm-toolchain-20 repo for Ubuntu 26.04 (resolute),
-    # which ubuntu-latest now resolves to.
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
 
     permissions:
       contents: read
@@ -38,10 +36,8 @@ jobs:
 
       - name: Install system deps
         run: |
-          CODENAME=$(lsb_release -cs)
-          wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo gpg --dearmor -o /usr/share/keyrings/llvm-snapshot.gpg
-          echo "deb [signed-by=/usr/share/keyrings/llvm-snapshot.gpg] http://apt.llvm.org/${CODENAME}/ llvm-toolchain-${CODENAME}-20 main" \
-            | sudo tee /etc/apt/sources.list.d/llvm-20.list
+          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+          sudo add-apt-repository "deb http://apt.llvm.org/noble/ llvm-toolchain-noble-20 main"
           sudo apt-get update
           sudo apt-get install -y build-essential cmake clang clang-tidy-20 clang-format perl libarmadillo-dev libopenblas-dev libsuperlu-dev libeigen3-dev
 
