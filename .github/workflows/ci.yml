@@ -11,7 +11,9 @@ on:
 
 jobs:
   lint-new-code:
-    runs-on: ubuntu-latest
+    # Pinned: apt.llvm.org has no llvm-toolchain-20 repo for Ubuntu 26.04 (resolute),
+    # which ubuntu-latest now resolves to.
+    runs-on: ubuntu-24.04
 
     permissions:
       contents: read
