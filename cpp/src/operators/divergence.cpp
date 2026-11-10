@@ -248,54 +248,18 @@ sp_mat Divergence::nonPeriodicDiv1D(u16 k, size_t m, Real dx) {
 //
 // periodicDiv1D builds the m x m circulant operator mapping the m
 // faces to the m centers. It is the negative transpose of the periodic
-// Gradient: with the Gradient stencil weights V,
+// Gradient: with the stencil weights V from periodicStencil,
 //
 //   G(i,j) = V[(i - j + 1) mod m]   =>   D(i,j) = -V[(j - i + 1) mod m].
 //
-// V is the Gradient stencil (kept here as in the legacy code). Requires
-// m >= 2k+1, which the constructors check before calling it. If
+// Requires m >= 2k+1, which the constructors check before calling it. If
 // allocation fails, the error is logged and an empty matrix is
 // returned.
 //
 sp_mat Divergence::periodicDiv1D(u16 k, size_t m, Real dx) {
-  array1D V(m, 0.0);
-  if (V.hasArrayErrors()) {
-    drainArrayErrors(V);
+  const vec v = periodicStencil(k, m);
+  if (hasOpErrors())
     return sp_mat();
-  }
-  vec &v = V.data_;
-  switch (k) {
-  case 2:
-    v(1) = 1.0;
-    v(2) = -1.0;
-    break;
-  case 4:
-    v(0) = -1.0 / 24.0;
-    v(1) = 9.0 / 8.0;
-    v(2) = -9.0 / 8.0;
-    v(3) = 1.0 / 24.0;
-    break;
-  case 6:
-    v(0) = -25.0 / 384.0;
-    v(1) = 75.0 / 64.0;
-    v(2) = -75.0 / 64.0;
-    v(3) = 25.0 / 384.0;
-    v(4) = -3.0 / 640.0;
-    v(m - 1) = 3.0 / 640.0;
-    break;
-  case 8:
-    v(0) = -245.0 / 3072.0;
-    v(1) = 1225.0 / 1024.0;
-    v(2) = -1225.0 / 1024.0;
-    v(3) = 245.0 / 3072.0;
-    v(4) = -49.0 / 5120.0;
-    v(5) = 5.0 / 7168.0;
-    v(m - 2) = -5.0 / 7168.0;
-    v(m - 1) = 49.0 / 5120.0;
-    break;
-  default: // unreachable: k is validated by checkOrder() first
-    break;
-  }
 
   sp_mat Dm;
   try {

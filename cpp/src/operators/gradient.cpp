@@ -294,57 +294,17 @@ sp_mat Gradient::nonPeriodicGrad1D(u16 k, size_t m, Real dx) {
 // periodicGrad1D builds the m x m circulant operator acting on the m
 // interior centers. Row i is the derivative at node i (x = i*dx).
 //
-// V holds the stencil weights by offset: G(i,j) = V[(i - j + 1) mod m],
-// so V[1] multiplies u_i, V[2] multiplies u_(i-1), V[0] multiplies
-// u_(i+1), and V[m-1], V[m-2] multiply u_(i+2), u_(i+3). Requires
-// m >= 2k, which the constructors check before calling it. If
-// allocation fails, the error is logged and an empty matrix is
-// returned.
+// V holds the stencil weights from periodicStencil, by offset:
+// G(i,j) = V[(i - j + 1) mod m], so V[1] multiplies u_i, V[2]
+// multiplies u_(i-1), V[0] multiplies u_(i+1), and V[m-1], V[m-2]
+// multiply u_(i+2), u_(i+3). Requires m >= 2k, which the constructors
+// check before calling it. If allocation fails, the error is logged
+// and an empty matrix is returned.
 //
 sp_mat Gradient::periodicGrad1D(u16 k, size_t m, Real dx) {
-  array1D V(m, 0.0);
-  if (V.hasArrayErrors()) {
-    drainArrayErrors(V);
+  const vec v = periodicStencil(k, m);
+  if (hasOpErrors())
     return sp_mat();
-  }
-  vec &v = V.data_;
-  switch (k) {
-  case 2:
-    // second order: (u_i - u_(i-1)) / dx
-    v(1) = 1.0;
-    v(2) = -1.0;
-    break;
-  case 4:
-    // fourth order: offsets u_(i+1) .. u_(i-2)
-    v(0) = -1.0 / 24.0;
-    v(1) = 9.0 / 8.0;
-    v(2) = -9.0 / 8.0;
-    v(3) = 1.0 / 24.0;
-    break;
-  case 6:
-    // sixth order: offsets u_(i+2) .. u_(i-3); u_(i+2) wraps to V[m-1]
-    v(0) = -25.0 / 384.0;
-    v(1) = 75.0 / 64.0;
-    v(2) = -75.0 / 64.0;
-    v(3) = 25.0 / 384.0;
-    v(4) = -3.0 / 640.0;
-    v(m - 1) = 3.0 / 640.0;
-    break;
-  case 8:
-    // eighth order: offsets u_(i+3) .. u_(i-4); u_(i+2), u_(i+3) wrap
-    // to V[m-1], V[m-2]
-    v(0) = -245.0 / 3072.0;
-    v(1) = 1225.0 / 1024.0;
-    v(2) = -1225.0 / 1024.0;
-    v(3) = 245.0 / 3072.0;
-    v(4) = -49.0 / 5120.0;
-    v(5) = 5.0 / 7168.0;
-    v(m - 2) = -5.0 / 7168.0;
-    v(m - 1) = 49.0 / 5120.0;
-    break;
-  default: // unreachable: k is validated by checkOrder() first
-    break;
-  }
 
   sp_mat Gm;
   try {

@@ -51,6 +51,10 @@ class mdOperator{
 
         // applies a MOLE debug mode to an operator with errors
         void applyDebugMode(size_t debug_mode) const;
+
+        // periodic stencil weights V of order k on m cells, shared
+        // by the periodic Gradient and Divergence
+        vec periodicStencil(u16 k, size_t m);
     public:
         virtual ~mdOperator() = default;
         void logOpErr(size_t errCode, string errLoc, 
