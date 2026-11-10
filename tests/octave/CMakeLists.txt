@@ -16,3 +16,9 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
           "addpath('${CMAKE_CURRENT_SOURCE_DIR}'); addpath('${CMAKE_SOURCE_DIR}/src/octave'); assertSuccess(runtests('${TEST_NAME}'))"
     )
 endforeach()
+
+# Custom target to run all GNU Octave tests using CTest
+add_custom_target(run_octave_tests
+    COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
+    COMMENT "Running all GNU Octave unit tests..."
+)
