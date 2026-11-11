@@ -6,14 +6,13 @@ function grid = makeGrid(varargin)
     % pass it to validateGrid for partial validation and normalization.
     %
     % SYNTAX
-    % grid = makeGrid()
     % grid = makeGrid(params)
     % grid = makeGrid(name1, value1, name2, value2, ...)
     %
     % DESCRIPTION
-    %   params : Scalar structure containing grid parameters.
-    %    nameN : Grid field name supplied as a character array or string.
-    %   valueN : Value assigned to the corresponding grid field.
+    %   params : Octave struct containing grid parameters.
+    %    name_i : Grid field name supplied as a character array or string.
+    %   value_i : Value assigned to the corresponding grid field.
     %     grid : Returned grid structure containing supplied parameters,
     %            inferred metadata, and coordinates when enough information
     %            is available.
@@ -23,17 +22,8 @@ function grid = makeGrid(varargin)
     % Coordinate arrays use ndgrid layout. Complete curvilinear geometry
     % requires nodes.X and nodes.Y, together with nodes.Z in three dimensions.
     %
-    % Name/value pairs may be supplied in any order. Repeated field names use
-    % the last value supplied. A structure input is passed directly to validation.
-    % Boundary conditions are handled by separate functions.
-    %
-    % Calls validateGrid with allowPartial = true. Missing fields may therefore
-    % produce a partial grid without generated coordinates. Calling makeGrid
-    % without arguments initializes a partial grid. Use validateGrid(grid)
-    % afterward when full validation is required.
-    %
-    % An unpaired name/value argument raises MOLE:MAKE_GRID_INVALID_INPUT_ARGS.
-    % Grid validation diagnostics are reported through MOLE_errors.
+    % Name/value pairs can be supplied in any order. Repeated field names overwrite
+    % previously supplied values. After parsing all pairs, the grid values are validated.
     %
     % ----------------------------------------------------------------------------
     % SPDX-License-Identifier: GPL-3.0-or-later

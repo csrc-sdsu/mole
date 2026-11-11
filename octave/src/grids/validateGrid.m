@@ -1,4 +1,4 @@
-function grid = validateGrid(grid, allowPartial, errorObj)
+function grid = validateGrid(grid, allowPartial = false, errorObj = MOLE_errors() )
 % PURPOSE
 % Canonical implementation for validateGrid — normalizes and enriches a
 % grid struct with coordinate arrays for nodes, faces, and centers.
@@ -17,22 +17,23 @@ function grid = validateGrid(grid, allowPartial, errorObj)
 %   grid         : Input struct (partial or complete)
 %   allowPartial : (optional) logical, default false — skip missing-field
 %                  errors during incremental construction
-%
+%   errorObj     : Error object to log mole errors
 % SYNTAX
 % grid = validateGrid(grid)
 % grid = validateGrid(grid, allowPartial)
+% grid = validateGrid(grid, errorObj)
+% grid = validateGrid(grid, allowPartial, errorObj)
 %
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
-    if nargin < 3
+
+    if ~isstruct(allowPartial)
         errorObj = MOLE_errors();
     end
-    if nargin < 2
-        allowPartial = false;
-    end
+   
 
     if ~isstruct(grid) || ~isscalar(grid)
         params = sprintf(['grid must be a scalar or a struct; received class %s' ...
@@ -98,6 +99,11 @@ function grid = validateGrid(grid, allowPartial, errorObj)
         params = sprintf('grid.dim must be 1, 2, or 3; received class %s with size %s.', class(grid.dim), mat2str(size(grid.dim)));
         errorObj.log_error('MOLE_ERR_INVALID_GRID_DIM', 'validateGrid', true, params);
     end
+    %check if there any errors and set grid valid attributs
+    if error_Obj.haveErrors()
+        grid.valid = false
+    else:
+        grid.valid = true
 end
 
 function localRequire(grid, names, allowPartial, errName, errorObj)

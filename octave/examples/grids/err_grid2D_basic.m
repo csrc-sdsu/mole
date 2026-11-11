@@ -1,4 +1,5 @@
-%% Two-Dimensional Grid Validation Errors
+%% This example illustrates the use of mole error logging on a
+% two-dimensional Grid Validation.
 %
 % Validate an invalid grid, catch the MOLE exception, then correct the
 % spacing and build a valid grid. Each validation uses a fresh logger.
