@@ -6,11 +6,27 @@ More information can be found on the [main documentation site](https://mole-docs
 
 ## Getting Started
 
-MOLE.jl is not yet available in the Julia's package manager. For now, this repository needs to be cloned locally in order to use the library.
+MOLE.jl is registered in the [General](https://github.com/JuliaRegistries/General) Julia registry under the package name `MOLE`. To install it, start Julia, enter the `pkg` mode by pressing `]`, and type
 
-## Using MOLE.jl
+```julia
+pkg> add MOLE
+```
 
-In order to use the MOLE.jl library, first navigate to the location where the repository has been cloned to. Then, go to the `mole/julia/MOLE.jl` sub-directory. From here, you can access the library via the REPL or the command line.
+or, equivalently, from the command line:
+
+```sh
+julia -e 'using Pkg; Pkg.add("MOLE")'
+```
+
+Once installed, load the library in your scripts or in the REPL with
+
+```julia
+using MOLE
+```
+
+## Using MOLE.jl from source
+
+To run the examples and the test suite, build the documentation, or contribute to MOLE.jl, clone the [MOLE repository](https://github.com/csrc-sdsu/mole) locally. Then navigate to the location where the repository has been cloned to and go to the `mole/julia/MOLE.jl` sub-directory. From here, you can access the library via the REPL or the command line.
 
 ### From the REPL
 
