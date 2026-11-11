@@ -26,7 +26,7 @@ using MOLE
 
 ## Using MOLE.jl from source
 
-To run the bundled examples, run the test suite, build the documentation, or contribute to MOLE.jl, clone the [MOLE repository](https://github.com/csrc-sdsu/mole) locally. Then navigate to the location where the repository has been cloned to and go to the `mole/julia/MOLE.jl` sub-directory. From here, you can access the library via the REPL or the command line.
+To run the examples and the test suite, build the documentation, or contribute to MOLE.jl, clone the [MOLE repository](https://github.com/csrc-sdsu/mole) locally. Then navigate to the location where the repository has been cloned to and go to the `mole/julia/MOLE.jl` sub-directory. From here, you can access the library via the REPL or the command line.
 
 ### From the REPL
 
