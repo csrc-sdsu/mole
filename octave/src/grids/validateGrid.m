@@ -30,7 +30,7 @@ function grid = validateGrid(grid, allowPartial = false, errorObj = MOLE_errors(
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
 
-    %Check arguments and their type
+    % Check arguments and their type
     if isa(allowPartial, 'MOLE_errors') && nargin == 2
         errorObj = allowPartial;
         allowPartial = false;
