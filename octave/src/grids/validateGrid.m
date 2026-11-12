@@ -30,10 +30,21 @@ function grid = validateGrid(grid, allowPartial = false, errorObj = MOLE_errors(
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
 
-    if ~isstruct(allowPartial)
-        errorObj = MOLE_errors();
+    %Check number of arguments and their type
+    if nargin > 3
+        params = sprintf(['validate grid can only have less than 3 arguments but %s' ...
+                ' was given.'], mat2str(nargin));
+        errorObj.log_error('MOLE_ERR_INVALID_GRID_ARGS', 'validateGrid', true, params);
     end
-   
+    if isstruct(allowPartial)
+        errorObj = allowPartial;
+        allowPartial = false;
+    end
+    if ~islogical(allowPartial) || ~isa(errorObj, 'MOLE_errors')
+        params = sprintf(['allowPartial must be a boolean and errorObj must be a struct; received class allowPartial: %s, ' ...
+                ' errorObj: %s.'], class(allowPartial), class(errorObj));
+        errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'validateGrid', true, params);
+    end
 
     if ~isstruct(grid) || ~isscalar(grid)
         params = sprintf(['grid must be a scalar or a struct; received class %s' ...
