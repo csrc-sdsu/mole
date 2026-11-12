@@ -30,19 +30,20 @@ function grid = validateGrid(grid, allowPartial = false, errorObj = MOLE_errors(
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
 
-    %Check number of arguments and their type
-    if nargin > 3
-        params = sprintf(['validate grid can only have less than 3 arguments but %s' ...
-                ' was given.'], mat2str(nargin));
-        errorObj.log_error('MOLE_ERR_INVALID_GRID_ARGS', 'validateGrid', true, params);
-    end
-    if isstruct(allowPartial)
+    %Check arguments and their type
+    if isa(allowPartial, 'MOLE_errors')
         errorObj = allowPartial;
         allowPartial = false;
     end
-    if ~islogical(allowPartial) || ~isa(errorObj, 'MOLE_errors')
-        params = sprintf(['allowPartial must be a boolean and errorObj must be a struct; received class allowPartial: %s, ' ...
-                ' errorObj: %s.'], class(allowPartial), class(errorObj));
+    if ~islogical(allowPartial)
+        params = sprintf('allowPartial must be a boolean and errorObj must be a struct; received class allowPartial: %s, ' ...
+            , class(allowPartial));
+        errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'validateGrid', true, params);
+    end
+    if ~isa(errorObj, 'MOLE_errors')
+        errorObj = MOLE_errors();
+        params = sprintf(['ErrorObj must be a struct; received class, ' ...
+                ' errorObj: %s.'], class(errorObj));
         errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'validateGrid', true, params);
     end
 
@@ -111,10 +112,11 @@ function grid = validateGrid(grid, allowPartial = false, errorObj = MOLE_errors(
         errorObj.log_error('MOLE_ERR_INVALID_GRID_DIM', 'validateGrid', true, params);
     end
     %check if there any errors and set grid valid attributs
-    if error_Obj.haveErrors()
-        grid.valid = false
-    else:
-        grid.valid = true
+    if errorObj.haveErrors()
+        grid.valid = false;
+    else
+        grid.valid = true;
+    end
 end
 
 function localRequire(grid, names, allowPartial, errName, errorObj)

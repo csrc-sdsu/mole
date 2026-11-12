@@ -31,7 +31,7 @@ function report = run_grid_tests(verbose)
     end
 
     names = {'test_grid1D', 'test_grid2D', 'test_grid3D', ...
-         'test_grid_inferred', 'test_makeGrid', 'testMakeGrid'};
+         'test_grid_inferred', 'test_makeGrid', 'testMakeGrid', 'testValidateGridInputs'};
     results = struct('name', {}, 'total', {}, 'passed', {}, 'failed', {}, ...
                      'blocked', {}, 'reason', {}, 'details', {});
     for i = 1:numel(names)

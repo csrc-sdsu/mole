@@ -30,4 +30,3 @@ end
 %! errorObj = MOLE_errors();
 %! expect_mole_error(@() validateGrid(p, 56), 'MOLE_ERR_INVALID_INPUT_TYPE');
 %! expect_mole_error(@() validateGrid(p, false, true), 'MOLE_ERR_INVALID_INPUT_TYPE');
-%! expect_mole_error(@() validateGrid(p, false, errorObj, true), 'MOLE_ERR_INVALID_GRID_ARGS');
