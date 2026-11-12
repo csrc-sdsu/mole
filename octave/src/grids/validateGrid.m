@@ -1,4 +1,4 @@
-function grid = validateGrid(grid, allowPartial = false, errorObj = MOLE_errors() )
+function grid = validateGrid(grid, allowPartial = false, errorObj = MOLE_errors())
 % PURPOSE
 % Canonical implementation for validateGrid — normalizes and enriches a
 % grid struct with coordinate arrays for nodes, faces, and centers.
@@ -31,12 +31,12 @@ function grid = validateGrid(grid, allowPartial = false, errorObj = MOLE_errors(
 % ----------------------------------------------------------------------------
 
     %Check arguments and their type
-    if isa(allowPartial, 'MOLE_errors')
+    if isa(allowPartial, 'MOLE_errors') && nargin == 2
         errorObj = allowPartial;
         allowPartial = false;
     end
     if ~islogical(allowPartial)
-        params = sprintf('allowPartial must be a boolean and errorObj must be a struct; received class allowPartial: %s, ' ...
+        params = sprintf('allowPartial must be a boolean; received class allowPartial: %s, ' ...
             , class(allowPartial));
         errorObj.log_error('MOLE_ERR_INVALID_INPUT_TYPE', 'validateGrid', true, params);
     end
