@@ -31,6 +31,7 @@ function grid = validateGrid(grid, allowPartial = false, errorObj = MOLE_errors(
 % ----------------------------------------------------------------------------
 
     % Check arguments and their type
+    % This is checking for case 3 of the validate grid syntax
     if isa(allowPartial, 'MOLE_errors') && nargin == 2
         errorObj = allowPartial;
         allowPartial = false;
