@@ -10,6 +10,7 @@ add_library(mole
     operators/MOLE_operators.cpp
     operators/gradient.cpp
     operators/divergence.cpp
+    operators/laplacian.cpp
     sys/MOLE_errors.cpp
     utils/utils.cpp
 )
