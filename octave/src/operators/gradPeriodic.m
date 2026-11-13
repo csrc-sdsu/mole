@@ -26,7 +26,7 @@ function G = gradPeriodic(k, grid, errorObj = MOLE_errors())
         errorObj.log_error('MOLE_ERR_INVALID_ARGS', 'grad', true, params);
 
     end
-    if grid.m >= 2*k
+    if grid.m < 2*k
         prams = sprintf('grid.m and k must meet m >= %s for k = %s',num2str(2*k), mat2str(k));
         errorObj.log_error('MOLE_ERR_INVALID_ARGS', 'grad', true, params);
     end

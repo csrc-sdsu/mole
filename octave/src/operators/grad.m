@@ -24,30 +24,30 @@ function [G, errorFlag] = grad(k, grid, errorObj = MOLE_errors())
 % ----------------------------------------------------------------------------
 %
     %Need to ask about error naming and error not being in mole errors file!!!
-    if nargin ~= 2 || nargin ~= 3
+    if nargin ~= 2 && nargin ~= 3
         params = sprintf('grad:InvalidNumArgs grad expects 2 or 3 arguments', mat2str(k));
         errorObj.log_error('MOLE_ERR_INVALID_ARGS', 'grad', true, params);
     end
     
     % for legacy code
-    if nargin == 3
-        G = gradNonPeriodic(k, grid.m, grid.dx);
-        return;
-    end
+    %if nargin == 3
+        %G = gradNonPeriodic(k, grid.m, grid.dx);
+        %return;
+    %end
     % NEED TO ASK ABOUT THE ERROR USED THE MESSAGE IS NOT EXPLICIT ABOUT ALL INVALID ARGS THEY ARE FOR GRID CREATION !!
     if k < 2 || mod(k, 2) != 0
         params = sprintf('Order of accuracy k must be greter than 2 and even but k: %s was  given.', mat2str(k));
         errorObj.log_error('MOLE_ERR_INVALID_ARGS', 'grad', true, params);
 
     end
-    if grid.m >= 2*k
+    if grid.m < 2*k
         prams = sprintf('grid.m and k must meet m >= %s for k = %s',num2str(2*k), mat2str(k));
         errorObj.log_error('MOLE_ERR_INVALID_ARGS', 'grad', true, params);
     end
     %NEED TO ASK ABOUT THE NEW IMPLEMENTATION OF DC AND NC
     % periodic boundary condition case
-    dc = grid.dc
-    nc = grid.nc
+    dc = grid.bc.dc
+    nc = grid.bc.nc
     q = find(dc.*dc + nc.*nc,1);
 
     if isempty(q)
