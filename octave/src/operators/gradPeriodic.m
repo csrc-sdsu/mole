@@ -21,7 +21,7 @@ function G = gradPeriodic(k, grid, errorObj = MOLE_errors())
 
     % Assertions:
     % NEED TO ASK ABOUT THE ERROR USED THE MESSAGE IS NOT EXPLICIT ABOUT ALL INVALID ARGS THEY ARE FOR GRID CREATION !!
-    if k < 2 || mod(k, 2) != 0
+    if k < 2 || (mod(k, 2) != 0 && k > 8)
         params = sprintf('Order of accuracy k must be greter than 2 and even but k: %s was  given.', mat2str(k));
         errorObj.log_error('MOLE_ERR_INVALID_ARGS', 'grad', true, params);
 
@@ -30,8 +30,8 @@ function G = gradPeriodic(k, grid, errorObj = MOLE_errors())
         prams = sprintf('grid.m and k must meet m >= %s for k = %s',num2str(2*k), mat2str(k));
         errorObj.log_error('MOLE_ERR_INVALID_ARGS', 'grad', true, params);
     end
-    m = grid.m
-    dx = grid.dx
+    m = grid.m;
+    dx = grid.dx;
     % constructing circulant matrix
     V = sparse(1, m); % vector of values for circulant matrix
     idx = repmat(-1,m, m); % matrix of indices for circulant matrix

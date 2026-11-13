@@ -35,7 +35,7 @@ function [G, errorFlag] = grad(k, grid, errorObj = MOLE_errors())
         %return;
     %end
     % NEED TO ASK ABOUT THE ERROR USED THE MESSAGE IS NOT EXPLICIT ABOUT ALL INVALID ARGS THEY ARE FOR GRID CREATION !!
-    if k < 2 || mod(k, 2) != 0
+    if k < 2 || (mod(k, 2) != 0 && k > 8)
         params = sprintf('Order of accuracy k must be greter than 2 and even but k: %s was  given.', mat2str(k));
         errorObj.log_error('MOLE_ERR_INVALID_ARGS', 'grad', true, params);
 
@@ -46,8 +46,8 @@ function [G, errorFlag] = grad(k, grid, errorObj = MOLE_errors())
     end
     %NEED TO ASK ABOUT THE NEW IMPLEMENTATION OF DC AND NC
     % periodic boundary condition case
-    dc = grid.bc.dc
-    nc = grid.bc.nc
+    dc = grid.bc.dc;
+    nc = grid.bc.nc;
     q = find(dc.*dc + nc.*nc,1);
 
     if isempty(q)
