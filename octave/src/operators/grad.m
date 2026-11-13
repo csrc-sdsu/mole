@@ -1,4 +1,4 @@
-function G = grad(k, m, dx, dc, nc)
+function [G, errorFlag] = grad(k, grid, errorObj = MOLE_errors())
 % PURPOSE
 % This gradient operator computes the vector of partial derivatives,
 % indicating the direction of maximum rate of increase and the steepest
@@ -11,43 +11,50 @@ function G = grad(k, m, dx, dc, nc)
 %
 % Parameters:
 %                k : Order of accuracy
-%                m : Number of cells
-%               dx : Step size
-%    (optional) dc : a0 (2x1 vector for left and right vertices, resp.)
-%    (optional) nc : b0 (2x1 vector for left and right vertices, resp.)
+%                grid : Grid object with m cells, dx step size, 
+%                       dc, and nc attributes
 %
 % SYNTAX
-% G = grad(k, m, dx)
-% G = grad(k, m, dx, dc, nc)
-%
+% G = grad(k, grid)
+% G = grad(k, grid, errorObj)
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
 %
-
-    if nargin ~= 3 && nargin ~= 5
-        error('grad:InvalidNumArgs', 'grad expects 3 or 5 arguments');
+    %Need to ask about error naming and error not being in mole errors file!!!
+    if nargin ~= 2 || nargin ~= 3
+        params = sprintf('grad:InvalidNumArgs grad expects 2 or 3 arguments', mat2str(k));
+        errorObj.log_error('MOLE_ERR_INVALID_ARGS', 'grad', true, params);
     end
     
     % for legacy code
     if nargin == 3
-        G = gradNonPeriodic(k, m, dx);
+        G = gradNonPeriodic(k, grid.m, grid.dx);
         return;
     end
+    % NEED TO ASK ABOUT THE ERROR USED THE MESSAGE IS NOT EXPLICIT ABOUT ALL INVALID ARGS THEY ARE FOR GRID CREATION !!
+    if k < 2 || mod(k, 2) != 0
+        params = sprintf('Order of accuracy k must be greter than 2 and even but k: %s was  given.', mat2str(k));
+        errorObj.log_error('MOLE_ERR_INVALID_ARGS', 'grad', true, params);
 
-    % Assertions:
-    assert(k >= 2, 'k >= 2');
-    assert(mod(k, 2) == 0, 'k % 2 = 0');
-    assert(m >= 2*k, ['m >= ' num2str(2*k) ' for k = ' num2str(k)]);
-
+    end
+    if grid.m >= 2*k
+        prams = sprintf('grid.m and k must meet m >= %s for k = %s',num2str(2*k), mat2str(k));
+        errorObj.log_error('MOLE_ERR_INVALID_ARGS', 'grad', true, params);
+    end
+    %NEED TO ASK ABOUT THE NEW IMPLEMENTATION OF DC AND NC
     % periodic boundary condition case
+    dc = grid.dc
+    nc = grid.nc
     q = find(dc.*dc + nc.*nc,1);
 
     if isempty(q)
-        G = gradPeriodic(k, m, dx);
+        G = gradPeriodic(k, grid, errorObj);
+        errorFlag = grid.valid
     else
-        G = gradNonPeriodic(k, m, dx);
+        G = gradNonPeriodic(k, grid, errorObj);
+        errorFlag = grid.valid
     end
 end
