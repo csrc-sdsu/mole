@@ -88,7 +88,6 @@ private:
   sp_mat G; // operator matrix
 
   // Construction checks. Each logs onto the operator error stack.
-  void checkOrder(u16 k, const string &loc);
   void checkTopology(char topology, const string &loc);
   void checkCellCount(u16 k, size_t cells, const string &axis,
                       const string &loc);

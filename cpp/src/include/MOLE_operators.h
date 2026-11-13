@@ -22,6 +22,22 @@
 
 // ----------------------------------------------------------------//
 //
+//               ORDER OF ACCURACY
+//
+// ----------------------------------------------------------------//
+
+// Currently MOLE supports an even number for the order of
+// accuracy k = 2, 4, 6, and 8. The function isValidOrder
+// will need a revision whenever more orders of accuracy
+// are implemented in MOLE.
+constexpr int kMinOrder = 2;
+constexpr int kMaxOrder = 8;
+constexpr bool isValidOrder(int k) {
+    return k >= kMinOrder && k <= kMaxOrder && k % 2 == 0;
+}
+
+// ----------------------------------------------------------------//
+//
 //               MOLE OPERATOR BASE CLASS
 //
 // mdOperator is the base class for all mimetic operators;  Gradient,
@@ -51,6 +67,9 @@ class mdOperator{
 
         // applies a MOLE debug mode to an operator with errors
         void applyDebugMode(size_t debug_mode) const;
+
+        // logs an error when k is not a supported order of accuracy
+        void checkOrder(u16 k, const string &loc);
 
         // periodic stencil weights V of order k on m cells, shared
         // by the periodic Gradient and Divergence

@@ -21,15 +21,6 @@
 // ============================================================================
 
 //
-// checkOrder logs an error when k is not one of the supported orders.
-//
-void Divergence::checkOrder(u16 k, const string &loc) {
-  if (k != 2 && k != 4 && k != 6 && k != 8) {
-    logOpErr(MOLE_ERR_OP_INVALID_ORDER, loc, "k = " + to_string(k));
-  }
-}
-
-//
 // checkTopology logs an error when the grid is not uniform.
 //
 void Divergence::checkTopology(char topology, const string &loc) {

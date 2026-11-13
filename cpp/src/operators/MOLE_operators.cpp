@@ -86,6 +86,20 @@ void mdOperator::applyDebugMode(size_t debug_mode) const {
     MOLEerr_applyDebugMode(o_errs, debug_mode);
 }
 
+//
+// mdOperator::checkOrder checks whether a MOLE supported order of
+// accuracy is requested, else it logs a MOLE error.
+//
+void mdOperator::checkOrder(u16 k, const string &loc) {
+    if (!isValidOrder(k)) {
+        logOpErr(MOLE_ERR_OP_INVALID_ORDER, loc,
+                 "k = " + to_string(k) +
+                 " (Order value must be an even number between [" +
+                 to_string(kMinOrder) + ", " + to_string(kMaxOrder) +
+                 "])");
+    }
+}
+
 // -----------
 //
 // Shared stencils for MOLE Operators
