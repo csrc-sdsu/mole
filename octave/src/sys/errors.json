@@ -138,5 +138,65 @@
   "MOLE_ERR_NAN_VALUE": {
     "Code": 302,
     "Message": "NaN value detected"
+  },
+  "MOLE_ERR_OP_INVALID_ORDER": {
+    "Code": 303,
+    "Message": "Operator order k must be 2, 4, 6 or 8."
+  },
+  "MOLE_ERR_OP_GRID_HAS_ERRORS": {
+    "Code": 304,
+    "Message": "Operator cannot be built because the input grid has errors."
+  },
+  "MOLE_ERR_OP_INSUFFICIENT_CELLS": {
+    "Code": 305,
+    "Message": "Number of cells along each axis must be at least 2*k."
+  },
+  "MOLE_ERR_OP_UNSUPPORTED_TOPOLOGY": {
+    "Code": 306,
+    "Message": "Operator supports uniform grids only."
+  },
+  "MOLE_ERR_OP_INPUT_SIZE_MISMATCH": {
+    "Code": 307,
+    "Message": "Input array size does not match the operator."
+  },
+  "MOLE_ERR_OP_NOT_BUILT": {
+    "Code": 308,
+    "Message": "Operator has not been built from a grid."
+  },
+  "MOLE_ERR_OP_DIV_INSUFFICIENT_CELLS": {
+    "Code": 309,
+    "Message": "Divergence requires at least 2*k + 1 cells along each axis."
+  },
+  "MOLE_ERR_UTILS_INVALID_MESH_SIZE": {
+    "Code": 500,
+    "Message": "Each meshgrid input vector must contain at least one element."
+  },
+  "MOLE_ERR_UTILS_SIZE_MISMATCH": {
+    "Code": 501,
+    "Message": "Input vectors x and y must have the same number of elements."
+  },
+  "MOLE_ERR_UTILS_ROW_MISMATCH": {
+    "Code": 502,
+    "Message": "Matrices A and B must have the same number of rows."
+  },
+  "MOLE_ERR_UTILS_COL_MISMATCH": {
+    "Code": 503,
+    "Message": "Matrices A and B must have the same number of columns."
+  },
+  "MOLE_ERR_UTILS_NOT_SQUARE": {
+    "Code": 504,
+    "Message": "Matrix A must be square."
+  },
+  "MOLE_ERR_UTILS_RHS_ROW_MISMATCH": {
+    "Code": 505,
+    "Message": "Matrix A and the right-hand side must have the same number of rows."
+  },
+  "MOLE_ERR_UTILS_SINGULAR_MATRIX": {
+    "Code": 506,
+    "Message": "Factorization failed because matrix A is singular."
+  },
+  "MOLE_ERR_UTILS_TOO_FEW_POINTS": {
+    "Code": 507,
+    "Message": "Input vectors x and y must have at least two elements."
   }
 }

@@ -5,8 +5,7 @@ function G = gradNonPeriodic(k, grid, errorObj = MOLE_errors())
 % DESCRIPTION
 % Parameters:
 %                k : Order of accuracy
-%                grid : Grid object with attributes m number of cells and 
-%                       dx step size 
+%                grid : MOLE grid object
 %
 % SYNTAX
 % G = gradNonPeriodic(k, grid)
@@ -19,15 +18,18 @@ function G = gradNonPeriodic(k, grid, errorObj = MOLE_errors())
 % ----------------------------------------------------------------------------
 %
 
+    %Check whether the grid is valid
+
+
     % NEED TO ASK ABOUT THE ERROR USED THE MESSAGE IS NOT EXPLICIT ABOUT ALL INVALID ARGS THEY ARE FOR GRID CREATION !!
     if k < 2 || mod(k, 2) != 0 || k > 8
         params = sprintf('Order of accuracy k must be greater than 2 and even but k: %s was  given.', mat2str(k));
-        errorObj.log_error('MOLE_ERR_INVALID_ARGS', 'grad', true, params);
+        errorObj.log_error('MOLE_ERR_INVALID_ARGS', 'gradNonPeriodic', true, params);
 
     end
     if grid.m < 2*k
         params = sprintf('grid.m and k must meet m >= %s for k = %s', num2str(2*k), mat2str(k));
-        errorObj.log_error('MOLE_ERR_INVALID_ARGS', 'grad', true, params);
+        errorObj.log_error('MOLE_ERR_INVALID_ARGS', 'gradNonPeriodic', true, params);
     end
     m = grid.m;
     dx = grid.dx;
