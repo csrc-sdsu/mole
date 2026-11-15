@@ -14,8 +14,8 @@ function G = grad(k, grid, errorObj = MOLE_errors())
 %                grid : MOLE grid object
 %
 % SYNTAX
-% [G, errorFlag] = grad(k, grid)
-% [G, errorFlag] = grad(k, grid, errorObj)
+%  G = grad(k, grid)
+%  G = grad(k, grid, errorObj)
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
