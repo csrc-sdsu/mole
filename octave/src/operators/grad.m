@@ -22,7 +22,10 @@ function G = grad(k, grid, errorObj = MOLE_errors())
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
 %
-        %Check whether the grid is valid
+    %Check whether the grid is valid
+    if ~grid.valid
+        errorObj.log_error('MOLE_ERR_OP_GRID_HAS_ERRORS', 'grad', true);
+    end
 
 
     %Need to ask about error naming and error not being in mole errors file!!!
@@ -35,12 +38,12 @@ function G = grad(k, grid, errorObj = MOLE_errors())
     % NEED TO ASK ABOUT THE ERROR USED THE MESSAGE IS NOT EXPLICIT ABOUT ALL INVALID ARGS THEY ARE FOR GRID CREATION !!
     if k < 2 || mod(k, 2) != 0 || k > 8
         params = sprintf('Order of accuracy k must be greater than 2 and even but k: %s was  given.', mat2str(k));
-        errorObj.log_error('MOLE_ERR_INVALID_ARGS', 'grad', true, params);
+        errorObj.log_error('MOLE_ERR_OP_INVALID_ORDER', 'grad', true, params);
 
     end
     if grid.m < 2*k
         params = sprintf('grid.m and k must meet m >= %s for k = %s',num2str(2*k), mat2str(k));
-        errorObj.log_error('MOLE_ERR_INVALID_ARGS', 'grad', true, params);
+        errorObj.log_error('MOLE_ERR_OP_INSUFFICIENT_CELLS', 'grad', true, params);
     end
 
     if grid.isPeriodic
