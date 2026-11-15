@@ -46,7 +46,7 @@ function G = grad(k, grid, errorObj = MOLE_errors())
         errorObj.log_error('MOLE_ERR_OP_INSUFFICIENT_CELLS', 'grad', true, params);
     end
 
-    if grid.isPeriodic
+    if grid.bc.isPeriodic
         G = gradPeriodic(k, grid, errorObj);
     else
         G = gradNonPeriodic(k, grid, errorObj);
