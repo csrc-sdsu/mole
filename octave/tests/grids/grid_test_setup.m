@@ -1,6 +1,6 @@
 function paths = grid_test_setup()
 % PURPOSE
-% Add grid sources, error handling, and test helpers to the Octave path.
+% Add grid sources, error handling, and test helpers to the MATLAB or Octave path.
 % SYNTAX
 % paths = grid_test_setup()
 % DESCRIPTION
@@ -13,10 +13,8 @@ function paths = grid_test_setup()
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
     paths.tests = fileparts(mfilename('fullpath'));
-    octaveDir = fileparts(fileparts(paths.tests));
-    testDir = fileparts(mfilename('fullpath'));
-    paths.grids = fullfile(testDir, '..', '..', 'src', 'grids');
-    paths.sys = fullfile(testDir, '..', '..', 'src', 'sys');
+    paths.grids = fullfile(paths.tests, '..', '..', 'src', 'grids');
+    paths.sys = fullfile(paths.tests, '..', '..', 'src', 'sys');
     if ~isfolder(paths.grids) || ~isfolder(paths.sys)
         error('MOLETests:Setup', 'Place these files in octave/tests/grids beside octave/src/grids and octave/src/sys.');
     end

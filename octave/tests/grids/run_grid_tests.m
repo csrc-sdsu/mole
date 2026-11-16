@@ -1,10 +1,10 @@
 function report = run_grid_tests(verbose)
 % PURPOSE
-% Run the Octave grid and error reporting tests.
+% Run grid validation and construction tests in MATLAB or GNU Octave.
 % SYNTAX
 % run_grid_tests()
 % report = run_grid_tests(false)
-% report = run_grid_tests(true)   % also display each BIST case and failure
+% report = run_grid_tests(true)   % also display individual test results and failures
 % DESCRIPTION
 % Parse/callability blockers are counted separately from assertion failures.
 % Calling without an output raises an error if anything fails or is blocked.
@@ -16,11 +16,9 @@ function report = run_grid_tests(verbose)
     report.preflight.MOLE_errors = check_logger();
     report.preflight.validateGrid = check_function('validateGrid');
     report.preflight.makeGrid = check_function('makeGrid');
-    report.sources.validateGrid = fullfile(paths.grids, 'validateGrid.m');
-    report.sources.makeGrid = fullfile(paths.grids, 'makeGrid.m');
+    report.sources.validateGrid = report.preflight.validateGrid.path;
+    report.sources.makeGrid = report.preflight.makeGrid.path;
     report.sources.MOLE_errors = report.preflight.MOLE_errors.path;
-    report.sources.validateGrid_sha256 = hash('sha256', fileread(report.sources.validateGrid));
-    report.sources.makeGrid_sha256 = hash('sha256', fileread(report.sources.makeGrid));
 
     labels = {'MOLE_errors', 'validateGrid', 'makeGrid'};
     for i = 1:numel(labels)
@@ -36,14 +34,17 @@ function report = run_grid_tests(verbose)
                      'blocked', {}, 'reason', {}, 'details', {});
     for i = 1:numel(names)
         file = fullfile(paths.tests, [names{i} '.m']);
-        planned = numel(regexp(fileread(file), '(?m)^%!test\s*$', 'match'));
+        planned = numel(regexp(fileread(file), '(?m)^function test[A-Za-z0-9_]+\(\)\s*$', 'match'));
+        if planned == 0
+            error('MOLETests:NoTests', 'No test functions were found in %s.', names{i});
+        end
         result = struct('name', names{i}, 'total', planned, 'passed', 0, ...
                         'failed', 0, 'blocked', 0, 'reason', '', 'details', '');
         reasons = {};
         if ~report.preflight.MOLE_errors.ok
             reasons{end+1} = ['MOLE_errors: ' report.preflight.MOLE_errors.reason];
         end
-        if ~strcmp(names{i}, 'test_error_reporting') && ~report.preflight.validateGrid.ok
+        if ~report.preflight.validateGrid.ok
             reasons{end+1} = ['validateGrid: ' report.preflight.validateGrid.reason];
         end
         if any(strcmp(names{i}, {'test_makeGrid', 'testMakeGrid'})) && ~report.preflight.makeGrid.ok
@@ -54,9 +55,9 @@ function report = run_grid_tests(verbose)
             result.reason = strjoin(reasons, ' | ');
         else
             try
-                result.details = evalc('[passed, total] = test(file, ''verbose'');');
+                result.details = evalc('[passed, total] = feval(names{i});');
                 if total ~= planned
-                    error('MOLETests:CountMismatch', 'Expected %d cases in %s; Octave discovered %d.', planned, names{i}, total);
+                    error('MOLETests:CountMismatch', 'Expected %d cases in %s; the suite executed %d.', planned, names{i}, total);
                 end
                 result.passed = passed;
                 result.failed = total - passed;
@@ -104,11 +105,11 @@ function status = check_logger()
     try
         status.path = which('MOLE_errors');
         probe = MOLE_errors();
-        assert(probe.getNumErrors(), 0);
-        output = evalc("probe.log_error('MOLE_ERR_INVALID_GRID_SPACING','test preflight',false,'dx = -1');");
+        assert(isequal(probe.getNumErrors(), 0), 'A new logger must have zero errors.');
+        output = evalc('probe.log_error(''MOLE_ERR_INVALID_GRID_SPACING'',''test preflight'',false,''dx = -1'');');
         assert(~isempty(output));
-        assert(probe.getNumErrors(), 1);
-        assert(probe.haveErrors(), true);
+        assert(isequal(probe.getNumErrors(), 1), 'Logging must increment the error count.');
+        assert(isequal(probe.haveErrors(), true), 'Logging must set the recorded-error status.');
         status.ok = true;
     catch err
         status.reason = err.message;

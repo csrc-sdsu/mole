@@ -17,6 +17,6 @@ function [grid, errors, output] = validate_clean(params)
     output = evalc('grid = validateGrid(params, false, errors);');
     assert(isstruct(grid) && isscalar(grid), 'Expected a scalar grid struct.');
     assert(errors.getNumErrors() == 0, ['Valid input recorded MOLE errors: ' output]);
-    assert(errors.haveErrors(), false);
+    assert(isequal(errors.haveErrors(), false), 'Valid input unexpectedly recorded an error.');
     assert(isempty(output), ['Valid input produced unexpected output: ' output]);
 end

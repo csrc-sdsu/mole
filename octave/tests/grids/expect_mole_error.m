@@ -5,7 +5,7 @@ function caughtError = expect_mole_error(action, errorName)
 % caughtError = expect_mole_error(action, errorName)
 % DESCRIPTION
 % action is a function handle invoked without arguments. errorName is the
-% catalog key without the MOLE: prefix. Returns the caught error structure.
+% catalog key without the MOLE: prefix. Returns the caught exception object or error structure.
 % Fails an assertion if no exception is raised or its identifier differs.
     caught = false;
     caughtError = struct();
