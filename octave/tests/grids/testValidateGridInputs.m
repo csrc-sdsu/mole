@@ -11,18 +11,20 @@ end
 %! g = validateGrid(p);
 %! assert(g.valid,true);
 
+
 %!test
-%! # Call validate grid with grid and error object.
+%! # Call validate grid with grid and allow partial. For second syntax case.
+%! p = struct('topology', 'uniform', 'm', 5, 'dx', .5);
+%! g = validateGrid(p, true);
+%! assert(g.valid, true);
+
+%!test
+%! # Call validate grid with grid and error object. For thrid syntax case.
 %! p = struct('topology', 'uniform', 'm', 5, 'dx', .5);;
 %! errorObj = MOLE_errors();
 %! g = validateGrid(p, errorObj );
 %! assert(g.valid, true);
 
-%!test
-%! # Call validate grid with grid and allow partial.
-%! p = struct('topology', 'uniform', 'm', 5, 'dx', .5);
-%! g = validateGrid(p, true);
-%! assert(g.valid, true);
 
 %!test
 %! # Call validate grid with invalid input types.
