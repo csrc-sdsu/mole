@@ -1,11 +1,11 @@
 function report = run_gradient_tests(verbose)
 % PURPOSE
-% Run the Octave gradient test suites and summarize their results.
+% Run the MATLAB and GNU Octave gradient test suites and summarize their results.
 % SYNTAX
 % run_gradient_tests()
 % report = run_gradient_tests(true)
 % DESCRIPTION
-% Returns per-suite counts, captured BIST output, and resolved source paths.
+% Returns per-suite counts, captured test output, and resolved source paths.
 % Passing true displays individual cases and failure diagnostics. Calling
 % without an output raises an error when any test fails.
 % ----------------------------------------------------------------------------
@@ -29,11 +29,11 @@ function report = run_gradient_tests(verbose)
         if ~isfile(filename)
             error('MOLETests:Setup', 'Missing test file: %s', filename);
         end
-        planned = numel(regexp(fileread(filename), '(?m)^%!test\s*$', 'match'));
-        output = evalc('[passed, total] = test(filename, ''verbose'');');
+        planned = numel(regexp(fileread(filename), '(?m)^function test[A-Za-z0-9_]+\(\)\s*$', 'match'));
+        output = evalc('[passed, total] = feval(names{i});');
         if total ~= planned || total == 0
             error('MOLETests:CountMismatch', ...
-                  'Expected %d cases in %s; Octave discovered %d.', planned, names{i}, total);
+                  'Expected %d cases in %s; the suite executed %d.', planned, names{i}, total);
         end
         result = struct('name', names{i}, 'passed', passed, 'total', total, ...
                         'failed', total-passed, 'output', output);

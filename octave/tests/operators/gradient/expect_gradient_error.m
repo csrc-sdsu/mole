@@ -25,6 +25,6 @@ function caughtError = expect_gradient_error(action, errors, errorName)
     assert(strcmp(caughtError.identifier, expectedId), ...
            sprintf('Expected %s; received "%s": %s', ...
                    expectedId, caughtError.identifier, caughtError.message));
-    assert(errors.getNumErrors(), before + 1);
-    assert(errors.haveErrors(), true);
+    assert(isequal(errors.getNumErrors(), before + 1), 'Expected exactly one newly recorded error.');
+    assert(isequal(errors.haveErrors(), true), 'The logger must report a recorded error.');
 end

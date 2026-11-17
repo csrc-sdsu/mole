@@ -2,99 +2,126 @@ function [passed, total] = test_grad()
 % PURPOSE
 % Test one-dimensional gradient dispatch and error reporting.
 % SYNTAX
+% test_grad()
 % [passed, total] = test_grad()
 % DESCRIPTION
 % Exercises periodic and nonperiodic dispatch, optional logger arguments,
 % grid validity errors, and integration with validateGrid.
+% Runs named cases in MATLAB or GNU Octave and reports every result.
+% Without output arguments, raises MOLETests:Failed if any case fails.
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
     gradient_test_setup();
-    [passed, total] = test(mfilename('fullpath'), 'verbose');
+    testFunctions = { ...
+        @testNonperiodicDispatch, ...
+        @testExplicitLogger, ...
+        @testPeriodicDispatch, ...
+        @testExplicitPeriodicLogger, ...
+        @testValidatedNonperiodicGrid, ...
+        @testOddOrder, ...
+        @testUnsupportedEvenOrder, ...
+        @testInsufficientCells, ...
+        @testInvalidGrid, ...
+        @testValidatedPeriodicGrid};
+    [passed, total] = run_gradient_test_cases(testFunctions);
+    if nargout == 0 && passed ~= total
+        error('MOLETests:Failed', '%d of %d gradient test cases failed.', total - passed, total);
+    end
 end
 
-%!test
-%! # Dispatch nonperiodic grids at every supported accuracy order.
-%! grid = gradient_test_grid(17, .125, false);
-%! for k = [2, 4, 6, 8]
-%!     output = evalc('G = grad(k, grid);');
-%!     output = evalc('expected = gradNonPeriodic(k, grid);');
-%!     assert(size(G), [18, 19]);
-%!     assert(G, expected);
-%! end
+function testNonperiodicDispatch()
+    % Dispatch nonperiodic grids at every supported accuracy order.
+    grid = gradient_test_grid(17, .125, false);
+    for k = [2, 4, 6, 8]
+        output = evalc('G = grad(k, grid);');
+        output = evalc('expected = gradNonPeriodic(k, grid);');
+        assert(isequal(size(G), [18, 19]), 'Unexpected value for size(G).');
+        assert(isequal(G, expected), 'Unexpected value for G.');
+    end
+end
 
-%!test
-%! # Accept an explicit logger without recording errors or printing output.
-%! grid = gradient_test_grid(17, .125, false);
-%! errors = MOLE_errors();
-%! output = evalc('G = grad(4, grid, errors);');
-%! assert(size(G), [18, 19]);
-%! assert(errors.getNumErrors(), 0);
-%! assert(errors.haveErrors(), false);
-%! assert(isempty(output), ['Unexpected gradient output: ' output]);
+function testExplicitLogger()
+    % Accept an explicit logger without recording errors or printing output.
+    grid = gradient_test_grid(17, .125, false);
+    errors = MOLE_errors();
+    output = evalc('G = grad(4, grid, errors);');
+    assert(isequal(size(G), [18, 19]), 'Unexpected value for size(G).');
+    assert(isequal(errors.getNumErrors(), 0), 'Unexpected value for errors.getNumErrors().');
+    assert(isequal(errors.haveErrors(), false), 'Unexpected value for errors.haveErrors().');
+    assert(isempty(output), ['Unexpected gradient output: ' output]);
+end
 
-%!test
-%! # Dispatch periodic grids at every supported accuracy order.
-%! grid = gradient_test_grid(17, .125, true);
-%! for k = [2, 4, 6, 8]
-%!     output = evalc('G = grad(k, grid);');
-%!     output = evalc('expected = gradPeriodic(k, grid);');
-%!     assert(size(G), [17, 17]);
-%!     assert(G, expected);
-%! end
+function testPeriodicDispatch()
+    % Dispatch periodic grids at every supported accuracy order.
+    grid = gradient_test_grid(17, .125, true);
+    for k = [2, 4, 6, 8]
+        output = evalc('G = grad(k, grid);');
+        output = evalc('expected = gradPeriodic(k, grid);');
+        assert(isequal(size(G), [17, 17]), 'Unexpected value for size(G).');
+        assert(isequal(G, expected), 'Unexpected value for G.');
+    end
+end
 
-%!test
-%! # Preserve periodic dispatch when the logger is supplied explicitly.
-%! grid = gradient_test_grid(17, .125, true);
-%! errors = MOLE_errors();
-%! output = evalc('G = grad(4, grid, errors);');
-%! expectedOutput = evalc('expected = gradPeriodic(4, grid);');
-%! assert(G, expected);
-%! assert(errors.getNumErrors(), 0);
-%! assert(errors.haveErrors(), false);
-%! assert(isempty(output), ['Unexpected gradient output: ' output]);
+function testExplicitPeriodicLogger()
+    % Preserve periodic dispatch when the logger is supplied explicitly.
+    grid = gradient_test_grid(17, .125, true);
+    errors = MOLE_errors();
+    output = evalc('G = grad(4, grid, errors);');
+    expectedOutput = evalc('expected = gradPeriodic(4, grid);');
+    assert(isequal(G, expected), 'Unexpected value for G.');
+    assert(isequal(errors.getNumErrors(), 0), 'Unexpected value for errors.getNumErrors().');
+    assert(isequal(errors.haveErrors(), false), 'Unexpected value for errors.haveErrors().');
+    assert(isempty(output), ['Unexpected gradient output: ' output]);
+end
 
-%!test
-%! # Accept a default nonperiodic grid returned by validateGrid.
-%! grid = validateGrid(struct('topology', 'uniform', 'm', 17, 'dx', .125));
-%! output = evalc('G = grad(4, grid);');
-%! output = evalc('expected = gradNonPeriodic(4, grid);');
-%! assert(size(G), [18, 19]);
-%! assert(G, expected);
+function testValidatedNonperiodicGrid()
+    % Accept a default nonperiodic grid returned by validateGrid.
+    grid = validateGrid(struct('topology', 'uniform', 'm', 17, 'dx', .125));
+    output = evalc('G = grad(4, grid);');
+    output = evalc('expected = gradNonPeriodic(4, grid);');
+    assert(isequal(size(G), [18, 19]), 'Unexpected value for size(G).');
+    assert(isequal(G, expected), 'Unexpected value for G.');
+end
 
-%!test
-%! # Reject an odd accuracy order through the supplied logger.
-%! grid = gradient_test_grid(17, .125, false);
-%! errors = MOLE_errors();
-%! expect_gradient_error(@() grad(3, grid, errors), errors, 'MOLE_ERR_OP_INVALID_ORDER');
+function testOddOrder()
+    % Reject an odd accuracy order through the supplied logger.
+    grid = gradient_test_grid(17, .125, false);
+    errors = MOLE_errors();
+    expect_gradient_error(@() grad(3, grid, errors), errors, 'MOLE_ERR_OP_INVALID_ORDER');
+end
 
-%!test
-%! # Reject an even accuracy order without an implemented stencil.
-%! grid = gradient_test_grid(21, .125, false);
-%! errors = MOLE_errors();
-%! expect_gradient_error(@() grad(10, grid, errors), errors, 'MOLE_ERR_OP_INVALID_ORDER');
+function testUnsupportedEvenOrder()
+    % Reject an even accuracy order without an implemented stencil.
+    grid = gradient_test_grid(21, .125, false);
+    errors = MOLE_errors();
+    expect_gradient_error(@() grad(10, grid, errors), errors, 'MOLE_ERR_OP_INVALID_ORDER');
+end
 
-%!test
-%! # Reject fewer than twice the requested accuracy order in cells.
-%! grid = gradient_test_grid(7, .125, false);
-%! errors = MOLE_errors();
-%! expect_gradient_error(@() grad(4, grid, errors), errors, 'MOLE_ERR_OP_INSUFFICIENT_CELLS');
+function testInsufficientCells()
+    % Reject fewer than twice the requested accuracy order in cells.
+    grid = gradient_test_grid(7, .125, false);
+    errors = MOLE_errors();
+    expect_gradient_error(@() grad(4, grid, errors), errors, 'MOLE_ERR_OP_INSUFFICIENT_CELLS');
+end
 
-%!test
-%! # Reject a grid flagged as invalid through the supplied logger.
-%! grid = gradient_test_grid(17, .125, false);
-%! grid.valid = false;
-%! errors = MOLE_errors();
-%! expect_gradient_error(@() grad(4, grid, errors), errors, 'MOLE_ERR_OP_GRID_HAS_ERRORS');
+function testInvalidGrid()
+    % Reject a grid flagged as invalid through the supplied logger.
+    grid = gradient_test_grid(17, .125, false);
+    grid.valid = false;
+    errors = MOLE_errors();
+    expect_gradient_error(@() grad(4, grid, errors), errors, 'MOLE_ERR_OP_GRID_HAS_ERRORS');
+end
 
-%!test
-%! # Accept a periodic grid returned by validateGrid.
-%! bc = struct('dc', zeros(2, 1), 'nc', zeros(2, 1));
-%! params = struct('topology', 'uniform', 'm', 17, 'dx', .125, 'bc', bc);
-%! grid = validateGrid(params);
-%! output = evalc('G = grad(4, grid);');
-%! output = evalc('expected = gradPeriodic(4, grid);');
-%! assert(size(G), [17, 17]);
-%! assert(G, expected);
+function testValidatedPeriodicGrid()
+    % Accept a periodic grid returned by validateGrid.
+    bc = struct('dc', zeros(2, 1), 'nc', zeros(2, 1));
+    params = struct('topology', 'uniform', 'm', 17, 'dx', .125, 'bc', bc);
+    grid = validateGrid(params);
+    output = evalc('G = grad(4, grid);');
+    output = evalc('expected = gradPeriodic(4, grid);');
+    assert(isequal(size(G), [17, 17]), 'Unexpected value for size(G).');
+    assert(isequal(G, expected), 'Unexpected value for G.');
+end

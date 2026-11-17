@@ -1,6 +1,6 @@
 function paths = gradient_test_setup()
 % PURPOSE
-% Add gradient sources and test helpers to the Octave path.
+% Add gradient sources and test helpers to the MATLAB or Octave path.
 % SYNTAX
 % paths = gradient_test_setup()
 % DESCRIPTION
@@ -23,7 +23,7 @@ function paths = gradient_test_setup()
                 'MOLE_errors', 'validateGrid'};
     for i = 1:numel(required)
         if isempty(which(required{i}))
-            error('MOLETests:Setup', 'Required function or class %s is not on the Octave path.', required{i});
+            error('MOLETests:Setup', 'Required function or class %s is not on the MATLAB or Octave path.', required{i});
         end
     end
 end
