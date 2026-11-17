@@ -1,4 +1,4 @@
-function G = gradNonPeriodic(k, grid, errorObj = MOLE_errors())
+function G = gradNonPeriodic(k, grid, errorObj)
 % PURPOSE
 % Returns a m+1 by m+2 one-dimensional mimetic gradient operator
 %
@@ -18,6 +18,10 @@ function G = gradNonPeriodic(k, grid, errorObj = MOLE_errors())
 % ----------------------------------------------------------------------------
 %
 
+    if nargin < 3
+        errorObj = MOLE_errors();
+    end
+
     %Check whether the grid is valid
     if ~grid.valid
         errorObj.log_error('MOLE_ERR_OP_GRID_HAS_ERRORS', 'gradNonPeriodic', true);
@@ -25,7 +29,7 @@ function G = gradNonPeriodic(k, grid, errorObj = MOLE_errors())
 
 
     % NEED TO ASK ABOUT THE ERROR USED THE MESSAGE IS NOT EXPLICIT ABOUT ALL INVALID ARGS THEY ARE FOR GRID CREATION !!
-    if k < 2 || mod(k, 2) != 0 || k > 8
+    if k < 2 || mod(k, 2) ~= 0 || k > 8
         params = sprintf('Order of accuracy k must be greater than 2 and even but k: %s was  given.', mat2str(k));
         errorObj.log_error('MOLE_ERR_OP_INVALID_ORDER', 'gradNonPeriodic', true, params);
 

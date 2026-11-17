@@ -1,4 +1,4 @@
-function G = grad(k, grid, errorObj = MOLE_errors())
+function G = grad(k, grid, errorObj)
 % PURPOSE
 % This gradient operator computes the vector of partial derivatives,
 % indicating the direction of maximum rate of increase and the steepest
@@ -22,6 +22,10 @@ function G = grad(k, grid, errorObj = MOLE_errors())
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
 %
+    if nargin < 3
+        errorObj = MOLE_errors();
+    end
+
     %Check whether the grid is valid
     if ~grid.valid
         errorObj.log_error('MOLE_ERR_OP_GRID_HAS_ERRORS', 'grad', true);
@@ -36,7 +40,7 @@ function G = grad(k, grid, errorObj = MOLE_errors())
     
    
     % NEED TO ASK ABOUT THE ERROR USED THE MESSAGE IS NOT EXPLICIT ABOUT ALL INVALID ARGS THEY ARE FOR GRID CREATION !!
-    if k < 2 || mod(k, 2) != 0 || k > 8
+    if k < 2 || mod(k, 2) ~= 0 || k > 8
         params = sprintf('Order of accuracy k must be greater than 2 and even but k: %s was  given.', mat2str(k));
         errorObj.log_error('MOLE_ERR_OP_INVALID_ORDER', 'grad', true, params);
 
