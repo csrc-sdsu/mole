@@ -34,7 +34,7 @@ function G = grad(k, grid, errorObj)
 
     %Need to ask about error naming and error not being in mole errors file!!!
     if nargin ~= 2 && nargin ~= 3
-        params = sprintf('grad:InvalidNumArgs grad expects 2 or 3 arguments', mat2str(k));
+        params = sprintf('Grad expects 2 or 3 arguments', mat2str(k));
         errorObj.log_error('MOLE_ERR_INVALID_ARGS', 'grad', true, params);
     end
     

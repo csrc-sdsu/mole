@@ -12,10 +12,10 @@ function paths = gradient_test_setup()
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
     paths.tests = fileparts(mfilename('fullpath'));
-    octaveDir = fileparts(fileparts(paths.tests));
+    octaveDir = fileparts(fileparts(fileparts(paths.tests)));
     paths.src = fullfile(octaveDir, 'src');
     if ~isfolder(paths.src)
-        error('MOLETests:Setup', 'Place these tests in octave/tests/gradients beside octave/src.');
+        error('MOLETests:Setup', 'Place these tests in octave/tests/operator/gradient beside octave/src.');
     end
     addpath(genpath(paths.src));
     addpath(paths.tests);
