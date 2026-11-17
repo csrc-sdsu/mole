@@ -10,7 +10,7 @@ function grid = makeGrid(varargin)
     % grid = makeGrid(name1, value1, name2, value2, ...)
     %
     % DESCRIPTION
-    %   params : Octave struct containing grid parameters.
+    %   params : Struct containing grid parameters.
     %    name_i : Grid field name supplied as a character array or string.
     %   value_i : Value assigned to the corresponding grid field.
     %     grid : Returned grid structure containing supplied parameters,
@@ -45,7 +45,7 @@ function grid = makeGrid(varargin)
             else
             	params = sprintf('Name: %s , Value: %s ', name, value)
             	errorObj.log_error('MOLE_ERR_INVALID_GRID_ARGS', 'makeGrid', true, params)
-            endif
+            end
         end
     end
 
@@ -53,14 +53,14 @@ function grid = makeGrid(varargin)
 end
 
 function validateNumArgs(nargin, errorObj)
-	#This function vaildates that the number of arguments are pairs if not it logs
-    #stops execution
+	%This function vaildates that the number of arguments are pairs if not it logs
+    %stops execution
 	if mod(nargin, 2) ~= 0
     	params = sprintf('number of arguments: %d', nargin);
     	errorObj.log_error('MAKE_GRID_INVALID_INPUT_ARGS', 'makeGrid', true, params);
     else
 		  return;
-    endif
+    end
 
-endfunction
+end
 

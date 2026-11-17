@@ -1,4 +1,4 @@
-function grid = validateGrid(grid, allowPartial = false, errorObj = MOLE_errors())
+function grid = validateGrid(grid, allowPartial, errorObj)
 % PURPOSE
 % Canonical implementation for validateGrid — normalizes and enriches a
 % grid struct with coordinate arrays for nodes, faces, and centers.
@@ -29,6 +29,13 @@ function grid = validateGrid(grid, allowPartial = false, errorObj = MOLE_errors(
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
+
+    if nargin < 2
+        allowPartial = false;
+    end
+    if nargin < 3
+        errorObj = MOLE_errors();
+    end
 
     % Check arguments and their type
     % This is checking for case 3 of the validate grid syntax
@@ -73,7 +80,7 @@ function grid = validateGrid(grid, allowPartial = false, errorObj = MOLE_errors(
         % raises validateGrid:InvalidDim.
         inferredDim = localInferDim(grid);
         if inferredDim > grid.dim
-            #Inferred dimension logged error
+            %Inferred dimension logged error
             params = sprintf('grid.dim is %d, but supplied fields imply at least %d dimensions.', grid.dim, inferredDim);
             errorObj.log_error('MOLE_ERR_INVALID_GRID_DIM', 'validateGrid', true, params);
         end
