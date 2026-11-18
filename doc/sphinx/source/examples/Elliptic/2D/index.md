@@ -9,5 +9,6 @@ Elliptic2D
 Elliptic2D-Case-2
 Elliptic2D-Nodal-Curv
 Elliptic2D-Nodal-Curv-Sinusoidal
+Elliptic2D-X-Dirichlet-Y-Dirichlet
 Minimal-Poisson-2D
 ``` 
