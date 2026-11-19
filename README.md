@@ -48,7 +48,8 @@ For documentation build requirements, please refer to the [Documentation Guide](
 
 ```bash
 # Install all required packages
-sudo apt install cmake libopenblas-dev libeigen3-dev
+sudo apt update
+sudo apt install octave make cmake libopenblas-dev libeigen3-dev
 ```
 
 #### macOS Systems
@@ -125,9 +126,39 @@ make run_tests
 
 Octave equivalent of the C++ test suite. We recommend running these tests before using MOLE to ensure proper setup.
 
+First, verify the installation:
+
+```bash
+octave --version
+make --version
+```
+
+GNU Octave is the supported open-source environment for running the tests. MATLAB is not required. The general contribution guidelines list GNU Octave as an accepted environment for MATLAB/Octave development.
+
 ```matlab
+cd tests/octave
 make run_octave_tests
 ```
+
+The test suite includes tests for:
+- 1D, 2D, and 3D gradient operators;
+- 1D, 2D, and 3D divergence operators;
+- 1D, 2D, and 3D Laplacian operators;
+- polynomial exactness and convergence;
+- boundary-condition operators;
+- Poisson-solution accuracy;
+- curvilinear-grid operators;
+- Jacobian orientation and degeneracy detection; and
+- transfinite and elliptic grid generation.
+
+If GNU Make is unavailable, run the complete test directory directly:
+
+```bash
+cd tests/octave
+octave --quiet --eval "addpath(pwd()); oruntests(pwd())"
+```
+
+A successful test produces no test failed message. A failed test reports the test block and the associated assertion message.
 
 ## Examples
 
