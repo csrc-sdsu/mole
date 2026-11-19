@@ -58,8 +58,41 @@ Currently, the following examples are available in the MOLE Python package.
 
 - Elliptic Problems
     - 1D Examples
-        - `elliptic1D`: A script that solves the 1D Poisson's equation with Robin boundary conditions using mimetic operators. Invoke as
-        
+        - `elliptic1D`: Solves the 1D Poisson's equation with Robin boundary conditions using mimetic operators. Invoke as
+
         ```sh
-         python python/examples/elliptic1D.py
+        python python/examples/elliptic1D.py
+        ```
+
+        - `elliptic1DHomogeneousDirichlet`: Solves the 1D Poisson equation with homogeneous Dirichlet boundary conditions. Invoke as 
+
+        ```sh
+        python python/examples/elliptic1DHomogeneousDirichlet.py
+        ```
+
+        - `elliptic1DLeftNeumannRightDirichlet`: Solves the 1D Poisson equation with a left Neumann and right Dirichlet condition. Invoke as
+
+        ```sh
+        python python/examples/elliptic1DLeftNeumannRightDirichlet.py
+        ```
+
+- Hyperbolic Problems
+    - 1D Examples
+        - `hyperbolic1D`: Solves the periodic 1D advection equation with leapfrog time stepping. Invoke as 
+
+        ```sh
+        python python/examples/hyperbolic1D.py
+        ```
+
+- Operator Demonstrations
+    - `curl2D`: Applies the 2D curl to the vector field `(-y, x)`. Invoke as
+
+        ```sh
+        python python/examples/curl2D.py
+        ```
+
+    - `gradient1D`: Demonstrates second-, fourth-, and sixth-order convergence of the 1D gradient. Invoke as
+
+        ```sh
+        python python/examples/gradient1D.py
         ```
