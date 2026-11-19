@@ -45,6 +45,7 @@ $$
 This example is implemented in:
 - [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/elliptic1DLeftNeumannRightDirichlet.m)
 - [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/elliptic1DLeftNeumannRightDirichlet.cpp)
+- [Python](https://github.com/csrc-sdsu/mole/blob/main/python/examples/elliptic1DLeftNeumannRightDirichlet.py)
 
 Additional Octave variants of this example with different boundary conditions:
 - [Homogeneous Dirichlet](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/elliptic1DHomogeneousDirichlet.m)

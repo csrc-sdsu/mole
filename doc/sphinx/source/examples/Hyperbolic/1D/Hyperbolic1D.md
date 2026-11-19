@@ -43,6 +43,8 @@ $$
 This example is implemented in:
 - [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/hyperbolic1D.m)
 - [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/hyperbolic1D.cpp)
+- [Python](https://github.com/csrc-sdsu/mole/blob/main/python/examples/hyperbolic1D.py)
+
 Additional Octave variants:
 - [Upwind Scheme](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/hyperbolic1D_upwind.m)
 - [Lax-Friedrichs Scheme](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/hyperbolic1D_lax_friedrichs.m)
