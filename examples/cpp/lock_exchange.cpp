@@ -101,7 +101,18 @@ int main() {
   // Impose Dirichlet boundary conditions using a RobinBC
   RobinBC BC(k, m, dx, n, dy, 0, 1);  // Neumann BC
   L = L + BC;
+#ifndef EIGEN
+  // Factorize the pressure Poisson matrix once and reuse the factorization.
+  // The pure-Neumann Laplacian is singular to working precision, so SuperLU
+  // must be allowed to proceed with an approximate factorization.
+  spsolve_factoriser pressure_factoriser;
+  superlu_opts opts;
+  opts.allow_ugly = true;
 
+  if (!pressure_factoriser.factorise(L, opts)) {
+    throw std::runtime_error("Failed to factorize pressure Laplacian");
+  }
+#endif
   // Pre-multiply the gradient operator for pressure correction.
   G *= (-dt / rho_middle);
 
@@ -174,10 +185,11 @@ int main() {
 #ifdef EIGEN
     p_vec = Utils::spsolve_eigen(L, b);
 #else
-    // Default to SuperLU if EIGEN is not defined
-    p_vec = spsolve(L, b);
+    // Reuse the SuperLU factorization because L is unchanged between time steps.
+    if (!pressure_factoriser.solve(p_vec, b)) {
+      throw std::runtime_error("Failed to solve pressure Poisson system");
+    }
 #endif
-
     // Reshape the solution vector back into a matrix
     p = reshape(p_vec, m + 2, n + 2).t();
 
