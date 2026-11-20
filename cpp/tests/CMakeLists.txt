@@ -15,6 +15,7 @@ set(MOLE_TEST_SOURCES
     grids/test_debug_modes.cpp
     operators/test_gradient.cpp
     operators/test_divergence.cpp
+    operators/test_laplacian.cpp
 )
 
 add_custom_target(mole_tests)
