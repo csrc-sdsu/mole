@@ -1,4 +1,4 @@
-function G = grad2D(k, m, dx, n, dy, dc, nc)
+function G = grad2D(k, grid, errorObj = MOLE_errors())
 % PURPOSE
 % Returns a two-dimensional mimetic gradient operator depending on whether
 % or not the operator will contain a periodic boundary condition type
