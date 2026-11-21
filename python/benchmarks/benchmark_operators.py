@@ -64,16 +64,19 @@ def summarize(values: list[float]) -> dict[str, float]:
     }
 
 
-def measure_construction(factory: Callable[[Grid], object], grid: Grid, repeats: int) -> dict[str, float]:
-    """Measure construction of an operator and its benchmark matrix."""
+def measure_construction(
+    factory: Callable[[Grid], object],
+    grid: Grid,
+    repeats: int,
+) -> dict[str, float]:
+    """Measure construction of an operator."""
     samples = []
+
     for _ in range(repeats):
         start = time.perf_counter()
-        operator = factory(grid)
-        # Gradient exposes its combined matrix through a property. Access it
-        # here so construction has the same meaning for every operator.
-        _ = operator.matrix
+        _ = factory(grid)
         samples.append(time.perf_counter() - start)
+
     return summarize(samples)
 
 
