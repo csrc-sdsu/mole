@@ -1,10 +1,11 @@
-function [passed, total] = test_grid2D()
+function [passed, total, testFunctions] = test_grid2D(runTests)
 % PURPOSE
 % Test two-dimensional grid validation and coordinates.
 %
 % SYNTAX
 % test_grid2D()
 % [passed, total] = test_grid2D()
+% [~, total, testFunctions] = test_grid2D(false)
 %
 % DESCRIPTION
 % Runs named test functions in MATLAB or GNU Octave and reports each result.
@@ -15,7 +16,11 @@ function [passed, total] = test_grid2D()
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
-    grid_test_setup();
+    if nargin < 1
+        runTests = true;
+    elseif ~islogical(runTests) || ~isscalar(runTests)
+        error('MOLETests:InvalidInput', 'runTests must be a logical scalar.');
+    end
     testFunctions = { ...
         @testUniformGrid, ...
         @testCoordinateSizes, ...
@@ -27,6 +32,12 @@ function [passed, total] = test_grid2D()
         @testZeroSpacing, ...
         @testMissingCurvilinearNodes, ...
         @testSpacingErrorLogger};
+    total = numel(testFunctions);
+    if ~runTests
+        passed = 0;
+        return;
+    end
+    grid_test_setup();
     [passed, total] = run_grid_test_cases(testFunctions);
     if nargout == 0 && passed ~= total
         error('MOLETests:Incomplete', '%d of %d tests failed.', total - passed, total);
@@ -116,3 +127,4 @@ function testSpacingErrorLogger()
     assert(isequal(errors.getNumErrors(), 1), 'Unexpected value for errors.getNumErrors().');
     assert(~isempty(strfind(err.message, 'Code: 102')));
 end
+

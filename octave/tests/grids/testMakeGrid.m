@@ -1,10 +1,11 @@
-function [passed, total] = testMakeGrid()
+function [passed, total, testFunctions] = testMakeGrid(runTests)
 % PURPOSE
 % Test curvilinear grid construction from supplied nodal coordinates.
 %
 % SYNTAX
 % testMakeGrid()
 % [passed, total] = testMakeGrid()
+% [~, total, testFunctions] = testMakeGrid(false)
 %
 % DESCRIPTION
 % Runs named test functions in MATLAB or GNU Octave and reports each result.
@@ -15,9 +16,19 @@ function [passed, total] = testMakeGrid()
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
-    grid_test_setup();
+    if nargin < 1
+        runTests = true;
+    elseif ~islogical(runTests) || ~isscalar(runTests)
+        error('MOLETests:InvalidInput', 'runTests must be a logical scalar.');
+    end
     testFunctions = { ...
         @testSuppliedCurvilinearNodes};
+    total = numel(testFunctions);
+    if ~runTests
+        passed = 0;
+        return;
+    end
+    grid_test_setup();
     [passed, total] = run_grid_test_cases(testFunctions);
     if nargout == 0 && passed ~= total
         error('MOLETests:Incomplete', '%d of %d tests failed.', total - passed, total);
@@ -46,3 +57,4 @@ function testSuppliedCurvilinearNodes()
     assert(isequal(g.faces.v.X, XiV + EtaV/4), 'Unexpected value for g.faces.v.X.');
     assert(isequal(g.faces.v.Y, EtaV), 'Unexpected value for g.faces.v.Y.');
 end
+

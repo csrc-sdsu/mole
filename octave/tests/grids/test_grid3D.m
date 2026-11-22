@@ -1,10 +1,11 @@
-function [passed, total] = test_grid3D()
+function [passed, total, testFunctions] = test_grid3D(runTests)
 % PURPOSE
 % Test three-dimensional grid validation and coordinates.
 %
 % SYNTAX
 % test_grid3D()
 % [passed, total] = test_grid3D()
+% [~, total, testFunctions] = test_grid3D(false)
 %
 % DESCRIPTION
 % Runs named test functions in MATLAB or GNU Octave and reports each result.
@@ -15,7 +16,11 @@ function [passed, total] = test_grid3D()
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
-    grid_test_setup();
+    if nargin < 1
+        runTests = true;
+    elseif ~islogical(runTests) || ~isscalar(runTests)
+        error('MOLETests:InvalidInput', 'runTests must be a logical scalar.');
+    end
     testFunctions = { ...
         @testUniformGrid, ...
         @testCoordinateSizes, ...
@@ -25,6 +30,12 @@ function [passed, total] = test_grid3D()
         @testMissingCurvilinearNodes, ...
         @testSpacingErrorLogger, ...
         @testInconsistentNodes};
+    total = numel(testFunctions);
+    if ~runTests
+        passed = 0;
+        return;
+    end
+    grid_test_setup();
     [passed, total] = run_grid_test_cases(testFunctions);
     if nargout == 0 && passed ~= total
         error('MOLETests:Incomplete', '%d of %d tests failed.', total - passed, total);
@@ -106,3 +117,4 @@ function testInconsistentNodes()
         expect_mole_error(@() validateGrid(q), 'MOLE_ERR_INVALID_NODAL_COORDINATES');
     end
 end
+

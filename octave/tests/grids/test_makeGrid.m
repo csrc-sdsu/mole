@@ -1,10 +1,11 @@
-function [passed, total] = test_makeGrid()
+function [passed, total, testFunctions] = test_makeGrid(runTests)
 % PURPOSE
 % Test grid construction from structs and name/value pairs.
 %
 % SYNTAX
 % test_makeGrid()
 % [passed, total] = test_makeGrid()
+% [~, total, testFunctions] = test_makeGrid(false)
 %
 % DESCRIPTION
 % Runs named test functions in MATLAB or GNU Octave and reports each result.
@@ -15,7 +16,11 @@ function [passed, total] = test_makeGrid()
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
-    grid_test_setup();
+    if nargin < 1
+        runTests = true;
+    elseif ~islogical(runTests) || ~isscalar(runTests)
+        error('MOLETests:InvalidInput', 'runTests must be a logical scalar.');
+    end
     testFunctions = { ...
         @testNameValueGrid1D, ...
         @testNameValueGrid2D, ...
@@ -26,6 +31,12 @@ function [passed, total] = test_makeGrid()
         @testStructGrid3D, ...
         @testQuietConstruction, ...
         @testUnknownTopology};
+    total = numel(testFunctions);
+    if ~runTests
+        passed = 0;
+        return;
+    end
+    grid_test_setup();
     [passed, total] = run_grid_test_cases(testFunctions);
     if nargout == 0 && passed ~= total
         error('MOLETests:Incomplete', '%d of %d tests failed.', total - passed, total);
@@ -101,3 +112,4 @@ function testUnknownTopology()
     p = struct('topology','q','m',3,'n',3,'dx',1,'dy',1);
     expect_mole_error(@() makeGrid(p), 'MOLE_ERR_INVALID_GRID_TOPOLOGY');
 end
+

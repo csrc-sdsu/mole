@@ -1,10 +1,11 @@
-function [passed, total] = test_grid_inferred()
+function [passed, total, testFunctions] = test_grid_inferred(runTests)
 % PURPOSE
 % Test inferred grid attributes.
 %
 % SYNTAX
 % test_grid_inferred()
 % [passed, total] = test_grid_inferred()
+% [~, total, testFunctions] = test_grid_inferred(false)
 %
 % DESCRIPTION
 % Runs named test functions in MATLAB or GNU Octave and reports each result.
@@ -15,7 +16,11 @@ function [passed, total] = test_grid_inferred()
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
-    grid_test_setup();
+    if nargin < 1
+        runTests = true;
+    elseif ~islogical(runTests) || ~isscalar(runTests)
+        error('MOLETests:InvalidInput', 'runTests must be a logical scalar.');
+    end
     testFunctions = { ...
         @testInferredDimension, ...
         @testInvalidDimensions, ...
@@ -28,6 +33,12 @@ function [passed, total] = test_grid_inferred()
         @testUnknownTopology, ...
         @testUniformGrid, ...
         @testCurvilinearGrid};
+    total = numel(testFunctions);
+    if ~runTests
+        passed = 0;
+        return;
+    end
+    grid_test_setup();
     [passed, total] = run_grid_test_cases(testFunctions);
     if nargout == 0 && passed ~= total
         error('MOLETests:Incomplete', '%d of %d tests failed.', total - passed, total);
@@ -111,3 +122,4 @@ function testCurvilinearGrid()
     assert(isequal(g.dim, 2), 'Unexpected value for g.dim.');
     assert(isequal(g.topology, 'curvilinear'), 'Unexpected value for g.topology.');
 end
+

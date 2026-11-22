@@ -1,10 +1,11 @@
-function [passed, total] = testValidateGridInputs()
+function [passed, total, testFunctions] = testValidateGridInputs(runTests)
 % PURPOSE
 % Test validate grid user inputs.
 %
 % SYNTAX
 % testValidateGridInputs()
 % [passed, total] = testValidateGridInputs()
+% [~, total, testFunctions] = testValidateGridInputs(false)
 %
 % DESCRIPTION
 % Runs named test functions in MATLAB or GNU Octave and reports each result.
@@ -15,12 +16,22 @@ function [passed, total] = testValidateGridInputs()
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
-    grid_test_setup();
+    if nargin < 1
+        runTests = true;
+    elseif ~islogical(runTests) || ~isscalar(runTests)
+        error('MOLETests:InvalidInput', 'runTests must be a logical scalar.');
+    end
     testFunctions = { ...
         @testGridOnly, ...
         @testAllowPartial, ...
         @testErrorLogger, ...
         @testInvalidInputTypes};
+    total = numel(testFunctions);
+    if ~runTests
+        passed = 0;
+        return;
+    end
+    grid_test_setup();
     [passed, total] = run_grid_test_cases(testFunctions);
     if nargout == 0 && passed ~= total
         error('MOLETests:Incomplete', '%d of %d tests failed.', total - passed, total);
@@ -57,3 +68,4 @@ function testInvalidInputTypes()
     expect_mole_error(@() validateGrid(p, false, true), 'MOLE_ERR_INVALID_INPUT_TYPE');
     expect_mole_error(@() validateGrid(p, errorObj, errorObj), 'MOLE_ERR_INVALID_INPUT_TYPE');
 end
+
