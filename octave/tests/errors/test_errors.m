@@ -1,10 +1,11 @@
-function [passed, total] = test_errors()
+function [passed, total, testFunctions] = test_errors(runTests)
 % PURPOSE
 % Test MOLE error logging, validation, and abort behavior.
 %
 % SYNTAX
 % test_errors()
 % [passed, total] = test_errors()
+% [~, total, testFunctions] = test_errors(false)
 %
 % DESCRIPTION
 % Adds src/sys relative to this file when saved in tests/errors. Runs each
@@ -26,6 +27,11 @@ function [passed, total] = test_errors()
     pathCleanup = onCleanup(@() path(originalPath));
     addpath(fullfile(testDir, '..', '..', 'src', 'sys'));
 
+    if nargin < 1
+        runTests = true;
+    elseif ~islogical(runTests) || ~isscalar(runTests)
+        error('MOLETests:InvalidInput', 'runTests must be a logical scalar.');
+    end
     testFunctions = { ...
         @testMoleLogErrors, ...
         @testMoleLogErrorOutput, ...
@@ -40,8 +46,12 @@ function [passed, total] = test_errors()
         @testIndependentErrorObjects, ...
         @testAbortMessage};
 
-    passed = 0;
     total = numel(testFunctions);
+    if ~runTests
+        passed = 0;
+        return;
+    end
+    passed = 0;
     for index = 1:total
         currentTest = testFunctions{index};
         testName = func2str(currentTest);
@@ -220,3 +230,4 @@ function testAbortMessage()
     assert(isequal(TestError.getNumErrors(), 1), 'Unexpected number of recorded errors.');
     assert(isequal(TestError.haveErrors(), true), 'Unexpected recorded-error status.');
 end
+
