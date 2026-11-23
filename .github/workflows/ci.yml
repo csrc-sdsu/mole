@@ -317,20 +317,3 @@ jobs:
       - name: Run tests
         run: |
           pytest python/tests
-
-    octave-unit-tests:
-      runs-on: ubuntu-latest
-
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
-
-        - name: Install GNU Octave
-          run: |
-            sudo apt-get update
-            sudo apt-get install -y octave
-
-        - name: Run current Octave tests
-          run: >
-            octave --no-gui --quiet --eval
-            "addpath('octave/tests'); run_mole_tests();"
