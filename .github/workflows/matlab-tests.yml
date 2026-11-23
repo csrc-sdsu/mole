@@ -33,8 +33,8 @@ jobs:
         with:
           test-results-junit: test-results/results.xml
           code-coverage-cobertura: code-coverage/coverage.xml
-          source-folder: octave/src/old_version
-          select-by-folder: octave/tests/old_version
+          source-folder: octave/src/operators;octave/src/grids;octave/src/sys
+          select-by-folder: octave/tests/ci/current
           strict: false
           use-parallel: false
           generate-summary: true

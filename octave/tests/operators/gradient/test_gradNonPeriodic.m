@@ -1,20 +1,26 @@
-function [passed, total] = test_gradNonPeriodic()
+function [passed, total, testFunctions] = test_gradNonPeriodic(runTests)
 % PURPOSE
 % Test nonperiodic gradient dimensions, accuracy, and input errors.
 % SYNTAX
 % test_gradNonPeriodic()
 % [passed, total] = test_gradNonPeriodic()
+% [~, total, testFunctions] = test_gradNonPeriodic(false)
 % DESCRIPTION
 % Exercises orders 2, 4, 6, and 8 with endpoint-padded cell-center data.
 % Checks polynomial differentiation at boundary and interior nodes.
 % Runs named cases in MATLAB or GNU Octave and reports every result.
+% Passing false lists case handles without executing them.
 % Without output arguments, raises MOLETests:Failed if any case fails.
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
-    gradient_test_setup();
+    if nargin < 1
+        runTests = true;
+    elseif ~islogical(runTests) || ~isscalar(runTests)
+        error('MOLETests:InvalidInput', 'runTests must be a logical scalar.');
+    end
     testFunctions = { ...
         @testSparseMatrixDimensions, ...
         @testConstantDerivative, ...
@@ -26,6 +32,12 @@ function [passed, total] = test_gradNonPeriodic()
         @testUnsupportedEvenOrder, ...
         @testOrderBelowTwo, ...
         @testInvalidGrid};
+    total = numel(testFunctions);
+    if ~runTests
+        passed = 0;
+        return;
+    end
+    gradient_test_setup();
     [passed, total] = run_gradient_test_cases(testFunctions);
     if nargout == 0 && passed ~= total
         error('MOLETests:Failed', '%d of %d gradient test cases failed.', total - passed, total);

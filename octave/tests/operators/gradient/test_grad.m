@@ -1,20 +1,26 @@
-function [passed, total] = test_grad()
+function [passed, total, testFunctions] = test_grad(runTests)
 % PURPOSE
 % Test one-dimensional gradient dispatch and error reporting.
 % SYNTAX
 % test_grad()
 % [passed, total] = test_grad()
+% [~, total, testFunctions] = test_grad(false)
 % DESCRIPTION
 % Exercises periodic and nonperiodic dispatch, optional logger arguments,
 % grid validity errors, and integration with validateGrid.
 % Runs named cases in MATLAB or GNU Octave and reports every result.
+% Passing false lists case handles without executing them.
 % Without output arguments, raises MOLETests:Failed if any case fails.
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
-    gradient_test_setup();
+    if nargin < 1
+        runTests = true;
+    elseif ~islogical(runTests) || ~isscalar(runTests)
+        error('MOLETests:InvalidInput', 'runTests must be a logical scalar.');
+    end
     testFunctions = { ...
         @testNonperiodicDispatch, ...
         @testExplicitLogger, ...
@@ -26,6 +32,12 @@ function [passed, total] = test_grad()
         @testInsufficientCells, ...
         @testInvalidGrid, ...
         @testValidatedPeriodicGrid};
+    total = numel(testFunctions);
+    if ~runTests
+        passed = 0;
+        return;
+    end
+    gradient_test_setup();
     [passed, total] = run_gradient_test_cases(testFunctions);
     if nargout == 0 && passed ~= total
         error('MOLETests:Failed', '%d of %d gradient test cases failed.', total - passed, total);
