@@ -78,7 +78,7 @@ for cell_index = 1 : numel(num_cells)
     r2_md = c^2 * (dt^2);           % c in the equation, dx is built into the
                                     % mimetic operator Laplacian (L)
 
-    Tfinal = 4 / c;
+    Tfinal = 3 / c;
     t = ceil(Tfinal / dt);
 
     % MD grid, note the extra staggered (dx/2) step near the boundaries
@@ -101,7 +101,6 @@ for cell_index = 1 : numel(num_cells)
     [L_bc,b_bc] = addScalarBC1D(L,U0_md,k,m,dx,dc,nc,v);
     
     L = r2_md * L;
-
 
     U1_md = U0_md + (0.5 * L * U0_md); % First step, Euler
 

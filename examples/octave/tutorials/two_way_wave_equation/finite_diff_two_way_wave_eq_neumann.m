@@ -59,7 +59,7 @@ for cell_index = 1 : numel(num_cells)
 
     r2_fd = c^2 * (dt^2 / dx^2);    % Courant-like factor
 
-    Tfinal = 4 / c;       % hit boundary once and return to center
+    Tfinal = 3 / c;       % hit boundary once and return to center
     t = ceil(Tfinal / dt);
 
     % FD grid

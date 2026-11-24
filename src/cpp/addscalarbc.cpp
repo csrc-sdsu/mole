@@ -51,13 +51,10 @@ uvec collectUniqueRows(const sp_mat &M) {
  *       replacing them with boundary condition equations.
  */
 void zeroRows(sp_mat &A, const uvec &rows) {
-    for (uword i = 0; i < rows.n_elem; i++) {
-        uword row_idx = rows(i);
-        for (sp_mat::const_row_iterator it = A.begin_row(row_idx);
-             it != A.end_row(row_idx); ++it) {
-            A(it.row(), it.col()) = 0;
-        }
+    for (uword idx : rows) {
+	    A.row(idx).zeros();
     }
+    A.sync();
 }
 
 /**

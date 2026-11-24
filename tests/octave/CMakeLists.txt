@@ -22,4 +22,3 @@ add_custom_target(run_octave_tests
     COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
     COMMENT "Running all GNU Octave unit tests..."
 )
-
