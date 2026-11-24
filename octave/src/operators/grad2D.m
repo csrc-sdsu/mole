@@ -37,19 +37,12 @@ function G = grad2D(k, grid, errorObj)
     end
     if ~isscalar(grid.dim) || grid.dim ~= 2
         errorObj.log_error('MOLE_ERR_INVALID_GRID_DIM', 'grad2D', true, ...
-                           'grad2D requires a two-dimensional grid.');
+                           'grad2D requires a 2-dimensional grid.');
     end
     if ~strcmpi(grid.topology, 'uniform')
         errorObj.log_error('MOLE_ERR_OP_UNSUPPORTED_TOPOLOGY', 'grad2D', true);
     end
-    if ~islogical(grid.bc.isPeriodic)
-        errorObj.log_error('MOLE_ERR_ISPERIODIC_TYPE', 'grad2D', true);
-    end
-    if numel(grid.bc.isPeriodic) ~= 2
-        errorObj.log_error('MOLE_ERR_INVALID_ISPERIODIC_DIM', 'grad2D', true, ...
-                           'Two periodic flags are required, one for each axis.');
-    end
-
+    %Build a 1D grid for both the x and y dimension to apply gradient operator
     xGrid = struct('dim', 1, 'valid', grid.valid, ...
                    'topology', grid.topology, 'm', grid.m, 'dx', grid.dx, ...
                    'bc', struct('isPeriodic', grid.bc.isPeriodic(1)));
@@ -58,19 +51,19 @@ function G = grad2D(k, grid, errorObj)
     yGrid.dx = grid.dy;
     yGrid.bc.isPeriodic = grid.bc.isPeriodic(2);
 
-    Gx = grad(k, xGrid, errorObj);
+    Gx = grad(k, xGrid, erromrObj);
     Gy = grad(k, yGrid, errorObj);
 
     if grid.bc.isPeriodic(1)
-        Rx = speye(grid.m);
+        Im = speye(grid.m);
     else
-        Rx = sparse(1:grid.m, 2:grid.m+1, ones(1, grid.m), grid.m, grid.m+2);
+        Im = sparse(1:grid.m, 2:grid.m+1, ones(1, grid.m), grid.m, grid.m+2);
     end
     if grid.bc.isPeriodic(2)
-        Ry = speye(grid.n);
+        In = speye(grid.n);
     else
-        Ry = sparse(1:grid.n, 2:grid.n+1, ones(1, grid.n), grid.n, grid.n+2);
+        In = sparse(1:grid.n, 2:grid.n+1, ones(1, grid.n), grid.n, grid.n+2);
     end
 
-    G = [kron(Ry, Gx); kron(Gy, Rx)];
+    G = [kron(In, Gx); kron(Gy, Im)];
 end
