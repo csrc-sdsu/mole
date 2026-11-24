@@ -35,7 +35,7 @@ We assume no boundary effects (large domain), allowing a clean comparison of the
 If we discretize the equation with standard centered second order finite differences, Equation(1) turns into 
 
 $$
-\frac{U^{k-1}_i - 2U^{k}_i + U^{k+1}_i}{\Delta t^2} = c^2\frac{U_{i+1}^k - 2U_{i}^k + U_{i+1}^k}{\Delta x^2}
+\frac{U^{k-1}_i - 2U^{k}_i + U^{k+1}_i}{\Delta t^2} = c^2\frac{U_{i-1}^k - 2U_{i}^k + U_{i+1}^k}{\Delta x^2}
 $$
 
 Rearranging the equation for the unknown value $U^{k+1}_i$ we get:
