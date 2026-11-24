@@ -85,7 +85,7 @@ for cell_index = 1 : numel(num_cells)
     % L =
     %   [2-2c  c    0    0    0
     %    c   2-2c   c    0    0
-    %    0     α  2-2c   c    0
+    %    0     c  2-2c   c    0
     %    0     0    c  2-2c   c
     %    0     0    0    c  2-2c]
     %
