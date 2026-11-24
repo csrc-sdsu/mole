@@ -33,7 +33,7 @@ function G = grad(k, grid, errorObj)
         errorObj.log_error('MOLE_ERR_OP_GRID_HAS_ERRORS', 'grad', true, params);
     end
 
-
+    %Check function number of arguments
     if nargin ~= 2 && nargin ~= 3
         params = sprintf('Grad expects 2 or 3 arguments', mat2str(k));
         errorObj.log_error('MOLE_ERR_INVALID_ARGS', 'grad', true, params);
@@ -51,7 +51,7 @@ function G = grad(k, grid, errorObj)
         params = sprintf('grid.m and k must meet m >= %s for k = %s',num2str(2*k), mat2str(k));
         errorObj.log_error('MOLE_ERR_OP_INSUFFICIENT_CELLS', 'grad', true, params);
     end
-    
+
     if grid.bc.isPeriodic
         G = gradPeriodic(k, grid, errorObj);
     else

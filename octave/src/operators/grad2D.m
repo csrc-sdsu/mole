@@ -51,7 +51,7 @@ function G = grad2D(k, grid, errorObj)
     yGrid.dx = grid.dy;
     yGrid.bc.isPeriodic = grid.bc.isPeriodic(2);
 
-    Gx = grad(k, xGrid, erromrObj);
+    Gx = grad(k, xGrid, errorObj);
     Gy = grad(k, yGrid, errorObj);
 
     if grid.bc.isPeriodic(1)
