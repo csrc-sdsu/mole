@@ -42,6 +42,10 @@ function G = grad2D(k, grid, errorObj)
     if ~strcmpi(grid.topology, 'uniform')
         errorObj.log_error('MOLE_ERR_OP_UNSUPPORTED_TOPOLOGY', 'grad2D', true);
     end
+    if numel(grid.bc.isPeriodic) ~= 2
+    errorObj.log_error('MOLE_ERR_INVALID_ISPERIODIC_DIM', 'grad2D', true, ...
+                      'Two periodic flags are required, one for each axis.');
+    end
     %Build a 1D grid for both the x and y dimension to apply gradient operator
     xGrid = struct('dim', 1, 'valid', grid.valid, ...
                    'topology', grid.topology, 'm', grid.m, 'dx', grid.dx, ...

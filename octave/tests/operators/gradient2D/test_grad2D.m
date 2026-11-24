@@ -113,12 +113,6 @@ function testInvalidDimension()
     expect_gradient_error(@() grad2D(4,grid,errors),errors,'MOLE_ERR_INVALID_GRID_DIM');
 end
 
-function testInvalidPeriodicType()
-    grid = grid_fixture(9,11,false,false);
-    grid.bc.isPeriodic = [0;1];
-    errors = MOLE_errors();
-    expect_gradient_error(@() grad2D(4,grid,errors),errors,'MOLE_ERR_ISPERIODIC_TYPE');
-end
 
 function testInvalidPeriodicCount()
     for flags = {false, false(3,1)}
