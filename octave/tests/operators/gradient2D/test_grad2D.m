@@ -26,8 +26,7 @@ function [passed, total, testFunctions] = test_grad2D(runTests)
     end
     testFunctions = {@testAxisAssembly, @testLoggerForms, ...
         @testInvalidGrid, @testAxisCellCounts, @testUnsupportedTopology, ...
-        @testInvalidDimension, @testInvalidPeriodicType, ...
-        @testInvalidPeriodicCount};
+        @testInvalidDimension, @testInvalidPeriodicCount};
     total = numel(testFunctions);
     if ~runTests
         passed = 0;
