@@ -32,13 +32,6 @@ $$
 u(\pi,y) = e^\pi\cos(y).
 $$
 
-
-The exact solution is
-
-$$
-u(x,y) = e^x\cos(y).
-$$
-
 This corresponds to the call to `addScalarBC2D(A,b,k,m,dx,n,dy,dc,nc,v)`, with
 
 $$
@@ -46,6 +39,12 @@ dc=[1,1,1,1], \qquad nc=[0,0,0,0],
 $$
 
 applying Dirichlet boundary conditions on all four edges.
+
+The exact solution is
+
+$$
+u(x,y) = e^x\cos(y).
+$$
 
 Using the parameters in the example, the computed solution has:
 
