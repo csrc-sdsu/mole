@@ -128,5 +128,5 @@ shading interp
 l2_norm_u = norm(Gx - 2 * Ux);
 l2_norm_v = norm(Gy - 2 * Vy);
 
-disp("L2 norm of U: " + l2_norm_u)
-disp("L2 norm of V: " + l2_norm_v)
+fprintf("L2 norm of U: %g\n", l2_norm_u)
+fprintf("L2 norm of V: %g\n", l2_norm_v)

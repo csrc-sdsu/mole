@@ -75,4 +75,4 @@ axis equal
 colorbar
 
 l2_norm = norm(ue - SOL);
-disp("L2 norm of error: " + l2_norm)
+fprintf("L2 norm of error: %g\n", l2_norm)

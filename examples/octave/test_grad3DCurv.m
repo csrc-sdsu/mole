@@ -164,6 +164,6 @@ l2_norm_u = norm(Gx - 2 * Ux);
 l2_norm_v = norm(Gy - 2 * Vy);
 l2_norm_w = norm(Gz - 2 * Wz);
 
-disp("L2 norm of U: " + l2_norm_u)
-disp("L2 norm of V: " + l2_norm_v)
-disp("L2 norm of W: " + l2_norm_w)
+fprintf("L2 norm of U: %g\n", l2_norm_u)
+fprintf("L2 norm of V: %g\n", l2_norm_v)
+fprintf("L2 norm of W: %g\n", l2_norm_w)
