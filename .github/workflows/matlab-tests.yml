@@ -58,4 +58,5 @@ jobs:
 			   - name: Run Octave tests
         run: |
           cd octave/tests
-          octave --quiet --eval "files = dir('test*.m'); assert(!isempty(files));"
+          octave --quiet --eval "file = dir('run_mole_tests.m'); assert(!isempty(file));
+assert(test(file.name, 'verbose'));  "
