@@ -6,4 +6,6 @@ This section demonstrates three-dimensional elliptic partial differential equati
 :maxdepth: 1
 
 Elliptic3D
+Elliptic3D-addScalarBC3D
+Elliptic3D-Dirichlet-Dirichlet-Dirichlet
 ``` 
