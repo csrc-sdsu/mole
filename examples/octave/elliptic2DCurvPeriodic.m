@@ -1,19 +1,19 @@
 clear; clc; close all;
 addpath("../../src/octave/")
-% 
+%
 % ∆u = 0
-% 
+%
 % 1 < r < 2
 % 0 < θ < 2 pi
-% 
+%
 % x = r cos(θ)
 % y = r sin(θ)
-% 
+%
 % Dirichlet Boundary Conditions
-% 
+%
 % Exact solution
 % u(x, y) = x^2 - y^2
-% 
+%
 
 % Parameters
 k = 4;
@@ -68,7 +68,7 @@ ylabel("Y")
 axis equal
 view([0 90])
 cb = colorbar;
-cb.Label.String = "u(X,Y)";
+ylabel(cb, "u(X,Y)");
 colormap("jet")
 
 figure
@@ -79,10 +79,10 @@ ylabel("Y")
 axis equal
 view([0 90])
 cb = colorbar;
-cb.Label.String = "u(X,Y)";
+ylabel(cb, "u(X,Y)");
 colormap("jet")
 
 max_err = max(max(abs(ua - u)));
-disp("Maximum Absolute Error: " + max_err)
+fprintf("Maximum Absolute Error: %g\n", max_err)
 rel_err = 100 * max_err / (max(max(u)) - min(min(u)));
-disp("Maximum Relative Error: " + rel_err)
+fprintf("Maximum Relative Error: %g\n", rel_err)

@@ -125,14 +125,14 @@ hold on
 plot(k, errorCur, 'LineWidth', 2)
 plot(k, errorNew, 'LineWidth', 2)
 hold off
-yscale log
+set(gca, 'YScale', 'log')
 xlim([k(1), k(end)])
 xlabel('k')
 ylabel('Maximum Absolute Error')
 legend('Current Implementation', 'New Implementation','Location','southwest')
 grid on
-title("Maximum Absolute Error vs k")
-subtitle("∆u = 0, 1 < R < 2, 0 < theta < π, m = 100, n = 25")
+title({"Maximum Absolute Error vs k", ...
+       "∆u = 0, 1 < R < 2, 0 < theta < π, m = 100, n = 25"})
 
 
 %% Fixed k, varying mesh Comparison
@@ -207,12 +207,12 @@ plot(h, errorNew, 'LineWidth', 2)
 plot(h, refCur, 'LineWidth', 1.5, 'Color', 'k', 'LineStyle', '--')
 plot(h, refNew, 'LineWidth', 1.5, 'Color', 'k', 'LineStyle', '--')
 hold off
-xscale log
-yscale log
+set(gca, 'XScale', 'log')
+set(gca, 'YScale', 'log')
 xlim([min(h) max(h)])
 xlabel('1 / sqrt(Number of Centers)')
 ylabel('Maximum Absolute Error')
-legend('Current Implementation', 'New Implementation',"k =  " + k + " Reference Line",'Location','southeast')
+legend('Current Implementation', 'New Implementation',sprintf("k = %d Reference Line", k),'Location','southeast')
 grid on
-title("Maximum Absolute Error vs 1 / sqrt(Number of Centers)")
-subtitle("∆u = 0, 1 < R < 2, 0 < theta < π, k = " + k)
+title({"Maximum Absolute Error vs 1 / sqrt(Number of Centers)", ...
+       sprintf("∆u = 0, 1 < R < 2, 0 < theta < π, k = %d", k)})
