@@ -4,6 +4,16 @@ SPDX-License-Identifier: GPL-3.0-or-later
 See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 
 One-dimensional elliptic problem with Robin boundary conditions.
+
+Problem:
+    u''(x) = exp(x), 0 < x < 1
+
+Boundary conditions:
+    u(0) - u'(0) = 0
+    u(1) + u'(1) = 2e
+
+Exact solution:
+    u(x) = exp(x)
 """
 
 import numpy as np
@@ -16,6 +26,8 @@ WEST = 0.0
 EAST = 1.0
 ACCURACY_ORDER = 6
 NUM_CELLS = 13
+DIRICHLET_COEFFICIENT = 1.0
+NEUMANN_COEFFICIENT = 1.0
 
 
 def exact_solution(x):
@@ -55,8 +67,8 @@ def solve_problem(
     boundary_condition = RobinBoundaryCondition(
         grid,
         accuracy_order=accuracy_order,
-        dirichlet_coefficient=1.0,
-        neumann_coefficient=1.0,
+        dirichlet_coefficient=DIRICHLET_COEFFICIENT,
+        neumann_coefficient=NEUMANN_COEFFICIENT,
     )
 
     #this is the matrix of the linear system that will be solved
@@ -75,7 +87,8 @@ def solve_problem(
     )
 
     #the exact solution is also used to build the right-hand side
-    right_hand_side = exact_solution(x)
+    analytical_solution = exact_solution(x)
+    right_hand_side = np.copy(analytical_solution)
 
     # Robin boundary conditions:
     # u(0) - u'(0) = 0
@@ -88,8 +101,6 @@ def solve_problem(
         system_matrix,
         right_hand_side,
     )
-
-    analytical_solution = exact_solution(x)
 
     return x, numerical_solution, analytical_solution
 
@@ -109,9 +120,11 @@ def plot_solution(
     )
 
     #preparing the exact analytical solution
+    x_plot = np.linspace(WEST, EAST, 200)
+
     plt.plot(
-        x,
-        analytical_solution,
+        x_plot,
+        exact_solution(x_plot),
         label="Analytical",
     )
 
