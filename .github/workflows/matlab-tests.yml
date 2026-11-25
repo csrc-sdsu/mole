@@ -54,9 +54,26 @@ jobs:
         with:
           name: matlab-code-coverage
           path: code-coverage/coverage.xml
-		  
+- name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # Full git history is needed to get a proper
+          # list of changed files within `super-linter`
+          fetch-depth: 0
+
+      - name: Install system deps
+        run: |
+          sudo mkdir -p /etc/apt/keyrings
+          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key \
+            | gpg --dearmor \
+            | sudo tee /etc/apt/keyrings/llvm.gpg > /dev/null
+
+          echo "deb [signed-by=/etc/apt/keyrings/llvm.gpg] http://apt.llvm.org/noble/ llvm-toolchain-noble-20 main" \
+            | sudo tee /etc/apt/sources.list.d/llvm.list
+
+          sudo apt-get update
+          sudo apt-get install -y octave
 	- name: Run Octave tests
     	run: |
 		cd octave/tests
-		octave --quiet --eval "file = dir('run_mole_tests.m'); assert(!isempty(file));
-		assert(test(file.name, 'verbose')); "
+		octave --quiet --eval "file = dir('run_mole_tests.m'); assert(!isempty(file));assert(test(file.name, 'verbose')); "
