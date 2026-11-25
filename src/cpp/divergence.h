@@ -45,20 +45,20 @@ public:
   /**
    * @brief 1-D Mimetic Divergence (non-periodic)
    *
-   * @argument k  Order of accuracy
-   * @argument m  Number of cells
-   * @argument dx Spacing between cells
+   * @param k  Order of accuracy
+   * @param m  Number of cells
+   * @param dx Spacing between cells
    */
   Divergence(u16 k, u32 m, Real dx);
 
   /**
    * @brief 2-D Mimetic Divergence (non-periodic)
    *
-   *  @argument k  Order of accuracy
-   * @argument m  Number of cells in x-direction
-   * @argument n  Number of cells in y-direction
-   * @argument dx Spacing between cells in x-direction
-   * @argument dy Spacing between cells in y-direction
+   *  @param k  Order of accuracy
+   * @param m  Number of cells in x-direction
+   * @param n  Number of cells in y-direction
+   * @param dx Spacing between cells in x-direction
+   * @param dy Spacing between cells in y-direction
    */
   Divergence(u16 k, u32 m, u32 n, Real dx, Real dy);
 
@@ -68,13 +68,13 @@ public:
   /**
    * @brief 3-D Mimetic Divergence (non-periodic)
    *
-   * @argument k  Order of accuracy
-   * @argument m  Number of cells in x-direction
-   * @argument n  Number of cells in y-direction
-   * @argument o  Number of cells in z-direction
-   * @argument dx Spacing between cells in x-direction
-   * @argument dy Spacing between cells in y-direction
-   * @argument dz Spacing between cells in z-direction
+   * @param k  Order of accuracy
+   * @param m  Number of cells in x-direction
+   * @param n  Number of cells in y-direction
+   * @param o  Number of cells in z-direction
+   * @param dx Spacing between cells in x-direction
+   * @param dy Spacing between cells in y-direction
+   * @param dz Spacing between cells in z-direction
    */
   Divergence(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz);
 
@@ -90,12 +90,12 @@ public:
   /**
    * @brief 1-D Mimetic Divergence (periodic or non-periodic)
    *
-   * @argument k  Order of accuracy
-   * @argument m  Number of cells
-   * @argument dx Spacing between cells
-   * @argument dc Robin coefficient a0; 2-element integer vector [left, right].
+   * @param k  Order of accuracy
+   * @param m  Number of cells
+   * @param dx Spacing between cells
+   * @param dc Robin coefficient a0; 2-element integer vector [left, right].
    *              All-zero → periodic BC.
-   * @argument nc Robin coefficient b0; 2-element integer vector [left, right].
+   * @param nc Robin coefficient b0; 2-element integer vector [left, right].
    *              All-zero → periodic BC.
    *
    * Periodic result is m×m; non-periodic result is (m+2)×(m+1).
@@ -105,15 +105,15 @@ public:
   /**
    * @brief 2-D Mimetic Divergence (periodic or non-periodic per axis)
    *
-   * @argument k  Order of accuracy
-   * @argument m  Number of cells in x-direction
-   * @argument n  Number of cells in y-direction
-   * @argument dx Spacing between cells in x-direction
-   * @argument dy Spacing between cells in y-direction
-   * @argument dc Robin coefficient a0; 4-element integer vector [left, right,
+   * @param k  Order of accuracy
+   * @param m  Number of cells in x-direction
+   * @param n  Number of cells in y-direction
+   * @param dx Spacing between cells in x-direction
+   * @param dy Spacing between cells in y-direction
+   * @param dc Robin coefficient a0; 4-element integer vector [left, right,
    * bottom, top]. Entries 0-1 all-zero → periodic in x. Entries 2-3 all-zero →
    * periodic in y.
-   * @argument nc Robin coefficient b0; 4-element integer vector [left, right,
+   * @param nc Robin coefficient b0; 4-element integer vector [left, right,
    * bottom, top].
    */
   Divergence(u16 k, u32 m, u32 n, Real dx, Real dy, const ivec &dc,
@@ -122,17 +122,17 @@ public:
   /**
    * @brief 3-D Mimetic Divergence (periodic or non-periodic per axis)
    *
-   * @argument k  Order of accuracy
-   * @argument m  Number of cells in x-direction
-   * @argument n  Number of cells in y-direction
-   * @argument o  Number of cells in z-direction
-   * @argument dx Spacing between cells in x-direction
-   * @argument dy Spacing between cells in y-direction
-   * @argument dz Spacing between cells in z-direction
-   * @argument dc Robin coefficient a0; 6-element integer vector [left, right,
+   * @param k  Order of accuracy
+   * @param m  Number of cells in x-direction
+   * @param n  Number of cells in y-direction
+   * @param o  Number of cells in z-direction
+   * @param dx Spacing between cells in x-direction
+   * @param dy Spacing between cells in y-direction
+   * @param dz Spacing between cells in z-direction
+   * @param dc Robin coefficient a0; 6-element integer vector [left, right,
    * bottom, top, front, back]. Entries 0-1 all-zero → periodic in x. Entries
    * 2-3 all-zero → periodic in y. Entries 4-5 all-zero → periodic in z.
-   * @argument nc Robin coefficient b0; 6-element integer vector, same ordering
+   * @param nc Robin coefficient b0; 6-element integer vector, same ordering
    * as dc.
    */
   Divergence(u16 k, u32 m, u32 n, u32 o, Real dx, Real dy, Real dz,
