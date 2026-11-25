@@ -82,8 +82,11 @@ function G = grad2DCurv(k, X, Y, dc, nc)
     % Apply Metrics
     [J,Xe,Xn,Ye,Yn] = jacobian2D(k,X,Y,dc,nc);
 
-    Gx = (Yn ./ J) .* Ge - (Ye ./ J) .* Gn;
-    Gy = (Xe ./ J) .* Gn - (Xn ./ J) .* Ge;
+    % Scale rows with sparse diagonals, Octave can't broadcast a vector
+    % against a sparse matrix
+    N = numel(J);
+    Gx = spdiags(Yn ./ J, 0, N, N) * Ge - spdiags(Ye ./ J, 0, N, N) * Gn;
+    Gy = spdiags(Xe ./ J, 0, N, N) * Gn - spdiags(Xn ./ J, 0, N, N) * Ge;
 
     % Now have them output to the extended faces
     Gx = kron(In,ICFx) * Gx;

@@ -90,8 +90,11 @@ function D = div2DCurv(k, X, Y, dc, nc)
     % Apply metrics
     [J,Xe,Xn,Ye,Yn] = jacobian2D(k,X,Y,dc,nc);
 
-    Dx = (Yn ./ J) .* De - (Ye ./ J) .* Dn;
-    Dy = (Xe ./ J) .* Dn - (Xn ./ J) .* De;
+    % Scale rows with sparse diagonals, Octave can't broadcast a vector
+    % against a sparse matrix
+    N = numel(J);
+    Dx = spdiags(Yn ./ J, 0, N, N) * De - spdiags(Ye ./ J, 0, N, N) * Dn;
+    Dy = spdiags(Xe ./ J, 0, N, N) * Dn - spdiags(Xn ./ J, 0, N, N) * De;
 
     % Now have them act on the extended faces
     Dx = Dx * kron(In,IFCx);
