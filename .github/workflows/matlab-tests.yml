@@ -54,3 +54,8 @@ jobs:
         with:
           name: matlab-code-coverage
           path: code-coverage/coverage.xml
+
+			   - name: Run Octave tests
+        run: |
+          cd octave/tests
+          octave --quiet --eval "files = dir('test*.m'); assert(!isempty(files));"
