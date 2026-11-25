@@ -1,4 +1,4 @@
-# MATLAB and GNU Octave tests
+# GNU Octave tests (fully MATLAB compatible)
 
 This directory contains the shared tests for MOLE error logging, grid
 construction and validation, and operators. The portable runner and the MATLAB

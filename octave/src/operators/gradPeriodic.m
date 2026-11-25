@@ -28,8 +28,6 @@ function G = gradPeriodic(k, grid, errorObj)
         errorObj.log_error('MOLE_ERR_OP_GRID_HAS_ERRORS', 'gradPeriodic', true);
     end
 
-    % Assertions:
-    % NEED TO ASK ABOUT THE ERROR USED THE MESSAGE IS NOT EXPLICIT ABOUT ALL INVALID ARGS THEY ARE FOR GRID CREATION !!
     if k < 2 || mod(k, 2) ~= 0 || k > 8
         params = sprintf('Order of accuracy k must be greater than 2 and even but k: %s was  given.', mat2str(k));
         errorObj.log_error('MOLE_ERR_OP_INVALID_ORDER', 'gradPeriodic', true, params);

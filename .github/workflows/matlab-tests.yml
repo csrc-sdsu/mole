@@ -54,7 +54,8 @@ jobs:
         with:
           name: matlab-code-coverage
           path: code-coverage/coverage.xml
-- name: Checkout code
+
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           # Full git history is needed to get a proper
@@ -73,7 +74,7 @@ jobs:
 
           sudo apt-get update
           sudo apt-get install -y octave
-	- name: Run Octave tests
-    	run: |
-		cd octave/tests
-		octave --quiet --eval "file = dir('run_mole_tests.m'); assert(!isempty(file));assert(test(file.name, 'verbose')); "
+
+      - name: Run Octave tests
+        working-directory: octave/tests
+        run: octave --no-gui --quiet --eval "run_mole_tests();"

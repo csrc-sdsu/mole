@@ -57,6 +57,10 @@ function G = grad2D(k, grid, errorObj)
 
     Gx = grad(k, xGrid, errorObj);
     Gy = grad(k, yGrid, errorObj);
+    
+    % Clear temporary grids from memory
+    clear xGrid
+    clear yGrid;
 
     if grid.bc.isPeriodic(1)
         Im = speye(grid.m);
