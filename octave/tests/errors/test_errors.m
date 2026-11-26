@@ -11,7 +11,7 @@ function [passed, total, testFunctions] = test_errors(runTests)
 % Adds src/sys relative to this file when saved in tests/errors. Runs each
 % test function with a fresh logger and prints individual results and a
 % summary. Checks console output, identifiers, error counts, and input
-% rejection using syntax shared by MATLAB and GNU Octave.
+% rejection using portable GNU Octave syntax.
 %
 % Returns the number of successful tests and the total number of tests.
 % When called without output arguments, raises MOLE:TEST_FAILURE if any
@@ -22,7 +22,9 @@ function [passed, total, testFunctions] = test_errors(runTests)
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
+    % Locate the error-logging sources relative to this suite.
     testDir = fileparts(mfilename('fullpath'));
+    % Restore the caller's path when the suite exits, including error exits.
     originalPath = path;
     pathCleanup = onCleanup(@() path(originalPath));
     addpath(fullfile(testDir, '..', '..', 'src', 'sys'));
@@ -32,6 +34,7 @@ function [passed, total, testFunctions] = test_errors(runTests)
     elseif ~islogical(runTests) || ~isscalar(runTests)
         error('MOLETests:InvalidInput', 'runTests must be a logical scalar.');
     end
+    % Register handles for both direct execution and CI discovery.
     testFunctions = { ...
         @testMoleLogErrors, ...
         @testMoleLogErrorOutput, ...
@@ -47,11 +50,13 @@ function [passed, total, testFunctions] = test_errors(runTests)
         @testAbortMessage};
 
     total = numel(testFunctions);
+    % Discovery returns handles and counts without executing the test bodies.
     if ~runTests
         passed = 0;
         return;
     end
     passed = 0;
+    % Catch each failure so the remaining cases still execute.
     for index = 1:total
         currentTest = testFunctions{index};
         testName = func2str(currentTest);
@@ -66,6 +71,7 @@ function [passed, total, testFunctions] = test_errors(runTests)
     end
     fprintf('\nPassed %d of %d tests.\n', passed, total);
 
+    % Fail direct CLI calls; callers requesting counts must check them.
     if nargout == 0 && passed ~= total
         error('MOLE:TEST_FAILURE', '%d of %d tests failed.', ...
               total - passed, total);
@@ -73,10 +79,12 @@ function [passed, total, testFunctions] = test_errors(runTests)
 end
 
 function testMoleLogErrors()
+    % Count successive printed errors on one fresh logger.
     TestError = MOLE_errors();
     assert(isequal(TestError.getNumErrors(), 0), 'Unexpected number of recorded errors.');
 
     params = 'numelem = 5 ';
+    % Capture the printed report so this count test stays quiet.
     evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'', false, params);');
     assert(isequal(TestError.getNumErrors(), 1), 'Unexpected number of recorded errors.');
 
@@ -90,6 +98,7 @@ function testMoleLogErrors()
 end
 
 function testMoleLogErrorOutput()
+    % Compare the full printed report, including spaces and the final newline.
     TestError = MOLE_errors();
     params = 'numelem = 5 ';
     output = evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'', false, params);');
@@ -100,10 +109,12 @@ function testMoleLogErrorOutput()
 end
 
 function testErrorStopExecution()
+    % Aborting errors must raise the expected IDs and still increase the count.
     TestError = MOLE_errors();
     assert(isequal(TestError.getNumErrors(), 0), 'Unexpected number of recorded errors.');
 
     params = 'numelem = 5 ';
+    % If no exception occurs, the empty identifier fails the assertion below.
     caughtId = '';
     try
         TestError.log_error('MOLE_ERR_INVALID_ARRAY_SIZE', 'array1D Construction', true, params);
@@ -125,6 +136,7 @@ function testErrorStopExecution()
 end
 
 function testInvalidErrorNameType()
+    % Reject a numeric error name without recording an error.
     TestError = MOLE_errors();
     caughtId = '';
     try
@@ -137,6 +149,7 @@ function testInvalidErrorNameType()
 end
 
 function testUnknownErrorName()
+    % A missing catalog key must raise a lookup error without being logged.
     TestError = MOLE_errors();
     caughtId = '';
     try
@@ -149,6 +162,7 @@ function testUnknownErrorName()
 end
 
 function testInvalidLocationAndParamsTypes()
+    % Reject location and parameter types independently without logging.
     TestError = MOLE_errors();
     locationOutput = evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', 25, false, ''numelem = 5'');');
     paramsOutput = evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'', false, 25);');
@@ -160,6 +174,7 @@ function testInvalidLocationAndParamsTypes()
 end
 
 function testInvalidAbortFlag()
+    % Check both the type and size requirements of the abort flag.
     TestError = MOLE_errors();
     typeOutput = evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'', 5, ''numelem = 5'');');
     sizeOutput = evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'', [true false], ''numelem = 5'');');
@@ -171,6 +186,7 @@ function testInvalidAbortFlag()
 end
 
 function testDefaultInputs()
+    % Omitted optional arguments should print a report with empty parameters.
     TestError = MOLE_errors();
     output = evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'');');
     expectedOutput = sprintf('========================================\nMOLE Error\n========================================\nError: MOLE_ERR_INVALID_ARRAY_SIZE\nCode: 200\nParams: \nLocations: array1D Construction\nMessage: Array dimensions need to be natural numbers >= 1\n');
@@ -180,6 +196,7 @@ function testDefaultInputs()
 end
 
 function testHaveErrors()
+    % Status should change to true after the first logged error.
     TestError = MOLE_errors();
     assert(isequal(TestError.haveErrors(), false), 'Unexpected recorded-error status.');
     evalc('TestError.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'', false, ''numelem = 5'');');
@@ -187,6 +204,7 @@ function testHaveErrors()
 end
 
 function testAdditionalInvalidAbortFlags()
+    % Reject numeric flags, empty logicals, and nonscalar logical arrays.
     TestError = MOLE_errors();
     invalidFlags = {0, 1, false(0, 0), true(2), [false; true]};
     expectedOutput = sprintf('onErrorAbort must be true or false\n');
@@ -200,6 +218,7 @@ function testAdditionalInvalidAbortFlags()
 end
 
 function testIndependentErrorObjects()
+    % Logging on one object must not change another object's state.
     first = MOLE_errors();
     second = MOLE_errors();
     evalc('first.log_error(''MOLE_ERR_INVALID_ARRAY_SIZE'', ''array1D Construction'');');
@@ -210,6 +229,7 @@ function testIndependentErrorObjects()
 end
 
 function testAbortMessage()
+    % Check the exception text, identifier, and recorded error state.
     TestError = MOLE_errors();
     caughtId = '';
     caughtMessage = '';
@@ -230,4 +250,7 @@ function testAbortMessage()
     assert(isequal(TestError.getNumErrors(), 1), 'Unexpected number of recorded errors.');
     assert(isequal(TestError.haveErrors(), true), 'Unexpected recorded-error status.');
 end
+
+
+
 
