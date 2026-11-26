@@ -19,15 +19,19 @@ function [passed, total, testFunctions] = test_junit_reporting(runTests)
     elseif ~islogical(runTests) || ~isscalar(runTests)
         error('MOLETests:InvalidInput', 'runTests must be a logical scalar.');
     end
+    % Register cases for discovery and normal suite execution.
     testFunctions = {@testPassingCases, @testFailureDiagnostics, ...
         @testControlCharacters, @testEmptyReport, ...
         @testNestedDestination, @testUnwritableDestination};
     total = numel(testFunctions);
     passed = 0;
+    % Discovery returns handles and counts without executing case bodies.
     if ~runTests
         return;
     end
+    % Locate the shared XML writer relative to this suite.
     addpath(fileparts(fileparts(mfilename('fullpath'))));
+    % Continue after failures so every registered case reports an outcome.
     for index = 1:total
         currentTest = testFunctions{index};
         try
@@ -40,12 +44,14 @@ function [passed, total, testFunctions] = test_junit_reporting(runTests)
         end
     end
     fprintf('Passed %d of %d tests.\n', passed, total);
+    % Fail direct CLI calls; callers requesting counts must check them.
     if nargout == 0 && passed ~= total
         error('MOLETests:Failed', '%d of %d tests failed.', total - passed, total);
     end
 end
 
 function testPassingCases()
+    % Check one entry per case and the sum of individual durations.
     [directory, cleanup] = temporary_directory();
     report = sample_report();
     report.results(2) = report.results;
@@ -60,6 +66,7 @@ function testPassingCases()
 end
 
 function testFailureDiagnostics()
+    % Check failure details and XML escaping in both names and messages.
     [directory, cleanup] = temporary_directory();
     report = sample_report();
     report.results.passed = false;
@@ -77,6 +84,7 @@ function testFailureDiagnostics()
 end
 
 function testControlCharacters()
+    % Preserve allowed whitespace and remove the forbidden control character.
     [directory, cleanup] = temporary_directory();
     report = sample_report();
     report.results.passed = false;
@@ -89,6 +97,7 @@ function testControlCharacters()
 end
 
 function testEmptyReport()
+    % Zero cases should produce a suite without any testcase entries.
     [directory, cleanup] = temporary_directory();
     report = sample_report();
     report.results = report.results([]);
@@ -100,6 +109,7 @@ function testEmptyReport()
 end
 
 function testNestedDestination()
+    % Create missing parent folders and replace an existing XML document.
     [directory, cleanup] = temporary_directory();
     filename = fullfile(directory, 'nested', 'reports', 'results.xml');
     write_mole_junit(sample_report(), filename);
@@ -109,6 +119,7 @@ function testNestedDestination()
 end
 
 function testUnwritableDestination()
+    % A directory used as a filename tests write rejection across systems.
     [directory, cleanup] = temporary_directory();
     caught = false;
     try
@@ -121,6 +132,7 @@ function testUnwritableDestination()
 end
 
 function report = sample_report()
+    % Use a fixed duration so tests can verify the aggregate execution time.
     report.results = struct('name', 'suite_first', 'passed', true, ...
         'duration', .125, 'identifier', '', 'message', '');
 end
@@ -128,5 +140,9 @@ end
 function [directory, cleanup] = temporary_directory()
     directory = tempname();
     mkdir(directory);
+    % The caller retains cleanup until its case finishes, then files are removed.
     cleanup = onCleanup(@() rmdir(directory, 's'));
 end
+
+
+
