@@ -1,21 +1,32 @@
-function report = run_mole_tests()
+function report = run_mole_tests(junitFile)
 % PURPOSE
-% Run every current portable MOLE test case in MATLAB or GNU Octave.
+% Run current MOLE test cases in GNU Octave and optionally write JUnit XML.
 %
 % SYNTAX
 % run_mole_tests()
+% run_mole_tests('test-results/octave-results.xml')
 % report = run_mole_tests()
+% report = run_mole_tests(junitFile)
 %
 % DESCRIPTION
 % Recursively discovers suites under tests while excluding old_version.
 % Attempts every discovered case and prints its result. Calling without
-% output raises an error after the run when any case fails. MATLAB users
-% requiring JUnit and coverage XML can call the CI runner run_mole_ci.
+% output raises an error after the run when any case fails.
+% junitFile is an optional character vector; empty disables XML output.
+% Relative paths use the current working directory. Missing parent folders
+% are created. The report is written before raising the final test-failure
+% exception. Discovery/setup failures occur before a report can be produced.
+% Capturing the output requires the caller to check report.ok explicitly.
 % ----------------------------------------------------------------------------
 % SPDX-License-Identifier: GPL-3.0-or-later
 % © 2008-2024 San Diego State University Research Foundation (SDSURF).
 % See LICENSE file or https://www.gnu.org/licenses/gpl-3.0.html for details.
 % ----------------------------------------------------------------------------
+    if nargin < 1
+        junitFile = '';
+    elseif ~ischar(junitFile) || (~isempty(junitFile) && ~isrow(junitFile))
+        error('MOLETests:InvalidInput', 'junitFile must be a character vector.');
+    end
     cases = mole_test_catalog();
     names = fieldnames(cases);
     report.results = struct('name', {}, 'passed', {}, 'duration', {}, ...
@@ -44,6 +55,9 @@ function report = run_mole_tests()
     report.ok = report.failed == 0;
     fprintf('TOTAL: %d tests; %d passed, %d failed.\n', ...
             report.total, report.passed, report.failed);
+    if ~isempty(junitFile)
+        write_mole_junit(report, junitFile);
+    end
     if nargout == 0 && ~report.ok
         error('MOLETests:Failed', '%d of %d tests failed.', report.failed, report.total);
     end

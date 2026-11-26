@@ -76,5 +76,13 @@ jobs:
           sudo apt-get install -y octave
 
       - name: Run Octave tests
-        working-directory: octave/tests
-        run: octave --no-gui --quiet --eval "run_mole_tests();"
+        run: |
+          octave --no-gui --quiet --eval "addpath('octave/tests'); run_mole_tests('test-results/octave-results.xml');"
+
+      - name: Upload Octave test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: octave-test-results
+          path: test-results/octave-results.xml
+          if-no-files-found: error
