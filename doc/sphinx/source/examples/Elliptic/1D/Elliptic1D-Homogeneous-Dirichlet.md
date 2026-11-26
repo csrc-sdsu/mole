@@ -42,6 +42,7 @@ $$
 This example is implemented in:
 - [Octave](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/elliptic1DHomogeneousDirichlet.m)
 - [C++](https://github.com/csrc-sdsu/mole/blob/main/examples/cpp/elliptic1DHomogeneousDirichlet.cpp)
+- [Python](https://github.com/csrc-sdsu/mole/blob/main/python/examples/elliptic1DHomogeneousDirichlet.py)
 
 Additional Octave variants of this example with different boundary conditions:
 - [Non-Homogeneous Dirichlet](https://github.com/csrc-sdsu/mole/blob/main/examples/octave/elliptic1DNonHomogeneousDirichlet.m)
