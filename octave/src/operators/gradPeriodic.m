@@ -33,6 +33,7 @@ function G = gradPeriodic(k, grid, errorObj)
         errorObj.log_error('MOLE_ERR_OP_INVALID_ORDER', 'gradPeriodic', true, params);
 
     end
+    %Check if grid has correct cell counts
     if grid.m < 2*k
         params = sprintf('grid.m and k must meet m >= %s for k = %s',num2str(2*k), mat2str(k));
         errorObj.log_error('MOLE_ERR_OP_INSUFFICIENT_CELLS', 'gradPeriodic', true, params);
